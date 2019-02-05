@@ -1,0 +1,3062 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "projectManagment"
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "paths": {
+    "/api/Configs/getXslts": {
+      "get": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsGetXsltsGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/XsltItem"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Configs/saveXslts": {
+      "post": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsSaveXsltsPost",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "xslts",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "uniqueItems": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/XsltItem"
+            }
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Configs/getGlobalSettings": {
+      "get": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsGetGlobalSettingsGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GlobalSettings"
+            }
+          }
+        }
+      }
+    },
+    "/api/Configs/saveGlobalSettings": {
+      "post": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsSaveGlobalSettingsPost",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "globalSettings",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/GlobalSettings"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Configs/getYaraRules": {
+      "get": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsGetYaraRulesGet",
+        "consumes": [],
+        "produces": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Configs/saveYaraRules": {
+      "post": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsSaveYaraRulesPost",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "rules",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Configs/getSastRules": {
+      "get": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsGetSastRulesGet",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "type",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"]
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Configs/saveSastRules": {
+      "post": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsSaveSastRulesPost",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "rules",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/SastRules"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Configs/getIssueDescriptions": {
+      "get": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsGetIssueDescriptionsGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/IssueDescriptionBase"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Configs/getUserIssueDescriptions": {
+      "get": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsGetUserIssueDescriptionsGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/IssueDescriptionBase"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Configs/getIssueMetadatas": {
+      "get": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsGetIssueMetadatasGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/IssueBaseMetadata"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Configs/getUserIssueMetadatas": {
+      "get": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsGetUserIssueMetadatasGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/IssueBaseMetadata"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Configs/getPmPatterns": {
+      "get": {
+        "tags": ["Configs"],
+        "operationId": "ApiConfigsGetPmPatternsGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PmPattern"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Projects": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGet",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "withoutDetails",
+          "in": "query",
+          "required": false,
+          "type": "boolean",
+          "default": false
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/getProject": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGetProjectGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          }
+        }
+      }
+    },
+    "/api/Projects/getScanResults": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGetScanResultsGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ScanResult"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Projects/getIssues": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGetIssuesGet",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/createProject": {
+      "post": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsCreateProjectPost",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [{
+          "name": "createProjectModel",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/CreateProjectModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Project"
+            }
+          }
+        }
+      }
+    },
+    "/api/Projects/deleteProject": {
+      "delete": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsDeleteProjectDelete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/updateProject": {
+      "put": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsUpdateProjectPut",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "project",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Project"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/changeApprovalState": {
+      "put": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsChangeApprovalStatePut",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "issueId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "state",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "enum": ["None", "Approval", "Discard", "NotExist", "AutoApproval"]
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/updateScanSettings": {
+      "put": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsUpdateScanSettingsPut",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "updateScanSettingsModel",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/UpdateScanSettingsModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/getScanSettings": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGetScanSettingsGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanSettingsId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/IScanSettings"
+            }
+          }
+        }
+      }
+    },
+    "/api/Projects/getPoliciesRules": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGetPoliciesRulesGet",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/savePoliciesRules": {
+      "post": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsSavePoliciesRulesPost",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "model",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/UpdatePoliciesModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/getScanResult": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGetScanResultGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ScanResult"
+            }
+          }
+        }
+      }
+    },
+    "/api/Projects/getPreviousScanResult": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGetPreviousScanResultGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ScanResult"
+            }
+          }
+        }
+      }
+    },
+    "/api/Projects/getScanResultVfs": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGetScanResultVfsGet",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/vfsExists": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsVfsExistsGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "/api/Projects/addScanResult": {
+      "post": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsAddScanResultPost",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [{
+          "name": "createScanResultModel",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/CreateScanResultModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ScanResult"
+            }
+          }
+        }
+      }
+    },
+    "/api/Projects/updateScanResult": {
+      "put": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsUpdateScanResultPut",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "scanResult",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/ScanResult"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/deleteScanResult": {
+      "delete": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsDeleteScanResultDelete",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "deleteGroup",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/updateIssue": {
+      "put": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsUpdateIssuePut",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "updateIssueModel",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/UpdateIssueModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/updateIssues": {
+      "put": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsUpdateIssuesPut",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "updateIssuesModel",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/UpdateIssuesModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/updateScanErrors": {
+      "put": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsUpdateScanErrorsPut",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "model",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/UpdateScanErrorsModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Projects/getScanErrors": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGetScanErrorsGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ScanError"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Projects/getGraph": {
+      "get": {
+        "tags": ["Projects"],
+        "operationId": "ApiProjectsGetGraphGet",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json", "application/x-msgpack", "application/msgpack"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "graphId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/Graph"
+            }
+          }
+        }
+      }
+    },
+    "/api/Scan/startScan": {
+      "post": {
+        "tags": ["Scan"],
+        "operationId": "ApiScanStartScanPost",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "enqueueScanModel",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/EnqueueScanModel"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Scan/stopScan": {
+      "post": {
+        "tags": ["Scan"],
+        "operationId": "ApiScanStopScanPost",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json", "application/x-msgpack", "application/msgpack"],
+        "produces": [],
+        "parameters": [{
+          "name": "scanResult",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/ScanResult"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "XsltItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "compressedData": {
+          "type": "string"
+        },
+        "isReadonly": {
+          "type": "boolean"
+        },
+        "isFavorite": {
+          "type": "boolean"
+        },
+        "outputFileName": {
+          "type": "string"
+        }
+      }
+    },
+    "GlobalSettings": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "languageId": {
+          "type": "string"
+        },
+        "reportParameters": {
+          "$ref": "#/definitions/ReportParametrs"
+        },
+        "reportMailSenderParameters": {
+          "$ref": "#/definitions/ReportMailSenderParameters"
+        },
+        "proxyCredentals": {
+          "$ref": "#/definitions/ProxyCredentals"
+        }
+      }
+    },
+    "ReportParametrs": {
+      "type": "object",
+      "properties": {
+        "saveAsPath": {
+          "type": "string"
+        },
+        "useFilters": {
+          "type": "boolean"
+        },
+        "useElectronicSignature": {
+          "type": "boolean"
+        },
+        "certificatePath": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "showSignatureTime": {
+          "type": "boolean"
+        },
+        "signatureReason": {
+          "type": "string"
+        },
+        "location": {
+          "type": "string"
+        },
+        "doSignatureVisible": {
+          "type": "boolean"
+        },
+        "includeDiscardedVulnerabilities": {
+          "type": "boolean"
+        },
+        "includeSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "includeGraph": {
+          "type": "boolean"
+        },
+        "includeGlossary": {
+          "type": "boolean"
+        },
+        "converHtmlToPdf": {
+          "type": "boolean"
+        },
+        "removeHtml": {
+          "type": "boolean"
+        },
+        "createPdfPrintVersion": {
+          "type": "boolean"
+        },
+        "makeAFReport": {
+          "type": "boolean"
+        },
+        "includeDFD": {
+          "type": "boolean"
+        },
+        "includeSuppressedVulnerabilities": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ReportMailSenderParameters": {
+      "type": "object",
+      "properties": {
+        "smtpServerAddress": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "useDefaultSettings": {
+          "type": "boolean"
+        },
+        "emailRecipients": {
+          "type": "string"
+        },
+        "enableSsl": {
+          "type": "boolean"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "considerCertificateErrors": {
+          "type": "boolean"
+        },
+        "senderEmail": {
+          "type": "string"
+        }
+      }
+    },
+    "ProxyCredentals": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "SastRules": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string",
+          "readOnly": true
+        },
+        "instance": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "IssueDescriptionBase": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "readOnly": true
+        },
+        "issueType": {
+          "enum": ["Unknown", "Vulnerability", "Weakness", "Configuration", "Fingerprint", "BlackBox", "YaraMatch"],
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "IssueBaseMetadata": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "readOnly": true
+        },
+        "issueType": {
+          "enum": ["Unknown", "Vulnerability", "Weakness", "Configuration", "Fingerprint", "BlackBox", "YaraMatch"],
+          "type": "string",
+          "readOnly": true
+        },
+        "level": {
+          "enum": ["None", "Potential", "Low", "Medium", "High"],
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "PmPattern": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "readOnly": true
+        },
+        "pattern": {
+          "type": "string",
+          "readOnly": true
+        },
+        "filenameWildcard": {
+          "type": "string",
+          "readOnly": true
+        },
+        "programmingLanguages": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string",
+          "readOnly": true
+        },
+        "dataFormat": {
+          "enum": ["Json", "Dsl"],
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "Project": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "readOnly": true
+        },
+        "creationDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "settingsId": {
+          "format": "uuid",
+          "type": "string",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "lastScanDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "filePatterns": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/FilePattern"
+          }
+        }
+      }
+    },
+    "FilePattern": {
+      "type": "object",
+      "properties": {
+        "pattern": {
+          "type": "string"
+        },
+        "isChecked": {
+          "type": "boolean"
+        },
+        "isHardcoded": {
+          "type": "boolean"
+        },
+        "group": {
+          "type": "string"
+        }
+      }
+    },
+    "ScanResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "readOnly": true
+        },
+        "projectId": {
+          "format": "uuid",
+          "type": "string",
+          "readOnly": true
+        },
+        "settingsId": {
+          "format": "uuid",
+          "type": "string",
+          "readOnly": true
+        },
+        "version": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scanDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "progress": {
+          "$ref": "#/definitions/Progress"
+        },
+        "statistic": {
+          "$ref": "#/definitions/ScanResultStatistic"
+        },
+        "scanEnvironment": {
+          "$ref": "#/definitions/ScanEnvironment"
+        },
+        "previousScanResultId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "isRunFromQueue": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Progress": {
+      "type": "object",
+      "properties": {
+        "stage": {
+          "enum": ["Unknown", "VFSSetup", "Initialize", "Precheck", "Scan", "Finalize", "Done", "Failed", "Aborted", "Enqueued", "Autocheck"],
+          "type": "string",
+          "readOnly": true
+        },
+        "subStage": {
+          "type": "string",
+          "readOnly": true
+        },
+        "value": {
+          "format": "int32",
+          "type": "integer",
+          "readOnly": true
+        }
+      }
+    },
+    "ScanResultStatistic": {
+      "type": "object",
+      "properties": {
+        "highLevelVulnerabilityCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "mediumLevelVulnerabilityCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "lowLevelVulnerabilityCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "potentialVulnerabilityCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "totalBlackBoxVulnerabilityCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "totalStaticVulnerabilityCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "totalVulnerabilityCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "totalFileCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "totalUrlCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scannedUrlCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scannedFileCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scanDuration": {
+          "type": "string"
+        },
+        "state": {
+          "enum": ["None", "Inaccurate", "Incremental", "Incorrect"],
+          "type": "string"
+        },
+        "policyState": {
+          "enum": ["None", "Rejected", "Confirmed"],
+          "type": "string"
+        }
+      }
+    },
+    "ScanEnvironment": {
+      "type": "object",
+      "properties": {
+        "infrastructureVersion": {
+          "$ref": "#/definitions/ComponentVersion"
+        },
+        "componentVersions": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ComponentVersion"
+          }
+        },
+        "installatorVersion": {
+          "$ref": "#/definitions/ComponentVersion"
+        },
+        "clientVersion": {
+          "$ref": "#/definitions/ComponentVersion"
+        },
+        "yaraHash": {
+          "format": "byte",
+          "type": "string"
+        },
+        "sastHashes": {
+          "type": "object",
+          "properties": {
+            "None": {
+              "format": "byte",
+              "type": "string"
+            },
+            "Binary": {
+              "format": "byte",
+              "type": "string"
+            },
+            "Configuration": {
+              "format": "byte",
+              "type": "string"
+            },
+            "Fingerprint": {
+              "format": "byte",
+              "type": "string"
+            },
+            "Java": {
+              "format": "byte",
+              "type": "string"
+            },
+            "CSharp": {
+              "format": "byte",
+              "type": "string"
+            },
+            "PHP": {
+              "format": "byte",
+              "type": "string"
+            },
+            "PmTaint": {
+              "format": "byte",
+              "type": "string"
+            },
+            "BlackBox": {
+              "format": "byte",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "ComponentVersion": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "readOnly": true
+        },
+        "version": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "CreateProjectModel": {
+      "type": "object",
+      "properties": {
+        "project": {
+          "$ref": "#/definitions/Project"
+        },
+        "scanSettings": {
+          "$ref": "#/definitions/IScanSettings"
+        }
+      }
+    },
+    "IScanSettings": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/definitions/ISourceScanSettings",
+          "readOnly": true
+        },
+        "java": {
+          "$ref": "#/definitions/IJavaSettings",
+          "readOnly": true
+        },
+        "cSharp": {
+          "$ref": "#/definitions/ICSharpSettings",
+          "readOnly": true
+        },
+        "php": {
+          "$ref": "#/definitions/IPhpSettings",
+          "readOnly": true
+        },
+        "binary": {
+          "$ref": "#/definitions/IBinarySettings",
+          "readOnly": true
+        },
+        "pmTaint": {
+          "$ref": "#/definitions/IPmTaintSettings",
+          "readOnly": true
+        },
+        "configuration": {
+          "$ref": "#/definitions/IConfigSettings",
+          "readOnly": true
+        },
+        "fingerprint": {
+          "$ref": "#/definitions/IFingerprintSettings",
+          "readOnly": true
+        },
+        "blackBox": {
+          "$ref": "#/definitions/IBlackBoxSettings",
+          "readOnly": true
+        },
+        "common": {
+          "$ref": "#/definitions/ICommonSettings",
+          "readOnly": true
+        },
+        "disableInterpretCores": {
+          "type": "boolean"
+        },
+        "reportMailSenderParameters": {
+          "$ref": "#/definitions/ReportMailSenderParameters"
+        }
+      }
+    },
+    "ISourceScanSettings": {
+      "type": "object",
+      "properties": {
+        "isUnpackUserPackages": {
+          "type": "boolean"
+        },
+        "isDownloadDependencies": {
+          "type": "boolean"
+        },
+        "isGraphEnabled": {
+          "type": "boolean"
+        },
+        "isUsePublicAnalysisMethod": {
+          "type": "boolean"
+        },
+        "isUseEntryAnalysisPoint": {
+          "type": "boolean"
+        },
+        "threadCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "programmingLanguage": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "All", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string"
+        },
+        "scanAppType": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string"
+        },
+        "rootFolder": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "scanTarget": {
+          "type": "string"
+        },
+        "customParameters": {
+          "type": "string"
+        },
+        "scanUnitTimeout": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "useIncrementalScan": {
+          "type": "boolean"
+        },
+        "fullRescanOnNewFilesAdded": {
+          "type": "boolean"
+        },
+        "skipFileFormats": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipFilesFolders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "isStaticScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isBlackBoxScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "sourceControlSettings": {
+          "$ref": "#/definitions/SourceControlSettings"
+        },
+        "preprocessingTimeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "sendEmailWithReportsAfterScan": {
+          "type": "boolean"
+        },
+        "runAutocheckAfterScan": {
+          "type": "boolean"
+        },
+        "compressReport": {
+          "type": "boolean"
+        },
+        "considerPreviousScan": {
+          "type": "boolean"
+        },
+        "tempDir": {
+          "type": "string"
+        }
+      }
+    },
+    "IJavaSettings": {
+      "type": "object",
+      "properties": {
+        "javaParameters": {
+          "type": "string"
+        },
+        "javaVersion": {
+          "enum": ["v1_8", "v1_10"],
+          "type": "string"
+        },
+        "javaNormalizeVersionPattern": {
+          "type": "string"
+        },
+        "useJavaNormalizeVersionPattern": {
+          "type": "boolean"
+        },
+        "isUnpackUserPackages": {
+          "type": "boolean"
+        },
+        "isDownloadDependencies": {
+          "type": "boolean"
+        },
+        "isGraphEnabled": {
+          "type": "boolean"
+        },
+        "isUsePublicAnalysisMethod": {
+          "type": "boolean"
+        },
+        "isUseEntryAnalysisPoint": {
+          "type": "boolean"
+        },
+        "threadCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "programmingLanguage": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "All", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string"
+        },
+        "scanAppType": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string"
+        },
+        "rootFolder": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "scanTarget": {
+          "type": "string"
+        },
+        "customParameters": {
+          "type": "string"
+        },
+        "scanUnitTimeout": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "useIncrementalScan": {
+          "type": "boolean"
+        },
+        "fullRescanOnNewFilesAdded": {
+          "type": "boolean"
+        },
+        "skipFileFormats": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipFilesFolders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "isStaticScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isBlackBoxScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "sourceControlSettings": {
+          "$ref": "#/definitions/SourceControlSettings"
+        },
+        "preprocessingTimeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "sendEmailWithReportsAfterScan": {
+          "type": "boolean"
+        },
+        "runAutocheckAfterScan": {
+          "type": "boolean"
+        },
+        "compressReport": {
+          "type": "boolean"
+        },
+        "considerPreviousScan": {
+          "type": "boolean"
+        },
+        "tempDir": {
+          "type": "string"
+        }
+      }
+    },
+    "ICSharpSettings": {
+      "type": "object",
+      "properties": {
+        "projectType": {
+          "enum": ["None", "Solution", "WebSite"],
+          "type": "string"
+        },
+        "solutionFile": {
+          "type": "string"
+        },
+        "webSiteFolder": {
+          "type": "string"
+        },
+        "isUnpackUserPackages": {
+          "type": "boolean"
+        },
+        "isDownloadDependencies": {
+          "type": "boolean"
+        },
+        "isGraphEnabled": {
+          "type": "boolean"
+        },
+        "isUsePublicAnalysisMethod": {
+          "type": "boolean"
+        },
+        "isUseEntryAnalysisPoint": {
+          "type": "boolean"
+        },
+        "threadCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "programmingLanguage": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "All", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string"
+        },
+        "scanAppType": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string"
+        },
+        "rootFolder": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "scanTarget": {
+          "type": "string"
+        },
+        "customParameters": {
+          "type": "string"
+        },
+        "scanUnitTimeout": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "useIncrementalScan": {
+          "type": "boolean"
+        },
+        "fullRescanOnNewFilesAdded": {
+          "type": "boolean"
+        },
+        "skipFileFormats": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipFilesFolders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "isStaticScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isBlackBoxScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "sourceControlSettings": {
+          "$ref": "#/definitions/SourceControlSettings"
+        },
+        "preprocessingTimeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "sendEmailWithReportsAfterScan": {
+          "type": "boolean"
+        },
+        "runAutocheckAfterScan": {
+          "type": "boolean"
+        },
+        "compressReport": {
+          "type": "boolean"
+        },
+        "considerPreviousScan": {
+          "type": "boolean"
+        },
+        "tempDir": {
+          "type": "string"
+        }
+      }
+    },
+    "IPhpSettings": {
+      "type": "object",
+      "properties": {
+        "isUnpackUserPackages": {
+          "type": "boolean"
+        },
+        "isDownloadDependencies": {
+          "type": "boolean"
+        },
+        "isGraphEnabled": {
+          "type": "boolean"
+        },
+        "isUsePublicAnalysisMethod": {
+          "type": "boolean"
+        },
+        "isUseEntryAnalysisPoint": {
+          "type": "boolean"
+        },
+        "threadCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "programmingLanguage": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "All", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string"
+        },
+        "scanAppType": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string"
+        },
+        "rootFolder": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "scanTarget": {
+          "type": "string"
+        },
+        "customParameters": {
+          "type": "string"
+        },
+        "scanUnitTimeout": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "useIncrementalScan": {
+          "type": "boolean"
+        },
+        "fullRescanOnNewFilesAdded": {
+          "type": "boolean"
+        },
+        "skipFileFormats": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipFilesFolders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "isStaticScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isBlackBoxScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "sourceControlSettings": {
+          "$ref": "#/definitions/SourceControlSettings"
+        },
+        "preprocessingTimeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "sendEmailWithReportsAfterScan": {
+          "type": "boolean"
+        },
+        "runAutocheckAfterScan": {
+          "type": "boolean"
+        },
+        "compressReport": {
+          "type": "boolean"
+        },
+        "considerPreviousScan": {
+          "type": "boolean"
+        },
+        "tempDir": {
+          "type": "string"
+        }
+      }
+    },
+    "IBinarySettings": {
+      "type": "object",
+      "properties": {
+        "isUseIssueScan": {
+          "type": "boolean"
+        },
+        "isUseTaintScan": {
+          "type": "boolean"
+        },
+        "isUsePatternmatchingScan": {
+          "type": "boolean"
+        },
+        "isUnpackUserPackages": {
+          "type": "boolean"
+        },
+        "isDownloadDependencies": {
+          "type": "boolean"
+        },
+        "isGraphEnabled": {
+          "type": "boolean"
+        },
+        "isUsePublicAnalysisMethod": {
+          "type": "boolean"
+        },
+        "isUseEntryAnalysisPoint": {
+          "type": "boolean"
+        },
+        "threadCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "programmingLanguage": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "All", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string"
+        },
+        "scanAppType": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string"
+        },
+        "rootFolder": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "scanTarget": {
+          "type": "string"
+        },
+        "customParameters": {
+          "type": "string"
+        },
+        "scanUnitTimeout": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "useIncrementalScan": {
+          "type": "boolean"
+        },
+        "fullRescanOnNewFilesAdded": {
+          "type": "boolean"
+        },
+        "skipFileFormats": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipFilesFolders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "isStaticScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isBlackBoxScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "sourceControlSettings": {
+          "$ref": "#/definitions/SourceControlSettings"
+        },
+        "preprocessingTimeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "sendEmailWithReportsAfterScan": {
+          "type": "boolean"
+        },
+        "runAutocheckAfterScan": {
+          "type": "boolean"
+        },
+        "compressReport": {
+          "type": "boolean"
+        },
+        "considerPreviousScan": {
+          "type": "boolean"
+        },
+        "tempDir": {
+          "type": "string"
+        }
+      }
+    },
+    "IPmTaintSettings": {
+      "type": "object",
+      "properties": {
+        "disabledPatterns": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "enabledPatterns": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "usePmAnalysis": {
+          "type": "boolean"
+        },
+        "useTaintAnalysis": {
+          "type": "boolean"
+        },
+        "isUnpackUserPackages": {
+          "type": "boolean"
+        },
+        "isDownloadDependencies": {
+          "type": "boolean"
+        },
+        "isGraphEnabled": {
+          "type": "boolean"
+        },
+        "isUsePublicAnalysisMethod": {
+          "type": "boolean"
+        },
+        "isUseEntryAnalysisPoint": {
+          "type": "boolean"
+        },
+        "threadCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "programmingLanguage": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "All", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string"
+        },
+        "scanAppType": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string"
+        },
+        "rootFolder": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "scanTarget": {
+          "type": "string"
+        },
+        "customParameters": {
+          "type": "string"
+        },
+        "scanUnitTimeout": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "useIncrementalScan": {
+          "type": "boolean"
+        },
+        "fullRescanOnNewFilesAdded": {
+          "type": "boolean"
+        },
+        "skipFileFormats": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipFilesFolders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "isStaticScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isBlackBoxScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "sourceControlSettings": {
+          "$ref": "#/definitions/SourceControlSettings"
+        },
+        "preprocessingTimeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "sendEmailWithReportsAfterScan": {
+          "type": "boolean"
+        },
+        "runAutocheckAfterScan": {
+          "type": "boolean"
+        },
+        "compressReport": {
+          "type": "boolean"
+        },
+        "considerPreviousScan": {
+          "type": "boolean"
+        },
+        "tempDir": {
+          "type": "string"
+        }
+      }
+    },
+    "IConfigSettings": {
+      "type": "object",
+      "properties": {
+        "configurationFiles": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isUnpackUserPackages": {
+          "type": "boolean"
+        },
+        "isDownloadDependencies": {
+          "type": "boolean"
+        },
+        "isGraphEnabled": {
+          "type": "boolean"
+        },
+        "isUsePublicAnalysisMethod": {
+          "type": "boolean"
+        },
+        "isUseEntryAnalysisPoint": {
+          "type": "boolean"
+        },
+        "threadCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "programmingLanguage": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "All", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string"
+        },
+        "scanAppType": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string"
+        },
+        "rootFolder": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "scanTarget": {
+          "type": "string"
+        },
+        "customParameters": {
+          "type": "string"
+        },
+        "scanUnitTimeout": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "useIncrementalScan": {
+          "type": "boolean"
+        },
+        "fullRescanOnNewFilesAdded": {
+          "type": "boolean"
+        },
+        "skipFileFormats": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipFilesFolders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "isStaticScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isBlackBoxScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "sourceControlSettings": {
+          "$ref": "#/definitions/SourceControlSettings"
+        },
+        "preprocessingTimeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "sendEmailWithReportsAfterScan": {
+          "type": "boolean"
+        },
+        "runAutocheckAfterScan": {
+          "type": "boolean"
+        },
+        "compressReport": {
+          "type": "boolean"
+        },
+        "considerPreviousScan": {
+          "type": "boolean"
+        },
+        "tempDir": {
+          "type": "string"
+        }
+      }
+    },
+    "IFingerprintSettings": {
+      "type": "object",
+      "properties": {
+        "customYaraRules": {
+          "type": "string"
+        },
+        "useDefaultFingerprints": {
+          "type": "boolean"
+        },
+        "useCustomYaraRules": {
+          "type": "boolean"
+        },
+        "isUnpackUserPackages": {
+          "type": "boolean"
+        },
+        "isDownloadDependencies": {
+          "type": "boolean"
+        },
+        "isGraphEnabled": {
+          "type": "boolean"
+        },
+        "isUsePublicAnalysisMethod": {
+          "type": "boolean"
+        },
+        "isUseEntryAnalysisPoint": {
+          "type": "boolean"
+        },
+        "threadCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "programmingLanguage": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "All", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string"
+        },
+        "scanAppType": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string"
+        },
+        "rootFolder": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "scanTarget": {
+          "type": "string"
+        },
+        "customParameters": {
+          "type": "string"
+        },
+        "scanUnitTimeout": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "useIncrementalScan": {
+          "type": "boolean"
+        },
+        "fullRescanOnNewFilesAdded": {
+          "type": "boolean"
+        },
+        "skipFileFormats": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipFilesFolders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "isStaticScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isBlackBoxScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "sourceControlSettings": {
+          "$ref": "#/definitions/SourceControlSettings"
+        },
+        "preprocessingTimeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "sendEmailWithReportsAfterScan": {
+          "type": "boolean"
+        },
+        "runAutocheckAfterScan": {
+          "type": "boolean"
+        },
+        "compressReport": {
+          "type": "boolean"
+        },
+        "considerPreviousScan": {
+          "type": "boolean"
+        },
+        "tempDir": {
+          "type": "string"
+        }
+      }
+    },
+    "IBlackBoxSettings": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "enum": ["None", "Fast", "Normal", "Full"],
+          "type": "string"
+        },
+        "autocheckSite": {
+          "type": "string"
+        },
+        "autocheckCustomHeaders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "uniqueItems": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "customHeaders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "uniqueItems": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "authentication": {
+          "$ref": "#/definitions/BlackBoxAuthentication"
+        },
+        "autocheckAuthentication": {
+          "$ref": "#/definitions/BlackBoxAuthentication"
+        },
+        "proxySettings": {
+          "$ref": "#/definitions/BlackBoxProxySettings"
+        },
+        "autocheckProxySettings": {
+          "$ref": "#/definitions/BlackBoxProxySettings"
+        },
+        "configurationPath": {
+          "type": "string"
+        },
+        "bindAddress": {
+          "type": "string"
+        },
+        "threadCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "programmingLanguage": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "All", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string"
+        },
+        "scanAppType": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string"
+        },
+        "rootFolder": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "scanTarget": {
+          "type": "string"
+        },
+        "customParameters": {
+          "type": "string"
+        },
+        "scanUnitTimeout": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "useIncrementalScan": {
+          "type": "boolean"
+        },
+        "fullRescanOnNewFilesAdded": {
+          "type": "boolean"
+        },
+        "skipFileFormats": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipFilesFolders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "isStaticScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isBlackBoxScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "sourceControlSettings": {
+          "$ref": "#/definitions/SourceControlSettings"
+        },
+        "preprocessingTimeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "sendEmailWithReportsAfterScan": {
+          "type": "boolean"
+        },
+        "runAutocheckAfterScan": {
+          "type": "boolean"
+        },
+        "compressReport": {
+          "type": "boolean"
+        },
+        "considerPreviousScan": {
+          "type": "boolean"
+        },
+        "tempDir": {
+          "type": "string"
+        }
+      }
+    },
+    "ICommonSettings": {
+      "type": "object",
+      "properties": {
+        "threadCount": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "programmingLanguage": {
+          "enum": ["None", "CSharp", "Php", "Java", "Html", "JavaScript", "All", "SandBox", "Binary", "PlSql", "TSql", "MySql", "Aspx", "C", "CPlusPlus", "ObjectiveC", "Swift"],
+          "type": "string"
+        },
+        "scanAppType": {
+          "enum": ["None", "Binary", "Configuration", "Fingerprint", "Java", "CSharp", "PHP", "PmTaint", "BlackBox"],
+          "type": "string"
+        },
+        "rootFolder": {
+          "type": "string"
+        },
+        "site": {
+          "type": "string"
+        },
+        "scanTarget": {
+          "type": "string"
+        },
+        "customParameters": {
+          "type": "string"
+        },
+        "scanUnitTimeout": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "useIncrementalScan": {
+          "type": "boolean"
+        },
+        "fullRescanOnNewFilesAdded": {
+          "type": "boolean"
+        },
+        "skipFileFormats": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipFilesFolders": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disabledTypes": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hideSuspectedVulnerabilities": {
+          "type": "boolean"
+        },
+        "isStaticScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isBlackBoxScanEnabled": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "sourceControlSettings": {
+          "$ref": "#/definitions/SourceControlSettings"
+        },
+        "preprocessingTimeout": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "sendEmailWithReportsAfterScan": {
+          "type": "boolean"
+        },
+        "runAutocheckAfterScan": {
+          "type": "boolean"
+        },
+        "compressReport": {
+          "type": "boolean"
+        },
+        "considerPreviousScan": {
+          "type": "boolean"
+        },
+        "tempDir": {
+          "type": "string"
+        }
+      }
+    },
+    "SourceControlSettings": {
+      "type": "object",
+      "properties": {
+        "repositoryType": {
+          "enum": ["None", "Git", "TFS"],
+          "type": "string"
+        },
+        "repositoryUrl": {
+          "type": "string"
+        },
+        "checkoutDir": {
+          "type": "string"
+        },
+        "sourceControlCredentalsType": {
+          "enum": ["None", "Anonymous", "Password", "AuthenticationToken", "SshKeys"],
+          "type": "string"
+        },
+        "user": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "catalog": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "publicSSHKey": {
+          "type": "string"
+        },
+        "privateSSHKey": {
+          "type": "string"
+        },
+        "includeSubmodules": {
+          "type": "boolean"
+        },
+        "updateSourcesBeforeScan": {
+          "type": "boolean"
+        }
+      }
+    },
+    "BlackBoxAuthentication": {
+      "type": "object",
+      "properties": {
+        "auth_item": {
+          "$ref": "#/definitions/AuthenticationItem"
+        }
+      }
+    },
+    "BlackBoxProxySettings": {
+      "type": "object",
+      "properties": {
+        "isEnabled": {
+          "type": "boolean"
+        },
+        "host": {
+          "type": "string"
+        },
+        "port": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "type": {
+          "enum": ["Http", "HttpNoConnect", "Socks4", "Socks5"],
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "AuthenticationItem": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "credentials": {
+          "$ref": "#/definitions/AuthenticationCredentials"
+        },
+        "test_url": {
+          "type": "string"
+        },
+        "form_url": {
+          "type": "string"
+        },
+        "form_xpath": {
+          "type": "string"
+        },
+        "regexp_of_success": {
+          "type": "string"
+        }
+      }
+    },
+    "AuthenticationCredentials": {
+      "type": "object",
+      "properties": {
+        "cookie": {
+          "type": "string"
+        },
+        "cookies": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "uniqueItems": false,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "type": {
+          "enum": ["Form", "Http", "None", "RawCookie"],
+          "type": "string"
+        },
+        "login": {
+          "$ref": "#/definitions/MappedAuthenticationObject"
+        },
+        "password": {
+          "$ref": "#/definitions/MappedAuthenticationObject"
+        }
+      }
+    },
+    "MappedAuthenticationObject": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "regexp": {
+          "type": "string"
+        },
+        "is_regexp": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UpdateScanSettingsModel": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "scanSettings": {
+          "$ref": "#/definitions/IScanSettings"
+        }
+      }
+    },
+    "UpdatePoliciesModel": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "policies": {
+          "type": "string"
+        }
+      }
+    },
+    "CreateScanResultModel": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/definitions/ScanResult"
+        },
+        "scanSettings": {
+          "$ref": "#/definitions/IScanSettings"
+        }
+      }
+    },
+    "UpdateIssueModel": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "issue": {
+          "$ref": "#/definitions/IssueBase"
+        }
+      }
+    },
+    "IssueBase": {
+      "type": "object",
+      "properties": {
+        "Class": {
+          "enum": ["Unknown", "Vulnerability", "Weakness", "Configuration", "Fingerprint", "BlackBox", "YaraMatch"],
+          "type": "string",
+          "readOnly": true
+        },
+        "internalId": {
+          "format": "uuid",
+          "type": "string",
+          "readOnly": true
+        },
+        "id": {
+          "type": "string"
+        },
+        "isOldInScanResultId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "isFavorite": {
+          "type": "boolean"
+        },
+        "groupId": {
+          "type": "string"
+        },
+        "approvalState": {
+          "enum": ["None", "Approval", "Discard", "NotExist", "AutoApproval"],
+          "type": "string"
+        },
+        "isNewInScanResultId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "scanResultId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "isSuspected": {
+          "type": "boolean"
+        },
+        "isSuppressed": {
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string"
+        },
+        "counter": {
+          "format": "int64",
+          "type": "integer"
+        }
+      }
+    },
+    "UpdateIssuesModel": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "issues": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IssueBase"
+          }
+        }
+      }
+    },
+    "UpdateScanErrorsModel": {
+      "type": "object",
+      "properties": {
+        "projectId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "scanResultId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "scanErrors": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ScanError"
+          }
+        }
+      }
+    },
+    "ScanError": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "readOnly": true
+        },
+        "hash": {
+          "format": "byte",
+          "type": "string",
+          "readOnly": true
+        },
+        "scanResultId": {
+          "format": "uuid",
+          "type": "string",
+          "readOnly": true
+        },
+        "errorType": {
+          "type": "string",
+          "readOnly": true
+        },
+        "message": {
+          "type": "string",
+          "readOnly": true
+        },
+        "scanStage": {
+          "enum": ["Unknown", "VFSSetup", "Initialize", "Precheck", "Scan", "Finalize", "Done", "Failed", "Aborted", "Enqueued", "Autocheck"],
+          "type": "string",
+          "readOnly": true
+        },
+        "workType": {
+          "enum": ["Unknown", "Scan", "Autocheck"],
+          "type": "string",
+          "readOnly": true
+        },
+        "primaryFile": {
+          "type": "string"
+        },
+        "isCritical": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      }
+    },
+    "Graph": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string",
+          "readOnly": true
+        },
+        "value": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "EnqueueScanModel": {
+      "type": "object",
+      "properties": {
+        "scanResult": {
+          "$ref": "#/definitions/ScanResult"
+        },
+        "scanSettings": {
+          "$ref": "#/definitions/IScanSettings"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "name": "Authorization",
+      "in": "header",
+      "type": "apiKey",
+      "description": "Please insert JWT with Bearer into field"
+    }
+  }
+}

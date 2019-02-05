@@ -1,0 +1,13 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+    <j:set var="sastConfigName" value="2019" />
+    <f:entry title="${sastConfigName}"/>
+    <f:entry title="${sastConfigName1}"/>
+    <f:entry title="${descriptor.clazz}"/>
+    <f:entry title="UI project name">
+        <f:textbox field="uiProjectName"/>
+    </f:entry>
+    <f:entry title="uiProject" field="uiProject">
+        <f:select />
+    </f:entry>
+</j:jelly>

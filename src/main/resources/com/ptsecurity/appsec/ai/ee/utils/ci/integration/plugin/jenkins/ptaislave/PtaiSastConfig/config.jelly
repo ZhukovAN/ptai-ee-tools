@@ -1,0 +1,41 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+    <f:entry title="${%sastconfig.entry.name}" field="sastConfigName">
+        <f:textbox/>
+    </f:entry>
+
+    <f:entry title="${%sastconfig.entry.ptai.url}" field="sastConfigPtaiHostUrl">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="sastConfigPtaiCert" field="sastConfigPtaiCert">
+        <f:textarea/>
+    </f:entry>
+    <f:entry title="sastConfigPtaiCertPwd" field="sastConfigPtaiCertPwd">
+        <f:password/>
+    </f:entry>
+    <f:validateButton
+            title="testPtaiCert" progress="${%sastconfig.entry.url.jenkins.checking}"
+            method="testPtaiCert" with="sastConfigPtaiCert,sastConfigPtaiCertPwd" />
+    <f:entry title="sastConfigPtaiCaCerts" field="sastConfigPtaiCaCerts">
+        <f:textarea/>
+    </f:entry>
+    <f:validateButton
+            title="testPtaiCaCerts" progress="${%sastconfig.entry.url.jenkins.checking}"
+            method="testPtaiCaCerts" with="sastConfigPtaiCaCerts" />
+    <f:validateButton
+            title="${%sastconfig.entry.url.ptai.check}" progress="${%sastconfig.entry.url.ptai.checking}"
+            method="testPtaiConnection" with="sastConfigPtaiHostUrl,sastConfigPtaiCert,sastConfigPtaiCertPwd,sastConfigPtaiCaCerts" />
+
+    <f:entry title="${%sastconfig.entry.jenkins.url}" field="sastConfigJenkinsHostUrl">
+        <f:textbox/>
+    </f:entry>
+    <f:entry title="${%sastconfig.entry.url.jenkins}" field="sastConfigJenkinsJobName">
+        <f:textbox/>
+    </f:entry>
+    <f:dropdownDescriptorSelector
+            field="sastConfigJenkinsAuth" title="Authentication" descriptors="${descriptor.getAuthDescriptors()}"
+            default="${descriptor.getDefaultAuthDescriptor()}"/>
+    <f:validateButton
+            title="${%sastconfig.entry.url.jenkins.check}" progress="${%sastconfig.entry.url.jenkins.checking}"
+            method="testJenkinsConnection" with="sastConfigJenkinsHostUrl,sastConfigJenkinsJobName,sastConfigJenkinsAuth,credentials,userName,apiToken" />
+</j:jelly>

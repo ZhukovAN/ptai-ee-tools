@@ -1,0 +1,72 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:st="jelly:stapler">
+    <f:entry title="Site Address">
+        <f:textbox clazz="text" name="siteAddress" value="${instance.siteAddress}"/>
+    </f:entry>
+    <f:entry title="Number of Threads">
+        <f:textbox clazz="number" name="threadsNumber" value="${instance.threadsNumber}"/>
+    </f:entry>
+    <f:entry title="Launch Parameters">
+        <f:textbox clazz="text" name="launchParameters" value="${instance.launchParameters}"/>
+    </f:entry>
+    <f:entry title="File Scanning Maximum Duration">
+        <f:textbox clazz="number" name="timeout" value="${instance.timeout}"/>
+    </f:entry>
+    <f:optionalBlock name="useAi" title="Vulnerability Search in Source Code" checked="${instance.useAi != null}">
+        <j:scope>
+        <j:set var="instance" value="${instance.useAi}"/>
+            <f:dropdownDescriptorSelector
+                    field="aiEngineSettings" title="AI engines" descriptors="${descriptor.getAiSettingsDescriptors()}"/>
+        </j:scope>
+    </f:optionalBlock>
+    <f:optionalBlock field="useSca" name="useSca" title="Vulnerable Components Search" checked="${instance.useSca != null}">
+        <f:nested>
+            <table width="100%">
+                <j:scope>
+                    <j:set var="descriptor" value="${descriptor.scaSettingsDescriptor}"/>
+                    <j:set var="instance" value="${instance.useSca}"/>
+                    <st:include page="${descriptor.configPage}" from="${descriptor}" optional="true" class="${descriptor.clazz}"/>
+                </j:scope>
+            </table>
+        </f:nested>
+    </f:optionalBlock>
+    <!--
+    <f:optionalBlock name="useSca" title="Use SCA" checked="${instance.useSca != null}">
+        <f:entry title="Use PT database" field="usePtScaDatabase">
+            <f:checkbox />
+        </f:entry>
+    </f:optionalBlock>
+    -->
+    <f:optionalBlock name="usePm" title="Pattern Matching" checked="${instance.usePm != null}">
+    </f:optionalBlock>
+    <f:optionalBlock name="useCfg" title="Configuration Flaw Search" checked="${instance.useCfg != null}">
+    </f:optionalBlock>
+    <f:optionalBlock name="useBlackBox" title="Blackbox Search" checked="${instance.useBlackBox != null}">
+    </f:optionalBlock>
+    <!--
+    <f:optionalBlock name="usePm" title="Use PM" checked="${usePm.pmSettings != null}">
+        <f:property field="pmSettings"/>
+    </f:optionalBlock>
+    -->
+<!--
+    <f:dropdownDescriptorSelector
+            field="templateLanguage" title="Language" descriptors="${descriptor.getLanguageDescriptors()}"
+            default="${descriptor.getDefaultLanguageDescriptor()}"/>
+    <f:entry title="1111111">
+        <f:checkbox default="false" name="success" id="success"/>
+        <label>SUCCESS</label>
+        &amp;nbsp;&amp;nbsp;
+
+        <f:checkbox default="false" name="fail" id="fail"/>
+        <label>FAILURE</label>
+        &amp;nbsp;&amp;nbsp;
+
+        <f:checkbox default="false" name="unstable" id="unstable"/>
+        <label>UNSTABLE</label>
+        &amp;nbsp;&amp;nbsp;
+
+        <f:checkbox default="false" name="aborted" id="aborted"/>
+        <label>ABORTED</label>
+    </f:entry>
+    -->
+</j:jelly>

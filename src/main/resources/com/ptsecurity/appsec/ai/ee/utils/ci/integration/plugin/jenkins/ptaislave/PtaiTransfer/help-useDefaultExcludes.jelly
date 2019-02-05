@@ -1,0 +1,13 @@
+<?jelly escape-by-default='true'?>
+
+<j:jelly xmlns:j="jelly:core">
+    <p>${%useDefaultExcludes}
+        <j:invokeStatic var="defaultExcludes" method="getDefaultExcludes" className="org.apache.tools.ant.DirectoryScanner"/>
+        <pre>
+            <j:forEach var="pattern" items="${defaultExcludes}">
+                ${pattern}<br/>
+            </j:forEach>
+        </pre>
+    </p>
+
+</j:jelly>
