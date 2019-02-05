@@ -22,15 +22,4 @@
             </f:repeatable>
         </j:scope>
     </f:entry>
-    <f:entry title="${instance.sastConfigName}"/>
-    <!--
-    <j:scope>
-        <j:set var="sastConfigName" value="${instance.sastConfigName}"/> -->
-    <j:set var="sastConfigName1" value="2018" />
-    <j:set var="uiProject" value="${instance.sastConfigName}" />
-
-    <f:dropdownDescriptorSelector
-            field="sastJobSettings" title="Job settings" descriptors="${descriptor.getJobSettingsDescriptors()}"
-            default="${descriptor.getDefaultJobSettingsDescriptor()}" capture="sastConfigName1,uiProject"/>
-    <!-- </j:scope> -->
 </j:jelly>

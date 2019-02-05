@@ -1,8 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.descriptor.PtaiPluginDescriptor;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.settings.PtaiJobSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.utils.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleBuild;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleProject;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -42,9 +43,6 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
     @Getter
     private ArrayList<PtaiTransfer> transfers;
 
-    @Getter
-    private PtaiJobSettings sastJobSettings;
-
     public final void setTransfers(final ArrayList<PtaiTransfer> transfers) {
         if (transfers == null)
             this.transfers = new ArrayList<PtaiTransfer>();
@@ -54,11 +52,9 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
 
     @DataBoundConstructor
     public PtaiPlugin(final String sastConfigName, final boolean doZip,
-                      final ArrayList<PtaiTransfer> transfers,
-                      final PtaiJobSettings sastJobSettings) {
+                      final ArrayList<PtaiTransfer> transfers) {
         this.sastConfigName = sastConfigName;
         this.transfers = transfers;
-        this.sastJobSettings = sastJobSettings;
     }
 
     private TreeMap<String, String> getEnvironmentVariables(final Run<?, ?> build, final TaskListener listener) {
@@ -82,12 +78,23 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
         buildInfo.setEffectiveEnvironmentInBuildInfo();
 
         String l_strUrl = this.getSastConfig(sastConfigName).getSastConfigPtaiHostUrl();
-        FileUploader l_objUploader = new FileUploader(listener, transfers, false, l_strUrl);
-        String l_objRes = workspace.act(l_objUploader);
+        // FileUploader l_objUploader = new FileUploader(listener, transfers, false, l_strUrl);
+        // String l_objRes = workspace.act(l_objUploader);
 
-        buildInfo.println("Upload: " + l_objRes.toString());
+        // buildInfo.println("Upload: " + l_objRes.toString());
 
-        RemoteAccessApi l_objApi = new RemoteAccessApi();
+        PtaiSastConfig cfg = getDescriptor().getSastConfig(sastConfigName);
+        PtaiJenkinsApiClient apiClient = new PtaiJenkinsApiClient();
+        apiClient.setDebugging(true);
+        RemoteAccessApi api = new RemoteAccessApi(apiClient);
+        api.getApiClient().setBasePath(this.getSastConfig(sastConfigName).getSastConfigJenkinsHostUrl());
+        String l_strJobName = apiClient.convertJobName(cfg.getSastConfigJenkinsJobName());
+        String json = "{\"parameter\": [{\"name\":\"workMode\", \"value\":\"123\"}, {\"name\":\"sastNode\", \"value\":\"high\"}]}";
+        try {
+            FreeStyleProject prj = api.getJob(l_strJobName);
+            api.postJobBuild(l_strJobName, json, null, null);
+            prj = api.getJob(l_strJobName);
+        } catch (Exception e) {}
         // l_objApi.postJobBuild();
     }
 
