@@ -1,5 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.descriptor;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiClient;
+import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiResponse;
+import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest.AgentAuthApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.Project;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.ProjectsApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.PtaiPlugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.PtaiSastConfig;
 import hudson.Extension;
@@ -12,7 +17,15 @@ import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
+import org.parboiled.common.StringUtils;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLSession;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.util.Base64;
 import java.util.List;
 
 @Extension
@@ -25,11 +38,11 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
     }
 
     public PtaiSastConfigDescriptor getSastConfigDescriptor() {
-        return Jenkins.getInstance().getDescriptorByType(PtaiSastConfigDescriptor.class);
+        return Jenkins.get().getDescriptorByType(PtaiSastConfigDescriptor.class);
     }
 
     public PtaiTransferDescriptor getTransferDescriptor() {
-        return Jenkins.getInstance().getDescriptorByType(PtaiTransferDescriptor.class);
+        return Jenkins.get().getDescriptorByType(PtaiTransferDescriptor.class);
     }
 
     public PtaiPluginDescriptor() {
@@ -43,9 +56,9 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
     }
 
     public PtaiSastConfig getSastConfig(final String configName) {
-        for (PtaiSastConfig l_objCfg : sastConfigs) {
-            if (l_objCfg.getSastConfigName().equals(configName))
-                return l_objCfg;
+        for (PtaiSastConfig cfg : sastConfigs) {
+            if (cfg.getSastConfigName().equals(configName))
+                return cfg;
         }
         return null;
     }
@@ -58,12 +71,56 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
     }
 
     public ListBoxModel doFillUiProjectItems(@QueryParameter String sastConfigName) {
-        ListBoxModel m = new ListBoxModel();
-        m.add(sastConfigName + " 1", sastConfigName + " 1");
-        m.add(sastConfigName + " 2", sastConfigName + " 2");
-        m.add(sastConfigName + " 3", sastConfigName + " 3");
-        m.add(sastConfigName + " 4", sastConfigName + " 4");
-        return m;
+        ListBoxModel res = new ListBoxModel();
+        PtaiSastConfig sastConfig = getSastConfig(sastConfigName);
+        if (null == sastConfig) return res;
+        if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiHostUrl())) return res;
+        if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiCert())) return res;
+        if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiCertPwd())) return res;
+        if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiCaCerts())) return res;
+
+        HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) { return true; }
+        };
+
+        ApiClient apiClient = new ApiClient();
+        AgentAuthApi authApi = new AgentAuthApi(apiClient);
+        authApi.getApiClient().setBasePath(sastConfig.getSastConfigPtaiHostUrl());
+
+        ProjectsApi prjApi = new ProjectsApi();
+        prjApi.getApiClient().setBasePath(sastConfig.getSastConfigPtaiHostUrl());
+
+        byte[] decodedBytes = Base64.getDecoder().decode(sastConfig.getSastConfigPtaiCert().replaceAll("\n", ""));
+        char[] certPwd = sastConfig.getSastConfigPtaiCertPwd().toCharArray();
+        KeyStore appKeyStore = null;
+        ApiResponse<String> authToken = null;
+        try (InputStream certStream = new ByteArrayInputStream(decodedBytes)) {
+            appKeyStore = KeyStore.getInstance("PKCS12");
+            appKeyStore.load(certStream, certPwd);
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+            kmf.init(appKeyStore, certPwd);
+            authApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
+            // Due to ApiClient specific keyManagers must be set before CA certificates
+            authApi.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfig.getSastConfigPtaiCaCerts().getBytes()));
+            authApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
+
+            prjApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
+            prjApi.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfig.getSastConfigPtaiCaCerts().getBytes()));
+            prjApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
+
+            authToken = authApi.apiAgentAuthSigninGetWithHttpInfo("Agent");
+
+            prjApi.getApiClient().setApiKeyPrefix("Bearer");
+            prjApi.getApiClient().setApiKey(authToken.getData());
+
+            com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiResponse<List<Project>> projects = prjApi.apiProjectsGetWithHttpInfo(true);
+            for (Project prj : projects.getData())
+                res.add(prj.getName(), prj.getId().toString());
+        } catch (Exception e) {
+            return res;
+        }
+        return res;
     }
 
     @Override

@@ -35,10 +35,8 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
     @Getter
     private String uiProject;
 
-    @DataBoundSetter
-    public void setSastConfigName(final String sastConfigName) {
-        this.sastConfigName = sastConfigName;
-    }
+    @Getter
+    private String sastAgentName;
 
     @Getter
     private ArrayList<PtaiTransfer> transfers;
@@ -51,9 +49,13 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
     }
 
     @DataBoundConstructor
-    public PtaiPlugin(final String sastConfigName, final boolean doZip,
+    public PtaiPlugin(final String sastConfigName,
+                      final String uiProject,
+                      final String sastAgentName,
                       final ArrayList<PtaiTransfer> transfers) {
         this.sastConfigName = sastConfigName;
+        this.uiProject = uiProject;
+        this.sastAgentName = sastAgentName;
         this.transfers = transfers;
     }
 
@@ -71,17 +73,15 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
 
     @Override
     public void perform(@Nonnull Run<?, ?> build, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener listener) throws InterruptedException, IOException {
-        Jenkins jenkins = Jenkins.getInstance();
+        Jenkins jenkins = Jenkins.get();
         final BuildEnv currentBuildEnv = new BuildEnv(getEnvironmentVariables(build, listener), workspace, build.getTimestamp());
         final BuildEnv targetBuildEnv = null;
         final BuildInfo buildInfo = new BuildInfo(listener, consolePrefix, jenkins.getRootPath(), currentBuildEnv, targetBuildEnv);
         buildInfo.setEffectiveEnvironmentInBuildInfo();
 
-        String l_strUrl = this.getSastConfig(sastConfigName).getSastConfigPtaiHostUrl();
-        // FileUploader l_objUploader = new FileUploader(listener, transfers, false, l_strUrl);
-        // String l_objRes = workspace.act(l_objUploader);
-
-        // buildInfo.println("Upload: " + l_objRes.toString());
+        String ptaiHostUrl = this.getSastConfig(sastConfigName).getSastConfigPtaiHostUrl();
+        FileUploader uploader = new FileUploader(listener, transfers, ptaiHostUrl);
+        buildInfo.println("Upload: " + workspace.act(uploader));
 
         PtaiSastConfig cfg = getDescriptor().getSastConfig(sastConfigName);
         PtaiJenkinsApiClient apiClient = new PtaiJenkinsApiClient();
@@ -105,7 +105,7 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
 
     @Override
     public PtaiPluginDescriptor getDescriptor() {
-        return Jenkins.getInstance().getDescriptorByType(PtaiPluginDescriptor.class);
+        return Jenkins.get().getDescriptorByType(PtaiPluginDescriptor.class);
     }
 
     public PtaiSastConfig getSastConfig(final String sastConfigName) {

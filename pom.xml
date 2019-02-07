@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>3.28</version>
+        <version>3.36</version>
         <relativePath />
     </parent>
     <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins</groupId>
@@ -17,7 +17,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <java-version>1.8</java-version>
         <java.level>8</java.level>
-        <jenkins.version>2.60.3</jenkins.version>
+        <!-- <jenkins.version>2.60.3</jenkins.version> -->
+        <jenkins.version>2.150.2</jenkins.version>
         <swagger-core-version>1.5.18</swagger-core-version>
         <feign-version>9.4.0</feign-version>
         <feign-form-version>2.1.0</feign-form-version>
@@ -223,34 +224,15 @@
                 <version>2.2.3</version>
                 <executions>
                     <execution>
-                        <id>Simple server API</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <!-- <inputSpec>http://localhost:8443/v2/api-docs</inputSpec> -->
-                            <inputSpec>${project.basedir}/src/main/resources/swagger.json</inputSpec>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.utils.ci.integration.server.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.utils.ci.integration.server.rest</modelPackage>
-                            <language>java</language>
-                            <!-- <library>feign</library>-->
-                            <library>okhttp-gson</library>
-                            <generateApiTests>false</generateApiTests>
-                            <generateModelTests>false</generateModelTests>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>PTAI EE server gateway API</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <!-- <inputSpec>http://localhost:8443/v2/api-docs</inputSpec> -->
-                            <inputSpec>${project.basedir}/src/main/resources/ptai.server.gateway.swagger.json</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/ptai.server.gateway.swagger.json</inputSpec>
                             <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest</apiPackage>
                             <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest</modelPackage>
                             <language>java</language>
-                            <!-- <library>feign</library>-->
                             <library>okhttp-gson</library>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
@@ -262,12 +244,26 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <!-- <inputSpec>http://localhost:8443/v2/api-docs</inputSpec> -->
-                            <inputSpec>${project.basedir}/src/main/resources/ptai.server.projectmanagement.swagger.json</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/ptai.server.projectmanagement.swagger.json</inputSpec>
                             <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest</apiPackage>
                             <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest</modelPackage>
                             <language>java</language>
-                            <!-- <library>feign</library>-->
+                            <library>okhttp-gson</library>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>PTAI EE server files store API</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <!-- <inputSpec>http://localhost:8443/v2/api-docs</inputSpec> -->
+                            <inputSpec>${project.basedir}/src/main/resources/api/ptai.server.filesstore.swagger.json</inputSpec>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest</modelPackage>
+                            <language>java</language>
                             <library>okhttp-gson</library>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
@@ -285,17 +281,12 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/jenkins-api.yml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/jenkins-api.yml</inputSpec>
                             <generatorName>java</generatorName>
                             <apiPackage>com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest</apiPackage>
                             <modelPackage>com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest</modelPackage>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
-                            <!--
-                            <configOptions>
-                                <sourceFolder>src/gen/java/main</sourceFolder>
-                            </configOptions>
-                            -->
                         </configuration>
                     </execution>
                 </executions>

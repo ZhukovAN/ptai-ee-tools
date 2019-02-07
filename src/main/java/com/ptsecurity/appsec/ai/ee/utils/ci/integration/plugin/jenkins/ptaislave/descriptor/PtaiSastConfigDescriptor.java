@@ -1,17 +1,17 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.descriptor;
 
 import com.cloudbees.plugins.credentials.common.UsernamePasswordCredentials;
+import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiClient;
+import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiResponse;
+import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest.AgentAuthApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.PtaiSastConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.auth.Auth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.auth.CredentialsAuth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.auth.NoneAuth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.CredentialsNotFoundException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.PtaiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.utils.PtaiJenkinsApiClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.server.ApiClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.server.StringUtil;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.server.rest.Version;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.server.rest.VersionControllerApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleProject;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
 import hudson.Extension;
@@ -21,7 +21,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.kohsuke.stapler.QueryParameter;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
 import javax.servlet.ServletException;
 import java.io.ByteArrayInputStream;
@@ -67,14 +69,43 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
     }
 
     public FormValidation doTestPtaiConnection(
-            @QueryParameter("sastConfigPtaiHostUrl") final String sastConfigPtaiHostUrl,
-            @QueryParameter("sastConfigPtaiCert") final String sastConfigPtaiCert,
-            @QueryParameter("sastConfigPtaiCertPwd") final String sastConfigPtaiCertPwd) throws IOException, ServletException {
+            @QueryParameter("sastConfigPtaiHostUrl") final String ptaiHostUrl,
+            @QueryParameter("sastConfigPtaiCert") final String ptaiCert,
+            @QueryParameter("sastConfigPtaiCertPwd") final String ptaiCertPwd,
+            @QueryParameter("sastConfigPtaiCaCerts") final String ptaiCaCerts) throws IOException, ServletException {
         try {
-            VersionControllerApi l_objApi = new VersionControllerApi();
-            l_objApi.getApiClient().setBasePath(sastConfigPtaiHostUrl);
-            Version l_objResponse = l_objApi.versionUsingGET();
-            return FormValidation.ok("Success, PT AI EE integration server version is " + l_objResponse.getVersion());
+            if (StringUtils.isEmpty(ptaiHostUrl))
+                throw new PtaiException("PT AI host URL must not be empty");
+            if (StringUtils.isEmpty(ptaiCert))
+                throw new PtaiException("PT AI client certificate must not be empty");
+            if (StringUtils.isEmpty(ptaiCaCerts))
+                throw new PtaiException("PT AI CA certificates must not be empty");
+            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+                @Override
+                public boolean verify(String hostname, SSLSession session) { return true; }
+            };
+
+            ApiClient apiClient = new ApiClient();
+            AgentAuthApi authApi = new AgentAuthApi(apiClient);
+            apiClient.setBasePath(ptaiHostUrl);
+
+            byte[] decodedBytes = Base64.getDecoder().decode(ptaiCert.replaceAll("\n", ""));
+            char[] certPwd = ptaiCertPwd.toCharArray();
+            KeyStore appKeyStore = null;
+            ApiResponse<String> authToken = null;
+            try (InputStream certStream = new ByteArrayInputStream(decodedBytes)) {
+                appKeyStore = KeyStore.getInstance("PKCS12");
+                appKeyStore.load(certStream, certPwd);
+                KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+                kmf.init(appKeyStore, certPwd);
+                apiClient.setKeyManagers(kmf.getKeyManagers());
+                apiClient.setSslCaCert(new ByteArrayInputStream(ptaiCaCerts.getBytes()));
+                apiClient.getHttpClient().setHostnameVerifier(hostnameVerifier);
+                authToken = authApi.apiAgentAuthSigninGetWithHttpInfo("Agent");
+            } catch (Exception e) {
+                throw e;
+            }
+            return FormValidation.ok("Success, JWT token starts with " + authToken.getData().substring(1, 10));
         } catch (Exception e) {
             return FormValidation.error("Connection failed");
         }
@@ -109,17 +140,16 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
             KeyStore caKeyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             caKeyStore.load(null, password);
             int index = 0;
-            String l_strDn = "";
+            String dn = "";
             for (Certificate certificate : certificates) {
                 String certificateAlias = "ca" + Integer.toString(index++);
                 caKeyStore.setCertificateEntry(certificateAlias, certificate);
-                l_strDn += ((X509Certificate)certificate).getSubjectDN().getName();
-                l_strDn += ", ";
+                dn += "{" + ((X509Certificate)certificate).getSubjectDN().getName() + "}, ";
             }
-            l_strDn = "[" + StringUtils.removeEnd(l_strDn, ",") + "]";
+            dn = "[" + StringUtils.removeEnd(dn.trim(), ",") + "]";
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             trustManagerFactory.init(caKeyStore);
-            return FormValidation.ok("Success, trusted certificates are " + l_strDn);
+            return FormValidation.ok("Success, trusted certificates are " + dn);
         } catch (Exception e) {
             return FormValidation.error(e, "Verification failed");
         }

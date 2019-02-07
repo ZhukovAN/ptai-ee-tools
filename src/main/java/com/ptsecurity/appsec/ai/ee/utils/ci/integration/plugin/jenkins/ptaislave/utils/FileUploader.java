@@ -3,23 +3,17 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislav
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.PtaiTransfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.PtaiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.server.ApiClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.server.rest.Upload;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.server.rest.UploadControllerApi;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 import jenkins.MasterToSlaveFileCallable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 
@@ -38,7 +32,6 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
     private final TaskListener listener;
 
     private final List<PtaiTransfer> transfers;
-    private final boolean doZip;
 
     private final String sastConfigUrlPtai;
 
@@ -96,37 +89,24 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
     }
 
     public String packCollectedFiles(final File dir, final List<FileEntry> files) throws IOException, ArchiveException {
-        String l_strPackedFileName = UUID.randomUUID().toString();
-        String l_strStreamType = ArchiveStreamFactory.TAR;
-        if (this.doZip) {
-            l_strPackedFileName += ".zip";
-            l_strStreamType = ArchiveStreamFactory.ZIP;
-        } else
-            l_strPackedFileName += ".tar";
+        String zipFileName = UUID.randomUUID().toString() + ".zip";
 
-        OutputStream l_objArchiveStream = new FileOutputStream(dir.getCanonicalPath() + File.separator + l_strPackedFileName);
-        ArchiveOutputStream l_objArchive;
-        l_objArchive = new ArchiveStreamFactory().createArchiveOutputStream(l_strStreamType, l_objArchiveStream);
+        OutputStream zipFileStream = new FileOutputStream(dir.getCanonicalPath() + File.separator + zipFileName);
+        ArchiveOutputStream archiveStream;
+        archiveStream = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP, zipFileStream);
 
-        for (FileEntry l_objFileEntry : files) {
-            File l_objFile = new File(l_objFileEntry.fileName);
-            ArchiveEntry l_objEntry;
-            if (!this.doZip) {
-                l_objEntry = new TarArchiveEntry(l_objFileEntry.entryName);
-                ((TarArchiveEntry) l_objEntry).setSize(l_objFile.length());
-            } else
-                l_objEntry = new ZipArchiveEntry(l_objFileEntry.entryName);
-            l_objArchive.putArchiveEntry(l_objEntry);
-            this.listener.getLogger().printf("%sAdded %s as %s\r\n", Messages.console_message_prefix(), l_objFileEntry.fileName, l_objFileEntry.entryName);
+        for (FileEntry fileEntry : files) {
+            archiveStream.putArchiveEntry(new ZipArchiveEntry(fileEntry.entryName));
 
-            BufferedInputStream l_objInput = new BufferedInputStream(new FileInputStream(l_objFile));
-            IOUtils.copy(l_objInput, l_objArchive);
-            l_objInput.close();
-            l_objArchive.closeArchiveEntry();
+            BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(fileEntry.fileName));
+            IOUtils.copy(inputStream, archiveStream);
+            inputStream.close();
+            archiveStream.closeArchiveEntry();
+            this.listener.getLogger().printf("%sAdded %s as %s\r\n", Messages.console_message_prefix(), fileEntry.fileName, fileEntry.entryName);
         }
-        l_objArchive.finish();
-        l_objArchiveStream.close();
-        return dir.getCanonicalPath() + File.separator + l_strPackedFileName;
+        archiveStream.finish();
+        zipFileStream.close();
+        return dir.getCanonicalPath() + File.separator + zipFileName;
     }
 
     public String uploadPackedFile(final String fileName) {
