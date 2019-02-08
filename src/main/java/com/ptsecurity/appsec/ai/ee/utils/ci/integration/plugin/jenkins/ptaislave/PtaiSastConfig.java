@@ -8,6 +8,7 @@ import jenkins.model.Jenkins;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
@@ -30,7 +31,7 @@ public class PtaiSastConfig implements Describable<PtaiSastConfig>, Cloneable, S
     private String sastConfigPtaiHostUrl;
     @DataBoundSetter
     public void setSastConfigPtaiHostUrl(final String sastConfigPtaiHostUrl) {
-        this.sastConfigPtaiHostUrl = sastConfigPtaiHostUrl;
+        this.sastConfigPtaiHostUrl = fixApiUrl(sastConfigPtaiHostUrl);
     }
 
     @Getter
@@ -58,7 +59,7 @@ public class PtaiSastConfig implements Describable<PtaiSastConfig>, Cloneable, S
     private String sastConfigJenkinsHostUrl;
     @DataBoundSetter
     public void setSastConfigJenkinsHostUrl(final String sastConfigJenkinsHostUrl) {
-        this.sastConfigJenkinsHostUrl = sastConfigJenkinsHostUrl;
+        this.sastConfigJenkinsHostUrl = fixApiUrl(sastConfigJenkinsHostUrl);
     }
 
     @Getter
@@ -82,16 +83,20 @@ public class PtaiSastConfig implements Describable<PtaiSastConfig>, Cloneable, S
             final String sastConfigPtaiCaCerts,
             final String sastConfigJenkinsHostUrl, final String sastConfigJenkinsJobName, final Auth sastConfigJenkinsAuth) {
         this.sastConfigName = sastConfigName;
-        this.sastConfigPtaiHostUrl = sastConfigPtaiHostUrl;
+        this.sastConfigPtaiHostUrl = fixApiUrl(sastConfigPtaiHostUrl);
         this.sastConfigPtaiCert = sastConfigPtaiCert;
         this.sastConfigPtaiCertPwd = sastConfigPtaiCertPwd;
         this.sastConfigPtaiCaCerts = sastConfigPtaiCaCerts;
-        this.sastConfigJenkinsHostUrl = sastConfigJenkinsHostUrl;
+        this.sastConfigJenkinsHostUrl = fixApiUrl(sastConfigJenkinsHostUrl);
         this.sastConfigJenkinsJobName = sastConfigJenkinsJobName;
         this.sastConfigJenkinsAuth = sastConfigJenkinsAuth;
     }
 
     public PtaiSastConfigDescriptor getDescriptor() {
-        return Jenkins.getInstance().getDescriptorByType(PtaiSastConfigDescriptor.class);
+        return Jenkins.get().getDescriptorByType(PtaiSastConfigDescriptor.class);
+    }
+
+    protected static String fixApiUrl(String apiUrl) {
+        return StringUtils.removeEnd(apiUrl.trim(), "/");
     }
 }

@@ -67,9 +67,8 @@ public class BuildInfo extends BuildEnv {
     }
 
     public void println(final String message) {
-        if (listener != null) {
+        if (listener != null)
             listener.getLogger().println(consoleMsgPrefix + message);
-        }
     }
 
     public void setEffectiveEnvironmentInBuildInfo() {

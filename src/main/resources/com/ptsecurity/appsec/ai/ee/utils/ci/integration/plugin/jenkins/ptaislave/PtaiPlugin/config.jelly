@@ -5,12 +5,15 @@
         <f:select />
     </f:entry>
     <f:entry title="uiProject" field="uiProject">
-        <f:select />
+        <f:textbox />
     </f:entry>
 
     <f:advanced>
-        <f:entry title="${%sastAgentName}" field="sastAgentName">
+        <f:entry title="${%sastAgentNodeName}" field="sastAgentNodeName">
             <f:textbox default=""/>
+        </f:entry>
+        <f:entry title="${%verbose}" field="verbose">
+            <f:checkbox />
         </f:entry>
     </f:advanced>
 

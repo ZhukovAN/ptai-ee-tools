@@ -29,7 +29,7 @@
     <f:entry title="${%sastconfig.entry.jenkins.url}" field="sastConfigJenkinsHostUrl">
         <f:textbox/>
     </f:entry>
-    <f:entry title="${%sastconfig.entry.url.jenkins}" field="sastConfigJenkinsJobName">
+    <f:entry title="${%sastconfig.entry.jenkins.jobname}" field="sastConfigJenkinsJobName">
         <f:textbox/>
     </f:entry>
     <f:dropdownDescriptorSelector

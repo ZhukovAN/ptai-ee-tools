@@ -243,7 +243,7 @@
           "Store"
         ],
         "operationId": "ApiStoreSourcesByProjectIdPost",
-        "consumes": [],
+        "consumes": ["multipart/form-data"],
         "produces": [],
         "parameters": [
           {
@@ -289,6 +289,13 @@
             "in": "query",
             "required": false,
             "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "description": "The file to upload"
           }
         ],
         "responses": {
@@ -464,6 +471,11 @@
       }
     }
   },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
   "securityDefinitions": {
     "Bearer": {
       "name": "Authorization",

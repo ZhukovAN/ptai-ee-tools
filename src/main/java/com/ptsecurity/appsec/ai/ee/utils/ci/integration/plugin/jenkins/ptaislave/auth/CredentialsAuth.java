@@ -33,12 +33,12 @@ public class CredentialsAuth extends Auth {
         this.credentials = null;
     }
 
-    private String getUserName(Item item) throws CredentialsNotFoundException {
+    public String getUserName(Item item) throws CredentialsNotFoundException {
         UsernamePasswordCredentials creds = getCredentials(item);
         return creds.getUsername();
     }
 
-    private String getPassword(Item item) throws CredentialsNotFoundException {
+    public String getPassword(Item item) throws CredentialsNotFoundException {
         UsernamePasswordCredentials creds = getCredentials(item);
         return creds.getPassword().getPlainText();
     }

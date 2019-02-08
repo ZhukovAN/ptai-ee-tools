@@ -38,16 +38,14 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
     public String invoke(final File dir, final VirtualChannel virtualChannel) throws IOException, InterruptedException {
         List<FileEntry> l_objFileEntries = this.collectFiles(dir);
         try {
-            String l_strPackedFile = this.packCollectedFiles(dir, l_objFileEntries);
-
-            return this.uploadPackedFile(l_strPackedFile);
+            return this.packCollectedFiles(dir, l_objFileEntries);
         } catch (ArchiveException e) {
             throw new IOException(e.getLocalizedMessage());
         }
     }
 
     public List<FileEntry> collectFiles(final File dir) {
-        List<FileEntry> l_objRes = new ArrayList<FileEntry>();
+        List<FileEntry> res = new ArrayList<FileEntry>();
         for (PtaiTransfer transfer : this.transfers) {
             // Normalize prefix
             String removePrefix = Optional.ofNullable(
@@ -57,35 +55,35 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
             if ('/' == removePrefix.charAt(0))
                 removePrefix = removePrefix.substring(1);
 
-            final FileSet l_objFileSet = new FileSet();
-            l_objFileSet.setDir(dir);
-            l_objFileSet.setProject(new Project());
+            final FileSet fileSet = new FileSet();
+            fileSet.setDir(dir);
+            fileSet.setProject(new Project());
             if (null != transfer.getIncludes())
-                for (String l_strPattern : transfer.getIncludes().split(transfer.getPatternSeparator()))
-                    l_objFileSet.createInclude().setName(l_strPattern);
+                for (String pattern : transfer.getIncludes().split(transfer.getPatternSeparator()))
+                    fileSet.createInclude().setName(pattern);
             if (null != transfer.getExcludes())
-                for (String l_strPattern : transfer.getExcludes().split(transfer.getPatternSeparator()))
-                    l_objFileSet.createExclude().setName(l_strPattern);
-            l_objFileSet.setDefaultexcludes(transfer.isUseDefaultExcludes());
-            String[] l_strFiles = l_objFileSet.getDirectoryScanner().getIncludedFiles();
-            // l_strFiles is an array of this.dir - relative paths to files
-            for (String l_strFile : l_strFiles) {
+                for (String pattern : transfer.getExcludes().split(transfer.getPatternSeparator()))
+                    fileSet.createExclude().setName(pattern);
+            fileSet.setDefaultexcludes(transfer.isUseDefaultExcludes());
+            String[] files = fileSet.getDirectoryScanner().getIncludedFiles();
+            // files is an array of this.dir - relative paths to files
+            for (String file : files) {
                 // Normalize relative path
-                String l_strPathToFile = dir.getAbsolutePath() + File.separator + l_strFile;
-                String l_strNormalizedPathToFile = new File(l_strPathToFile).toURI().normalize().getPath();
-                String l_strRelativePath = l_strNormalizedPathToFile.replace(dir.toURI().normalize().getPath(), "");
-                String l_strEntryName;
+                String filePath = dir.getAbsolutePath() + File.separator + file;
+                String normalizedFilePath = new File(filePath).toURI().normalize().getPath();
+                String relativeFilePath = normalizedFilePath.replace(dir.toURI().normalize().getPath(), "");
+                String entryName;
                 if (transfer.isFlatten())
-                    l_strEntryName = new File(l_strPathToFile).getName();
+                    entryName = new File(filePath).getName();
                 else {
-                    if (!l_strRelativePath.startsWith(removePrefix))
-                        throw new PtaiException(Messages.exception_removePrefix_noMatch(l_strFile, removePrefix));
-                    l_strEntryName = l_strRelativePath.substring(removePrefix.length());
+                    if (!relativeFilePath.startsWith(removePrefix))
+                        throw new PtaiException(Messages.exception_removePrefix_noMatch(file, removePrefix));
+                    entryName = relativeFilePath.substring(removePrefix.length());
                 }
-                l_objRes.add(new FileEntry(l_strPathToFile, l_strEntryName));
+                res.add(new FileEntry(filePath, entryName));
             }
         }
-        return l_objRes;
+        return res;
     }
 
     public String packCollectedFiles(final File dir, final List<FileEntry> files) throws IOException, ArchiveException {
