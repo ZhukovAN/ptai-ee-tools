@@ -9,7 +9,7 @@
     </f:entry>
 
     <f:description>
-        <j:out value='${m.transfers_envVars(rootURL)}'/>
+        <j:out value='${%envVarsSupport(rootURL)}'/>
     </f:description>
 
     <f:advanced>

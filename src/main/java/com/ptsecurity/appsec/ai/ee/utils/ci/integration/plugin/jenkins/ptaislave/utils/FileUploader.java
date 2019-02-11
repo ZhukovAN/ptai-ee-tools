@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislav
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.PtaiTransfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.PtaiException;
+import hudson.Util;
 import hudson.model.TaskListener;
 import hudson.remoting.VirtualChannel;
 import jenkins.MasterToSlaveFileCallable;
@@ -33,7 +34,7 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
 
     private final List<PtaiTransfer> transfers;
 
-    private final String sastConfigUrlPtai;
+    private final BuildInfo buildInfo;
 
     public String invoke(final File dir, final VirtualChannel virtualChannel) throws IOException, InterruptedException {
         List<FileEntry> l_objFileEntries = this.collectFiles(dir);
@@ -47,10 +48,13 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
     public List<FileEntry> collectFiles(final File dir) {
         List<FileEntry> res = new ArrayList<FileEntry>();
         for (PtaiTransfer transfer : this.transfers) {
+            String removePrefix = Util.replaceMacro(transfer.getRemovePrefix(), buildInfo.getEnvVars());
+            String includes = Util.replaceMacro(transfer.getIncludes(), buildInfo.getEnvVars());
+            String excludes = Util.replaceMacro(transfer.getExcludes(), buildInfo.getEnvVars());
             // Normalize prefix
-            String removePrefix = Optional.ofNullable(
+            removePrefix = Optional.ofNullable(
                     FilenameUtils.separatorsToUnix(
-                            FilenameUtils.normalize(transfer.getRemovePrefix() + "/")))
+                            FilenameUtils.normalize(removePrefix + "/")))
                     .orElse("");
             if ('/' == removePrefix.charAt(0))
                 removePrefix = removePrefix.substring(1);
@@ -58,11 +62,11 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
             final FileSet fileSet = new FileSet();
             fileSet.setDir(dir);
             fileSet.setProject(new Project());
-            if (null != transfer.getIncludes())
-                for (String pattern : transfer.getIncludes().split(transfer.getPatternSeparator()))
+            if (null != includes)
+                for (String pattern : includes.split(transfer.getPatternSeparator()))
                     fileSet.createInclude().setName(pattern);
-            if (null != transfer.getExcludes())
-                for (String pattern : transfer.getExcludes().split(transfer.getPatternSeparator()))
+            if (null != excludes)
+                for (String pattern : excludes.split(transfer.getPatternSeparator()))
                     fileSet.createExclude().setName(pattern);
             fileSet.setDefaultexcludes(transfer.isUseDefaultExcludes());
             String[] files = fileSet.getDirectoryScanner().getIncludedFiles();

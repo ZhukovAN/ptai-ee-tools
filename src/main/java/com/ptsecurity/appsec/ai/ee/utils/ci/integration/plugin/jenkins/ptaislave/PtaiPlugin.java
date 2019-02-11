@@ -20,6 +20,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
 import hudson.AbortException;
 import hudson.FilePath;
 import hudson.Launcher;
+import hudson.Util;
 import hudson.model.*;
 import hudson.tasks.Builder;
 import jenkins.model.Jenkins;
@@ -144,11 +145,10 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
         Jenkins jenkins = Jenkins.get();
         final BuildEnv currentBuildEnv = new BuildEnv(getEnvironmentVariables(build, listener), workspace, build.getTimestamp());
         final BuildEnv targetBuildEnv = null;
-        final BuildInfo buildInfo = new BuildInfo(listener, consolePrefix, jenkins.getRootPath(), currentBuildEnv, targetBuildEnv);
+        final BuildInfo buildInfo = new BuildInfo(currentBuildEnv, targetBuildEnv);
         buildInfo.setEffectiveEnvironmentInBuildInfo();
 
-        String ptaiHostUrl = this.getSastConfig(sastConfigName).getSastConfigPtaiHostUrl();
-        FileUploader uploader = new FileUploader(listener, transfers, ptaiHostUrl);
+        FileUploader uploader = new FileUploader(listener, transfers, buildInfo);
         String zipFileName = workspace.act(uploader);
         log(listener, "Zipped file: %s", zipFileName);
 
@@ -209,8 +209,11 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
             prjApi.getApiClient().setApiKey(authToken.getData());
             com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiResponse<List<Project>> projects = prjApi.apiProjectsGetWithHttpInfo(true);
             UUID projectId = null;
+            String uiPrj = Util.replaceMacro(this.uiProject, buildInfo.getEnvVars());
+            uiPrj = Util.fixEmptyAndTrim(uiPrj);
+
             for (Project prj : projects.getData())
-                if (uiProject.equals(prj.getName())) {
+                if (uiPrj.equals(prj.getName())) {
                     projectId = prj.getId();
                     break;
                 }
@@ -261,7 +264,7 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
             FreeStyleProject prj = jenkinsApi.getJob(jobName);
             Integer buildNumber = prj.getNextBuildNumber();
             JenkinsJsonParameter params = new JenkinsJsonParameter();
-            params.add("PTAI_PROJECT_NAME", uiProject);
+            params.add("PTAI_PROJECT_NAME", uiPrj);
             params.add("PTAI_NODE_NAME", sastAgentNodeName);
             ObjectMapper objectMapper = new ObjectMapper();
             // Start SAST job
