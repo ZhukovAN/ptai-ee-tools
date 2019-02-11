@@ -402,6 +402,41 @@ paths:
         - jenkins_auth: []
       tags:
         - remoteAccess
+  '/job/{name}/{buildId}/artifact/{artifactName}':
+    get:
+      description: Retrieve job's build details
+      operationId: getJobBuildArtifact
+      parameters:
+        - $ref: '#/components/parameters/jobName'
+        - name: buildId
+          description: Build ID
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: artifactName
+          description: Artifact Name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successfully retrieved job's results
+          content:
+            text/xml:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/jobNotFound'
+      security:
+        - jenkins_auth: []
+      tags:
+        - remoteAccess
   '/job/{name}/lastBuild/stop':
     post:
       description: Stop a job

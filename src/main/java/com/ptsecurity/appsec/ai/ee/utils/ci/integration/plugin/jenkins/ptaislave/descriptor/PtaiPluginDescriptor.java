@@ -15,6 +15,7 @@ import hudson.util.CopyOnWriteList;
 import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.parboiled.common.StringUtils;
@@ -28,7 +29,7 @@ import java.security.KeyStore;
 import java.util.Base64;
 import java.util.List;
 
-@Extension
+@Extension @Symbol("ptaiUiSast")
 public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
 
     private final CopyOnWriteList<PtaiSastConfig> sastConfigs = new CopyOnWriteList<PtaiSastConfig>();

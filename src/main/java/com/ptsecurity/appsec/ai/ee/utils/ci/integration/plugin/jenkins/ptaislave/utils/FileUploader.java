@@ -106,43 +106,4 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
         zipFileStream.close();
         return dir.getCanonicalPath() + File.separator + zipFileName;
     }
-
-    public String uploadPackedFile(final String fileName) {
-        final int maxPartSize = 1024 * 1024;
-        byte[] l_intArray = new byte[maxPartSize];
-        try {
-            /*
-            UploadControllerApi l_objApi = new ApiClient().setBasePath(this.sastConfigUrlPtai).buildClient(UploadControllerApi.class);
-            Upload l_objId = l_objApi.beginUploadUsingPOST();
-
-            RandomAccessFile l_objSrcFile = new RandomAccessFile(fileName,"r");
-
-            long l_intSize = l_objSrcFile.length();
-            long l_intChunks = (long) Math.ceil((double) l_intSize / (double) maxPartSize);
-            int l_intDigits = 1 + (int)(Math.log10(l_intChunks));
-            final String l_strFmt = "%s.part.%0" + String.valueOf(l_intDigits) + "d";
-
-            for (long i = 0; i < l_intChunks; i++) {
-                String l_strChunkFileName = String.format(l_strFmt, fileName, i);
-
-                int l_intBytesRead = l_objSrcFile.read(l_intArray);
-                if (-1 == l_intBytesRead) break;
-
-                try (FileOutputStream fos = new FileOutputStream(l_strChunkFileName)) {
-                    fos.write(l_intArray, 0, l_intBytesRead);
-                }
-                File l_objFileToTransfer = new File(l_strChunkFileName);
-                l_objApi.fileUploadUsingPOST(l_objFileToTransfer, l_objId.getId());
-                l_objFileToTransfer.delete();
-            }
-            l_objSrcFile.close();
-            new File(fileName).delete();
-            l_objApi.endUploadUsingPOST(l_objId.getId());
-            return l_objId.getId();
-            */
-            return null;
-        } catch (Exception e) {
-            return null;
-        }
-    }
 }

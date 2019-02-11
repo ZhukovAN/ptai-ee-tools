@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave;
 
+import com.cloudbees.plugins.credentials.domains.DomainSpecification;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest.StoreApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiResponse;
@@ -19,10 +20,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
 import hudson.AbortException;
 import hudson.FilePath;
 import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.Item;
-import hudson.model.Run;
-import hudson.model.TaskListener;
+import hudson.model.*;
 import hudson.tasks.Builder;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
@@ -37,13 +35,12 @@ import javax.annotation.Nonnull;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLSession;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,6 +57,12 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
 
     @Getter
     private String uiProject;
+
+    @Getter
+    private boolean failIfSastFailed;
+
+    @Getter
+    private boolean failIfSastUnstable;
 
     @Getter
     private String sastAgentNodeName;
@@ -80,11 +83,15 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
     @DataBoundConstructor
     public PtaiPlugin(final String sastConfigName,
                       final String uiProject,
+                      final boolean failIfSastFailed,
+                      final boolean failIfSastUnstable,
                       final String sastAgentNodeName,
                       final boolean verbose,
                       final ArrayList<PtaiTransfer> transfers) {
         this.sastConfigName = sastConfigName;
         this.uiProject = uiProject;
+        this.failIfSastFailed = failIfSastFailed;
+        this.failIfSastUnstable = failIfSastUnstable;
         this.verbose = verbose;
         this.sastAgentNodeName = sastAgentNodeName;
         this.transfers = transfers;
@@ -108,11 +115,7 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
     }
 
     protected void log(TaskListener listener, String format, Object... args) {
-        listener.getLogger().println(consolePrefix + String.format(format, args));
-    }
-
-    static enum PtaiResult {
-        FAILURE, UNSTABLE, SUCCESS;
+        listener.getLogger().print(consolePrefix + String.format(format, args));
     }
 
     static class JenkinsJsonParameter {
@@ -131,6 +134,9 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
             parameter.add(res);
             return res;
         }
+    }
+    static enum PtaiResult {
+        FAILURE, UNSTABLE, SUCCESS;
     }
 
     @Override
@@ -282,10 +288,11 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
             } while (true);
             // Wait till SAST job is complete
             int start = 0;
-            boolean moreData = false;
             Pattern p = Pattern.compile("^Finished: (FAILURE)|(UNSTABLE)|(SUCCESS)$");
             PtaiResult sastJobRes = PtaiResult.UNSTABLE;
             do {
+                sastBuild = jenkinsApi.getJobBuild(jobName, buildNumber.toString());
+                if (null == sastBuild) break;
                 com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse<String> sastJobLog;
                 sastJobLog = jenkinsApi.getJobProgressiveTextWithHttpInfo(jobName, buildNumber.toString(), String.valueOf(start));
                 if (200 != sastJobLog.getStatusCode()) break;
@@ -296,32 +303,38 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
                 } catch (Exception e) {
                     break;
                 }
-                try {
-                    moreData = Boolean.parseBoolean(sastJobLog.getHeaders().get("X-More-Data").get(0));
-                } catch (Exception e) {
-                    break;
-                }
                 if (pos != start) {
                     log(listener, "%s", sastJobLog.getData());
-                    // Check SAST job result
-                    for (String logEntry : sastJobLog.getData().split("\\r?\\n")) {
-                        Matcher m = p.matcher(logEntry);
-                        if (!m.matches()) continue;
-                        try {
-                            sastJobRes = PtaiResult.valueOf(m.group(1));
-                        } catch (Exception e) {
-                            continue;
-                        }
-                    }
                     start = pos;
                 }
                 Thread.sleep(1000);
-            } while (moreData);
-        } catch (NoSuchAlgorithmException | KeyStoreException e) {
-            log(listener, "Certificate problem^ %s", e.getMessage());
+                if (StringUtils.isEmpty(sastBuild.getResult())) continue;
+                try {
+                    sastJobRes = PtaiResult.valueOf(sastBuild.getResult());
+                    break;
+                } catch (Exception e) {
+                    continue;
+                }
+            } while (true);
+            // Save results
+            for (String sastResType : Arrays.asList( "json", "html" )) {
+                try {
+                    String sastJson = jenkinsApi.getJobBuildArtifact(jobName, buildNumber.toString(), "REPORTS/report." + sastResType);
+                    workspace.child("sast.report." + sastResType).write(sastJson, "UTF-8");
+                } catch (Exception e) {
+                    log(listener, "%s.%s\r\n", "Failed to download report", sastResType);
+                }
+            }
+            if (failIfSastFailed && PtaiResult.FAILURE.equals(sastJobRes))
+                throw new AbortException("SAST is failed");
+            if (failIfSastUnstable && PtaiResult.UNSTABLE.equals(sastJobRes))
+                throw new AbortException("SAST is unstable");
+        } catch (NoSuchAlgorithmException | KeyStoreException | CertificateException | UnrecoverableKeyException e) {
+            log(listener, "Certificate problem: %s", e.getMessage());
             throw new AbortException("Certificate problem");
-        } catch (Exception e) {
-                throw new AbortException("API client create failed");
+        } catch (ApiException | com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiException | com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiException | com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiException e) {
+            log(listener, "API exception: %s", e.getMessage());
+            throw new AbortException("API client create failed");
         }
     }
 

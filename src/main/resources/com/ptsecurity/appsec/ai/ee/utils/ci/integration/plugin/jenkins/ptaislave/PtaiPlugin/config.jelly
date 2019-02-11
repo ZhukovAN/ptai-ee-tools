@@ -8,6 +8,13 @@
         <f:textbox />
     </f:entry>
 
+    <f:entry title="${%failIfSastFailed}" field="failIfSastFailed" default="true">
+        <f:checkbox />
+    </f:entry>
+    <f:entry title="${%failIfSastUnstable}" field="failIfSastUnstable" default="true">
+        <f:checkbox />
+    </f:entry>
+
     <f:advanced>
         <f:entry title="${%sastAgentNodeName}" field="sastAgentNodeName">
             <f:textbox default=""/>
