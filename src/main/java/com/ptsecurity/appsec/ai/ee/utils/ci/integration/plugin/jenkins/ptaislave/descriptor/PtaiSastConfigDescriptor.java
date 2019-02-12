@@ -105,7 +105,7 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
             } catch (Exception e) {
                 throw e;
             }
-            return FormValidation.ok("Success, JWT token starts with " + authToken.getData().substring(1, 10));
+            return FormValidation.ok("Success, JWT token starts with " + authToken.getData().substring(0, 10));
         } catch (Exception e) {
             return FormValidation.error("Connection failed");
         }

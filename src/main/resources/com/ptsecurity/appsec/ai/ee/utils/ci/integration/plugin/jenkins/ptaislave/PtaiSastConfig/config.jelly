@@ -1,41 +1,41 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
-    <f:entry title="${%sastconfig.entry.name}" field="sastConfigName">
+    <f:entry title="${%sastConfigName}" field="sastConfigName">
         <f:textbox/>
     </f:entry>
 
-    <f:entry title="${%sastconfig.entry.ptai.url}" field="sastConfigPtaiHostUrl">
+    <f:entry title="${%sastConfigPtaiHostUrl}" field="sastConfigPtaiHostUrl">
         <f:textbox/>
     </f:entry>
-    <f:entry title="sastConfigPtaiCert" field="sastConfigPtaiCert">
-        <f:textarea/>
+    <f:entry title="${%sastConfigPtaiCert}" field="sastConfigPtaiCert">
+        <f:textarea style="height:100px"/>
     </f:entry>
-    <f:entry title="sastConfigPtaiCertPwd" field="sastConfigPtaiCertPwd">
+    <f:entry title="${%sastConfigPtaiCertPwd}" field="sastConfigPtaiCertPwd">
         <f:password/>
     </f:entry>
     <f:validateButton
-            title="testPtaiCert" progress="${%sastconfig.entry.url.jenkins.checking}"
+            title="${%testPtaiCert}" progress="${%sastConfigChecking}"
             method="testPtaiCert" with="sastConfigPtaiCert,sastConfigPtaiCertPwd" />
-    <f:entry title="sastConfigPtaiCaCerts" field="sastConfigPtaiCaCerts">
-        <f:textarea/>
+    <f:entry title="${%sastConfigPtaiCaCerts}" field="sastConfigPtaiCaCerts">
+        <f:textarea style="height:100px"/>
     </f:entry>
     <f:validateButton
-            title="testPtaiCaCerts" progress="${%sastconfig.entry.url.jenkins.checking}"
+            title="${%testPtaiCaCerts}" progress="${%sastConfigChecking}"
             method="testPtaiCaCerts" with="sastConfigPtaiCaCerts" />
     <f:validateButton
-            title="${%sastconfig.entry.url.ptai.check}" progress="${%sastconfig.entry.url.ptai.checking}"
+            title="${%testPtaiConnection}" progress="${%sastConfigChecking}"
             method="testPtaiConnection" with="sastConfigPtaiHostUrl,sastConfigPtaiCert,sastConfigPtaiCertPwd,sastConfigPtaiCaCerts" />
 
-    <f:entry title="${%sastconfig.entry.jenkins.url}" field="sastConfigJenkinsHostUrl">
+    <f:entry title="${%sastConfigJenkinsHostUrl}" field="sastConfigJenkinsHostUrl">
         <f:textbox/>
     </f:entry>
-    <f:entry title="${%sastconfig.entry.jenkins.jobname}" field="sastConfigJenkinsJobName">
+    <f:entry title="${%sastConfigJenkinsJobName}" field="sastConfigJenkinsJobName">
         <f:textbox/>
     </f:entry>
     <f:dropdownDescriptorSelector
             field="sastConfigJenkinsAuth" title="Authentication" descriptors="${descriptor.getAuthDescriptors()}"
             default="${descriptor.getDefaultAuthDescriptor()}"/>
     <f:validateButton
-            title="${%sastconfig.entry.url.jenkins.check}" progress="${%sastconfig.entry.url.jenkins.checking}"
+            title="${%testJenkinsConnection}" progress="${%sastConfigChecking}"
             method="testJenkinsConnection" with="sastConfigJenkinsHostUrl,sastConfigJenkinsJobName,sastConfigJenkinsAuth,credentials,userName,apiToken" />
 </j:jelly>

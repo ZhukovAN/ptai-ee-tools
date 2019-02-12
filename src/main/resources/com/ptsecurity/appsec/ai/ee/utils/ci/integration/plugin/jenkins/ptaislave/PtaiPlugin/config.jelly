@@ -4,9 +4,12 @@
     <f:entry title="${%sastConfigName}" field="sastConfigName">
         <f:select />
     </f:entry>
-    <f:entry title="uiProject" field="uiProject">
+    <f:entry title="${%uiProject}" field="uiProject">
         <f:textbox />
     </f:entry>
+    <f:validateButton
+            title="${%testUiProject}" progress="${%sastConfigChecking}"
+            method="testUiProject" with="sastConfigName,uiProject" />
 
     <f:entry title="${%failIfSastFailed}" field="failIfSastFailed" default="true">
         <f:checkbox />
