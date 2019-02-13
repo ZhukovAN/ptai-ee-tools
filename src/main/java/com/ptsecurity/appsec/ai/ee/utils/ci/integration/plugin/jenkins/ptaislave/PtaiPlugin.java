@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave;
 
-import com.cloudbees.plugins.credentials.domains.DomainSpecification;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest.StoreApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiResponse;
@@ -37,13 +36,13 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLSession;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
@@ -54,29 +53,29 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
     private static final String consolePrefix = Messages.console_message_prefix();
 
     @Getter
-    private String sastConfigName;
+    private final String sastConfigName;
 
     @Getter
-    private String uiProject;
+    private final String uiProject;
 
     @Getter
-    private boolean failIfSastFailed;
+    private final boolean failIfSastFailed;
 
     @Getter
-    private boolean failIfSastUnstable;
+    private final boolean failIfSastUnstable;
 
     @Getter
-    private String sastAgentNodeName;
+    private final String sastAgentNodeName;
 
     @Getter
-    private boolean verbose;
+    private final boolean verbose;
 
     @Getter
     private ArrayList<PtaiTransfer> transfers;
 
     public final void setTransfers(final ArrayList<PtaiTransfer> transfers) {
         if (transfers == null)
-            this.transfers = new ArrayList<PtaiTransfer>();
+            this.transfers = new ArrayList<>();
         else
             this.transfers = transfers;
     }
@@ -128,16 +127,17 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
             private String value;
         }
         @Getter
-        private List<NameValuePair> parameter = new ArrayList<NameValuePair>();
+        private final List<NameValuePair> parameter = new ArrayList<>();
 
+        @SuppressWarnings("UnusedReturnValue")
         public NameValuePair add(String name, String value) {
             NameValuePair res = new NameValuePair(name, value);
             parameter.add(res);
             return res;
         }
     }
-    static enum PtaiResult {
-        FAILURE, UNSTABLE, SUCCESS;
+    enum PtaiResult {
+        FAILURE, UNSTABLE, SUCCESS
     }
 
     @Override
@@ -148,19 +148,19 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
         final BuildInfo buildInfo = new BuildInfo(currentBuildEnv, targetBuildEnv);
         buildInfo.setEffectiveEnvironmentInBuildInfo();
 
-        FileUploader uploader = new FileUploader(listener, transfers, buildInfo);
+        FileUploader uploader = new FileUploader(listener, transfers, buildInfo, verbose);
         String zipFileName = workspace.act(uploader);
         log(listener, "Zipped file: %s", zipFileName);
 
         PtaiSastConfig cfg = getDescriptor().getSastConfig(sastConfigName);
         if (StringUtils.isEmpty(cfg.getSastConfigPtaiHostUrl()))
-            throw new AbortException("PT AI host URL must be set up");
+            throw new AbortException(Messages.validator_emptyPtaiHostUrl());
         if (StringUtils.isEmpty(cfg.getSastConfigPtaiCert()))
-            throw new AbortException("PT AI client certificate must be set up");
+            throw new AbortException(Messages.validator_emptyPtaiCert());
         if (StringUtils.isEmpty(cfg.getSastConfigPtaiCertPwd()))
-            throw new AbortException("PT AI client key must be set up");
+            throw new AbortException(Messages.validator_emptyPtaiCertPwd());
         if (StringUtils.isEmpty(cfg.getSastConfigPtaiCaCerts()))
-            throw new AbortException("PT AI CA certificates must be set up");
+            throw new AbortException(Messages.validator_emptyPtaiCaCerts());
 
         // Connect to PT AI server
         HostnameVerifier hostnameVerifier = new HostnameVerifier() {
@@ -192,17 +192,17 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
             prjApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
             storeApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
             // Due to ApiClient specific keyManagers must be set before CA certificates
-            authApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigPtaiCaCerts().getBytes()));
-            prjApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigPtaiCaCerts().getBytes()));
-            storeApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigPtaiCaCerts().getBytes()));
+            authApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigPtaiCaCerts().getBytes(StandardCharsets.UTF_8)));
+            prjApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigPtaiCaCerts().getBytes(StandardCharsets.UTF_8)));
+            storeApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigPtaiCaCerts().getBytes(StandardCharsets.UTF_8)));
             authApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
             prjApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
             storeApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
             // Try to authenticate
             authToken = authApi.apiAgentAuthSigninGetWithHttpInfo("Agent");
             if (StringUtils.isEmpty(authToken.getData()))
-                throw new AbortException("PT AI server authentication failed");
-            verboseLog(listener,"Auth token: %s", authToken.getData());
+                throw new AbortException(Messages.validator_failedPtaiServerAuth());
+            verboseLog(listener,Messages.validator_successPtaiAuthToken(authToken.getData()));
 
             // Search for project
             prjApi.getApiClient().setApiKeyPrefix("Bearer");
@@ -218,8 +218,8 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
                     break;
                 }
             if (null == projectId)
-                throw new AbortException("PT AI project not found");
-            verboseLog(listener,"Project ID: %s", projectId.toString());
+                throw new AbortException(Messages.validator_failedPtaiProjectByName());
+            verboseLog(listener,Messages.validator_successPtaiProjectByName(projectId.toString()));
             // Upload project sources
             storeApi.getApiClient().setApiKeyPrefix("Bearer");
             storeApi.getApiClient().setApiKey(authToken.getData());
@@ -227,9 +227,9 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
                     projectId,
                     new File(zipFileName),
                     null,null,null,null,null,null);
-            verboseLog(listener,"File upload result: %d", res.getStatusCode());
+            verboseLog(listener, Messages.plugin_logFileUploadResult(res.getStatusCode()));
             if (200 != res.getStatusCode())
-                throw new AbortException("Project upload failed");
+                throw new AbortException(Messages.validator_failedFileUpload());
             // Let's start analysis
             PtaiJenkinsApiClient apiClient = new PtaiJenkinsApiClient();
             RemoteAccessApi jenkinsApi = new RemoteAccessApi(apiClient);
@@ -237,30 +237,30 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
             // Set authentication parameters
             Auth jenkinsAuth = cfg.getSastConfigJenkinsAuth();
             if (null == jenkinsAuth)
-                throw new AbortException("Jenkins authentication mode is not set");
+                throw new AbortException(Messages.validator_failedJenkinsAuthNotSet());
             if (jenkinsAuth instanceof CredentialsAuth) {
                 Item item = jenkins.getItem("/");
                 apiClient.setApiKeyPrefix("Authorization");
                 CredentialsAuth auth = (CredentialsAuth)jenkinsAuth;
                 String tuple = auth.getUserName(item) + ":" + auth.getPassword(item);
-                verboseLog(listener, "Password authentication tuple: %s", tuple);
-                byte[] encoded = org.apache.commons.codec.binary.Base64.encodeBase64(tuple.getBytes("UTF-8"));
-                String apiKey = "Basic " + new String(encoded, "UTF-8");
-                verboseLog(listener, "Password authentication key: %s", apiKey);
+                // verboseLog(listener, "Password authentication tuple: %s", tuple);
+                byte[] encoded = org.apache.commons.codec.binary.Base64.encodeBase64(tuple.getBytes(StandardCharsets.UTF_8));
+                String apiKey = "Basic " + new String(encoded, StandardCharsets.UTF_8);
+                // verboseLog(listener, "Password authentication key: %s", apiKey);
                 apiClient.setApiKey(apiKey);
             } else if (jenkinsAuth instanceof TokenAuth) {
                 apiClient.setApiKeyPrefix("Authorization");
                 TokenAuth auth = (TokenAuth)jenkinsAuth;
                 String tuple = auth.getUserName() + ":" + auth.getApiToken();
-                verboseLog(listener, "Token authentication tuple: %s", tuple);
-                byte[] encoded = org.apache.commons.codec.binary.Base64.encodeBase64(tuple.getBytes("UTF-8"));
-                String apiKey = "Basic " + new String(encoded, "UTF-8");
-                verboseLog(listener, "Token authentication key: %s", apiKey);
+                // verboseLog(listener, "Token authentication tuple: %s", tuple);
+                byte[] encoded = org.apache.commons.codec.binary.Base64.encodeBase64(tuple.getBytes(StandardCharsets.UTF_8));
+                String apiKey = "Basic " + new String(encoded, StandardCharsets.UTF_8);
+                // verboseLog(listener, "Token authentication key: %s", apiKey);
                 apiClient.setApiKey(apiKey);
             }
             // Autogenerated Jenkins API does not support folders so we need to
             // hack job name
-            String jobName = apiClient.convertJobName(cfg.getSastConfigJenkinsJobName());
+            String jobName = PtaiJenkinsApiClient.convertJobName(cfg.getSastConfigJenkinsJobName());
             FreeStyleProject prj = jenkinsApi.getJob(jobName);
             Integer buildNumber = prj.getNextBuildNumber();
             JenkinsJsonParameter params = new JenkinsJsonParameter();
@@ -275,17 +275,17 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
                     // There may be a situation where build is not started yet, so we'll get an "not found" exception
                     sastBuild = jenkinsApi.getJobBuild(jobName, buildNumber.toString());
                     if (null != sastBuild) {
-                        log(listener, "%s job started", cfg.getSastConfigJenkinsJobName());
+                        log(listener, Messages.plugin_logSastJobStarted(cfg.getSastConfigJenkinsJobName()));
                         break;
                     } else
-                        throw new PtaiException("SAST job build is null");
+                        throw new PtaiException(Messages.validator_failedSastJobStartNull());
                 } catch (ApiException e) {
                     if (404 == e.getCode()) {
-                        log(listener, "Wait 5 seconds for %s job to start", cfg.getSastConfigJenkinsJobName());
+                        verboseLog(listener, "Wait 5 seconds for %s job to start", cfg.getSastConfigJenkinsJobName());
                         Thread.sleep(5000);
                         continue;
                     }
-                    log(listener, "%s job start failed: %s", cfg.getSastConfigJenkinsJobName(), e.getMessage());
+                    log(listener, Messages.validator_failedSastJobStart(cfg.getSastConfigJenkinsJobName(), e.getMessage()));
                     throw new PtaiException(e.getMessage());
                 }
             } while (true);
@@ -307,7 +307,9 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
                     break;
                 }
                 if (pos != start) {
-                    log(listener, "%s", sastJobLog.getData());
+                    String[] lines = sastJobLog.getData().split("\\r?\\n");
+                    for (String line : lines)
+                        log(listener, "%s\r\n", line);
                     start = pos;
                 }
                 Thread.sleep(1000);
@@ -325,19 +327,19 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
                     String sastJson = jenkinsApi.getJobBuildArtifact(jobName, buildNumber.toString(), "REPORTS/report." + sastResType);
                     workspace.child("sast.report." + sastResType).write(sastJson, "UTF-8");
                 } catch (Exception e) {
-                    log(listener, "%s.%s\r\n", "Failed to download report", sastResType);
+                    log(listener, "%s\r\n", Messages.plugin_logReportDownloadFailed(sastResType, e));
                 }
             }
             if (failIfSastFailed && PtaiResult.FAILURE.equals(sastJobRes))
-                throw new AbortException("SAST is failed");
+                throw new AbortException(Messages.plugin_resultSastFailed());
             if (failIfSastUnstable && PtaiResult.UNSTABLE.equals(sastJobRes))
-                throw new AbortException("SAST is unstable");
+                throw new AbortException(Messages.plugin_resultSastUnstable());
         } catch (NoSuchAlgorithmException | KeyStoreException | CertificateException | UnrecoverableKeyException e) {
-            log(listener, "Certificate problem: %s", e.getMessage());
-            throw new AbortException("Certificate problem");
+            log(listener, Messages.validator_failedPtaiCertificateDetails(e.getMessage()));
+            throw new AbortException(Messages.validator_failedPtaiCertificate());
         } catch (ApiException | com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiException | com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiException | com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiException e) {
-            log(listener, "API exception: %s", e.getMessage());
-            throw new AbortException("API client create failed");
+            log(listener, Messages.validator_failedPtaiApiDetails(e.getMessage()));
+            throw new AbortException(Messages.validator_failedPtaiApi());
         }
     }
 

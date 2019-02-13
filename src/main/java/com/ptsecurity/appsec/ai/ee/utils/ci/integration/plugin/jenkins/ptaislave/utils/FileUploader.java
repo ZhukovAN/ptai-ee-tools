@@ -36,6 +36,8 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
 
     private final BuildInfo buildInfo;
 
+    private final boolean verbose;
+
     public String invoke(final File dir, final VirtualChannel virtualChannel) throws IOException, InterruptedException {
         List<FileEntry> l_objFileEntries = this.collectFiles(dir);
         try {
@@ -46,7 +48,7 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
     }
 
     public List<FileEntry> collectFiles(final File dir) {
-        List<FileEntry> res = new ArrayList<FileEntry>();
+        List<FileEntry> res = new ArrayList<>();
         for (PtaiTransfer transfer : this.transfers) {
             String removePrefix = Util.replaceMacro(transfer.getRemovePrefix(), buildInfo.getEnvVars());
             String includes = Util.replaceMacro(transfer.getIncludes(), buildInfo.getEnvVars());
@@ -104,7 +106,8 @@ public class FileUploader extends MasterToSlaveFileCallable<String> {
             IOUtils.copy(inputStream, archiveStream);
             inputStream.close();
             archiveStream.closeArchiveEntry();
-            this.listener.getLogger().printf("%sAdded %s as %s\r\n", Messages.console_message_prefix(), fileEntry.fileName, fileEntry.entryName);
+            if (verbose)
+                this.listener.getLogger().printf("%s%s\r\n", Messages.console_message_prefix(), Messages.plugin_logFileAddedToZip(fileEntry.fileName, fileEntry.entryName));
         }
         archiveStream.finish();
         zipFileStream.close();

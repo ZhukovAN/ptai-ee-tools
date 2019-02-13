@@ -16,12 +16,10 @@ import java.util.regex.PatternSyntaxException;
 public class PtaiTransferDescriptor extends Descriptor<PtaiTransfer> {
     public PtaiTransferDescriptor() {
         super(PtaiTransfer.class);
-        if (null == ptaiTransferDefaults)
-            ptaiTransferDefaults = new PtaiTransferDefaults();
     }
 
     @Getter
-    PtaiTransferDefaults ptaiTransferDefaults;
+    PtaiTransferDefaults ptaiTransferDefaults = new PtaiTransferDefaults();
 
     @Override
     public String getDisplayName() {

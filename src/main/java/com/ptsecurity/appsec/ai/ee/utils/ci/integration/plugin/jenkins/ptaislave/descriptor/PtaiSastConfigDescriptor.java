@@ -29,6 +29,7 @@ import javax.servlet.ServletException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
@@ -48,24 +49,18 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
         return "PtaiSastConfigDescriptor"; //Messages.hostconfig_descriptor();
     }
 
-    public FormValidation doCheckSastConfigUrlPtai(@QueryParameter("sastConfigUrlPtai") String sastConfigUrlPtai) {
-        return doCheckUrl(sastConfigUrlPtai);
+    public FormValidation doCheckSastConfigUrlPtai(@QueryParameter("sastConfigPtaiHostUrl") String sastConfigPtaiHostUrl) {
+        return doCheckUrl(sastConfigPtaiHostUrl);
     }
 
-    public FormValidation doCheckSastConfigUrlJenkins(@QueryParameter("sastConfigUrlJenkins") String sastConfigUrlJenkins) {
-        return doCheckUrl(sastConfigUrlJenkins);
+    public FormValidation doCheckSastConfigUrlJenkins(@QueryParameter("sastConfigJenkinsHostUrl") String sastConfigJenkinsHostUrl) {
+        return doCheckUrl(sastConfigJenkinsHostUrl);
     }
 
     public FormValidation doCheckUrl(String url) {
         String[] schemes = {"http","https"};
         UrlValidator urlValidator = new UrlValidator(schemes);
         return (urlValidator.isValid(url)) ? FormValidation.ok() : FormValidation.error(Messages.validator_invalidUrl());
-    }
-
-    public FormValidation doCheckPtaiServerPort(@QueryParameter("ptaiServerPort") int ptaiServerPort) {
-        if ((ptaiServerPort > 0) && (ptaiServerPort < 65535))
-            return FormValidation.ok();
-        return FormValidation.error(Messages.validator_ptaiServerPort());
     }
 
     public FormValidation doTestPtaiConnection(
@@ -75,15 +70,12 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
             @QueryParameter("sastConfigPtaiCaCerts") final String ptaiCaCerts) throws IOException, ServletException {
         try {
             if (StringUtils.isEmpty(ptaiHostUrl))
-                throw new PtaiException("PT AI host URL must not be empty");
+                throw new PtaiException(Messages.validator_emptyPtaiHostUrl());
             if (StringUtils.isEmpty(ptaiCert))
-                throw new PtaiException("PT AI client certificate must not be empty");
+                throw new PtaiException(Messages.validator_emptyPtaiCert());
             if (StringUtils.isEmpty(ptaiCaCerts))
-                throw new PtaiException("PT AI CA certificates must not be empty");
-            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) { return true; }
-            };
+                throw new PtaiException(Messages.validator_emptyPtaiCaCerts());
+            HostnameVerifier hostnameVerifier = (hostname, session) -> true;
 
             ApiClient apiClient = new ApiClient();
             AgentAuthApi authApi = new AgentAuthApi(apiClient);
@@ -99,15 +91,13 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
                 KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
                 kmf.init(appKeyStore, certPwd);
                 apiClient.setKeyManagers(kmf.getKeyManagers());
-                apiClient.setSslCaCert(new ByteArrayInputStream(ptaiCaCerts.getBytes()));
+                apiClient.setSslCaCert(new ByteArrayInputStream(ptaiCaCerts.getBytes(StandardCharsets.UTF_8)));
                 apiClient.getHttpClient().setHostnameVerifier(hostnameVerifier);
                 authToken = authApi.apiAgentAuthSigninGetWithHttpInfo("Agent");
-            } catch (Exception e) {
-                throw e;
             }
-            return FormValidation.ok("Success, JWT token starts with " + authToken.getData().substring(0, 10));
+            return FormValidation.ok(Messages.validator_successPtaiAuthToken(authToken.getData().substring(0, 10)));
         } catch (Exception e) {
-            return FormValidation.error("Connection failed");
+            return FormValidation.error(e, Messages.validator_failed());
         }
     }
 
@@ -123,9 +113,9 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
             X509Certificate l_objCert = (X509Certificate)appKeyStore.getCertificate(appKeyStore.aliases().nextElement());
             KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
             kmf.init(appKeyStore, tableauCertPassword);
-            return FormValidation.ok("Success, subject is " + l_objCert.getSubjectDN().getName());
+            return FormValidation.ok(Messages.validator_successPtaiCertSubject(l_objCert.getSubjectDN().getName()));
         } catch (Exception e) {
-            return FormValidation.error(e, "Verification failed");
+            return FormValidation.error(e, Messages.validator_failed());
         }
     }
 
@@ -134,24 +124,24 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
         try {
             char[] password = null; // Any password will work.
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(new ByteArrayInputStream(sastConfigPtaiCaCerts.getBytes()));
+            Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(new ByteArrayInputStream(sastConfigPtaiCaCerts.getBytes(StandardCharsets.UTF_8)));
             if (certificates.isEmpty())
-                throw new IllegalArgumentException("Expected non-empty set of trusted certificates");
+                throw new IllegalArgumentException(Messages.validator_failedPtaiCaCerts());
             KeyStore caKeyStore = KeyStore.getInstance(KeyStore.getDefaultType());
             caKeyStore.load(null, password);
             int index = 0;
-            String dn = "";
+            StringBuilder dn = new StringBuilder();
             for (Certificate certificate : certificates) {
-                String certificateAlias = "ca" + Integer.toString(index++);
+                String certificateAlias = "ca" + index++;
                 caKeyStore.setCertificateEntry(certificateAlias, certificate);
-                dn += "{" + ((X509Certificate)certificate).getSubjectDN().getName() + "}, ";
+                dn.append("{").append(((X509Certificate) certificate).getSubjectDN().getName()).append("}, ");
             }
-            dn = "[" + StringUtils.removeEnd(dn.trim(), ",") + "]";
+            dn = new StringBuilder("[" + StringUtils.removeEnd(dn.toString().trim(), ",") + "]");
             TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             trustManagerFactory.init(caKeyStore);
-            return FormValidation.ok("Success, trusted certificates are " + dn);
+            return FormValidation.ok(Messages.validator_successPtaiCaCertsSubjects(dn.toString()));
         } catch (Exception e) {
-            return FormValidation.error(e, "Verification failed");
+            return FormValidation.error(e, Messages.validator_failed());
         }
     }
 
@@ -169,7 +159,7 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
             try {
                 creds = CredentialsAuth.getCredentials(null, credentials);
             } catch (CredentialsNotFoundException e) {
-                return FormValidation.error(e, "Failed to get credentials");
+                return FormValidation.error(e, Messages.validator_failedGetCredentials());
             }
             apiClient.setUsername(creds.getUsername());
             apiClient.setPassword(creds.getPassword().getPlainText());
@@ -179,12 +169,12 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
         }
 
         api.getApiClient().setBasePath(sastConfigJenkinsHostUrl);
-        String l_strJobName = apiClient.convertJobName(sastConfigJenkinsJobName);
+        String l_strJobName = PtaiJenkinsApiClient.convertJobName(sastConfigJenkinsJobName);
         try {
             FreeStyleProject prj = api.getJob(l_strJobName);
-            return FormValidation.ok("Success, job's display name is " + prj.getDisplayName());
+            return FormValidation.ok(Messages.validator_successSastJobName(prj.getDisplayName()));
         } catch (Exception e) {
-            return FormValidation.error("Connection failed");
+            return FormValidation.error(e, Messages.validator_failed());
         }
     }
 

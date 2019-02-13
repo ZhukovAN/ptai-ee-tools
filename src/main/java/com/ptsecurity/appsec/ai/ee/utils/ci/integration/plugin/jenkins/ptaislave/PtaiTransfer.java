@@ -42,6 +42,6 @@ public class PtaiTransfer implements Describable<PtaiTransfer>, Cloneable, Seria
     }
 
     public PtaiTransferDescriptor getDescriptor() {
-        return Jenkins.getInstance().getDescriptorByType(PtaiTransferDescriptor.class);
+        return Jenkins.get().getDescriptorByType(PtaiTransferDescriptor.class);
     }
 }

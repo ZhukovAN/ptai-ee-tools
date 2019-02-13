@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class PtaiTransferDefaults implements Describable<PtaiTransferDefaults>, Cloneable, Serializable {
     @Override
     public PtaiTransferDefaults.PtaiPluginDefaultsDescriptor getDescriptor() {
-        return Jenkins.getInstance().getDescriptorByType(PtaiTransferDefaults.PtaiPluginDefaultsDescriptor.class);
+        return Jenkins.get().getDescriptorByType(PtaiTransferDefaults.PtaiPluginDefaultsDescriptor.class);
     }
 
     @Extension

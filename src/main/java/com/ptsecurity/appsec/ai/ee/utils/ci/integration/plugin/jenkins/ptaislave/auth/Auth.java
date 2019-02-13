@@ -10,10 +10,11 @@ import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 
 public abstract class Auth extends AbstractDescribableImpl<Auth> implements Serializable, Cloneable {
     @Getter
-    private static final DescriptorExtensionList<Auth, AuthDescriptor> all = DescriptorExtensionList.createDescriptorList(Jenkins.getInstance(), Auth.class);
+    private static final DescriptorExtensionList<Auth, AuthDescriptor> all = DescriptorExtensionList.createDescriptorList(Jenkins.get(), Auth.class);
 
     public static String generateAuthorizationHeaderValue(String authType, String user, String password /*,
                                                           BuildContext context*/) throws IOException {
@@ -22,8 +23,8 @@ public abstract class Auth extends AbstractDescribableImpl<Auth> implements Seri
         String authTypeKey = getAuthType(authType);
         String tuple = user + ":" + password;
         // tuple = TokenMacroUtils.applyTokenMacroReplacements(tuple, context);
-        byte[] encoded = Base64.encodeBase64(tuple.getBytes("UTF-8"));
-        return authTypeKey + " " + new String(encoded, "UTF-8");
+        byte[] encoded = Base64.encodeBase64(tuple.getBytes(StandardCharsets.UTF_8));
+        return authTypeKey + " " + new String(encoded, StandardCharsets.UTF_8);
     }
 
     private static String getAuthType(String authType) {
@@ -37,6 +38,6 @@ public abstract class Auth extends AbstractDescribableImpl<Auth> implements Seri
     @Override
     public Auth clone() throws CloneNotSupportedException {
         return (Auth)super.clone();
-    };
+    }
 
 }

@@ -57,7 +57,7 @@ public class CredentialsAuth extends Auth {
 
     public static UsernamePasswordCredentials getCredentials(final Item item, final String credentials) throws CredentialsNotFoundException {
         List<StandardUsernameCredentials> listOfCredentials = CredentialsProvider.lookupCredentials(
-                StandardUsernameCredentials.class, item, ACL.SYSTEM, Collections.<DomainRequirement> emptyList());
+                StandardUsernameCredentials.class, item, ACL.SYSTEM, Collections.emptyList());
 
         for (StandardUsernameCredentials cred : listOfCredentials)
             if (credentials.equals(cred.getId()))

@@ -1,24 +1,15 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.utils;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.Messages;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.PtaiException;
-import hudson.FilePath;
-import hudson.Util;
-import hudson.model.TaskListener;
 import lombok.Getter;
-import lombok.Setter;
-import org.apache.commons.io.FilenameUtils;
 
-import java.io.IOException;
-import java.util.Calendar;
 import java.util.TreeMap;
 
 public class BuildInfo extends BuildEnv {
     @Getter
-    private BuildEnv currentBuildEnv;
+    private final BuildEnv currentBuildEnv;
 
     @Getter
-    private BuildEnv targetBuildEnv;
+    private final BuildEnv targetBuildEnv;
 
     public BuildInfo(final BuildEnv currentBuildEnv, final BuildEnv targetBuildEnv) {
         this.currentBuildEnv = currentBuildEnv;

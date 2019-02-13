@@ -33,7 +33,7 @@ public class FileFinder extends MasterToSlaveFileCallable<FileFinderResult> {
                 : thePatternSeparatorRegex;
     }
 
-    public FileFinderResult invoke(final File file, final VirtualChannel virtualChannel) throws IOException, InterruptedException {
+    public FileFinderResult invoke(final File file, final VirtualChannel virtualChannel) throws IOException {
         final DirectoryScanner scanner = createDirectoryScanner(file, includes, excludes, defaultExcludes, patternSeparatorRegex);
         final String[] includedFiles = scanner.getIncludedFiles();
         final FilePath[] files = toFilePathArray(file, includedFiles);
@@ -46,22 +46,22 @@ public class FileFinder extends MasterToSlaveFileCallable<FileFinderResult> {
         return new FileFinderResult(files, dirs);
     }
 
-    static DirectoryScanner createDirectoryScanner(final File dir, final String includes, final String excludes,
+    private static DirectoryScanner createDirectoryScanner(final File dir, final String includes, final String excludes,
                                                    final boolean defaultExcludes, final String patternSeparatorRegex) throws IOException {
         final FileSet fs = new FileSet();
         fs.setDir(dir);
         fs.setProject(new Project());
         if (includes != null) {
             final String[] includePatterns = includes.split(patternSeparatorRegex);
-            for (int i = 0; i < includePatterns.length; i++)
-                if (!"".equals(includePatterns[i]))
-                    fs.createInclude().setName(includePatterns[i]);
+            for (String pattern : includePatterns)
+                if (!"".equals(pattern))
+                    fs.createInclude().setName(pattern);
         }
         if (excludes != null) {
             final String[] excludePatterns = excludes.split(patternSeparatorRegex);
-            for (int i = 0; i < excludePatterns.length; i++)
-                if (!"".equals(excludePatterns[i]))
-                    fs.createExclude().setName(excludePatterns[i]);
+            for (String pattern : excludePatterns)
+                if (!"".equals(pattern))
+                    fs.createExclude().setName(pattern);
         }
         fs.setDefaultexcludes(defaultExcludes);
         return fs.getDirectoryScanner();

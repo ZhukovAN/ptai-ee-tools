@@ -58,7 +58,7 @@ public class BuildEnv implements Serializable {
         }
     }
 
-    public static final String ENV_NODE_NAME = "NODE_NAME";
+    // --Commented out by Inspection (13.02.2019 11:21):public static final String ENV_NODE_NAME = "NODE_NAME";
     public static final String ENV_JOB_NAME = "JOB_NAME";
     public static final String ENV_BUILD_NUMBER = "BUILD_NUMBER";
 
@@ -76,7 +76,7 @@ public class BuildEnv implements Serializable {
     }
 
     public TreeMap<String, String> getEnvVarsWithPrefix(final String prefix) {
-        final TreeMap<String, String> prefixed = new TreeMap<String, String>();
+        final TreeMap<String, String> prefixed = new TreeMap<>();
         for (Map.Entry<String, String> entry : envVars.entrySet()) {
             prefixed.put(prefix + entry.getKey(), entry.getValue());
         }

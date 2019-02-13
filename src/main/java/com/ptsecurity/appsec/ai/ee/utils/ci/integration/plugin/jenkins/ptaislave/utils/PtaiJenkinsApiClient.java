@@ -13,12 +13,12 @@ public class PtaiJenkinsApiClient extends ApiClient {
     @Override
     public String escapeString(String str) {
         try {
-            String l_strRes = "";
+            StringBuilder l_strRes = new StringBuilder();
             String[] l_strPath = str.split("/");
             for (String l_strPathItem : l_strPath)
-                l_strRes += URLEncoder.encode(l_strPathItem, "utf8").replaceAll("\\+", "%20") + "/";
-            l_strRes = StringUtils.stripEnd(l_strRes, "/");
-            return l_strRes;
+                l_strRes.append(URLEncoder.encode(l_strPathItem, "utf8").replaceAll("\\+", "%20")).append("/");
+            l_strRes = new StringBuilder(StringUtils.stripEnd(l_strRes.toString(), "/"));
+            return l_strRes.toString();
         } catch (UnsupportedEncodingException e) {
             return str;
         }
