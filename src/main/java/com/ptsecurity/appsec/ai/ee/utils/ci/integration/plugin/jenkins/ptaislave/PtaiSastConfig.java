@@ -49,10 +49,10 @@ public class PtaiSastConfig implements Describable<PtaiSastConfig>, Cloneable, S
     }
 
     @Getter
-    private String sastConfigPtaiCaCerts;
+    private String sastConfigCaCerts;
     @DataBoundSetter
-    public void setSastConfigPtaiCaCerts(final String sastConfigPtaiCaCerts) {
-        this.sastConfigPtaiCaCerts = sastConfigPtaiCaCerts;
+    public void setSastConfigCaCerts(final String sastConfigCaCerts) {
+        this.sastConfigCaCerts = sastConfigCaCerts;
     }
 
     @Getter
@@ -80,13 +80,13 @@ public class PtaiSastConfig implements Describable<PtaiSastConfig>, Cloneable, S
     public PtaiSastConfig(
             final String sastConfigName,
             final String sastConfigPtaiHostUrl, final String sastConfigPtaiCert, final String sastConfigPtaiCertPwd,
-            final String sastConfigPtaiCaCerts,
+            final String sastConfigCaCerts,
             final String sastConfigJenkinsHostUrl, final String sastConfigJenkinsJobName, final Auth sastConfigJenkinsAuth) {
         this.sastConfigName = sastConfigName;
         this.sastConfigPtaiHostUrl = fixApiUrl(sastConfigPtaiHostUrl);
         this.sastConfigPtaiCert = sastConfigPtaiCert;
         this.sastConfigPtaiCertPwd = sastConfigPtaiCertPwd;
-        this.sastConfigPtaiCaCerts = sastConfigPtaiCaCerts;
+        this.sastConfigCaCerts = sastConfigCaCerts;
         this.sastConfigJenkinsHostUrl = fixApiUrl(sastConfigJenkinsHostUrl);
         this.sastConfigJenkinsJobName = sastConfigJenkinsJobName;
         this.sastConfigJenkinsAuth = sastConfigJenkinsAuth;

@@ -12,6 +12,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.CredentialsNotFoundException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.PtaiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.utils.PtaiJenkinsApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.DefaultCrumbIssuer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleProject;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
 import hudson.Extension;
@@ -23,7 +25,6 @@ import org.kohsuke.stapler.QueryParameter;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
 import javax.servlet.ServletException;
 import java.io.ByteArrayInputStream;
@@ -67,7 +68,7 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
             @QueryParameter("sastConfigPtaiHostUrl") final String ptaiHostUrl,
             @QueryParameter("sastConfigPtaiCert") final String ptaiCert,
             @QueryParameter("sastConfigPtaiCertPwd") final String ptaiCertPwd,
-            @QueryParameter("sastConfigPtaiCaCerts") final String ptaiCaCerts) throws IOException, ServletException {
+            @QueryParameter("sastConfigCaCerts") final String ptaiCaCerts) throws IOException, ServletException {
         try {
             if (StringUtils.isEmpty(ptaiHostUrl))
                 throw new PtaiException(Messages.validator_emptyPtaiHostUrl());
@@ -120,11 +121,11 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
     }
 
     public FormValidation doTestPtaiCaCerts(
-            @QueryParameter("sastConfigPtaiCaCerts") final String sastConfigPtaiCaCerts) {
+            @QueryParameter("sastConfigCaCerts") final String sastConfigCaCerts) {
         try {
             char[] password = null; // Any password will work.
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(new ByteArrayInputStream(sastConfigPtaiCaCerts.getBytes(StandardCharsets.UTF_8)));
+            Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(new ByteArrayInputStream(sastConfigCaCerts.getBytes(StandardCharsets.UTF_8)));
             if (certificates.isEmpty())
                 throw new IllegalArgumentException(Messages.validator_failedPtaiCaCerts());
             KeyStore caKeyStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -148,6 +149,7 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
     public FormValidation doTestJenkinsConnection(
             @QueryParameter("sastConfigJenkinsHostUrl") final String sastConfigJenkinsHostUrl,
             @QueryParameter("sastConfigJenkinsJobName") final String sastConfigJenkinsJobName,
+            @QueryParameter("sastConfigCaCerts") final String sastConfigCaCerts,
             @QueryParameter("sastConfigJenkinsAuth") final String sastConfigJenkinsAuth,
             @QueryParameter("credentials") final String credentials,
             @QueryParameter("userName") final String userName,
@@ -155,6 +157,7 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
         PtaiJenkinsApiClient apiClient = new PtaiJenkinsApiClient();
         RemoteAccessApi api = new RemoteAccessApi(apiClient);
         if (!StringUtils.isEmpty(credentials)) {
+            // Retrieve credentials from Jenkins
             UsernamePasswordCredentials creds;
             try {
                 creds = CredentialsAuth.getCredentials(null, credentials);
@@ -164,16 +167,21 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
             apiClient.setUsername(creds.getUsername());
             apiClient.setPassword(creds.getPassword().getPlainText());
         } else if (!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(apiToken)) {
-            apiClient.setApiKeyPrefix("Authorization");
-            apiClient.setApiKey(Auth.generateAuthorizationHeaderValue("Basic", userName, apiToken));
+            // Jenkins API tone authentication is not the same as JWT (i.e. "bearer" one)
+            // It is just another form of login/password authentication
+            apiClient.setUsername(userName);
+            apiClient.setPassword(apiToken);
         }
 
         api.getApiClient().setBasePath(sastConfigJenkinsHostUrl);
-        String l_strJobName = PtaiJenkinsApiClient.convertJobName(sastConfigJenkinsJobName);
+        api.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfigCaCerts.getBytes(StandardCharsets.UTF_8)));
+        api.getApiClient().getHttpClient().setHostnameVerifier((hostname, session) -> true);
+
         try {
+            String l_strJobName = PtaiJenkinsApiClient.convertJobName(sastConfigJenkinsJobName);
             FreeStyleProject prj = api.getJob(l_strJobName);
             return FormValidation.ok(Messages.validator_successSastJobName(prj.getDisplayName()));
-        } catch (Exception e) {
+        } catch (ApiException e) {
             return FormValidation.error(e, Messages.validator_failed());
         }
     }

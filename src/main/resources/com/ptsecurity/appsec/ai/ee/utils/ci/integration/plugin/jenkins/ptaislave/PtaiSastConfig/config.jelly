@@ -7,6 +7,12 @@
     <f:entry title="${%sastConfigPtaiHostUrl}" field="sastConfigPtaiHostUrl">
         <f:textbox/>
     </f:entry>
+    <f:entry title="${%sastConfigCaCerts}" field="sastConfigCaCerts">
+        <f:textarea style="height:100px"/>
+    </f:entry>
+    <f:validateButton
+            title="${%testPtaiCaCerts}" progress="${%sastConfigChecking}"
+            method="testPtaiCaCerts" with="sastConfigCaCerts" />
     <f:entry title="${%sastConfigPtaiCert}" field="sastConfigPtaiCert">
         <f:textarea style="height:100px"/>
     </f:entry>
@@ -16,15 +22,9 @@
     <f:validateButton
             title="${%testPtaiCert}" progress="${%sastConfigChecking}"
             method="testPtaiCert" with="sastConfigPtaiCert,sastConfigPtaiCertPwd" />
-    <f:entry title="${%sastConfigPtaiCaCerts}" field="sastConfigPtaiCaCerts">
-        <f:textarea style="height:100px"/>
-    </f:entry>
-    <f:validateButton
-            title="${%testPtaiCaCerts}" progress="${%sastConfigChecking}"
-            method="testPtaiCaCerts" with="sastConfigPtaiCaCerts" />
     <f:validateButton
             title="${%testPtaiConnection}" progress="${%sastConfigChecking}"
-            method="testPtaiConnection" with="sastConfigPtaiHostUrl,sastConfigPtaiCert,sastConfigPtaiCertPwd,sastConfigPtaiCaCerts" />
+            method="testPtaiConnection" with="sastConfigPtaiHostUrl,sastConfigPtaiCert,sastConfigPtaiCertPwd,sastConfigCaCerts" />
 
     <f:entry title="${%sastConfigJenkinsHostUrl}" field="sastConfigJenkinsHostUrl">
         <f:textbox/>
@@ -37,5 +37,5 @@
             default="${descriptor.getDefaultAuthDescriptor()}"/>
     <f:validateButton
             title="${%testJenkinsConnection}" progress="${%sastConfigChecking}"
-            method="testJenkinsConnection" with="sastConfigJenkinsHostUrl,sastConfigJenkinsJobName,sastConfigJenkinsAuth,credentials,userName,apiToken" />
+            method="testJenkinsConnection" with="sastConfigJenkinsHostUrl,sastConfigJenkinsJobName,sastConfigCaCerts,sastConfigJenkinsAuth,credentials,userName,apiToken" />
 </j:jelly>

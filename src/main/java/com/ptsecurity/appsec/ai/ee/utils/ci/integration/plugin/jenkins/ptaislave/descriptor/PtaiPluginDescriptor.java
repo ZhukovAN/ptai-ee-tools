@@ -92,7 +92,7 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
         if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiHostUrl())) return res;
         if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiCert())) return res;
         if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiCertPwd())) return res;
-        if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiCaCerts())) return res;
+        if (StringUtils.isEmpty(sastConfig.getSastConfigCaCerts())) return res;
 
         HostnameVerifier hostnameVerifier = (hostname, session) -> true;
 
@@ -114,11 +114,11 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
             kmf.init(appKeyStore, certPwd);
             authApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
             // Due to ApiClient specific keyManagers must be set before CA certificates
-            authApi.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfig.getSastConfigPtaiCaCerts().getBytes(StandardCharsets.UTF_8)));
+            authApi.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfig.getSastConfigCaCerts().getBytes(StandardCharsets.UTF_8)));
             authApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
 
             prjApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
-            prjApi.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfig.getSastConfigPtaiCaCerts().getBytes(StandardCharsets.UTF_8)));
+            prjApi.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfig.getSastConfigCaCerts().getBytes(StandardCharsets.UTF_8)));
             prjApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
 
             authToken = authApi.apiAgentAuthSigninGetWithHttpInfo("Agent");
@@ -160,7 +160,7 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
                 throw new PtaiException(Messages.validator_emptyPtaiCert());
             if (StringUtils.isEmpty(cfg.getSastConfigPtaiCertPwd()))
                 throw new PtaiException(Messages.validator_emptyPtaiCertPwd());
-            if (StringUtils.isEmpty(cfg.getSastConfigPtaiCaCerts()))
+            if (StringUtils.isEmpty(cfg.getSastConfigCaCerts()))
                 throw new PtaiException(Messages.validator_emptyPtaiCaCerts());
 
             // Connect to PT AI server
@@ -185,8 +185,8 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
                 authApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
                 prjApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
                 // Due to ApiClient specific keyManagers must be set before CA certificates
-                authApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigPtaiCaCerts().getBytes(StandardCharsets.UTF_8)));
-                prjApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigPtaiCaCerts().getBytes(StandardCharsets.UTF_8)));
+                authApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigCaCerts().getBytes(StandardCharsets.UTF_8)));
+                prjApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigCaCerts().getBytes(StandardCharsets.UTF_8)));
                 authApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
                 prjApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
                 // Try to authenticate
