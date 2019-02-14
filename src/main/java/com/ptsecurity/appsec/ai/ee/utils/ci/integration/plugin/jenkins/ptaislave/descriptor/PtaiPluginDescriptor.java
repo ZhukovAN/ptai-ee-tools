@@ -224,10 +224,6 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
         return Messages.pluginStepName();
     }
 
-    public FormValidation doCheckSastConfigName(@QueryParameter("sastConfigName") String sastConfigName) {
-        return doCheckField(sastConfigName, Messages.validator_emptyConfigName());
-    }
-
     public FormValidation doCheckUiProject(@QueryParameter("uiProject") String uiProject) {
         return doCheckField(uiProject, Messages.validator_emptyPtaiProjectName());
     }

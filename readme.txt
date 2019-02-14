@@ -34,3 +34,6 @@ node('master') {
       cleanWs();
    }
 }
+
+Build without SAST:
+mvn install -Dspotbugs.skip=true
