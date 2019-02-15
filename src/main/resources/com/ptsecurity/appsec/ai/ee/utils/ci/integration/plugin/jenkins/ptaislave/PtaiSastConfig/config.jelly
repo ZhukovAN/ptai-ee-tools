@@ -1,5 +1,5 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form" xmlns:ui="/lib/ui">
     <f:entry title="${%sastConfigName}" field="sastConfigName">
         <f:textbox/>
     </f:entry>
@@ -32,10 +32,15 @@
     <f:entry title="${%sastConfigJenkinsJobName}" field="sastConfigJenkinsJobName">
         <f:textbox/>
     </f:entry>
-    <f:dropdownDescriptorSelector
+    <ui:dropdownDescriptorSelectorUi
             field="sastConfigJenkinsAuth" title="Authentication" descriptors="${descriptor.getAuthDescriptors()}"
             default="${descriptor.getDefaultAuthDescriptor()}"/>
     <f:validateButton
             title="${%testJenkinsConnection}" progress="${%sastConfigChecking}"
             method="testJenkinsConnection" with="sastConfigJenkinsHostUrl,sastConfigJenkinsJobName,sastConfigCaCerts,sastConfigJenkinsAuth,credentials,userName,apiToken" />
+    <f:entry title="!!!"/>
+    <f:entry title="${sastConfigJenkinsAuth.toString}"/>
+    <f:entry title="${sastConfigJenkinsAuth.clazz}"/>
+    <f:entry title="${instance[]}"/>
+    <f:entry title="!!!"/>
 </j:jelly>
