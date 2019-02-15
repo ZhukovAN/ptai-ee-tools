@@ -19,9 +19,13 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.util.FormValidation;
+import jenkins.model.Jenkins;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.kohsuke.stapler.QueryParameter;
+import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.StaplerResponse;
+import org.kohsuke.stapler.verb.POST;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
@@ -146,6 +150,7 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
         }
     }
 
+    /*
     public FormValidation doTestJenkinsConnection(
             @QueryParameter("sastConfigJenkinsHostUrl") final String sastConfigJenkinsHostUrl,
             @QueryParameter("sastConfigJenkinsJobName") final String sastConfigJenkinsJobName,
@@ -154,7 +159,6 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
             @QueryParameter("credentials") final String credentials,
             @QueryParameter("userName") final String userName,
             @QueryParameter("apiToken") final String apiToken) throws IOException, ServletException {
-        System.out.println(sastConfigJenkinsAuth);
         PtaiJenkinsApiClient apiClient = new PtaiJenkinsApiClient();
         RemoteAccessApi api = new RemoteAccessApi(apiClient);
         if (!StringUtils.isEmpty(credentials)) {
@@ -186,6 +190,27 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
             return FormValidation.error(e, Messages.validator_failed());
         }
     }
+    */
+    @POST
+    public FormValidation doTestJenkinsConnection(final StaplerRequest request, final StaplerResponse response) {
+        Jenkins.get().checkPermission(Jenkins.ADMINISTER);
+        return FormValidation.ok();
+    /*
+        final CifsHostConfiguration hostConfig = request.bindParameters(CifsHostConfiguration.class, "");
+        request.bindParameters(hostConfig);
+        final BPBuildInfo buildInfo = createDummyBuildInfo(request);
+        try {
+            hostConfig.createClient(buildInfo).disconnect();
+            return FormValidation.ok(Messages.descriptor_testConnection_ok());
+        } catch (Exception e) {
+            return FormValidation.errorWithMarkup("<p>"
+                    + Messages.descriptor_testConnection_error() + "</p><p><pre>"
+                    + Util.escape(e.getClass().getCanonicalName() + ": " + e.getLocalizedMessage())
+                    + "</pre></p>");
+        }*/
+    }
+
+
 
     public static List<Auth.AuthDescriptor> getAuthDescriptors() {
         return Auth.getAll();

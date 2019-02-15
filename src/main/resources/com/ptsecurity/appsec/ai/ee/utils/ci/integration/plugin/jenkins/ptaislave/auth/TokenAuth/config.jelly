@@ -6,4 +6,7 @@
     <f:entry title="API Token">
         <f:password field="apiToken"/>
     </f:entry>
+    <f:validateButton
+            title="${%testJenkinsConnection}" progress="${%sastConfigChecking}"
+            method="testJenkinsConnection" with="sastConfigJenkinsHostUrl,sastConfigJenkinsJobName,sastConfigCaCerts,userName,apiToken" />
 </j:jelly>

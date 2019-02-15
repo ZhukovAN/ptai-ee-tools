@@ -37,6 +37,7 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLSession;
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -235,8 +236,10 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
             PtaiJenkinsApiClient apiClient = new PtaiJenkinsApiClient();
             RemoteAccessApi jenkinsApi = new RemoteAccessApi(apiClient);
             jenkinsApi.getApiClient().setBasePath(cfg.getSastConfigJenkinsHostUrl());
-            jenkinsApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigCaCerts().getBytes(StandardCharsets.UTF_8)));
-            jenkinsApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
+            if ("https".equalsIgnoreCase(new URL(cfg.getSastConfigJenkinsHostUrl()).getProtocol())) {
+                jenkinsApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigCaCerts().getBytes(StandardCharsets.UTF_8)));
+                jenkinsApi.getApiClient().getHttpClient().setHostnameVerifier((hostname, session) -> true);
+            }
             // Set authentication parameters
             Auth jenkinsAuth = cfg.getSastConfigJenkinsAuth();
             if (null == jenkinsAuth)
