@@ -154,6 +154,7 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
             @QueryParameter("credentials") final String credentials,
             @QueryParameter("userName") final String userName,
             @QueryParameter("apiToken") final String apiToken) throws IOException, ServletException {
+        System.out.println(sastConfigJenkinsAuth);
         PtaiJenkinsApiClient apiClient = new PtaiJenkinsApiClient();
         RemoteAccessApi api = new RemoteAccessApi(apiClient);
         if (!StringUtils.isEmpty(credentials)) {
