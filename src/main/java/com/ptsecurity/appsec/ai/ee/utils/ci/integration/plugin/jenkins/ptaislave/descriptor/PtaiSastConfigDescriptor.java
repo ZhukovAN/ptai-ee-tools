@@ -150,67 +150,11 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
         }
     }
 
-    /*
-    public FormValidation doTestJenkinsConnection(
-            @QueryParameter("sastConfigJenkinsHostUrl") final String sastConfigJenkinsHostUrl,
-            @QueryParameter("sastConfigJenkinsJobName") final String sastConfigJenkinsJobName,
-            @QueryParameter("sastConfigCaCerts") final String sastConfigCaCerts,
-            @QueryParameter("sastConfigJenkinsAuth") final String sastConfigJenkinsAuth,
-            @QueryParameter("credentials") final String credentials,
-            @QueryParameter("userName") final String userName,
-            @QueryParameter("apiToken") final String apiToken) throws IOException, ServletException {
-        PtaiJenkinsApiClient apiClient = new PtaiJenkinsApiClient();
-        RemoteAccessApi api = new RemoteAccessApi(apiClient);
-        if (!StringUtils.isEmpty(credentials)) {
-            // Retrieve credentials from Jenkins
-            UsernamePasswordCredentials creds;
-            try {
-                creds = CredentialsAuth.getCredentials(null, credentials);
-            } catch (CredentialsNotFoundException e) {
-                return FormValidation.error(e, Messages.validator_failedGetCredentials());
-            }
-            apiClient.setUsername(creds.getUsername());
-            apiClient.setPassword(creds.getPassword().getPlainText());
-        } else if (!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(apiToken)) {
-            // Jenkins API tone authentication is not the same as JWT (i.e. "bearer" one)
-            // It is just another form of login/password authentication
-            apiClient.setUsername(userName);
-            apiClient.setPassword(apiToken);
-        }
-
-        api.getApiClient().setBasePath(sastConfigJenkinsHostUrl);
-        api.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfigCaCerts.getBytes(StandardCharsets.UTF_8)));
-        api.getApiClient().getHttpClient().setHostnameVerifier((hostname, session) -> true);
-
-        try {
-            String l_strJobName = PtaiJenkinsApiClient.convertJobName(sastConfigJenkinsJobName);
-            FreeStyleProject prj = api.getJob(l_strJobName);
-            return FormValidation.ok(Messages.validator_successSastJobName(prj.getDisplayName()));
-        } catch (ApiException e) {
-            return FormValidation.error(e, Messages.validator_failed());
-        }
-    }
-    */
     @POST
     public FormValidation doTestJenkinsConnection(final StaplerRequest request, final StaplerResponse response) {
         Jenkins.get().checkPermission(Jenkins.ADMINISTER);
         return FormValidation.ok();
-    /*
-        final CifsHostConfiguration hostConfig = request.bindParameters(CifsHostConfiguration.class, "");
-        request.bindParameters(hostConfig);
-        final BPBuildInfo buildInfo = createDummyBuildInfo(request);
-        try {
-            hostConfig.createClient(buildInfo).disconnect();
-            return FormValidation.ok(Messages.descriptor_testConnection_ok());
-        } catch (Exception e) {
-            return FormValidation.errorWithMarkup("<p>"
-                    + Messages.descriptor_testConnection_error() + "</p><p><pre>"
-                    + Util.escape(e.getClass().getCanonicalName() + ": " + e.getLocalizedMessage())
-                    + "</pre></p>");
-        }*/
     }
-
-
 
     public static List<Auth.AuthDescriptor> getAuthDescriptors() {
         return Auth.getAll();

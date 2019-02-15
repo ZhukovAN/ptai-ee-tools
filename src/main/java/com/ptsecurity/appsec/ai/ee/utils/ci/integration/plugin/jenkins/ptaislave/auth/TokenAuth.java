@@ -8,6 +8,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleProject
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
 import hudson.Extension;
 import hudson.util.FormValidation;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jenkinsci.Symbol;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+@EqualsAndHashCode
 public class TokenAuth extends Auth {
     @Getter
     private String userName;
@@ -38,14 +40,6 @@ public class TokenAuth extends Auth {
 
     @DataBoundConstructor
     public TokenAuth() {}
-
-    /*
-    @DataBoundConstructor
-    public TokenAuth(String theUserName, String theApiToken) {
-        this.userName = theUserName;
-        this.apiToken = theApiToken;
-    }
-    */
 
     @Symbol("TokenAuth")
     @Extension

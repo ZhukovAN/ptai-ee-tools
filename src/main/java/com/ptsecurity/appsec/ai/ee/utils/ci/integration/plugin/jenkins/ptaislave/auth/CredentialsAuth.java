@@ -16,6 +16,7 @@ import hudson.model.Item;
 import hudson.security.ACL;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jenkinsci.Symbol;
@@ -32,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import com.cloudbees.plugins.credentials.common.UsernamePasswordCredentials;
 
-
+@EqualsAndHashCode
 public class CredentialsAuth extends Auth {
     @Getter
     private String credentials;

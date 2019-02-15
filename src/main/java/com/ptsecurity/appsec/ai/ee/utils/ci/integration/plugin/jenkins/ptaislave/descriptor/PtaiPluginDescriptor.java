@@ -43,7 +43,8 @@ import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
-@Extension @Symbol("ptaiUiSast")
+@Extension
+@Symbol("ptaiUiSast")
 public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
 
     private final CopyOnWriteList<PtaiSastConfig> sastConfigs = new CopyOnWriteList<>();

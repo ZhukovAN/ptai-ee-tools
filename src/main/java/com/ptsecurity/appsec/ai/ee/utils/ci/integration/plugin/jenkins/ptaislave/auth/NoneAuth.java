@@ -10,6 +10,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleProject
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
 import hudson.Extension;
 import hudson.util.FormValidation;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+@EqualsAndHashCode
 public class NoneAuth extends Auth {
 
     // private static final long serialVersionUID = -3128995428538415113L;
@@ -29,29 +31,10 @@ public class NoneAuth extends Auth {
 
     public static final NoneAuth INSTANCE = new NoneAuth();
 
-
     @DataBoundConstructor
     public NoneAuth() {
     }
-    /*
-    @Override
-    public void setAuthorizationHeader(URLConnection connection, BuildContext context) throws IOException {
-        //TODO: Should remove potential existing header, but URLConnection does not provide means to do so.
-        //      Setting null worked in the past, but is not valid with newer versions (of Jetty).
-        //connection.setRequestProperty("Authorization", null);
-    }
-    */
-    /*
-    @Override
-    public String toString() {
-        return "'" + getDescriptor().getDisplayName() + "'";
-    }
 
-    @Override
-    public String toString(Item item) {
-        return toString();
-    }
-    */
     @Override
     public AuthDescriptor getDescriptor() {
         return DESCRIPTOR;
@@ -91,15 +74,4 @@ public class NoneAuth extends Auth {
             }
         }
     }
-    /*
-    @Override
-    public int hashCode() {
-        return "NoneAuth".hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return this.getClass().isInstance(obj);
-    }
-    */
 }
