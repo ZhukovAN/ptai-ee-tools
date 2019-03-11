@@ -8,8 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a177746f-2c42-4190-af33-319ccb367123" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/Messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/Messages.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/Messages_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/Messages_ru.properties" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,19 +22,65 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/auth/TokenAuth.java">
+        <entry file="file://$PROJECT_DIR$/target/generated-sources/openapi/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/jenkins/server/ApiClient.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="25" selection-start-line="25" selection-end-line="25" />
+            <state relative-caret-position="216">
+              <caret line="1169" column="95" selection-start-line="1169" selection-start-column="95" selection-end-line="1169" selection-end-column="95" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="jar://W:/TOOLS/DEVEL/JAVA/jdk1.8.0_162/src.zip!/java/security/cert/CertificateFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="223">
+              <caret line="459" column="71" selection-start-line="459" selection-start-column="51" selection-end-line="459" selection-end-column="71" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/auth/CredentialsAuth.java">
+        <entry file="jar://W:/TOOLS/DEVEL/JAVA/jdk1.8.0_162/src.zip!/java/security/cert/CertificateFactorySpi.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="35" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="91">
+              <caret line="244" column="35" lean-forward="true" selection-start-line="244" selection-start-column="35" selection-end-line="244" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/target/generated-sources/localizer/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/Messages.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="462">
+              <caret line="23" column="7" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/Messages.properties">
+          <provider editor-type-id="ResourceBundle" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="132">
+              <caret line="6" column="36" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/commons-io/commons-io/2.4/commons-io-2.4-sources.jar!/org/apache/commons/io/FilenameUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="22">
+              <caret line="16" column="29" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3388">
+              <caret line="154" column="21" selection-start-line="154" selection-start-column="21" selection-end-line="154" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -44,44 +88,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/descriptor/PtaiPluginDescriptor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3652">
-              <caret line="46" selection-start-line="46" selection-end-line="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/descriptor/PtaiTransferDescriptor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="32" column="33" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/utils/BuildEnv.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/PtaiPlugin.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="335" selection-start-line="335" selection-end-line="335" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/PtaiSastConfig.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1452">
-              <caret line="84" selection-start-line="84" selection-end-line="84" />
+            <state relative-caret-position="2772">
+              <caret line="171" selection-start-line="171" selection-end-line="171" />
             </state>
           </provider>
         </entry>
@@ -89,17 +97,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/PtaiTransfer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-290">
-              <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/resources/index.jelly">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
+            <state relative-caret-position="264">
+              <caret line="20" column="30" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -152,6 +151,10 @@
       <find>upload</find>
       <find>hpi</find>
       <find>crumb</find>
+      <find>ant</find>
+      <find>resource</find>
+      <find>local</find>
+      <find>jacks</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -234,9 +237,9 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-9" />
-    <option name="y" value="-9" />
-    <option name="width" value="1937" />
+    <option name="x" value="1912" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -246,28 +249,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="PackagesPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="ptaiSlave" type="58d84e3e:PackageViewProjectNode" />
-              <item name="ptaiSlave" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="ptaiSlave" type="58d84e3e:PackageViewProjectNode" />
-              <item name="ptaiSlave" type="616d4139:PackageViewModuleNode" />
-              <item name="com.ptsecurity.appsec.ai.ee.utils.ci.integration" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="ptaiSlave" type="58d84e3e:PackageViewProjectNode" />
-              <item name="ptaiSlave" type="616d4139:PackageViewModuleNode" />
-              <item name="com.ptsecurity.appsec.ai.ee.utils.ci.integration" type="1f31426a:PackageElementNode" />
-              <item name="server" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -308,15 +289,6 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="ptaislave" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiSlave" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jenkinsClientPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaislave" type="462c0819:PsiDirectoryNode" />
               <item name="descriptor" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -324,33 +296,7 @@
               <item name="jenkinsClientPlugin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaislave" type="462c0819:PsiDirectoryNode" />
-              <item name="exceptions" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiSlave" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jenkinsClientPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaislave" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiSlave" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jenkinsClientPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiSlave" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jenkinsClientPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="api" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiSlave" type="b2602c69:ProjectViewProjectNode" />
@@ -367,55 +313,55 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="ptaislave" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
+              <item name="PtaiPlugin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiSlave" type="b2602c69:ProjectViewProjectNode" />
               <item name="jenkinsClientPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaislave" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="CredentialsAuth" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiSlave" type="b2602c69:ProjectViewProjectNode" />
               <item name="jenkinsClientPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaislave" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="NoneAuth" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
+              <item name="generated-sources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiSlave" type="b2602c69:ProjectViewProjectNode" />
               <item name="jenkinsClientPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaislave" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="TokenAuth" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
+              <item name="generated-sources" type="462c0819:PsiDirectoryNode" />
+              <item name="localizer" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiSlave" type="b2602c69:ProjectViewProjectNode" />
               <item name="jenkinsClientPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
+              <item name="generated-sources" type="462c0819:PsiDirectoryNode" />
+              <item name="localizer" type="462c0819:PsiDirectoryNode" />
               <item name="ptaislave" type="462c0819:PsiDirectoryNode" />
-              <item name="PtaiSastConfig" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="ptaiSlave" type="58d84e3e:PackageViewProjectNode" />
+              <item name="ptaiSlave" type="616d4139:PackageViewModuleNode" />
             </path>
             <path>
-              <item name="ptaiSlave" type="b2602c69:ProjectViewProjectNode" />
-              <item name="jenkinsClientPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaislave" type="462c0819:PsiDirectoryNode" />
-              <item name="PtaiTransfer" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiSlave" type="58d84e3e:PackageViewProjectNode" />
+              <item name="ptaiSlave" type="616d4139:PackageViewModuleNode" />
+              <item name="com.ptsecurity.appsec.ai.ee.utils.ci.integration" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="ptaiSlave" type="58d84e3e:PackageViewProjectNode" />
+              <item name="ptaiSlave" type="616d4139:PackageViewModuleNode" />
+              <item name="com.ptsecurity.appsec.ai.ee.utils.ci.integration" type="1f31426a:PackageElementNode" />
+              <item name="server" type="1f31426a:PackageElementNode" />
             </path>
           </expand>
           <select />
@@ -426,12 +372,12 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../restClientTest" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ptaiClientLib" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
-    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -511,24 +457,24 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8611111" visible="true" weight="0.22228146" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8611111" visible="true" weight="0.23667377" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" sideWeight="0.1388889" side_tool="true" weight="0.2462372" />
       <window_info id="UI Designer" order="4" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.48400852" weight="0.2426869" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.48347548" visible="true" weight="0.2426869" />
       <window_info anchor="bottom" id="Run" order="2" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.8171642" visible="true" weight="0.3802817" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.8171642" weight="0.3802817" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49733475" weight="0.32936078" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.48027718" weight="0.42795232" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.18283582" side_tool="true" visible="true" weight="0.3802817" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.47761193" weight="0.42795232" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5165245" side_tool="true" visible="true" weight="0.2426869" />
       <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.68976545" weight="0.3217768" />
       <window_info anchor="bottom" id="Inspection Results" order="11" sideWeight="0.49840087" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -612,91 +558,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-servlet/9.4.5.v20170502/jetty-servlet-9.4.5.v20170502.jar!/org/eclipse/jetty/servlet/ServletHandler.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="411" selection-start-line="411" selection-end-line="411" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.4.5.v20170502/jetty-server-9.4.5.v20170502.jar!/org/eclipse/jetty/server/handler/ScopedHandler.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="56" selection-start-line="56" selection-end-line="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/TOOLS/DEVEL/JAVA/JDK.1.8.0.181/src.zip!/java/lang/Thread.java" />
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-util/9.4.5.v20170502/jetty-util-9.4.5.v20170502.jar!/org/eclipse/jetty/util/thread/QueuedThreadPool.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="522" selection-start-line="522" selection-end-line="522" />
-          <folding>
-            <element signature="e#0#20635#0" expanded="true" />
-            <element signature="e#19051#19052#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-util/9.4.5.v20170502/jetty-util-9.4.5.v20170502.jar!/org/eclipse/jetty/util/thread/strategy/EatWhatYouKill.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="287" selection-start-line="287" selection-end-line="287" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-util/9.4.5.v20170502/jetty-util-9.4.5.v20170502.jar!/org/eclipse/jetty/util/thread/Invocable.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="52" selection-start-line="52" selection-end-line="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-io/9.4.5.v20170502/jetty-io-9.4.5.v20170502.jar!/org/eclipse/jetty/io/ChannelEndPoint.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="123" selection-start-line="123" selection-end-line="123" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-io/9.4.5.v20170502/jetty-io-9.4.5.v20170502.jar!/org/eclipse/jetty/io/FillInterest.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="66" selection-start-line="66" selection-end-line="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.4.5.v20170502/jetty-server-9.4.5.v20170502.jar!/org/eclipse/jetty/server/HttpConnection.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="194" selection-start-line="194" selection-end-line="194" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.4.5.v20170502/jetty-server-9.4.5.v20170502.jar!/org/eclipse/jetty/server/HttpChannel.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="139">
-          <caret line="234" selection-start-line="234" selection-end-line="234" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.4.5.v20170502/jetty-server-9.4.5.v20170502.jar!/org/eclipse/jetty/server/Server.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="445" column="9" lean-forward="true" selection-start-line="445" selection-start-column="9" selection-end-line="445" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-io/9.4.5.v20170502/jetty-io-9.4.5.v20170502.jar!/org/eclipse/jetty/io/AbstractConnection.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3432">
-          <caret line="207" selection-start-line="207" selection-end-line="207" />
-          <folding>
-            <element signature="e#5563#5564#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/eclipse/jetty/jetty-server/9.4.5.v20170502/jetty-server-9.4.5.v20170502-sources.jar!/org/eclipse/jetty/server/HttpConnection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3058">
@@ -711,11 +572,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/lib/ui/dropdownDescriptorSelectorUi.jelly">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1122" />
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/lib/ui/dropdownDescriptorSelectorUi.jelly" />
     <entry file="file://$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/PtaiPlugin/config.jelly">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-505">
@@ -749,24 +606,6 @@
     </entry>
     <entry file="jar://W:/TOOLS/DEVEL/JAVA/jdk1.8.0_162/src.zip!/java/lang/invoke/LambdaForm.java">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/target/generated-sources/openapi/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/jenkins/server/ApiClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="112" column="21" selection-start-line="112" selection-start-column="21" selection-end-line="112" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/exceptions/PtaiException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="2" column="42" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
-          <folding>
-            <element signature="e#371#372#0" expanded="true" />
-            <element signature="e#401#402#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="jar://W:/TOOLS/DEVEL/JAVA/jdk1.8.0_162/src.zip!/java/lang/RuntimeException.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -804,8 +643,8 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/PtaiSastConfig/config.properties">
-      <provider editor-type-id="text-editor" />
       <provider selected="true" editor-type-id="ResourceBundle" />
+      <provider editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/auth/CredentialsAuth/config.jelly">
       <provider selected="true" editor-type-id="text-editor">
@@ -815,24 +654,24 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/auth/TokenAuth/config.properties">
-      <provider selected="true" editor-type-id="text-editor" />
       <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/auth/TokenAuth/config_ru.properties">
+      <provider editor-type-id="ResourceBundle" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="22">
           <caret line="3" selection-start-line="3" selection-end-line="3" />
         </state>
       </provider>
-      <provider editor-type-id="ResourceBundle" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/auth/CredentialsAuth/config.properties">
-      <provider editor-type-id="text-editor" />
       <provider selected="true" editor-type-id="ResourceBundle" />
+      <provider editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/PtaiPlugin/config_ru.properties">
-      <provider selected="true" editor-type-id="text-editor" />
       <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/work/plugins/Parameterized-Remote-Trigger/META-INF/maven/org.jenkins-ci.plugins/Parameterized-Remote-Trigger/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
@@ -885,13 +724,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/auth/Auth.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="34" column="74" selection-start-line="34" selection-start-column="74" selection-end-line="34" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/auth/CredentialsAuth.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
@@ -899,16 +731,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/descriptor/PtaiPluginDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3652">
-          <caret line="46" selection-start-line="46" selection-end-line="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/descriptor/PtaiTransferDescriptor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
+        <state relative-caret-position="396">
           <caret line="32" column="33" selection-start-line="32" selection-start-column="33" selection-end-line="32" selection-end-column="33" />
         </state>
       </provider>
@@ -927,21 +752,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/PtaiTransfer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-290">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/Messages.properties">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="31" column="40" selection-start-line="31" selection-start-column="40" selection-end-line="31" selection-end-column="40" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="ResourceBundle" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/index.jelly">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="88">
@@ -949,10 +759,141 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../genericClient/genericClient.iml" />
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/ant/ant/1.9.2/ant-1.9.2.jar!/org/apache/tools/ant/types/FileSet.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/ant/ant/1.9.2/ant-1.9.2-sources.jar!/org/apache/tools/ant/types/FileSet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#2734#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/exceptions/PtaiException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="12" column="5" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
+          <folding>
+            <element signature="e#371#372#0" expanded="true" />
+            <element signature="e#401#402#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.6.4/jackson-databind-2.6.4.jar!/com/fasterxml/jackson/databind/ObjectMapper.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="107" column="13" selection-start-line="107" selection-start-column="13" selection-end-line="107" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/utils/FileUploader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="616">
+          <caret line="47" selection-start-line="41" selection-end-line="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jenkins-ci/main/jenkins-core/2.121.3/jenkins-core-2.121.3.jar!/hudson/model/TaskListener.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="27" column="13" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/PtaiPlugin.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="335" selection-start-line="335" selection-end-line="335" />
+        <state relative-caret-position="4180">
+          <caret line="239" column="51" selection-start-line="239" selection-start-column="51" selection-end-line="239" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/generated-sources/openapi/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/jenkins/server/rest/RemoteAccessApi.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="54" column="21" selection-start-line="54" selection-start-column="21" selection-end-line="54" selection-end-column="21" />
+          <folding>
+            <element signature="e#2010#2011#0" expanded="true" />
+            <element signature="e#2042#2043#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/generated-sources/localizer/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/Messages.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="23" column="7" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/Messages.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="6" column="36" selection-start-line="6" selection-start-column="36" selection-end-line="6" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/commons-io/commons-io/2.4/commons-io-2.4-sources.jar!/org/apache/commons/io/FilenameUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="16" column="29" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3388">
+          <caret line="154" column="21" selection-start-line="154" selection-start-column="21" selection-end-line="154" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/descriptor/PtaiPluginDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2772">
+          <caret line="171" selection-start-line="171" selection-end-line="171" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/PtaiTransfer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="20" column="30" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ptaislave/auth/Auth.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="528">
+          <caret line="34" column="74" selection-start-line="34" selection-start-column="74" selection-end-line="34" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/target/generated-sources/openapi/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/jenkins/server/ApiClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="1169" column="95" selection-start-line="1169" selection-start-column="95" selection-end-line="1169" selection-end-column="95" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://W:/TOOLS/DEVEL/JAVA/jdk1.8.0_162/src.zip!/java/security/cert/CertificateFactorySpi.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="91">
+          <caret line="244" column="35" lean-forward="true" selection-start-line="244" selection-start-column="35" selection-end-line="244" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://W:/TOOLS/DEVEL/JAVA/jdk1.8.0_162/src.zip!/java/security/cert/CertificateFactory.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="459" column="71" selection-start-line="459" selection-start-column="51" selection-end-line="459" selection-end-column="71" />
         </state>
       </provider>
     </entry>
