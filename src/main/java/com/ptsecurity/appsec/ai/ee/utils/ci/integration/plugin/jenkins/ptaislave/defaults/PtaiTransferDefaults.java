@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.defaults;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.utils.FileFinder;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import hudson.Extension;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
@@ -45,7 +45,6 @@ public class PtaiTransferDefaults implements Describable<PtaiTransferDefaults>, 
     }
 
     public String getPatternSeparator() {
-        return FileFinder.DEFAULT_PATTERN_SEPARATOR;
+        return Transfer.DEFAULT_PATTERN_SEPARATOR;
     }
-
 }

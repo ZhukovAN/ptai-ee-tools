@@ -10,6 +10,9 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.PtaiPlugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.PtaiSastConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.PtaiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProject;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiServerException;
 import hudson.AbortException;
 import hudson.Extension;
 import hudson.Util;
@@ -86,58 +89,6 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
         return model;
     }
 
-    public ListBoxModel doFillUiProjectItems(@QueryParameter String sastConfigName) {
-        ListBoxModel res = new ListBoxModel();
-        PtaiSastConfig sastConfig = getSastConfig(sastConfigName);
-        if (null == sastConfig) return res;
-        if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiHostUrl())) return res;
-        if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiCert())) return res;
-        if (StringUtils.isEmpty(sastConfig.getSastConfigPtaiCertPwd())) return res;
-        if (StringUtils.isEmpty(sastConfig.getSastConfigCaCerts())) return res;
-
-        HostnameVerifier hostnameVerifier = (hostname, session) -> true;
-
-        ApiClient apiClient = new ApiClient();
-        AgentAuthApi authApi = new AgentAuthApi(apiClient);
-        authApi.getApiClient().setBasePath(sastConfig.getSastConfigPtaiHostUrl());
-
-        ProjectsApi prjApi = new ProjectsApi();
-        prjApi.getApiClient().setBasePath(sastConfig.getSastConfigPtaiHostUrl());
-
-        byte[] decodedBytes = Base64.getDecoder().decode(sastConfig.getSastConfigPtaiCert().replaceAll("\n", ""));
-        char[] certPwd = sastConfig.getSastConfigPtaiCertPwd().toCharArray();
-        KeyStore appKeyStore = null;
-        ApiResponse<String> authToken = null;
-        try (InputStream certStream = new ByteArrayInputStream(decodedBytes)) {
-            appKeyStore = KeyStore.getInstance("PKCS12");
-            appKeyStore.load(certStream, certPwd);
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-            kmf.init(appKeyStore, certPwd);
-            authApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
-            // Due to ApiClient specific keyManagers must be set before CA certificates
-            authApi.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfig.getSastConfigCaCerts().getBytes(StandardCharsets.UTF_8)));
-            authApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
-
-            prjApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
-            prjApi.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfig.getSastConfigCaCerts().getBytes(StandardCharsets.UTF_8)));
-            prjApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
-
-            authToken = authApi.apiAgentAuthSigninGetWithHttpInfo("Agent");
-
-            prjApi.getApiClient().setApiKeyPrefix("Bearer");
-            prjApi.getApiClient().setApiKey(authToken.getData());
-
-            com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiResponse<List<Project>> projects = prjApi.apiProjectsGetWithHttpInfo(true);
-            for (Project prj : projects.getData())
-                res.add(prj.getName(), prj.getId().toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (CertificateException | ApiException | NoSuchAlgorithmException | KeyStoreException | UnrecoverableKeyException | com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiException e) {
-            return res;
-        }
-        return res;
-    }
-
     @Override
     public boolean configure(StaplerRequest theRq, JSONObject theFormData) throws FormException {
         theFormData = theFormData.getJSONObject("ptai");
@@ -163,60 +114,24 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
                 throw new PtaiException(Messages.validator_emptyPtaiCertPwd());
             if (StringUtils.isEmpty(cfg.getSastConfigCaCerts()))
                 throw new PtaiException(Messages.validator_emptyPtaiCaCerts());
+            PtaiProject ptaiProject = new PtaiProject();
+            ptaiProject.setUrl(cfg.getSastConfigPtaiHostUrl());
+            ptaiProject.setKeyPem(cfg.getSastConfigPtaiCert());
+            ptaiProject.setKeyPassword(cfg.getSastConfigPtaiCertPwd());
+            ptaiProject.setCaCertsPem(cfg.getSastConfigCaCerts());
 
             // Connect to PT AI server
-            HostnameVerifier hostnameVerifier = (hostname, session) -> true;
-
-            AgentAuthApi authApi = new AgentAuthApi(new com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiClient());
-            ProjectsApi prjApi = new ProjectsApi(new com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiClient());
-
-            authApi.getApiClient().setBasePath(cfg.getSastConfigPtaiHostUrl());
-            prjApi.getApiClient().setBasePath(cfg.getSastConfigPtaiHostUrl());
-
-            byte[] decodedBytes = Base64.getDecoder().decode(cfg.getSastConfigPtaiCert().replaceAll("\n", ""));
-            char[] certPwd = cfg.getSastConfigPtaiCertPwd().toCharArray();
-            KeyStore appKeyStore;
-            ApiResponse<String> authToken;
-            try (InputStream certStream = new ByteArrayInputStream(decodedBytes)) {
-                // Set certificates and keys for mutual PT AI EE server authentication
-                appKeyStore = KeyStore.getInstance("PKCS12");
-                appKeyStore.load(certStream, certPwd);
-                KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-                kmf.init(appKeyStore, certPwd);
-                authApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
-                prjApi.getApiClient().setKeyManagers(kmf.getKeyManagers());
-                // Due to ApiClient specific keyManagers must be set before CA certificates
-                authApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigCaCerts().getBytes(StandardCharsets.UTF_8)));
-                prjApi.getApiClient().setSslCaCert(new ByteArrayInputStream(cfg.getSastConfigCaCerts().getBytes(StandardCharsets.UTF_8)));
-                authApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
-                prjApi.getApiClient().getHttpClient().setHostnameVerifier(hostnameVerifier);
-                // Try to authenticate
-                authToken = authApi.apiAgentAuthSigninGetWithHttpInfo("Agent");
-                if (StringUtils.isEmpty(authToken.getData()))
-                    throw new AbortException(Messages.validator_failedPtaiServerAuth());
-
-                // Search for project
-                prjApi.getApiClient().setApiKeyPrefix("Bearer");
-                prjApi.getApiClient().setApiKey(authToken.getData());
-                com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiResponse<List<Project>> projects;
-                projects = prjApi.apiProjectsGetWithHttpInfo(true);
-                UUID projectId = null;
-                String uiPrj = Util.fixEmptyAndTrim(uiProject);
-
-                for (Project prj : projects.getData())
-                    if (uiPrj.equals(prj.getName())) {
-                        projectId = prj.getId();
-                        break;
-                    }
-                if (null == projectId)
-                    throw new PtaiException(Messages.validator_failedPtaiProjectByName());
-                return FormValidation.ok(Messages.validator_successPtaiProjectByName(projectId.toString().substring(0, 4)));
-            } catch (NoSuchAlgorithmException | KeyStoreException | CertificateException | UnrecoverableKeyException e) {
-                throw new PtaiException(Messages.validator_failedPtaiCertificate(), e);
-            } catch (ApiException | com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiException e) {
-                throw new PtaiException(Messages.validator_failedPtaiApi(), e);
-            }
-        } catch (PtaiException e) {
+            // Try to authenticate
+            String ptaiToken = ptaiProject.init();
+            if (StringUtils.isEmpty(ptaiToken))
+                return FormValidation.error(Messages.validator_failedPtaiServerAuth());
+            // Search for project
+            ptaiProject.setName(Util.fixEmptyAndTrim(uiProject));
+            UUID projectId = ptaiProject.searchProject();
+            if (null == projectId)
+                return FormValidation.error(Messages.validator_failedPtaiProjectByName());
+            return FormValidation.ok(Messages.validator_successPtaiProjectByName(projectId.toString().substring(0, 4)));
+        } catch (PtaiClientException e) {
             return FormValidation.error(e, Messages.validator_failed());
         }
     }

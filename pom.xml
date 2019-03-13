@@ -8,7 +8,7 @@
         <relativePath />
     </parent>
     <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins</groupId>
-    <artifactId>ptaiSlave</artifactId>
+    <artifactId>jenkinsClientPlugin</artifactId>
     <version>0.1</version>
     <packaging>hpi</packaging>
     <properties>
@@ -35,6 +35,11 @@
     <url>https://www.ptsecurity.com/ww-en/products/ai/</url>
     <description>This plugin used to implement AST using PT Application Inspector</description>
     <dependencies>
+        <dependency>
+            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver</groupId>
+            <artifactId>ptaiclient-lib</artifactId>
+            <version>0.1</version>
+        </dependency>
         <dependency>
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>credentials</artifactId>
@@ -83,48 +88,6 @@
             <version>3.8.1</version>
         </dependency>
 
-        <!--
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-core</artifactId>
-            <version>${feign-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-jackson</artifactId>
-            <version>${feign-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-slf4j</artifactId>
-            <version>${feign-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.github.openfeign.form</groupId>
-            <artifactId>feign-form</artifactId>
-            <version>${feign-form-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
-            <version>${jackson-version}</version>
-        </dependency>
-        -->
         <dependency>
             <groupId>com.github.joschi.jackson</groupId>
             <artifactId>jackson-datatype-threetenbp</artifactId>
@@ -218,81 +181,4 @@
             <url>http://repo.jenkins-ci.org/releases/</url>
         </pluginRepository>
     </pluginRepositories>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-codegen-maven-plugin</artifactId>
-                <version>2.2.3</version>
-                <executions>
-                    <execution>
-                        <id>PTAI EE server gateway API</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/ptai.server.gateway.swagger.json</inputSpec>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest</modelPackage>
-                            <language>java</language>
-                            <library>okhttp-gson</library>
-                            <generateApiTests>false</generateApiTests>
-                            <generateModelTests>false</generateModelTests>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>PTAI EE server project management API</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/ptai.server.projectmanagement.swagger.json</inputSpec>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest</modelPackage>
-                            <language>java</language>
-                            <library>okhttp-gson</library>
-                            <generateApiTests>false</generateApiTests>
-                            <generateModelTests>false</generateModelTests>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>PTAI EE server files store API</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <!-- <inputSpec>http://localhost:8443/v2/api-docs</inputSpec> -->
-                            <inputSpec>${project.basedir}/src/main/resources/api/ptai.server.filesstore.swagger.json</inputSpec>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest</modelPackage>
-                            <language>java</language>
-                            <library>okhttp-gson</library>
-                            <generateApiTests>false</generateApiTests>
-                            <generateModelTests>false</generateModelTests>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/jenkins-api.yml</inputSpec>
-                            <generatorName>java</generatorName>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest</modelPackage>
-                            <generateApiTests>false</generateApiTests>
-                            <generateModelTests>false</generateModelTests>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>

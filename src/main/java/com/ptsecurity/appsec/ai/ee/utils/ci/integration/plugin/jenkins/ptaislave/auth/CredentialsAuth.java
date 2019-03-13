@@ -4,6 +4,9 @@ import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.common.StandardUsernameCredentials;
 import com.cloudbees.plugins.credentials.common.StandardUsernameListBoxModel;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.CredentialsNotFoundException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.PtaiException;
@@ -110,20 +113,18 @@ public class CredentialsAuth extends Auth {
                         throw new PtaiException(Messages.validator_emptyPtaiCaCerts());
                 if (StringUtils.isEmpty(credentials))
                     throw new PtaiException(Messages.validator_emptyJenkinsCredentials());
-                PtaiJenkinsApiClient apiClient = new PtaiJenkinsApiClient();
-                RemoteAccessApi api = new RemoteAccessApi(apiClient);
+
                 UsernamePasswordCredentials creds = CredentialsAuth.getCredentials(null, credentials);
-                apiClient.setUsername(creds.getUsername());
-                apiClient.setPassword(creds.getPassword().getPlainText());
-                api.getApiClient().setBasePath(sastConfigJenkinsHostUrl);
-                if ("https".equalsIgnoreCase(new URL(sastConfigJenkinsHostUrl).getProtocol())) {
-                    api.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfigCaCerts.getBytes(StandardCharsets.UTF_8)));
-                    api.getApiClient().getHttpClient().setHostnameVerifier((hostname, session) -> true);
-                }
-                String l_strJobName = PtaiJenkinsApiClient.convertJobName(sastConfigJenkinsJobName);
-                FreeStyleProject prj = api.getJob(l_strJobName);
-                return FormValidation.ok(Messages.validator_successSastJobName(prj.getDisplayName()));
-            } catch (ApiException e) {
+
+                SastJob jenkinsClient = new SastJob();
+                jenkinsClient.setUrl(sastConfigJenkinsHostUrl);
+                jenkinsClient.setCaCertsPem(sastConfigCaCerts);
+                jenkinsClient.setJobName(sastConfigJenkinsJobName);
+                jenkinsClient.setUserName(creds.getUsername());
+                jenkinsClient.setPassword(creds.getPassword().getPlainText());
+                jenkinsClient.init();
+                return FormValidation.ok(Messages.validator_successSastJobName(jenkinsClient.testSastJob()));
+            } catch (JenkinsClientException e) {
                 return FormValidation.error(e, Messages.validator_failed());
             } catch (CredentialsNotFoundException e) {
                 return FormValidation.error(e, Messages.validator_failedGetCredentials());

@@ -4,6 +4,7 @@ import com.cloudbees.plugins.credentials.common.UsernamePasswordCredentials;
 import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiClient;
 import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest.AgentAuthApi;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.Client;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.PtaiSastConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.auth.Auth;
@@ -12,6 +13,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.CredentialsNotFoundException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.PtaiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.utils.PtaiJenkinsApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProject;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.DefaultCrumbIssuer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleProject;
@@ -80,27 +82,15 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
                 throw new PtaiException(Messages.validator_emptyPtaiCert());
             if (StringUtils.isEmpty(ptaiCaCerts))
                 throw new PtaiException(Messages.validator_emptyPtaiCaCerts());
-            HostnameVerifier hostnameVerifier = (hostname, session) -> true;
 
-            ApiClient apiClient = new ApiClient();
-            AgentAuthApi authApi = new AgentAuthApi(apiClient);
-            apiClient.setBasePath(ptaiHostUrl);
-
-            byte[] decodedBytes = Base64.getDecoder().decode(ptaiCert.replaceAll("\n", ""));
-            char[] certPwd = ptaiCertPwd.toCharArray();
-            KeyStore appKeyStore = null;
-            ApiResponse<String> authToken = null;
-            try (InputStream certStream = new ByteArrayInputStream(decodedBytes)) {
-                appKeyStore = KeyStore.getInstance("PKCS12");
-                appKeyStore.load(certStream, certPwd);
-                KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-                kmf.init(appKeyStore, certPwd);
-                apiClient.setKeyManagers(kmf.getKeyManagers());
-                apiClient.setSslCaCert(new ByteArrayInputStream(ptaiCaCerts.getBytes(StandardCharsets.UTF_8)));
-                apiClient.getHttpClient().setHostnameVerifier(hostnameVerifier);
-                authToken = authApi.apiAgentAuthSigninGetWithHttpInfo("Agent");
-            }
-            return FormValidation.ok(Messages.validator_successPtaiAuthToken(authToken.getData().substring(0, 10)));
+            PtaiProject ptaiProject = new PtaiProject();
+            ptaiProject.setVerbose(false);
+            ptaiProject.setUrl(ptaiHostUrl);
+            ptaiProject.setKeyPem(ptaiCert);
+            ptaiProject.setKeyPassword(ptaiCertPwd);
+            ptaiProject.setCaCertsPem(ptaiCaCerts);
+            String authToken = ptaiProject.init();
+            return FormValidation.ok(Messages.validator_successPtaiAuthToken(authToken.substring(0, 10)));
         } catch (Exception e) {
             return FormValidation.error(e, Messages.validator_failed());
         }
@@ -109,15 +99,9 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
     public FormValidation doTestPtaiCert(
             @QueryParameter("sastConfigPtaiCert") final String sastConfigPtaiCert,
             @QueryParameter("sastConfigPtaiCertPwd") final String sastConfigPtaiCertPwd) {
-        byte[] decodedBytes = Base64.getDecoder().decode(sastConfigPtaiCert.replaceAll("\n", ""));
-        try (InputStream is = new ByteArrayInputStream(decodedBytes)) {
-            char[] tableauCertPassword = sastConfigPtaiCertPwd.toCharArray();
-            // Import PKCS12 in KeyStore
-            KeyStore appKeyStore = KeyStore.getInstance("PKCS12");
-            appKeyStore.load(is, tableauCertPassword);
-            X509Certificate l_objCert = (X509Certificate)appKeyStore.getCertificate(appKeyStore.aliases().nextElement());
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-            kmf.init(appKeyStore, tableauCertPassword);
+        try {
+            KeyStore keyStore = new Client().checkKey(sastConfigPtaiCert, sastConfigPtaiCertPwd);
+            X509Certificate l_objCert = (X509Certificate)keyStore.getCertificate(keyStore.aliases().nextElement());
             return FormValidation.ok(Messages.validator_successPtaiCertSubject(l_objCert.getSubjectDN().getName()));
         } catch (Exception e) {
             return FormValidation.error(e, Messages.validator_failed());
@@ -127,24 +111,11 @@ public class PtaiSastConfigDescriptor extends Descriptor<PtaiSastConfig> {
     public FormValidation doTestPtaiCaCerts(
             @QueryParameter("sastConfigCaCerts") final String sastConfigCaCerts) {
         try {
-            char[] password = null; // Any password will work.
-            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            Collection<? extends Certificate> certificates = certificateFactory.generateCertificates(new ByteArrayInputStream(sastConfigCaCerts.getBytes(StandardCharsets.UTF_8)));
-            if (certificates.isEmpty())
-                throw new IllegalArgumentException(Messages.validator_failedPtaiCaCerts());
-            KeyStore caKeyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            caKeyStore.load(null, password);
-            int index = 0;
+            List<X509Certificate> certs = new Client().checkCaCerts(sastConfigCaCerts);
             StringBuilder dn = new StringBuilder();
-            for (Certificate certificate : certificates) {
-                String certificateAlias = "ca" + index++;
-                caKeyStore.setCertificateEntry(certificateAlias, certificate);
-                dn.append("{").append(((X509Certificate) certificate).getSubjectDN().getName()).append("}, ");
-            }
-            dn = new StringBuilder("[" + StringUtils.removeEnd(dn.toString().trim(), ",") + "]");
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init(caKeyStore);
-            return FormValidation.ok(Messages.validator_successPtaiCaCertsSubjects(dn.toString()));
+            for (X509Certificate cert : certs)
+                dn.append("{").append(cert.getSubjectDN().getName()).append("}, ");
+            return FormValidation.ok(Messages.validator_successPtaiCaCertsSubjects("[" + StringUtils.removeEnd(dn.toString().trim(), ",") + "]"));
         } catch (Exception e) {
             return FormValidation.error(e, Messages.validator_failed());
         }

@@ -1,5 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.auth;
 
+import com.cloudbees.plugins.credentials.common.UsernamePasswordCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.exceptions.PtaiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ptaislave.utils.PtaiJenkinsApiClient;
@@ -67,21 +71,16 @@ public class TokenAuth extends Auth {
                     throw new PtaiException(Messages.validator_emptyJenkinsUserName());
                 if (StringUtils.isEmpty(apiToken))
                     throw new PtaiException(Messages.validator_emptyJenkinsApiToken());
-                PtaiJenkinsApiClient apiClient = new PtaiJenkinsApiClient();
-                RemoteAccessApi api = new RemoteAccessApi(apiClient);
-                // Jenkins API tone authentication is not the same as JWT (i.e. "bearer" one)
-                // It is just another form of login/password authentication
-                apiClient.setUsername(userName);
-                apiClient.setPassword(apiToken);
-                api.getApiClient().setBasePath(sastConfigJenkinsHostUrl);
-                if ("https".equalsIgnoreCase(new URL(sastConfigJenkinsHostUrl).getProtocol())) {
-                    api.getApiClient().setSslCaCert(new ByteArrayInputStream(sastConfigCaCerts.getBytes(StandardCharsets.UTF_8)));
-                    api.getApiClient().getHttpClient().setHostnameVerifier((hostname, session) -> true);
-                }
-                String l_strJobName = PtaiJenkinsApiClient.convertJobName(sastConfigJenkinsJobName);
-                FreeStyleProject prj = api.getJob(l_strJobName);
-                return FormValidation.ok(Messages.validator_successSastJobName(prj.getDisplayName()));
-            } catch (ApiException e) {
+
+                SastJob jenkinsClient = new SastJob();
+                jenkinsClient.setUrl(sastConfigJenkinsHostUrl);
+                jenkinsClient.setCaCertsPem(sastConfigCaCerts);
+                jenkinsClient.setJobName(sastConfigJenkinsJobName);
+                jenkinsClient.setUserName(userName);
+                jenkinsClient.setPassword(apiToken);
+                jenkinsClient.init();
+                return FormValidation.ok(Messages.validator_successSastJobName(jenkinsClient.testSastJob()));
+            } catch (JenkinsClientException e) {
                 return FormValidation.error(e, Messages.validator_failed());
             }
         }
