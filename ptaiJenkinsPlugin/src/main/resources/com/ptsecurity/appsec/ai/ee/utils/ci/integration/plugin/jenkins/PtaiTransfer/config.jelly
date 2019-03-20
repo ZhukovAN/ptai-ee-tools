@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+
+    <f:entry title="${%includes}" field="includes">
+        <f:textbox default="${defaults.transfer.includes}"/>
+    </f:entry>
+
+    <f:entry title="${%removePrefix}" field="removePrefix">
+        <f:textbox default="${defaults.transfer.removePrefix}"/>
+    </f:entry>
+
+    <f:description>
+        <j:out value='${%envVarsSupport(rootURL)}'/>
+    </f:description>
+
+    <f:advanced>
+
+        <f:entry title="${%excludes}" field="excludes">
+            <f:textbox default="${defaults.transfer.excludes}"/>
+        </f:entry>
+
+        <f:entry title="${%patternSeparator}" field="patternSeparator">
+            <f:textbox default="${descriptor.ptaiTransferDefaults.patternSeparator}"/>
+        </f:entry>
+
+        <f:entry title="${%useDefaultExcludes}" field="useDefaultExcludes">
+            <f:checkbox default="${defaults.transfer.useDefaultExcludes}"/>
+        </f:entry>
+
+        <f:entry title="${%flatten}" field="flatten">
+            <f:checkbox default="${defaults.transfer.flatten}"/>
+        </f:entry>
+    </f:advanced>
+
+</j:jelly>
