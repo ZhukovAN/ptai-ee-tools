@@ -1,3 +1,4 @@
+<!-- http://hilite.me/ used to generate script HTML listing -->
 <div>
     <p>Name of main SAST job. The job is a pipeline with two parameters:</p>
     <p>PTAI_PROJECT_NAME - defines name of project in the PT AI Viewer</p>
@@ -51,7 +52,7 @@ node(<span style="color: #a31515">&quot;${PTAI_NODE_NAME}&quot;</span>) {
             currentBuild.result = <span style="color: #a31515">&quot;UNSTABLE&quot;</span>;
             println <span style="color: #a31515">&#39;Project settings error&#39;</span>;
         } <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span> (6 == retStatus) {
-            currentBuild.result = <span style="color: #a31515">&quot;UNSTABLE&quot;</span>;
+            currentBuild.result = <span style="color: #a31515">&quot;SUCCESS&quot;</span>;
             println <span style="color: #a31515">&#39;Minor errors during scan&#39;</span>;
         } <span style="color: #0000ff">else</span> {
             currentBuild.result = <span style="color: #a31515">&quot;FAILURE&quot;</span>;

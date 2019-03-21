@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 @EqualsAndHashCode
 @ToString
-public class PtaiTransfer implements Describable<PtaiTransfer>, Cloneable, Serializable {
+public class PtaiTransfer implements Describable<PtaiTransfer>, Serializable {
     @Getter
     private final String remoteDirectory;
     @Getter

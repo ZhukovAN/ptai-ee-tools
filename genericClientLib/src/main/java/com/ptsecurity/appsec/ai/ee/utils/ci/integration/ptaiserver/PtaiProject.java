@@ -38,7 +38,7 @@ public class PtaiProject extends Client {
         return null;
     }
 
-    public String upload(Transfers transfers, String srcFolderName) throws PtaiClientException, PtaiServerException {
+    public void upload(Transfers transfers, String srcFolderName) throws PtaiClientException, PtaiServerException {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String transfersJson = objectMapper.writeValueAsString(transfers);
@@ -60,9 +60,9 @@ public class PtaiProject extends Client {
                     destFile,
                     null,null,null,null,null,null);
             this.log("Sources upload result is %d\r\n", res.getStatusCode());
+            destFile.delete();
             if (200 != res.getStatusCode())
                 throw new PtaiClientException("Sources upload failed");
-            return destFile.getAbsolutePath();
         } catch (IOException e) {
             this.log(e);
             throw new PtaiClientException(e.getMessage(), e);

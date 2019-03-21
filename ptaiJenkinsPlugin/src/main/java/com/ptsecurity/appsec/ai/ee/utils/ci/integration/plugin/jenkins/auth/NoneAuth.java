@@ -15,7 +15,7 @@ import org.kohsuke.stapler.QueryParameter;
 import java.io.IOException;
 import java.net.URL;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 public class NoneAuth extends Auth {
 
     // private static final long serialVersionUID = -3128995428538415113L;

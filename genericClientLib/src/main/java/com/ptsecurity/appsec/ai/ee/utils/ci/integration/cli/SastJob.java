@@ -20,6 +20,7 @@ import java.util.UUID;
 
 public class SastJob {
     protected static CommandLine cli = null;
+
     protected static void parseCommand(String[] args) {
         CommandLineParser parser = new DefaultParser();
         Options options = new Options();
@@ -177,7 +178,9 @@ public class SastJob {
 
             folder = cli.getOptionValue("folder").replaceAll("^\"|\"$", "");
             folder = new File(folder).getAbsolutePath();
-            transfersJson = cli.getOptionValue("transfersJson").replaceAll("^\"|\"$", "");
+            transfersJson = Optional.ofNullable(cli.getOptionValue("transfersJson")).orElse("").replaceAll("^\"|\"$", "");
+            includes = Optional.ofNullable(cli.getOptionValue("includes")).orElse("").replaceAll("^\"|\"$", "");
+            excludes = Optional.ofNullable(cli.getOptionValue("excludes")).orElse("").replaceAll("^\"|\"$", "");
             if (StringUtils.isNotEmpty(transfersJson))
                 transfers = new ObjectMapper().readValue(transfersJson, Transfers.class);
             else {
@@ -186,7 +189,7 @@ public class SastJob {
                 if (StringUtils.isNotEmpty(includes))
                     transfer.setIncludes(includes);
                 if (StringUtils.isNotEmpty(excludes))
-                    transfer.setExcludes(includes);
+                    transfer.setExcludes(excludes);
                 transfers.addTransfer(transfer);
             }
 
@@ -226,13 +229,22 @@ public class SastJob {
 
     protected static boolean verbose = false;
 
-    public static void main(String[] theArgs) {
-            parseCommand(theArgs);
-            if (null != cli)
-                execute();
+    public static void main(String[] args) {
+            switch (execute(args)) {
+                case UNSTABLE: System.exit(2);
+                case FAILURE: System.exit(1);
+                case SUCCESS: System.exit(0);
+                default: System.exit(2);
+            }
     }
 
-    public static PtaiResultStatus execute() {
+    protected static PtaiResultStatus execute(String[] theArgs) {
+        parseCommand(theArgs);
+        if (null == cli) return null;
+        return execute();
+    }
+
+    protected static PtaiResultStatus execute() {
         PtaiProject ptaiPrj = new PtaiProject();
         ptaiPrj.setVerbose(verbose);
         ptaiPrj.setLog(System.out);

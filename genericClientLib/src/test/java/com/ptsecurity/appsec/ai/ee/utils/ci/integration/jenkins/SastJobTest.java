@@ -21,7 +21,7 @@ class SastJobTest {
         sast.setJobName("SAST/UI-managed SAST pipeline");
         sast.setUrl("http://" + ip + ":38080/jenkins");
         sast.setUserName("svc_ptai");
-        sast.setToken("117872cd3acb073940e7280b34426a47c8");
+        sast.setToken("114b330974dba8827019a5988ed461f8af");
         sast.setProjectName("JUnit.01");
         sast.setNodeName("PTAI");
         try {

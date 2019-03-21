@@ -8,7 +8,7 @@ import jenkins.model.Jenkins;
 
 import java.io.Serializable;
 
-public class PtaiTransferDefaults implements Describable<PtaiTransferDefaults>, Cloneable, Serializable {
+public class PtaiTransferDefaults implements Describable<PtaiTransferDefaults> {
     @Override
     public PtaiTransferDefaults.PtaiPluginDefaultsDescriptor getDescriptor() {
         return Jenkins.get().getDescriptorByType(PtaiTransferDefaults.PtaiPluginDefaultsDescriptor.class);

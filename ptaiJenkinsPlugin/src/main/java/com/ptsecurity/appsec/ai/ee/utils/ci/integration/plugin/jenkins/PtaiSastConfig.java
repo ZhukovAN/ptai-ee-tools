@@ -99,4 +99,10 @@ public class PtaiSastConfig implements Describable<PtaiSastConfig>, Cloneable, S
     protected static String fixApiUrl(String apiUrl) {
         return StringUtils.removeEnd(apiUrl.trim(), "/");
     }
+
+    public PtaiSastConfig clone() throws CloneNotSupportedException {
+        PtaiSastConfig clone = (PtaiSastConfig)super.clone();
+        clone.sastConfigJenkinsAuth = (null == sastConfigJenkinsAuth) ? null : sastConfigJenkinsAuth.clone();
+        return clone;
+    }
 }

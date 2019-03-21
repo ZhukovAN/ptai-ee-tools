@@ -54,9 +54,7 @@ class PtaiProjectTest {
             Transfers transfers = new Transfers();
             transfers.add(Transfer.builder().includes("**/*").excludes("target/** .settings/** .*").build());
             ptai.setName("JUnit.01");
-            String destFile = ptai.upload(transfers, "src\\test\\resources\\src\\app01");
-            assertNotNull(destFile);
-            System.out.println(destFile);
+            ptai.upload(transfers, "src\\test\\resources\\src\\app01");
         } catch (Exception e) {
             e.printStackTrace();
         }

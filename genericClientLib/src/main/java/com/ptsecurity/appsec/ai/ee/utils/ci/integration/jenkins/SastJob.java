@@ -129,6 +129,7 @@ public class SastJob extends Client {
                 }
             } while (true);
             // Save results
+            if (PtaiResultStatus.UNSTABLE.equals(sastJobRes)) return sastJobRes;
             for (String sastResType : Arrays.asList( "json", "html" )) {
                 String sastJson = jenkinsApi.getJobBuildArtifact(jobName, buildNumber.toString(), "REPORTS/report." + sastResType);
                 Files.write(
