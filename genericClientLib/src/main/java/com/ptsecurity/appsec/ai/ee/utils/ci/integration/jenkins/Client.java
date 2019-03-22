@@ -35,7 +35,7 @@ public class Client extends Base {
     @Setter
     protected String token = null;
 
-    public void init() throws JenkinsClientException, JenkinsServerException {
+    public Client init() throws JenkinsClientException, JenkinsServerException {
         try {
             super.baseInit();
             super.initClients(jenkinsApi.getApiClient());
@@ -48,6 +48,7 @@ public class Client extends Base {
                 else
                     throw new JenkinsClientException("Password or token must be set");
             }
+            return this;
         } catch (BaseClientException e) {
             throw new JenkinsClientException(e.getMessage(), e);
         }

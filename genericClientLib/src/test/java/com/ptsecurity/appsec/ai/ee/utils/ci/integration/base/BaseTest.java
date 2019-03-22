@@ -14,9 +14,10 @@ class BaseTest {
         try {
             Base base = new Base();
             base.setUrl("http://127.0.0.1:8080");
-            base.setKeyPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keystores\\CB5352E43AC14295\\ssl.client.brief.pem"))));
+            base.setKeyPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keys\\ssl.client.brief.pem"))));
             base.setKeyPassword("P@ssw0rd");
             base.baseInit();
+            System.out.println("BaseTest done");
         } catch (Exception e) {
             e.printStackTrace();
         }

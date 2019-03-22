@@ -7,6 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="generic-client-lib" />
+        <module name="jce-restrictions-checker" />
+        <module name="ptai-cli-plugin" />
         <module name="ptai-jenkins-plugin" />
       </profile>
     </annotationProcessing>

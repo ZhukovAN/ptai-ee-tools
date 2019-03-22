@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -32,9 +33,11 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Log
 public class Base {
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -48,15 +51,15 @@ public class Base {
 
     @Setter
     @Getter
-    protected PrintStream log = null;
+    protected PrintStream consoleLog = null;
 
     @Setter
     @Getter
     protected String logPrefix = "[PTAI] ";
 
     public void log(String value) {
-        if (null != this.log)
-            this.log.print(this.logPrefix + value);
+        if (null != this.consoleLog)
+            this.consoleLog.print(this.logPrefix + value);
     }
 
     public void log(String format, Object ... value) {
@@ -65,7 +68,7 @@ public class Base {
 
     public void log(Throwable value) {
         this.log("%s\r\n", value.getMessage());
-        if (this.verbose) value.printStackTrace(this.log);
+        if (this.verbose) value.printStackTrace(this.consoleLog);
     }
 
     @Setter
@@ -191,6 +194,9 @@ public class Base {
     }
 
     public void initClients(Object ... clients) throws BaseClientException {
+        if (!jceFixApplied)
+            this.removeCryptographyRestrictions();
+
         try {
             for (Object client : clients) {
                 Method method = client.getClass().getMethod("setBasePath", String.class);
@@ -276,6 +282,8 @@ public class Base {
     }
 
     public List<X509Certificate> checkCaCerts(final String caCertsPem) throws BaseClientException {
+        if (!jceFixApplied)
+            this.removeCryptographyRestrictions();
         Matcher match = parse.matcher(new String(caCertsPem.getBytes(), StandardCharsets.ISO_8859_1));
         List<X509Certificate> caCerts = new ArrayList<>();
         try {
@@ -303,6 +311,8 @@ public class Base {
     }
 
     public KeyStore checkKey(final List<RSAPrivateKey> keys, final List<X509Certificate> certs) throws BaseClientException {
+        if (!jceFixApplied)
+            this.removeCryptographyRestrictions();
         try {
             // If we have a key than only one should be added
             if (1 < keys.size())
@@ -333,12 +343,16 @@ public class Base {
             }
             throw new BaseClientException("Certificate not found for private key");
         } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | NoSuchProviderException | UnrecoverableKeyException e) {
+            log.log(Level.SEVERE, "Key check exception", e);
             this.log(e);
             throw new BaseClientException(e.getMessage(), e);
         }
     }
 
     public KeyStore checkKey(final String keyPem, final String keyPassword) throws BaseClientException {
+        log.log(Level.INFO, "Checking key");
+        if (!jceFixApplied)
+            this.removeCryptographyRestrictions();
         Matcher match = parse.matcher(new String(keyPem.getBytes(), StandardCharsets.ISO_8859_1));
         List<RSAPrivateKey> keys = new ArrayList<>();
         List<X509Certificate> certs = new ArrayList<>();
@@ -358,9 +372,9 @@ public class Base {
                         keys.add((RSAPrivateKey) key);
                 } else if ("ENCRYPTED PRIVATE KEY".equalsIgnoreCase(match.group(1))) {
                     try (PEMParser keyReader = new PEMParser(new StringReader(match.group(0)))) {
-                        JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
+                        JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
                         char[] pass = StringUtils.isEmpty(keyPassword) ? "".toCharArray() : keyPassword.toCharArray();
-                        InputDecryptorProvider decryptionProv = new JceOpenSSLPKCS8DecryptorProviderBuilder().build(pass);
+                        InputDecryptorProvider decryptionProv = new JceOpenSSLPKCS8DecryptorProviderBuilder().setProvider("BC").build(pass);
                         Object keyPair = keyReader.readObject();
                         if (keyPair instanceof PKCS8EncryptedPrivateKeyInfo) {
                             PrivateKeyInfo keyInfo;
@@ -374,6 +388,7 @@ public class Base {
             }
             return checkKey(keys, certs);
         } catch (NoSuchProviderException | CertificateException | IOException | NoSuchAlgorithmException | InvalidKeySpecException | PKCSException | OperatorCreationException e) {
+            log.log(Level.SEVERE, "Key check exception", e);
             this.log(e);
             throw new BaseClientException(e.getMessage(), e);
         }
@@ -381,7 +396,7 @@ public class Base {
 
     private void removeCryptographyRestrictions() {
         if (!isRestrictedCryptography()) {
-            this.log("No need to fix JCE");
+            log.log(Level.INFO, "No need to fix JCE");
             jceFixApplied = true;
             return;
         }
@@ -414,7 +429,7 @@ public class Base {
             defaultPolicy.add((Permission)instance.get(null));
             jceFixApplied = true;
         } catch (final Exception e) {
-            this.log(e);
+            log.log(Level.SEVERE, "Restrictions removal failed", e);
             jceFixApplied = false;
         }
     }

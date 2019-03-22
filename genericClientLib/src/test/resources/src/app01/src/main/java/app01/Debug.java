@@ -30,10 +30,10 @@ public class Debug {
 	public static void getLogFile(String theFile, HttpServletResponse theResponse)
 			throws ServletException, IOException {
 		// According to log4j.appender.FILE.File setting from log4j.properties
-		// Only the log files are needed, 
+		// Only the consoleLog files are needed,
 		String l_strLogFolder = System.getProperty("catalina.base") + "/logs/";
 		File l_objLogFile = new File(l_strLogFolder + theFile);
-		// Read the log file
+		// Read the consoleLog file
 		theResponse.setContentType("application/octet-stream");
 		// String l_strName = l_objLogFile.getName().replaceAll("\\W", "");
 		

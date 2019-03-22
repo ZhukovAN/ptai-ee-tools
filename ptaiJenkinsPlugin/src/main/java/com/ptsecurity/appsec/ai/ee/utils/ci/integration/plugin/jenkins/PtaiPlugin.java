@@ -124,7 +124,7 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
 
         PtaiProject ptaiProject = new PtaiProject();
         ptaiProject.setVerbose(this.verbose);
-        ptaiProject.setLog(listener.getLogger());
+        ptaiProject.setConsoleLog(listener.getLogger());
         ptaiProject.setLogPrefix(this.consolePrefix);
         ptaiProject.setUrl(cfg.getSastConfigPtaiHostUrl());
         ptaiProject.setKeyPem(cfg.getSastConfigPtaiCert());
@@ -163,7 +163,7 @@ public class PtaiPlugin extends Builder implements SimpleBuildStep {
             // Let's start analysis
             SastJob sastJob = new SastJob();
             sastJob.setVerbose(verbose);
-            sastJob.setLog(listener.getLogger());
+            sastJob.setConsoleLog(listener.getLogger());
             sastJob.setLogPrefix(this.consolePrefix);
             sastJob.setUrl(cfg.getSastConfigJenkinsHostUrl());
             sastJob.setJobName(cfg.getSastConfigJenkinsJobName());

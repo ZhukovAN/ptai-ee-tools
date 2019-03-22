@@ -78,7 +78,7 @@ public class MainServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doGet(HttpServletRequest theRq, HttpServletResponse theResponse) throws ServletException, IOException {
-    	// I need to get easy access to my app's log files
+    	// I need to get easy access to my app's consoleLog files
     	// (this is for technical support purposes only)
     	// I will use secure P@ssw0rd (corresponds to 161ebd7d45089b3446ee4e0d86dbcf92 MD5)
     	System.out.println("Remote host is " + theRq.getRemoteHost());

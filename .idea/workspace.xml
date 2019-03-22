@@ -2,26 +2,83 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="58b3e6c1-36c6-47af-94ff-72f789dc14ec" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/BaseTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jceRestrictionsChecker/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheckTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/BaseTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/BaseTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJobTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJobTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiTransfer.java" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiTransfer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth.java" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/PtaiTransferDefaults.java" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/PtaiTransferDefaults.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig/help-sastConfigJenkinsJobName.html" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig/help-sastConfigJenkinsJobName.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/ca.chain.pem.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/private.jks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/private.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/ssl.server.brief.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/ssl.server.brief.pfx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/ssl.server.der.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/ssl.server.full.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/ssl.server.full.pfx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/ssl.server.pem.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/ssl.server.pem.csr" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/ssl.server.pem.key" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14292/trust.jks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/ca.chain.pem.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/private.jks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/private.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/ssl.client.brief.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/ssl.client.brief.pfx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/ssl.client.der.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/ssl.client.full.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/ssl.client.full.pfx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/ssl.client.pem.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/ssl.client.pem.csr" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/ssl.client.pem.key" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14293/trust.jks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/ca.chain.pem.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/private.jks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/private.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/ssl.server.brief.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/ssl.server.brief.pfx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/ssl.server.der.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/ssl.server.full.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/ssl.server.full.pfx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/ssl.server.pem.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/ssl.server.pem.csr" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/ssl.server.pem.key" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14294/trust.jks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/ca.chain.pem.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/private.jks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/private.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/ssl.client.brief.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/ssl.client.brief.pfx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/ssl.client.der.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/ssl.client.full.pem" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/ssl.client.full.pfx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/ssl.client.pem.crt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/ssl.client.pem.csr" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/ssl.client.pem.key" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/CB5352E43AC14295/trust.jks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/trust.jks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/keystores/trust.p12" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/src/app01/sast.report.html" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/resources/src/app01/sast.report.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/src/app01/sast.report.json" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/resources/src/app01/sast.report.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/src/app01/src/main/java/app01/Debug.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/resources/src/app01/src/main/java/app01/Debug.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/src/app01/src/main/java/app01/MainServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/resources/src/app01/src/main/java/app01/MainServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiPlugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiPlugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/index.jelly" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/index.jelly" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/genericClientLib/target/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/ptaiJenkinsPlugin/target/" />
+    <ignored path="$PROJECT_DIR$/ptaiCliPlugin/target/" />
+    <ignored path="$PROJECT_DIR$/jceRestrictionsChecker/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,86 +87,85 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="23" column="26" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
+            <state relative-caret-position="1047">
+              <caret line="176" column="57" selection-start-line="176" selection-start-column="57" selection-end-line="176" selection-end-column="57" />
               <folding>
-                <element signature="method#parseCommand#0;class#SastJob#0" />
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jceRestrictionsChecker/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="6" selection-start-line="6" selection-end-line="6" />
+            <state relative-caret-position="370">
+              <caret line="50" selection-start-line="44" selection-end-line="50" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth.java">
+        <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="17" column="30" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
+            <state relative-caret-position="418">
+              <caret line="28" column="50" selection-start-line="28" selection-start-column="50" selection-end-line="28" selection-end-column="50" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/resources/api/jenkins-api.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="173">
+              <caret line="1213" column="30" selection-start-line="1213" selection-start-column="30" selection-end-line="1213" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/TokenAuth.java">
+        <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="20" column="13" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+            <state relative-caret-position="128">
+              <caret line="259" column="41" selection-start-line="259" selection-start-column="41" selection-end-line="259" selection-end-column="41" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig.java">
+        <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1518">
-              <caret line="104" selection-start-line="104" selection-end-line="104" />
+            <state relative-caret-position="241">
+              <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiTransfer.java">
+        <entry file="file://$PROJECT_DIR$/jceRestrictionsChecker/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheckTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-290">
-              <caret line="14" column="64" selection-start-line="14" selection-start-column="64" selection-end-line="14" selection-end-column="64" />
+            <state relative-caret-position="176">
+              <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/PtaiTransferDefaults.java">
+        <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="12" column="59" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/Auth.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-216">
-              <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/CredentialsAuth.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="30" column="10" selection-start-line="30" selection-start-column="10" selection-end-line="30" selection-end-column="10" />
+            <state relative-caret-position="348">
+              <caret line="45" column="17" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -117,8 +173,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/genericClientLib/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="124" selection-start-line="124" selection-end-line="124" />
+            <state relative-caret-position="502">
+              <caret line="155" selection-start-line="134" selection-end-line="155" />
             </state>
           </provider>
         </entry>
@@ -128,6 +184,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Class" />
         <option value="JUnit5 Test Class" />
       </list>
     </option>
@@ -135,6 +192,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>l_</find>
+      <find>.init</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -144,36 +202,44 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/utils/ApiClient.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PtaiSastConfigDescriptor.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/domain/Transfer.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/BaseTest.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJobTest.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig/help-sastConfigJenkinsJobName.html" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml" />
-        <option value="$PROJECT_DIR$/genericClientLib/pom.xml" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiTransfer.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/PtaiTransferDefaults.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig.java" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheck.java" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml" />
+        <option value="$PROJECT_DIR$/genericClientLib/pom.xml" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/Client.java" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PtaiSastConfigDescriptor.java" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java" />
+        <option value="$PROJECT_DIR$/jceRestrictionsChecker/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheckTest.java" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/BaseTest.java" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJobTest.java" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java" />
+        <option value="$PROJECT_DIR$/jceRestrictionsChecker/pom.xml" />
+        <option value="$PROJECT_DIR$/ptaiCliPlugin/pom.xml" />
+        <option value="$PROJECT_DIR$/ptaiCliPlugin/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/main/resources/api/jenkins-api.yml" />
       </list>
     </option>
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
         <option name="lookForNested" value="true" />
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="2290" />
-    <option name="y" value="237" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
     <option name="width" value="1296" />
     <option name="height" value="605" />
   </component>
@@ -214,7 +280,7 @@
               <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
@@ -222,61 +288,55 @@
               <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
-              <item name="base" type="462c0819:PsiDirectoryNode" />
+              <item name="jceRestrictionsChecker" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="jceRestrictionsChecker" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="jceRestrictionsChecker" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="jceRestrictionsChecker" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="jceRestrictionsChecker" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="cli" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="jceRestrictionsChecker" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="jceRestrictionsChecker" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
@@ -284,139 +344,54 @@
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="jceRestrictionsChecker" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
-              <item name="base" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
               <item name="cli" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="jceRestrictionsChecker" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiCliPlugin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiCliPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiCliPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiCliPlugin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiCliPlugin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiserver" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="defaults" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="PtaiSastConfig" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
+              <item name="cli" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -431,13 +406,18 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli" />
       <recent name="com.ptsecurity.appsec.ai.ee.utils.ci.integration.base" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiCliPlugin" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -452,7 +432,15 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.SastJobTest.main">
+  <component name="RunManager" selected="JUnit.JceCheckTest.main">
+    <configuration name="JceCheck" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.JceCheck" />
+      <module name="jce-restrictions-checker" />
+      <option name="PROGRAM_PARAMETERS" value="--keystore=&quot;W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\jceRestrictionsChecker\src\test\resources\keystores\keystore.pkcs8.pem&quot; --keystore-pass=P@ssw0rd" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="BaseTest.checkKey" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="generic-client-lib" />
       <option name="PACKAGE_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.base" />
@@ -463,39 +451,64 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PtaiProjectTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="generic-client-lib" />
-      <option name="PACKAGE_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver" />
-      <option name="MAIN_CLASS_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProjectTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SastJobTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="generic-client-lib" />
-      <option name="PACKAGE_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins" />
-      <option name="MAIN_CLASS_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJobTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="SastJobTest.main" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="generic-client-lib" />
+    <configuration name="JceCheckTest.main" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jce-restrictions-checker" />
       <option name="PACKAGE_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli" />
-      <option name="MAIN_CLASS_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.SastJobTest" />
+      <option name="MAIN_CLASS_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.JceCheckTest" />
       <option name="METHOD_NAME" value="main" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="PtaiProjectTest.searchProject" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="generic-client-lib" />
+      <option name="PACKAGE_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver" />
+      <option name="MAIN_CLASS_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProjectTest" />
+      <option name="METHOD_NAME" value="searchProject" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PtaiProjectTest.upload" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="generic-client-lib" />
+      <option name="PACKAGE_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver" />
+      <option name="MAIN_CLASS_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProjectTest" />
+      <option name="METHOD_NAME" value="upload" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Local Jenkins" type="Remote">
+      <module name="ptai-jenkins-plugin" />
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="8000" />
+      <option name="AUTO_RESTART" value="false" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="8000" />
+        <option name="LOCAL" value="false" />
+      </RunnerSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Application.JceCheck" />
+      <item itemvalue="JUnit.BaseTest.checkKey" />
+      <item itemvalue="Remote.Local Jenkins" />
+      <item itemvalue="JUnit.JceCheckTest.main" />
+      <item itemvalue="JUnit.PtaiProjectTest.searchProject" />
+      <item itemvalue="JUnit.PtaiProjectTest.upload" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.SastJobTest.main" />
-        <item itemvalue="JUnit.SastJobTest" />
-        <item itemvalue="JUnit.PtaiProjectTest" />
+        <item itemvalue="JUnit.JceCheckTest.main" />
+        <item itemvalue="JUnit.PtaiProjectTest.upload" />
+        <item itemvalue="JUnit.PtaiProjectTest.searchProject" />
+        <item itemvalue="Application.JceCheck" />
         <item itemvalue="JUnit.BaseTest.checkKey" />
       </list>
     </recent_temporary>
@@ -511,39 +524,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="PtaiProjectTest - 2019.03.21 at 12h 51m 27s.xml">
-      <configuration name="PtaiProjectTest" configurationId="JUnit" />
+    <history-entry file="BaseTest_checkKey - 2019.03.22 at 09h 45m 36s.xml">
+      <configuration name="BaseTest.checkKey" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SastJobTest - 2019.03.21 at 13h 23m 31s.xml">
-      <configuration name="SastJobTest" configurationId="JUnit" />
+    <history-entry file="BaseTest_checkKey - 2019.03.22 at 09h 53m 03s.xml">
+      <configuration name="BaseTest.checkKey" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SastJobTest - 2019.03.21 at 13h 25m 12s.xml">
-      <configuration name="SastJobTest" configurationId="JUnit" />
+    <history-entry file="JceCheckTest_main - 2019.03.22 at 14h 45m 16s.xml">
+      <configuration name="JceCheckTest.main" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SastJobTest_main - 2019.03.21 at 15h 15m 34s.xml">
-      <configuration name="SastJobTest.main" configurationId="JUnit" />
+    <history-entry file="PtaiProjectTest_searchProject - 2019.03.22 at 15h 03m 35s.xml">
+      <configuration name="PtaiProjectTest.searchProject" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SastJobTest_main - 2019.03.21 at 15h 17m 56s.xml">
-      <configuration name="SastJobTest.main" configurationId="JUnit" />
+    <history-entry file="PtaiProjectTest_upload - 2019.03.22 at 15h 04m 18s.xml">
+      <configuration name="PtaiProjectTest.upload" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SastJobTest_main - 2019.03.21 at 15h 21m 34s.xml">
-      <configuration name="SastJobTest.main" configurationId="JUnit" />
+    <history-entry file="PtaiProjectTest_upload - 2019.03.22 at 15h 05m 10s.xml">
+      <configuration name="PtaiProjectTest.upload" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SastJobTest_main - 2019.03.21 at 15h 25m 02s.xml">
-      <configuration name="SastJobTest.main" configurationId="JUnit" />
+    <history-entry file="PtaiProjectTest_upload - 2019.03.22 at 15h 05m 20s.xml">
+      <configuration name="PtaiProjectTest.upload" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SastJobTest_main - 2019.03.21 at 15h 27m 42s.xml">
-      <configuration name="SastJobTest.main" configurationId="JUnit" />
+    <history-entry file="PtaiProjectTest_upload - 2019.03.22 at 15h 06m 48s.xml">
+      <configuration name="PtaiProjectTest.upload" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SastJobTest_main - 2019.03.21 at 15h 29m 08s.xml">
-      <configuration name="SastJobTest.main" configurationId="JUnit" />
+    <history-entry file="PtaiProjectTest_upload - 2019.03.22 at 15h 09m 09s.xml">
+      <configuration name="PtaiProjectTest.upload" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="SastJobTest_main - 2019.03.21 at 15h 30m 45s.xml">
-      <configuration name="SastJobTest.main" configurationId="JUnit" />
+    <history-entry file="JceCheckTest_main - 2019.03.22 at 15h 15m 00s.xml">
+      <configuration name="JceCheckTest.main" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2553305" />
@@ -551,7 +564,7 @@
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32936078" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -560,7 +573,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32936078" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" visible="true" weight="0.32936078" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -573,12 +586,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java</url>
-          <line>20</line>
+          <line>17</line>
           <properties />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java</url>
+          <url>file://$PROJECT_DIR$/ptaiCliPlugin/com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli/SastJob.java</url>
           <line>260</line>
           <properties />
           <option name="timeStamp" value="3" />
@@ -590,22 +603,46 @@
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java</url>
-          <line>366</line>
-          <properties />
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java</url>
           <line>131</line>
           <properties />
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java</url>
+          <url>file://$PROJECT_DIR$/ptaiCliPlugin/com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli/SastJob.java</url>
           <line>182</line>
           <properties />
           <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/jceRestrictionsChecker/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheck.java</url>
+          <line>49</line>
+          <properties />
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/jceRestrictionsChecker/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheck.java</url>
+          <line>61</line>
+          <properties />
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java</url>
+          <line>139</line>
+          <properties />
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PtaiSastConfigDescriptor.java</url>
+          <line>81</line>
+          <properties />
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java</url>
+          <line>50</line>
+          <properties />
+          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -619,13 +656,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/utils/PtaiJenkinsApiClient.java" />
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PtaiSastConfigDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="81" column="32" selection-start-line="81" selection-start-column="32" selection-end-line="81" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/domain/Transfers.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -657,13 +687,6 @@
     <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiPlugin.java">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8118">
-          <caret line="404" column="51" selection-start-line="404" selection-start-column="51" selection-end-line="404" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig/help-sastConfigJenkinsJobName.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -681,13 +704,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/BaseTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/utils/FileCollector.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="145">
@@ -695,45 +711,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="41" selection-start-line="41" selection-end-line="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJobTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="28" column="48" selection-start-line="28" selection-start-column="48" selection-end-line="28" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="528">
           <caret line="65" selection-start-line="65" selection-end-line="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="56" column="12" selection-start-line="56" selection-start-column="12" selection-end-line="56" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="277">
-          <caret line="137" selection-start-line="137" selection-end-line="137" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="124" selection-start-line="124" selection-end-line="124" />
         </state>
       </provider>
     </entry>
@@ -788,18 +769,159 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        <state relative-caret-position="110">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java">
+    <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli/JceCheck.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="23" column="26" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
+        <state relative-caret-position="-418">
+          <caret line="11" column="28" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli/SastJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="213" column="44" selection-start-line="213" selection-start-column="44" selection-end-line="213" selection-end-column="44" />
           <folding>
             <element signature="method#parseCommand#0;class#SastJob#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="58" selection-start-line="58" selection-end-line="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="37" column="20" selection-start-line="37" selection-start-column="20" selection-end-line="37" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jceRestrictionsChecker/src/test/resources/keystores/keystore.pkcs8.pem">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PtaiSastConfigDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="83" column="49" selection-start-line="83" selection-start-column="49" selection-end-line="83" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/BaseTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="16" column="96" selection-start-line="16" selection-start-column="96" selection-end-line="16" selection-end-column="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJobTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="38" column="101" selection-start-line="38" selection-start-column="101" selection-end-line="38" selection-end-column="101" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/junit/platform/junit-platform-commons/1.4.0/junit-platform-commons-1.4.0.jar!/org/junit/platform/commons/util/ReflectionUtils.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="302" selection-start-line="302" selection-end-line="302" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="51" selection-start-line="51" selection-end-line="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jceRestrictionsChecker/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheck.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="502">
+          <caret line="155" selection-start-line="134" selection-end-line="155" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jceRestrictionsChecker/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="50" selection-start-line="44" selection-end-line="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="348">
+          <caret line="45" column="17" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="259" column="41" selection-start-line="259" selection-start-column="41" selection-end-line="259" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="241">
+          <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1047">
+          <caret line="176" column="57" selection-start-line="176" selection-start-column="57" selection-end-line="176" selection-end-column="57" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jceRestrictionsChecker/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheckTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="28" column="50" selection-start-line="28" selection-start-column="50" selection-end-line="28" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/resources/api/jenkins-api.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="1213" column="30" selection-start-line="1213" selection-start-column="30" selection-end-line="1213" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -843,7 +965,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>OpenJDK 12</last-edited>
+          <last-edited>Oracle JDK 1.8.66</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -860,6 +982,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>

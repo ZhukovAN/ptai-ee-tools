@@ -16,11 +16,11 @@ class PtaiProjectTest {
         PtaiProject ptai = new PtaiProject();
         try {
             ptai.setVerbose(true);
-            ptai.setLog(System.out);
+            ptai.setConsoleLog(System.out);
 
             ptai.setUrl("https://127.0.0.1:30443");
-            ptai.setCaCertsPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keystores\\CB5352E43AC14295\\ca.chain.pem.crt"))));
-            ptai.setKeyPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keystores\\CB5352E43AC14295\\ssl.client.brief.pem"))));
+            ptai.setCaCertsPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keys\\ca.chain.pem.crt"))));
+            ptai.setKeyPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keys\\ssl.client.brief.pem"))));
             ptai.setKeyPassword("P@ssw0rd");
             String token = ptai.init();
             assertNotNull(token);
@@ -39,13 +39,13 @@ class PtaiProjectTest {
         PtaiProject ptai = new PtaiProject();
         try {
             ptai.setVerbose(true);
-            ptai.setLog(System.out);
+            ptai.setConsoleLog(System.out);
 
             ptai.setUrl("https://127.0.0.1:30443");
-            ptai.setKeyStoreFile("src\\test\\resources\\keystores\\CB5352E43AC14295\\private.p12");
+            ptai.setKeyStoreFile("src\\test\\resources\\keys\\private.p12");
             ptai.setKeyStoreType("PKCS12");
             ptai.setKeyStorePassword("P@ssw0rd");
-            ptai.setTrustStoreFile("src\\test\\resources\\keystores\\trust.jks");
+            ptai.setTrustStoreFile("src\\test\\resources\\keys\\trust.jks");
             ptai.setTrustStoreType("JKS");
             ptai.setTrustStorePassword("");
             String token = ptai.init();
