@@ -7,6 +7,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.Jenki
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.Artifact;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.DefaultCrumbIssuer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleBuild;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleProject;
@@ -130,11 +131,12 @@ public class SastJob extends Client {
             } while (true);
             // Save results
             if (PtaiResultStatus.UNSTABLE.equals(sastJobRes)) return sastJobRes;
-            for (String sastResType : Arrays.asList( "json", "html" )) {
-                String sastJson = jenkinsApi.getJobBuildArtifact(jobName, buildNumber.toString(), "REPORTS/report." + sastResType);
+            sastBuild = jenkinsApi.getJobBuild(jobName, buildNumber.toString());
+            for (Artifact artifact : sastBuild.getArtifacts()) {
+                String resultFile = jenkinsApi.getJobBuildArtifact(jobName, buildNumber.toString(), artifact.getRelativePath());
                 Files.write(
-                        Paths.get(reportFolderName + File.separator + "sast.report." + sastResType),
-                        sastJson.getBytes("utf-8"),
+                        Paths.get(reportFolderName + File.separator + artifact.getFileName()),
+                        resultFile.getBytes("utf-8"),
                         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             }
             return sastJobRes;

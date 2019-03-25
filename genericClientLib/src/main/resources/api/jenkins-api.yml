@@ -1696,6 +1696,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CauseAction'
+        artifacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Artifact'
         building:
           type: boolean
         description:
@@ -2029,6 +2033,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CauseUserIdCause'
+    Artifact:
+      type: object
+      properties:
+        displayPath:
+          type: string
+        fileName:
+          type: string
+        relativePath:
+          type: string
     EmptyChangeLogSet:
       type: object
       properties:
