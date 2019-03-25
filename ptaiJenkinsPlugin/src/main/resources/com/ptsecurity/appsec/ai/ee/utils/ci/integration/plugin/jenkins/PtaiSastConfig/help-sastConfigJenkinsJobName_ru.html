@@ -51,13 +51,12 @@ node(<span style="color: #a31515">&quot;${PTAI_NODE_NAME}&quot;</span>) {
             currentBuild.result = <span style="color: #a31515">&quot;UNSTABLE&quot;</span>;
             println <span style="color: #a31515">&#39;Project settings error&#39;</span>;
         } <span style="color: #0000ff">else</span> <span style="color: #0000ff">if</span> (6 == retStatus) {
-            currentBuild.result = <span style="color: #a31515">&quot;UNSTABLE&quot;</span>;
+            currentBuild.result = <span style="color: #a31515">&quot;SUCCESS&quot;</span>;
             println <span style="color: #a31515">&#39;Minor errors during scan&#39;</span>;
         } <span style="color: #0000ff">else</span> {
             currentBuild.result = <span style="color: #a31515">&quot;FAILURE&quot;</span>;
             println <span style="color: #a31515">&#39;Unknown problem&#39;</span>;
         }
-        cleanWs();
     }
 }
 </pre></div>
