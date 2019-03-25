@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
+import org.junit.jupiter.api.Test;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PtaiProjectTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     void searchProject() {
         PtaiProject ptai = new PtaiProject();
         try {
@@ -34,7 +35,7 @@ class PtaiProjectTest {
         }
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void upload() {
         PtaiProject ptai = new PtaiProject();
         try {

@@ -23,7 +23,7 @@ public class Client extends Base {
     @Getter
     protected final StoreApi storeApi = new StoreApi(new com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiClient());
 
-    public String init() throws PtaiClientException, PtaiServerException {
+    public String init() throws PtaiClientException {
         try {
             super.baseInit();
             super.initClients(authApi.getApiClient(), prjApi.getApiClient(), storeApi.getApiClient());
