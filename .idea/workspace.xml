@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="58b3e6c1-36c6-47af-94ff-72f789dc14ec" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth/config.properties" afterDir="false" />
-    </list>
+    <list default="true" id="58b3e6c1-36c6-47af-94ff-72f789dc14ec" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/genericClientLib/target/" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/ptaiJenkinsPlugin/target/" />
@@ -18,52 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="134" selection-start-line="134" selection-end-line="134" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/CredentialsAuth/config.properties">
-          <provider selected="true" editor-type-id="ResourceBundle" />
-          <provider editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth/config.properties">
-          <provider selected="true" editor-type-id="ResourceBundle" />
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/TokenAuth/config.jelly">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="9" column="43" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/TokenAuth/config.properties">
-          <provider selected="true" editor-type-id="ResourceBundle" />
-          <provider editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="3" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -157,77 +108,34 @@
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="integration" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="api" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiCliPlugin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiCliPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiCliPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiCliPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
@@ -235,61 +143,29 @@
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiCliPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="cli" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="ptsecurity" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="descriptor" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
@@ -297,110 +173,12 @@
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="CredentialsAuth" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="CredentialsAuth" type="462c0819:PsiDirectoryNode" />
-              <item name="Resource Bundle 'config'" type="a6c14932:ResourceBundleNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="NoneAuth" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="NoneAuth" type="462c0819:PsiDirectoryNode" />
-              <item name="Resource Bundle 'config'" type="a6c14932:ResourceBundleNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="TokenAuth" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="auth" type="462c0819:PsiDirectoryNode" />
-              <item name="TokenAuth" type="462c0819:PsiDirectoryNode" />
-              <item name="Resource Bundle 'config'" type="a6c14932:ResourceBundleNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="PtaiPlugin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="PtaiSastConfig" type="462c0819:PsiDirectoryNode" />
+              <item name="buildServerResources" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -411,7 +189,7 @@
   <component name="PropertiesComponent">
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="File.Encoding" />
@@ -507,8 +285,8 @@
       <item itemvalue="Application.JceCheck" />
       <item itemvalue="JUnit.JceCheckTest.main" />
       <item itemvalue="JUnit.PtaiProjectTest.searchProject" />
-      <item itemvalue="JUnit.PtaiProjectTest.testAiPost2012" />
       <item itemvalue="JUnit.PtaiProjectTest.upload" />
+      <item itemvalue="JUnit.PtaiProjectTest.testAiPost2012" />
       <item itemvalue="Remote.Local Jenkins" />
     </list>
     <recent_temporary>
@@ -565,7 +343,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26332623" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -650,13 +427,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/utils/ApiClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="20" column="29" selection-start-line="20" selection-start-column="29" selection-end-line="20" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/utils/PtaiJenkinsApiClient.java" />
     <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/domain/Transfers.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -931,13 +701,6 @@
       <provider selected="true" editor-type-id="ResourceBundle" />
       <provider editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="134" selection-start-line="134" selection-end-line="134" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/TokenAuth/config.jelly">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
@@ -964,6 +727,23 @@
     <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/CredentialsAuth/config.properties">
       <provider selected="true" editor-type-id="ResourceBundle" />
       <provider editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="134" selection-start-line="134" selection-end-line="134" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/adminPage.jsp">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/teamcity-plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
+        </state>
+      </provider>
     </entry>
   </component>
   <component name="masterDetails">
