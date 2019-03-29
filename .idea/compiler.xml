@@ -10,6 +10,7 @@
         <module name="jce-restrictions-checker" />
         <module name="ptai-cli-plugin" />
         <module name="ptai-jenkins-plugin" />
+        <module name="ptai-teamcity-plugin-server" />
       </profile>
     </annotationProcessing>
   </component>

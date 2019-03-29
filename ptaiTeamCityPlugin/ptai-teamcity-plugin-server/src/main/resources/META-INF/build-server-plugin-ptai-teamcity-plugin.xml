@@ -3,4 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
        default-autowire="constructor">
+
+    <bean id="ptaiAdminConfig" class="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.PtaiAdminConfig" init-method="init"/>
+    <bean id="ptaiAdminPage" class="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.PtaiAdminPage"/>
+    <bean id="ptaiAdminPageController" class="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.PtaiAdminPageController"/>
 </beans>

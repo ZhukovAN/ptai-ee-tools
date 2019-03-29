@@ -13,5 +13,6 @@
         <module>ptaiJenkinsPlugin</module>
         <module>ptaiCliPlugin</module>
         <module>jceRestrictionsChecker</module>
+        <module>ptaiteamCityPlugin</module>
     </modules>
 </project>
