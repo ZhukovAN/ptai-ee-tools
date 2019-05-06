@@ -2,18 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="58b3e6c1-36c6-47af-94ff-72f789dc14ec" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/PtaiAdminConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPageController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/BaseDisplayName.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/BaseVulnerability.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/ConfVulnerability.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/FingerprintVulnerability.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Glossary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/GlossaryItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Level.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Nist.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/OWASP.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/OWASPM.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/PCIDSS.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/PMVulnerability.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Report.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/SANS.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Type.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Vulnerability.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsBean.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPageController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/js/ptaiSettings.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/ptaiAdminSettings.jsp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiTeamCityPlugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/AppServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/PtaiAdminConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/PtaiAdminSettings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPageController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/META-INF/build-server-plugin-ptai-teamcity-plugin.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/META-INF/build-server-plugin-ptai-teamcity-plugin.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/adminPage.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/adminPage.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/adminPage.jsp" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/genericClientLib/target/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -23,6 +43,7 @@
     <ignored path="$PROJECT_DIR$/ptaiTeamCityPlugin/build/target/" />
     <ignored path="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/target/" />
     <ignored path="$PROJECT_DIR$/ptaiTeamCityPlugin/target/" />
+    <ignored path="$PROJECT_DIR$/ptaiReportGenerator/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,111 +52,68 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/adminPage.jsp">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="40" column="42" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="42" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPage.java">
+        <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPageController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="34" column="34" selection-start-line="34" selection-start-column="34" selection-end-line="34" selection-end-column="34" />
+            <state relative-caret-position="409">
+              <caret line="82" column="44" selection-start-line="82" selection-start-column="44" selection-end-line="82" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1178#1179#0" expanded="true" />
-                <element signature="e#1219#1220#0" expanded="true" />
+                <element signature="method#validate#0;class#PtaiAdminSettingsPageController#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPageController.java">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/controllers/BaseFormXmlController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="294">
-              <caret line="60" selection-start-line="60" selection-end-line="60" />
+            <state relative-caret-position="184">
+              <caret line="53" selection-start-line="53" selection-end-line="53" />
               <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#1703#1956#0" expanded="true" />
+                <element signature="e#1955#1956#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0.jar!/jetbrains/buildServer/controllers/BaseFormXmlController.class">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/controllers/AjaxRequestProcessor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="33" selection-start-line="33" selection-end-line="33" />
+            <state relative-caret-position="323">
+              <caret line="52" selection-start-line="52" selection-end-line="52" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/controllers/ActionErrors.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="301">
+              <caret line="142" column="5" selection-start-line="142" selection-start-column="5" selection-end-line="142" selection-end-column="5" />
               <folding>
-                <element signature="e#1169#1460#0" expanded="true" />
-                <element signature="e#1459#1460#0" expanded="true" />
+                <element signature="e#1644#1645#0" expanded="true" />
+                <element signature="e#1690#1691#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0.jar!/jetbrains/buildServer/controllers/BaseController.class">
+        <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/controllers/XmlResponseUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="71" column="32" selection-start-line="71" selection-start-column="32" selection-end-line="71" selection-end-column="32" />
+            <state relative-caret-position="376">
+              <caret line="105" selection-start-line="105" selection-end-line="105" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/PtaiAdminConfig.java">
+        <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/js/ptaiSettings.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="94" selection-start-line="94" selection-end-line="94" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#922#923#0" expanded="true" />
-                <element signature="e#957#958#0" expanded="true" />
-                <element signature="e#3363#3364#0" expanded="true" />
-                <element signature="e#3490#3491#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/teamcity-plugin.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/META-INF/build-server-plugin-ptai-teamcity-plugin.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="9" selection-start-line="9" selection-end-line="9" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="322">
-              <caret line="29" column="42" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="13" selection-start-line="13" selection-end-line="13" />
+            <state relative-caret-position="374">
+              <caret line="71" column="90" selection-start-line="71" selection-start-column="90" selection-end-line="71" selection-end-column="90" />
             </state>
           </provider>
         </entry>
@@ -164,7 +142,13 @@
       <find>FreeStyleBuild</find>
       <find>getJobB</find>
       <find>wildcard</find>
+      <find>getOrCreateMessages</find>
+      <find>SandboxAdmin</find>
+      <find>storeInSession</find>
     </findStrings>
+    <replaceStrings>
+      <replace>PtaiAdmin</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -172,20 +156,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/utils/ApiClient.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/domain/Transfer.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiTransfer.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/PtaiTransferDefaults.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheck.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml" />
-        <option value="$PROJECT_DIR$/genericClientLib/pom.xml" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/Client.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PtaiSastConfigDescriptor.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java" />
         <option value="$PROJECT_DIR$/jceRestrictionsChecker/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheckTest.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/BaseTest.java" />
@@ -200,17 +170,43 @@
         <option value="$PROJECT_DIR$/genericClientLib/src/main/resources/api/jenkins-api.yml" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth/config.properties" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/PtaiAdminPage.java" />
         <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/PtaiAdminPage.java" />
         <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/PtaiAdminConfig.java" />
-        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/pom.xml" />
         <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/pom.xml" />
         <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/PtaiAdminConfig.java" />
-        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/adminPage.jsp" />
-        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPageController.java" />
         <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/META-INF/build-server-plugin-ptai-teamcity-plugin.xml" />
+        <option value="$PROJECT_DIR$/genericClientLib/pom.xml" />
+        <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/SastJob.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/BuilderTest.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/OWASP.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/OWASPM.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Level.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Type.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/CWE.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/BaseDisplayName.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Glossary.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/pom.xml" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/GlossaryItem.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/PMVulnerability.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/ConfVulnerability.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/FingerprintVulnerability.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/Builder.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/test/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/BuilderTest.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Report.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Vulnerability.java" />
+        <option value="$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/BaseVulnerability.java" />
+        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPageController.java" />
+        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/pom.xml" />
+        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/adminPage.jsp" />
         <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPage.java" />
+        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPage.java" />
+        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/js/ptaiSettings.js" />
+        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/ptaiAdminSettings.jsp" />
+        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsBean.java" />
+        <option value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPageController.java" />
       </list>
     </option>
   </component>
@@ -223,9 +219,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
-    <option name="width" value="1936" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1937" />
     <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -234,12 +230,101 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
+              <item name="auth" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
+              <item name="descriptor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
+              <item name="Resource Bundle 'Messages'" type="a6c14932:ResourceBundleNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
@@ -283,6 +368,27 @@
               <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="teamcity" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="teamcity" type="462c0819:PsiDirectoryNode" />
+              <item name="admin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -303,35 +409,53 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="buildServerResources" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiTeamCityPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="ptai-teamcity-plugin-server" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="META-INF" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
-    <property name="last_directory_selection" value="$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity" />
+    <property name="last_directory_selection" value="$PROJECT_DIR$/ptaiReportGenerator/src/test/java/com/ptsecurity/appsec/ai" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ptaiReportGenerator" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="File.Encoding" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.annotationProcessors" />
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="com.ptsecurity.appsec.ai.desktop.utils.report.generator" />
       <recent name="com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli" />
       <recent name="com.ptsecurity.appsec.ai.ee.utils.ci.integration.base" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiCliPlugin" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiCliPlugin" />
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ptsecurity.appsec.ai.desktop.utils.report.generator.domain" />
+    </key>
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="com.ptsecurity.appsec.ai.desktop.utils.report.generator.domain" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -347,10 +471,12 @@
     </option>
   </component>
   <component name="RunManager" selected="Remote.Local TeamCity">
-    <configuration name="JceCheck" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.JceCheck" />
-      <module name="jce-restrictions-checker" />
-      <option name="PROGRAM_PARAMETERS" value="--keystore=&quot;W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\jceRestrictionsChecker\src\test\resources\keystores\keystore.pkcs8.pem&quot; --keystore-pass=P@ssw0rd" />
+    <configuration name="BuilderTest.execute" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ptai-report-generator" />
+      <option name="PACKAGE_NAME" value="com.ptsecurity.appsec.ai.desktop.utils.report.generator" />
+      <option name="MAIN_CLASS_NAME" value="com.ptsecurity.appsec.ai.desktop.utils.report.generator.BuilderTest" />
+      <option name="METHOD_NAME" value="execute" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -424,7 +550,7 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.JceCheck" />
+      <item itemvalue="JUnit.BuilderTest.execute" />
       <item itemvalue="JUnit.JceCheckTest.main" />
       <item itemvalue="JUnit.PtaiProjectTest.searchProject" />
       <item itemvalue="JUnit.PtaiProjectTest.testAiPost2012" />
@@ -434,11 +560,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.BuilderTest.execute" />
         <item itemvalue="JUnit.PtaiProjectTest.testAiPost2012" />
         <item itemvalue="JUnit.JceCheckTest.main" />
         <item itemvalue="JUnit.PtaiProjectTest.upload" />
         <item itemvalue="JUnit.PtaiProjectTest.searchProject" />
-        <item itemvalue="Application.JceCheck" />
       </list>
     </recent_temporary>
   </component>
@@ -453,56 +579,55 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="JceCheckTest_main - 2019.03.22 at 14h 45m 16s.xml">
-      <configuration name="JceCheckTest.main" configurationId="JUnit" />
+    <history-entry file="BuilderTest_execute - 2019.04.08 at 17h 41m 42s.xml">
+      <configuration name="BuilderTest.execute" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PtaiProjectTest_searchProject - 2019.03.22 at 15h 03m 35s.xml">
-      <configuration name="PtaiProjectTest.searchProject" configurationId="JUnit" />
+    <history-entry file="BuilderTest_execute - 2019.04.08 at 17h 45m 02s.xml">
+      <configuration name="BuilderTest.execute" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PtaiProjectTest_upload - 2019.03.22 at 15h 04m 18s.xml">
-      <configuration name="PtaiProjectTest.upload" configurationId="JUnit" />
+    <history-entry file="BuilderTest_execute - 2019.04.08 at 17h 50m 52s.xml">
+      <configuration name="BuilderTest.execute" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PtaiProjectTest_upload - 2019.03.22 at 15h 05m 10s.xml">
-      <configuration name="PtaiProjectTest.upload" configurationId="JUnit" />
+    <history-entry file="BuilderTest_execute - 2019.04.09 at 10h 54m 58s.xml">
+      <configuration name="BuilderTest.execute" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PtaiProjectTest_upload - 2019.03.22 at 15h 05m 20s.xml">
-      <configuration name="PtaiProjectTest.upload" configurationId="JUnit" />
+    <history-entry file="BuilderTest_execute - 2019.04.09 at 10h 56m 28s.xml">
+      <configuration name="BuilderTest.execute" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PtaiProjectTest_upload - 2019.03.22 at 15h 06m 48s.xml">
-      <configuration name="PtaiProjectTest.upload" configurationId="JUnit" />
+    <history-entry file="BuilderTest_execute - 2019.04.09 at 10h 57m 22s.xml">
+      <configuration name="BuilderTest.execute" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PtaiProjectTest_upload - 2019.03.22 at 15h 09m 09s.xml">
-      <configuration name="PtaiProjectTest.upload" configurationId="JUnit" />
+    <history-entry file="BuilderTest_execute - 2019.04.09 at 10h 58m 07s.xml">
+      <configuration name="BuilderTest.execute" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="JceCheckTest_main - 2019.03.22 at 15h 15m 00s.xml">
-      <configuration name="JceCheckTest.main" configurationId="JUnit" />
+    <history-entry file="BuilderTest_execute - 2019.04.09 at 10h 59m 05s.xml">
+      <configuration name="BuilderTest.execute" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PtaiProjectTest_testAiPost2012 - 2019.03.25 at 10h 12m 28s.xml">
-      <configuration name="PtaiProjectTest.testAiPost2012" configurationId="JUnit" />
+    <history-entry file="BuilderTest_execute - 2019.04.09 at 11h 01m 50s.xml">
+      <configuration name="BuilderTest.execute" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="PtaiProjectTest_testAiPost2012 - 2019.03.25 at 10h 17m 05s.xml">
-      <configuration name="PtaiProjectTest.testAiPost2012" configurationId="JUnit" />
+    <history-entry file="BuilderTest_execute - 2019.04.09 at 11h 11m 28s.xml">
+      <configuration name="BuilderTest.execute" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26865673" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19936034" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.32936078" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.4968017" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32936078" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.34669557" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.69189763" weight="0.34669557" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Version Control" order="7" sideWeight="0.49946696" weight="0.32936078" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32936078" />
-      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32936078" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50319827" side_tool="true" visible="true" weight="0.32936078" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4989339" weight="0.32936078" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -568,337 +693,137 @@
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPage.java</url>
-          <line>16</line>
+          <url>file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPage.java</url>
+          <line>18</line>
           <properties />
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPage.java</url>
-          <line>26</line>
-          <properties />
-          <option name="timeStamp" value="24" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/PtaiAdminConfig.java</url>
+          <url>file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/PtaiAdminSettings.java</url>
           <line>45</line>
           <properties />
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPageController.java</url>
-          <line>44</line>
-          <properties />
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPageController.java</url>
-          <line>26</line>
+          <url>file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPageController.java</url>
+          <line>41</line>
           <properties />
           <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/Builder.java</url>
+          <line>20</line>
+          <properties />
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPageController.java</url>
+          <line>72</line>
+          <properties />
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPageController.java</url>
+          <line>148</line>
+          <properties />
+          <option name="timeStamp" value="38" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/Auth.java">
+    <entry file="file://$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/Builder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-216">
-          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiTransfer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-290">
-          <caret line="14" column="64" selection-start-line="14" selection-start-column="64" selection-end-line="14" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/PtaiTransferDefaults.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="12" column="59" selection-start-line="12" selection-start-column="59" selection-end-line="12" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java" />
-    <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli/JceCheck.java" />
-    <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli/SastJob.java" />
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="58" selection-start-line="58" selection-end-line="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="37" column="20" selection-start-line="37" selection-start-column="20" selection-end-line="37" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jceRestrictionsChecker/src/test/resources/keystores/keystore.pkcs8.pem" />
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJobTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="38" column="101" selection-start-line="38" selection-start-column="101" selection-end-line="38" selection-end-column="101" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/junit/platform/junit-platform-commons/1.4.0/junit-platform-commons-1.4.0.jar!/org/junit/platform/commons/util/ReflectionUtils.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="302" selection-start-line="302" selection-end-line="302" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jceRestrictionsChecker/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheck.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jceRestrictionsChecker/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1100">
-          <caret line="50" selection-start-line="44" selection-end-line="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jceRestrictionsChecker/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/JceCheckTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="990">
-          <caret line="45" column="17" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3410">
-          <caret line="155" selection-start-line="134" selection-end-line="155" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJobTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="28" column="50" selection-start-line="28" selection-start-column="50" selection-end-line="28" selection-end-column="50" />
+        <state relative-caret-position="220">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/BaseTest.java">
+    <entry file="file://$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Vulnerability.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="16" column="96" selection-start-line="16" selection-start-column="96" selection-end-line="16" selection-end-column="96" />
+        <state relative-caret-position="154">
+          <caret line="13" column="28" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PtaiSastConfigDescriptor.java">
+    <entry file="file://$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/ConfVulnerability.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
-          <caret line="75" selection-start-line="56" selection-end-line="75" />
+        <state relative-caret-position="110">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java">
+    <entry file="file://$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/FingerprintVulnerability.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="7" column="63" selection-start-line="7" selection-start-column="63" selection-end-line="7" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/PMVulnerability.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="7" column="21" selection-start-line="7" selection-start-column="21" selection-end-line="7" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/core/jackson-databind/2.9.8/jackson-databind-2.9.8-sources.jar!/com/fasterxml/jackson/databind/ObjectMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="62942">
+          <caret line="3003" selection-start-line="3003" selection-end-line="3003" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/Report.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1210">
+          <caret line="69" column="46" selection-start-line="69" selection-start-column="46" selection-end-line="69" selection-end-column="46" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#975#976#0" expanded="true" />
+            <element signature="e#1022#1023#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/fasterxml/jackson/dataformat/jackson-dataformat-xml/2.9.8/jackson-dataformat-xml-2.9.8-sources.jar!/com/fasterxml/jackson/dataformat/xml/deser/WrapperHandlingDeserializer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2244">
-          <caret line="139" selection-start-line="139" selection-end-line="139" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <caret line="112" selection-start-line="112" selection-end-line="112" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
-          <caret line="37" column="5" selection-start-line="37" selection-start-column="5" selection-end-line="37" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/resources/api/jenkins-api.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8316">
-          <caret line="378" column="24" selection-start-line="378" selection-start-column="24" selection-end-line="378" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig/help-sastConfigJenkinsJobName.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" selection-start-line="6" selection-end-line="63" selection-end-column="6" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiCliPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/cli/SastJob.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6072">
-          <caret line="291" column="37" selection-start-line="291" selection-start-column="37" selection-end-line="291" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/target/generated-sources/openapi/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/jenkins/server/rest/RemoteAccessApi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12540">
-          <caret line="614" column="17" selection-start-line="614" selection-start-column="17" selection-end-line="614" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/target/generated-sources/openapi/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/jenkins/server/rest/FreeStyleBuild.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="36" column="13" selection-start-line="36" selection-start-column="13" selection-end-line="36" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig/help-sastConfigJenkinsJobName_ru.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="15" column="9" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/Client.java">
+    <entry file="file://$PROJECT_DIR$/ptaiReportGenerator/src/main/java/com/ptsecurity/appsec/ai/desktop/utils/report/generator/domain/BaseVulnerability.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
-          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+          <caret line="18" column="37" selection-start-line="18" selection-start-column="37" selection-end-line="18" selection-end-column="37" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/CredentialsAuth/config.jelly">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth/config.jelly">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiPlugin/global_ru.properties">
-      <provider editor-type-id="text-editor" />
-      <provider selected="true" editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/TokenAuth/config.jelly">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0.jar!/jetbrains/buildServer/web/openapi/Groupable.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
-          <caret line="9" column="43" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="43" />
+          <caret line="15" column="29" lean-forward="true" selection-start-line="15" selection-start-column="11" selection-end-line="15" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/TokenAuth/config.properties">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="52" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth/config.properties">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/CredentialsAuth/config.properties">
-      <provider editor-type-id="text-editor" />
-      <provider selected="true" editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/web/openapi/Groupable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="134" selection-start-line="134" selection-end-line="134" />
+        <state relative-caret-position="321">
+          <caret line="41" column="22" selection-start-line="41" selection-start-column="22" selection-end-line="41" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiSastConfig.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/serverSide/ServerPaths.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1848">
-          <caret line="104" selection-start-line="104" selection-end-line="104" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="15" column="28" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/PtaiPlugin.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0.jar!/jetbrains/buildServer/controllers/admin/AdminPage.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="18" column="22" selection-start-line="18" selection-start-column="22" selection-end-line="18" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="29" column="42" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/teamcity-plugin.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="12" column="34" selection-start-line="12" selection-start-column="34" selection-end-line="12" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/AppServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0.jar!/jetbrains/buildServer/controllers/BaseController.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="71" column="32" selection-start-line="71" selection-start-column="32" selection-end-line="71" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/adminPage.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="40" column="42" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="42" />
+        <state relative-caret-position="220">
+          <caret line="30" column="13" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -909,49 +834,315 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/PtaiAdminConfig.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/controllers/BaseController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="94" selection-start-line="94" selection-end-line="94" />
+        <state relative-caret-position="232">
+          <caret line="119" column="27" selection-start-line="119" selection-start-column="27" selection-end-line="119" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="638">
+          <caret line="29" column="42" selection-start-line="29" selection-start-column="42" selection-end-line="29" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/common-api/10.0/common-api-10.0.jar!/jetbrains/buildServer/serverSide/crypt/EncryptUtil.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="219">
+          <caret line="106" column="26" lean-forward="true" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#922#923#0" expanded="true" />
-            <element signature="e#957#958#0" expanded="true" />
-            <element signature="e#3363#3364#0" expanded="true" />
-            <element signature="e#3490#3491#0" expanded="true" />
+            <element signature="e#4055#4056#0" expanded="true" />
+            <element signature="e#4104#4105#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPageController.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/common-api/10.0/common-api-10.0-sources.jar!/jetbrains/buildServer/serverSide/crypt/EncryptUtil.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
+        <state relative-caret-position="22">
+          <caret line="143" column="24" selection-start-line="143" selection-start-column="2" selection-end-line="149" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" column="42" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="42" />
+        </state>
+      </provider>
+      <provider editor-type-id="ResourceBundle" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="42" selection-start-line="37" selection-end-line="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-webmvc/2.5.6.SEC03/spring-webmvc-2.5.6.SEC03-sources.jar!/org/springframework/web/servlet/DispatcherServlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="897" selection-start-line="897" selection-end-line="897" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/springframework/spring-webmvc/2.5.6.SEC03/spring-webmvc-2.5.6.SEC03-sources.jar!/org/springframework/web/servlet/FrameworkServlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="245">
+          <caret line="638" column="7" selection-start-line="638" selection-start-column="7" selection-end-line="638" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="105" selection-start-line="100" selection-end-line="105" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="51" selection-start-line="51" selection-end-line="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/idea/obsolete-openapi/10.0/obsolete-openapi-10.0.jar!/com/intellij/openapi/util/text/StringUtil.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="828" column="26" selection-start-line="828" selection-start-column="26" selection-end-line="828" selection-end-column="26" />
+          <folding>
+            <element signature="e#26742#26743#0" expanded="true" />
+            <element signature="e#26800#26801#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar!/org/apache/commons/lang3/StringUtils.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="19" column="13" selection-start-line="19" selection-start-column="13" selection-end-line="19" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://W:/TOOLS/DEVEL/JAVA/jdk1.8.0_162/src.zip!/java/util/Optional.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="106" column="35" selection-start-line="106" selection-start-column="35" selection-end-line="106" selection-end-column="35" />
+          <folding>
+            <element signature="e#2998#2999#0" expanded="true" />
+            <element signature="e#3042#3043#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/Base.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="351" column="20" selection-start-line="351" selection-start-column="20" selection-end-line="351" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="14" column="54" selection-start-line="14" selection-start-column="54" selection-end-line="14" selection-end-column="54" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/ptaiAdminSettings.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="811">
+          <caret line="117" selection-start-line="117" selection-end-line="117" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsBean.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="838">
+          <caret line="65" column="29" selection-start-line="65" selection-start-column="29" selection-end-line="65" selection-end-column="29" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/common-api/10.0/common-api-10.0-sources.jar!/jetbrains/buildServer/util/StringUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="1350" selection-start-line="1350" selection-end-line="1350" />
+          <folding>
+            <element signature="e#42648#42649#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/commons-validator/commons-validator/1.6/commons-validator-1.6.jar!/org/apache/commons/validator/routines/DomainValidator.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
           <caret line="60" selection-start-line="60" selection-end-line="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/commons-validator/commons-validator/1.6/commons-validator-1.6.jar!/org/apache/commons/validator/routines/UrlValidator.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="162" selection-start-line="162" selection-end-line="162" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#3273#3274#0" expanded="true" />
+            <element signature="e#3306#3307#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0.jar!/jetbrains/buildServer/controllers/BaseFormXmlController.class">
+    <entry file="jar://$MAVEN_REPOSITORY$/commons-validator/commons-validator/1.6/commons-validator-1.6.jar!/org/apache/commons/validator/routines/InetAddressValidator.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
+        <state relative-caret-position="345">
+          <caret line="48" selection-start-line="48" selection-end-line="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/commons-validator/commons-validator/1.6/commons-validator-1.6-sources.jar!/org/apache/commons/validator/routines/DomainValidator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="151" column="19" selection-start-line="151" selection-start-column="19" selection-end-line="151" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/commons-validator/commons-validator/1.6/commons-validator-1.6-sources.jar!/org/apache/commons/validator/routines/InetAddressValidator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="117" selection-start-line="117" selection-end-line="117" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/commons-validator/commons-validator/1.6/commons-validator-1.6-sources.jar!/org/apache/commons/validator/routines/UrlValidator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="340" selection-start-line="340" selection-end-line="340" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/PtaiAdminSettings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="45" selection-start-line="45" selection-end-line="45" />
           <folding>
-            <element signature="e#1169#1460#0" expanded="true" />
-            <element signature="e#1459#1460#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#3287#3288#0" expanded="true" />
+            <element signature="e#3367#3368#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminPage.java">
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/NoneAuth.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="34" column="34" selection-start-line="34" selection-start-column="34" selection-end-line="34" selection-end-column="34" />
+        <state relative-caret-position="-484">
+          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="37" column="18" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PtaiSastConfigDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1716">
+          <caret line="104" column="18" selection-start-line="104" selection-start-column="18" selection-end-line="104" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/auth/CredentialsAuth.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="117" column="76" lean-forward="true" selection-start-line="117" selection-start-column="76" selection-end-line="117" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/target/generated-sources/localizer/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="1110" column="52" lean-forward="true" selection-start-line="1110" selection-start-column="52" selection-end-line="1110" selection-end-column="52" />
+          <folding>
+            <element signature="e#10630#10631#0" expanded="true" />
+            <element signature="e#10690#10691#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/jdom/jdom/1.0/jdom-1.0.jar!/org/jdom/Content.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="40" column="18" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/controllers/XmlResponseUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="105" selection-start-line="105" selection-end-line="105" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/controllers/ActionErrors.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="142" column="5" selection-start-line="142" selection-start-column="5" selection-end-line="142" selection-end-column="5" />
+          <folding>
+            <element signature="e#1644#1645#0" expanded="true" />
+            <element signature="e#1690#1691#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/controllers/BaseFormXmlController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="53" selection-start-line="53" selection-end-line="53" />
+          <folding>
+            <element signature="e#1703#1956#0" expanded="true" />
+            <element signature="e#1955#1956#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jetbrains/teamcity/server-api/10.0/server-api-10.0-sources.jar!/jetbrains/buildServer/controllers/AjaxRequestProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="52" selection-start-line="52" selection-end-line="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/resources/buildServerResources/js/ptaiSettings.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="71" column="90" selection-start-line="71" selection-start-column="90" selection-end-line="71" selection-end-column="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/teamcity/admin/PtaiAdminSettingsPageController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="409">
+          <caret line="82" column="44" selection-start-line="82" selection-start-column="44" selection-end-line="82" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1178#1179#0" expanded="true" />
-            <element signature="e#1219#1220#0" expanded="true" />
+            <element signature="method#validate#0;class#PtaiAdminSettingsPageController#0" />
           </folding>
         </state>
       </provider>
@@ -1008,7 +1199,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>ptai-teamcity-plugin-server</last-edited>
+          <last-edited>ptai-report-generator</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

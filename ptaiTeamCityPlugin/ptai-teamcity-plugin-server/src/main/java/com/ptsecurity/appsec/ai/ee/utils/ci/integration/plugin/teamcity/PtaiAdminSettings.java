@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.Properties;
 
 
-public class PtaiAdminConfig {
+public class PtaiAdminSettings {
     @Getter @Setter
     protected String caCertsPem;
 
@@ -37,7 +37,7 @@ public class PtaiAdminConfig {
         loadConfiguration();
     }
 
-    public PtaiAdminConfig(@NotNull ServerPaths serverPaths) throws IOException {
+    public PtaiAdminSettings(@NotNull ServerPaths serverPaths) throws IOException {
         this.serverPaths = serverPaths;
         loadConfiguration();
     }

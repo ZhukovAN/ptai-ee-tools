@@ -1,4 +1,5 @@
 **/target/**
 **/work/**
 **/servers/**
+**/*.vpp.bak_*
 
