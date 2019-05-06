@@ -71,7 +71,10 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
     @Override
     public boolean configure(StaplerRequest theRq, JSONObject theFormData) throws FormException {
         theFormData = theFormData.getJSONObject("ptai");
-        sastConfigs.replaceBy(theRq.bindJSONToList(PtaiSastConfig.class, theFormData.get("instanceConfig")));
+        if ((null == theFormData) || theFormData.isEmpty() || !theFormData.containsKey("instanceConfig"))
+            sastConfigs.clear();
+        else
+            sastConfigs.replaceBy(theRq.bindJSONToList(PtaiSastConfig.class, theFormData.get("instanceConfig")));
         save();
         return true;
     }
@@ -81,18 +84,18 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
             @QueryParameter("uiProject") final String uiProject) throws IOException {
         try {
             if (StringUtils.isEmpty(sastConfigName))
-                throw new PtaiException(Messages.validator_emptyConfigName());
+                throw new PtaiClientException(Messages.validator_emptyConfigName());
             if (StringUtils.isEmpty(uiProject))
-                throw new PtaiException(Messages.validator_emptyPtaiProjectName());
+                throw new PtaiClientException(Messages.validator_emptyPtaiProjectName());
             PtaiSastConfig cfg = getSastConfig(sastConfigName);
             if (StringUtils.isEmpty(cfg.getSastConfigPtaiHostUrl()))
-                throw new PtaiException(Messages.validator_emptyPtaiHostUrl());
+                throw new PtaiClientException(Messages.validator_emptyPtaiHostUrl());
             if (StringUtils.isEmpty(cfg.getSastConfigPtaiCert()))
-                throw new PtaiException(Messages.validator_emptyPtaiCert());
+                throw new PtaiClientException(Messages.validator_emptyPtaiCert());
             if (StringUtils.isEmpty(cfg.getSastConfigPtaiCertPwd()))
-                throw new PtaiException(Messages.validator_emptyPtaiCertPwd());
+                throw new PtaiClientException(Messages.validator_emptyPtaiCertPwd());
             if (StringUtils.isEmpty(cfg.getSastConfigCaCerts()))
-                throw new PtaiException(Messages.validator_emptyPtaiCaCerts());
+                throw new PtaiClientException(Messages.validator_emptyPtaiCaCerts());
             PtaiProject ptaiProject = new PtaiProject();
             ptaiProject.setUrl(cfg.getSastConfigPtaiHostUrl());
             ptaiProject.setKeyPem(cfg.getSastConfigPtaiCert());
@@ -111,12 +114,16 @@ public class PtaiPluginDescriptor extends BuildStepDescriptor<Builder> {
                 return FormValidation.error(Messages.validator_failedPtaiProjectByName());
             return FormValidation.ok(Messages.validator_successPtaiProjectByName(projectId.toString().substring(0, 4)));
         } catch (PtaiClientException e) {
-            return FormValidation.error(e, Messages.validator_failed());
+            return FormValidation.error(e, Messages.validator_failed() + ": " + e.getMessage());
         }
     }
 
     public String getDisplayName() {
         return Messages.pluginStepName();
+    }
+
+    public FormValidation doCheckSastConfigName(@QueryParameter("sastConfigName") String sastConfigName) {
+        return doCheckField(sastConfigName, Messages.validator_emptyConfigName());
     }
 
     public FormValidation doCheckUiProject(@QueryParameter("uiProject") String uiProject) {
