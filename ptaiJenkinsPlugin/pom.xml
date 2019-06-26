@@ -19,7 +19,8 @@
         <java.level>8</java.level>
         <!-- <jenkins.version>2.60.3</jenkins.version> -->
         <!-- <jenkins.version>2.150.2</jenkins.version> -->
-        <jenkins.version>2.121.3</jenkins.version>
+        <!-- <jenkins.version>2.121.3</jenkins.version> -->
+        <jenkins.version>2.165</jenkins.version>
         <swagger-core-version>1.5.18</swagger-core-version>
         <feign-version>9.4.0</feign-version>
         <feign-form-version>2.1.0</feign-form-version>

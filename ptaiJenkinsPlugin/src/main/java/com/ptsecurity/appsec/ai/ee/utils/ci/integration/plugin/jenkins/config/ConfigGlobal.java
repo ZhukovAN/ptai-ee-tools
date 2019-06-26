@@ -9,7 +9,7 @@ import lombok.Getter;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-public class ConfigGlobal extends Config {
+public class ConfigGlobal extends ConfigBase {
     @Extension
     public static final ConfigDescriptor DESCRIPTOR = new ConfigGlobalDescriptor();
 
@@ -22,6 +22,7 @@ public class ConfigGlobal extends Config {
     }
 
     @Symbol("ConfigGlobal")
+    @Extension
     public static class ConfigGlobalDescriptor extends ConfigDescriptor {
         @Override
         public String getDisplayName() {

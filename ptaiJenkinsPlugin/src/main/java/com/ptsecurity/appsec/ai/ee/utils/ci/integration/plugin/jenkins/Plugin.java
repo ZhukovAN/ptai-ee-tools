@@ -1,14 +1,12 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
-import com.cloudbees.plugins.credentials.CredentialsProvider;
-import com.cloudbees.plugins.credentials.domains.DomainRequirement;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.Auth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.CredentialsAuth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.TokenAuth;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.Config;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigCustom;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigGlobal;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentials;
@@ -28,9 +26,6 @@ import hudson.FilePath;
 import hudson.Launcher;
 import hudson.Util;
 import hudson.model.*;
-import hudson.model.Queue;
-import hudson.model.queue.Tasks;
-import hudson.security.ACL;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
@@ -53,7 +48,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
     private static final String consolePrefix = com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.console_message_prefix();
 
     @Getter
-    private final Config config;
+    private final ConfigBase config;
 
     @Getter
     private final ScanSettings scanSettings;
@@ -82,7 +77,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
 
     @DataBoundConstructor
     public Plugin(final ScanSettings scanSettings,
-                  final Config config,
+                  final ConfigBase config,
                   final boolean failIfFailed,
                   final boolean failIfUnstable,
                   final String nodeName,

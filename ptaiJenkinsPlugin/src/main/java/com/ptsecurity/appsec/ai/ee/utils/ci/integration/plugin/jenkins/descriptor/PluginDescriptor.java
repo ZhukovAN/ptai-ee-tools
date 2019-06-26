@@ -1,13 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor;
 
-import com.cloudbees.plugins.credentials.CredentialsMatchers;
-import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.GlobalConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ServerSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.Config;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigCustom;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigGlobal;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentials;
@@ -26,7 +24,6 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.CopyOnWriteList;
 import hudson.util.FormValidation;
-import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -37,8 +34,6 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 import org.parboiled.common.StringUtils;
 
-import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -217,11 +212,11 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         return Messages.captions_plugin_displayname();
     }
 
-    public static List<Config.ConfigDescriptor> getConfigDescriptors() {
-        return Config.getAll();
+    public static List<ConfigBase.ConfigDescriptor> getConfigDescriptors() {
+        return ConfigBase.getAll();
     }
 
-    public static Config.ConfigDescriptor getDefaultConfigDescriptor() {
+    public static ConfigBase.ConfigDescriptor getDefaultConfigDescriptor() {
         return ConfigGlobal.DESCRIPTOR;
     }
 
