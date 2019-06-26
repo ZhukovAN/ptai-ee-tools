@@ -1,5 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicy;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import org.junit.jupiter.api.Test;
@@ -11,6 +15,29 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PtaiProjectTest {
+    @Test
+    void createDeleteProject() {
+        PtaiProject ptai = new PtaiProject();
+        try {
+            ptai.setVerbose(true);
+            ptai.setConsoleLog(System.out);
+
+            ptai.setUrl("https://127.0.0.1:30443");
+            ptai.setCaCertsPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keys\\ca.chain.pem.crt"))));
+            ptai.setKeyPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keys\\ssl.client.brief.pem"))));
+            ptai.setKeyPassword("P@ssw0rd");
+            String token = ptai.init();
+            assertNotNull(token);
+            System.out.println(token);
+            JsonSettings settings = JsonSettingsVerifier.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\settings.1.json"))));
+            JsonPolicy policy[] = JsonPolicyVerifier.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\policy\\policy.1.json"))));
+
+            System.out.println(ptai.createProject(settings, policy));
+            // ptai.deleteProject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     void searchProject() {
@@ -26,7 +53,8 @@ class PtaiProjectTest {
             String token = ptai.init();
             assertNotNull(token);
             System.out.println(token);
-            ptai.setName("JUnit.01");
+            // ptai.setName("JUnit.01");
+            ptai.setName("TEST");
             UUID project = ptai.searchProject();
             assertNotNull(project);
             System.out.println(project.toString());

@@ -296,6 +296,7 @@ public class Base {
                     if (cert.getPublicKey() instanceof RSAPublicKey)
                         caCerts.add((X509Certificate) cert);
             }
+            if (caCerts.isEmpty()) throw new CertificateException("No CA certificates detected");
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null, null);
             int index = 0;

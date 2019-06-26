@@ -58,7 +58,6 @@ public class BuildEnv implements Serializable {
         }
     }
 
-    // --Commented out by Inspection (13.02.2019 11:21):public static final String ENV_NODE_NAME = "NODE_NAME";
     public static final String ENV_JOB_NAME = "JOB_NAME";
     public static final String ENV_BUILD_NUMBER = "BUILD_NUMBER";
 
@@ -82,6 +81,4 @@ public class BuildEnv implements Serializable {
         }
         return prefixed;
     }
-
-
 }

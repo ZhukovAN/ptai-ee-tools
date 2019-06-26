@@ -1,54 +1,59 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth;
 
+import com.cloudbees.plugins.credentials.CredentialsMatchers;
 import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.common.StandardUsernameCredentials;
 import com.cloudbees.plugins.credentials.common.StandardUsernameListBoxModel;
+import com.cloudbees.plugins.credentials.common.UsernamePasswordCredentials;
+import com.cloudbees.plugins.credentials.domains.DomainRequirement;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.exceptions.PtaiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.exceptions.CredentialsNotFoundException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import hudson.Extension;
+import hudson.model.FreeStyleProject;
 import hudson.model.Item;
+import hudson.model.ItemGroup;
+import hudson.model.Queue;
+import hudson.model.queue.Tasks;
 import hudson.security.ACL;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
+import jenkins.model.Jenkins;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jenkinsci.Symbol;
+import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
-import org.kohsuke.stapler.Stapler;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.List;
-import com.cloudbees.plugins.credentials.common.UsernamePasswordCredentials;
+import java.util.UUID;
 
 @EqualsAndHashCode
 public class CredentialsAuth extends Auth {
     @Getter
-    private String credentials;
-    @DataBoundSetter
-    public void setCredentials(String theCredentials) {
-        this.credentials = theCredentials;
-    }
+    private String credentialsId;
 
     @DataBoundConstructor
-    public CredentialsAuth() {
-        this.credentials = null;
+    public CredentialsAuth(final String credentialsId) {
+        this.credentialsId = credentialsId;
     }
 
     public String getUserName(Item item) throws CredentialsNotFoundException {
-        UsernamePasswordCredentials creds = getCredentials(item);
+        UsernamePasswordCredentials creds = getCredentialsById(item, credentialsId);
         return creds.getUsername();
     }
 
     public String getPassword(Item item) throws CredentialsNotFoundException {
-        UsernamePasswordCredentials creds = getCredentials(item);
+        UsernamePasswordCredentials creds = getCredentialsById(item, credentialsId);
         return creds.getPassword().getPlainText();
     }
 
@@ -57,21 +62,25 @@ public class CredentialsAuth extends Auth {
      * @param item the Item (Job, Pipeline,...) we are currently running in.
      *      The item is required to also get Credentials which are defined in the items scope and not Jenkins globally.
      *      Value can be null, but Credentials e.g. configured on a Folder will not be found in this case, only globally configured Credentials.
-     * @return the matched credentials
+     * @return the matched credentialsId
      * @throws CredentialsNotFoundException if not found
      */
-    private UsernamePasswordCredentials getCredentials(Item item) throws CredentialsNotFoundException {
-        return getCredentials(item, this.credentials);
-    }
+    private static UsernamePasswordCredentials getCredentialsById(Item item, String credentialsId) throws CredentialsNotFoundException {
+        if (item == null)
+            // Construct a fake project
+            item = new FreeStyleProject((ItemGroup)Jenkins.get(), "fake-" + UUID.randomUUID().toString());
+        List<StandardUsernameCredentials> credentialsList = CredentialsProvider.lookupCredentials(
+                StandardUsernameCredentials.class,
+                item,
+                item instanceof Queue.Task
+                        ? Tasks.getAuthenticationOf((Queue.Task) item)
+                        : ACL.SYSTEM,
+                Collections.<DomainRequirement>emptyList());
 
-    public static UsernamePasswordCredentials getCredentials(final Item item, final String credentials) throws CredentialsNotFoundException {
-        List<StandardUsernameCredentials> listOfCredentials = CredentialsProvider.lookupCredentials(
-                StandardUsernameCredentials.class, item, ACL.SYSTEM, Collections.emptyList());
-
-        for (StandardUsernameCredentials cred : listOfCredentials)
-            if (credentials.equals(cred.getId()))
-                return (UsernamePasswordCredentials)cred;
-        throw new CredentialsNotFoundException(credentials);
+        for (StandardUsernameCredentials credentials : credentialsList)
+            if (credentials.getId().equals(credentialsId))
+                return (UsernamePasswordCredentials)credentials;
+        throw new CredentialsNotFoundException(credentialsId);
     }
 
     @Symbol("CredentialsAuth")
@@ -82,44 +91,57 @@ public class CredentialsAuth extends Auth {
             return "Credentials Authentication";
         }
 
-        public static ListBoxModel doFillCredentialsItems() {
-            StandardUsernameListBoxModel model = new StandardUsernameListBoxModel();
+        public static ListBoxModel doFillCredentialsIdItems(
+                @AncestorInPath Item item,
+                @QueryParameter String credentialsId) {
+            if (item == null && !Jenkins.get().hasPermission(Jenkins.ADMINISTER) ||
+                    item != null && !item.hasPermission(Item.EXTENDED_READ))
+                return new StandardUsernameListBoxModel().includeCurrentValue(credentialsId);
 
-            Item item = Stapler.getCurrentRequest().findAncestorObject(Item.class);
-            model.includeAs(ACL.SYSTEM, item, StandardUsernameCredentials.class);
-            return model;
+            if (item == null)
+                // Construct a fake project
+                item = new FreeStyleProject((ItemGroup)Jenkins.get(), "fake-" + UUID.randomUUID().toString());
+            return new StandardUsernameListBoxModel()
+                    .includeMatchingAs(
+                            item instanceof Queue.Task
+                                    ? Tasks.getAuthenticationOf((Queue.Task) item)
+                                    : ACL.SYSTEM,
+                            item,
+                            StandardUsernameCredentials.class,
+                            Collections.<DomainRequirement>emptyList(),
+                            CredentialsMatchers.always());
         }
 
-        public FormValidation doTestJenkinsConnection(
-                @QueryParameter("sastConfigJenkinsHostUrl") final String sastConfigJenkinsHostUrl,
-                @QueryParameter("sastConfigJenkinsJobName") final String sastConfigJenkinsJobName,
-                @QueryParameter("sastConfigCaCerts") final String sastConfigCaCerts,
-                @QueryParameter("credentials") final String credentials) throws IOException {
+        public FormValidation doTestJenkinsServer(
+                @AncestorInPath Item item,
+                @QueryParameter("jenkinsServerUrl") final String jenkinsServerUrl,
+                @QueryParameter("jenkinsJobName") final String jenkinsJobName,
+                @QueryParameter("serverCredentialsId") final String serverCredentialsId,
+                @QueryParameter("credentialsId") final String credentialsId) throws IOException {
             try {
-                if (StringUtils.isEmpty(sastConfigJenkinsHostUrl))
-                    throw new PtaiException(Messages.validator_emptyJenkinsHostUrl());
-                if (StringUtils.isEmpty(sastConfigJenkinsJobName))
-                    throw new PtaiException(Messages.validator_emptyJenkinsJobName());
-                if (StringUtils.isEmpty(sastConfigCaCerts))
-                    if ("https".equalsIgnoreCase(new URL(sastConfigJenkinsHostUrl).getProtocol()))
-                        throw new PtaiException(Messages.validator_emptyPtaiCaCerts());
-                if (StringUtils.isEmpty(credentials))
-                    throw new PtaiException(Messages.validator_emptyJenkinsCredentials());
+                if (StringUtils.isEmpty(jenkinsServerUrl))
+                    throw new JenkinsClientException(Messages.validator_emptyJenkinsHostUrl());
+                if (StringUtils.isEmpty(jenkinsJobName))
+                    throw new JenkinsClientException(Messages.validator_emptyJenkinsJobName());
+                if (StringUtils.isEmpty(serverCredentialsId))
+                    if ("https".equalsIgnoreCase(new URL(jenkinsServerUrl).getProtocol()))
+                        throw new JenkinsClientException(Messages.validator_emptyPtaiCaCerts());
+                if (StringUtils.isEmpty(credentialsId))
+                    throw new JenkinsClientException(Messages.validator_emptyJenkinsCredentials());
 
-                UsernamePasswordCredentials creds = CredentialsAuth.getCredentials(null, credentials);
+                UsernamePasswordCredentials jenkinsCredentials = CredentialsAuth.getCredentialsById(item, credentialsId);
+                ServerCredentials serverCredentials = ServerCredentialsImpl.getCredentialsById(item, serverCredentialsId);
 
                 SastJob jenkinsClient = new SastJob();
-                jenkinsClient.setUrl(sastConfigJenkinsHostUrl);
-                jenkinsClient.setCaCertsPem(sastConfigCaCerts);
-                jenkinsClient.setJobName(sastConfigJenkinsJobName);
-                jenkinsClient.setUserName(creds.getUsername());
-                jenkinsClient.setPassword(creds.getPassword().getPlainText());
+                jenkinsClient.setUrl(jenkinsServerUrl);
+                jenkinsClient.setCaCertsPem(serverCredentials.getServerCaCertificates());
+                jenkinsClient.setJobName(jenkinsJobName);
+                jenkinsClient.setUserName(jenkinsCredentials.getUsername());
+                jenkinsClient.setPassword(jenkinsCredentials.getPassword().getPlainText());
                 jenkinsClient.init();
                 return FormValidation.ok(Messages.validator_successSastJobName(jenkinsClient.testSastJob()));
-            } catch (JenkinsClientException e) {
-                return FormValidation.error(e, Messages.validator_failed());
-            } catch (CredentialsNotFoundException e) {
-                return FormValidation.error(e, Messages.validator_failedGetCredentials());
+            } catch (Exception e) {
+                return Validator.error(e);
             }
         }
     }

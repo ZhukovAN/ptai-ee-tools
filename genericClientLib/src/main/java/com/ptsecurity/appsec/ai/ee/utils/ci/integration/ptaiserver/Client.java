@@ -29,7 +29,7 @@ public class Client extends Base {
             super.initClients(authApi.getApiClient(), prjApi.getApiClient(), storeApi.getApiClient());
 
             // Start PT AI EE server negotiation
-            ApiResponse<String> authToken = authApi.apiAgentAuthSigninGetWithHttpInfo("Agent");
+            ApiResponse<String> authToken = authApi.signInWithHttpInfo("Agent");
             if (StringUtils.isEmpty(authToken.getData()))
                 throw new PtaiClientException("Auth token is empty");
 

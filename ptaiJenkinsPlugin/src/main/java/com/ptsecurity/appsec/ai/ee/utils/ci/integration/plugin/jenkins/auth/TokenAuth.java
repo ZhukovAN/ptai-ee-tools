@@ -2,16 +2,19 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.exceptions.PtaiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentialsImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import hudson.Extension;
+import hudson.model.Item;
 import hudson.util.FormValidation;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.jenkinsci.Symbol;
+import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 
 import java.io.IOException;
@@ -21,20 +24,15 @@ import java.net.URL;
 public class TokenAuth extends Auth {
     @Getter
     private String userName;
-    @DataBoundSetter
-    public void setUserName(String theUserName) {
-        this.userName = theUserName;
-    }
-
     @Getter
     private String apiToken;
-    @DataBoundSetter
-    public void setApiToken(String theApiToken) {
-        this.apiToken = theApiToken;
-    }
 
     @DataBoundConstructor
-    public TokenAuth() {}
+    public TokenAuth(final String userName,
+                     final String apiToken) {
+        this.userName = userName;
+        this.apiToken = apiToken;
+    }
 
     @Symbol("TokenAuth")
     @Extension
@@ -44,35 +42,38 @@ public class TokenAuth extends Auth {
             return "Token Authentication";
         }
 
-        public FormValidation doTestJenkinsConnection(
-                @QueryParameter("sastConfigJenkinsHostUrl") final String sastConfigJenkinsHostUrl,
-                @QueryParameter("sastConfigJenkinsJobName") final String sastConfigJenkinsJobName,
-                @QueryParameter("sastConfigCaCerts") final String sastConfigCaCerts,
+        public FormValidation doTestJenkinsServer(
+                @AncestorInPath Item item,
+                @QueryParameter("jenkinsServerUrl") final String jenkinsServerUrl,
+                @QueryParameter("jenkinsJobName") final String jenkinsJobName,
+                @QueryParameter("serverCredentialsId") final String serverCredentialsId,
                 @QueryParameter("userName") final String userName,
                 @QueryParameter("apiToken") final String apiToken) throws IOException {
             try {
-                if (StringUtils.isEmpty(sastConfigJenkinsHostUrl))
-                    throw new PtaiException(Messages.validator_emptyJenkinsHostUrl());
-                if (StringUtils.isEmpty(sastConfigJenkinsJobName))
-                    throw new PtaiException(Messages.validator_emptyJenkinsJobName());
-                if (StringUtils.isEmpty(sastConfigCaCerts))
-                    if ("https".equalsIgnoreCase(new URL(sastConfigJenkinsHostUrl).getProtocol()))
-                        throw new PtaiException(Messages.validator_emptyPtaiCaCerts());
+                if (StringUtils.isEmpty(jenkinsServerUrl))
+                    throw new JenkinsClientException(Messages.validator_emptyJenkinsHostUrl());
+                if (StringUtils.isEmpty(jenkinsJobName))
+                    throw new JenkinsClientException(Messages.validator_emptyJenkinsJobName());
+                if (StringUtils.isEmpty(serverCredentialsId))
+                    if ("https".equalsIgnoreCase(new URL(jenkinsServerUrl).getProtocol()))
+                        throw new JenkinsClientException(Messages.validator_emptyPtaiCaCerts());
                 if (StringUtils.isEmpty(userName))
-                    throw new PtaiException(Messages.validator_emptyJenkinsUserName());
+                    throw new JenkinsClientException(Messages.validator_emptyJenkinsUserName());
                 if (StringUtils.isEmpty(apiToken))
-                    throw new PtaiException(Messages.validator_emptyJenkinsApiToken());
+                    throw new JenkinsClientException(Messages.validator_emptyJenkinsApiToken());
+
+                ServerCredentials serverCredentials = ServerCredentialsImpl.getCredentialsById(item, serverCredentialsId);
 
                 SastJob jenkinsClient = new SastJob();
-                jenkinsClient.setUrl(sastConfigJenkinsHostUrl);
-                jenkinsClient.setCaCertsPem(sastConfigCaCerts);
-                jenkinsClient.setJobName(sastConfigJenkinsJobName);
+                jenkinsClient.setUrl(jenkinsServerUrl);
+                jenkinsClient.setCaCertsPem(serverCredentials.getServerCaCertificates());
+                jenkinsClient.setJobName(jenkinsJobName);
                 jenkinsClient.setUserName(userName);
                 jenkinsClient.setPassword(apiToken);
                 jenkinsClient.init();
                 return FormValidation.ok(Messages.validator_successSastJobName(jenkinsClient.testSastJob()));
-            } catch (JenkinsClientException e) {
-                return FormValidation.error(e, Messages.validator_failed());
+            } catch (Exception e) {
+                return Validator.error(e);
             }
         }
     }

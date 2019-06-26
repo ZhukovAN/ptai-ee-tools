@@ -3,12 +3,16 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.exceptions.PtaiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentialsImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import hudson.Extension;
+import hudson.model.Item;
 import hudson.util.FormValidation;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.jenkinsci.Symbol;
+import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -17,17 +21,13 @@ import java.net.URL;
 
 @EqualsAndHashCode(callSuper = false)
 public class NoneAuth extends Auth {
-
-    // private static final long serialVersionUID = -3128995428538415113L;
-
     @Extension
     public static final AuthDescriptor DESCRIPTOR = new NoneAuthDescriptor();
 
     public static final NoneAuth INSTANCE = new NoneAuth();
 
     @DataBoundConstructor
-    public NoneAuth() {
-    }
+    public NoneAuth() {}
 
     @Override
     public AuthDescriptor getDescriptor() {
@@ -41,27 +41,30 @@ public class NoneAuth extends Auth {
             return "No Authentication";
         }
 
-        public FormValidation doTestJenkinsConnection(
-                @QueryParameter("sastConfigJenkinsHostUrl") final String sastConfigJenkinsHostUrl,
-                @QueryParameter("sastConfigJenkinsJobName") final String sastConfigJenkinsJobName,
-                @QueryParameter("sastConfigCaCerts") final String sastConfigCaCerts) throws IOException {
+        public FormValidation doTestJenkinsServer(
+                @AncestorInPath Item item,
+                @QueryParameter("jenkinsServerUrl") final String jenkinsServerUrl,
+                @QueryParameter("jenkinsJobName") final String jenkinsJobName,
+                @QueryParameter("serverCredentialsId") final String serverCredentialsId) throws IOException {
             try {
-                if (StringUtils.isEmpty(sastConfigJenkinsHostUrl))
-                    throw new PtaiException(Messages.validator_emptyJenkinsHostUrl());
-                if (StringUtils.isEmpty(sastConfigJenkinsJobName))
-                    throw new PtaiException(Messages.validator_emptyJenkinsJobName());
-                if (StringUtils.isEmpty(sastConfigCaCerts))
-                    if ("https".equalsIgnoreCase(new URL(sastConfigJenkinsHostUrl).getProtocol()))
-                        throw new PtaiException(Messages.validator_emptyPtaiCaCerts());
+                if (StringUtils.isEmpty(jenkinsServerUrl))
+                    throw new JenkinsClientException(Messages.validator_emptyJenkinsHostUrl());
+                if (StringUtils.isEmpty(jenkinsJobName))
+                    throw new JenkinsClientException(Messages.validator_emptyJenkinsJobName());
+                if (StringUtils.isEmpty(serverCredentialsId))
+                    if ("https".equalsIgnoreCase(new URL(jenkinsServerUrl).getProtocol()))
+                        throw new JenkinsClientException(Messages.validator_emptyPtaiCaCerts());
+
+                ServerCredentials serverCredentials = ServerCredentialsImpl.getCredentialsById(item, serverCredentialsId);
 
                 SastJob jenkinsClient = new SastJob();
-                jenkinsClient.setUrl(sastConfigJenkinsHostUrl);
-                jenkinsClient.setCaCertsPem(sastConfigCaCerts);
-                jenkinsClient.setJobName(sastConfigJenkinsJobName);
+                jenkinsClient.setUrl(jenkinsServerUrl);
+                jenkinsClient.setCaCertsPem(serverCredentials.getServerCaCertificates());
+                jenkinsClient.setJobName(jenkinsJobName);
                 jenkinsClient.init();
                 return FormValidation.ok(Messages.validator_successSastJobName(jenkinsClient.testSastJob()));
-            } catch (JenkinsClientException e) {
-                return FormValidation.error(e, Messages.validator_failed());
+            } catch (Exception e) {
+                return Validator.error(e);
             }
         }
     }

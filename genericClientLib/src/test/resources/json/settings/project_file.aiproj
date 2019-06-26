@@ -1,0 +1,153 @@
+{
+ // Main Settings
+ "ProjectName": "Test_Proj", // Имя проекта
+ "ProgrammingLanguage": "Csharp", // Язык приложения. Доступны: Java, Php, Csharp, ObjectiveC, CPlusPlus, Sql, Swift, Python, JavaScript
+ "ScanAppType": "Csharp, Configuration, Fingerprint, PMtaint", // Модули поиска уязвимостей. Доступны:  Php, Java, CSharp, Configuration, Fingerprint, PMtaint, BlackBox, JavaScript
+ "ThreadCount": 1, // Количество потоков
+ "Site": "http://localhost", // Адрес сайта
+ "IsDownloadDependencies": true, // Загрузить зависимости
+ "IsUsePublicAnalysisMethod": false, // Искать от доступных public и protected методов
+ "IsUseEntryAnalysisPoint": true, // Искать от точек входа
+ "IsGraphEnabled": false, // Генерировать графы уязвимостей
+ "UseIncrementalScan": true,  //Использовать инкременатльное сканирование
+ "ScanUnitTimeout": 600, // Максимальное время сканирования файла в seconds
+ "PreprocessingTimeout": 60, // Таймаут препроцессинга в  minutes
+ "RunAutocheckAfterScan": false, // Запустить автопроверку после сканирования
+ "CustomParameters": null, // Параметры запуска
+ "SkipFileFormats": ["*.gif"], // Исключенные форматы файлов
+ "SkipFilesFolders": ["\\.git\\", "\\.gitignore", "\\.gitmodules", "\\.gitattributes", "\\$tf\\", "\\$BuildProcessTemplate\\", "\\.tfignore"], // Фильтр дерева
+ "UseIssueTrackerIntegration": true,
+  
+// Java Parameters
+ "IsUnpackUserPackages": false, // Распаковывать пользовательские пакеты
+ "JavaParameters": null, // Параметры запуска Java
+ "JavaVersion": 0, // Версия java,0 соответствует версии 1.8, 1 соответствует версии 1.10
+ "UseJavaNormalizeVersionPattern": "true", // Использовать шаблон определения версии
+ "JavaNormalizeVersionPattern": "-\\d+(\\.\\d+)*", // Пример регулярного выражения
+  
+// C# Parameters
+ "ProjectType": "Solution", // Типа проекта. Доступны: Solution, WebSite
+ "SolutionFile": "C:\\Applications\\Sharp\\VulnApp-1.1\\VulnApp.sln", // Путь к файлу решения/проекта
+ "WebSiteFolder": "path_to_website", // Директория сайта
+ 
+//JavaScript параметры
+  "JavaScriptProjectFile": "path_to_file", //Путь к фалу скрипта
+  
+// Vulnerabilities to find
+ "DisabledPatterns": ["145", "146", "148", "149"], // Отключенные шаблоны
+ "DisabledTypes": [], // Отключенные проверки исходного кода
+  
+// YARA Rules
+ "UseDefaultFingerprints": true, // Использовать предустановленные фингерпринты
+ "UseCustomYaraRules": false, // Использовать пользовательские правила YARA
+  
+ "SendEmailWithReportsAfterScan": true, // Отправлять отчет на почту по завершении сканирования
+ "CompressReport": false, // Сжимать отчет перед отправкой
+  
+// Email Settings
+ "EmailSettings": {
+ "SmtpServerAddress": "mail.ptsecurity.ru", // Адрес SMTP сервера
+ "UserName": "testagent_wes@ptsecurity.com", // Имя пользователя
+ "Password": "P@ssw0rd", // Пароль
+ "EmailRecipients": "User@ptsecurity.ru", // Адрес получателя отчета
+ "EnableSsl": true, // Включить SSL
+ "Subject": "Email Title", // Тема
+ "ConsiderCertificateError": true, // Учитывать ошибки сертификата
+ "SenderEmail": "testagent_wes@ptsecurity.com" // Отправитель
+ },
+  
+// BlackBox Settings
+ "Level": "None", // Режим поиска. Доступны: Fast, Normal, Full
+ "CustomHeaders": [["", ""]], // Дополнительные заголовки
+ "Authentication": {
+ "auth_item": {
+ "domain": null, // Адрес проверки
+ "credentials": {
+ "cookie": null, // Значение куки
+ "type": 2, // Тип аутентификации. Доступно: 0 = Form, 1 = HTTP, 2 = None, 3 = Cookie
+ "login": {
+ "name": null, // поле "Ключ логина"
+ "value": null, // поле значения логина
+ "regexp": null,
+ "is_regexp": false
+ },
+ "password": {
+ "name": null, // поле "Ключ пароля"
+ "value": null, // поле значения пароля
+ "regexp": null, // ex: "p[aA]ss(word)?"
+ "is_regexp": false
+ }
+ },
+ "test_url": null, // поле "Адрес проверки"
+ "form_url": null, // поле "Адрес формы"
+ "form_xpath": ".//form", // поле "XPath формы"
+ "regexp_of_success": null // поле "Шаблон проверки"
+ }
+ },
+  
+ "ProxySettings": {
+ "IsEnabled": false, // Активировать настройки прокси
+ "Host": null, // "ip address"
+ "Port": null, // Порт
+ "Type": 0, // Тип прокси. Доступно: 0 or HTTP, 1 or HTTPNOCONNECT, 2 or SOCKS4, 3 or SOCKS5
+ "Username": null, // Логин
+ "Password": null // Пароль
+ },
+// Report Settings
+ "ReportParameters": {
+ "SaveAsPath": null, // Папка, в которую сохраняются отчеты
+ "UseElectronicSignature": false, // Использовать электронную подпись в отчете
+ "CertificatePath": null, // Путь до сертификата
+ "Password": null, // Пароль сертификата
+ "ShowSignatureTime": false, // Показывать время подписи
+ "SignatureReason": null, // Причина подписи
+ "Location": null, // Местонахождение
+ "DoSignatureVisible": false, // Сделать подпись видимой
+ "IncludeDiscardedVulnerabilities": false, // Включить опровергнутые уязвимости в отчет
+ "IncludeSuppressedVulnerabilities": true, // Добавить исключенные уязвимости в отчет
+ "IncludeSuspectedVulnerabilities": false, // Включить подозрения на уязвимость в отчет
+ "IncludeGlossary": false, // Добавить глоссарий
+ "ConverHtmlToPdf": false, // Преобразовывать HTML в PDF
+ "RemoveHtml": false, // Удалять HTML файл после преобразования
+ "CreatePdfPrintVersion": false, // Создавать версию для печати
+ "MakeAFReport": false, // Патч для PT Application Firewall
+ "IncludeDFD": false // Добавить диаграмму потока данных
+    },
+// Autocheck
+"AutocheckSite": "http://localhost", // Адрес для автопроверки, если не указан берется значение параметра "Site"
+"AutocheckCustomHeaders": [ [ "", "" ] ], // Дополнительные заголовки
+"AutocheckAuthentication": {
+"auth_item": {
+"domain": null, // Адрес проверки
+"credentials": {
+"cookie": null, // Значение куки
+"cookies": null,
+"type": 2, // Тип аутентификации. Доступно: 0 = Form, 1 = HTTP, 2 = None, 3 = Cookie
+"login": {
+"name": null, // поле "Ключ логина"
+"value": null, // поле значения логина
+"regexp": null,
+"is_regexp": false
+},
+"password": {
+"name": null, // поле "Ключ пароля"
+"value": null, // поле значения пароля
+"regexp": null, // пример: "p[aA]ss(word)?"
+"is_regexp": false
+}
+},
+"test_url": null, // поле "Адрес проверки"
+"form_url": null, // поле "Адрес формы"
+"form_xpath": ".//form", // поле "XPath формы"
+"regexp_of_success": null // поле "Шаблон проверки"
+}
+},
+"AutocheckProxySettings": {
+"IsEnabled": false, // Активировать настройки прокси
+"Host": null, // IP-адрес
+"Port": null, // Порт
+"Type": 0, // Тип прокси. Доступно: 0 or HTTP, 1 or HTTPNOCONNECT, 2 or SOCKS4, 3 or SOCKS5
+"Username": null, // Логин
+"Password": null // Пароль
+}
+}

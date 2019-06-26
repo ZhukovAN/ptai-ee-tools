@@ -7,28 +7,47 @@
   "paths": {
     "/api/DirectoryContent/{projectId}/{path}": {
       "get": {
-        "tags": [
-          "DirectoryContent"
-        ],
-        "operationId": "ApiDirectoryContentByProjectIdByPathGet",
+        "tags": ["DirectoryContent"],
+        "operationId": "DirectoryContent",
         "consumes": [],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          },
-          {
-            "name": "path",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "path",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
         ],
         "responses": {
           "200": {
@@ -42,27 +61,37 @@
     },
     "/api/FileContent/{projectId}/{file}": {
       "get": {
-        "tags": [
-          "FileContent"
-        ],
-        "operationId": "ApiFileContentByProjectIdByFileGet",
+        "tags": ["FileContent"],
+        "operationId": "GetFileContent",
         "consumes": [],
         "produces": [],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          },
-          {
-            "name": "file",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "file",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
         ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Health/status": {
+      "get": {
+        "tags": ["Health"],
+        "operationId": "Status",
+        "consumes": [],
+        "produces": [],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Success"
@@ -72,24 +101,42 @@
     },
     "/api/SourceControl/checkout/{projectId}": {
       "get": {
-        "tags": [
-          "SourceControl"
-        ],
-        "operationId": "ApiSourceControlCheckoutByProjectIdGet",
+        "tags": ["SourceControl"],
+        "operationId": "Checkout",
         "consumes": [],
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          }
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
         ],
         "responses": {
           "200": {
@@ -103,24 +150,42 @@
     },
     "/api/SourceControl/update/{projectId}": {
       "get": {
-        "tags": [
-          "SourceControl"
-        ],
-        "operationId": "ApiSourceControlUpdateByProjectIdGet",
+        "tags": ["SourceControl"],
+        "operationId": "Update",
         "consumes": [],
-        "produces": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          }
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
         ],
         "responses": {
           "200": {
@@ -134,20 +199,42 @@
     },
     "/api/Store/temp/{projectId}": {
       "get": {
-        "tags": [
-          "Store"
-        ],
-        "operationId": "ApiStoreTempByProjectIdGet",
+        "tags": ["Store"],
+        "operationId": "DownloadTemp",
         "consumes": [],
         "produces": [],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          }
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
         ],
         "responses": {
           "200": {
@@ -156,57 +243,73 @@
         }
       },
       "post": {
-        "tags": [
-          "Store"
-        ],
-        "operationId": "ApiStoreTempByProjectIdPost",
+        "tags": ["Store"],
+        "operationId": "UploadTemp",
         "consumes": [],
         "produces": [],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          },
-          {
-            "name": "ContentType",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "ContentDisposition",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "Headers",
-            "in": "query",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "Length",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "Name",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "FileName",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "ContentType",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "ContentDisposition",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "Headers",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "Length",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int64"
+        }, {
+          "name": "Name",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "FileName",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
         ],
         "responses": {
           "200": {
@@ -217,20 +320,42 @@
     },
     "/api/Store/sources/{projectId}": {
       "get": {
-        "tags": [
-          "Store"
-        ],
-        "operationId": "ApiStoreSourcesByProjectIdGet",
+        "tags": ["Store"],
+        "operationId": "DownloadSources",
         "consumes": [],
         "produces": [],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          }
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
         ],
         "responses": {
           "200": {
@@ -239,64 +364,79 @@
         }
       },
       "post": {
-        "tags": [
-          "Store"
-        ],
-        "operationId": "ApiStoreSourcesByProjectIdPost",
+        "tags": ["Store"],
+        "operationId": "UploadSources",
         "consumes": ["multipart/form-data"],
         "produces": [],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          },
-          {
-            "name": "ContentType",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "ContentDisposition",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "Headers",
-            "in": "query",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "Length",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "Name",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "FileName",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "file",
-            "in": "formData",
-            "required": true,
-            "type": "file",
-            "description": "The file to upload"
-          }
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "ContentType",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "ContentDisposition",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "Headers",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "Length",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int64"
+        }, {
+          "name": "Name",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "FileName",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "file",
+          "in": "formData",
+          "required": true,
+          "type": "file",
+          "description": "The file to upload"
+        }
         ],
         "responses": {
           "200": {
@@ -307,27 +447,48 @@
     },
     "/api/Store/logs/{projectId}/{scanResultId}": {
       "get": {
-        "tags": [
-          "Store"
-        ],
-        "operationId": "ApiStoreLogsByProjectIdByScanResultIdGet",
+        "tags": ["Store"],
+        "operationId": "DownloadLogs",
         "consumes": [],
         "produces": [],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          },
-          {
-            "name": "scanResultId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          }
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
         ],
         "responses": {
           "200": {
@@ -336,64 +497,79 @@
         }
       },
       "post": {
-        "tags": [
-          "Store"
-        ],
-        "operationId": "ApiStoreLogsByProjectIdByScanResultIdPost",
+        "tags": ["Store"],
+        "operationId": "UploadLogs",
         "consumes": [],
         "produces": [],
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          },
-          {
-            "name": "scanResultId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
-          },
-          {
-            "name": "ContentType",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "ContentDisposition",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "Headers",
-            "in": "query",
-            "required": false,
-            "type": "object"
-          },
-          {
-            "name": "Length",
-            "in": "query",
-            "required": false,
-            "type": "integer",
-            "format": "int64"
-          },
-          {
-            "name": "Name",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "FileName",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          }
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "ContentType",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "ContentDisposition",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "Headers",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "Length",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int64"
+        }, {
+          "name": "Name",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "FileName",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
         ],
         "responses": {
           "200": {
@@ -471,10 +647,9 @@
       }
     }
   },
-  "security": [
-    {
-      "Bearer": []
-    }
+  "security": [{
+    "Bearer": []
+  }
   ],
   "securityDefinitions": {
     "Bearer": {

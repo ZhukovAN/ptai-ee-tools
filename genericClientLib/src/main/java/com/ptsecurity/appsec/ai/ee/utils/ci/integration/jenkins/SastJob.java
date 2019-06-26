@@ -25,6 +25,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class SastJob extends Client {
@@ -37,6 +38,12 @@ public class SastJob extends Client {
     @Getter
     @Setter
     protected String nodeName;
+    @Getter
+    @Setter
+    protected String settingsJson;
+    @Getter
+    @Setter
+    protected String policyJson;
 
     public String testSastJob() throws JenkinsServerException {
         String jobName = ApiClient.convertJobName(this.jobName);
@@ -59,8 +66,10 @@ public class SastJob extends Client {
             FreeStyleProject prj = this.jenkinsApi.getJob(jobName);
             Integer buildNumber = prj.getNextBuildNumber();
             JenkinsJsonParameter params = new JenkinsJsonParameter();
-            params.add("PTAI_PROJECT_NAME", this.projectName);
-            params.add("PTAI_NODE_NAME", this.nodeName);
+            params.add("PTAI_PROJECT_NAME", Optional.ofNullable(this.projectName).orElse(""));
+            params.add("PTAI_NODE_NAME", Optional.ofNullable(this.nodeName).orElse(""));
+            params.add("PTAI_SETTINGS_JSON", Optional.ofNullable(this.settingsJson).orElse(""));
+            params.add("PTAI_POLICY_JSON", Optional.ofNullable(this.policyJson).orElse(""));
             ObjectMapper objectMapper = new ObjectMapper();
             // Try to get crumb
             com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse<DefaultCrumbIssuer> crumb;

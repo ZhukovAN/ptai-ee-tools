@@ -1,4 +1,5 @@
 **/target/**
 **/work/**
 ptaiTeamCityPlugin/servers/**
-ptaiTeamCityPlugin/docs/*.vpp.bak_*
+**/docs/*.vpp.bak_*
+**/docs/*.vpp.lck

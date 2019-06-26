@@ -14,12 +14,6 @@ public class JenkinsServerException extends JenkinsClientException {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         if (StringUtils.isNotEmpty(this.getMessage())) builder.append("Message: ").append(this.getMessage());
-        if (inner instanceof ApiException) {
-            ApiException e = (ApiException) inner;
-            builder.append("\r\n")
-                    .append("Details: ")
-                    .append(String.format("code: %d, message: %s", e.getCode(), HttpStatus.getStatusText(e.getCode())));
-        }
         if (null != this.inner) builder.append("\r\n").append("Inner: ").append(this.inner);
         return builder.toString();
     }

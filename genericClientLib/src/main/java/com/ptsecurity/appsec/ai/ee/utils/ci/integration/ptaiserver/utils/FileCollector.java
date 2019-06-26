@@ -13,6 +13,7 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 
@@ -26,7 +27,7 @@ import java.util.UUID;
 public class FileCollector {
     @AllArgsConstructor
     @Getter
-    private final static class FileEntry {
+    public static class FileEntry {
         private final String fileName;
         private final String entryName;
     }
@@ -37,13 +38,13 @@ public class FileCollector {
     public void collect(final File srcDir, final File destFile) throws PtaiClientException {
         List<FileEntry> fileEntries = this.collectFiles(srcDir);
         try {
-            this.packCollectedFiles(srcDir, destFile, fileEntries);
+            this.packCollectedFiles(destFile, fileEntries);
         } catch (ArchiveException | IOException e) {
             throw new PtaiClientException("File collect error", e);
         }
     }
 
-    protected List<FileEntry> collectFiles(final File srcDir) throws PtaiClientException {
+    public List<FileEntry> collectFiles(final File srcDir) throws PtaiClientException {
         List<FileEntry> res = new ArrayList<>();
         for (Transfer transfer : this.transfers) {
             // Normalize prefix
@@ -79,13 +80,14 @@ public class FileCollector {
                         throw new PtaiClientException(String.format("Failed to remove prefix from file named %s. Prefix %s must be present in all file paths", file, removePrefix));
                     entryName = relativeFilePath.substring(removePrefix.length());
                 }
+                // res.add(new FileEntry(filePath, "SCAN" + "/" + entryName));
                 res.add(new FileEntry(filePath, entryName));
             }
         }
         return res;
     }
 
-    protected void packCollectedFiles(final File srcDir, final File destFile, final List<FileEntry> files) throws IOException, ArchiveException {
+    public void packCollectedFiles(final File destFile, final List<FileEntry> files) throws IOException, ArchiveException {
         File destDir = destFile.getParentFile();
         if (!destDir.exists())
             destDir.mkdirs();
