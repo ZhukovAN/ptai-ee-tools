@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.ServerSettings;
 import hudson.Extension;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public class ConfigCustom extends ConfigBase {
     public static class ConfigCustomDescriptor extends ConfigDescriptor {
         @Override
         public String getDisplayName() {
-            return "ConfigCustom";
+            return Messages.captions_config_configCustom();
         }
     }
 }

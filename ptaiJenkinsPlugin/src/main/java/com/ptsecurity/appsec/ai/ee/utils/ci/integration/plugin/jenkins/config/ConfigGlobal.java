@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.GlobalConfig;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
 import hudson.Extension;
 import hudson.util.ListBoxModel;
@@ -22,11 +23,10 @@ public class ConfigGlobal extends ConfigBase {
     }
 
     @Symbol("ConfigGlobal")
-    @Extension
     public static class ConfigGlobalDescriptor extends ConfigDescriptor {
         @Override
         public String getDisplayName() {
-            return "ConfigGlobal";
+            return Messages.captions_config_configGlobal();
         }
 
         public ListBoxModel doFillConfigNameItems() {
