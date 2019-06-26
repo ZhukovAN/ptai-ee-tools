@@ -6,16 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="ptai-teamcity-plugin-server" />
         <module name="ptai-cli-plugin" />
-        <module name="jce-restrictions-checker" />
-        <module name="ptai-jenkins-plugin" />
         <module name="generic-client-lib" />
+        <module name="ptai-jenkins-plugin" />
+        <module name="jce-restrictions-checker" />
+        <module name="ptai-report-generator" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="ptai-report-generator" target="1.8" />
-      <module name="ptai-teamcity-plugin" target="1.5" />
-      <module name="ptai-teamcity-plugin-server" target="1.8" />
+      <module name="build" target="1.5" />
+      <module name="KB" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
