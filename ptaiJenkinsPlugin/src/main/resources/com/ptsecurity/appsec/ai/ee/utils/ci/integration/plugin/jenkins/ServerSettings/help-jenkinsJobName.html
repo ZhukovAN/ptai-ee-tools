@@ -6,8 +6,7 @@
     <p>PTAI_SETTINGS_JSON - scan settings represented as JSON-formatted text</p>
     <p>PTAI_POLICY_JSON - scan policy represented as JSON-formatted text</p>
     <p>Groovy sandbox must be turned off. Basic recommended script is:</p>
-<!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #B00040">def</span> aicPath <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;C:\\Program Files (x86)\\Positive Technologies\\Application Inspector Agent\\aic.exe&#39;</span>
-
+    <!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #B00040">def</span> aicPath <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;C:\\Program Files (x86)\\Positive Technologies\\Application Inspector Agent\\aic.exe&#39;</span>
 node<span style="color: #666666">(</span><span style="color: #BA2121">&quot;${PTAI_NODE_NAME}&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
     <span style="color: #B00040">def</span> retStatus <span style="color: #666666">=</span> <span style="color: #666666">0;</span>
 
@@ -28,12 +27,12 @@ node<span style="color: #666666">(</span><span style="color: #BA2121">&quot;${PT
         batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--sync &quot;</span>
         <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span><span style="color: #BA2121">&quot;${PTAI_SETTINGS_JSON}&quot;</span><span style="color: #666666">?.</span><span style="color: #7D9029">trim</span><span style="color: #666666">())</span> <span style="color: #666666">{</span>
             writeFile <span style="color: #A0A000">file:</span> <span style="color: #BA2121">&quot;${WORKSPACE}\\SETTINGS\\settings.aiproj&quot;</span><span style="color: #666666">,</span> <span style="color: #A0A000">text:</span> <span style="color: #BA2121">&quot;${PTAI_SETTINGS_JSON}&quot;</span>
-            batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--project-settings-file \&quot;${WORKSPACE}\\SETTINGS\\settings.aiproj\&quot;&quot;</span>
+            batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--project-settings-file \&quot;${WORKSPACE}\\SETTINGS\\settings.aiproj\&quot; &quot;</span>
         <span style="color: #666666">}</span>
 
         <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span><span style="color: #BA2121">&quot;${PTAI_POLICY_JSON}&quot;</span><span style="color: #666666">?.</span><span style="color: #7D9029">trim</span><span style="color: #666666">())</span> <span style="color: #666666">{</span>
             writeFile <span style="color: #A0A000">file:</span> <span style="color: #BA2121">&quot;${WORKSPACE}\\SETTINGS\\policy.json&quot;</span><span style="color: #666666">,</span> <span style="color: #A0A000">text:</span> <span style="color: #BA2121">&quot;${PTAI_POLICY_JSON}&quot;</span>
-            batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--policies-path \&quot;${WORKSPACE}\\SETTINGS\\policy.json\&quot;&quot;</span>
+            batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--policies-path \&quot;${WORKSPACE}\\SETTINGS\\policy.json\&quot; &quot;</span>
         <span style="color: #666666">}</span>
 
         retStatus <span style="color: #666666">=</span> bat<span style="color: #666666">(</span><span style="color: #A0A000">script:</span> batchScript<span style="color: #666666">,</span> <span style="color: #A0A000">returnStatus:</span> <span style="color: #008000; font-weight: bold">true</span><span style="color: #666666">);</span>

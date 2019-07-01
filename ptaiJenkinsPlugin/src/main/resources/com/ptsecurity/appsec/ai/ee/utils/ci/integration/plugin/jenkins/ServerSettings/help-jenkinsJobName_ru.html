@@ -27,12 +27,12 @@ node<span style="color: #666666">(</span><span style="color: #BA2121">&quot;${PT
         batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--sync &quot;</span>
         <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span><span style="color: #BA2121">&quot;${PTAI_SETTINGS_JSON}&quot;</span><span style="color: #666666">?.</span><span style="color: #7D9029">trim</span><span style="color: #666666">())</span> <span style="color: #666666">{</span>
             writeFile <span style="color: #A0A000">file:</span> <span style="color: #BA2121">&quot;${WORKSPACE}\\SETTINGS\\settings.aiproj&quot;</span><span style="color: #666666">,</span> <span style="color: #A0A000">text:</span> <span style="color: #BA2121">&quot;${PTAI_SETTINGS_JSON}&quot;</span>
-            batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--project-settings-file \&quot;${WORKSPACE}\\SETTINGS\\settings.aiproj\&quot;&quot;</span>
+            batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--project-settings-file \&quot;${WORKSPACE}\\SETTINGS\\settings.aiproj\&quot; &quot;</span>
         <span style="color: #666666">}</span>
 
         <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span><span style="color: #BA2121">&quot;${PTAI_POLICY_JSON}&quot;</span><span style="color: #666666">?.</span><span style="color: #7D9029">trim</span><span style="color: #666666">())</span> <span style="color: #666666">{</span>
             writeFile <span style="color: #A0A000">file:</span> <span style="color: #BA2121">&quot;${WORKSPACE}\\SETTINGS\\policy.json&quot;</span><span style="color: #666666">,</span> <span style="color: #A0A000">text:</span> <span style="color: #BA2121">&quot;${PTAI_POLICY_JSON}&quot;</span>
-            batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--policies-path \&quot;${WORKSPACE}\\SETTINGS\\policy.json\&quot;&quot;</span>
+            batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--policies-path \&quot;${WORKSPACE}\\SETTINGS\\policy.json\&quot; &quot;</span>
         <span style="color: #666666">}</span>
 
         retStatus <span style="color: #666666">=</span> bat<span style="color: #666666">(</span><span style="color: #A0A000">script:</span> batchScript<span style="color: #666666">,</span> <span style="color: #A0A000">returnStatus:</span> <span style="color: #008000; font-weight: bold">true</span><span style="color: #666666">);</span>
