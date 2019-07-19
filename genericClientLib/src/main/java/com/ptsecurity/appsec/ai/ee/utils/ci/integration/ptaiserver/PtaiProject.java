@@ -22,9 +22,11 @@ import org.joda.time.DateTime;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class PtaiProject extends Client {
     @Getter
@@ -53,13 +55,14 @@ public class PtaiProject extends Client {
         return null;
     }
 
-    public UUID createProject(JsonSettings settings, JsonPolicy policy[]) throws PtaiClientException, PtaiServerException {
+
+    public UUID createProject(String projectName) throws PtaiClientException, PtaiServerException {
         try {
             CreateProjectModel model = new CreateProjectModel();
 
             Project project = new Project();
             FieldUtils.writeField(project, "id", UUID.randomUUID(), true);
-            project.setName(settings.ProjectName);
+            project.setName(projectName);
             project.setCreationDate(DateTime.now());
             model.setProject(project);
 
@@ -67,39 +70,17 @@ public class PtaiProject extends Client {
             FieldUtils.writeField(scanSettings, "id", UUID.randomUUID(), true);
             model.setScanSettings(scanSettings);
 
-            if ("Java".equalsIgnoreCase(settings.ProgrammingLanguage)) {
-
-            } else if ("Php".equalsIgnoreCase(settings.ProgrammingLanguage)) {
-
-            } else if ("Csharp".equalsIgnoreCase(settings.ProgrammingLanguage)) {
-
-            } else if ("ObjectiveC".equalsIgnoreCase(settings.ProgrammingLanguage)) {
-
-            } else if ("CPlusPlus".equalsIgnoreCase(settings.ProgrammingLanguage)) {
-
-            } else if ("Sql".equalsIgnoreCase(settings.ProgrammingLanguage)) {
-
-            } else if ("Swift".equalsIgnoreCase(settings.ProgrammingLanguage)) {
-
-            } else if ("Python".equalsIgnoreCase(settings.ProgrammingLanguage)) {
-
-            } else if ("JavaScript".equalsIgnoreCase(settings.ProgrammingLanguage)) {
-
-            }
-
-            IJavaSettings java = new IJavaSettings();
-            java.setProgrammingLanguage(IJavaSettings.ProgrammingLanguageEnum.JAVA);
-            java.setThreadCount(2);
-            scanSettings.setJava(java);
-            ICommonSettings common = new ICommonSettings();
-            common.setProgrammingLanguage(ICommonSettings.ProgrammingLanguageEnum.JAVA);
-            scanSettings.setCommon(common);
+            FieldUtils.writeField(project, "settingsId", scanSettings.getId(), true);
 
             Project res = this.prjApi.post(model);
             return res.getId();
         } catch (ApiException | IllegalAccessException e) {
             throw new PtaiServerException(e.getMessage(), e);
         }
+    }
+
+    public UUID createProject(JsonSettings settings) throws PtaiClientException, PtaiServerException {
+        return this.createProject(settings.ProjectName);
     }
 
     public void deleteProject() throws PtaiClientException, PtaiServerException {

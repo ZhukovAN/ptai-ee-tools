@@ -32,7 +32,7 @@ class PtaiProjectTest {
             JsonSettings settings = JsonSettingsVerifier.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\settings.1.json"))));
             JsonPolicy policy[] = JsonPolicyVerifier.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\policy\\policy.1.json"))));
 
-            System.out.println(ptai.createProject(settings, policy));
+            System.out.println(ptai.createProject(settings));
             // ptai.deleteProject();
         } catch (Exception e) {
             e.printStackTrace();

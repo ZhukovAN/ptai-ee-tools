@@ -2,15 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="58b3e6c1-36c6-47af-94ff-72f789dc14ec" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config_ru.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.incomplete.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.incorrect.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config_ru.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config_ru.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/domain/Transfer.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/domain/Transfer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifierTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifierTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.1.json" beforeDir="false" afterPath="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin.java" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/TransferDefaults.java" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/TransferDefaults.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual.java" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/global.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/global.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/global_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/global_ru.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Transfer/config.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Transfer/config.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.groovy" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.groovy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config_ru.properties" beforeDir="false" afterPath="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config_ru.properties" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/genericClientLib/target/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -29,79 +41,90 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config.groovy">
-          <provider selected="true" editor-type-id="text-editor" />
+        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config_ru.properties">
+          <provider editor-type-id="ResourceBundle" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="110">
+              <caret line="5" column="43" selection-start-line="5" selection-start-column="43" selection-end-line="5" selection-end-column="43" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config.groovy">
+        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="8" column="26" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="26" />
+            <state relative-caret-position="198">
+              <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="261">
+              <caret line="64" column="21" selection-start-line="64" selection-start-column="21" selection-end-line="64" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config.properties">
+        <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettings.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="19" column="29" lean-forward="true" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
+            <state relative-caret-position="66">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
-          <provider editor-type-id="ResourceBundle" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/help-sastConfigJenkinsJobName.html">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigCustom/config.groovy">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config.properties">
+        <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/BaseTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
+            <state relative-caret-position="88">
+              <caret line="9" column="6" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
             </state>
           </provider>
-          <provider editor-type-id="ResourceBundle" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config_ru.properties">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="19" column="36" lean-forward="true" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
-            </state>
-          </provider>
-          <provider editor-type-id="ResourceBundle" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config_ru.properties">
+        <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifierTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="286">
+              <caret line="20" column="35" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifier.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="176">
               <caret line="13" column="61" selection-start-line="13" selection-start-column="61" selection-end-line="13" selection-end-column="61" />
             </state>
           </provider>
-          <provider editor-type-id="ResourceBundle" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config_ru.properties">
-          <provider selected="true" editor-type-id="text-editor" />
-          <provider editor-type-id="ResourceBundle" />
+        <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.incorrect.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="88">
+              <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config.properties">
+        <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.incomplete.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="88">
+              <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor" />
-          <provider editor-type-id="ResourceBundle" />
         </entry>
       </file>
     </leaf>
@@ -144,6 +167,7 @@
       <find>UploadS</find>
       <find>ApiStoreLogsByProjectIdByScanResultIdPost</find>
       <find>&quot;Project&quot;</find>
+      <find>/api/AgentAuth</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -152,45 +176,25 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/help-jsonSettings.html" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/help-jsonSettings_ru.html" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsUi/config_ru.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsUi/config.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsUi/help-projectName.html" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsUi/help-projectName_ru.html" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/global.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/global_ru.properties" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsUi.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsUi/config.groovy" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ui/validateButton.jelly" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ui/dropdownList.jelly" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ui/dropdownDescriptorSelector.jelly" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config.groovy" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifierTest.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifier.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettings.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonPolicyVerifierTest.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonPolicyVerifier.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonPolicy.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.groovy" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/utils/Validator.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/GlobalConfigDescriptor.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PluginDescriptor.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/ServerSettingsDescriptor.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/jenkins/SastJob.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.1.json" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/resources/api/ptai.server.filesstore.swagger.json" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/Client.java" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/main/resources/api/ptai.server.projectmanagement.swagger.json" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/Config.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigBase.java" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages_ru.properties" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigCustom.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ServerSettings/help-jenkinsJobName.html" />
@@ -203,6 +207,26 @@
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config_ru.properties" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config_ru.properties" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config.properties" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/main/resources/api/ptai.server.gateway.swagger.json" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.1.json" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/domain/Transfer.java" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/TransferDefaults.java" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin.java" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.groovy" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages.properties" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages_ru.properties" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual.java" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Transfer/config.groovy" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.properties" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config_ru.properties" />
+        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifierTest.java" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.incorrect.json" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.incomplete.json" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifier.java" />
+        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettings.java" />
       </list>
     </option>
   </component>
@@ -226,6 +250,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -236,6 +261,182 @@
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
               <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="integration" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="integration" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiserver" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="integration" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiserver" type="462c0819:PsiDirectoryNode" />
+              <item name="domain" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="integration" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiserver" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="integration" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="integration" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="integration" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="integration" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiserver" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="json" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="json" type="462c0819:PsiDirectoryNode" />
+              <item name="policy" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="genericClientLib" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="json" type="462c0819:PsiDirectoryNode" />
+              <item name="settings" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
               <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -276,7 +477,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
+              <item name="defaults" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
@@ -294,6 +495,26 @@
               <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
+              <item name="scansettings" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -313,7 +534,7 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
+              <item name="scansettings" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
@@ -323,8 +544,8 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-              <item name="ConfigCustom" type="462c0819:PsiDirectoryNode" />
+              <item name="scansettings" type="462c0819:PsiDirectoryNode" />
+              <item name="ScanSettingsManual" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
@@ -334,72 +555,8 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-              <item name="ConfigGlobal" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-              <item name="ConfigGlobal" type="462c0819:PsiDirectoryNode" />
-              <item name="Resource Bundle 'config'" type="a6c14932:ResourceBundleNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-              <item name="Resource Bundle 'config'" type="a6c14932:ResourceBundleNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="GlobalConfig" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="GlobalConfig" type="462c0819:PsiDirectoryNode" />
-              <item name="Resource Bundle 'config'" type="a6c14932:ResourceBundleNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="Plugin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
-              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
-              <item name="Plugin" type="462c0819:PsiDirectoryNode" />
+              <item name="scansettings" type="462c0819:PsiDirectoryNode" />
+              <item name="ScanSettingsManual" type="462c0819:PsiDirectoryNode" />
               <item name="Resource Bundle 'config'" type="a6c14932:ResourceBundleNode" />
             </path>
             <path>
@@ -420,13 +577,23 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="resources" type="462c0819:PsiDirectoryNode" />
               <item name="jenkins" type="462c0819:PsiDirectoryNode" />
+              <item name="ServerSettings" type="462c0819:PsiDirectoryNode" />
+              <item name="Resource Bundle 'config'" type="a6c14932:ResourceBundleNode" />
+            </path>
+            <path>
+              <item name="ptaiPlugins" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ptaiPlugins" type="462c0819:PsiDirectoryNode" />
+              <item name="ptaiJenkinsPlugin" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
               <item name="Resource Bundle 'Messages'" type="a6c14932:ResourceBundleNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
@@ -434,7 +601,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -446,25 +613,25 @@
       <recent name="com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli" />
       <recent name="com.ptsecurity.appsec.ai.ee.utils.ci.integration.base" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettingstype" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\genericClientLib\src\test\resources\json\settings" />
+      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\config\ConfigGlobal" />
+      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\scansettings\ScanSettingsUi" />
+      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\scansettings\ScanSettingsManual" />
+      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\auth\TokenAuth" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\scansettingstype" />
       <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\ServerSettings" />
       <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\credentials\ServerCredentialsImpl" />
       <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\credentials\PtaiServerCredentialsImpl" />
       <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiCliPlugin" />
-    </key>
-    <key name="CreateTestDialog.Recents.Supers">
-      <recent name="" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettingstype" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\config\ConfigGlobal" />
-      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\scansettings\ScanSettingsUi" />
-      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\scansettings\ScanSettingsManual" />
-      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\auth\TokenAuth" />
-      <recent name="W:\DATA\DEVEL\IDEA\PT AI EE Tools\ptaiPlugins\ptaiJenkinsPlugin\src\main\resources\com\ptsecurity\appsec\ai\ee\utils\ci\integration\plugin\jenkins\ServerSettings" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -479,7 +646,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Remote.Local Jenkins">
+  <component name="RunManager" selected="JUnit.JsonSettingsVerifierTest.verify">
     <configuration name="JsonPolicyVerifierTest.verify" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="generic-client-lib" />
       <option name="PACKAGE_NAME" value="com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils" />
@@ -554,10 +721,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.JsonSettingsVerifierTest.verify" />
         <item itemvalue="JUnit.PtaiProjectTest.createDeleteProject" />
         <item itemvalue="JUnit.JsonPolicyVerifierTest.verify" />
         <item itemvalue="JUnit.PtaiProjectTest.searchProject" />
-        <item itemvalue="JUnit.JsonSettingsVerifierTest.verify" />
         <item itemvalue="JUnit.PtaiProjectTest.testAiPost2012" />
       </list>
     </recent_temporary>
@@ -576,35 +743,35 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.06.14 at 11h 38m 23s.xml">
-      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="JsonPolicyVerifierTest_verify - 2019.06.14 at 11h 38m 55s.xml">
-      <configuration name="JsonPolicyVerifierTest.verify" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.06.14 at 11h 40m 24s.xml">
-      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.06.14 at 11h 41m 47s.xml">
-      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.06.14 at 11h 46m 13s.xml">
-      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.06.14 at 11h 52m 20s.xml">
-      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.06.24 at 08h 48m 12s.xml">
-      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.06.24 at 09h 00m 57s.xml">
-      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="PtaiProjectTest_createDeleteProject - 2019.06.24 at 09h 14m 21s.xml">
       <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
     </history-entry>
     <history-entry file="PtaiProjectTest_createDeleteProject - 2019.06.24 at 10h 15m 25s.xml">
       <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.07.02 at 14h 11m 27s.xml">
+      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.07.02 at 14h 29m 43s.xml">
+      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.07.02 at 15h 35m 59s.xml">
+      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.07.02 at 17h 24m 44s.xml">
+      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.07.19 at 13h 13m 48s.xml">
+      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PtaiProjectTest_createDeleteProject - 2019.07.19 at 14h 43m 58s.xml">
+      <configuration name="PtaiProjectTest.createDeleteProject" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="JsonSettingsVerifierTest_verify - 2019.07.19 at 15h 19m 51s.xml">
+      <configuration name="JsonSettingsVerifierTest.verify" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="JsonSettingsVerifierTest_verify - 2019.07.19 at 15h 20m 27s.xml">
+      <configuration name="JsonSettingsVerifierTest.verify" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TodoView">
@@ -620,15 +787,15 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28784648" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19722815" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="UI Designer" order="4" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info active="true" anchor="bottom" id="Find" order="1" sideWeight="0.4968017" visible="true" weight="0.32936078" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4968017" weight="0.32936078" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989339" weight="0.32936078" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4936034" visible="true" weight="0.35536295" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4936034" visible="true" weight="0.37703142" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49946696" weight="0.32936078" />
@@ -740,100 +907,362 @@
           <option name="timeStamp" value="111" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/Client.java</url>
+          <url>file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java</url>
           <line>31</line>
           <properties />
-          <option name="timeStamp" value="112" />
+          <option name="timeStamp" value="113" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual.java</url>
+          <line>74</line>
+          <properties />
+          <option name="timeStamp" value="115" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/genericClientLib/target/generated-sources/swagger/src/main/java/com/ptsecurity/appsec/ai/ee/ptai/server/projectmanagement/rest/ProjectsApi.java">
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config_ru.properties">
+      <provider editor-type-id="ResourceBundle" />
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4902">
-          <caret line="326" column="82" selection-start-line="326" selection-start-column="82" selection-end-line="326" selection-end-column="82" />
+        <state relative-caret-position="286">
+          <caret line="13" column="61" selection-start-line="13" selection-start-column="61" selection-end-line="13" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config_ru.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="16" column="43" selection-start-line="16" selection-start-column="43" selection-end-line="16" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://W:/TOOLS/DEVEL/JAVA/jdk1.8.0_162/src.zip!/java/util/function/Consumer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="858">
+          <caret line="62" column="33" selection-start-line="62" selection-start-column="33" selection-end-line="62" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://W:/TOOLS/DEVEL/JAVA/jdk1.8.0_162/src.zip!/java/lang/FunctionalInterface.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="968">
+          <caret line="67" column="14" selection-start-line="67" selection-start-column="14" selection-end-line="67" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/genericClientLib/target/generated-sources/swagger/src/main/java/com/ptsecurity/appsec/ai/ee/ptai/server/projectmanagement/rest/CreateProjectModel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="48" column="23" selection-start-line="48" selection-start-column="23" selection-end-line="48" selection-end-column="23" />
+        <state relative-caret-position="352">
+          <caret line="36" column="27" selection-start-line="36" selection-start-column="27" selection-end-line="36" selection-end-column="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/genericClientLib/target/generated-sources/swagger/src/main/java/com/ptsecurity/appsec/ai/ee/ptai/server/projectmanagement/rest/IScanSettings.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1178">
-          <caret line="94" column="21" selection-start-line="94" selection-start-column="21" selection-end-line="94" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/resources/json/policy/policy.1.json" />
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonPolicyVerifierTest.java" />
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/project_file.aiproj" />
-    <entry file="file://$PROJECT_DIR$/genericClientLib/target/generated-sources/swagger/src/main/java/com/ptsecurity/appsec/ai/ee/ptai/server/filesstore/rest/StoreApi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="870" column="34" selection-start-line="870" selection-start-column="34" selection-end-line="870" selection-end-column="34" />
-          <folding>
-            <element signature="e#1308#1309#0" expanded="true" />
-            <element signature="e#1365#1366#0" expanded="true" />
-            <element signature="e#1409#1410#0" expanded="true" />
-            <element signature="e#1451#1452#0" expanded="true" />
-            <element signature="e#1490#1491#0" expanded="true" />
-            <element signature="e#1522#1523#0" expanded="true" />
-            <element signature="e#1575#1576#0" expanded="true" />
-            <element signature="e#1617#1618#0" expanded="true" />
-            <element signature="e#3066#3072#0" expanded="true" />
-            <element signature="e#3975#3991#0" expanded="true" />
-            <element signature="e#4056#4072#0" expanded="true" />
-            <element signature="e#5447#5476#0" expanded="true" />
-            <element signature="e#12095#12101#0" expanded="true" />
-            <element signature="e#13004#13020#0" expanded="true" />
-            <element signature="e#13085#13101#0" expanded="true" />
-            <element signature="e#14476#14505#0" expanded="true" />
-            <element signature="e#20657#20663#0" expanded="true" />
-            <element signature="e#21566#21582#0" expanded="true" />
-            <element signature="e#21647#21663#0" expanded="true" />
-            <element signature="e#23038#23067#0" expanded="true" />
-            <element signature="e#29701#29707#0" expanded="true" />
-            <element signature="e#31348#31364#0" expanded="true" />
-            <element signature="e#31429#31445#0" expanded="true" />
-            <element signature="e#32821#32850#0" expanded="true" />
-            <element signature="e#41228#41234#0" expanded="true" />
-            <element signature="e#42875#42891#0" expanded="true" />
-            <element signature="e#42956#42972#0" expanded="true" />
-            <element signature="e#44441#44470#0" expanded="true" />
-            <element signature="e#52751#52757#0" expanded="true" />
-            <element signature="e#54398#54414#0" expanded="true" />
-            <element signature="e#54479#54495#0" expanded="true" />
-            <element signature="e#55871#55900#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/workmode/WorkModeCustom.java" />
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/workmode/WorkModeManual.java" />
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/workmode/WorkModeConfig.java" />
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="572">
-          <caret line="62" selection-start-line="62" selection-end-line="62" />
+        <state relative-caret-position="242">
+          <caret line="42" column="13" selection-start-line="42" selection-start-column="13" selection-end-line="42" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/genericClientLib/target/generated-sources/swagger/src/main/java/com/ptsecurity/appsec/ai/ee/ptai/server/projectmanagement/rest/Project.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="968">
-          <caret line="69" column="14" selection-start-line="69" selection-start-column="14" selection-end-line="69" selection-end-column="14" />
+        <state relative-caret-position="242">
+          <caret line="34" column="13" selection-start-line="34" selection-start-column="13" selection-end-line="34" selection-end-column="13" />
           <folding>
             <element signature="e#1634#1635#0" expanded="true" />
             <element signature="e#1653#1654#0" expanded="true" />
             <element signature="e#2422#2423#0" expanded="true" />
             <element signature="e#2448#2449#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/credentials/ServerCredentialsImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1694">
+          <caret line="109" column="30" selection-start-line="109" selection-start-column="30" selection-end-line="109" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PluginDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1804">
+          <caret line="123" column="75" selection-start-line="123" selection-start-column="66" selection-end-line="123" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/target/generated-sources/swagger/src/main/java/com/ptsecurity/appsec/ai/ee/ptai/server/filesstore/ApiClient.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8624">
+          <caret line="492" column="76" selection-start-line="492" selection-start-column="76" selection-end-line="492" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="21" column="56" selection-start-line="21" selection-start-column="41" selection-end-line="21" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/credentials/ServerCredentialsImpl/help-clientCertificate_ru.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/resources/api/ptai.server.gateway.swagger.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="14" selection-start-line="7" selection-start-column="14" selection-end-line="7" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.1.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2552">
+          <caret line="4" column="44" selection-start-line="4" selection-start-column="44" selection-end-line="4" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/GlobalConfigDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/domain/Transfer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="7" column="8" lean-forward="true" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="365">
+          <caret line="81" column="51" selection-start-line="81" selection-start-column="51" selection-end-line="81" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="83" column="30" selection-start-line="83" selection-start-column="30" selection-end-line="83" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ServerSettings/config.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="29" selection-start-line="20" selection-end-line="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/ServerSettingsDescriptor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="370">
+          <caret line="116" column="5" selection-start-line="88" selection-end-line="116" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="434">
+          <caret line="81" selection-start-line="81" selection-end-line="81" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages_ru.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="434">
+          <caret line="81" column="69" selection-start-line="81" selection-start-column="69" selection-end-line="81" selection-end-column="69" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProjectTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="31" column="16" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/kohsuke/stapler/stapler/1.256/stapler-1.256.jar!/org/kohsuke/stapler/Function.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="76" selection-start-line="76" selection-end-line="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/kohsuke/stapler/stapler/1.256/stapler-1.256.jar!/org/kohsuke/stapler/MetaClass.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="536" selection-start-line="536" selection-end-line="536" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/kohsuke/stapler/stapler/1.256/stapler-1.256.jar!/org/kohsuke/stapler/NameBasedDispatcher.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/utils/Validator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+          <folding>
+            <element signature="e#1103#1104#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/resources/json/policy/policy.1.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jenkins-ci/main/jenkins-core/2.165/jenkins-core-2.165.jar!/hudson/EnvVars.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2816">
+          <caret line="45" column="13" selection-start-line="45" selection-start-column="13" selection-end-line="45" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jenkins-ci/main/jenkins-core/2.165/jenkins-core-2.165-sources.jar!/hudson/EnvVars.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2920">
+          <caret line="105" column="11" selection-start-line="105" selection-start-column="11" selection-end-line="105" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/jenkins-ci/main/jenkins-core/2.165/jenkins-core-2.165-sources.jar!/hudson/model/AbstractBuild.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="987" column="41" selection-start-line="987" selection-start-column="41" selection-end-line="987" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="101" column="57" selection-start-line="101" selection-start-column="57" selection-end-line="101" selection-end-column="57" />
+          <folding>
+            <element signature="e#15713#15714#0" expanded="true" />
+            <element signature="e#15793#15794#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/TransferDefaults.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="242">
+          <caret line="22" column="23" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="23" />
+          <folding>
+            <element signature="e#393#394#0" expanded="true" />
+            <element signature="e#441#442#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Transfer/config.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="7" column="29" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Transfer/config.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.groovy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="15" column="49" selection-start-line="15" selection-start-column="25" selection-end-line="15" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ServerSettings/config.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="36" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" selection-start-line="2" selection-end-line="5" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ServerSettings/config_ru.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="12" column="39" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config_ru.properties">
+      <provider editor-type-id="ResourceBundle" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" column="43" selection-start-line="5" selection-start-column="43" selection-end-line="5" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="34" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="261">
+          <caret line="64" column="21" selection-start-line="64" selection-start-column="21" selection-end-line="64" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.incorrect.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.incomplete.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -844,283 +1273,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/resources/api/ptai.server.filesstore.swagger.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14542">
-          <caret line="661" selection-start-line="661" selection-end-line="661" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/resources/api/ptai.server.projectmanagement.swagger.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40370">
-          <caret line="1835" column="26" selection-start-line="1835" selection-start-column="26" selection-end-line="1835" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/PtaiProject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2479">
-          <caret line="159" selection-start-line="159" selection-end-line="159" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3740">
-          <caret line="179" column="56" selection-start-line="179" selection-start-column="28" selection-end-line="179" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="346">
-          <caret line="16" column="23" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="10" column="22" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="79" selection-start-line="77" selection-end-line="79" />
-        </state>
-      </provider>
-      <provider editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Messages_ru.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="74" column="24" selection-start-line="74" selection-start-column="24" selection-end-line="74" selection-end-column="24" />
-        </state>
-      </provider>
-      <provider editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/PluginDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="123" column="75" selection-start-line="123" selection-start-column="66" selection-end-line="123" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="30" selection-start-line="27" selection-end-line="30" />
-          <folding>
-            <element signature="e#1014#1015#0" expanded="true" />
-            <element signature="e#1084#1085#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigCustom.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
-          <folding>
-            <element signature="e#807#808#0" expanded="true" />
-            <element signature="e#877#878#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/target/generated-sources/swagger/src/main/java/com/ptsecurity/appsec/ai/ee/ptai/server/gateway/rest/AgentAuthApi.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="140" selection-start-line="140" selection-end-line="140" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp/okhttp/2.7.5/okhttp-2.7.5.jar!/com/squareup/okhttp/OkHttpClient.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="306" selection-start-line="306" selection-end-line="306" />
-          <folding>
-            <element signature="e#10126#10127#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp/okhttp/2.7.5/okhttp-2.7.5.jar!/com/squareup/okhttp/Dispatcher.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="158" selection-start-line="158" selection-end-line="158" />
-          <folding>
-            <element signature="e#4754#4755#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/descriptor/ServerSettingsDescriptor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1320">
-          <caret line="93" selection-start-line="93" selection-end-line="93" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ServerSettings/help-jenkinsJobName.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="e#721#757#0" expanded="true" />
-            <element signature="e#764#786#0" expanded="true" />
-            <element signature="e#812#834#0" expanded="true" />
-            <element signature="e#850#872#0" expanded="true" />
-            <element signature="e#873#878#0" expanded="true" />
-            <element signature="e#962#967#0" expanded="true" />
-            <element signature="e#3290#3296#0" expanded="true" />
-            <element signature="e#4906#4912#0" expanded="true" />
-            <element signature="e#7368#7373#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ServerSettings/help-jenkinsJobName_ru.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-          <folding>
-            <element signature="e#2854#2860#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/target/generated-sources/swagger/src/main/java/com/ptsecurity/appsec/ai/ee/ptai/server/gateway/ApiClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#47726#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp/okhttp/2.7.5/okhttp-2.7.5.jar!/com/squareup/okhttp/Call.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2354">
-          <caret line="130" selection-start-line="130" selection-end-line="130" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp/okhttp/2.7.5/okhttp-2.7.5-sources.jar!/com/squareup/okhttp/Call.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5280">
-          <caret line="286" selection-start-line="286" selection-end-line="286" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp/okhttp/2.7.5/okhttp-2.7.5-sources.jar!/com/squareup/okhttp/internal/http/HttpEngine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12540">
-          <caret line="650" selection-start-line="650" selection-end-line="650" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp/okhttp/2.7.5/okhttp-2.7.5-sources.jar!/com/squareup/okhttp/Dispatcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3124">
-          <caret line="171" column="20" selection-start-line="171" selection-start-column="20" selection-end-line="171" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/squareup/okhttp/okhttp/2.7.5/okhttp-2.7.5-sources.jar!/com/squareup/okhttp/OkHttpClient.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8712">
-          <caret line="478" column="20" selection-start-line="478" selection-start-column="20" selection-end-line="478" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/Client.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config.groovy">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config.groovy">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="20" column="31" selection-start-line="20" selection-start-column="31" selection-end-line="20" selection-end-column="31" />
-        </state>
-      </provider>
-      <provider editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config_ru.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="11" column="25" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
-        </state>
-      </provider>
-      <provider editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config.groovy">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-        </state>
-      </provider>
-      <provider editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigCustom/config.groovy">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config.groovy">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="26" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config_ru.properties">
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifierTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
+          <caret line="20" column="35" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
           <caret line="13" column="61" selection-start-line="13" selection-start-column="61" selection-end-line="13" selection-end-column="61" />
         </state>
       </provider>
-      <provider editor-type-id="ResourceBundle" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config.properties">
-      <provider selected="true" editor-type-id="text-editor" />
-      <provider editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config_ru.properties">
-      <provider selected="true" editor-type-id="text-editor" />
-      <provider editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/help-sastConfigJenkinsJobName.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config_ru.properties">
+    <entry file="file://$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettings.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="19" column="36" lean-forward="true" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
+        <state relative-caret-position="66">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
         </state>
       </provider>
-      <provider editor-type-id="ResourceBundle" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config.properties">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="19" column="29" lean-forward="true" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="29" />
-        </state>
-      </provider>
-      <provider editor-type-id="ResourceBundle" />
     </entry>
   </component>
   <component name="masterDetails">

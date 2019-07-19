@@ -8,11 +8,11 @@ import jenkins.model.Jenkins;
 
 public class TransferDefaults implements Describable<TransferDefaults> {
     public String getIncludes() {
-        return null;
+        return Transfer.DEFAULT_INCLUDES;
     }
     public String getRemovePrefix() { return null; }
     public String getExcludes() {
-        return null;
+        return Transfer.DEFAULT_EXCLUDES;
     }
     public boolean isFlatten() {
         return false;

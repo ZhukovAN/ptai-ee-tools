@@ -5,11 +5,9 @@ import lib.FormTagLib
 def f = namespace(FormTagLib)
 
 f.entry(
-        // title: _('includes'),
-        title: descriptor.transferDefaults.patternSeparator,
-        field: 'includes',
-        default: descriptor.clazz) {
-    f.textbox()
+        title: _('includes'),
+        field: 'includes') {
+    f.textbox(default: descriptor.transferDefaults.includes)
 }
 
 f.entry(
@@ -27,7 +25,7 @@ f.advanced() {
     f.entry(
             title: _('patternSeparator'),
             field: 'patternSeparator') {
-        f.textbox()
+        f.textbox(default: descriptor.transferDefaults.patternSeparator)
     }
 
     f.entry(

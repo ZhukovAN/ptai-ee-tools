@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
     <artifactId>ptai-jenkins-plugin</artifactId>
-    <version>0.2</version>
+    <version>0.4.0</version>
     <packaging>hpi</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,9 +18,9 @@
         <java-version>1.8</java-version>
         <java.level>8</java.level>
         <!-- <jenkins.version>2.60.3</jenkins.version> -->
-        <!-- <jenkins.version>2.150.2</jenkins.version> -->
+        <jenkins.version>2.150.2</jenkins.version>
         <!-- <jenkins.version>2.121.3</jenkins.version> -->
-        <jenkins.version>2.165</jenkins.version>
+        <!-- <jenkins.version>2.165</jenkins.version> -->
         <swagger-core-version>1.5.18</swagger-core-version>
         <feign-version>9.4.0</feign-version>
         <feign-form-version>2.1.0</feign-form-version>

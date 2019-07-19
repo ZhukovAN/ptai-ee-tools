@@ -1,5 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicy;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
@@ -214,8 +217,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
             ptaiProject.setName(uiPrj);
 
             UUID projectId = ptaiProject.searchProject();
-            if (null == projectId)
-                throw new AbortException(Messages.validator_test_ptaiProject_notfound());
+            if (null == projectId) {
+                if (scanSettings instanceof ScanSettingsManual) {
+                    JsonSettings jsonSettings = JsonSettingsVerifier.verify(((ScanSettingsManual)scanSettings).getJsonSettings());
+                    projectId = ptaiProject.createProject(jsonSettings);
+                } else
+                    throw new AbortException(Messages.validator_test_ptaiProject_notfound());
+            }
             verboseLog(listener, Messages.validator_test_ptaiProject_success(projectId.toString().substring(0, 4)) + "\r\n");
 
             Transfers transfers = new Transfers();
@@ -227,7 +235,6 @@ public class Plugin extends Builder implements SimpleBuildStep {
                         .patternSeparator(transfer.getPatternSeparator())
                         .removePrefix(Util.replaceMacro(transfer.getRemovePrefix(), buildInfo.getEnvVars()))
                         .build());
-
 
             // Upload project sources
             ptaiProject.upload(transfers, workspace.getRemote());
