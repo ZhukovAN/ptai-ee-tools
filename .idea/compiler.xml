@@ -17,6 +17,8 @@
     <bytecodeTargetLevel>
       <module name="build" target="1.5" />
       <module name="KB" target="1.8" />
+      <module name="ptai-teamcity-plugin" target="1.5" />
+      <module name="ptai-teamcity-plugin-server" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

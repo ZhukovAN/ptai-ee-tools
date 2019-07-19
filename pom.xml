@@ -13,7 +13,7 @@
         <module>ptaiJenkinsPlugin</module>
         <module>ptaiCliPlugin</module>
         <module>jceRestrictionsChecker</module>
-        <module>ptaiTeamCityPlugin</module>
-        <module>ptaiReportGenerator</module>
+        <!-- <module>ptaiTeamCityPlugin</module> -->
+        <!-- <module>ptaiReportGenerator</module> -->
     </modules>
 </project>
