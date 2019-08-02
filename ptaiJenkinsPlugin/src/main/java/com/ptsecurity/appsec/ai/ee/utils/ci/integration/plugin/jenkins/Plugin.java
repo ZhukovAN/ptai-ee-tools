@@ -247,6 +247,8 @@ public class Plugin extends Builder implements SimpleBuildStep {
             sastJob.setJobName(settings.getJenkinsJobName());
             sastJob.setCaCertsPem(ptaiCreds.getServerCaCertificates());
             sastJob.setProjectName(ptaiProject.getName());
+            sastJob.setJenkinsMaxRetry(settings.getJenkinsMaxRetry());
+            sastJob.setJenkinsRetryDelay(settings.getJenkinsRetryDelay());
             if (scanSettings instanceof ScanSettingsManual) {
                 sastJob.setSettingsJson(((ScanSettingsManual)scanSettings).getJsonSettings());
                 sastJob.setPolicyJson(((ScanSettingsManual)scanSettings).getJsonPolicy());

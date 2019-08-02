@@ -25,6 +25,15 @@ public class Validator {
         return urlValidator.isValid(value);
     }
 
+    public static boolean doCheckFieldInteger(Integer value) {
+        return (null != value);
+    }
+
+    public static boolean doCheckFieldBetween(Integer value, int from, int to) {
+        if (null == value) return false;
+        return (from <= value) && (value <= to);
+    }
+
     public static boolean doCheckFieldRegEx(String value) {
         try {
             Pattern.compile(value);
@@ -55,6 +64,14 @@ public class Validator {
 
     public static FormValidation doCheckFieldNotEmpty(String value, String errorMessage) {
         return doCheckFieldNotEmpty(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
+    }
+
+    public static FormValidation doCheckFieldInteger(Integer value, String errorMessage) {
+        return doCheckFieldInteger(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
+    }
+
+    public static FormValidation doCheckFieldBetween(Integer value, int from, int to, String errorMessage) {
+        return doCheckFieldBetween(value, from, to) ? FormValidation.ok() : FormValidation.error(errorMessage);
     }
 
     public static FormValidation doCheckFieldUrl(String value, String errorMessage) {

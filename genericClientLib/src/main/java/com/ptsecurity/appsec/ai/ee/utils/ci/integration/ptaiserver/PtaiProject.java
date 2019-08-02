@@ -100,8 +100,17 @@ public class PtaiProject extends Client {
             String transfersJson = objectMapper.writeValueAsString(transfers);
             FileCollector collector = new FileCollector(transfers, this);
             File srcFolder = new File(srcFolderName);
-            if ((null == srcFolder) || !srcFolder.exists() || !srcFolder.canRead())
-                throw new PtaiClientException("Invalid source folder");
+            if ((null == srcFolder) || !srcFolder.exists() || !srcFolder.canRead()) {
+                String reason = "Unknown";
+                if (null == srcFolder)
+                    reason = "Null value passed";
+                else if (!srcFolder.exists())
+                    reason = srcFolderName + " does not exist";
+                else if (!srcFolder.canRead())
+                    reason = srcFolderName + " can not be read";
+                throw new PtaiClientException("Invalid source folder, " + reason);
+            } else
+                this.log("Sources to be packed are in ", srcFolderName);
             File destFile = File.createTempFile("PTAI_", ".zip");
             this.log("Zipped sources are in  %s\r\n", destFile.getAbsolutePath());
 

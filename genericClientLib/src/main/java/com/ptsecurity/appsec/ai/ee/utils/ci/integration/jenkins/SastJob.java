@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.ApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.JenkinsApiClientWrapper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.Artifact;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.DefaultCrumbIssuer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleBuild;
@@ -14,6 +16,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleProject
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -26,6 +29,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.regex.Pattern;
 
 public class SastJob extends Client {
@@ -45,6 +52,8 @@ public class SastJob extends Client {
     @Setter
     protected String policyJson;
 
+    protected com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse<DefaultCrumbIssuer> crumb;
+
     public String testSastJob() throws JenkinsServerException {
         String jobName = ApiClient.convertJobName(this.jobName);
         try {
@@ -63,7 +72,10 @@ public class SastJob extends Client {
             if (StringUtils.isEmpty(this.jobName))
                 throw new JenkinsClientException("Job name is not set");
             String jobName = ApiClient.convertJobName(this.jobName);
-            FreeStyleProject prj = this.jenkinsApi.getJob(jobName);
+
+            JenkinsApiClientWrapper apiClient = new JenkinsApiClientWrapper(this, 5, 5000);
+
+            FreeStyleProject prj = apiClient.callApi(() -> this.jenkinsApi.getJob(jobName));
             Integer buildNumber = prj.getNextBuildNumber();
             JenkinsJsonParameter params = new JenkinsJsonParameter();
             params.add("PTAI_PROJECT_NAME", Optional.ofNullable(this.projectName).orElse(""));
@@ -72,9 +84,8 @@ public class SastJob extends Client {
             params.add("PTAI_POLICY_JSON", Optional.ofNullable(this.policyJson).orElse(""));
             ObjectMapper objectMapper = new ObjectMapper();
             // Try to get crumb
-            com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse<DefaultCrumbIssuer> crumb;
             try {
-                crumb = jenkinsApi.getCrumbWithHttpInfo();
+                crumb = apiClient.callApi(() -> jenkinsApi.getCrumbWithHttpInfo());
                 this.log("Crumb: %s\r\n", crumb.getData().toString());
             } catch (ApiException e) {
                 this.log("No CSRF token issued\r\n");
@@ -82,22 +93,23 @@ public class SastJob extends Client {
                 crumb = null;
             }
             // Start SAST job
+            String paramsJson = objectMapper.writeValueAsString(params);
             if (null != crumb)
-                jenkinsApi.postJobBuild(jobName, objectMapper.writeValueAsString(params), null, crumb.getData().getCrumb());
+                apiClient.callApi(() -> jenkinsApi.postJobBuildWithHttpInfo(jobName, paramsJson, null, crumb.getData().getCrumb()));
             else
-                jenkinsApi.postJobBuild(jobName, objectMapper.writeValueAsString(params), null, null);
+                apiClient.callApi(() -> jenkinsApi.postJobBuildWithHttpInfo(jobName, objectMapper.writeValueAsString(params), null, null));
             FreeStyleBuild sastBuild = null;
             do {
                 try {
                     // There may be a situation where build is not started yet, so we'll get an "not found" exception
-                    sastBuild = jenkinsApi.getJobBuild(jobName, buildNumber.toString());
+                    sastBuild = apiClient.callApi(() -> jenkinsApi.getJobBuild(jobName, buildNumber.toString()));
                     if (null != sastBuild) {
                         this.log("Job %s started\r\n", this.jobName);
                         break;
                     } else
                         throw new JenkinsClientException("SAST job build is null");
                 } catch (ApiException e) {
-                    if (404 == e.getCode()) {
+                    if (HttpStatus.SC_NOT_FOUND == e.getCode()) {
                         this.log("Wait 5 seconds for %s job to start\r\n", this.jobName);
                         Thread.sleep(5000);
                         continue;
@@ -111,11 +123,12 @@ public class SastJob extends Client {
             Pattern p = Pattern.compile("^Finished: (FAILURE)|(UNSTABLE)|(SUCCESS)$");
             PtaiResultStatus sastJobRes = PtaiResultStatus.UNSTABLE;
             do {
-                sastBuild = jenkinsApi.getJobBuild(jobName, buildNumber.toString());
+                sastBuild = apiClient.callApi(() -> jenkinsApi.getJobBuild(jobName, buildNumber.toString()));
                 if (null == sastBuild) break;
                 com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse<String> sastJobLog;
-                sastJobLog = jenkinsApi.getJobProgressiveTextWithHttpInfo(jobName, buildNumber.toString(), String.valueOf(start));
-                if (200 != sastJobLog.getStatusCode()) break;
+                String startStr = String.valueOf(start);
+                sastJobLog = apiClient.callApi(() -> jenkinsApi.getJobProgressiveTextWithHttpInfo(jobName, buildNumber.toString(), startStr));
+                if (HttpStatus.SC_OK != sastJobLog.getStatusCode()) break;
                 // Just to simplify processing of optional headers array
                 int pos = start;
                 try {
@@ -140,9 +153,9 @@ public class SastJob extends Client {
             } while (true);
             // Save results
             if (PtaiResultStatus.UNSTABLE.equals(sastJobRes)) return sastJobRes;
-            sastBuild = jenkinsApi.getJobBuild(jobName, buildNumber.toString());
+            sastBuild = apiClient.callApi(() -> jenkinsApi.getJobBuild(jobName, buildNumber.toString()));
             for (Artifact artifact : sastBuild.getArtifacts()) {
-                String resultFile = jenkinsApi.getJobBuildArtifact(jobName, buildNumber.toString(), artifact.getRelativePath());
+                String resultFile = apiClient.callApi(() -> jenkinsApi.getJobBuildArtifact(jobName, buildNumber.toString(), artifact.getRelativePath()));
                 Files.write(
                         Paths.get(reportFolderName + File.separator + artifact.getFileName()),
                         resultFile.getBytes("utf-8"),

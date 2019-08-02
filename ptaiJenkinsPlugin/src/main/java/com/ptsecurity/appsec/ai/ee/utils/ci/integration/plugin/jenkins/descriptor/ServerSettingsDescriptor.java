@@ -9,6 +9,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.Auth
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.NoneAuth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentialsImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.defaults.ServerSettingsDefaults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProject;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
@@ -19,6 +20,7 @@ import hudson.security.ACL;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
+import lombok.Getter;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
 import org.parboiled.common.StringUtils;
@@ -36,6 +38,9 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
     public String getDisplayName() {
         return "ServerSettingsDescriptor";
     }
+
+    @Getter
+    ServerSettingsDefaults serverSettingsDefaults = new ServerSettingsDefaults();
 
     public static List<Auth.AuthDescriptor> getAuthDescriptors() {
         return Auth.getAll();
@@ -114,6 +119,18 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
         } catch (Exception e) {
             return Validator.error(e);
         }
+    }
+
+    public FormValidation doCheckJenkinsMaxRetry(@QueryParameter final Integer jenkinsMaxRetry) {
+        return Validator.doCheckFieldBetween(
+                jenkinsMaxRetry, ServerSettings.JENKINS_MAX_RETRY_FROM, ServerSettings.JENKINS_MAX_RETRY_TO,
+                Messages.validator_check_field_integer_range(ServerSettings.JENKINS_MAX_RETRY_FROM, ServerSettings.JENKINS_MAX_RETRY_TO));
+    }
+
+    public FormValidation doCheckJenkinsRetryDelay(@QueryParameter final Integer jenkinsRetryDelay) {
+        return Validator.doCheckFieldBetween(
+                jenkinsRetryDelay, ServerSettings.JENKINS_RETRY_DELAY_FROM, ServerSettings.JENKINS_RETRY_DELAY_TO,
+                Messages.validator_check_field_integer_range(ServerSettings.JENKINS_RETRY_DELAY_FROM, ServerSettings.JENKINS_RETRY_DELAY_TO));
     }
 }
 

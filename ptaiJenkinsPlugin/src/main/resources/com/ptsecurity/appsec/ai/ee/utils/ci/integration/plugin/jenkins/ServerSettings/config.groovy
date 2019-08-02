@@ -45,3 +45,18 @@ f.dropdownDescriptorSelector(
         descriptors: descriptor.getAuthDescriptors(),
         default: descriptor.getDefaultAuthDescriptor()
 )
+
+f.advanced() {
+    f.entry(
+            title: _('jenkinsMaxRetry'),
+            field: 'jenkinsMaxRetry') {
+        f.textbox(default: descriptor.serverSettingsDefaults.jenkinsMaxRetry)
+    }
+    f.entry(
+            title: _('jenkinsRetryDelay'),
+            field: 'jenkinsRetryDelay') {
+        f.textbox(default: descriptor.serverSettingsDefaults.jenkinsRetryDelay)
+    }
+}
+
+

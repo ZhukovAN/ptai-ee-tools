@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ptaiJenkinsPlugin/work/workspace/Pipeline" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptaiJenkinsPlugin/work/workspace/Test" vcs="Git" />
   </component>
 </project>

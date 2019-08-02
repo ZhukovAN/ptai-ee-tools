@@ -67,7 +67,8 @@ public class Base {
     }
 
     public void log(Throwable value) {
-        this.log("%s\r\n", value.getMessage());
+        if (StringUtils.isNotEmpty(value.getMessage()))
+            this.log("%s\r\n", value.getMessage());
         if (this.verbose) value.printStackTrace(this.consoleLog);
     }
 

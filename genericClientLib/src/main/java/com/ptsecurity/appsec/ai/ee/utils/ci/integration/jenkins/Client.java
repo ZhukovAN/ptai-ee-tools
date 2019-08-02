@@ -34,6 +34,12 @@ public class Client extends Base {
     @Getter
     @Setter
     protected String token = null;
+    @Getter
+    @Setter
+    private Integer jenkinsMaxRetry;
+    @Getter
+    @Setter
+    private Integer jenkinsRetryDelay;
 
     public Client init() throws JenkinsClientException, JenkinsServerException {
         try {
