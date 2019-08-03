@@ -20,6 +20,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansetti
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildEnv;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildInfo;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.PtaiRemoteProject;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProject;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
@@ -186,7 +187,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
         if (StringUtils.isEmpty(ptaiCreds.getServerCaCertificates()))
             throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_emptyPtaiCaCerts());
 */
-        PtaiProject ptaiProject = new PtaiProject();
+        PtaiRemoteProject ptaiProject = new PtaiRemoteProject();
         ptaiProject.setVerbose(this.verbose);
         ptaiProject.setConsoleLog(listener.getLogger());
         ptaiProject.setLogPrefix(this.consolePrefix);
@@ -237,7 +238,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                         .build());
 
             // Upload project sources
-            ptaiProject.upload(transfers, workspace.getRemote());
+            ptaiProject.upload(transfers, workspace);
             // Let's start analysis
             SastJob sastJob = new SastJob();
             sastJob.setVerbose(verbose);
