@@ -1,13 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.concurrent.Callable;
 
 /**
  * Generated ApiClient doesn't supports tasks that are inside folders so we need to fix that

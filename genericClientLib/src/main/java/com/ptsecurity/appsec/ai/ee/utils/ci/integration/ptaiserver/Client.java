@@ -5,7 +5,7 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest.AgentAuthApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.ProjectsApi;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.BaseClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiServerException;
@@ -13,9 +13,7 @@ import lombok.Getter;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.concurrent.TimeUnit;
-
-public class Client extends Base {
+public class Client extends BaseClient {
     @Getter
     protected final AgentAuthApi authApi = new AgentAuthApi(new com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiClient());
     @Getter

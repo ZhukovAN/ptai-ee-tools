@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.BaseClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
@@ -13,7 +14,6 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 
@@ -21,7 +21,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public class FileCollector {
@@ -42,6 +41,37 @@ public class FileCollector {
         } catch (ArchiveException | IOException e) {
             throw new PtaiClientException("File collect error", e);
         }
+    }
+
+    public static File collect(Transfers transfers, final File srcDir, Base owner) throws PtaiClientException {
+        try {
+            FileCollector collector = new FileCollector(transfers, owner);
+            if ((null == srcDir) || !srcDir.exists() || !srcDir.canRead()) {
+                String reason = "Unknown";
+                if (null == srcDir)
+                    reason = "Null value passed";
+                else if (!srcDir.exists())
+                    reason = srcDir.getAbsolutePath() + " does not exist";
+                else if (!srcDir.canRead())
+                    reason = srcDir.getAbsolutePath() + " can not be read";
+                throw new PtaiClientException("Invalid source folder, " + reason);
+            } else {
+                if (null != owner)
+                    owner.log("Sources to be packed are in ", srcDir.getAbsolutePath());
+            }
+            File destFile = File.createTempFile("PTAI_", ".zip");
+            if (null != owner)
+                owner.log("Zipped sources are in  %s\r\n", destFile.getAbsolutePath());
+
+            List<FileCollector.FileEntry> fileEntries = collector.collectFiles(srcDir);
+            collector.packCollectedFiles(destFile, fileEntries);
+            return destFile;
+        } catch (IOException | ArchiveException e) {
+            if (null != owner)
+                owner.log(e);
+            throw new PtaiClientException(e.getMessage(), e);
+        }
+
     }
 
     public List<FileEntry> collectFiles(final File srcDir) throws PtaiClientException {

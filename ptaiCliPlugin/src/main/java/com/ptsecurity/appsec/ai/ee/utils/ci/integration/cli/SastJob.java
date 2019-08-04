@@ -8,6 +8,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transf
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiServerException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -271,7 +272,9 @@ public class SastJob {
             if (verbose)
                 System.out.println("PTAI project found. ID starts with " + projectId.toString().substring(0, 4));
             // Upload project sources
-            ptaiPrj.upload(transfers, folder);
+            FileCollector collector = new FileCollector(transfers, null);
+            File zip = FileCollector.collect(transfers, new File(folder), null);
+            ptaiPrj.upload(zip);
             // Let's start analysis
             com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob jenkinsSastJob = new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob();
             jenkinsSastJob.setVerbose(verbose);

@@ -6,8 +6,10 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -83,7 +85,9 @@ class PtaiProjectTest {
             Transfers transfers = new Transfers();
             transfers.add(Transfer.builder().includes("**/*").excludes("target/** .settings/** .*").build());
             ptai.setName("JUnit.01");
-            ptai.upload(transfers, "src\\test\\resources\\src\\app01");
+            FileCollector collector = new FileCollector(transfers, null);
+            File zip = FileCollector.collect(transfers, new File("src\\test\\resources\\src\\app01"), null);
+            ptai.upload(zip);
         } catch (Exception e) {
             e.printStackTrace();
         }
