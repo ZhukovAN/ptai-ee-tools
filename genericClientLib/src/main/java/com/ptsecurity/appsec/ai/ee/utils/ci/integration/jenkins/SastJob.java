@@ -156,10 +156,7 @@ public class SastJob extends Client {
             sastBuild = apiClient.callApi(() -> jenkinsApi.getJobBuild(jobName, buildNumber.toString()));
             for (Artifact artifact : sastBuild.getArtifacts()) {
                 String resultFile = apiClient.callApi(() -> jenkinsApi.getJobBuildArtifact(jobName, buildNumber.toString(), artifact.getRelativePath()));
-                Files.write(
-                        Paths.get(reportFolderName + File.separator + artifact.getFileName()),
-                        resultFile.getBytes("utf-8"),
-                        StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                saveReport(reportFolderName, artifact.getFileName(), resultFile);
             }
             return sastJobRes;
         } catch (IOException e) {
@@ -172,6 +169,13 @@ public class SastJob extends Client {
             log(e);
             throw new JenkinsClientException(e.getMessage(), e);
         }
+    }
+
+    protected void saveReport(String folder, String artifact, String data) throws IOException, InterruptedException {
+        Files.write(
+                Paths.get(folder + File.separator + artifact),
+                data.getBytes("utf-8"),
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     static class JenkinsJsonParameter {

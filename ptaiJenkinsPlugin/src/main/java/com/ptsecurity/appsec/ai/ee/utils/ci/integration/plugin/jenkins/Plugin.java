@@ -19,6 +19,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansetti
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildEnv;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildInfo;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.remote.RemoteFileCollector;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.remote.RemoteSastJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProject;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
@@ -245,7 +246,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
             ptaiProject.upload(zipFile);
 
             // Let's start analysis
-            SastJob sastJob = new SastJob();
+            RemoteSastJob sastJob = new RemoteSastJob(launcher);
             sastJob.setVerbose(verbose);
             sastJob.setConsoleLog(listener.getLogger());
             sastJob.setLogPrefix(this.consolePrefix);

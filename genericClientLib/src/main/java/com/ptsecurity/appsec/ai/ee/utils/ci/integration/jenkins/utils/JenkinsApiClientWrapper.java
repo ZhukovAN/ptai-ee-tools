@@ -12,8 +12,6 @@ public class JenkinsApiClientWrapper {
     int jenkinsMaxRetry = 1;
     int jenkinsDelay = 5000;
 
-
-
     public JenkinsApiClientWrapper(BaseClient baseClient, int jenkinsMaxRetry, int jenkinsDelay) {
         this.baseClient = baseClient;
         this.jenkinsMaxRetry = jenkinsMaxRetry;
