@@ -1,0 +1,17 @@
+@startuml
+Client -> "PTAI projectManagement": POST /api/Projects/createProject
+note left: Если проект еще не существует
+Client -> "PTAI filesStore": POST /api/Store/sources/{projectId}
+note left: Загрузка сканируемых артефактов
+Client -> "PTAI ciApi": POST /api/jobBuild/{projectName}
+note left: Запуск анализа
+loop
+Client -> "PTAI ciApi": GET /api/jobBuild/{projectName}
+"PTAI ciApi" --> Client: SAST status
+Client -> "PTAI ciApi": GET /api/jobProgressiveText/{projectName}
+"PTAI ciApi" --> Client: SAST log
+end
+Client -> "PTAI ciApi": GET /api/jobBuildArtifact/{projectName}
+note left: Получить результаты анализа
+"PTAI ciApi" --> Client: SAST JSON / HTML result files
+@enduml
