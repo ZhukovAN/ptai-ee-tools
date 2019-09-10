@@ -1,28 +1,18 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.BaseClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse;
-import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.DefaultCrumbIssuer;
-import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleProject;
-import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.Hudson;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Client extends Base {
+public class Client extends BaseClient {
     @Getter
     protected final RemoteAccessApi jenkinsApi = new RemoteAccessApi(new ApiClient());
     @Getter

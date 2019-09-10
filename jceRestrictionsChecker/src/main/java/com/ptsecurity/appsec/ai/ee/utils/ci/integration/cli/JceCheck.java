@@ -1,9 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.BaseClient;
 import org.apache.commons.cli.*;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -54,12 +53,12 @@ public class JceCheck {
 
     protected static void execute() {
         try {
-            Base base = new Base();
-            base.setUrl("http://127.0.0.1:8080");
-            // base.setKeyPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keystores\\CB5352E43AC14295\\ssl.client.brief.pem"))));
-            base.setKeyPem(new String(Files.readAllBytes(Paths.get(keystore))));
-            base.setKeyPassword(keystorePass);
-            base.baseInit();
+            BaseClient baseClient = new BaseClient();
+            baseClient.setUrl("http://127.0.0.1:8080");
+            // baseClient.setKeyPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keystores\\CB5352E43AC14295\\ssl.client.brief.pem"))));
+            baseClient.setKeyPem(new String(Files.readAllBytes(Paths.get(keystore))));
+            baseClient.setKeyPassword(keystorePass);
+            baseClient.baseInit();
             System.out.println("JCE check done");
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,7 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicy;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
@@ -20,7 +18,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansetti
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildEnv;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildInfo;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.PtaiRemoteProject;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.remote.RemoteFileCollector;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.remote.RemoteSastJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProject;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
@@ -187,7 +186,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
         if (StringUtils.isEmpty(ptaiCreds.getServerCaCertificates()))
             throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_emptyPtaiCaCerts());
 */
-        PtaiRemoteProject ptaiProject = new PtaiRemoteProject();
+        PtaiProject ptaiProject = new PtaiProject();
         ptaiProject.setVerbose(this.verbose);
         ptaiProject.setConsoleLog(listener.getLogger());
         ptaiProject.setLogPrefix(this.consolePrefix);
@@ -238,9 +237,16 @@ public class Plugin extends Builder implements SimpleBuildStep {
                         .build());
 
             // Upload project sources
-            ptaiProject.upload(transfers, workspace);
+            FilePath remoteZip = new RemoteFileCollector().collect(launcher, listener, transfers, workspace.getRemote(), verbose);
+            File zipFile = File.createTempFile("PTAI_", ".zip");
+            try (OutputStream fos = new FileOutputStream(zipFile)) {
+                remoteZip.copyTo(fos);
+                remoteZip.delete();
+            }
+            ptaiProject.upload(zipFile);
+
             // Let's start analysis
-            SastJob sastJob = new SastJob();
+            RemoteSastJob sastJob = new RemoteSastJob(launcher);
             sastJob.setVerbose(verbose);
             sastJob.setConsoleLog(listener.getLogger());
             sastJob.setLogPrefix(this.consolePrefix);

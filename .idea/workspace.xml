@@ -166,26 +166,13 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ServerSettings/help-jenkinsJobName.html" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ServerSettings/help-jenkinsJobName_ru.html" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Plugin/config_ru.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/GlobalConfig/config_ru.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/config_ru.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config_ru.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/config/ConfigGlobal/config.properties" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/resources/api/ptai.server.gateway.swagger.json" />
         <option value="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.1.json" />
-        <option value="$PROJECT_DIR$/genericClientLib/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/ptaiserver/domain/Transfer.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/defaults/TransferDefaults.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.groovy" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual.java" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/Transfer/config.groovy" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config.properties" />
         <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/scansettings/ScanSettingsManual/config_ru.properties" />
-        <option value="$PROJECT_DIR$/ptaiJenkinsPlugin/pom.xml" />
         <option value="$PROJECT_DIR$/genericClientLib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/base/utils/JsonSettingsVerifierTest.java" />
         <option value="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.incorrect.json" />
         <option value="$PROJECT_DIR$/genericClientLib/src/test/resources/json/settings/settings.incomplete.json" />
