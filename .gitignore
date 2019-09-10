@@ -3,3 +3,4 @@
 ptaiTeamCityPlugin/servers/**
 **/docs/*.vpp.bak_*
 **/docs/*.vpp.lck
+.idea/workspace.xml
