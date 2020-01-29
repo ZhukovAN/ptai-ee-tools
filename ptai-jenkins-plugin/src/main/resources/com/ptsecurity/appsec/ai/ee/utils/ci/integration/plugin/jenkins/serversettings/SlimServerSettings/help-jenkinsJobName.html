@@ -1,0 +1,75 @@
+<!-- http://hilite.me/ used to generate script HTML listing -->
+<div>
+    <p>Name of main SAST job. The job is a pipeline with four parameters:</p>
+    <p>PTAI_PROJECT_NAME - defines name of project in the PT AI Viewer</p>
+    <p>PTAI_NODE_NAME - defines name or tag of CI node where SAST is to be executed</p>
+    <p>PTAI_SETTINGS_JSON - scan settings represented as JSON-formatted text</p>
+    <p>PTAI_POLICY_JSON - scan policy represented as JSON-formatted text</p>
+    <p>Groovy sandbox must be turned off. Basic recommended script is:</p>
+    <!-- HTML generated using hilite.me --><div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #B00040">def</span> aicPath <span style="color: #666666">=</span> <span style="color: #BA2121">&#39;C:\\Program Files (x86)\\Positive Technologies\\Application Inspector Agent\\aic.exe&#39;</span>
+node<span style="color: #666666">(</span><span style="color: #BA2121">&quot;${PTAI_NODE_NAME}&quot;</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+    <span style="color: #B00040">def</span> retStatus <span style="color: #666666">=</span> <span style="color: #666666">0;</span>
+
+    stage<span style="color: #666666">(</span><span style="color: #BA2121">&#39;SAST&#39;</span><span style="color: #666666">)</span> <span style="color: #666666">{</span>
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span>isUnix<span style="color: #666666">())</span> <span style="color: #666666">{</span>
+            currentBuild<span style="color: #666666">.</span><span style="color: #7D9029">result</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;UNSTABLE&quot;</span><span style="color: #666666">;</span>
+            println <span style="color: #BA2121">&#39;PT AI must be deployed on a Windows host&#39;</span><span style="color: #666666">;</span>
+            <span style="color: #008000; font-weight: bold">return</span><span style="color: #666666">;</span>
+        <span style="color: #666666">}</span>
+        cleanWs<span style="color: #666666">();</span>
+
+        batchScript <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;\&quot;${aicPath}\&quot; &quot;</span><span style="color: #666666">;</span>
+        batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--project-name \&quot;${PTAI_PROJECT_NAME}\&quot; &quot;</span><span style="color: #666666">;</span>
+        batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--scan-target \&quot;${WORKSPACE}\\SCAN\&quot; &quot;</span>
+        batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--reports \&quot;HTML|JSON\&quot; &quot;</span>
+        batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--reports-folder \&quot;${WORKSPACE}\\REPORTS\&quot; &quot;</span>
+        batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--restore-sources &quot;</span>
+        batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--sync &quot;</span>
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span><span style="color: #BA2121">&quot;${PTAI_SETTINGS_JSON}&quot;</span><span style="color: #666666">?.</span><span style="color: #7D9029">trim</span><span style="color: #666666">())</span> <span style="color: #666666">{</span>
+            writeFile <span style="color: #A0A000">file:</span> <span style="color: #BA2121">&quot;${WORKSPACE}\\SETTINGS\\settings.aiproj&quot;</span><span style="color: #666666">,</span> <span style="color: #A0A000">text:</span> <span style="color: #BA2121">&quot;${PTAI_SETTINGS_JSON}&quot;</span>
+            batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--project-settings-file \&quot;${WORKSPACE}\\SETTINGS\\settings.aiproj\&quot; &quot;</span>
+        <span style="color: #666666">}</span>
+
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(</span><span style="color: #BA2121">&quot;${PTAI_POLICY_JSON}&quot;</span><span style="color: #666666">?.</span><span style="color: #7D9029">trim</span><span style="color: #666666">())</span> <span style="color: #666666">{</span>
+            writeFile <span style="color: #A0A000">file:</span> <span style="color: #BA2121">&quot;${WORKSPACE}\\SETTINGS\\policy.json&quot;</span><span style="color: #666666">,</span> <span style="color: #A0A000">text:</span> <span style="color: #BA2121">&quot;${PTAI_POLICY_JSON}&quot;</span>
+            batchScript <span style="color: #666666">+=</span> <span style="color: #BA2121">&quot;--policies-path \&quot;${WORKSPACE}\\SETTINGS\\policy.json\&quot; &quot;</span>
+        <span style="color: #666666">}</span>
+
+        retStatus <span style="color: #666666">=</span> bat<span style="color: #666666">(</span><span style="color: #A0A000">script:</span> batchScript<span style="color: #666666">,</span> <span style="color: #A0A000">returnStatus:</span> <span style="color: #008000; font-weight: bold">true</span><span style="color: #666666">);</span>
+        println <span style="color: #BA2121">&quot;AI return status ${retStatus}&quot;</span><span style="color: #666666">;</span>
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">((0</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">)</span> <span style="color: #666666">||</span> <span style="color: #666666">(10</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">)</span> <span style="color: #666666">||</span> <span style="color: #666666">(6</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">))</span>
+            archiveArtifacts <span style="color: #BA2121">&#39;REPORTS/*&#39;</span><span style="color: #666666">;</span>
+
+        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(0</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">)</span> <span style="color: #666666">{</span>
+            currentBuild<span style="color: #666666">.</span><span style="color: #7D9029">result</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;SUCCESS&quot;</span><span style="color: #666666">;</span>
+            println <span style="color: #BA2121">&#39;SAST policy assessment OK&#39;</span><span style="color: #666666">;</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(10</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">)</span> <span style="color: #666666">{</span>
+            currentBuild<span style="color: #666666">.</span><span style="color: #7D9029">result</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;FAILURE&quot;</span><span style="color: #666666">;</span>
+            println <span style="color: #BA2121">&#39;SAST policy assessment failed&#39;</span><span style="color: #666666">;</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(-1</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">)</span> <span style="color: #666666">{</span>
+            currentBuild<span style="color: #666666">.</span><span style="color: #7D9029">result</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;UNSTABLE&quot;</span><span style="color: #666666">;</span>
+            println <span style="color: #BA2121">&#39;Another AI instance started already&#39;</span><span style="color: #666666">;</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(2</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">)</span> <span style="color: #666666">{</span>
+            currentBuild<span style="color: #666666">.</span><span style="color: #7D9029">result</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;UNSTABLE&quot;</span><span style="color: #666666">;</span>
+            println <span style="color: #BA2121">&#39;Scan folder not found&#39;</span><span style="color: #666666">;</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(3</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">)</span> <span style="color: #666666">{</span>
+            currentBuild<span style="color: #666666">.</span><span style="color: #7D9029">result</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;UNSTABLE&quot;</span><span style="color: #666666">;</span>
+            println <span style="color: #BA2121">&#39;AI license problem&#39;</span><span style="color: #666666">;</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(4</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">)</span> <span style="color: #666666">{</span>
+            currentBuild<span style="color: #666666">.</span><span style="color: #7D9029">result</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;UNSTABLE&quot;</span><span style="color: #666666">;</span>
+            println <span style="color: #BA2121">&#39;Project not found&#39;</span><span style="color: #666666">;</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(5</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">)</span> <span style="color: #666666">{</span>
+            currentBuild<span style="color: #666666">.</span><span style="color: #7D9029">result</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;UNSTABLE&quot;</span><span style="color: #666666">;</span>
+            println <span style="color: #BA2121">&#39;Project settings error&#39;</span><span style="color: #666666">;</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #008000; font-weight: bold">if</span> <span style="color: #666666">(6</span> <span style="color: #666666">==</span> retStatus<span style="color: #666666">)</span> <span style="color: #666666">{</span>
+            currentBuild<span style="color: #666666">.</span><span style="color: #7D9029">result</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;UNSTABLE&quot;</span><span style="color: #666666">;</span>
+            println <span style="color: #BA2121">&#39;Minor errors during scan&#39;</span><span style="color: #666666">;</span>
+        <span style="color: #666666">}</span> <span style="color: #008000; font-weight: bold">else</span> <span style="color: #666666">{</span>
+            currentBuild<span style="color: #666666">.</span><span style="color: #7D9029">result</span> <span style="color: #666666">=</span> <span style="color: #BA2121">&quot;FAILURE&quot;</span><span style="color: #666666">;</span>
+            println <span style="color: #BA2121">&#39;Unknown problem&#39;</span><span style="color: #666666">;</span>
+        <span style="color: #666666">}</span>
+        cleanWs<span style="color: #666666">();</span>
+    <span style="color: #666666">}</span>
+<span style="color: #666666">}</span>
+</pre></div>
+</div>

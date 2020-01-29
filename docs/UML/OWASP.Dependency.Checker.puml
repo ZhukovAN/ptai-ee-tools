@@ -1,0 +1,181 @@
+@startuml
+
+class DependencyCheckConstants {
+ +REPORT_PATH_PROPERTY = "sonar.dependencyCheck.reportPath"
+ +HTML_REPORT_PATH_PROPERTY = "sonar.dependencyCheck.htmlReportPath"
+ +SEVERITY_BLOCKER = "sonar.dependencyCheck.severity.blocker"
+ +SEVERITY_CRITICAL = "sonar.dependencyCheck.severity.critical"
+ +SEVERITY_MAJOR = "sonar.dependencyCheck.severity.major"
+ +SEVERITY_MINOR = "sonar.dependencyCheck.severity.minor"
+ +SUMMARIZE_PROPERTY = "sonar.dependencyCheck.summarize"
+ +SKIP_PROPERTY = "sonar.dependencyCheck.skip"
+---
+ +SEVERITY_BLOCKER_DEFAULT = 9.0f
+ +SEVERITY_CRITICAL_DEFAULT = 7.0f
+ +SEVERITY_MAJOR_DEFAULT = 4.0f
+ +SEVERITY_MINOR_DEFAULT = 0.0f
+ +REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.xml"
+ +HTML_REPORT_PATH_DEFAULT = "${WORKSPACE}/dependency-check-report.html"
+ +SUMMARIZE_PROPERTY_DEFAULT = Boolean.FALSE
+ +SKIP_PROPERTY_DEFAULT = Boolean.FALSE
+---
+ +REPOSITORY_KEY = "OWASP"
+ +LANGUAGE_KEY = "neutral"
+ +RULE_KEY = "UsingComponentWithKnownVulnerability"
+ +SUB_CATEGORY_SEVERITIES = "Severities"
+}
+
+interface RulesDefinition
+class KnownCveRuleDefinition {
+  +define(Context context)
+}
+
+KnownCveRuleDefinition ..|> RulesDefinition
+KnownCveRuleDefinition ..> DependencyCheckConstants
+
+abstract class AbstractLanguage
+class NeutralLanguage
+NeutralLanguage --|> AbstractLanguage
+
+interface BuiltInQualityProfilesDefinition
+class NeutralProfile {
+  +define(Context context)
+}
+NeutralProfile ..|> BuiltInQualityProfilesDefinition
+NeutralProfile ..> DependencyCheckConstants
+
+package parser <<Frame>> {
+interface Cvss {
+  +Float score
+  +String severity
+}
+
+class CvssV2 {
+  +Float score
+  +String severity
+}
+CvssV2 ..|> Cvss
+
+class CvssV3 {
+  +Float score
+  +String severity
+}
+
+CvssV3 ..|> Cvss
+
+enum Confidence {
+  +LOW
+  +MEDIUM
+  +HIGH
+  +HIGHEST
+}
+
+class DataSource {
+  +String name
+  +String timeStamp
+}
+
+class Dependency {
+  +String fileName
+  +String filePath
+  +String md5Hash
+  +String sha1Hash
+}
+
+class Identifier {
+  +String type
+  +String name
+}
+Identifier --> "confidence" Confidence
+
+class Evidence {
+  +String source
+  +String name
+  +String value
+}
+
+class Vulnerability {
+  +String name
+  +String source
+  +Float cvssScore
+  +String severity
+  +String description
+  +String cwe
+}
+
+Vulnerability --|> Cvss
+Vulnerability --> "cvssv2" CvssV2
+Vulnerability --> "cvssv3" CvssV3
+
+Dependency --> "evidenceCollected[]" Evidence
+Dependency --> "identifiersCollected[]" Identifier
+Dependency --> "vulnerabilities[]" Vulnerability
+
+class ProjectInfo {
+  +String name
+  +String reportDate
+  +String credits
+}
+
+class ScanInfo {
+  +String engineVersion
+}
+ScanInfo --> "dataSources[]" DataSource
+
+class Analysis
+Analysis --> "scanInfo" ScanInfo
+Analysis --> "projectInfo" ProjectInfo
+Analysis --> "dependencies[]" Dependency
+
+class ReportParser {
+  +Analysis parse(InputStream inputStream)
+}
+
+}
+
+interface ProjectSensor
+
+class DependencyCheckSensor {
+  -Analysis parseAnalysis(SensorContext context)
+
+}
+
+DependencyCheckSensor ..|> ProjectSensor
+
+class DependencyReasonSearcher {
+  +addDependenciesToInputComponents(Analysis analysis, SensorContext context)
+}
+
+DependencyCheckSensor ..> DependencyReasonSearcher
+
+abstract class DependencyReason {
+  +TextRangeConfidence getBestTextRange(Dependency dependency)
+}
+
+class DependencyCheckMetric {
+  +InputComponent inputcomponent
+  ---
+  +int totalDependencies
+  +int vulnerableDependencies
+  +int vulnerabilityCount
+  +int blockerIssuesCount
+  +int criticalIssuesCount
+  +int majorIssuesCount
+  +int minorIssuesCount
+  +int infoIssuesCount
+  +incrementCount(Severity severity)
+  +saveMeasures(SensorContext context)
+}
+
+DependencyReason --> "metrics" DependencyCheckMetric
+class GradleDependencyReason
+GradleDependencyReason --|> DependencyReason
+class MavenDependencyReason
+MavenDependencyReason --|> DependencyReason
+
+class TextRangeConfidence
+
+TextRangeConfidence --> "confidence" Confidence
+TextRangeConfidence --> "textrange" TextRange
+
+@enduml

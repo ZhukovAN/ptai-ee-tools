@@ -1,0 +1,29 @@
+@startuml
+actor Jenkins
+activate Plugin
+Jenkins -> Plugin : perform()
+Plugin -> PluginDescriptor : doTestProjectFields()
+create PtaiProject
+Plugin -> PtaiProject : new()
+group Set parameters
+Plugin -> PtaiProject : setVerbose(verbose)
+Plugin -> PtaiProject : setConsoleLog(listener.logger)
+Plugin -> PtaiProject : setLogPrefix(consolePrefix)
+Plugin -> PtaiProject : setUrl(ptaiUrl)
+Plugin -> PtaiProject : setKeyPem(ptaiCreds.clientCertificate)
+Plugin -> PtaiProject : setKeyPassword(ptaiCreds.clientKey.plainText)
+Plugin -> PtaiProject : setCaCertsPem(ptaiCreds.serverCaCertificates)
+== if ScanSettingsManual ==
+Plugin -> PtaiProject : ptaiProject.setJsonSettings(scanSettings.jsonSettings)
+Plugin -> PtaiProject : ptaiProject.setJsonPolicy(scanSettings.jsonPolicy
+== endif ==
+Plugin -> PtaiProject : setName(ptaiProject)
+end
+group PTAI server authentication
+Plugin -> PtaiProject : init
+PtaiProject --> Plugin : ptaiToken
+end
+Plugin -> PtaiProject : searchProject()
+create FileCollector
+Plugin -> FileCollector : new()
+@enduml

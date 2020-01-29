@@ -1,19 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="ISO-8859-1">
-    <file url="file://$PROJECT_DIR$/genericClientLib" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/genericClientLib/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/genericClientLib/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/jceRestrictionsChecker" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/jceRestrictionsChecker/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptaiCliPlugin" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptaiCliPlugin/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptaiJenkinsPlugin" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptaiJenkinsPlugin/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptaiReportGenerator" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptaiReportGenerator/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptaiTeamCityPlugin/ptai-teamcity-plugin-server" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/generic-client-lib" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/generic-client-lib/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/generic-client-lib/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jce-restrictions-checker" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jce-restrictions-checker/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-cli-plugin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-cli-plugin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-data-structures" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-data-structures/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-data-structures/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-integration-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-integration-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-integration-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-integration-service/src/main/resources/application.yml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-jenkins-plugin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-jenkins-plugin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-jenkins-plugin/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-maven-plugin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-maven-plugin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-sonar-plugin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-sonar-plugin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest-api/integration-rest-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest-api/integration-rest-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest-api/integration-rest-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest-api/jenkins-rest-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest-api/jenkins-rest-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest-api/jenkins-rest-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest-api/ptai-rest-api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest-api/ptai-rest-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rest-api/ptai-rest-api/src/main/resources" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

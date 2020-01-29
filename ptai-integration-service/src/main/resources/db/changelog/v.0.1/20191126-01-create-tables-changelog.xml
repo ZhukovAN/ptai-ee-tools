@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="Alexey N. Zhukov" id="1">
+        <createSequence sequenceName="HIBERNATE_SEQUENCE"/>
+    </changeSet>
+    <changeSet author="Alexey N. Zhukov" id="2">
+        <createTable tableName="OAUTH_CLIENT_DETAILS">
+            <column name="CLIENT_ID" type="VARCHAR(256)">
+                <constraints primaryKey="true" primaryKeyName="PK_OAUTH_CLIENT_DETAILS"/>
+            </column>
+            <column name="RESOURCE_IDS" type="VARCHAR(256)"/>
+            <column name="CLIENT_SECRET" type="VARCHAR(256)"/>
+            <column name="SCOPE" type="VARCHAR(256)"/>
+            <column name="AUTHORIZED_GRANT_TYPES" type="VARCHAR(256)"/>
+            <column name="WEB_SERVER_REDIRECT_URI" type="VARCHAR(256)"/>
+            <column name="AUTHORITIES" type="VARCHAR(256)"/>
+            <column name="ACCESS_TOKEN_VALIDITY" type="INT"/>
+            <column name="REFRESH_TOKEN_VALIDITY" type="INT"/>
+            <column name="ADDITIONAL_INFORMATION" type="VARCHAR(4096)"/>
+            <column name="AUTOAPPROVE" type="VARCHAR(256)"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="OAUTH_CLIENT_DETAILS"/>
+        </rollback>
+    </changeSet>
+    <changeSet author="Alexey N. Zhukov" id="3">
+        <createTable tableName="ROLE">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_ROLE"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="ROLE"/>
+        </rollback>
+    </changeSet>
+    <changeSet author="Alexey N. Zhukov" id="4">
+        <createTable tableName="USER">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_USER"/>
+            </column>
+            <column name="PASSWORD" type="VARCHAR(255)"/>
+            <column name="USERNAME" type="VARCHAR(255)"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="USER"/>
+        </rollback>
+    </changeSet>
+    <changeSet author="Alexey N. Zhukov" id="5">
+        <createTable tableName="USER_ROLE">
+            <column name="USER" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ROLE" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="USER_ROLE"/>
+        </rollback>
+    </changeSet>
+    <changeSet author="Alexey N. Zhukov" id="6">
+        <addUniqueConstraint columnNames="USER, ROLE" constraintName="UK_USER_ROLE" tableName="USER_ROLE"/>
+    </changeSet>
+    <changeSet author="Alexey N. Zhukov" id="7">
+        <createIndex indexName="IDX_USER_ROLE_USER" tableName="USER_ROLE">
+            <column name="USER"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Alexey N. Zhukov" id="8">
+        <addForeignKeyConstraint baseColumnNames="USER" baseTableName="USER_ROLE" constraintName="FK_USER_ROLE_USER" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="USER"/>
+    </changeSet>
+    <changeSet author="Alexey N. Zhukov" id="9">
+        <addForeignKeyConstraint baseColumnNames="ROLE" baseTableName="USER_ROLE" constraintName="FK_USER_ROLE_ROLE" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" onUpdate="RESTRICT" referencedColumnNames="ID" referencedTableName="ROLE"/>
+    </changeSet>
+</databaseChangeLog>

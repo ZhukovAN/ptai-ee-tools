@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
+        <artifactId>ptai-ee-tools</artifactId>
+        <version>0.1</version>
+    </parent>
+
+    <artifactId>generic-client-lib</artifactId>
+    <version>0.1</version>
+    <name>generic-client-lib</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
+            <artifactId>ptai-rest-api</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
+            <artifactId>jenkins-rest-api</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
+            <artifactId>integration-rest-api</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
+            <artifactId>ptai-data-structures</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+            <version>1.18</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.10</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.10.5</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jenkins-ci.plugins/bouncycastle-api -->
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>bouncycastle-api</artifactId>
+            <version>2.16.2</version>
+        </dependency>
+    </dependencies>
+    <!--
+    <repositories>
+        <repository>
+            <id>repo.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/public/</url>
+        </repository>
+        <repository>
+            <id>repo.jenkins-ci-releases.org</id>
+            <url>http://repo.jenkins-ci.org/releases/</url>
+        </repository>
+    </repositories>
+    -->
+</project>

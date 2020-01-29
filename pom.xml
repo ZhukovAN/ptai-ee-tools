@@ -7,13 +7,88 @@
     <artifactId>ptai-ee-tools</artifactId>
     <version>0.1</version>
     <packaging>pom</packaging>
-    <name>ptaiPlugins</name>
+    <name>ptai-ee-tools</name>
     <modules>
-        <module>genericClientLib</module>
-        <module>ptaiJenkinsPlugin</module>
-        <module>ptaiCliPlugin</module>
-        <module>jceRestrictionsChecker</module>
-        <!-- <module>ptaiTeamCityPlugin</module> -->
-        <!-- <module>ptaiReportGenerator</module> -->
+        <module>rest-api</module>
+        <module>ptai-data-structures</module>
+        <module>generic-client-lib</module>
+        <module>ptai-jenkins-plugin</module>
+        <module>ptai-cli-plugin</module>
+        <module>jce-restrictions-checker</module>
+        <module>ptai-maven-plugin</module>
+        <module>ptai-sonar-plugin</module>
+        <module>ptai-integration-service</module>
+        <!-- <module>ptai-teamcity-plugin</module> -->
+        <!-- <module>ptai-report-generator</module> -->
     </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <java-version>1.8</java-version>
+        <java.level>8</java.level>
+        <junit.version>5.5.2</junit.version>
+    </properties>
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-junit-jupiter -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>3.1.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+            </plugin>
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/*Test</exclude>
+                            </excludes>
+                            <includes>
+                                <include>**/*IT</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet author="Alexey N. Zhukov" id="1" context="test">
+        <insert tableName="USER">
+            <column name="USERNAME" value="admin.test"/>
+            <!-- Password is e7T85cZXMXefM6yjWm8ozte6Z3WVoR6R -->
+            <column name="PASSWORD" value="$2a$10$085hDSNq9ETRSPiwDFh2suiIT8ZKh6AwBwDZHuvlXtogQRBqNdBXu"/>
+        </insert>
+        <insert tableName="USER">
+            <column name="USERNAME" value="user.test"/>
+            <!-- Password is GcJE29h4yUaIAb3dGd46xe4mXPCa1zrN -->
+            <column name="PASSWORD" value="$2a$10$09f.kivplAcIhvtqbXlcW.d3MUq3A8uzo6gpS3XpbuTOKmsvIx4Yu"/>
+        </insert>
+    </changeSet>
+    <changeSet author="Alexey N. Zhukov" id="2" context="test">
+        <insert tableName="USER_ROLE">
+            <column name="USER" valueComputed="(SELECT id FROM user WHERE username = 'admin.test')"/>
+            <column name="ROLE" valueComputed="(SELECT id FROM role WHERE name = 'ADMIN')"/>
+        </insert>
+        <insert tableName="USER_ROLE">
+            <column name="USER" valueComputed="(SELECT id FROM user WHERE username = 'admin.test')"/>
+            <column name="ROLE" valueComputed="(SELECT id FROM role WHERE name = 'USER')"/>
+        </insert>
+        <insert tableName="USER_ROLE">
+            <column name="USER" valueComputed="(SELECT id FROM user WHERE username = 'user.test')"/>
+            <column name="ROLE" valueComputed="(SELECT id FROM role WHERE name = 'USER')"/>
+        </insert>
+    </changeSet>
+    <changeSet author="Alexey N. Zhukov" id="3" context="test">
+        <insert tableName="OAUTH_CLIENT_DETAILS">
+            <column name="CLIENT_ID" value="unit-test-client-fast"/>
+            <!-- client_secret is IMfiy4f3uvGjKD4v4yB6C5NmHTLwmC55 -->
+            <column name="CLIENT_SECRET" value="$2a$10$V3X0o3sr5G5oMUKooBsQPefJZ9eb/QGRFqXwVjmpTG0HYYTfiyK1."/>
+            <column name="SCOPE" value="read,write,trust"/>
+            <column name="AUTHORIZED_GRANT_TYPES" value="password,refresh_token"/>
+            <column name="AUTHORITIES" value="ROLE_CLIENT,ROLE_TRUSTED_CLIENT"/>
+            <column name="ACCESS_TOKEN_VALIDITY" valueNumeric="2"/>
+            <column name="REFRESH_TOKEN_VALIDITY" valueNumeric="4"/>
+        </insert>
+        <insert tableName="OAUTH_CLIENT_DETAILS">
+            <column name="CLIENT_ID" value="unit-test-client"/>
+            <!-- client_secret is IMfiy4f3uvGjKD4v4yB6C5NmHTLwmC55 -->
+            <column name="CLIENT_SECRET" value="$2a$10$V3X0o3sr5G5oMUKooBsQPefJZ9eb/QGRFqXwVjmpTG0HYYTfiyK1."/>
+            <column name="SCOPE" value="read,write,trust"/>
+            <column name="AUTHORIZED_GRANT_TYPES" value="password,refresh_token"/>
+            <column name="AUTHORITIES" value="ROLE_CLIENT,ROLE_TRUSTED_CLIENT"/>
+            <column name="ACCESS_TOKEN_VALIDITY" valueNumeric="900"/>
+            <column name="REFRESH_TOKEN_VALIDITY" valueNumeric="2592000"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
