@@ -36,8 +36,10 @@ public class RemoteSastJob extends SastJob {
 
         @Override
         public Void call() throws IOException {
+            String fileName = folder + File.separator + artifact;
+            new File(fileName).getParentFile().mkdirs();
             Files.write(
-                    Paths.get(folder + File.separator + artifact),
+                    Paths.get(fileName),
                     data.getBytes("utf-8"),
                     StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             return null;

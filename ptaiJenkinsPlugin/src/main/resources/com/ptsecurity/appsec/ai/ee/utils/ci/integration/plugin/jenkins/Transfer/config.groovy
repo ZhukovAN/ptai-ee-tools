@@ -19,7 +19,7 @@ f.advanced() {
     f.entry(
             title: _('excludes'),
             field: 'excludes') {
-        f.textbox()
+        f.textbox(default: descriptor.transferDefaults.excludes)
     }
 
     f.entry(
@@ -31,13 +31,12 @@ f.advanced() {
     f.entry(
             title: _('useDefaultExcludes'),
             field: 'useDefaultExcludes') {
-        f.checkbox()
+        f.checkbox(default: descriptor.transferDefaults.useDefaultExcludes)
     }
 
     f.entry(
             title: _('flatten'),
-            field: 'flatten',
-            default: 'true') {
-        f.checkbox()
+            field: 'flatten') {
+        f.checkbox(descriptor.transferDefaults.flatten)
     }
 }

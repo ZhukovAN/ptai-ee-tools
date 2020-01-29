@@ -36,6 +36,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.regex.Pattern;
 
 public class SastJob extends Client {
+    public static final String SAST_FOLDER = ".ptai";
+
     @Getter
     @Setter
     protected String jobName;
@@ -155,8 +157,9 @@ public class SastJob extends Client {
             if (PtaiResultStatus.UNSTABLE.equals(sastJobRes)) return sastJobRes;
             sastBuild = apiClient.callApi(() -> jenkinsApi.getJobBuild(jobName, buildNumber.toString()));
             for (Artifact artifact : sastBuild.getArtifacts()) {
-                String resultFile = apiClient.callApi(() -> jenkinsApi.getJobBuildArtifact(jobName, buildNumber.toString(), artifact.getRelativePath()));
-                saveReport(reportFolderName, artifact.getFileName(), resultFile);
+                String resultData = apiClient.callApi(() -> jenkinsApi.getJobBuildArtifact(jobName, buildNumber.toString(), artifact.getRelativePath()));
+                String fileName = artifact.getRelativePath().replaceAll("REPORTS", SAST_FOLDER);
+                saveReport(reportFolderName, fileName, resultData);
             }
             return sastJobRes;
         } catch (IOException e) {

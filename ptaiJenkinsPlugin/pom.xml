@@ -18,7 +18,7 @@
         <java-version>1.8</java-version>
         <java.level>8</java.level>
         <!-- <jenkins.version>2.60.3</jenkins.version> -->
-        <jenkins.version>2.150.2</jenkins.version>
+        <jenkins.version>2.150.3</jenkins.version>
         <!-- <jenkins.version>2.121.3</jenkins.version> -->
         <!-- <jenkins.version>2.165</jenkins.version> -->
         <swagger-core-version>1.5.18</swagger-core-version>

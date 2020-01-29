@@ -231,6 +231,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 transfers.addTransfer(com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer.builder()
                         .excludes(Util.replaceMacro(transfer.getExcludes(), buildInfo.getEnvVars()))
                         .flatten(transfer.isFlatten())
+                        .useDefaultExcludes(transfer.isUseDefaultExcludes())
                         .includes(Util.replaceMacro(transfer.getIncludes(), buildInfo.getEnvVars()))
                         .patternSeparator(transfer.getPatternSeparator())
                         .removePrefix(Util.replaceMacro(transfer.getRemovePrefix(), buildInfo.getEnvVars()))

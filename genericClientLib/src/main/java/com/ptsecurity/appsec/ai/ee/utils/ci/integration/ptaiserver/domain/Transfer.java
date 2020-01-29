@@ -12,7 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class Transfer implements Serializable {
     public static final String DEFAULT_INCLUDES = "**/*";
-    public static final String DEFAULT_EXCLUDES = "";
+    public static final String DEFAULT_EXCLUDES = "**/.ptai/**";
     public static final String DEFAULT_PATTERN_SEPARATOR = "[, ]+";
     @Builder.Default
     private String includes = DEFAULT_INCLUDES;
