@@ -1,0 +1,50 @@
+[
+    {
+        "id": "ed666735-958c-4cd8-83fd-fe420249c21b",
+        "name": "CPP 01 freestyle PoC"
+    },
+    {
+        "id": "e3d97f28-6e23-4fe4-9e02-b786cf38442e",
+        "name": "CPP 02 freestyle PoC"
+    },
+    {
+        "id": "00c2bb73-0bd7-41e6-a3b3-724fed732f02",
+        "name": "PoC freestyle"
+    },
+    {
+        "id": "c4e4e143-6eb4-4aa6-89e8-aac6894181df",
+        "name": "JAVA 01 freestyle PoC"
+    },
+    {
+        "id": "4d14ebbc-1ca4-49b1-af81-d26833f16231",
+        "name": "JS 01 freestyle PoC"
+    },
+    {
+        "id": "205e6f90-76d8-4997-b4c7-2fb62d5ccf1b",
+        "name": "PYTHON 01 freestyle PoC"
+    },
+    {
+        "id": "0f29e750-1424-4498-a24c-dbaf16165f07",
+        "name": "SWIFT 01 freestyle PoC"
+    },
+    {
+        "id": "8ba5ec13-d7fe-41e5-a4d7-6feab2ecf43f",
+        "name": "JS 02 freestyle PoC"
+    },
+    {
+        "id": "bc77aefe-2f22-4351-834b-fe2f838199ec",
+        "name": "JSON-based Maven project"
+    },
+    {
+        "id": "7b3516ac-2946-49c7-a4c6-132cc5208a96",
+        "name": "Java JSON project"
+    },
+    {
+        "id": "6cf394f0-3a83-4b27-b53a-c4dc22f5727c",
+        "name": "OWASP Benchmark"
+    },
+    {
+        "id": "5d0ffdf2-b73d-4e51-852c-2a76aba45e5b",
+        "name": "PoC pipeline"
+    }
+]

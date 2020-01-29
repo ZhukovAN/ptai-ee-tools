@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
+        <artifactId>ptai-ee-tools</artifactId>
+        <version>0.1</version>
+    </parent>
+
+    <artifactId>jce-restrictions-checker</artifactId>
+    <version>0.1</version>
+    <name>jce-restrictions-checker</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
+            <artifactId>generic-client-lib</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-cli/commons-cli -->
+        <dependency>
+            <groupId>commons-cli</groupId>
+            <artifactId>commons-cli</artifactId>
+            <version>1.4</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.1.3.RELEASE</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <!-- <classifier>spring-boot</classifier> -->
+                            <mainClass>
+                                com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.JceCheck
+                            </mainClass>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

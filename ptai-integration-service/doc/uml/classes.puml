@@ -1,0 +1,25 @@
+@startuml
+
+interface IntegrationService {
+  String getPtaiGatewayUri()
+}
+
+class IntegrationServiceImpl {
+  String getPtaiGatewayUri()
+}
+
+IntegrationServiceImpl --|> IntegrationService
+
+class IntegrationController {
+  getPtaiGatewayUrl()
+}
+
+IntegrationController --> "integrationService" IntegrationService
+
+class JenkinsClient {
+
+}
+
+IntegrationServiceImpl --> "jenkinsClient" JenkinsClient
+
+@enduml

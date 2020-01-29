@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
+        <artifactId>rest-api</artifactId>
+        <version>0.1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>integration-rest-api</artifactId>
+    <version>0.1</version>
+
+    <name>integration-rest-api</name>
+    <packaging>jar</packaging>
+    <url>http://www.ptsecurity.com</url>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <!-- <version>3.2.0</version> -->
+                <version>4.2.2</version>
+                <executions>
+                    <execution>
+                        <id>PTAI EE server integration API</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api/integration.yml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>okhttp-gson</library>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.integration.rest</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.integration.rest</modelPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

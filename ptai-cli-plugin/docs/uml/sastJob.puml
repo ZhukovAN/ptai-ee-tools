@@ -1,0 +1,133 @@
+@startuml
+actor CLI
+create SastJob
+CLI -> SastJob : main(args)
+activate SastJob
+SastJob -> SastJob : parseCommand(args)
+note left
+Parsed CLI parameters:
+<color #004000>Server settings</color>
+* //ptaiUrl// - PTAI URL, i.e. https://ptaisrv.domain.org:443
+* //jenkinsUrl// - embedded Jenkins URL, i.e. https://jenkins.domain.org:8443/jenkins
+* //username// - embedded Jenkins username account name
+* //password// - embedded Jenkins username password or API token
+* //sastJob// - SAST job full name, i.e. SAST/UI-managed SAST pipeline
+* //keystore// - path to file that stores client SSL certificate and key
+* //keystoreType// - keystore file type, i.e. JKS, PKCS12 etc. By default JKS is used
+* //keystorePass// - keystore password
+* //truststore// - path to file that stores trusted CA certificates
+* //truststoreType// - truststore file type, i.e. JKS, PKCS12 etc. By default JKS is used
+* //truststorePass// - truststore password
+<color #004000>What to scan</color>
+* //folder// - source folder to scan
+* //transfersJson// - files to scan **or**
+* //includes// - files to include to scan **and**
+* //excludes// - files to exclude from scan
+* //ptaiProject// - project name how it is setup and seen in the PT AI Viewer
+<color #004000>Misc:</color>
+* //node// - node name or tag for SAST to be executed on
+* //verbose// - provide verbose console log output
+end note
+SastJob -> SastJob : execute()
+create PtaiProject
+activate SastJob
+SastJob -> PtaiProject : new()
+create PtaiClient
+PtaiProject -> PtaiClient : new()
+create BasePtaiClient
+PtaiClient -> BasePtaiClient : new()
+create AgentAuthApi
+PtaiClient -> AgentAuthApi : new()
+create PrjApi
+PtaiClient -> PrjApi : new()
+create StoreApi
+PtaiClient -> StoreApi : new()
+create AuthApi
+PtaiClient -> AuthApi : new()
+
+group Set PTAI project parameters
+SastJob -> PtaiProject : setVerbose(verbose)
+SastJob -> PtaiProject : setConsoleLog(System.out)
+SastJob -> PtaiProject : setUrl(ptaiUrl)
+SastJob -> PtaiProject : setKeyStoreFile(keystore)
+SastJob -> PtaiProject : setKeyStoreType(keystoreType)
+SastJob -> PtaiProject : setKeyStorePassword(keystorePass)
+SastJob -> PtaiProject : setTrustStoreFile(truststore)
+SastJob -> PtaiProject : setTrustStoreType(truststoreType)
+SastJob -> PtaiProject : setTrustStorePassword(truststorePass)
+SastJob -> PtaiProject : setName(ptaiProject)
+end
+group PTAI server authentication
+SastJob -> PtaiProject : init()
+PtaiProject -> PtaiClient: init()
+PtaiClient -> BasePtaiClient: baseInit()
+BasePtaiClient -> BasePtaiClient: Check keys, certs etc.
+PtaiClient -> BasePtaiClient: initClients(agentAuth, prj, store, auth)
+BasePtaiClient -> BasePtaiClient: Init API clients with keys, certs etc.
+PtaiClient -> AgentAuthApi: signInWithHttpInfo
+AgentAuthApi --> PtaiClient: JWT token
+PtaiClient -> PrjApi : setApiKey(JWT token)
+PtaiClient -> StoreApi : setApiKey(JWT token)
+PtaiClient -> AuthApi : setApiKey(JWT token)
+PtaiClient --> PtaiProject: JWT token
+
+PtaiProject --> SastJob :  JWT token
+end
+SastJob -> PtaiProject : searchProject()
+PtaiProject -> PrjApi : getWithHttpInfo()
+PrjApi --> PtaiProject : UUID
+create FileCollector
+SastJob -> FileCollector : new()
+SastJob -> FileCollector : collect(transfers, folder)
+create Zip
+FileCollector -> Zip : new()
+SastJob <-- FileCollector : zip
+SastJob -> PtaiProject : upload(zip)
+PtaiProject -> StoreApi : uploadSourcesWithHttpInfo(projectId, zip)
+PtaiProject -> Zip : delete()
+
+
+create JenkinsSastJob
+SastJob -> JenkinsSastJob : new()
+create JenkinsClient
+JenkinsSastJob -> JenkinsClient : new()
+create BaseJenkinsClient
+JenkinsClient -> BaseJenkinsClient : new()
+create JenkinsApi
+JenkinsClient -> JenkinsApi : new()
+group PTAI embedded CI server authentication
+SastJob -> JenkinsSastJob : setVerbose(verbose)
+SastJob -> JenkinsSastJob : setConsoleLog(System.out)
+SastJob -> JenkinsSastJob : setUrl(jenkinsUrl)
+SastJob -> JenkinsSastJob : setJobName(sastJob)
+SastJob -> JenkinsSastJob : setTrustStoreFile(truststore)
+SastJob -> JenkinsSastJob : setTrustStoreType(truststoreType)
+SastJob -> JenkinsSastJob : setTrustStorePassword(truststorePass)
+SastJob -> JenkinsSastJob : setProjectName(ptaiPrj.getName())
+SastJob -> JenkinsSastJob : setNodeName(node)
+SastJob -> JenkinsSastJob : setUserName(username)
+SastJob -> JenkinsSastJob : setPassword(password)
+end
+
+SastJob -> JenkinsSastJob : init()
+JenkinsSastJob -> JenkinsClient : init()
+JenkinsClient -> BaseJenkinsClient : baseInit()
+BaseJenkinsClient -> BaseJenkinsClient: Check keys, certs etc.
+JenkinsClient -> BaseJenkinsClient : initClients(jenkins)
+BaseJenkinsClient -> JenkinsApi: Init API client with keys, certs etc.
+JenkinsClient -> JenkinsApi : Set username and password
+SastJob -> JenkinsSastJob : execute()
+create JenkinsApiClientWrapper
+JenkinsSastJob -> JenkinsApiClientWrapper : new()
+JenkinsApiClientWrapper -> JenkinsApi : getJob(jobName)
+JenkinsApiClientWrapper -> JenkinsApi : getCrumbWithHttpInfo()
+JenkinsApiClientWrapper -> JenkinsApi : postJobBuildWithHttpInfo(jobName)
+
+JenkinsApiClientWrapper -> JenkinsApi : getJobBuild()
+loop
+JenkinsApiClientWrapper -> JenkinsApi : getJobBuild()
+JenkinsApiClientWrapper -> JenkinsApi : getJobProgressiveText()
+end
+JenkinsApiClientWrapper -> JenkinsApi : getJobBuildArtifact()
+
+@enduml

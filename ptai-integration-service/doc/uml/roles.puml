@@ -1,0 +1,30 @@
+@startuml
+(api/admin)
+(api/diagnostic)
+(api/sast)
+:Admin:
+:User:
+:Anonymous:
+
+User --|> Anonymous
+Admin --|> :User:
+Admin --> (api/admin)
+User --> (api/sast)
+User --> (api/diagnostic)
+Anonymous --> (api/public)
+
+(api/admin) ..> (signup)
+(api/admin) ..> (random)
+(api/admin) ..> (encode)
+(api/diagnostic) ..> (check)
+(api/diagnostic) ..> (project)
+(api/public) ..> (about)
+(api/public) ..> (build-info)
+(api/sast) ..> (upload)
+(api/sast) ..> (scan-ui-managed)
+(api/sast) ..> (scan-json-managed)
+(api/sast) ..> (state)
+(api/sast) ..> (results)
+(api/sast) ..> (result)
+
+@enduml
