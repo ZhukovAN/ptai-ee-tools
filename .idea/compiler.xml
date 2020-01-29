@@ -11,14 +11,13 @@
         <module name="jenkins-rest-api" />
         <module name="ptai-jenkins-plugin" />
         <module name="ptai-sonar-plugin" />
-        <module name="ptai-integration-service" />
         <module name="ptai-cli-plugin" />
-        <module name="ptai-data-structures" />
-        <module name="generic-client-lib" />
         <module name="ptai-rest-api" />
-        <module name="jce-restrictions-checker" />
-        <module name="ptai-report-generator" />
         <module name="ptai-maven-plugin" />
+        <module name="generic-client-lib" />
+        <module name="jce-restrictions-checker" />
+        <module name="ptai-data-structures" />
+        <module name="ptai-integration-service" />
         <module name="integration-rest-api" />
       </profile>
     </annotationProcessing>
@@ -26,6 +25,7 @@
       <module name="build" target="1.5" />
       <module name="KB" target="1.8" />
       <module name="ptai-integration-server" target="1.8" />
+      <module name="ptai-report-generator" target="1.8" />
       <module name="ptai-teamcity-plugin" target="1.5" />
       <module name="ptai-teamcity-plugin-server" target="1.8" />
     </bytecodeTargetLevel>
