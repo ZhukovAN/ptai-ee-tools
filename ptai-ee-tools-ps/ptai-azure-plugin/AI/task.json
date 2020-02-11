@@ -1,0 +1,76 @@
+{
+	"id": "75d6d6a2-2b71-4e0d-8ee1-40f6914aea28",
+	"name": "Application security testing",
+	"friendlyName": "PT Application Inspector",
+	"description": "Application security testing",
+	"helpMarkDown": "https://www.ptsecurity.com/ww-en/products/ai/",
+	"category": "Build",
+	"visibility": [
+		"Build"
+	],
+	"author": "Positive Technologies",
+	"version": {
+		"Major": 0,
+		"Minor": 4,
+		"Patch": 36
+	},
+	"demands": [
+	],
+	"minimumAgentVersion": "1.0.0",
+	"instanceNameFormat": "PT AI code analysis",
+	"inputs": [
+        {
+            "name": "scanSettingsType",
+            "type": "pickList",
+            "label": "Scan settings type",
+            "required": true,
+            "defaultValue": "ui",
+            "helpMarkDown": "Select scan settings and policy definition mode. You may use PT AI viewer UI to create project and assign its name below. Or you may use JSON-defined settings and policy.",
+            "options": {
+                "ui": "UI-defined settings",
+                "json": "JSON-defined settings"
+            }
+        },
+		{
+			"name": "projectName",
+			"type": "string",
+			"label": "Project Name",
+			"required": true,
+			"helpMarkDown": "Select an existing PT AI project name",
+			"visibleRule": "scanSettingsType == ui"
+		}, 
+        {
+            "name": "jsonSettings",
+            "type": "multiLine",
+            "label": "JSON settings",
+            "defaultValue": "",
+            "required": true,
+			"visibleRule": "scanSettingsType == json"
+        },
+        {
+            "name": "jsonPolicy",
+            "type": "multiLine",
+            "label": "JSON policy",
+            "defaultValue": "",
+            "required": false,
+			"visibleRule": "scanSettingsType == json",
+            "helpMarkDown": "During project building, the build agent validates scan results against the rule conditions and fails the build process if the policy is breached."
+        },
+		{
+			"name": "failIfAstUnstable",
+			"type": "boolean",
+			"label": "Fail step if AST unstable",
+			"required": true,
+			"defaultValue": "false",
+			"helpMarkDown": "PT AI fails build phase if security policy is failed or some errors raised during AST. Select this option to fail build phase even if there were minor warnings during AST."
+		}
+	],
+	"execution": {
+		"PowerShell": {
+			"target": "$(currentDirectory)\\scan.ps1",
+			"argumentFormat": "",
+			"workingDirectory": "$(currentDirectory)"
+		}
+	},
+	"messages": {}
+}

@@ -1,6 +1,13 @@
 **/target/**
 **/work/**
-ptai-teamcity-plugin/servers/**
+**/ptai-teamcity-plugin/servers/**
 **/docs/*.vpp.bak_*
 **/docs/*.vpp.lck
-.idea/workspace.xml
+**/.idea/workspace.xml
+**/bin/Release/**
+**/bin/Debug/**
+**/packages/**
+**/node_modules/**
+**/*.vsix
+**/*.dll
+**/.vs/**

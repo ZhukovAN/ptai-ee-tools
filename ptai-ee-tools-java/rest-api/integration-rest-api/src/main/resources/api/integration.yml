@@ -1,0 +1,543 @@
+openapi: 3.0.1
+info:
+  title: Api Documentation
+  description: Api Documentation
+  termsOfService: urn:tos
+  contact: {}
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0
+  version: "1.0"
+servers:
+- url: https://127.0.0.1:8443/
+tags:
+- name: sast-controller
+  description: Sast Controller
+security:
+  - Bearer: []
+paths:
+  /oauth/token:
+    post:
+      security:
+        - Basic: []
+      tags:
+        - oauth-controller
+      summary: Login user by client id / secret (those are passed as a basic auth fields) and login / password or refresh-token
+      operationId: getJwtTokenUsingPOST
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                refresh_token:
+                  type: string
+                grant_type:
+                  type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtResponse'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+  /api/public/build-info:
+    get:
+      tags:
+        - public-controller
+      summary: getBuildInfo
+      operationId: getBuildInfoUsingGET
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildInfo'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+  /api/diagnostic/check:
+    get:
+      tags:
+        - diagnostic-controller
+      summary: getComponentsStatus
+      operationId: getComponentsStatusUsingGET
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentsStatus'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+  /api/diagnostic/project:
+    get:
+      tags:
+        - diagnostic-controller
+      operationId: getProject
+      parameters:
+        - name: projectName
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+  /api/admin/random:
+    get:
+      tags:
+        - admin-controller
+      summary: random
+      operationId: randomUsingGET
+      responses:
+        200:
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: string
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+  /api/sast/result:
+    get:
+      tags:
+      - sast-controller
+      summary: getJobResult
+      operationId: getJobResultUsingGET
+      parameters:
+      - name: buildNumber
+        in: query
+        description: buildNumber
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: artifact
+        in: query
+        description: artifact
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+  /api/sast/results:
+    get:
+      tags:
+      - sast-controller
+      summary: getJobResults
+      operationId: getJobResultsUsingGET
+      parameters:
+      - name: build-number
+        in: query
+        description: build-number
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+  /api/sast/scan-json-managed:
+    post:
+      tags:
+      - sast-controller
+      summary: scanJsonManaged
+      operationId: scanJsonManagedUsingPOST
+      parameters:
+      - name: project-name
+        in: query
+        description: project-name
+        required: true
+        schema:
+          type: string
+      - name: node
+        in: query
+        description: node
+        required: true
+        schema:
+          type: string
+      - name: settings
+        in: query
+        description: settings
+        required: true
+        schema:
+          type: string
+      - name: policy
+        in: query
+        description: policy
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int32
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+  /api/sast/scan-ui-managed:
+    post:
+      tags:
+      - sast-controller
+      summary: scanUiManaged
+      operationId: scanUiManagedUsingPOST
+      parameters:
+      - name: project-name
+        in: query
+        description: project-name
+        required: true
+        schema:
+          type: string
+      - name: node
+        in: query
+        description: node
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int32
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+  /api/sast/state:
+    get:
+      tags:
+      - sast-controller
+      summary: getJobState
+      operationId: getJobStateUsingGET
+      parameters:
+      - name: build-number
+        in: query
+        description: build-number
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: start-pos
+        in: query
+        description: start-pos
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobState'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+  /api/sast/upload:
+    post:
+      tags:
+      - sast-controller
+      summary: upload
+      operationId: uploadUsingPOST
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+              - current
+              - file
+              - project
+              - total
+              properties:
+                current:
+                  description: current
+                file:
+                  type: string
+                  description: file
+                  format: binary
+                project:
+                  description: project
+                total:
+                  description: total
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ResponseEntity'
+        201:
+          description: Created
+          content: {}
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
+components:
+  schemas:
+    JwtResponse:
+      title: JwtResponse
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+        refresh_token:
+          type: string
+        expires_in:
+          type: integer
+        scope:
+          type: string
+        jti:
+          type: string
+    BuildInfo:
+      title: BuildInfo
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        date:
+          type: string
+    ComponentStatus:
+      title: ComponentStatus
+      type: string
+      enum:
+        - FAILURE
+        - SUCCESS
+    ComponentsStatus:
+      title: ComponentsStatus
+      type: object
+      properties:
+        ptai:
+          $ref: '#/components/schemas/ComponentStatus'
+        embedded:
+          $ref: '#/components/schemas/ComponentStatus'
+    JobState:
+      title: JobState
+      type: object
+      properties:
+        log:
+          type: string
+        pos:
+          type: integer
+          format: int32
+        status:
+          type: string
+          enum:
+          - UNKNOWN
+          - FAILURE
+          - UNSTABLE
+          - SUCCESS
+          - ABORTED
+    ResponseEntity:
+      title: ResponseEntity
+      type: object
+      properties:
+        body:
+          type: object
+          properties: {}
+        statusCode:
+          type: string
+          enum:
+          - 100 CONTINUE
+          - 101 SWITCHING_PROTOCOLS
+          - 102 PROCESSING
+          - 103 CHECKPOINT
+          - 200 OK
+          - 201 CREATED
+          - 202 ACCEPTED
+          - 203 NON_AUTHORITATIVE_INFORMATION
+          - 204 NO_CONTENT
+          - 205 RESET_CONTENT
+          - 206 PARTIAL_CONTENT
+          - 207 MULTI_STATUS
+          - 208 ALREADY_REPORTED
+          - 226 IM_USED
+          - 300 MULTIPLE_CHOICES
+          - 301 MOVED_PERMANENTLY
+          - 302 FOUND
+          - 302 MOVED_TEMPORARILY
+          - 303 SEE_OTHER
+          - 304 NOT_MODIFIED
+          - 305 USE_PROXY
+          - 307 TEMPORARY_REDIRECT
+          - 308 PERMANENT_REDIRECT
+          - 400 BAD_REQUEST
+          - 401 UNAUTHORIZED
+          - 402 PAYMENT_REQUIRED
+          - 403 FORBIDDEN
+          - 404 NOT_FOUND
+          - 405 METHOD_NOT_ALLOWED
+          - 406 NOT_ACCEPTABLE
+          - 407 PROXY_AUTHENTICATION_REQUIRED
+          - 408 REQUEST_TIMEOUT
+          - 409 CONFLICT
+          - 410 GONE
+          - 411 LENGTH_REQUIRED
+          - 412 PRECONDITION_FAILED
+          - 413 PAYLOAD_TOO_LARGE
+          - 413 REQUEST_ENTITY_TOO_LARGE
+          - 414 URI_TOO_LONG
+          - 414 REQUEST_URI_TOO_LONG
+          - 415 UNSUPPORTED_MEDIA_TYPE
+          - 416 REQUESTED_RANGE_NOT_SATISFIABLE
+          - 417 EXPECTATION_FAILED
+          - 418 I_AM_A_TEAPOT
+          - 419 INSUFFICIENT_SPACE_ON_RESOURCE
+          - 420 METHOD_FAILURE
+          - 421 DESTINATION_LOCKED
+          - 422 UNPROCESSABLE_ENTITY
+          - 423 LOCKED
+          - 424 FAILED_DEPENDENCY
+          - 426 UPGRADE_REQUIRED
+          - 428 PRECONDITION_REQUIRED
+          - 429 TOO_MANY_REQUESTS
+          - 431 REQUEST_HEADER_FIELDS_TOO_LARGE
+          - 451 UNAVAILABLE_FOR_LEGAL_REASONS
+          - 500 INTERNAL_SERVER_ERROR
+          - 501 NOT_IMPLEMENTED
+          - 502 BAD_GATEWAY
+          - 503 SERVICE_UNAVAILABLE
+          - 504 GATEWAY_TIMEOUT
+          - 505 HTTP_VERSION_NOT_SUPPORTED
+          - 506 VARIANT_ALSO_NEGOTIATES
+          - 507 INSUFFICIENT_STORAGE
+          - 508 LOOP_DETECTED
+          - 509 BANDWIDTH_LIMIT_EXCEEDED
+          - 510 NOT_EXTENDED
+          - 511 NETWORK_AUTHENTICATION_REQUIRED
+        statusCodeValue:
+          type: integer
+          format: int32
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      scheme: bearer
+      description: Please insert JWT with Bearer into field
+      name: Authorization
+      in: header
+      bearerFormat: JWT
+    Basic:
+      type: http
+      scheme: basic
