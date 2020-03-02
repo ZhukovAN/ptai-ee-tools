@@ -61,8 +61,7 @@ public class SlimServerSettingsDescriptor extends Descriptor<SlimServerSettings>
         try {
             if (!Validator.doCheckFieldNotEmpty(serverSlimUrl))
                 throw new PtaiClientException(Messages.validator_check_serverUrl_empty());
-            if (!Validator.doCheckFieldUrl(serverSlimUrl))
-                throw new PtaiClientException(Messages.validator_check_serverUrl_incorrect());
+            boolean urlInvalid = !Validator.doCheckFieldUrl(serverSlimUrl);
             if (!Validator.doCheckFieldNotEmpty(serverSlimCredentialsId))
                 throw new PtaiClientException(Messages.validator_check_serverCredentialsId_empty());
 
@@ -82,9 +81,11 @@ public class SlimServerSettingsDescriptor extends Descriptor<SlimServerSettings>
 
             ComponentsStatus statuses = client.getDiagnosticApi().getComponentsStatusUsingGET();
             String statusText = "PTAI: " + statuses.getPtai() + "; EMBEDDED: " + statuses.getEmbedded();
-            return  (statuses.getPtai().equals(ComponentStatus.SUCCESS) && statuses.getEmbedded().equals(ComponentStatus.SUCCESS))
-                    ? FormValidation.ok(Messages.validator_test_slim_server_success(buildInfoText))
-                    : FormValidation.error(Messages.validator_test_slim_server_fail(buildInfoText, statusText));
+            return  (statuses.getPtai().equals(ComponentStatus.FAILURE) || statuses.getEmbedded().equals(ComponentStatus.FAILURE))
+                    ? FormValidation.error(Messages.validator_test_slim_server_fail(buildInfoText, statusText))
+                    : urlInvalid
+                    ? FormValidation.warning(Messages.validator_test_slim_server_success(buildInfoText))
+                    : FormValidation.ok(Messages.validator_test_slim_server_success(buildInfoText));
         } catch (Exception e) {
             return Validator.error(new BaseClientException("Test failed", e));
         }

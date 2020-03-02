@@ -61,7 +61,7 @@ public class JenkinsClient extends Client {
         this.setTrustStorePassword(trustStorePassword);
         this.setUserName(ciUserName);
         this.setToken(ciApiToken);
-        // client.setVerbose(verbose);
+        this.setVerbose(verbose);
         // jenkinsSastJob.setConsoleLog(System.out);
         // client.setJobName(sastJob);
         // jenkinsSastJob.setProjectName(ptaiPrj.getName());

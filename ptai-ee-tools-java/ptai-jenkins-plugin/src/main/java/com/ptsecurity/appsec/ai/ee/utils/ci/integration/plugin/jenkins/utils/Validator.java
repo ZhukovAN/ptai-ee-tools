@@ -22,7 +22,7 @@ public class Validator {
     }
 
     public static boolean doCheckFieldUrl(String value) {
-        UrlValidator urlValidator = new UrlValidator(new String[] {"http","https"});
+        UrlValidator urlValidator = new UrlValidator(new String[] {"http","https"}, UrlValidator.ALLOW_LOCAL_URLS);
         return urlValidator.isValid(value);
     }
 
@@ -76,7 +76,7 @@ public class Validator {
     }
 
     public static FormValidation doCheckFieldUrl(String value, String errorMessage) {
-        return doCheckFieldUrl(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
+        return doCheckFieldUrl(value) ? FormValidation.ok() : FormValidation.warning(errorMessage);
     }
 
     public static FormValidation doCheckFieldRegEx(String value, String errorMessage) {

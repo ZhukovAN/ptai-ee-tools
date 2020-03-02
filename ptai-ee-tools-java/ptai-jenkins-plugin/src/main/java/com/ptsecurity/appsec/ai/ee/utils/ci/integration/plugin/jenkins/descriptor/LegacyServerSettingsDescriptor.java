@@ -98,8 +98,7 @@ public class LegacyServerSettingsDescriptor extends Descriptor<LegacyServerSetti
         try {
             if (!Validator.doCheckFieldNotEmpty(serverLegacyUrl))
                 throw new PtaiClientException(Messages.validator_check_serverUrl_empty());
-            if (!Validator.doCheckFieldUrl(serverLegacyUrl))
-                throw new PtaiClientException(Messages.validator_check_serverUrl_incorrect());
+            boolean urlInvalid = !Validator.doCheckFieldUrl(serverLegacyUrl);
             if (!Validator.doCheckFieldNotEmpty(serverLegacyCredentialsId))
                 throw new PtaiClientException(Messages.validator_check_serverCredentialsId_empty());
 
@@ -115,6 +114,8 @@ public class LegacyServerSettingsDescriptor extends Descriptor<LegacyServerSetti
             String authToken = ptaiProject.init();
             return StringUtils.isEmpty(authToken)
                     ? FormValidation.error(Messages.validator_test_server_token_invalid())
+                    : urlInvalid
+                    ? FormValidation.warning(Messages.validator_test_server_success(authToken.substring(0, 10)))
                     : FormValidation.ok(Messages.validator_test_server_success(authToken.substring(0, 10)));
         } catch (Exception e) {
             return Validator.error(e);
