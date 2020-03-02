@@ -150,10 +150,11 @@ namespace AI.Enterprise.Integration.RestApi.Api
         /// <exception cref="AI.Enterprise.Integration.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="current">current</param>
         /// <param name="file">file</param>
-        /// <param name="project">project</param>
-        /// <param name="total">total</param>
-        /// <returns>ResponseEntity</returns>
-        ResponseEntity UploadUsingPOST (Object current, System.IO.Stream file, Object project, Object total);
+        /// <param name="project">Project name</param>
+        /// <param name="total">Total number of file parts to be uploaded</param>
+        /// <param name="uploadId">Unique upload Id (optional)</param>
+        /// <returns>string</returns>
+        string UploadUsingPOST (Object current, System.IO.Stream file, Object project, Object total, Object uploadId = default(Object));
 
         /// <summary>
         /// upload
@@ -164,10 +165,11 @@ namespace AI.Enterprise.Integration.RestApi.Api
         /// <exception cref="AI.Enterprise.Integration.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="current">current</param>
         /// <param name="file">file</param>
-        /// <param name="project">project</param>
-        /// <param name="total">total</param>
-        /// <returns>ApiResponse of ResponseEntity</returns>
-        ApiResponse<ResponseEntity> UploadUsingPOSTWithHttpInfo (Object current, System.IO.Stream file, Object project, Object total);
+        /// <param name="project">Project name</param>
+        /// <param name="total">Total number of file parts to be uploaded</param>
+        /// <param name="uploadId">Unique upload Id (optional)</param>
+        /// <returns>ApiResponse of string</returns>
+        ApiResponse<string> UploadUsingPOSTWithHttpInfo (Object current, System.IO.Stream file, Object project, Object total, Object uploadId = default(Object));
         #endregion Synchronous Operations
         #region Asynchronous Operations
         /// <summary>
@@ -296,10 +298,11 @@ namespace AI.Enterprise.Integration.RestApi.Api
         /// <exception cref="AI.Enterprise.Integration.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="current">current</param>
         /// <param name="file">file</param>
-        /// <param name="project">project</param>
-        /// <param name="total">total</param>
-        /// <returns>Task of ResponseEntity</returns>
-        System.Threading.Tasks.Task<ResponseEntity> UploadUsingPOSTAsync (Object current, System.IO.Stream file, Object project, Object total);
+        /// <param name="project">Project name</param>
+        /// <param name="total">Total number of file parts to be uploaded</param>
+        /// <param name="uploadId">Unique upload Id (optional)</param>
+        /// <returns>Task of string</returns>
+        System.Threading.Tasks.Task<string> UploadUsingPOSTAsync (Object current, System.IO.Stream file, Object project, Object total, Object uploadId = default(Object));
 
         /// <summary>
         /// upload
@@ -310,10 +313,11 @@ namespace AI.Enterprise.Integration.RestApi.Api
         /// <exception cref="AI.Enterprise.Integration.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="current">current</param>
         /// <param name="file">file</param>
-        /// <param name="project">project</param>
-        /// <param name="total">total</param>
-        /// <returns>Task of ApiResponse (ResponseEntity)</returns>
-        System.Threading.Tasks.Task<ApiResponse<ResponseEntity>> UploadUsingPOSTAsyncWithHttpInfo (Object current, System.IO.Stream file, Object project, Object total);
+        /// <param name="project">Project name</param>
+        /// <param name="total">Total number of file parts to be uploaded</param>
+        /// <param name="uploadId">Unique upload Id (optional)</param>
+        /// <returns>Task of ApiResponse (string)</returns>
+        System.Threading.Tasks.Task<ApiResponse<string>> UploadUsingPOSTAsyncWithHttpInfo (Object current, System.IO.Stream file, Object project, Object total, Object uploadId = default(Object));
         #endregion Asynchronous Operations
     }
 
@@ -1218,12 +1222,13 @@ namespace AI.Enterprise.Integration.RestApi.Api
         /// <exception cref="AI.Enterprise.Integration.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="current">current</param>
         /// <param name="file">file</param>
-        /// <param name="project">project</param>
-        /// <param name="total">total</param>
-        /// <returns>ResponseEntity</returns>
-        public ResponseEntity UploadUsingPOST (Object current, System.IO.Stream file, Object project, Object total)
+        /// <param name="project">Project name</param>
+        /// <param name="total">Total number of file parts to be uploaded</param>
+        /// <param name="uploadId">Unique upload Id (optional)</param>
+        /// <returns>string</returns>
+        public string UploadUsingPOST (Object current, System.IO.Stream file, Object project, Object total, Object uploadId = default(Object))
         {
-             ApiResponse<ResponseEntity> localVarResponse = UploadUsingPOSTWithHttpInfo(current, file, project, total);
+             ApiResponse<string> localVarResponse = UploadUsingPOSTWithHttpInfo(current, file, project, total, uploadId);
              return localVarResponse.Data;
         }
 
@@ -1233,10 +1238,11 @@ namespace AI.Enterprise.Integration.RestApi.Api
         /// <exception cref="AI.Enterprise.Integration.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="current">current</param>
         /// <param name="file">file</param>
-        /// <param name="project">project</param>
-        /// <param name="total">total</param>
-        /// <returns>ApiResponse of ResponseEntity</returns>
-        public ApiResponse<ResponseEntity> UploadUsingPOSTWithHttpInfo (Object current, System.IO.Stream file, Object project, Object total)
+        /// <param name="project">Project name</param>
+        /// <param name="total">Total number of file parts to be uploaded</param>
+        /// <param name="uploadId">Unique upload Id (optional)</param>
+        /// <returns>ApiResponse of string</returns>
+        public ApiResponse<string> UploadUsingPOSTWithHttpInfo (Object current, System.IO.Stream file, Object project, Object total, Object uploadId = default(Object))
         {
             // verify the required parameter 'current' is set
             if (current == null)
@@ -1267,7 +1273,7 @@ namespace AI.Enterprise.Integration.RestApi.Api
 
             // to determine the Accept header
             String[] localVarHttpHeaderAccepts = new String[] {
-                "*/*"
+                "application/json"
             };
             String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
             if (localVarHttpHeaderAccept != null)
@@ -1277,6 +1283,7 @@ namespace AI.Enterprise.Integration.RestApi.Api
             if (file != null) localVarFileParams.Add("file", this.Configuration.ApiClient.ParameterToFile("file", file));
             if (project != null) localVarFormParams.Add("project", this.Configuration.ApiClient.ParameterToString(project)); // form parameter
             if (total != null) localVarFormParams.Add("total", this.Configuration.ApiClient.ParameterToString(total)); // form parameter
+            if (uploadId != null) localVarFormParams.Add("uploadId", this.Configuration.ApiClient.ParameterToString(uploadId)); // form parameter
 
             // authentication (Bearer) required
             if (!String.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
@@ -1297,9 +1304,9 @@ namespace AI.Enterprise.Integration.RestApi.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<ResponseEntity>(localVarStatusCode,
+            return new ApiResponse<string>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
-                (ResponseEntity) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ResponseEntity)));
+                (string) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(string)));
         }
 
         /// <summary>
@@ -1308,12 +1315,13 @@ namespace AI.Enterprise.Integration.RestApi.Api
         /// <exception cref="AI.Enterprise.Integration.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="current">current</param>
         /// <param name="file">file</param>
-        /// <param name="project">project</param>
-        /// <param name="total">total</param>
-        /// <returns>Task of ResponseEntity</returns>
-        public async System.Threading.Tasks.Task<ResponseEntity> UploadUsingPOSTAsync (Object current, System.IO.Stream file, Object project, Object total)
+        /// <param name="project">Project name</param>
+        /// <param name="total">Total number of file parts to be uploaded</param>
+        /// <param name="uploadId">Unique upload Id (optional)</param>
+        /// <returns>Task of string</returns>
+        public async System.Threading.Tasks.Task<string> UploadUsingPOSTAsync (Object current, System.IO.Stream file, Object project, Object total, Object uploadId = default(Object))
         {
-             ApiResponse<ResponseEntity> localVarResponse = await UploadUsingPOSTAsyncWithHttpInfo(current, file, project, total);
+             ApiResponse<string> localVarResponse = await UploadUsingPOSTAsyncWithHttpInfo(current, file, project, total, uploadId);
              return localVarResponse.Data;
 
         }
@@ -1324,10 +1332,11 @@ namespace AI.Enterprise.Integration.RestApi.Api
         /// <exception cref="AI.Enterprise.Integration.RestApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="current">current</param>
         /// <param name="file">file</param>
-        /// <param name="project">project</param>
-        /// <param name="total">total</param>
-        /// <returns>Task of ApiResponse (ResponseEntity)</returns>
-        public async System.Threading.Tasks.Task<ApiResponse<ResponseEntity>> UploadUsingPOSTAsyncWithHttpInfo (Object current, System.IO.Stream file, Object project, Object total)
+        /// <param name="project">Project name</param>
+        /// <param name="total">Total number of file parts to be uploaded</param>
+        /// <param name="uploadId">Unique upload Id (optional)</param>
+        /// <returns>Task of ApiResponse (string)</returns>
+        public async System.Threading.Tasks.Task<ApiResponse<string>> UploadUsingPOSTAsyncWithHttpInfo (Object current, System.IO.Stream file, Object project, Object total, Object uploadId = default(Object))
         {
             // verify the required parameter 'current' is set
             if (current == null)
@@ -1358,7 +1367,7 @@ namespace AI.Enterprise.Integration.RestApi.Api
 
             // to determine the Accept header
             String[] localVarHttpHeaderAccepts = new String[] {
-                "*/*"
+                "application/json"
             };
             String localVarHttpHeaderAccept = this.Configuration.ApiClient.SelectHeaderAccept(localVarHttpHeaderAccepts);
             if (localVarHttpHeaderAccept != null)
@@ -1368,6 +1377,7 @@ namespace AI.Enterprise.Integration.RestApi.Api
             if (file != null) localVarFileParams.Add("file", this.Configuration.ApiClient.ParameterToFile("file", file));
             if (project != null) localVarFormParams.Add("project", this.Configuration.ApiClient.ParameterToString(project)); // form parameter
             if (total != null) localVarFormParams.Add("total", this.Configuration.ApiClient.ParameterToString(total)); // form parameter
+            if (uploadId != null) localVarFormParams.Add("uploadId", this.Configuration.ApiClient.ParameterToString(uploadId)); // form parameter
 
             // authentication (Bearer) required
             if (!String.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("Authorization")))
@@ -1388,9 +1398,9 @@ namespace AI.Enterprise.Integration.RestApi.Api
                 if (exception != null) throw exception;
             }
 
-            return new ApiResponse<ResponseEntity>(localVarStatusCode,
+            return new ApiResponse<string>(localVarStatusCode,
                 localVarResponse.Headers.ToDictionary(x => x.Name, x => string.Join(",", x.Value)),
-                (ResponseEntity) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(ResponseEntity)));
+                (string) this.Configuration.ApiClient.Deserialize(localVarResponse, typeof(string)));
         }
 
     }

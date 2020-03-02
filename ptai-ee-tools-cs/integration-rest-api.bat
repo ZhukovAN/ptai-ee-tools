@@ -1,1 +1,1 @@
-java -jar D:\TOOLS\DEVEL\MISC\OPENAPI\openapi-generator-cli.jar generate -g csharp -i ..\..\JAVA\ptai-ee-tools\rest-api\integration-rest-api\src\main\resources\api\integration.yml --package-name AI.Enterprise.Integration.RestApi -o .\integration-rest-api
+java -jar D:\TOOLS\DEVEL\MISC\OPENAPI\openapi-generator-cli.jar generate -g csharp -i ..\ptai-ee-tools-java\rest-api\integration-rest-api\src\main\resources\api\integration.yml --package-name AI.Enterprise.Integration.RestApi -o .\integration-rest-api

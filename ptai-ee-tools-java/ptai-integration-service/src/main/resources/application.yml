@@ -30,6 +30,7 @@ logging:
     org.springframework.cloud.consul: ERROR
     com.ptsecurity.appsec.ai.ee.utils.ci.integration.service: DEBUG
 
+
 # Spring Boot Actuator endpoints
 endpoints:
   health.sensitive: false

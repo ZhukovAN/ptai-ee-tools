@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
 import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.utils.TempFile;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.ApiClient;
@@ -19,6 +20,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.*;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import liquibase.util.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,18 +28,22 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Response;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,7 +57,12 @@ public class SastService {
     @Autowired
     protected PtaiClient ptaiClient;
 
-    public void upload(String project, MultipartFile file) {
+    protected Path tempFolder;
+
+    public String upload(
+            String project, MultipartFile file,
+            int current, int total, String uploadId) {
+        String res = uploadId;
         String token = ptaiClient.signIn();
         log.debug("PTAI token: {}", token);
         UUID projectId = PtaiProject.searchProject(ptaiClient.getPrjApi(), project)
@@ -59,20 +70,45 @@ public class SastService {
 
         Path path = null;
         try {
-            path = Files.createTempFile("", ".ptai");
-            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-            com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiResponse<Void> res = ptaiClient.getStoreApi().uploadSourcesWithHttpInfo(
-                    projectId, path.toFile(),
-                    null,null,null,null,null,null,
-                    null,null,null,null,null);
-            log.debug("Sources upload result: {}", res.getStatusCode());
-            path.toFile().delete();
-            if (200 != res.getStatusCode())
-                throw new PtaiClientException("Sources upload failed");
-        } catch (IOException | ApiException e) {
+            // Is this a new upload?
+            if (StringUtils.isEmpty(res))
+                res = UUID.randomUUID().toString();
+            Path chunk = this.tempFolder.resolve(String.format("%s.%06d", res, current));
+            Files.copy(file.getInputStream(), chunk, StandardCopyOption.REPLACE_EXISTING);
+            log.debug("{} ({}) project's sources part {} of {} saved successfully", project, projectId, current + 1, total);
+            // Last chunk stored as a temp file - need to combine them and upload to PT AI EE server
+            if (current == total - 1) {
+                path = Files.createTempFile("", ".ptai");
+                try (
+                        OutputStream out = new FileOutputStream(path.toFile());) {
+                    byte[] buffer = new byte[512 * 1024];
+                    for (int i = 0 ; i < total ; i++) {
+                        chunk = this.tempFolder.resolve(String.format("%s.%06d", res, i));
+                        InputStream in = new FileInputStream(chunk.toFile());
+                        do {
+                            int bytesRead = in.read(buffer);
+                            if (-1 == bytesRead) break;
+                            out.write(buffer, 0, bytesRead);
+                        } while (true);
+                        in.close();
+                        Files.deleteIfExists(chunk);
+                    }
+                    out.flush();
+                }
+                com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiResponse<Void> status = ptaiClient.getStoreApi().uploadSourcesWithHttpInfo(
+                        projectId, path.toFile(),
+                        null,null,null,null,null,null,
+                        null,null,null,null,null);
+                log.debug("Sources upload result: {}", status.getStatusCode());
+                path.toFile().delete();
+                if (200 != status.getStatusCode())
+                    throw new PtaiClientException("Sources upload failed");
+            }
+        } catch (Exception e) {
             if ((null != path) && path.toFile().exists()) path.toFile().delete();
             e.printStackTrace();
         }
+        return res;
     }
 
     public Optional<Integer> scanUiManaged(String project, String node) {
@@ -225,6 +261,22 @@ public class SastService {
         }
     }
 
+    protected com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse<DefaultCrumbIssuer> crumb;
+
+    public void stopScan(Integer buildNumber) {
+        log.info("SAST job termination request. Build number is %d", buildNumber);
+        JenkinsApiClientWrapper apiClient = new JenkinsApiClientWrapper(jenkinsClient, 5, 5000);
+        RemoteAccessApi api = jenkinsClient.getJenkinsApi();
+
+        String jobName = ApiClient.convertJobName(jenkinsClient.getCiJobName());
+        FreeStyleBuild sastBuild = apiClient.callApi(() -> api.getJobBuild(jobName, buildNumber.toString()));
+        if (null == sastBuild) {
+            log.info("Job %s : %d is not started\r\n", jenkinsClient.getCiJobName(), buildNumber);
+            return;
+        }
+        jenkinsClient.stopJob(jobName, sastBuild);
+    }
+
     @Autowired
     private DiscoveryClient discoveryClient;
 
@@ -233,5 +285,15 @@ public class SastService {
                 .stream()
                 .map(si -> "https://" + si.getHost() + ":" + String.valueOf(si.getPort()))
                 .findFirst();
+    }
+
+    @PostConstruct
+    public void init() throws IOException {
+        this.tempFolder = Files.createTempDirectory("PTAI.");
+    }
+
+    @PreDestroy
+    public void fini() throws IOException {
+        FileUtils.deleteDirectory(this.tempFolder.toFile());
     }
 }

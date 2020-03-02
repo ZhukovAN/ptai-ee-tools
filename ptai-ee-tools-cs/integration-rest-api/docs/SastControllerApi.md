@@ -434,7 +434,7 @@ Name | Type | Description  | Notes
 
 ## UploadUsingPOST
 
-> ResponseEntity UploadUsingPOST (Object current, System.IO.Stream file, Object project, Object total)
+> string UploadUsingPOST (Object current, System.IO.Stream file, Object project, Object total, Object uploadId = null)
 
 upload
 
@@ -462,13 +462,14 @@ namespace Example
             var apiInstance = new SastControllerApi(Configuration.Default);
             var current = new Object(); // Object | current
             var file = BINARY_DATA_HERE;  // System.IO.Stream | file
-            var project = new Object(); // Object | project
-            var total = new Object(); // Object | total
+            var project = new Object(); // Object | Project name
+            var total = new Object(); // Object | Total number of file parts to be uploaded
+            var uploadId = new Object(); // Object | Unique upload Id (optional) 
 
             try
             {
                 // upload
-                ResponseEntity result = apiInstance.UploadUsingPOST(current, file, project, total);
+                string result = apiInstance.UploadUsingPOST(current, file, project, total, uploadId);
                 Debug.WriteLine(result);
             }
             catch (ApiException e)
@@ -489,12 +490,13 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **current** | [**Object**](Object.md)| current | 
  **file** | **System.IO.Stream**| file | 
- **project** | [**Object**](Object.md)| project | 
- **total** | [**Object**](Object.md)| total | 
+ **project** | [**Object**](Object.md)| Project name | 
+ **total** | [**Object**](Object.md)| Total number of file parts to be uploaded | 
+ **uploadId** | [**Object**](Object.md)| Unique upload Id | [optional] 
 
 ### Return type
 
-[**ResponseEntity**](ResponseEntity.md)
+**string**
 
 ### Authorization
 
@@ -503,7 +505,7 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: multipart/form-data
-- **Accept**: */*
+- **Accept**: application/json
 
 ### HTTP response details
 | Status code | Description | Response headers |

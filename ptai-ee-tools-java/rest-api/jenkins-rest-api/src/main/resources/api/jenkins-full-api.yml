@@ -457,6 +457,32 @@ paths:
         - jenkins_auth: []
       tags:
         - remoteAccess
+  '/job/{name}/{number}/stop':
+    post:
+      description: Stop a job
+      operationId: postJobBuildStop
+      parameters:
+        - $ref: '#/components/parameters/jobName'
+        - name: buildId
+          description: Build ID
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/crumb'
+      responses:
+        '200':
+          description: Successfully stopped the job
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/jobNotFound'
+      security:
+        - jenkins_auth: []
+      tags:
+        - remoteAccess
   '/job/{name}/{number}/logText/progressiveText':
     get:
       description: Retrieve job's build progressive text output
@@ -997,6 +1023,7 @@ paths:
         content:
           application/json:
             schema:
+              type: object
               required:
                 - favorite
               properties:
@@ -2133,10 +2160,10 @@ components:
           type: string
         url:
           type: string
-  ########################################
-  # Blue Ocean API definitions
-  # Generated using swaggy-jenkins-cli
-  ########################################
+    ########################################
+    # Blue Ocean API definitions
+    # Generated using swaggy-jenkins-cli
+    ########################################
     Link:
       type: object
       properties:

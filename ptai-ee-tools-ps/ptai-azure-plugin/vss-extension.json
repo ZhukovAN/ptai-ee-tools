@@ -2,7 +2,7 @@
 	"manifestVersion": 1,
 	"id": "ptai",
 	"publisher": "ptsecurity",
-	"version": "0.4.36",
+	"version": "0.4.40",
 	"name": "PT Application Inspector",
 	"description": "Add application security testing inside your build process",
 	"public": false,
@@ -58,6 +58,54 @@
 			],
 			"properties": {
 				"name": "AI"
+			}
+		}, {
+			"id": "ptai-scan-endpoint",
+			"description": "Service Endpoint type for all PT AI EE connections",
+			"type": "ms.vss-endpoint.service-endpoint-type",
+			"targets": [
+				"ms.vss-endpoint.endpoint-types"
+			],
+			"properties": {
+				"name": "ptai-scan-endpoint",
+				"displayName": "PT AI EE endpoint",
+				"authenticationSchemes": [{
+						"type": "ms.vss-endpoint.endpoint-auth-scheme-basic",
+						"inputDescriptors": [{
+								"id": "username",
+								"name": "Username",
+								"description": "PT AI EE username",
+								"inputMode": "textbox",
+								"isConfidential": false,
+								"validation": {
+									"dataType": "String",
+									"isRequired": true
+								}
+							}, {
+								"id": "password",
+								"name": "Password",
+								"description": "PT AI EE user password",
+								"inputMode": "passwordbox",
+								"isConfidential": true,
+								"validation": {
+									"dataType": "String",
+									"isRequired": true
+								}
+							}, {
+								"id": "ca",
+								"name": "CA certificate chain",
+								"description": "Custom CA crtificate chain",
+								"inputMode": "textarea",
+								"isConfidential": false,
+								"validation": {
+									"dataType": "String",
+									"isRequired": false
+								}
+							}
+						]
+					}
+				],
+				"helpMarkDown": "Setup connection to PT AI EE server. You may also use custom CA certificate chain here"
 			}
 		}
 	]

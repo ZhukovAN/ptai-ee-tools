@@ -3,6 +3,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.client;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.Client;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.config.ConsulConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.service.SastService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
@@ -15,6 +17,7 @@ import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
+@Slf4j
 @Component
 public class PtaiClient extends Client {
     @Value("${server.ssl.trust-store-type}")
@@ -77,5 +80,21 @@ public class PtaiClient extends Client {
         keyStore.load(resource, pass);
     }
 
+    @Override
+    public void log(String value) {
+        log.info(this.logPrefix + value);
+    }
 
+    @Override
+    public void log(String format, Object ... value) {
+        log.info(String.format(format, value));
+    }
+
+    @Override
+    public void log(Exception exception) {
+        if (StringUtils.isNotEmpty(exception.getMessage()))
+            this.log("%s\r\n", exception.getMessage());
+        if (this.verbose)
+            log.error(exception.getMessage(), exception);
+    }
 }

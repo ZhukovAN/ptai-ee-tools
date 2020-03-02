@@ -59,10 +59,17 @@ public class DiagnosticService {
             if (StringUtils.isEmpty(token))
                 throw new PtaiServerException("PT AI EE server returned empty API token");
             log.debug("PT AI EE JWT token is {}...", token.substring(0, 10));
-
+        } catch (PtaiClientException e) {
+            log.error(e.getMessage());
+            log.trace("Exception details", e);
+            res.ptai(ComponentStatus.FAILURE);
+        }
+        try {
             JenkinsApiClientWrapper apiClient = new JenkinsApiClientWrapper(
                     jenkinsClient, jenkinsClient.getMaxRetry(), jenkinsClient.getRetryDelay());
-            ApiResponse<Void> jenkinsInfo = apiClient.callApi(() -> jenkinsClient.getJenkinsApi().headJenkinsWithHttpInfo());
+            ApiResponse<Void> jenkinsInfo = apiClient.callApi(
+                    () -> jenkinsClient.getJenkinsApi().headJenkinsWithHttpInfo(),
+                    "Getting embedded server version");
             Optional<String> jenkinsVersion = Optional.ofNullable(jenkinsInfo)
                     .map(info -> info.getHeaders())
                     .map(headers -> headers.get("X-Jenkins"))
@@ -72,13 +79,15 @@ public class DiagnosticService {
                 throw new PtaiServerException("Embedded server returned empty version number");
             log.debug("Embedded server version is {}", jenkinsVersion.get());
             String jobName = ApiClient.convertJobName(jenkinsClient.getCiJobName());
-            FreeStyleProject prj = apiClient.callApi(() -> jenkinsClient.getJenkinsApi().getJob(jobName));
+            FreeStyleProject prj = apiClient.callApi(
+                    () -> jenkinsClient.getJenkinsApi().getJob(jobName),
+                    "Checking build job");
             Integer buildNumber = prj.getNextBuildNumber();
             log.debug("Next SAST job build number is {}", buildNumber);
-        } catch (PtaiClientException e) {
-            return res.ptai(ComponentStatus.FAILURE);
         } catch (JenkinsClientException e) {
-            return res.embedded(ComponentStatus.FAILURE);
+            log.error(e.getMessage());
+            log.trace("Exception details", e);
+            res.embedded(ComponentStatus.FAILURE);
         }
         return res;
     }

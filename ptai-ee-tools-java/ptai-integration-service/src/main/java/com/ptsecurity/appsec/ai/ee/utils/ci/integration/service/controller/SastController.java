@@ -35,15 +35,14 @@ public class SastController {
     SastService sastService;
 
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
-    public ResponseEntity upload(
+    public ResponseEntity<String> upload(
             @RequestParam String project,
             @RequestParam MultipartFile file,
             @RequestParam int current,
-            @RequestParam int total) {
-        if ((current + 1 != total) && (current != 0))
-            throw new HttpServerErrorException(HttpStatus.NOT_IMPLEMENTED);
-        sastService.upload(project, file);
-        return new ResponseEntity<>(HttpStatus.OK);
+            @RequestParam int total,
+            @RequestParam(required = false) String uploadId) {
+        String res = sastService.upload(project, file, current, total, uploadId);
+        return new ResponseEntity<String>(res, HttpStatus.OK);
     }
 
     @PostMapping(value = "/scan-ui-managed", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -101,5 +100,11 @@ public class SastController {
         } catch (IOException e) {
             throw new ServiceUnavailableException();
         }
+    }
+
+    @PostMapping(value = "/stop")
+    public ResponseEntity stop(@RequestParam Integer buildNumber) {
+        sastService.stopScan(buildNumber);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

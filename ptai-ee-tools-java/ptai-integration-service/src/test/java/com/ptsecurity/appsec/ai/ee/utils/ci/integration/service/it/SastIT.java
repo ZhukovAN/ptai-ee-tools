@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.ComponentsStatus;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
@@ -14,6 +15,7 @@ import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
@@ -26,6 +28,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+@ActiveProfiles("integration-test")
 @DisplayName("Test SAST integration service client")
 public class SastIT extends BaseIT {
 
@@ -66,7 +69,7 @@ public class SastIT extends BaseIT {
     @DisplayName("Scan UI-managed project")
     public void startUiManagedProjectScan() throws Exception {
         File file = new File(getClass().getClassLoader().getResource("code/test.java.zip").getFile());
-        client.getSastApi().uploadUsingPOST(0, file, "DEVEL.TEST.JAVA", 1);
+        client.uploadZip("DEVEL.TEST.JAVA", file, 50 * 1024);
         Integer scanId = client.getSastApi().scanUiManagedUsingPOST("DEVEL.TEST.JAVA", "ptai");
         System.out.println("SAST job number is " + scanId);
 
@@ -81,7 +84,7 @@ public class SastIT extends BaseIT {
     @DisplayName("Scan JSON-managed project")
     public void startJsonManagedProjectScan() throws Exception {
         File file = new File(getClass().getClassLoader().getResource("code/test.java.zip").getFile());
-        client.getSastApi().uploadUsingPOST(0, file, "DEVEL.TEST.JAVA", 1);
+        client.uploadZip("DEVEL.TEST.JAVA", file, 50 * 1024);
 
         Integer scanId = client.getSastApi().scanJsonManagedUsingPOST("DEVEL.TEST.JAVA", "ptai", settings, policy);
         System.out.println("SAST job number is " + scanId);
@@ -104,5 +107,13 @@ public class SastIT extends BaseIT {
             Thread.sleep(1000);
         } while (true);
     }
+
+    @Test
+    @DisplayName("Get diagnostic info")
+    public void getDiagnosticInfo() throws Exception {
+        ComponentsStatus status = client.getDiagnosticApi().getComponentsStatusUsingGET();
+        System.out.println(status.toString());
+    }
+
 
 }

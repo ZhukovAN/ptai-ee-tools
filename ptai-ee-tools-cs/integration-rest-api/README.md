@@ -130,7 +130,6 @@ Class | Method | HTTP request | Description
  - [Model.InlineObject](docs/InlineObject.md)
  - [Model.JobState](docs/JobState.md)
  - [Model.JwtResponse](docs/JwtResponse.md)
- - [Model.ResponseEntity](docs/ResponseEntity.md)
 
 
 ## Documentation for Authorization

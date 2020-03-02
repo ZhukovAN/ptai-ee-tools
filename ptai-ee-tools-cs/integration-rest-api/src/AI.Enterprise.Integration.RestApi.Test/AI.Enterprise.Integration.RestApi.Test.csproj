@@ -81,7 +81,7 @@ The version of the OpenAPI document: 1.0
   <Import Project="$(MsBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
       <ProjectReference Include="..\AI.Enterprise.Integration.RestApi\AI.Enterprise.Integration.RestApi.csproj">
-          <Project>{35250ABD-63DF-47EE-BE50-81C382522F4A}</Project>
+          <Project>{B4D78A4D-F47D-4B0D-A048-685FC7EF50EA}</Project>
           <Name>AI.Enterprise.Integration.RestApi</Name>
       </ProjectReference>
   </ItemGroup>

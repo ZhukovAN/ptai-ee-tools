@@ -52,7 +52,14 @@
     <Compile Include="BaseClient.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="FileUtils.cs" />
+    <Compile Include="Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\FileSelector.cs" />
+    <Compile Include="Utils\DirectoryScanner.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
+    <Compile Include="Utils\SelectorUtils.cs" />
+    <Compile Include="Utils\TokenizedPath.cs" />
+    <Compile Include="Utils\TokenizedPattern.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

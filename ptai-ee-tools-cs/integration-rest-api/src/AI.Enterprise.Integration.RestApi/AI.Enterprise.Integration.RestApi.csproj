@@ -12,7 +12,7 @@ The version of the OpenAPI document: 1.0
     
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{35250ABD-63DF-47EE-BE50-81C382522F4A}</ProjectGuid>
+    <ProjectGuid>{B4D78A4D-F47D-4B0D-A048-685FC7EF50EA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AI.Enterprise.Integration.RestApi</RootNamespace>

@@ -131,9 +131,14 @@ public class FileCollectorTest {
         try {
             Transfers transfers = new Transfers();
             // transfersJson.add(Transfer.xml().includes("**/*").build());
-            transfers.add(Transfer.builder().includes("**/*").build());
+            transfers.add(Transfer.builder()
+                    // .includes("**/*.java")
+                    .excludes("**/*.class **/.git/**")
+                    // .useDefaultExcludes(true)
+                    .build());
             FileCollector collector = new FileCollector(transfers, null);
-            File srcFolder = new File("D:\\TEMP\\20200131\\app01");
+            // File srcFolder = new File("D:\\TEMP\\20200131\\app01");
+            File srcFolder = new File("D:\\TEMP\\20200214\\App01");
             File destFile = new File("D:\\TEMP\\20200131\\test.zip");
             collector.collect(srcFolder, destFile);
         } catch (Exception e) {

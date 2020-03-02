@@ -19,8 +19,8 @@ logging:
   level:
     org:
       hibernate:
-        SQL: debug
-        type.descriptor.sql: trace
+        SQL: DEBUG
+        type.descriptor.sql: TRACE
 
 ptai-backend-services:
   ci-url: https://ci.domain.org:443

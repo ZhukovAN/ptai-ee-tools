@@ -23,20 +23,22 @@ namespace AI.Generic.Client {
         public int Execute() {
             int res = 1000;
             DataRead OnOutDataRead = data => Console.Write(data != null ? data : "");
-            DataRead OnErrDataRead = data => Console.Write(data != null ? "[ERROR]::" + data : "");
+            // DataRead OnErrDataRead = data => Console.Write(data != null ? "[ERROR]::" + data : "");
+            DataRead OnErrDataRead = data => { }; // Ignore error output
 
             Thread[] readingThread = new Thread[2];
             for (int i = 0; i < readingThread.Length; i++)
                 readingThread[i] = new Thread(Read);
 
             ProcessStartInfo info = new ProcessStartInfo() {
+                WorkingDirectory = Path.GetDirectoryName(this.path),
                 FileName = this.path,
                 Arguments = this.arguments,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
                 CreateNoWindow = true
-            };
+            }; 
             using (Process process = Process.Start(info)) {
                 readingThread[0].Start(new StreamProcessor(process.StandardOutput, OnOutDataRead));
                 readingThread[1].Start(new StreamProcessor(process.StandardError, OnErrDataRead));

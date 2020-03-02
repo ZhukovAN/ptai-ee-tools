@@ -1,0 +1,9 @@
+spring:
+  profiles: integration-test
+  cloud:
+    bus.enabled: true
+    discovery.enabled: true
+    consul:
+      enabled: true
+      config.enabled: true
+      host: ptai.domain.org

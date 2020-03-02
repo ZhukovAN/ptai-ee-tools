@@ -6,3 +6,4 @@ spring:
     consul:
       enabled: false
       config.enabled: false
+      host: ptai.domain.org

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="Alexey N. Zhukov" id="2">
+        <insert tableName="OAUTH_CLIENT_DETAILS">
+            <column name="CLIENT_ID" value="ptai-azure-plugin"/>
+            <!-- client_secret is wdjJd0DeWtW4SLB4K01Xy8ljQ5KKJH1Q -->
+            <column name="CLIENT_SECRET" value="$2a$10$jgRibpivIeHlcckDjVZp7usjTHHWwdhb.wLVfO3JwCiv7Kcr4M/x."/>
+            <column name="SCOPE" value="read,write,trust"/>
+            <column name="AUTHORIZED_GRANT_TYPES" value="password,refresh_token"/>
+            <column name="AUTHORITIES" value="ROLE_CLIENT,ROLE_TRUSTED_CLIENT"/>
+            <column name="ACCESS_TOKEN_VALIDITY" valueNumeric="900"/>
+            <column name="REFRESH_TOKEN_VALIDITY" valueNumeric="2592000"/>
+        </insert>
+        <insert tableName="OAUTH_CLIENT_DETAILS">
+            <column name="CLIENT_ID" value="ptai-teamcity-plugin"/>
+            <!-- client_secret is ZW3r0QB3YFZvhmG8pmYDMC0VtGP0IC17 -->
+            <column name="CLIENT_SECRET" value="$2a$10$le.sA27qHxUNCLsNfrGL5ub0kJo42f4fIOy6QXBTnljHqjHYep4Te"/>
+            <column name="SCOPE" value="read,write,trust"/>
+            <column name="AUTHORIZED_GRANT_TYPES" value="password,refresh_token"/>
+            <column name="AUTHORITIES" value="ROLE_CLIENT,ROLE_TRUSTED_CLIENT"/>
+            <column name="ACCESS_TOKEN_VALIDITY" valueNumeric="900"/>
+            <column name="REFRESH_TOKEN_VALIDITY" valueNumeric="2592000"/>
+        </insert>
+        <insert tableName="OAUTH_CLIENT_DETAILS">
+            <column name="CLIENT_ID" value="ptai-sonarqube-plugin"/>
+            <!-- client_secret is irJf19Jv5PdC9laZSJIG3YdT47gHjV7Q -->
+            <column name="CLIENT_SECRET" value="$2a$10$BxhnIQfohqthOmGvfWAd9uaZtLix93rI6yeunqOxseN1Y.ZDK7/cK"/>
+            <column name="SCOPE" value="read,write,trust"/>
+            <column name="AUTHORIZED_GRANT_TYPES" value="password,refresh_token"/>
+            <column name="AUTHORITIES" value="ROLE_CLIENT,ROLE_TRUSTED_CLIENT"/>
+            <column name="ACCESS_TOKEN_VALIDITY" valueNumeric="900"/>
+            <column name="REFRESH_TOKEN_VALIDITY" valueNumeric="2592000"/>
+        </insert>
+        <insert tableName="OAUTH_CLIENT_DETAILS">
+            <column name="CLIENT_ID" value="ptai-maven-plugin"/>
+            <!-- client_secret is tSVT2734JBRoFnbrak3oQaKQq9t9P6OY -->
+            <column name="CLIENT_SECRET" value="$2a$10$j9LdxVmUrK2mr7NyRSmup.w6ZkHXLhNmfNjMTrnUoui0Yjxk4yShi"/>
+            <column name="SCOPE" value="read,write,trust"/>
+            <column name="AUTHORIZED_GRANT_TYPES" value="password,refresh_token"/>
+            <column name="AUTHORITIES" value="ROLE_CLIENT,ROLE_TRUSTED_CLIENT"/>
+            <column name="ACCESS_TOKEN_VALIDITY" valueNumeric="900"/>
+            <column name="REFRESH_TOKEN_VALIDITY" valueNumeric="2592000"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

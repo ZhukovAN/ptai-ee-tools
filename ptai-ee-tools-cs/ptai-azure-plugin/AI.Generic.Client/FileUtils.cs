@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AI.Generic.Client.Utils;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -6,13 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AI.Azure.Plugin {
+namespace AI.Generic.Client {
     public class FileUtils {
-        protected static readonly char WINDOWS_SEPARATOR = '\\';
-        protected static readonly char UNIX_SEPARATOR = '/';
-
-        public static readonly string[] PREDEFINED_EXCLUDES = new string[] { "**/%*%", "**/.git/**", "**/SCCS", "**/.bzr", "**/.hg/**", "**/.bzrignore", "**/.git", "**/SCCS/**", "**/.hg", "**/.#*", "**/vssver.scc", "**/.bzr/**", "**/._*", "**/#*#", "**/*~", "**/CVS", "**/.hgtags", "**/.svn/**", "**/.hgignore", "**/.svn", "**/.gitignore", "**/.gitmodules", "**/.hgsubstate", "**/.gitattributes", "**/CVS/**", "**/.hgsub", "**/.DS_Store", "**/.cvsignore" };
-
         public class FileEntry {
             public string file;
             public string entry;
@@ -22,32 +18,42 @@ namespace AI.Azure.Plugin {
             }
         }
 
-        public static void collect(List<FileEntry> list, string rootFolder, string currentFolder, string[] includes, string[] excludes, bool usePredefinedExcludes, string removePrefix, bool flatten) {
-            string[] files = Directory.GetFiles(currentFolder);
-            foreach (string file in files) {
-                string relativePath = file.Substring(rootFolder.Length);
-                if (relativePath.StartsWith(Path.DirectorySeparatorChar.ToString()))
-                    relativePath = relativePath.Substring(Path.DirectorySeparatorChar.ToString().Length);
-                // relativePath = check(relativePath, includes, excludes, usePredefinedExcludes, removePrefix, flatten, true);
-                // if ("" == relativePath) continue;
-                list.Add(new FileEntry(file, relativePath));
+        public static List<FileEntry> collect(string folder, string[] includes, string[] excludes, bool usePredefinedExcludes, string removePrefix, bool flatten) {
+            DirectoryScanner scanner = new DirectoryScanner();
+            scanner.setBasedir(folder);
+            scanner.setIncludes(includes);
+            scanner.setExcludes(excludes);
+            if (usePredefinedExcludes)
+                scanner.addDefaultExcludes();
+            scanner.scan();
+            String[] files = scanner.getIncludedFiles();
+            List<FileEntry> res = new List<FileEntry>();
+            foreach (String file in files) {
+                String entry = file;
+                if (flatten)
+                    entry = Path.GetFileName(folder + Path.DirectorySeparatorChar + file);
+                else if (!String.IsNullOrEmpty(removePrefix)) {
+                    String normalizedPrefix = removePrefix.Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
+                    if (entry.StartsWith(normalizedPrefix))
+                        entry = entry.Substring(normalizedPrefix.Length);
+                    else
+                        throw new Exception($"Can't remove prefix {removePrefix} from entry {entry}");
+                }
+                if (!res.Any(e => e.entry.Equals(entry)))
+                    res.Add(new FileEntry(folder + Path.DirectorySeparatorChar + file, entry));
             }
-            string[] folders = Directory.GetDirectories(currentFolder);
-            foreach (string folder in folders)
-                collect(list, rootFolder, folder, includes, excludes, usePredefinedExcludes, removePrefix, flatten);
+            return res;
         }
 
         public static void zip(string folder, string destination, string[] includes, string[] excludes, bool usePredefinedExcludes, string removePrefix, bool flatten) {
-            List<FileEntry> entries = new List<FileEntry>();
             byte[] buf = new byte[1024 * 100];
 
-            collect(entries, folder, folder, includes, excludes, usePredefinedExcludes, removePrefix, flatten);
+            List<FileEntry> entries = collect(folder, includes, excludes, usePredefinedExcludes, removePrefix, flatten);
             using (FileStream zip = new FileStream(destination, FileMode.Create)) {
                 using (ZipArchive archive = new ZipArchive(zip, ZipArchiveMode.Update)) {
                     foreach (FileEntry entry in entries) {
                         using (BinaryReader reader = new BinaryReader(File.OpenRead(entry.file))) {
                             ZipArchiveEntry zipEntry = archive.CreateEntry(entry.entry);
-
                             using (BinaryWriter writer = new BinaryWriter(zipEntry.Open())) {
                                 while (true) {
                                     int sz = reader.Read(buf, 0, buf.Length);
@@ -60,6 +66,24 @@ namespace AI.Azure.Plugin {
                     }
                 }
             }
+        }
+
+        public static void copy(string folder, string destination, string[] includes, string[] excludes, bool usePredefinedExcludes, string removePrefix, bool flatten) {
+            List<FileEntry> entries = collect(folder, includes, excludes, usePredefinedExcludes, removePrefix, flatten);
+            foreach (FileEntry entry in entries) {
+                String destFileName = destination + Path.DirectorySeparatorChar + entry.entry;
+                Directory.CreateDirectory(Path.GetDirectoryName(destFileName));
+                File.Copy(entry.file, destFileName);
+            }
+        }
+
+        public static String BytesToString(long byteCount) {
+            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; // Longs run out around EB
+            if (0 == byteCount) return "0 " + suf[0];
+            long bytes = Math.Abs(byteCount);
+            int idx = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            double num = Math.Round(bytes / Math.Pow(1024, idx), 1);
+            return (Math.Sign(byteCount) * num).ToString() + " " + suf[idx];
         }
     }
 }

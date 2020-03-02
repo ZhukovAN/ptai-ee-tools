@@ -160,7 +160,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
     }
 
     @Override
-    public void perform(@Nonnull Run<?, ?> build, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener listener) throws InterruptedException, IOException {
+    public void perform(@Nonnull Run<?, ?> build, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener listener) throws IOException, InterruptedException {
         Jenkins jenkins = Jenkins.get();
         final BuildEnv currentBuildEnv = new BuildEnv(getEnvironmentVariables(build, listener), workspace, build.getTimestamp());
         final BuildEnv targetBuildEnv = null;
@@ -337,46 +337,57 @@ public class Plugin extends Builder implements SimpleBuildStep {
                     throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastUnstable());
             } else {
                 // Slim mode
-                client = new Client();
-                client.setUrl(serverUrl);
-                client.setClientId(Plugin.CLIENT_ID);
-                client.setClientSecret(Plugin.CLIENT_SECRET);
-                client.setUserName(slimCredentials.getUserName());
-                client.setPassword(slimCredentials.getPassword().getPlainText());
-                if (!org.apache.commons.lang.StringUtils.isEmpty(slimCredentials.getServerCaCertificates()))
-                    client.setCaCertsPem(slimCredentials.getServerCaCertificates());
-                client.init();
+                Integer scanId = null;
+                try {
+                    client = new Client();
+                    client.setConsoleLog(listener.getLogger());
+                    client.setVerbose(this.verbose);
+                    client.setLogPrefix(this.consolePrefix);
 
-                File zipFile = this.zipSources(buildInfo, workspace, launcher, listener);
-                client.getSastApi().uploadUsingPOST(0, zipFile, projectName, 1);
-                Integer scanId = client.getSastApi().scanUiManagedUsingPOST("DEVEL.TEST.JAVA", "ptai");
-                log(listener, "SAST job number is " + scanId);
+                    client.setUrl(serverUrl);
+                    client.setClientId(Plugin.CLIENT_ID);
+                    client.setClientSecret(Plugin.CLIENT_SECRET);
+                    client.setUserName(slimCredentials.getUserName());
+                    client.setPassword(slimCredentials.getPassword().getPlainText());
+                    if (!org.apache.commons.lang.StringUtils.isEmpty(slimCredentials.getServerCaCertificates()))
+                        client.setCaCertsPem(slimCredentials.getServerCaCertificates());
+                    client.init();
 
-                JobState state = null;
-                int pos = 0;
-                do {
-                    state = client.getSastApi().getJobStateUsingGET(scanId, pos);
-                    if (state.getPos() != pos) {
-                        String[] lines = state.getLog().split("\\r?\\n");
-                        for (String line : lines)
-                            log(listener, "%s\r\n", line);
+                    File zipFile = this.zipSources(buildInfo, workspace, launcher, listener);
+                    client.uploadZip(projectName, zipFile, 1024 * 1024);
+                    scanId = client.getSastApi().scanUiManagedUsingPOST(projectName, this.nodeName);
+                    log(listener, "SAST job number is " + scanId);
+
+                    JobState state = null;
+                    int pos = 0;
+                    do {
+                        state = client.getSastApi().getJobStateUsingGET(scanId, pos);
+                        if (state.getPos() != pos) {
+                            String[] lines = state.getLog().split("\\r?\\n");
+                            for (String line : lines)
+                                log(listener, "%s\r\n", line);
+                        }
+                        pos = state.getPos();
+                        if (!state.getStatus().equals(JobState.StatusEnum.UNKNOWN)) break;
+                        Thread.sleep(2000);
+                    } while (true);
+
+                    RemoteSastJob sastJob = new RemoteSastJob(launcher);
+                    List<String> results = client.getSastApi().getJobResultsUsingGET(scanId);
+                    for (String result : results) {
+                        File data = client.getSastApi().getJobResultUsingGET(scanId, result);
+                        String fileName = result.replaceAll("REPORTS", SAST_FOLDER);
+                        sastJob.saveReport(workspace.getRemote(), fileName, FileUtils.readFileToString(data, StandardCharsets.UTF_8));
                     }
-                    pos = state.getPos();
-                    if (!state.getStatus().equals(JobState.StatusEnum.UNKNOWN)) break;
-                    Thread.sleep(2000);
-                } while (true);
-
-                RemoteSastJob sastJob = new RemoteSastJob(launcher);
-                List<String> results = client.getSastApi().getJobResultsUsingGET(scanId);
-                for (String result : results) {
-                    File data = client.getSastApi().getJobResultUsingGET(scanId, result);
-                    String fileName = result.replaceAll("REPORTS", SAST_FOLDER);
-                    sastJob.saveReport(workspace.getRemote(), fileName, FileUtils.readFileToString(data, StandardCharsets.UTF_8));
+                    if (failIfFailed && JobState.StatusEnum.FAILURE.equals(state.getStatus()))
+                        throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastFailed());
+                    if (failIfUnstable && JobState.StatusEnum.UNSTABLE.equals(state.getStatus()))
+                        throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastUnstable());
+                } catch (InterruptedException e) {
+                    if ((null != client) && (null != scanId))
+                        client.getSastApi().stopScanUsingPOST(scanId);
+                    throw e;
                 }
-                if (failIfFailed && JobState.StatusEnum.FAILURE.equals(state.getStatus()))
-                    throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastFailed());
-                if (failIfUnstable && JobState.StatusEnum.UNSTABLE.equals(state.getStatus()))
-                    throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastUnstable());
             }
         } catch (JenkinsClientException e) {
             log(listener, com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedJenkinsApiDetails(e) + "\r\n");

@@ -4,10 +4,13 @@
 **/docs/*.vpp.bak_*
 **/docs/*.vpp.lck
 **/.idea/workspace.xml
-**/bin/Release/**
-**/bin/Debug/**
+**/Release/**
+**/Debug/**
 **/packages/**
 **/node_modules/**
 **/*.vsix
 **/*.dll
 **/.vs/**
+**/TestResults/**
+**/db/**/*.db
+**/admin

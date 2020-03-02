@@ -5,11 +5,14 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.Jenki
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.JenkinsApiClientWrapper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleBuild;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 @Getter @Setter
 public class Client extends BaseClient {
@@ -41,6 +44,23 @@ public class Client extends BaseClient {
             return this;
         } catch (BaseClientException e) {
             throw new JenkinsClientException(e.getMessage(), e);
+        }
+    }
+
+    public void stopJob(String jobName, FreeStyleBuild sastBuild) {
+        JenkinsApiClientWrapper client = new JenkinsApiClientWrapper(this, 5, 5000);
+        final String crumb = client.crumb();
+        try {
+            client.callApi(() -> { jenkinsApi.postCancelQueueItem(sastBuild.getQueueId(), crumb); return null; });
+        } catch (JenkinsServerException e) {
+            this.log("Queue item stop failed, SAST job may be started already");
+            this.log(e);
+            try {
+                client.callApi(() -> { jenkinsApi.postJobBuildStop(jobName, sastBuild.getId(), crumb); return null; });
+            } catch (JenkinsServerException e1) {
+                this.log("Queue item stop failed, SAST job may be started already");
+                this.log(e1);
+            }
         }
     }
 }

@@ -12,13 +12,57 @@
 	"version": {
 		"Major": 0,
 		"Minor": 4,
-		"Patch": 36
+		"Patch": 40
 	},
 	"demands": [
 	],
 	"minimumAgentVersion": "1.0.0",
+	"groups": [
+		{
+			"name": "serverSettings",
+			"displayName": "PT AI EE server",
+			"isExpanded": true
+		},
+		{
+			"name": "scanSettings",
+			"displayName": "PT AI EE scan settings",
+			"isExpanded": true
+		},
+		{
+			"name": "advancedScanSettings",
+			"displayName": "PT AI EE advanced scan settings",
+			"isExpanded": false
+		}
+	  ],
 	"instanceNameFormat": "PT AI code analysis",
 	"inputs": [
+		{
+			"name": "useRemotePtaiService",
+			"type": "boolean",
+			"label": "Use remote PT AI EE service",
+			"required": true,
+			"defaultValue": "true",
+			"groupName": "serverSettings",
+			"helpMarkDown": "If unchecked you will need to deploy PT AI EE scan agent on Azure DevOps server agent"
+		},
+		{
+			"name": "remotePtaiService",
+			"type": "connectedService:ptai-scan-endpoint",
+			"label": "PT AI EE endpoint",
+			"required": true,
+			"groupName": "serverSettings",
+			"helpMarkDown": "The PT AI EE server endpoint",
+			"visibleRule": "useRemotePtaiService == true"
+		},
+		{
+			"name": "ptaiAgent",
+			"type": "string",
+			"label": "PT AI EE scan agent tag or name",
+			"required": false,
+			"defaultValue": "ptai",
+			"groupName": "serverSettings",
+			"visibleRule": "useRemotePtaiService == true"
+		},
         {
             "name": "scanSettingsType",
             "type": "pickList",
@@ -29,7 +73,8 @@
             "options": {
                 "ui": "UI-defined settings",
                 "json": "JSON-defined settings"
-            }
+			},
+			"groupName": "scanSettings"
         },
 		{
 			"name": "projectName",
@@ -37,7 +82,8 @@
 			"label": "Project Name",
 			"required": true,
 			"helpMarkDown": "Select an existing PT AI project name",
-			"visibleRule": "scanSettingsType == ui"
+			"visibleRule": "scanSettingsType == ui",
+			"groupName": "scanSettings"
 		}, 
         {
             "name": "jsonSettings",
@@ -45,7 +91,9 @@
             "label": "JSON settings",
             "defaultValue": "",
             "required": true,
-			"visibleRule": "scanSettingsType == json"
+			"visibleRule": "scanSettingsType == json",
+			"helpMarkDown": "Define AST settings as JSON.",
+			"groupName": "scanSettings"
         },
         {
             "name": "jsonPolicy",
@@ -54,7 +102,8 @@
             "defaultValue": "",
             "required": false,
 			"visibleRule": "scanSettingsType == json",
-            "helpMarkDown": "During project building, the build agent validates scan results against the rule conditions and fails the build process if the policy is breached."
+			"helpMarkDown": "During project building, the build agent validates scan results against the rule conditions and fails the build process if the policy is breached.",
+			"groupName": "scanSettings"
         },
 		{
 			"name": "failIfAstUnstable",
@@ -62,7 +111,53 @@
 			"label": "Fail step if AST unstable",
 			"required": true,
 			"defaultValue": "false",
-			"helpMarkDown": "PT AI fails build phase if security policy is failed or some errors raised during AST. Select this option to fail build phase even if there were minor warnings during AST."
+			"helpMarkDown": "PT AI fails build phase if security policy is failed or some errors raised during AST. Select this option to fail build phase even if there were minor warnings during AST.",
+			"groupName": "scanSettings"
+		},
+        {
+            "name": "includeFiles",
+            "type": "multiLine",
+            "label": "Files to analyze",
+            "defaultValue": "**/*",
+            "required": true,
+			"helpMarkDown": "Files to scan for vulnerabilities. The string is a comma separated list of includes for an Ant fileset eg. '\\*\\*/\\*.jar', [see Patterns in the Ant manual](http://ant.apache.org/manual/dirtasks.html#patterns). The base directory for this fileset is the workspace.",
+			"groupName": "scanSettings"
+        },
+        {
+            "name": "excludeFiles",
+            "type": "multiLine",
+            "label": "Files to exclude",
+            "defaultValue": "",
+            "required": false,
+			"helpMarkDown": "Files to exclude from scan for vulnerabilities. The string is a comma separated list of excludes for an Ant fileset eg. '\\*\\*/\\*.log,\\*\\*/\\*.tmp, .git/', [see Patterns in the Ant manual](http://ant.apache.org/manual/dirtasks.html#patterns). The base directory for this fileset is the workspace.",
+			"groupName": "advancedScanSettings"
+        },
+        {
+            "name": "removePrefix",
+            "type": "string",
+            "label": "Remove prefix",
+            "defaultValue": "",
+            "required": false,
+			"helpMarkDown": "First part of the file path that should not be created on the remote server. Directory structures are created relative to the base directory, which is usually the workspace. You normally do not want the full path to these files to be created on the server. For example if Source files were target/deployment/images/\\*\\*/ then you may want Remove prefix to be target/deployment This would create the images folder under the remote directory, and not target/deployment. **If you use remove prefix, then ALL source file paths MUST start with the prefix.**",
+			"groupName": "advancedScanSettings"
+        },
+		{
+			"name": "usePredefinedExcludes",
+			"type": "boolean",
+			"label": "Use predefined excludes",
+			"required": true,
+			"defaultValue": "true",
+			"helpMarkDown": "Select this option to disable the default exclude patterns. The default exclude patterns are: /\\*~, /\\#\\*\\#, /.\\#\\*, /%\\*%, /._\\*, /CVS, /CVS/\\*\\*, /.cvsignore, /SCCS, /SCCS/\\*\\*, /vssver.scc, /.svn, /.svn/\\*\\*, /.git, /.git/\\*\\*, /.gitattributes, /.gitignore, /.gitmodules, /.hg, /.hg/\\*\\*, /.hgignore, /.hgsub, /.hgsubstate, /.hgtags, /.bzr, /.bzr/\\*\\*, /.bzrignore, /.DS_Store",
+			"groupName": "advancedScanSettings"
+		},
+		{
+			"name": "flattenFiles",
+			"type": "boolean",
+			"label": "Flatten files",
+			"required": true,
+			"defaultValue": "false",
+			"helpMarkDown": "Only transfer files, ignore folder structure. **All files that have been selected to analyze must have unique filenames.**",
+			"groupName": "advancedScanSettings"
 		}
 	],
 	"execution": {

@@ -4,13 +4,14 @@ using AI.Enterprise.Integration.RestApi.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace AI.Generic.Client {
     public class BaseClient {
-        protected readonly static string clientId = "ptai-jenkins-plugin";
-        protected readonly static string clientSecret = "etg76M18UsOGMPLRliwCn2r3g8BlO7TZ";
+        protected readonly static string clientId = "ptai-azure-plugin";
+        protected readonly static string clientSecret = "wdjJd0DeWtW4SLB4K01Xy8ljQ5KKJH1Q";
 
         protected string username = null;
         protected string password = null;
@@ -27,6 +28,7 @@ namespace AI.Generic.Client {
         public BaseClient init(string username, string password, string ca) {
             this.username = username;
             this.password = password;
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
             return this;
         }
 
