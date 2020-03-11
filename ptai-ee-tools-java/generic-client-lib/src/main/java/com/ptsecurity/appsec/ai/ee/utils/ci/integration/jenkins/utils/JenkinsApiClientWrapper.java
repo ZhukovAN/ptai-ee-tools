@@ -12,7 +12,9 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 
+import java.util.Arrays;
 import java.util.concurrent.Callable;
+import java.util.function.IntPredicate;
 
 @Builder
 @AllArgsConstructor
@@ -25,7 +27,8 @@ public class JenkinsApiClientWrapper {
 
     protected int jenkinsDelay = 5000;
 
-    public <V> V callApi(Callable<V> call) throws JenkinsServerException {
+    public <V> V callApi(Callable<V> call)
+            throws JenkinsServerException {
         return this.callApi(call, null);
     }
 
@@ -44,7 +47,7 @@ public class JenkinsApiClientWrapper {
         this.callApi(dummy, stage);
     }
 
-    public <V> V callApi(Callable<V> call, String stage) throws JenkinsServerException {
+    public <V> V callApi(Callable<V> call, IntPredicate treatCodeAsNull, String stage) throws JenkinsServerException {
         int attempt = 1;
         do {
             try {
@@ -52,6 +55,8 @@ public class JenkinsApiClientWrapper {
                     Thread.sleep(jenkinsDelay);
                 return call.call();
             } catch (ApiException e) {
+                if (treatCodeAsNull.test(e.getCode()))
+                    return null;
                 if (HttpStatus.SC_BAD_GATEWAY != e.getCode())
                     processException(e, stage);
                 if (jenkinsMaxRetry <= attempt) {
@@ -68,6 +73,10 @@ public class JenkinsApiClientWrapper {
         } while (true);
     }
 
+    public <V> V callApi(Callable<V> call, String stage) throws JenkinsServerException {
+        return callApi(call, c -> (false), stage);
+    }
+
     protected void processException(Exception e, String stage) throws JenkinsServerException {
         if (StringUtils.isNotEmpty(stage))
             throw new JenkinsServerException(String.format("Exception raised during stage: %s", stage), e);
@@ -82,8 +91,8 @@ public class JenkinsApiClientWrapper {
     protected String getCrumb() {
         try {
             ApiResponse<DefaultCrumbIssuer> response = client.getJenkinsApi().getCrumbWithHttpInfo();
-            client.log("Crumb: %s\r\n", response.getData().toString());
-            return response.getData().toString();
+            client.log("Crumb: %s\r\n", response.getData().getCrumb());
+            return response.getData().getCrumb();
         } catch (ApiException dummy) {
             client.log("No CSRF token issued\r\n");
             return null;

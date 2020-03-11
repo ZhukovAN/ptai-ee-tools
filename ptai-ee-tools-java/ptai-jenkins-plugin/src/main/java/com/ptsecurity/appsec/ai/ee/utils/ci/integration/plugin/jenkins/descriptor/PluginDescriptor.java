@@ -251,7 +251,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         if (!org.apache.commons.lang.StringUtils.isEmpty(slimCredentials.getServerCaCertificates()))
             client.setCaCertsPem(slimCredentials.getServerCaCertificates());
         client.init();
-        return client.getDiagnosticApi().getProject(projectName);
+        return client.getDiagnosticApi().getProjectId(projectName);
     }
 
     protected UUID searchProjectWithLegacyConfig(

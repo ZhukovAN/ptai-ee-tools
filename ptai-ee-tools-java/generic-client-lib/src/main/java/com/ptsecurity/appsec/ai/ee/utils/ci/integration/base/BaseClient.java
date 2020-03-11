@@ -304,7 +304,11 @@ public class BaseClient extends Base {
             helper.setSslCaCert(stream);
 
             OkHttpClient httpClient = helper.getHttpClient();
-            httpClient = httpClient.newBuilder().hostnameVerifier((hostname, session) -> true).build();
+            httpClient = httpClient.newBuilder()
+                    .hostnameVerifier((hostname, session) -> true)
+                    // .followRedirects(false)
+                    // .followSslRedirects(false)
+                    .build();
             helper.setHttpClient(httpClient);
         } catch (CertificateEncodingException | KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
             throw new BaseClientException(e.getMessage(), e);

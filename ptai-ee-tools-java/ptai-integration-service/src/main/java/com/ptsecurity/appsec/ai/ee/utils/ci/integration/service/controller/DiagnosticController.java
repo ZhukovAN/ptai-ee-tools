@@ -28,8 +28,8 @@ public class DiagnosticController {
     }
 
     @GetMapping(value = "/project", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UUID> getProject(@RequestParam(name = "projectName") String projectName) throws ServiceUnavailableException {
-        UUID projectId = diagnosticService.getProjectByName(projectName);
+    public ResponseEntity<UUID> getProject(@RequestParam(name = "name") String name) throws ServiceUnavailableException {
+        UUID projectId = diagnosticService.getProjectByName(name);
         if (null == projectId)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else

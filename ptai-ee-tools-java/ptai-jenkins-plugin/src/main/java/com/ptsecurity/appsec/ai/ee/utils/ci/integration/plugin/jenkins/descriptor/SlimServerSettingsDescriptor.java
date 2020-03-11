@@ -76,10 +76,10 @@ public class SlimServerSettingsDescriptor extends Descriptor<SlimServerSettings>
             if (!StringUtils.isEmpty(slimCredentials.getServerCaCertificates()))
                 client.setCaCertsPem(slimCredentials.getServerCaCertificates());
             client.init();
-            BuildInfo buildInfo = client.getPublicApi().getBuildInfoUsingGET();
+            BuildInfo buildInfo = client.getPublicApi().getBuildInfo();
             String buildInfoText = buildInfo.getName() + ".v" + buildInfo.getVersion() + " from " + buildInfo.getDate();
 
-            ComponentsStatus statuses = client.getDiagnosticApi().getComponentsStatusUsingGET();
+            ComponentsStatus statuses = client.getDiagnosticApi().getStatus();
             String statusText = "PTAI: " + statuses.getPtai() + "; EMBEDDED: " + statuses.getEmbedded();
             return  (statuses.getPtai().equals(ComponentStatus.FAILURE) || statuses.getEmbedded().equals(ComponentStatus.FAILURE))
                     ? FormValidation.error(Messages.validator_test_slim_server_fail(buildInfoText, statusText))

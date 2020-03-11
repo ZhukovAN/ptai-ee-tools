@@ -2,10 +2,17 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class SastJobTest {
     private final static String ip = "127.0.0.1";
@@ -51,5 +58,21 @@ class SastJobTest {
         } catch (JenkinsClientException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testQueueIdRegex() {
+        Map<String, List<String>> headers = new HashMap<>();
+        String location = "https://ci.domain.org/queue/item/308/";
+        headers.put("Location", Arrays.asList(location));
+        ApiResponse<Void> response = new ApiResponse<>(200, headers);
+        Integer id = Client.getQueueId(response);
+        System.out.println(String.format("%d", id));
+        assertEquals(308, id);
+        location = "https://www.github.com";
+        headers.replace("Location", Arrays.asList(location));
+        response = new ApiResponse<>(200, headers);
+        id = Client.getQueueId(response);
+        assertEquals(null, id);
     }
 }

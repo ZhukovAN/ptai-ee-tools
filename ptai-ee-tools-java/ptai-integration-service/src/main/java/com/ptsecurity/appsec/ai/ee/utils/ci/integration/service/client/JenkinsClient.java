@@ -62,11 +62,14 @@ public class JenkinsClient extends Client {
         this.setUserName(ciUserName);
         this.setToken(ciApiToken);
         this.setVerbose(verbose);
+        this.setJenkinsMaxRetry(maxRetry);
+        this.setJenkinsRetryDelay(retryDelay);
         // jenkinsSastJob.setConsoleLog(System.out);
         // client.setJobName(sastJob);
         // jenkinsSastJob.setProjectName(ptaiPrj.getName());
         // jenkinsSastJob.setNodeName(node);
 
+        this.setLogPrefix(null);
         this.init();
     }
 
@@ -81,7 +84,11 @@ public class JenkinsClient extends Client {
 
     @Override
     public void log(String value) {
-        log.info(this.logPrefix + value);
+        if (null == consoleLog) return;
+        if (null != logPrefix)
+            log.info(this.logPrefix + value);
+        else
+            log.info(value);
     }
 
     @Override
