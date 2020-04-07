@@ -1,9 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.TestUtils;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.utils.TempDirectory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.File;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,10 +27,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class FileCollectorTest {
@@ -126,6 +133,7 @@ public class FileCollectorTest {
         collector.collect(sourcesFolder, destFile.toFile());
         System.out.println("Done");
     }
+
     @Test
     void research() {
         try {
@@ -146,4 +154,62 @@ public class FileCollectorTest {
         }
     }
 
+    @Test
+    void folders() throws Exception {
+        String[] children = new String[] { "aaa", "bbb", "ccc" };
+        /*
+        Base owner = Mockito.mock(Base.class);
+        Mockito.when(owner.isVerbose()).thenReturn(true);
+        doCallRealMethod().when(owner).log(anyString(), any());
+        doAnswer((s) -> {
+            System.out.print(s);
+            return null;
+        }).when(owner).log(anyString());
+         */
+        Base owner = new Base();
+        owner.setVerbose(true);
+        owner.setConsoleLog(System.out);
+
+        try (TempDirectory dir = new TempDirectory()) {
+            Path sources = Files.createDirectory(dir.getFile().resolve("sources"));
+            for (String child : children) {
+                Path path = Files.createDirectory(sources.resolve(child));
+                unzipTestSources(path);
+            }
+            Transfers transfers = new Transfers();
+            transfers.add(Transfer.builder()
+                    // .includes("bbb/**")
+                    .includes("**/*.css")
+                    // .includes("bbb/app01/src/main/webapp/js/Bootstrap/css/*.css")
+                    .excludes("**/*.java")
+                    .useDefaultExcludes(true)
+                    .build());
+            FileCollector collector = new FileCollector(transfers, owner);
+            collector.collect(sources.toFile(), dir.getFile().resolve("sources.zip").toFile());
+        }
+    }
+
+    @Test
+    void bytesToStringTest() {
+        System.out.println(FileCollector.bytesToString(65536L * 65535L));
+        System.out.println(FileCollector.bytesToString(1024));
+        System.out.println(FileCollector.bytesToString(65515L));
+    }
+
+    void unzipTestSources(final Path destination) throws IOException {
+        File zip = new File(getClass().getClassLoader().getResource("src/app01.zip").getFile());
+        ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
+        ZipEntry entry = zis.getNextEntry();
+        while (null != entry) {
+            if (!entry.isDirectory()) {
+                File out = new File(destination.resolve(entry.getName()).toString());
+                out.getParentFile().mkdirs();
+                OutputStream fos = new FileOutputStream(out);
+                IOUtils.copy(zis, fos);
+                fos.close();
+            }
+            entry = zis.getNextEntry();
+        }
+
+    }
 }

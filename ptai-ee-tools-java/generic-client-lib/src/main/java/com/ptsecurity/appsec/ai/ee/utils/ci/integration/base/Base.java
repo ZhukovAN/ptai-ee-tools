@@ -49,7 +49,7 @@ public class Base {
     public void log(Exception exception) {
         if (StringUtils.isNotEmpty(exception.getMessage()))
             this.log("%s\r\n", exception.getMessage());
-        if (this.verbose)
+        if (this.verbose && null != consoleLog)
             exception.printStackTrace(this.consoleLog);
     }
 

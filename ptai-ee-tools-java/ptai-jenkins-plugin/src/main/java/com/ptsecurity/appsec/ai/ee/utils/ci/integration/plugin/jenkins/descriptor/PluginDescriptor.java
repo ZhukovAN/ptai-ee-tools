@@ -27,6 +27,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Val
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProject;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiServerException;
+import com.thoughtworks.xstream.XStream;
 import hudson.Extension;
 import hudson.Util;
 import hudson.model.*;
@@ -34,6 +35,7 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.CopyOnWriteList;
 import hudson.util.FormValidation;
+import hudson.util.XStream2;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -292,5 +294,19 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
 
     public static ScanSettings.ScanSettingsDescriptor getDefaultScanSettingsDescriptor() {
         return ScanSettingsUi.DESCRIPTOR;
+    }
+
+    @Override
+    public void load() {
+        if (null != getConfigFile() && null != getConfigFile().getXStream()) {
+            XStream xs = getConfigFile().getXStream();
+            if (xs instanceof XStream2) {
+                XStream2 xs2 = (XStream2) xs;
+                xs2.addCompatibilityAlias(
+                        "com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.GlobalConfig",
+                        LegacyConfig.class);
+            }
+        }
+        super.load();
     }
 }

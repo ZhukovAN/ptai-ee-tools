@@ -11,10 +11,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.Jenki
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.Auth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.CredentialsAuth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.TokenAuth;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.LegacyCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.LegacyCredentialsImpl;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.SlimCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.SlimCredentialsImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.BaseConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.LegacyConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.SlimConfig;
@@ -36,10 +33,9 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiRe
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
-import hudson.AbortException;
-import hudson.FilePath;
-import hudson.Launcher;
-import hudson.Util;
+import hudson.*;
+import hudson.init.InitMilestone;
+import hudson.init.Initializer;
 import hudson.model.*;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
@@ -425,5 +421,36 @@ public class Plugin extends Builder implements SimpleBuildStep {
         } else {
             throw new IllegalArgumentException("Both null, Run and Current Item!");
         }
+    }
+
+    @Initializer(before = InitMilestone.PLUGINS_STARTED)
+    public static void beforeInitMilestonePluginsStarted() {
+        // See also PluginDescriptor.load()
+        Jenkins.XSTREAM2.addCompatibilityAlias(
+                "com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentialsImpl",
+                LegacyCredentialsImpl.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigGlobal",
+                ConfigGlobal.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigCustom",
+                ConfigLegacyCustom.class);
+        /*
+        Items.XSTREAM2.addCompatibilityAlias(
+                "hudson.plugins.column.console.LastFailedBuildColumn",
+                LastFailedBuildColumn.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "hudson.plugins.column.console.LastStableBuildColumn",
+                LastStableBuildColumn.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "hudson.plugins.column.console.LastSuccessfulBuildColumn",
+                LastSuccessfulBuildColumn.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "hudson.plugins.column.console.LastUnstableBuildColumn",
+                LastUnstableBuildColumn.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "hudson.plugins.column.console.LastUnsuccessfulBuildColumn",
+                LastUnsuccessfulBuildColumn.class);
+         */
     }
 }
