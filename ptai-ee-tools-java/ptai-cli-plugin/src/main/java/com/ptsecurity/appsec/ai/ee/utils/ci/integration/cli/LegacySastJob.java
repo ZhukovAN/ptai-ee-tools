@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.UUID;
 
-public class SastJob {
+public class LegacySastJob {
     protected static CommandLine cli = null;
 
     protected static void parseCommand(String[] args) {
@@ -72,7 +72,7 @@ public class SastJob {
                 Option.builder()
                         .longOpt("truststore-pass")
                         .required(false)
-                        .desc("Truststore password")
+                        .desc("Truststore token")
                         .argName("password")
                         .hasArg(true)
                         .build());
@@ -95,7 +95,7 @@ public class SastJob {
                 Option.builder()
                         .longOpt("keystore-pass")
                         .required(false)
-                        .desc("Keystore password")
+                        .desc("Keystore token")
                         .argName("password")
                         .hasArg(true)
                         .build());
@@ -158,8 +158,8 @@ public class SastJob {
                 Option.builder()
                         .longOpt("password")
                         .required(false)
-                        .desc("Jenkins username password or API token")
-                        .argName("password or token")
+                        .desc("Jenkins username token or API token")
+                        .argName("token or token")
                         .hasArg(true).build());
 
         try {
@@ -229,16 +229,7 @@ public class SastJob {
 
     protected static boolean verbose = false;
 
-    public static void main(String[] args) {
-            switch (execute(args)) {
-                case UNSTABLE: System.exit(2);
-                case FAILURE: System.exit(1);
-                case SUCCESS: System.exit(0);
-                default: System.exit(2);
-            }
-    }
-
-    protected static PtaiResultStatus execute(String[] theArgs) {
+    public static PtaiResultStatus execute(String[] theArgs) {
         parseCommand(theArgs);
         if (null == cli) return null;
         return execute();

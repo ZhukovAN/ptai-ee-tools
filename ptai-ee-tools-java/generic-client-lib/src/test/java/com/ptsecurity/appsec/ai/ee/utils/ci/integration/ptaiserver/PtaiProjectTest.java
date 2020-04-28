@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
@@ -88,7 +89,7 @@ class PtaiProjectTest {
             transfers.add(Transfer.builder().includes("**/*").excludes("target/** .settings/** .*").build());
             ptai.setName("JUnit.01");
             FileCollector collector = new FileCollector(transfers, null);
-            File zip = FileCollector.collect(transfers, new File("src\\test\\resources\\src\\app01"), null);
+            File zip = FileCollector.collect(transfers, new File("src\\test\\resources\\src\\app01"), ptai);
             ptai.upload(zip);
         } catch (Exception e) {
             e.printStackTrace();

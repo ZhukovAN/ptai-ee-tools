@@ -59,7 +59,7 @@ public class Client extends BaseClient {
             log("Prepare to upload %s of sources\r\n", FileUtils.byteCountToDisplaySize(zip.length()));
 
             if (zip.length() <= chunkSize) {
-                sastApi.uploadUsingPOST(0, zip, projectName, 1, uploadId);
+                sastApi.uploadArtifacts(0, zip, projectName, 1, uploadId);
                 log("Uploaded as single part\r\n");
             } else {
                 try (InputStream in = new FileInputStream(zip)) {
@@ -84,7 +84,7 @@ public class Client extends BaseClient {
                                     totalBytesToRead -= bytesRead;
                                 }
                             }
-                            sastApi.uploadUsingPOST(i, chunkFile.getFile().toFile(), projectName, partsNumber, uploadId);
+                            sastApi.uploadArtifacts(i, chunkFile.getFile().toFile(), projectName, partsNumber, uploadId);
                             log("Uploaded part %d of %d\r\n", i, partsNumber);
                         }
                     }

@@ -16,6 +16,8 @@ import java.util.logging.Level;
 
 @Log
 public class Base {
+    public static final String SAST_FOLDER = ".ptai";
+
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
@@ -35,8 +37,9 @@ public class Base {
     protected String logPrefix = "[PTAI] ";
 
     public void log(String value) {
-        if (null != this.consoleLog)
-            this.consoleLog.print(this.logPrefix + value);
+        if (null == consoleLog) return;
+        if (null != logPrefix) consoleLog.print(logPrefix);
+        consoleLog.print(value);
     }
 
     public void log(String format, Object ... value) {
@@ -46,7 +49,7 @@ public class Base {
     public void log(Exception exception) {
         if (StringUtils.isNotEmpty(exception.getMessage()))
             this.log("%s\r\n", exception.getMessage());
-        if (this.verbose)
+        if (this.verbose && null != consoleLog)
             exception.printStackTrace(this.consoleLog);
     }
 

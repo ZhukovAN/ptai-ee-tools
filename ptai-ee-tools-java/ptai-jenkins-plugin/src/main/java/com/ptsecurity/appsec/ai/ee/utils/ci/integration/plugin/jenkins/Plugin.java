@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
 import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client;
@@ -10,10 +11,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.Jenki
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.Auth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.CredentialsAuth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.TokenAuth;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.LegacyCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.LegacyCredentialsImpl;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.SlimCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.SlimCredentialsImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.BaseConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.LegacyConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.SlimConfig;
@@ -35,10 +33,9 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiRe
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
-import hudson.AbortException;
-import hudson.FilePath;
-import hudson.Launcher;
-import hudson.Util;
+import hudson.*;
+import hudson.init.InitMilestone;
+import hudson.init.Initializer;
 import hudson.model.*;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
@@ -67,7 +64,6 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 public class Plugin extends Builder implements SimpleBuildStep {
     public static final String CLIENT_ID = "ptai-jenkins-plugin";
     public static final String CLIENT_SECRET = "etg76M18UsOGMPLRliwCn2r3g8BlO7TZ";
-    public static final String SAST_FOLDER = ".ptai";
 
     private static final String consolePrefix = com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.console_message_prefix();
 
@@ -355,13 +351,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
 
                     File zipFile = this.zipSources(buildInfo, workspace, launcher, listener);
                     client.uploadZip(projectName, zipFile, 1024 * 1024);
-                    scanId = client.getSastApi().scanUiManagedUsingPOST(projectName, this.nodeName);
+                    scanId = client.getSastApi().startUiJob(projectName, this.nodeName);
                     log(listener, "SAST job number is " + scanId);
 
                     JobState state = null;
                     int pos = 0;
                     do {
-                        state = client.getSastApi().getJobStateUsingGET(scanId, pos);
+                        state = client.getSastApi().getScanJobState(scanId, pos);
                         if (state.getPos() != pos) {
                             String[] lines = state.getLog().split("\\r?\\n");
                             for (String line : lines)
@@ -373,10 +369,10 @@ public class Plugin extends Builder implements SimpleBuildStep {
                     } while (true);
 
                     RemoteSastJob sastJob = new RemoteSastJob(launcher);
-                    List<String> results = client.getSastApi().getJobResultsUsingGET(scanId);
+                    List<String> results = client.getSastApi().getJobResults(scanId);
                     for (String result : results) {
-                        File data = client.getSastApi().getJobResultUsingGET(scanId, result);
-                        String fileName = result.replaceAll("REPORTS", SAST_FOLDER);
+                        File data = client.getSastApi().getJobResult(scanId, result);
+                        String fileName = result.replaceAll("REPORTS", Base.SAST_FOLDER);
                         sastJob.saveReport(workspace.getRemote(), fileName, FileUtils.readFileToString(data, StandardCharsets.UTF_8));
                     }
                     if (failIfFailed && JobState.StatusEnum.FAILURE.equals(state.getStatus()))
@@ -385,7 +381,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                         throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastUnstable());
                 } catch (InterruptedException e) {
                     if ((null != client) && (null != scanId))
-                        client.getSastApi().stopScanUsingPOST(scanId);
+                        client.getSastApi().stopScan(scanId);
                     throw e;
                 }
             }
@@ -425,5 +421,36 @@ public class Plugin extends Builder implements SimpleBuildStep {
         } else {
             throw new IllegalArgumentException("Both null, Run and Current Item!");
         }
+    }
+
+    @Initializer(before = InitMilestone.PLUGINS_STARTED)
+    public static void beforeInitMilestonePluginsStarted() {
+        // See also PluginDescriptor.load()
+        Jenkins.XSTREAM2.addCompatibilityAlias(
+                "com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentialsImpl",
+                LegacyCredentialsImpl.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigGlobal",
+                ConfigGlobal.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigCustom",
+                ConfigLegacyCustom.class);
+        /*
+        Items.XSTREAM2.addCompatibilityAlias(
+                "hudson.plugins.column.console.LastFailedBuildColumn",
+                LastFailedBuildColumn.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "hudson.plugins.column.console.LastStableBuildColumn",
+                LastStableBuildColumn.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "hudson.plugins.column.console.LastSuccessfulBuildColumn",
+                LastSuccessfulBuildColumn.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "hudson.plugins.column.console.LastUnstableBuildColumn",
+                LastUnstableBuildColumn.class);
+        Items.XSTREAM2.addCompatibilityAlias(
+                "hudson.plugins.column.console.LastUnsuccessfulBuildColumn",
+                LastUnsuccessfulBuildColumn.class);
+         */
     }
 }

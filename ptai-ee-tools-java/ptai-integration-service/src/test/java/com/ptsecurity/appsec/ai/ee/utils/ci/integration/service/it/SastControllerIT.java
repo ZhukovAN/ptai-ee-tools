@@ -42,13 +42,13 @@ public class SastControllerIT extends BaseIT {
         Integer randomValue = new Random().nextInt();
         Mockito.when(sastService.scanUiManaged("projectName", "nodeName")).thenReturn(Optional.of(randomValue));
 
-        Integer id = client.getSastApi().scanUiManagedUsingPOST("projectName", "nodeName");
+        Integer id = client.getSastApi().startUiJob("projectName", "nodeName");
         assertEquals(id, randomValue);
 
         String token = client.getSastApi().getCurrentJwt().getAccessToken();
         waitForExpiration("Waiting for JWT expiration", token);
 
-        client.getSastApi().scanUiManagedUsingPOST("projectName", "nodeName");
+        client.getSastApi().startUiJob("projectName", "nodeName");
         String newToken = client.getSastApi().getCurrentJwt().getAccessToken();
         assertNotEquals(token, newToken);
     }

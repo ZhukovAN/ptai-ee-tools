@@ -20,9 +20,9 @@ public class IntegrationClientTest {
             client.setUserName("admin");
             client.setPassword("5JBm6YpEcjtDjrCz4wo79lvoV2OLR11U_");
             client.init();
-            BuildInfo buildInfo = client.getPublicApi().getBuildInfoUsingGET();
+            BuildInfo buildInfo = client.getPublicApi().getBuildInfo();
             String buildInfoText = buildInfo.getName() + ".v" + buildInfo.getVersion() + " from " + buildInfo.getDate();
-            ComponentsStatus statuses = client.getDiagnosticApi().getComponentsStatusUsingGET();
+            ComponentsStatus statuses = client.getDiagnosticApi().getStatus();
             String statusText = "PTAI: " + statuses.getPtai() + "; EMBEDDED: " + statuses.getEmbedded();
         } catch (ApiException e) {
             BaseClientException clientException = new BaseClientException("", e);
@@ -37,9 +37,9 @@ public class IntegrationClientTest {
         api.getApiClient().setBasePath("https://ptai-integration-service.domain.org:8443");
         api.getApiClient().setUsername("ptai-jenkins-plugin");
         api.getApiClient().setPassword("etg76M18UsOGMPLRliwCn2r3g8BlO7TZ");
-        JwtResponse jwt = api.getJwtTokenUsingPOST("admin", "ZqK99w5mB7HfNRnBbVJWa79eW0kT8FCr", "", "password");
+        JwtResponse jwt = api.authenticate("admin", "ZqK99w5mB7HfNRnBbVJWa79eW0kT8FCr", "", "password");
         System.out.println(jwt);
-        jwt = api.getJwtTokenUsingPOST(null, null, jwt.getRefreshToken(), "refresh_token");
+        jwt = api.authenticate(null, null, jwt.getRefreshToken(), "refresh_token");
         System.out.println(jwt);
     }
 }

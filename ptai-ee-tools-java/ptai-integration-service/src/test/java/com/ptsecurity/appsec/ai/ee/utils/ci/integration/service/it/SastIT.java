@@ -70,14 +70,14 @@ public class SastIT extends BaseIT {
     public void startUiManagedProjectScan() throws Exception {
         File file = new File(getClass().getClassLoader().getResource("code/test.java.zip").getFile());
         client.uploadZip("DEVEL.TEST.JAVA", file, 50 * 1024);
-        Integer scanId = client.getSastApi().scanUiManagedUsingPOST("DEVEL.TEST.JAVA", "ptai");
+        Integer scanId = client.getSastApi().startUiJob("DEVEL.TEST.JAVA", "ptai");
         System.out.println("SAST job number is " + scanId);
 
         waitForSastJob(client, scanId);
 
-        List<String> res = client.getSastApi().getJobResultsUsingGET(scanId);
+        List<String> res = client.getSastApi().getJobResults(scanId);
         for (String item : res)
-            client.getSastApi().getJobResultUsingGET(scanId, item);
+            client.getSastApi().getJobResult(scanId, item);
     }
 
     @Test
@@ -86,20 +86,20 @@ public class SastIT extends BaseIT {
         File file = new File(getClass().getClassLoader().getResource("code/test.java.zip").getFile());
         client.uploadZip("DEVEL.TEST.JAVA", file, 50 * 1024);
 
-        Integer scanId = client.getSastApi().scanJsonManagedUsingPOST("DEVEL.TEST.JAVA", "ptai", settings, policy);
+        Integer scanId = client.getSastApi().startJsonJob("DEVEL.TEST.JAVA", "ptai", settings, policy);
         System.out.println("SAST job number is " + scanId);
 
         waitForSastJob(client, scanId);
 
-        List<String> res = client.getSastApi().getJobResultsUsingGET(scanId);
+        List<String> res = client.getSastApi().getJobResults(scanId);
         for (String item : res)
-            client.getSastApi().getJobResultUsingGET(scanId, item);
+            client.getSastApi().getJobResult(scanId, item);
     }
 
     protected void waitForSastJob(Client client, int buildId) throws Exception {
         int pos = 0;
         do {
-            JobState state = client.getSastApi().getJobStateUsingGET(buildId, pos);
+            JobState state = client.getSastApi().getScanJobState(buildId, pos);
             if (state.getPos() != pos)
                 System.out.print(state.getLog());
             pos = state.getPos();
@@ -111,7 +111,7 @@ public class SastIT extends BaseIT {
     @Test
     @DisplayName("Get diagnostic info")
     public void getDiagnosticInfo() throws Exception {
-        ComponentsStatus status = client.getDiagnosticApi().getComponentsStatusUsingGET();
+        ComponentsStatus status = client.getDiagnosticApi().getStatus();
         System.out.println(status.toString());
     }
 

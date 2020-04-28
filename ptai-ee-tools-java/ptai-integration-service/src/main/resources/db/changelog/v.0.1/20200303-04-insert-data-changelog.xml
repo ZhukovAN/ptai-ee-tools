@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet author="Alexey N. Zhukov" id="2">
+        <insert tableName="OAUTH_CLIENT_DETAILS">
+            <column name="CLIENT_ID" value="ptai-cli-plugin"/>
+            <!-- client_secret is ir5qWH61Pvr2FG54aC3YSeq0TGCoudod -->
+            <column name="CLIENT_SECRET" value="$2a$10$Pdmog3gxTvsTkbkaue/reOfMcJS3d3mxTp.l/kOPXMopd81RbHcW6"/>
+            <column name="SCOPE" value="read,write,trust"/>
+            <column name="AUTHORIZED_GRANT_TYPES" value="password,refresh_token"/>
+            <column name="AUTHORITIES" value="ROLE_CLIENT,ROLE_TRUSTED_CLIENT"/>
+            <column name="ACCESS_TOKEN_VALIDITY" valueNumeric="900"/>
+            <column name="REFRESH_TOKEN_VALIDITY" valueNumeric="2592000"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

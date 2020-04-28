@@ -76,23 +76,26 @@ public class SastController {
 
     @GetMapping(value = "/state", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JobState> getJobState(
-            @RequestParam(name = "build-number") Integer buildNumber,
+            @RequestParam(name = "scan-id") Integer scanId,
             @RequestParam(name = "start-pos") int startPos) throws ServiceUnavailableException {
-        JobState res = sastService.getJobState(buildNumber, startPos)
+        JobState res = sastService.getJobState(scanId, startPos)
                 .orElseThrow(ServiceUnavailableException::new);
         return new ResponseEntity<JobState>(res, HttpStatus.OK);
     }
 
     @GetMapping(value = "/results", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<String>> getJobResults(@RequestParam(name = "build-number") Integer buildNumber) throws ServiceUnavailableException {
-        List<String> res = sastService.getJobResults(buildNumber)
+    public ResponseEntity<List<String>> getJobResults(@RequestParam(name = "scan-id") Integer scanId) throws ServiceUnavailableException {
+        List<String> res = sastService.getJobResults(scanId)
                 .orElseThrow(ServiceUnavailableException::new);
         return new ResponseEntity<List<String>>(res, HttpStatus.OK);
     }
 
     @GetMapping(value = "/result", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public void getJobResult(@RequestParam Integer buildNumber, @RequestParam String artifact, HttpServletResponse response) throws ServiceUnavailableException {
-        ReadableByteChannel res = sastService.getJobResult(buildNumber, artifact)
+    public void getJobResult(
+            @RequestParam(name = "scan-id") Integer scanId,
+            @RequestParam(name = "artifact") String artifact,
+            HttpServletResponse response) throws ServiceUnavailableException {
+        ReadableByteChannel res = sastService.getJobResult(scanId, artifact)
                 .orElseThrow(ServiceUnavailableException::new);
         response.setContentType("application/octet-stream");
         try {
@@ -103,8 +106,8 @@ public class SastController {
     }
 
     @PostMapping(value = "/stop")
-    public ResponseEntity stop(@RequestParam Integer buildNumber) {
-        sastService.stopScan(buildNumber);
+    public ResponseEntity stop(@RequestParam(name = "scan-id") Integer scanId) {
+        sastService.stopScan(scanId);
         return new ResponseEntity(HttpStatus.OK);
     }
 }
