@@ -14,5 +14,6 @@
 **/TestResults/**
 **/db/**/*.db
 **/admin
+!**/admin/
 **/.ptai/**
 **/*.log
