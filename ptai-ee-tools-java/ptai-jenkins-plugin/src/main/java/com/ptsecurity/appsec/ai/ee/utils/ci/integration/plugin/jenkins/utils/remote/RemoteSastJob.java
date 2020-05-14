@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.remote;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
 import hudson.Launcher;
 import jenkins.security.MasterToSlaveCallable;
@@ -9,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
@@ -16,7 +18,6 @@ import java.nio.file.StandardOpenOption;
 public class RemoteSastJob extends SastJob {
     protected Launcher launcher;
 
-    @Override
     public void saveReport(String folder, String artifact, String data) throws IOException, InterruptedException {
         // folder parameter represents full folder to the file at remote (agent) host
         // Something like /home/user/workspace/TEST-SSDL/TEST-Project/report.html
@@ -36,12 +37,7 @@ public class RemoteSastJob extends SastJob {
 
         @Override
         public Void call() throws IOException {
-            String fileName = folder + File.separator + artifact;
-            new File(fileName).getParentFile().mkdirs();
-            Files.write(
-                    Paths.get(fileName),
-                    data.getBytes("utf-8"),
-                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            SastJob.saveReportData(folder, artifact, data);
             return null;
         }
     }

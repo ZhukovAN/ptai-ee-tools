@@ -1,22 +1,24 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.base;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import java.io.*;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.security.*;
-import java.util.*;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.security.Security;
+import java.util.Map;
 import java.util.logging.Level;
 
 @Log
 public class Base {
     public static final String SAST_FOLDER = ".ptai";
+    public static final String DEFAULT_PTAI_NODE_NAME = "ptai";
 
     static {
         Security.addProvider(new BouncyCastleProvider());

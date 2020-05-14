@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public interface LegacyCredentials extends StandardCredentials {
     String getClientCertificate();
-    Secret getClientKey() throws IOException, InterruptedException;
+    Secret getClientKey();
     String getServerCaCertificates();
     LegacyCredentials clone();
 }

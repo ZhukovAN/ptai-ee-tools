@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiException;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 
 public class JenkinsServerException extends JenkinsClientException {

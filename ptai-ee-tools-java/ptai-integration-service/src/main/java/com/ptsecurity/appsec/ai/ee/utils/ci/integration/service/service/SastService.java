@@ -22,10 +22,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.*;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import liquibase.util.StringUtils;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -66,17 +63,23 @@ public class SastService {
         String res = uploadId;
         String token = ptaiClient.signIn();
         log.debug("PTAI token: {}", token);
-        UUID projectId = PtaiProject.searchProject(ptaiClient.getPrjApi(), project)
-                .orElseThrow(() -> new PtaiServerException("PT AI EE project search failed", null));
+        UUID projectId = PtaiProject.searchProject(ptaiClient.getPrjApi(), project).orElse(null);
+        if (null == projectId) {
+            projectId = PtaiProject.createProject(ptaiClient.getPrjApi(), project);
+            log.info("Project {} not found. It will be now created for sources upload", project);
+        }
+        log.debug("PT AI project Id: {}", projectId.toString());
 
         Path path = null;
         try {
             // Is this a new upload?
-            if (StringUtils.isEmpty(res))
+            if (StringUtils.isEmpty(res)) {
                 res = UUID.randomUUID().toString();
+                log.debug("Generated upload Id: {}", res);
+            }
             Path chunk = this.tempFolder.resolve(String.format("%s.%06d", res, current));
             Files.copy(file.getInputStream(), chunk, StandardCopyOption.REPLACE_EXISTING);
-            log.debug("{} ({}) project's sources part {} of {} saved successfully", project, projectId, current + 1, total);
+            log.debug("{} ({}) project's sources part {} of {} saved successfully to {}", project, projectId, current + 1, total, chunk.toAbsolutePath().toString());
             // Last chunk stored as a temp file - need to combine them and upload to PT AI EE server
             if (current == total - 1) {
                 path = Files.createTempFile("", ".ptai");
@@ -123,7 +126,6 @@ public class SastService {
         RemoteAccessApi api = jenkinsClient.getJenkinsApi();
 
         FreeStyleProject prj = apiClient.callApi(() -> api.getJob(jobName));
-        Integer buildNumber = prj.getNextBuildNumber();
 
         // Start SAST job
         ApiResponse<Void> buildQueueInfo = apiClient.callApi(() -> api.postJobBuildWithParametersWithHttpInfo(
@@ -213,7 +215,8 @@ public class SastService {
 
         Integer buildId = jenkinsClient.getBuildId(jobName, scanId);
         if (null == buildId)
-            throw new JenkinsServerException(String.format("Build ID not found for scan %d", scanId));
+            throw new JenkinsServerException(String.format("Build Id not found for scan Id %d", scanId));
+        log.debug("Build Id {} found for scan Id {}", buildId, scanId);
         FreeStyleBuild build = apiClient.callApi(() -> api.getJobBuild(jobName, buildId.toString()));
         if (null == build)
             throw new JenkinsServerException("Build is null but there weren't API exception raised");
@@ -224,7 +227,9 @@ public class SastService {
             JobState.StatusEnum status = JobState.StatusEnum.valueOf(statusText);
             if ((JobState.StatusEnum.UNKNOWN == status) || (JobState.StatusEnum.ABORTED == status))
                 throw new Exception();
-
+            res = build.getArtifacts().stream().map(Artifact::getRelativePath).collect(Collectors.toList());
+            for (String artifact : res)
+                log.debug("Build artifact: {}", artifact);
             return Optional.of(build.getArtifacts().stream().map(Artifact::getRelativePath).collect(Collectors.toList()));
         } catch (Exception e) {
             return Optional.empty();
@@ -239,7 +244,8 @@ public class SastService {
 
         Integer buildId = jenkinsClient.getBuildId(jobName, scanId);
         if (null == buildId)
-            throw new JenkinsServerException(String.format("Build ID not found for scan %d", scanId));
+            throw new JenkinsServerException(String.format("Build Id not found for scan Id %d", scanId));
+        log.debug("Build Id {} found for scan Id {}", buildId, scanId);
         FreeStyleBuild build = apiClient.callApi(() -> api.getJobBuild(jobName, buildId.toString()));
         if (null == build)
             throw new JenkinsServerException("Build is null but there weren't API exception raised");
@@ -253,6 +259,7 @@ public class SastService {
             for (Artifact artifact : build.getArtifacts()) {
                 if (!artifactRelPath.equals(artifact.getRelativePath())) continue;
                 URL url = new URL(build.getUrl() + "artifact/" + artifactRelPath);
+                log.debug("Getting artifact from {}", url.toString());
                 Call call = api.getJobBuildArtifactCall(jobName, buildId.toString(), artifactRelPath, null);
                 Response response = call.execute();
 
@@ -267,7 +274,7 @@ public class SastService {
 
     protected com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse<DefaultCrumbIssuer> crumb;
 
-    public void stopScan(Integer scanId) {
+    public void stopScan(@NonNull Integer scanId) {
         log.info("SAST job termination request. Scan ID is {}", scanId);
         String jobName = ApiClient.convertJobName(jenkinsClient.getCiJobName());
         jenkinsClient.stopJob(jobName, scanId);

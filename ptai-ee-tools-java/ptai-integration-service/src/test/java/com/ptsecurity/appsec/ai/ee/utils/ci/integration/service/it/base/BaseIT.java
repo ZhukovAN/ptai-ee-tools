@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.it.base;
 
+import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.UserData;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.domain.User;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.repository.RoleRepository;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.repository.UserRepository;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.security.Key;
 import java.security.KeyStore;
+import java.util.Arrays;
 import java.util.Date;
 
 @ExtendWith(SpringExtension.class)
@@ -76,19 +78,20 @@ public class BaseIT {
     public void initAll() throws Exception {
         rootUrl = "https://localhost:" + port;
 
-        User admin = User.builder()
-                .username(loginTestAdmin)
-                .password(password)
-                .build();
-        if (null == userRepository.findByUsername(loginTestAdmin))
-            adminService.addUser(admin, new String[] {"ADMIN", "USER"});
+        UserData admin = new UserData();
+        admin.setName(loginTestAdmin);
+        admin.setPassword(password);
+        admin.setRoles(Arrays.asList("ADMIN", "USER"));
 
-        User user = User.builder()
-                .username(loginTestUser)
-                .password(password)
-                .build();
+        if (null == userRepository.findByUsername(loginTestAdmin))
+            adminService.addUser(admin);
+
+        UserData user = new UserData();
+        user.setName(loginTestUser);
+        user.setPassword(password);
+        user.setRoles(Arrays.asList("USER"));
         if (null == userRepository.findByUsername(loginTestUser))
-            adminService.addUser(user, new String[] {"USER"});
+            adminService.addUser(user);
         KeyStore ks = KeyStore.getInstance(keyStoreType);
         char[] pass = StringUtils.isEmpty(this.keyStorePassword) ? "".toCharArray() : this.keyStorePassword.toCharArray();
         ks.load(keyStore.getInputStream(), pass);

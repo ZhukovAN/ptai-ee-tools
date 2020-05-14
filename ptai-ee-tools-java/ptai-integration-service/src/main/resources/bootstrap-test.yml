@@ -1,9 +1,0 @@
-spring:
-  profiles: test
-  cloud:
-    bus.enabled: false
-    discovery.enabled: false
-    consul:
-      enabled: false
-      config.enabled: false
-      host: ptai.domain.org

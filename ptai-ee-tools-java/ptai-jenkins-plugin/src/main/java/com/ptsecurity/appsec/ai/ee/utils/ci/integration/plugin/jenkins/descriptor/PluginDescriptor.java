@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descript
 import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.BuildInfo;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.ComponentsStatus;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
@@ -235,15 +236,14 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
                         : FormValidation.warning(Messages.validator_test_ptaiProject_notfound());
             } else
                 return FormValidation.ok(Messages.validator_test_ptaiProject_success(projectId.toString().substring(0, 4)));
-        } catch (Exception e) {
+        } catch (PtaiServerException e) {
             return Validator.error(e);
         }
-
     }
 
     protected UUID searchProjectWithSlimConfig(
             String projectName, String serverSlimUrl,
-            SlimCredentials slimCredentials, boolean selectedScanSettingsUi) throws Exception {
+            SlimCredentials slimCredentials, boolean selectedScanSettingsUi) throws PtaiServerException {
         Client client = new Client();
         client.setUrl(serverSlimUrl);
         client.setClientId(Plugin.CLIENT_ID);
@@ -253,13 +253,17 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         if (!org.apache.commons.lang.StringUtils.isEmpty(slimCredentials.getServerCaCertificates()))
             client.setCaCertsPem(slimCredentials.getServerCaCertificates());
         client.init();
-        return client.getDiagnosticApi().getProjectId(projectName);
+        try {
+            return client.getDiagnosticApi().getProjectId(projectName);
+        } catch (ApiException e) {
+            throw new PtaiServerException("PT AI EE project search failed", e);
+        }
     }
 
     protected UUID searchProjectWithLegacyConfig(
             String projectName, String serverLegacyUrl,
             LegacyCredentials legacyCredentials,
-            boolean selectedScanSettingsUi) throws Exception {
+            boolean selectedScanSettingsUi) throws PtaiServerException {
         PtaiProject ptaiProject = new PtaiProject();
         ptaiProject.setUrl(serverLegacyUrl);
         ptaiProject.setKeyPem(legacyCredentials.getClientCertificate());

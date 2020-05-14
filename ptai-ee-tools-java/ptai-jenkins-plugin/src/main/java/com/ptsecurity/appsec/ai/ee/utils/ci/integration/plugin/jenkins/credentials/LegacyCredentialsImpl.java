@@ -4,9 +4,9 @@ import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.CredentialsScope;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
 import com.cloudbees.plugins.credentials.impl.BaseStandardCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.Client;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.exceptions.CredentialsNotFoundException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import hudson.Extension;
 import hudson.Util;
@@ -59,7 +59,7 @@ public class LegacyCredentialsImpl extends BaseStandardCredentials implements Le
         }
     }
 
-    public static LegacyCredentials getCredentialsById(Item item, String credentialsId) throws CredentialsNotFoundException {
+    public static LegacyCredentials getCredentialsById(Item item, String credentialsId) throws BaseClientException {
         if (item == null)
             // Construct a fake project
             item = new FreeStyleProject((ItemGroup) Jenkins.get(), "fake-" + UUID.randomUUID().toString());
@@ -74,7 +74,7 @@ public class LegacyCredentialsImpl extends BaseStandardCredentials implements Le
         for (LegacyCredentials credentials : credentialsList)
             if (credentials.getId().equals(credentialsId))
                 return (LegacyCredentials)credentials;
-        throw new CredentialsNotFoundException(credentialsId);
+        throw new BaseClientException("No credentials found with ID " + credentialsId);
     }
 
     @Extension

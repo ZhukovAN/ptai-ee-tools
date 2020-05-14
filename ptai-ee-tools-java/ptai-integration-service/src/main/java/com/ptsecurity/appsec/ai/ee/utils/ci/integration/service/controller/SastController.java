@@ -69,7 +69,9 @@ public class SastController {
             settings.setSite("http://localhost:8080");
             log.warn("It is strictly recommended to set site address in scan settings");
         }
-        Policy[] policy = jsonMapper.readValue(policyJson, Policy[].class);
+        Policy[] policy = null;
+        if (StringUtils.isNotEmpty(policyJson))
+            policy = jsonMapper.readValue(policyJson, Policy[].class);
         Integer res = sastService.scanJsonManaged(project, node, settings, policy).orElseThrow(ServiceUnavailableException::new);
         return new ResponseEntity<Integer>(res, HttpStatus.OK);
     }

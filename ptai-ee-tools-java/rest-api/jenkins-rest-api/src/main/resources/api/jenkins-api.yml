@@ -176,12 +176,12 @@ paths:
             type: string
         - name: PTAI_SETTINGS_JSON
           in: query
-          required: false
+          required: true
           schema:
             type: string
         - name: PTAI_POLICY_JSON
           in: query
-          required: true
+          required: false
           schema:
             type: string
         - $ref: '#/components/parameters/crumb'

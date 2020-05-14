@@ -1,10 +1,14 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.service;
 
+import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.UserData;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.UserExistsException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.UserNotFoundException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.domain.Role;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.domain.User;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.domain.UserRole;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.repository.RoleRepository;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.repository.UserRepository;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.passay.CharacterRule;
@@ -22,6 +26,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -64,17 +69,40 @@ public class AdminService {
         userRepository.save(admin);
     }
 
-    public User addUser(User user) {
-        return addUser(user, null);
-    }
-
-    public User addUser(User user, String[] roles) {
+    public User addUser(UserData userData) {
+        if (null != userRepository.findByUsername(userData.getName()))
+            throw new UserExistsException("User " + userData.getName() + " already exists");
+        User user = User.builder()
+                .username(userData.getName())
+                .password(userData.getPassword()).build();
         List<UserRole> userRoles = new ArrayList<>();
-        for (String role : roles)
+
+        for (String role : userData.getRoles())
             userRoles.add(new UserRole(user, roleRepository.findByName(role)));
         user.setRoles(userRoles);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(userData.getPassword()));
         return userRepository.save(user);
+    }
+
+    public List<User> allUsers() {
+        List<User> res = new ArrayList<>();
+        userRepository.findAll().forEach(res::add);
+        return res;
+    }
+
+    public void deleteUser(@NonNull Long id) {
+        if (userRepository.existsById(id))
+            userRepository.deleteById(id);
+        else
+            throw new UserNotFoundException("User " + id.toString() + " not found");
+    }
+
+    public void deleteUser(@NonNull String name) {
+        User user = userRepository.findByUsername(name);
+        if (null != user)
+            userRepository.deleteById(user.getId());
+        else
+            throw new UserNotFoundException("User " + name + " not found");
     }
 
     public static String generateRandomString() {

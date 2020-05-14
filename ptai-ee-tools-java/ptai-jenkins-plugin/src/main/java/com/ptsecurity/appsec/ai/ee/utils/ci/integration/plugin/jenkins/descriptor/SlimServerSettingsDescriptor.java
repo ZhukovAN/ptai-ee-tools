@@ -80,7 +80,7 @@ public class SlimServerSettingsDescriptor extends Descriptor<SlimServerSettings>
             String buildInfoText = buildInfo.getName() + ".v" + buildInfo.getVersion() + " from " + buildInfo.getDate();
 
             ComponentsStatus statuses = client.getDiagnosticApi().getStatus();
-            String statusText = "PTAI: " + statuses.getPtai() + "; EMBEDDED: " + statuses.getEmbedded();
+            String statusText = "PT AI: " + statuses.getPtai() + "; EMBEDDED: " + statuses.getEmbedded();
             return  (statuses.getPtai().equals(ComponentStatus.FAILURE) || statuses.getEmbedded().equals(ComponentStatus.FAILURE))
                     ? FormValidation.error(Messages.validator_test_slim_server_fail(buildInfoText, statusText))
                     : urlInvalid

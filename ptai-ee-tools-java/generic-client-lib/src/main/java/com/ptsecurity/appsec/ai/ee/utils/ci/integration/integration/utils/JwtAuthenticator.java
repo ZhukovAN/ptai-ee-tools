@@ -1,12 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.BaseClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.jwt.JwtResponse;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
@@ -14,9 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public class JwtAuthenticator extends Base implements Authenticator {

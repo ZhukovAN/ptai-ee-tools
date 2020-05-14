@@ -1,6 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.controller;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.UserExistsException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
@@ -27,5 +29,19 @@ public class ControllerAdvice {
                 log.trace("Inner exception data: {}", data);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @ExceptionHandler(value = {UserNotFoundException.class})
+    public ResponseEntity handleNotFoundException(UserNotFoundException e) {
+        log.info(e.getMessage());
+        log.trace("Exception details", e);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(value = {UserExistsException.class})
+    public ResponseEntity handleUserExistsException(UserExistsException e) {
+        log.info(e.getMessage());
+        log.trace("Exception details", e);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 }

@@ -6,6 +6,8 @@ import com.cloudbees.plugins.credentials.domains.DomainRequirement;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.Auth;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.NoneAuth;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.LegacyCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.LegacyCredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.defaults.ServerSettingsDefaults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProject;
@@ -47,7 +49,7 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
         return NoneAuth.DESCRIPTOR;
     }
 
-    private static final Class<ServerCredentials> BASE_CREDENTIAL_TYPE = ServerCredentials.class;
+    private static final Class<LegacyCredentials> BASE_CREDENTIAL_TYPE = LegacyCredentials.class;
 
     // Include any additional contextual parameters that you need in order to refine the
     // credentials list. For example, if the credentials will be used to connect to a remote server,
@@ -100,7 +102,7 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
             if (!Validator.doCheckFieldNotEmpty(serverCredentialsId))
                 throw new PtaiClientException(Messages.validator_check_serverCredentialsId_empty());
 
-            ServerCredentials serverCredentials = ServerCredentialsImpl.getCredentialsById(item, serverCredentialsId);
+            LegacyCredentials serverCredentials = LegacyCredentialsImpl.getCredentialsById(item, serverCredentialsId);
 
             PtaiProject ptaiProject = new PtaiProject();
             ptaiProject.setVerbose(false);

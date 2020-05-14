@@ -106,9 +106,9 @@ public class PtaiAdminSettingsPageController extends BaseFormXmlController {
     private ActionErrors validate(PtaiAdminSettingsBean bean) {
         ActionErrors errors = new ActionErrors();
         if (StringUtils.isEmpty(bean.ptaiServerUrl))
-            errors.addError("ptaiServerUrl", "PTAI server URL must not be empty");
+            errors.addError("ptaiServerUrl", "PT AI server URL must not be empty");
         if (!new UrlValidator(new String[] {"http", "https"}).isValid(emptyIfNull(bean.ptaiServerUrl)))
-            errors.addError("ptaiServerUrl", "Invalid PTAI server URL");
+            errors.addError("ptaiServerUrl", "Invalid PT AI server URL");
         if (StringUtils.isEmpty(bean.caCertsPem))
             errors.addError("caCertsPem", "CA certificates must not be empty");
         try {
@@ -120,12 +120,12 @@ public class PtaiAdminSettingsPageController extends BaseFormXmlController {
             errors.addError("caCertsPem", "CA certificates chain parse failed");
         }
         if (StringUtils.isEmpty(bean.ptaiKeyPem))
-            errors.addError("ptaiKeyPem", "PTAI client certificates must not be empty");
+            errors.addError("ptaiKeyPem", "PT AI client certificates must not be empty");
         try {
             new Client().checkKey(bean.ptaiKeyPem, bean.ptaiKeyPemPassword);
         } catch (Exception e) {
             Loggers.SERVER.debug(e);
-            errors.addError("ptaiKeyPem", "PTAI client certificate parse failed");
+            errors.addError("ptaiKeyPem", "PT AI client certificate parse failed");
         }
         if (StringUtils.isEmpty(bean.jenkinsServerUrl))
             errors.addError("jenkinsServerUrl", "Jenkins server URL must not be empty");
@@ -156,7 +156,7 @@ public class PtaiAdminSettingsPageController extends BaseFormXmlController {
             X509Certificate cert = (X509Certificate)keyStore.getCertificate(keyStore.aliases().nextElement());
             details.add("Client certificate:");
             details.add(cert.getSubjectDN().getName());
-            // Test PTAI server connection
+            // Test PT AI server connection
             PtaiProject ptaiProject = new PtaiProject();
             ptaiProject.setVerbose(false);
             ptaiProject.setUrl(bean.ptaiServerUrl);
@@ -164,7 +164,7 @@ public class PtaiAdminSettingsPageController extends BaseFormXmlController {
             ptaiProject.setKeyPassword(bean.ptaiKeyPemPassword);
             ptaiProject.setCaCertsPem(bean.caCertsPem);
             String authToken = ptaiProject.init();
-            details.add("PTAI authentication token starts with " + authToken.substring(0, 10));
+            details.add("PT AI authentication token starts with " + authToken.substring(0, 10));
             // Test Jenkins connection
             SastJob jenkinsClient = new SastJob();
             jenkinsClient.setUrl(bean.jenkinsServerUrl);

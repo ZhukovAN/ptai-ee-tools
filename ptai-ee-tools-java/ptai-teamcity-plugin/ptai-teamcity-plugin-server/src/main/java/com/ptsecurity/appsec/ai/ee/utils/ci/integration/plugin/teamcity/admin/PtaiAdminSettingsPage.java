@@ -28,7 +28,7 @@ public class PtaiAdminSettingsPage extends AdminPage {
         this.jspHome = descriptor.getPluginResourcesPath();
         setTabTitle("Positive Technologies");
         register();
-        Loggers.SERVER.info("PTAI configuration page registered");
+        Loggers.SERVER.info("PT AI configuration page registered");
     }
 
     @Override

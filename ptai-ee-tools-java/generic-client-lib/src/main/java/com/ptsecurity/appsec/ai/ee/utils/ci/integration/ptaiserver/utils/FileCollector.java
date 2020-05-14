@@ -11,14 +11,14 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tools.ant.DirectoryScanner;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 
 import java.io.*;
 import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.math.MathContext;
+import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +67,7 @@ public class FileCollector {
     public static File collect(Transfers transfers, final File srcDir, @NonNull Base owner) throws PtaiClientException {
         try {
             if (owner.isVerbose())
-                owner.log("Create file collector");
+                owner.log("Create file collector\r\n");
             FileCollector collector = new FileCollector(transfers, owner);
 
             if ((null == srcDir) || !srcDir.exists() || !srcDir.canRead()) {
@@ -80,7 +80,7 @@ public class FileCollector {
                     reason = srcDir.getAbsolutePath() + " can not be read";
                 throw new PtaiClientException("Invalid source folder, " + reason);
             } else
-                owner.log("Folder to collect file from is %s", srcDir.getAbsolutePath());
+                owner.log("Folder to collect files from is %s\r\n", srcDir.getAbsolutePath());
             File destFile = File.createTempFile("PTAI_", ".zip");
             owner.log("Sources will be zipped to %s\r\n", destFile.getAbsolutePath());
             List<FileCollector.FileEntry> fileEntries = collector.collectFiles(srcDir);
@@ -119,8 +119,8 @@ public class FileCollector {
             owner.log(format, data);
     }
 
-    public List<FileEntry> collectFiles(final File srcDir) throws PtaiClientException {
-        verbose("collectFiles called for %s folder\r\n", srcDir.getAbsolutePath());
+    public List<FileEntry> collectFiles(@NonNull final File source) throws PtaiClientException {
+        verbose("collectFiles called for %s\r\n", source.getAbsolutePath());
         List<FileEntry> res = new ArrayList<>();
         for (Transfer transfer : this.transfers) {
             // Normalize prefix
@@ -136,7 +136,10 @@ public class FileCollector {
             verbose("Use default excludes = %s\r\n", transfer.isUseDefaultExcludes());
 
             final FileSet fileSet = new FileSet();
-            fileSet.setDir(srcDir);
+            if (source.isDirectory())
+                fileSet.setDir(source);
+            else
+                fileSet.setFile(source);
             fileSet.setProject(new Project());
             if (null != transfer.getIncludes())
                 for (String pattern : transfer.getIncludes().split(transfer.getPatternSeparator())) {
@@ -157,22 +160,22 @@ public class FileCollector {
             verboseCollectionDetails(fileSet.getDirectoryScanner().getDeselectedFiles(), "Deselected files");
             verboseCollectionDetails(fileSet.getDirectoryScanner().getExcludedFiles(), "Excluded files");
             // files is an array of this.srcDir - relative paths to files
+            Path parentFolder = source.isDirectory() ? source.toPath() : source.getParentFile().toPath();
             for (String file : files) {
                 // Normalize relative path
-                String filePath = srcDir.getAbsolutePath() + File.separator + file;
-                String normalizedFilePath = new File(filePath).toURI().normalize().getPath();
-                String relativeFilePath = normalizedFilePath.replace(srcDir.toURI().normalize().getPath(), "");
+                Path filePath = parentFolder.resolve(file);
+                String relativePath = filePath.toUri().normalize().getPath();
+                relativePath = StringUtils.removeStart(relativePath, parentFolder.toUri().normalize().getPath());
                 String entryName;
                 if (transfer.isFlatten())
-                    entryName = new File(filePath).getName();
+                    entryName = filePath.getFileName().toString();
                 else {
-                    if (!relativeFilePath.startsWith(removePrefix))
+                    if (!relativePath.startsWith(removePrefix))
                         throw new PtaiClientException(String.format("Failed to remove prefix from file named %s. Prefix %s must be present in all file paths", file, removePrefix));
-                    entryName = relativeFilePath.substring(removePrefix.length());
+                    entryName = StringUtils.removeStart(relativePath, removePrefix);
                 }
-                verbose("File %s will be added as %s\r\n", filePath, entryName);
-                // res.add(new FileEntry(filePath, "SCAN" + "/" + entryName));
-                res.add(new FileEntry(filePath, entryName));
+                verbose("File %s will be added as %s\r\n", filePath.toString(), entryName);
+                res.add(new FileEntry(filePath.toString(), entryName));
             }
         }
         return res;

@@ -16,7 +16,7 @@ public class GlobalConfigDescriptor extends Descriptor<GlobalConfig> {
 
     @Override
     public String getDisplayName() {
-        return "PTAI global configuration";
+        return "PT AI global configuration";
     }
 
     public FormValidation doCheckConfigName(@QueryParameter("configName") String configName) {

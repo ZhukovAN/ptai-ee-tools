@@ -2,7 +2,10 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiResponse;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.CreateProjectModel;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.IScanSettings;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.Project;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.ProjectsApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiServerException;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
@@ -39,14 +42,13 @@ public class PtaiProject extends Client {
         return searchProject(this.prjApi, this.name).orElse(null);
     }
 
-
-    public UUID createProject(String projectName) throws PtaiClientException, PtaiServerException {
+    public static UUID createProject(ProjectsApi api, String name) throws PtaiServerException {
         try {
             CreateProjectModel model = new CreateProjectModel();
 
             Project project = new Project();
             FieldUtils.writeField(project, "id", UUID.randomUUID(), true);
-            project.setName(projectName);
+            project.setName(name);
             project.setCreationDate(OffsetDateTime.now());
             model.setProject(project);
 
@@ -56,11 +58,15 @@ public class PtaiProject extends Client {
 
             FieldUtils.writeField(project, "settingsId", scanSettings.getId(), true);
 
-            Project res = this.prjApi.post(model);
+            Project res = api.post(model);
             return res.getId();
         } catch (ApiException | IllegalAccessException e) {
             throw new PtaiServerException("PT AI EE project create failed", e);
         }
+    }
+
+    public UUID createProject(String name) throws PtaiServerException {
+        return createProject(this.prjApi, name);
     }
 
     public UUID createProject(ScanSettings settings) throws PtaiClientException, PtaiServerException {
