@@ -1,75 +1,82 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.admin;
 
 import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.User;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.UserData;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.AbstractIntegrationApiCommand;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseSlimAst;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine;
 
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.concurrent.Callable;
-import java.util.stream.Collectors;
 
 @Log4j2
 @CommandLine.Command(
         name = "admin-user-delete",
-        // mixinStandardHelpOptions = true, version = "0.1",
-        helpCommand = true,
-        description = "Adds new PT AI EE integration server user")
-public class UserDelete  extends AbstractIntegrationApiCommand implements Callable<Integer> {
+        sortOptions = false,
+        description = "Deletes existing PT AI EE integration server user",
+        exitCodeListHeading = "Exit Codes:%n",
+        exitCodeList = {
+        "0:User deleted successfully",
+        "1:Error during user delete attempt",
+        "2:Invalid input"})
+public class UserDelete  extends BaseSlimAst implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--url"},
-            required = true,
-            description = "PT AI EE integration service URL, i.e. https://ptai.domain.org:8443")
+            required = true, order = 1,
+            paramLabel = "<url>",
+            description = "PT AI integration service URL, i.e. https://ptai.domain.org:8443")
     protected URL url;
 
     @CommandLine.Option(
-            names = {"--truststore"},
-            description = "Path to file that stores trusted CA certificates")
-    protected Path truststore = null;
-
-    @CommandLine.Option(
-            names = {"--truststore-type"},
-            description = "Truststore file type, i.e. JKS, PKCS12 etc. By default JKS is used")
-    protected String truststoreType = "JKS";
-
-    @CommandLine.Option(
-            names = {"--truststore-pass"},
-            description = "Truststore password")
-    protected String truststorePassword = null;
-
-    @CommandLine.Option(
-            names = {"-a", "--admin"},
-            required = true,
-            description = "PT AI EE integration service administrator account name")
+            names = {"-a", "--administrator"},
+            required = true, order = 2,
+            paramLabel = "<user>",
+            description = "PT AI integration service administrator account name")
     protected String admin = null;
 
     @CommandLine.Option(
             names = {"-t", "--token"},
-            required = true,
-            description = "PT AI EE integration service API token")
+            required = true, order = 3,
+            paramLabel = "<token>",
+            description = "PT AI integration service administrator API token")
     protected String token = null;
 
     @CommandLine.Option(
-            names = {"-v", "--verbose"},
-            description = "Provide verbose console log output")
-    protected boolean verbose = false;
+            names = {"-u", "--user"},
+            required = true, order = 4,
+            paramLabel = "<user>",
+            description = "PT AI integration service user name")
+    protected String username = null;
 
     @CommandLine.Option(
-            names = {"--use-id"},
+            names = {"--truststore"}, order = 6,
+            paramLabel = "<path>",
+            description = "Path to file that stores trusted CA certificates")
+    protected Path truststore = null;
+
+    @CommandLine.Option(
+            names = {"--truststore-pass"}, order = 7,
+            paramLabel = "<password>",
+            description = "Truststore password")
+    protected String truststorePassword = null;
+
+    @CommandLine.Option(
+            names = {"--truststore-type"}, order = 8,
+            paramLabel = "<type>",
+            description = "Truststore file type, i.e. JKS, PKCS12 etc. By default JKS is used")
+    protected String truststoreType = "JKS";
+
+    @CommandLine.Option(
+            names = {"--use-id"}, order = 9,
             description = "Use user ID instead of name")
     protected boolean useId = false;
 
-    @CommandLine.Parameters(index = "0", description = "User name or ID to delete")
-    protected String user = null;
+    @CommandLine.Option(
+            names = {"-v", "--verbose"}, order = 9,
+            description = "Provide verbose console log output")
+    protected boolean verbose = false;
 
     @Override
     public Integer call() throws Exception {
@@ -87,9 +94,9 @@ public class UserDelete  extends AbstractIntegrationApiCommand implements Callab
             }
             client.init();
             if (useId)
-                client.getAdminApi().deleteUser(Long.valueOf(user), null);
+                client.getAdminApi().deleteUser(Long.valueOf(username), null);
             else
-                client.getAdminApi().deleteUser(null, user);
+                client.getAdminApi().deleteUser(null, username);
             log.info("User deleted");
             return 0;
         } catch (ApiException e) {

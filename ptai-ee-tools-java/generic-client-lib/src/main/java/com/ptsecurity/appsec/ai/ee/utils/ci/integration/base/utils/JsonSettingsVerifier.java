@@ -24,7 +24,7 @@ public class JsonSettingsVerifier {
 
     public static String serialize(ScanSettings settings) {
         try {
-            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(settings);
+            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(settings.fix());
         } catch (JsonProcessingException e) {
             throw new PtaiClientException("JSON settings serialization failed", e);
         }

@@ -2,6 +2,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.aic.ExitCode;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils.GracefulShutdown;
@@ -15,6 +17,7 @@ import lombok.Builder;
 import lombok.Setter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpStatus;
 
 import java.io.File;
 import java.net.URL;
@@ -22,7 +25,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 
 @Setter
 @Builder
@@ -72,6 +77,21 @@ public class SlimSastJob extends Base {
 
             String projectName = null == jsonSettings ? project : jsonSettings.getProjectName();
 
+            try {
+                client.getDiagnosticApi().getProjectId(projectName);
+            } catch (ApiException e) {
+                if (HttpStatus.SC_NOT_FOUND == e.getCode()) {
+                    // Project not found - create it if AST parameters are defined
+                    if (null != jsonSettings) {
+                        log("Project %s not found, will be created as JSON settings are defined\r\n", projectName);
+                        client.getSastApi().createProject(projectName);
+                    } else {
+                        log("Project %s not found\r\n", projectName);
+                        return ExitCode.CODE_ERROR_PROJECT_NOT_FOUND.getCode();
+                    }
+                } else
+                    throw e;
+            }
             Transfer transfer = new Transfer();
             if (StringUtils.isNotEmpty(includes)) transfer.setIncludes(includes);
             if (StringUtils.isNotEmpty(excludes)) transfer.setExcludes(excludes);
@@ -84,7 +104,7 @@ public class SlimSastJob extends Base {
                 scanId = client.getSastApi().startJsonJob(
                         projectName,
                         StringUtils.isEmpty(node) ? Base.DEFAULT_PTAI_NODE_NAME : node,
-                        new ObjectMapper().writeValueAsString(jsonSettings),
+                        new ObjectMapper().writeValueAsString(jsonSettings.fix()),
                         null == jsonPolicy ? "" : new ObjectMapper().writeValueAsString(jsonPolicy));
 
             GracefulShutdown shutdown = new GracefulShutdown(this, client, scanId);
@@ -110,9 +130,7 @@ public class SlimSastJob extends Base {
             List<String> results = client.getSastApi().getJobResults(scanId);
             if ((null != results) && (!results.isEmpty())) {
                 log("AST results will be stored to %s\r\n", output);
-                if (output.toFile().exists())
-                    FileUtils.cleanDirectory(output.toFile());
-                else
+                if (!output.toFile().exists())
                     Files.createDirectories(output);
             }
             for (String result : results) {
@@ -124,7 +142,7 @@ public class SlimSastJob extends Base {
                         log("Status code %d: %s\r\n", res, ExitCode.CODES.get(res));
                     Files.write(Paths.get(fileName), res.toString().getBytes());
                 } else
-                    Files.copy(data.toPath(), Paths.get(fileName));
+                    Files.copy(data.toPath(), Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (Exception e) {
             log(e);

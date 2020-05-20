@@ -1,6 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
+import com.ptsecurity.appsec.ai.ee.aic.ExitCode;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
@@ -47,6 +49,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpStatus;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import javax.annotation.Nonnull;
@@ -362,6 +365,21 @@ public class Plugin extends Builder implements SimpleBuildStep {
                     if (!org.apache.commons.lang.StringUtils.isEmpty(slimCredentials.getServerCaCertificates()))
                         client.setCaCertsPem(slimCredentials.getServerCaCertificates());
                     client.init();
+
+                    try {
+                        UUID projectId = client.getDiagnosticApi().getProjectId(projectName);
+                    } catch (ApiException e) {
+                        if (HttpStatus.SC_NOT_FOUND == e.getCode()) {
+                            if (!selectedScanSettingsUi) {
+                                log(listener,"Project %s not found, will be created as JSON settings are defined\r\n", projectName);
+                                client.getSastApi().createProject(projectName);
+                            } else {
+                                log(listener,"Project %s not found\r\n", projectName);
+                                throw new AbortException(Messages.validator_test_ptaiProject_notfound());
+                            }
+                        } else
+                            throw e;
+                    }
 
                     File zipFile = zipSources(buildInfo, workspace, launcher, listener);
                     client.uploadZip(projectName, zipFile, 1024 * 1024);

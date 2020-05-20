@@ -27,96 +27,112 @@ import java.util.stream.Stream;
 @Log4j2
 @CommandLine.Command(
         name = "slim-json-ast",
-        helpCommand = true,
-        // mixinStandardHelpOptions = true, version = "0.1",
+        sortOptions = false,
         description = "Calls PT AI EE for AST using integration server. Project settings and policy are defined with JSON files",
+        exitCodeOnInvalidInput = 1000,
         exitCodeListHeading = "Exit Codes:%n",
         exitCodeList = {
                 "0:AST complete, policy (if set up) assessment success",
                 "1:AST complete, policy (if set up) assessment failed",
-                "2:AST complete, minor warnings were reported",
-                "3:AST failed"})
+                "2:AST complete, policy (if set up) assessment success, minor warnings were reported",
+                "3:AST failed", "1000:Invalid input"})
 public class SlimJsonAst implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--url"},
-            required = true,
+            required = true, order = 1,
+            paramLabel = "<url>",
             description = "PT AI integration service URL, i.e. https://ptai.domain.org:8443")
     protected URL url;
 
     @CommandLine.Option(
-            names = {"--truststore"},
-            description = "Path to file that stores trusted CA certificates")
-    protected Path truststore = null;
-
-    @CommandLine.Option(
-            names = {"--truststore-type"},
-            description = "Truststore file type, i.e. JKS, PKCS12 etc. By default JKS is used")
-    protected String truststoreType = "JKS";
-
-    @CommandLine.Option(
-            names = {"--truststore-pass"},
-            description = "Truststore password")
-    protected String truststorePassword = null;
-
-    @CommandLine.Option(
-            names = {"-i", "--includes"},
-            description = "Comma-separated list of files to include to scan. The string is a comma separated list of includes for an Ant fileset eg. '**/*.jar'" +
-                    "(see http://ant.apache.org/manual/dirtasks.html#patterns). The base directory for this fileset is the sources folder")
-    protected String includes = null;
-
-    @CommandLine.Option(
-            names = {"-e", "--excludes"},
-            description = "Comma-separated list of files to exclude from scan. The syntax is the same as for includes")
-    protected String excludes = null;
-
-    @CommandLine.Option(
-            names = {"-n", "--node"},
-            required = true,
-            description = "Node name or tag for SAST to be executed on")
-    protected String node = Base.DEFAULT_PTAI_NODE_NAME;
-
-    @CommandLine.Option(
             names = {"-u", "--user"},
-            required = true,
+            required = true, order = 2,
+            paramLabel = "<name>",
             description = "PT AI integration service account name")
     protected String username = null;
 
     @CommandLine.Option(
             names = {"-t", "--token"},
-            required = true,
+            required = true, order = 3,
+            paramLabel = "<token>",
             description = "PT AI integration service API token")
     protected String token = null;
 
     @CommandLine.Option(
-            names = {"-o", "--output"},
+            names = {"--input"}, order = 4,
+            required = true,
+            paramLabel = "<path>",
+            description = "Source file or folder to scan")
+    protected Path input = Paths.get(System.getProperty("user.dir"));
+
+    @CommandLine.Option(
+            names = {"--output"}, order = 5,
+            paramLabel = "<path>",
             description = "Folder where AST reports are to be stored. By default .ptai folder is used")
     protected Path output = Paths.get(System.getProperty("user.dir")).resolve(Base.SAST_FOLDER);
 
     @CommandLine.Option(
-            names = {"--settings-json"},
+            names = {"--settings-json"}, order = 6,
+            paramLabel = "<path>",
             required = true,
-            description = "JSON-defined scan settings")
+            description = "Path to JSON-defined scan settings")
     protected Path jsonSettings = null;
 
     @CommandLine.Option(
-            names = {"--policy-json"},
-            description = "JSON-defined AST policy")
+            names = {"--policy-json"}, order = 7,
+            paramLabel = "<path>",
+            description = "Path to JSON-defined AST policy. If this option is not defined, existing policy from database will be used. So if you need to override existing policy, use policy file with empty [] value")
     protected Path jsonPolicy = null;
 
     @CommandLine.Option(
-            names = {"-v", "--verbose"},
+            names = {"-i", "--includes"}, order = 8,
+            paramLabel = "<pattern>",
+            description = "Comma-separated list of files to include to scan. The string is a comma separated list of includes for an Ant fileset eg. '**/*.jar'" +
+                    "(see http://ant.apache.org/manual/dirtasks.html#patterns). The base directory for this fileset is the sources folder")
+    protected String includes = null;
+
+    @CommandLine.Option(
+            names = {"-e", "--excludes"}, order = 9,
+            paramLabel = "<pattern>",
+            description = "Comma-separated list of files to exclude from scan. The syntax is the same as for includes")
+    protected String excludes = null;
+
+    @CommandLine.Option(
+            names = {"-n", "--node"},
+            required = true, order = 10,
+            paramLabel = "<name>",
+            description = "Node name or tag for SAST to be executed on")
+    protected String node = Base.DEFAULT_PTAI_NODE_NAME;
+
+    @CommandLine.Option(
+            names = {"--truststore"}, order = 11,
+            paramLabel = "<path>",
+            description = "Path to file that stores trusted CA certificates")
+    protected Path truststore = null;
+
+    @CommandLine.Option(
+            names = {"--truststore-pass"}, order = 12,
+            paramLabel = "<password>",
+            description = "Truststore password")
+    protected String truststorePassword = null;
+
+    @CommandLine.Option(
+            names = {"--truststore-type"}, order = 13,
+            paramLabel = "<type>",
+            description = "Truststore file type, i.e. JKS, PKCS12 etc. By default JKS is used")
+    protected String truststoreType = "JKS";
+
+    @CommandLine.Option(
+            names = {"-v", "--verbose"}, order = 14,
             description = "Provide verbose console log output")
     protected boolean verbose = false;
-
-    @CommandLine.Parameters(index = "0", description = "Source folder to scan")
-    protected Path input = Paths.get(System.getProperty("user.dir"));
 
     @Override
     public Integer call() throws Exception {
         switch (execute()) {
-            case UNSTABLE: return 2;
-            case FAILURE: return 1;
-            case SUCCESS: return 0;
+            case UNSTABLE: return BaseSlimAst.ExitCode.WARNINGS.getCode();
+            case FAILURE: return BaseSlimAst.ExitCode.FAILED.getCode();
+            case SUCCESS: return BaseSlimAst.ExitCode.SUCCESS.getCode();
             default: return 3;
         }
     }

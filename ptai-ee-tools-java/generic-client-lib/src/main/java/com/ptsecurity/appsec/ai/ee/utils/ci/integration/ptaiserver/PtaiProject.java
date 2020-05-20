@@ -2,10 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiResponse;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.CreateProjectModel;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.IScanSettings;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.Project;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.ProjectsApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiServerException;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
@@ -15,9 +12,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.io.File;
 import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class PtaiProject extends Client {
     @Getter
@@ -54,6 +49,7 @@ public class PtaiProject extends Client {
 
             IScanSettings scanSettings = new IScanSettings();
             FieldUtils.writeField(scanSettings, "id", UUID.randomUUID(), true);
+
             model.setScanSettings(scanSettings);
 
             FieldUtils.writeField(project, "settingsId", scanSettings.getId(), true);

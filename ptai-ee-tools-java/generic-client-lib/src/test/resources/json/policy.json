@@ -6,7 +6,7 @@
                 "Rules": [
                     {
                         "Field": "Level", // field name
-                        "Value": "High",  // field code, case insensitive
+                        "Value": "High",  // field value, case insensitive
                         "IsRegex": false  // whether to use regular expressions
                     },
                     {

@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.admin;
 
-import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.User;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.UserData;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseSlimAst;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client;
@@ -10,25 +10,21 @@ import picocli.CommandLine;
 
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-import static org.fusesource.jansi.Ansi.Color.*;
-import static org.fusesource.jansi.Ansi.ansi;
-
 @Log4j2
 @CommandLine.Command(
-        name = "admin-user-list",
+        name = "admin-user-create",
         sortOptions = false,
-        description = "Lists PT AI EE integration server users",
+        description = "Creates new PT AI EE integration server user",
         exitCodeListHeading = "Exit Codes:%n",
         exitCodeList = {
-                "0:Success",
-                "1:Error",
+                "0:User created successfully",
+                "1:Error during user add attempt",
                 "2:Invalid input"})
-
-public class UserList extends BaseSlimAst implements Callable<Integer> {
+public class UserCreate extends BaseSlimAst implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--url"},
             required = true, order = 1,
@@ -39,7 +35,7 @@ public class UserList extends BaseSlimAst implements Callable<Integer> {
     @CommandLine.Option(
             names = {"-a", "--administrator"},
             required = true, order = 2,
-            paramLabel = "<name>",
+            paramLabel = "<user>",
             description = "PT AI integration service administrator account name")
     protected String admin = null;
 
@@ -51,25 +47,40 @@ public class UserList extends BaseSlimAst implements Callable<Integer> {
     protected String token = null;
 
     @CommandLine.Option(
-            names = {"--truststore"}, order = 4,
+            names = {"-u", "--user"},
+            required = true, order = 4,
+            paramLabel = "<user>",
+            description = "New PT AI integration service user name")
+    protected String username = null;
+
+    @CommandLine.Option(
+            names = {"-p", "--password"},
+            arity = "0..1", interactive = true,
+            required = true, order = 5,
+            paramLabel = "<password>",
+            description = "New PT AI integration service user password")
+    protected String password = null;
+
+    @CommandLine.Option(
+            names = {"--truststore"}, order = 6,
             paramLabel = "<path>",
             description = "Path to file that stores trusted CA certificates")
     protected Path truststore = null;
 
     @CommandLine.Option(
-            names = {"--truststore-pass"}, order = 5,
+            names = {"--truststore-pass"}, order = 7,
             paramLabel = "<password>",
             description = "Truststore password")
     protected String truststorePassword = null;
 
     @CommandLine.Option(
-            names = {"--truststore-type"}, order = 6,
+            names = {"--truststore-type"}, order = 8,
             paramLabel = "<type>",
             description = "Truststore file type, i.e. JKS, PKCS12 etc. By default JKS is used")
     protected String truststoreType = "JKS";
 
     @CommandLine.Option(
-            names = {"-v", "--verbose"}, order = 7,
+            names = {"-v", "--verbose"}, order = 9,
             description = "Provide verbose console log output")
     protected boolean verbose = false;
 
@@ -88,17 +99,17 @@ public class UserList extends BaseSlimAst implements Callable<Integer> {
                 client.setTrustStorePassword(truststorePassword);
             }
             client.init();
-            List<User> users = client.getAdminApi().getUsers();
-            for (User user : users) {
-                String roles = String.join(", ", user.getRoles().stream().map(r -> r.getName()).collect(Collectors.toList()));
-                System.out.println(ansi()
-                        .a("User: #").fg(CYAN).a(user.getId())
-                        .reset()
-                        .a(" " + user.getName() + " [" + roles + "]"));
-            }
+
+            UserData userData = new UserData();
+            userData.setName(username);
+            userData.setPassword(password);
+            userData.setRoles(Arrays.asList("USER"));
+            User user = client.getAdminApi().postSignup(userData);
+            String roles = String.join(", ", user.getRoles().stream().map(r -> r.getName()).collect(Collectors.toList()));
+            log.info("User: {} [{}] created", user.getName(), roles);
             return 0;
-        } catch (ApiException e) {
-            processApiException("User list", e, verbose);
+        } catch (Exception e) {
+            processApiException("User create", e, verbose);
             return 1;
         }
     }

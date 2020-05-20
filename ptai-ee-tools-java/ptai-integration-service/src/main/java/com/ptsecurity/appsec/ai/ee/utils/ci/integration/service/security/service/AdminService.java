@@ -1,8 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.service;
 
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.UserData;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.UserExistsException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.UserNotFoundException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.EntityExistsException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.EntityNotFoundException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.domain.Role;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.domain.User;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.domain.UserRole;
@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -71,7 +70,7 @@ public class AdminService {
 
     public User addUser(UserData userData) {
         if (null != userRepository.findByUsername(userData.getName()))
-            throw new UserExistsException("User " + userData.getName() + " already exists");
+            throw new EntityExistsException("User " + userData.getName() + " already exists");
         User user = User.builder()
                 .username(userData.getName())
                 .password(userData.getPassword()).build();
@@ -94,7 +93,7 @@ public class AdminService {
         if (userRepository.existsById(id))
             userRepository.deleteById(id);
         else
-            throw new UserNotFoundException("User " + id.toString() + " not found");
+            throw new EntityNotFoundException("User " + id.toString() + " not found");
     }
 
     public void deleteUser(@NonNull String name) {
@@ -102,7 +101,7 @@ public class AdminService {
         if (null != user)
             userRepository.deleteById(user.getId());
         else
-            throw new UserNotFoundException("User " + name + " not found");
+            throw new EntityNotFoundException("User " + name + " not found");
     }
 
     public static String generateRandomString() {
