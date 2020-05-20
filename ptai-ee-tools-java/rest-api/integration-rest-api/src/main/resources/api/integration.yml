@@ -252,6 +252,29 @@ paths:
           description: Not Found
           content: {}
       deprecated: false
+  /api/sast/project:
+    post:
+      tags:
+        - sast-controller
+      summary: Create new project
+      operationId: create-project
+      parameters:
+        - name: name
+          description: PT AI EE project name
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: Project ID
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+        409:
+          description: Project already exists
+          content: {}
   /api/sast/result:
     get:
       tags:
