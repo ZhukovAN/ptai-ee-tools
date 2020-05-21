@@ -9,5 +9,6 @@
     <include file="/db/changelog/v.0.1/20200217-03-insert-data-changelog.xml"/>
     <include file="/db/changelog/v.0.1/20200303-04-insert-data-changelog.xml"/>
     <include file="/db/changelog/v.0.1/20200513-05-modify-tables-changelog.xml"/>
+    <include file="/db/changelog/v.0.1/20200521-06-modify-tables-changelog.xml"/>
     <include file="/db/changelog/v.0.1/20191212-99-insert-test-data-changelog.xml"/>
 </databaseChangeLog>

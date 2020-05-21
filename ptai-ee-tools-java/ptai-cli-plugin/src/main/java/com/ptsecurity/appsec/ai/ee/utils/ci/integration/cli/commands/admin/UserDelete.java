@@ -97,7 +97,7 @@ public class UserDelete  extends BaseSlimAst implements Callable<Integer> {
                 client.getAdminApi().deleteUser(Long.valueOf(username), null);
             else
                 client.getAdminApi().deleteUser(null, username);
-            log.info("User deleted");
+            log.info("User {}{} deleted", useId ? "#" : "", username);
             return 0;
         } catch (ApiException e) {
             processApiException("User delete", e, verbose);

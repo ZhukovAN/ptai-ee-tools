@@ -1,6 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.controller;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.ConflictException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.EntityExistsException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +37,8 @@ public class ControllerAdvice {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
-    @ExceptionHandler(value = {EntityExistsException.class})
-    public ResponseEntity handleEntityExistsException(EntityExistsException e) {
+    @ExceptionHandler(value = {EntityExistsException.class, ConflictException.class})
+    public ResponseEntity handleEntityExistsException(PtaiClientException e) {
         log.info(e.getMessage());
         log.trace("Exception details", e);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());

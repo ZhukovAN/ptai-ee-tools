@@ -101,7 +101,7 @@ class PluginTestIT {
         FileUtils.cleanDirectory(TEMP_FOLDER);
     }
 
-    void unzipTestSources(final Path destination) throws IOException {
+    protected void unzipTestSources(final Path destination) throws IOException {
         File zip = new File(getClass().getClassLoader().getResource("code/app01.zip").getFile());
         ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
         ZipEntry entry = zis.getNextEntry();
@@ -117,7 +117,7 @@ class PluginTestIT {
         }
     }
 
-    static void saveJsons() throws IOException {
+    protected static void saveJsons() throws IOException {
         SETTINGS_PATH = TEMPJSONFOLDER.toPath().resolve("settings.json");
         POLICY_PATH = TEMPJSONFOLDER.toPath().resolve("policy.json");
         EMPTY_POLICY_PATH = TEMPJSONFOLDER.toPath().resolve("empty.policy.json");
@@ -130,7 +130,7 @@ class PluginTestIT {
     }
 
     @Test
-    void testSlimJsonAst() throws IOException {
+    public void testSlimJsonAst() throws IOException {
         SETTINGS.setProjectName(NEW_PROJECT_NAME);
         saveJsons();
 
@@ -172,5 +172,39 @@ class PluginTestIT {
                 "--settings-json", SETTINGS_PATH.toString(),
                 "--policy-json", EMPTY_POLICY_PATH.toString());
         Assertions.assertEquals(BaseSlimAst.ExitCode.SUCCESS.getCode(), res);
+    }
+
+    @Test
+    public void testAdmin() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "admin-user-list",
+                "--url", PTAIURL,
+                "--truststore", TRUSTSTORE_PATH.toString(),
+                "--administrator", ADMIN,
+                "--token", ADMINTOKEN);
+        Assertions.assertEquals(0, res);
+
+        String username = "junit-" + UUID.randomUUID().toString();
+        String password = UUID.randomUUID().toString();
+        res = new CommandLine(new Plugin()).execute(
+                "admin-user-create",
+                "--url", PTAIURL,
+                "--truststore", TRUSTSTORE_PATH.toString(),
+                "--administrator", ADMIN,
+                "--token", ADMINTOKEN,
+                "--user", username,
+                "--password", password,
+                "--is-admin");
+        Assertions.assertEquals(0, res);
+
+        res = new CommandLine(new Plugin()).execute(
+                "admin-user-delete",
+                "--url", PTAIURL,
+                "--truststore", TRUSTSTORE_PATH.toString(),
+                "--administrator", ADMIN,
+                "--token", ADMINTOKEN,
+                "--user", username);
+        Assertions.assertEquals(0, res);
+
     }
 }

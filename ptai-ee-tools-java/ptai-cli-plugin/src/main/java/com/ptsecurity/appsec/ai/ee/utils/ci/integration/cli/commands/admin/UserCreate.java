@@ -62,25 +62,31 @@ public class UserCreate extends BaseSlimAst implements Callable<Integer> {
     protected String password = null;
 
     @CommandLine.Option(
-            names = {"--truststore"}, order = 6,
+            names = {"--is-admin"},
+            order = 6,
+            description = "Grant administrator role to new user")
+    protected boolean isAdmin = false;
+
+    @CommandLine.Option(
+            names = {"--truststore"}, order = 7,
             paramLabel = "<path>",
             description = "Path to file that stores trusted CA certificates")
     protected Path truststore = null;
 
     @CommandLine.Option(
-            names = {"--truststore-pass"}, order = 7,
+            names = {"--truststore-pass"}, order = 8,
             paramLabel = "<password>",
             description = "Truststore password")
     protected String truststorePassword = null;
 
     @CommandLine.Option(
-            names = {"--truststore-type"}, order = 8,
+            names = {"--truststore-type"}, order = 9,
             paramLabel = "<type>",
             description = "Truststore file type, i.e. JKS, PKCS12 etc. By default JKS is used")
     protected String truststoreType = "JKS";
 
     @CommandLine.Option(
-            names = {"-v", "--verbose"}, order = 9,
+            names = {"-v", "--verbose"}, order = 10,
             description = "Provide verbose console log output")
     protected boolean verbose = false;
 
@@ -103,7 +109,7 @@ public class UserCreate extends BaseSlimAst implements Callable<Integer> {
             UserData userData = new UserData();
             userData.setName(username);
             userData.setPassword(password);
-            userData.setRoles(Arrays.asList("USER"));
+            userData.setRoles(isAdmin ? Arrays.asList("ADMIN", "USER") : Arrays.asList("USER"));
             User user = client.getAdminApi().postSignup(userData);
             String roles = String.join(", ", user.getRoles().stream().map(r -> r.getName()).collect(Collectors.toList()));
             log.info("User: {} [{}] created", user.getName(), roles);

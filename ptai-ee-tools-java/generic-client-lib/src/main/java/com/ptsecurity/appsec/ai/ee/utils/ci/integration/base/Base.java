@@ -57,7 +57,7 @@ public class Base {
 
     protected void removeCryptographyRestrictions() {
         if (!isRestrictedCryptography()) {
-            log.log(Level.INFO, "No need to fix JCE");
+            log.log(Level.FINEST, "No need to fix JCE");
             jceFixApplied = true;
             return;
         }
