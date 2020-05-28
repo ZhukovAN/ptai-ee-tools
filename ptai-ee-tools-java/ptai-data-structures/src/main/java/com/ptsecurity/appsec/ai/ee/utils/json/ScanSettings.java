@@ -10,6 +10,20 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ScanSettings {
+    /**
+     * This is workaround for project creation: when AST is started using JSON files
+     * it sets scan parameters in the DB. But currently there's a problem: if
+     * JSON have no JavaNormalizeVersionPattern then this attribute will have null
+     * value in the database. In this case PT AI viewer will show empty project settings.
+     * The same case is for DisabledPatterns attribute it should be zero-length array
+     * instead of null. This method fixes these missing values if those aren't defined
+     */
+    public ScanSettings fix() {
+        if (null == disabledPatterns) disabledPatterns = new String[0];
+        if (null == javaNormalizeVersionPattern) javaNormalizeVersionPattern = "";
+        return this;
+    }
+
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class EmailSettings {

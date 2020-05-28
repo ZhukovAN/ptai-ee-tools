@@ -9,7 +9,6 @@ import com.ptsecurity.appsec.ai.ee.utils.json.report.vulnerability.details.Repor
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

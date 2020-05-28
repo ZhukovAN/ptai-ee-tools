@@ -11,14 +11,24 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
+    /**
+     * @return Make Swagger available at https://ptai.domain.org:8443/swagger-ui.html
+     */
     @Bean
     public Docket api() {
+        /*
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                // .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.ant("/api/sast/**"))
-                // .paths(PathSelectors.ant("/api/admin/**"))
+                .paths(PathSelectors.ant("/api/admin/**"))
                 // .paths(PathSelectors.ant("/oauth/**"))
+                .build();
+
+         */
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.ptsecurity.appsec.ai.ee"))
                 .build();
     }
 }

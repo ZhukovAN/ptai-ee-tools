@@ -1,0 +1,33 @@
+spring:
+  jpa:
+    hibernate.ddl-auto: none
+  liquibase:
+    contexts: test
+security:
+  require-ssl: false
+
+management:
+  endpoint:
+    health.enabled: false
+
+# Logging settings
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type.descriptor.sql: TRACE
+
+ptai-backend-services:
+  ci-url: https://ci.domain.org:443
+  ci-user-name: svc_ptai
+  ci-api-token: 11c4fb74f57eb12c06059fa899a3993468
+  ci-job-name: SAST/UI-managed SAST pipeline
+  ptai-url: https://ptai.domain.org:443
+
+ptai-integration-service:
+  check-cert-alias: domain.org generic localhost server (localhost)
+
+ptai-authorization-server:
+  sign-key-alias: domain.org generic localhost server (localhost)
+

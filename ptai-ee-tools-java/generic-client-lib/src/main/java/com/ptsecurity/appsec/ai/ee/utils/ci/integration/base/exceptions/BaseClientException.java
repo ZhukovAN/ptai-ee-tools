@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.impl.EnglishReasonPhraseCatalog;
 
@@ -29,30 +30,59 @@ public class BaseClientException extends RuntimeException {
         this(message, null);
     }
 
-    public static String getInnerExceptionDetails(Exception exception) {
-        if (!exception.getClass().getCanonicalName().matches(apiExceptionClassRegex))
-            return "";
+    public static Object getApiExceptionField(@NonNull Exception e, @NonNull String methodName) {
+        Class clazz = e.getClass();
+        if (!clazz.getCanonicalName().matches(apiExceptionClassRegex)) return "";
         try {
-            Method getCode = exception.getClass().getMethod("getCode");
-            int code = (int) getCode.invoke(exception);
-            if (0 == code)
-                return "";
-            String reason = EnglishReasonPhraseCatalog.INSTANCE.getReason(code, null);
-            return String.format("Code: %d, reason: %s", code, reason);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            return "";
+            Method method = clazz.getMethod(methodName);
+            return method.invoke(e);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            return null;
         }
     }
 
+    public static String getInnerExceptionDetails(Exception exception) {
+        int code = (int) getApiExceptionField(exception, "getCode");
+        if (0 == code) return "";
+        String reason = EnglishReasonPhraseCatalog.INSTANCE.getReason(code, null);
+        return String.format("Code: %d, reason: %s", code, reason);
+    }
+
+    public static String getApiExceptionDetails(@NonNull Exception e) {
+        Class clazz = e.getClass();
+        if (!clazz.getCanonicalName().matches(apiExceptionClassRegex)) return "";
+
+        int code = (int) getApiExceptionField(e, "getCode");
+        if (0 != code) {
+            String reason = EnglishReasonPhraseCatalog.INSTANCE.getReason(code, null);
+            return String.format("%s (%d)", reason, code);
+        } else
+            return "";
+    }
+
+    public static String getApiExceptionMessage(@NonNull Exception e) {
+        Class clazz = e.getClass();
+        if (!clazz.getCanonicalName().matches(apiExceptionClassRegex)) return "";
+        // As API exception may be thrown due to client-side issues like
+        // lack of certificate in local trust store, we need to check both detailMessage
+        // and response body
+        String message = e.getMessage();
+        int state = 0;
+        if (StringUtils.isNotEmpty(message)) state |= (1 << 0);
+        String body = (String) getApiExceptionField(e, "getResponseBody");
+        if (StringUtils.isNotEmpty(body)) state |= (1 << 1);
+        if (0 == state)
+            return "";
+        else if (1 == state)
+            return message;
+        else if (2 == state)
+            return body;
+        else
+            return body + " (" + message + ")";
+    }
+
     public static String getInnerExceptionData(Exception exception) {
-        if (!exception.getClass().getCanonicalName().matches(apiExceptionClassRegex))
-            return "";
-        try {
-            Method getResponseBody = exception.getClass().getMethod("getResponseBody");
-            return (String) getResponseBody.invoke(exception);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            return "";
-        }
+        return (String) getApiExceptionField(exception, "getResponseBody");
     }
 
     @Override

@@ -178,7 +178,6 @@ components:
           type: string
         lastScanDate:
           type: string
-          format: date-time
         filePatterns:
           type: array
           items:

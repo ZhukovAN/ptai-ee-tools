@@ -40,9 +40,7 @@ public class DiagnosticService {
 
     public UUID getProjectByName(String projectName) {
         String token = ptaiClient.signIn();
-        UUID projectId = PtaiProject.searchProject(ptaiClient.getPrjApi(), projectName)
-                .orElseThrow(() -> new PtaiServerException("PT AI EE project search failed", null));
-        return projectId;
+        return PtaiProject.searchProject(ptaiClient.getPrjApi(), projectName).orElse(null);
     }
 
     public ComponentsStatus getComponentsStatus() {

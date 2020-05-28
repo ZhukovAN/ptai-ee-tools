@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
 public class JsonSettingsVerifier {
@@ -23,9 +24,19 @@ public class JsonSettingsVerifier {
 
     public static String serialize(ScanSettings settings) {
         try {
-            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(settings);
+            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(settings.fix());
         } catch (JsonProcessingException e) {
             throw new PtaiClientException("JSON settings serialization failed", e);
         }
+    }
+
+    /**
+     * @param settingsJson JSON-defined AST settings
+     * @return Minimized JSON-defined AST settings, i.e. without comments, formatting etc.
+     * @throws PtaiClientException
+     */
+    public static String minimize(@NonNull String settingsJson) throws PtaiClientException {
+        ScanSettings settings = verify(settingsJson);
+        return serialize(settings);
     }
 }

@@ -1,16 +1,10 @@
 package com.ptsecurity.appsec.ai.desktop.utils.report.generator;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.ptsecurity.appsec.ai.desktop.utils.report.generator.domain.Report;
-import org.apache.commons.cli.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.UUID;
 
 public class Builder {
     public void execute(String xml) throws IOException {
@@ -262,17 +256,17 @@ public class Builder {
             // Try to authenticate
             String ptaiToken = ptaiPrj.init();
             if (StringUtils.isEmpty(ptaiToken))
-                throw new PtaiServerException("PTAI server authentication failed", null);
+                throw new PtaiServerException("PT AI server authentication failed", null);
             if (verbose)
-                System.out.println("PTAI server authentication success. Token starts with " + ptaiToken.substring(0, 10));
+                System.out.println("PT AI server authentication success. Token starts with " + ptaiToken.substring(0, 10));
 
             // Search for project
             ptaiPrj.setName(ptaiProject);
             UUID projectId = ptaiPrj.searchProject();
             if (null == projectId)
-                throw new PtaiServerException("PTAI project not found", null);
+                throw new PtaiServerException("PT AI project not found", null);
             if (verbose)
-                System.out.println("PTAI project found. ID starts with " + projectId.toString().substring(0, 4));
+                System.out.println("PT AI project found. ID starts with " + projectId.toString().substring(0, 4));
             // Upload project sources
             ptaiPrj.upload(transfers, folder);
             // Let's start analysis

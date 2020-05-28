@@ -17,15 +17,14 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.Pt
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.Constants;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.client.JenkinsClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.client.PtaiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.EntityExistsException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.EntityNotFoundException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.*;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import liquibase.util.StringUtils;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Response;
@@ -60,23 +59,39 @@ public class SastService {
 
     protected Path tempFolder;
 
+    public UUID createProject(String project) {
+        UUID projectId = PtaiProject.searchProject(ptaiClient.getPrjApi(), project).orElse(null);
+        if (null != projectId)
+            throw new EntityExistsException("Project " + project + " already exists");
+        projectId = PtaiProject.createProject(ptaiClient.getPrjApi(), project);
+        log.info("Project {} created", project);
+        log.debug("PT AI project ID: {}", projectId.toString());
+        return projectId;
+    }
+
     public String upload(
             String project, MultipartFile file,
             int current, int total, String uploadId) {
         String res = uploadId;
         String token = ptaiClient.signIn();
         log.debug("PTAI token: {}", token);
-        UUID projectId = PtaiProject.searchProject(ptaiClient.getPrjApi(), project)
-                .orElseThrow(() -> new PtaiServerException("PT AI EE project search failed", null));
+        UUID projectId = PtaiProject.searchProject(ptaiClient.getPrjApi(), project).orElse(null);
+        if (null == projectId) {
+            log.error("Project {} not found", project);
+            throw new EntityNotFoundException("Project " + project + " not found");
+        }
+        log.debug("PT AI project ID: {}", projectId.toString());
 
         Path path = null;
         try {
             // Is this a new upload?
-            if (StringUtils.isEmpty(res))
+            if (StringUtils.isEmpty(res)) {
                 res = UUID.randomUUID().toString();
+                log.debug("Generated upload ID: {}", res);
+            }
             Path chunk = this.tempFolder.resolve(String.format("%s.%06d", res, current));
             Files.copy(file.getInputStream(), chunk, StandardCopyOption.REPLACE_EXISTING);
-            log.debug("{} ({}) project's sources part {} of {} saved successfully", project, projectId, current + 1, total);
+            log.debug("{} ({}) project's sources part {} of {} saved successfully to {}", project, projectId, current + 1, total, chunk.toAbsolutePath().toString());
             // Last chunk stored as a temp file - need to combine them and upload to PT AI EE server
             if (current == total - 1) {
                 path = Files.createTempFile("", ".ptai");
@@ -123,14 +138,13 @@ public class SastService {
         RemoteAccessApi api = jenkinsClient.getJenkinsApi();
 
         FreeStyleProject prj = apiClient.callApi(() -> api.getJob(jobName));
-        Integer buildNumber = prj.getNextBuildNumber();
 
         // Start SAST job
         ApiResponse<Void> buildQueueInfo = apiClient.callApi(() -> api.postJobBuildWithParametersWithHttpInfo(
                 jobName, 0,
                 Optional.ofNullable(node).orElse(""),
                 Optional.ofNullable(project).orElse(""),
-                null == settings ? "" : new ObjectMapper().writeValueAsString(settings),
+                null == settings ? "" : new ObjectMapper().writeValueAsString(settings.fix()),
                 null == policy ? "" : new ObjectMapper().writeValueAsString(policy),
                 apiClient.crumb()));
         // Looks like buildNumber means nothing when there's several jobs exist in queue. We need to use
@@ -140,21 +154,25 @@ public class SastService {
     }
 
     public Optional<JobState> getJobState(Integer scanId, Integer startPos) {
+        log.trace("Scan ID {}, startPos {}", scanId, startPos);
         JenkinsApiClientWrapper apiClient = new JenkinsApiClientWrapper(jenkinsClient, 5, 5000);
         RemoteAccessApi api = jenkinsClient.getJenkinsApi();
 
         String jobName = ApiClient.convertJobName(jenkinsClient.getCiJobName());
+        log.trace("Job name {}", jobName);
 
         FreeStyleBuild build = null;
         boolean buildStarted = false;
         try {
             // Check: if build with defined number is started
             Integer buildId = jenkinsClient.getBuildId(jobName, scanId);
+            log.trace("Build ID {}", buildId);
             if (null == buildId)
                 return Optional.of(new JobState()
                         .status(JobState.StatusEnum.UNKNOWN)
                         .log("Job isn't started yet")
                         .pos(0));
+            log.trace("Getting info for build ID {}", buildId);
             build = apiClient.callApi(
                     () -> api.getJobBuild(jobName, buildId.toString()),
                     String.format("Get SAST job %d status", scanId));
@@ -162,10 +180,12 @@ public class SastService {
                 throw new JenkinsServerException("Build is null but there weren't API exception raised");
 
             buildStarted = true;
+            log.trace("Getting console output for job {} build ID {} starting with {}", jobName, buildId, startPos);
             ApiResponse<String> sastJobLog = apiClient.callApi(() -> api.getJobProgressiveTextWithHttpInfo(jobName, buildId.toString(), startPos.toString()));
             if (HttpStatus.OK.value() != sastJobLog.getStatusCode())
                 throw new JenkinsServerException("Failed to get job log");
 
+            log.trace("Getting X-Text-Size header value");
             int pos = Integer.valueOf(Optional.ofNullable(sastJobLog)
                     .map(ApiResponse::getHeaders)
                     .map(map -> map.get("X-Text-Size"))
@@ -181,6 +201,7 @@ public class SastService {
             }
 
             String statusText = Optional.ofNullable(build.getResult()).orElse(JobState.StatusEnum.UNKNOWN.name());
+            log.trace("AST job build status text is {}", statusText);
 
             try {
                 return Optional.of(new JobState()
@@ -194,14 +215,17 @@ public class SastService {
                         .pos(pos));
             }
         } catch (JenkinsServerException e) {
-            if (!buildStarted && (HttpStatus.NOT_FOUND.value() == e.getCode()))
+            if (!buildStarted && (HttpStatus.NOT_FOUND.value() == e.getCode())) {
+                log.trace("Job isn't started yet");
                 // Trying to get build info for job that isn't started yet results in 404 status
                 return Optional.of(new JobState()
                         .status(JobState.StatusEnum.UNKNOWN)
                         .log("Job isn't started yet")
                         .pos(0));
-            else
+            } else {
+                log.trace("Exception thrown:", e);
                 throw e;
+            }
         }
     }
 
@@ -213,7 +237,8 @@ public class SastService {
 
         Integer buildId = jenkinsClient.getBuildId(jobName, scanId);
         if (null == buildId)
-            throw new JenkinsServerException(String.format("Build ID not found for scan %d", scanId));
+            throw new JenkinsServerException(String.format("Build ID not found for scan ID %d", scanId));
+        log.debug("Build ID {} found for scan ID {}", buildId, scanId);
         FreeStyleBuild build = apiClient.callApi(() -> api.getJobBuild(jobName, buildId.toString()));
         if (null == build)
             throw new JenkinsServerException("Build is null but there weren't API exception raised");
@@ -224,7 +249,9 @@ public class SastService {
             JobState.StatusEnum status = JobState.StatusEnum.valueOf(statusText);
             if ((JobState.StatusEnum.UNKNOWN == status) || (JobState.StatusEnum.ABORTED == status))
                 throw new Exception();
-
+            res = build.getArtifacts().stream().map(Artifact::getRelativePath).collect(Collectors.toList());
+            for (String artifact : res)
+                log.debug("Build artifact: {}", artifact);
             return Optional.of(build.getArtifacts().stream().map(Artifact::getRelativePath).collect(Collectors.toList()));
         } catch (Exception e) {
             return Optional.empty();
@@ -239,7 +266,8 @@ public class SastService {
 
         Integer buildId = jenkinsClient.getBuildId(jobName, scanId);
         if (null == buildId)
-            throw new JenkinsServerException(String.format("Build ID not found for scan %d", scanId));
+            throw new JenkinsServerException(String.format("Build ID not found for scan ID %d", scanId));
+        log.debug("Build ID {} found for scan ID {}", buildId, scanId);
         FreeStyleBuild build = apiClient.callApi(() -> api.getJobBuild(jobName, buildId.toString()));
         if (null == build)
             throw new JenkinsServerException("Build is null but there weren't API exception raised");
@@ -253,6 +281,7 @@ public class SastService {
             for (Artifact artifact : build.getArtifacts()) {
                 if (!artifactRelPath.equals(artifact.getRelativePath())) continue;
                 URL url = new URL(build.getUrl() + "artifact/" + artifactRelPath);
+                log.debug("Getting artifact from {}", url.toString());
                 Call call = api.getJobBuildArtifactCall(jobName, buildId.toString(), artifactRelPath, null);
                 Response response = call.execute();
 
@@ -267,7 +296,7 @@ public class SastService {
 
     protected com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse<DefaultCrumbIssuer> crumb;
 
-    public void stopScan(Integer scanId) {
+    public void stopScan(@NonNull Integer scanId) {
         log.info("SAST job termination request. Scan ID is {}", scanId);
         String jobName = ApiClient.convertJobName(jenkinsClient.getCiJobName());
         jenkinsClient.stopJob(jobName, scanId);

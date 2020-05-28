@@ -6,7 +6,6 @@ import com.ptsecurity.appsec.ai.desktop.utils.xml.report.details.Report;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Test;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

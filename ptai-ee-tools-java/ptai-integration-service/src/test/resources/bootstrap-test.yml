@@ -1,0 +1,10 @@
+spring:
+  profiles: test
+  cloud:
+    bus.enabled: false
+    discovery.enabled: false
+    consul:
+      enabled: false
+      config.enabled: false
+      # host: ptai.domain.org
+      # token: 88471fc2-ff8f-f151-e71d-5ead2ac0feed

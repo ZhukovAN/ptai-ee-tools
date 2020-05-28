@@ -1,9 +1,12 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
+import com.ptsecurity.appsec.ai.ee.aic.ExitCode;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
@@ -46,6 +49,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpStatus;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import javax.annotation.Nonnull;
@@ -170,17 +174,22 @@ public class Plugin extends Builder implements SimpleBuildStep {
         PluginDescriptor descriptor = this.getDescriptor();
 
         FormValidation check = null;
-
+        // Get all descriptors that may be used by plugin:
+        // "UI-defined" scan settings descriptor
         ScanSettingsUi.Descriptor scanSettingsUiDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class);
+        // "JSON-defined" scan settings descriptor
         ScanSettingsManual.Descriptor scanSettingsManualDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsManual.Descriptor.class);
+        // "PT AI EE server connection settings (both legacy or slim) are defined globally" descriptor
         ConfigGlobal.Descriptor configGlobalDescriptor = Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
+        // "PT AI EE server legacy connection settings are defined locally" descriptor
         ConfigLegacyCustom.Descriptor configLegacyCustomDescriptor = Jenkins.get().getDescriptorByType(ConfigLegacyCustom.Descriptor.class);
+        // "PT AI EE server slim connection settings are defined locally" descriptor
         ConfigSlimCustom.Descriptor configSlimCustomDescriptor = Jenkins.get().getDescriptorByType(ConfigSlimCustom.Descriptor.class);
 
-        String selectedScanSettings = scanSettings instanceof ScanSettingsManual
-                ? scanSettingsManualDescriptor.getDisplayName()
-                : scanSettingsUiDescriptor.getDisplayName();
-        boolean selectedScanSettingsUi = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class).getDisplayName().equals(selectedScanSettings);
+        boolean selectedScanSettingsUi = scanSettings instanceof ScanSettingsUi;
+        String selectedScanSettings = selectedScanSettingsUi
+                ? scanSettingsUiDescriptor.getDisplayName()
+                : scanSettingsManualDescriptor.getDisplayName();
 
         String selectedConfig = config instanceof ConfigLegacyCustom
                 ? configLegacyCustomDescriptor.getDisplayName()
@@ -199,13 +208,17 @@ public class Plugin extends Builder implements SimpleBuildStep {
             check = scanSettingsManualDescriptor.doTestJsonSettings(item, jsonSettings);
             if (FormValidation.Kind.OK != check.kind)
                 throw new AbortException(check.getMessage());
+            check = scanSettingsManualDescriptor.doTestJsonPolicy(item, jsonPolicy);
+            if (FormValidation.Kind.OK != check.kind)
+                throw new AbortException(check.getMessage());
             ScanSettings scanSettings = JsonSettingsVerifier.verify(jsonSettings);
             projectName = scanSettings.getProjectName();
             String changedProjectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
-            if (!projectName.equals(changedProjectName)) {
+            if (!projectName.equals(changedProjectName))
                 scanSettings.setProjectName(projectName);
-                jsonSettings = JsonSettingsVerifier.serialize(scanSettings);
-            }
+            // These lines also minimize settings and policy JSONs
+            jsonSettings = JsonSettingsVerifier.serialize(scanSettings);
+            jsonPolicy = JsonPolicyVerifier.minimize(jsonPolicy);
         }
 
         LegacyServerSettings legacyServerSettings = null;
@@ -263,6 +276,10 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 serverUrl, legacyCredentialsId, jenkinsServerUrl, jenkinsJobName, serverUrl, slimCredentialsId, configName);
         if (FormValidation.Kind.OK != check.kind)
             throw new AbortException(check.getMessage());
+        String node = StringUtils.isEmpty(nodeName) ? Base.DEFAULT_PTAI_NODE_NAME : nodeName;
+        if (StringUtils.isEmpty(nodeName))
+            verboseLog(listener, Messages.plugin_logDefaultNodeUsed(node) + "\r\n");
+
         try {
             PtaiProject ptaiProject = null;
             Client client = null;
@@ -305,11 +322,11 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 sastJob.setProjectName(ptaiProject.getName());
                 sastJob.setJenkinsMaxRetry(legacyServerSettings.getJenkinsMaxRetry());
                 sastJob.setJenkinsRetryDelay(legacyServerSettings.getJenkinsRetryDelay());
-                if (scanSettings instanceof ScanSettingsManual) {
+                if (!selectedScanSettingsUi) {
                     sastJob.setSettingsJson(jsonSettings);
                     sastJob.setPolicyJson(jsonPolicy);
                 }
-                sastJob.setNodeName(this.nodeName);
+                sastJob.setNodeName(node);
                 // Set authentication parameters
                 if (null == jenkinsServerCredentials)
                     throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedJenkinsAuthNotSet());
@@ -325,7 +342,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                     sastJob.setPassword(auth.getApiToken());
                 }
                 sastJob.init();
-                PtaiResultStatus sastJobRes = sastJob.execute(workspace.getRemote());
+                PtaiResultStatus sastJobRes = PtaiResultStatus.convert(sastJob.execute(workspace.getRemote()));
 
                 if (failIfFailed && PtaiResultStatus.FAILURE.equals(sastJobRes))
                     throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastFailed());
@@ -349,9 +366,30 @@ public class Plugin extends Builder implements SimpleBuildStep {
                         client.setCaCertsPem(slimCredentials.getServerCaCertificates());
                     client.init();
 
-                    File zipFile = this.zipSources(buildInfo, workspace, launcher, listener);
+                    try {
+                        UUID projectId = client.getDiagnosticApi().getProjectId(projectName);
+                    } catch (ApiException e) {
+                        if (HttpStatus.SC_NOT_FOUND == e.getCode()) {
+                            if (!selectedScanSettingsUi) {
+                                log(listener,"Project %s not found, will be created as JSON settings are defined\r\n", projectName);
+                                client.getSastApi().createProject(projectName);
+                            } else {
+                                log(listener,"Project %s not found\r\n", projectName);
+                                throw new AbortException(Messages.validator_test_ptaiProject_notfound());
+                            }
+                        } else
+                            throw e;
+                    }
+
+                    File zipFile = zipSources(buildInfo, workspace, launcher, listener);
                     client.uploadZip(projectName, zipFile, 1024 * 1024);
-                    scanId = client.getSastApi().startUiJob(projectName, this.nodeName);
+                    if (selectedScanSettingsUi)
+                        scanId = client.getSastApi().startUiJob(projectName, node);
+                    else
+                        scanId = client.getSastApi().startJsonJob(
+                                projectName, node,
+                                JsonSettingsVerifier.minimize(jsonSettings),
+                                JsonPolicyVerifier.minimize(jsonPolicy));
                     log(listener, "SAST job number is " + scanId);
 
                     JobState state = null;
@@ -372,7 +410,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                     List<String> results = client.getSastApi().getJobResults(scanId);
                     for (String result : results) {
                         File data = client.getSastApi().getJobResult(scanId, result);
-                        String fileName = result.replaceAll("REPORTS", Base.SAST_FOLDER);
+                        String fileName = result.replaceAll("REPORTS/", "");
                         sastJob.saveReport(workspace.getRemote(), fileName, FileUtils.readFileToString(data, StandardCharsets.UTF_8));
                     }
                     if (failIfFailed && JobState.StatusEnum.FAILURE.equals(state.getStatus()))

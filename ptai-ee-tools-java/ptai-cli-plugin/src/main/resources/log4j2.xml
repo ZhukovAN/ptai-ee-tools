@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Properties>
+        <Property name="filename">ptai-cli-plugin.log</Property>
+    </Properties>
+    <Appenders>
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="%m%n"/>
+        </Console>
+        <File name="logfile" fileName="${filename}">
+            <PatternLayout>
+                <Pattern>[%d{yy-MM-dd HH:mm:ss:SSS}] [%p] [%C{1.}] %m%n</Pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="trace">
+            <AppenderRef ref="logfile" level="debug"/>
+            <AppenderRef ref="stdout" level="info"/>
+        </Root>
+    </Loggers>
+</Configuration>

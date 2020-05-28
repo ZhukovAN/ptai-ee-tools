@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class SastJobTest {
     private final static String ip = "127.0.0.1";
@@ -29,7 +29,8 @@ class SastJobTest {
         sast.setNodeName("PTAI");
         try {
             sast.init();
-            PtaiResultStatus status = sast.execute(Files.createTempDirectory("PT_").toString());
+            Integer res = sast.execute(Files.createTempDirectory("PT_").toString());
+            PtaiResultStatus status = PtaiResultStatus.convert(res);
         } catch (JenkinsClientException | IOException e) {
             e.printStackTrace();
         }
@@ -54,7 +55,8 @@ class SastJobTest {
             sast.setNodeName("LOCAL");
 
             sast.init();
-            PtaiResultStatus status = sast.execute(Files.createTempDirectory("PT_").toString());
+            Integer res = sast.execute(Files.createTempDirectory("PT_").toString());
+            PtaiResultStatus status = PtaiResultStatus.convert(res);
         } catch (JenkinsClientException | IOException e) {
             e.printStackTrace();
         }

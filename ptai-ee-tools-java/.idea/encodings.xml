@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding">
+  <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="ISO-8859-1">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/generic-client-lib" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/generic-client-lib/src/main/java" charset="UTF-8" />
@@ -22,6 +22,7 @@
     <file url="file://$PROJECT_DIR$/ptai-maven-plugin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ptai-sonar-plugin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ptai-sonar-plugin/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-server" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rest-api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rest-api/integration-rest-api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rest-api/integration-rest-api/src/main/java" charset="UTF-8" />
@@ -32,5 +33,6 @@
     <file url="file://$PROJECT_DIR$/rest-api/ptai-rest-api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rest-api/ptai-rest-api/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rest-api/ptai-rest-api/src/main/resources" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

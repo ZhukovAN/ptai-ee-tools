@@ -1,10 +1,15 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.service;
 
+import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.UserData;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.ConflictException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.EntityExistsException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.exceptions.EntityNotFoundException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.domain.Role;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.domain.User;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.domain.UserRole;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.repository.RoleRepository;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.security.repository.UserRepository;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.passay.CharacterRule;
@@ -23,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -64,17 +70,53 @@ public class AdminService {
         userRepository.save(admin);
     }
 
-    public User addUser(User user) {
-        return addUser(user, null);
-    }
-
-    public User addUser(User user, String[] roles) {
+    public User addUser(UserData userData) {
+        if (null != userRepository.findByUsername(userData.getName()))
+            throw new EntityExistsException("User " + userData.getName() + " already exists");
+        User user = User.builder()
+                .username(userData.getName())
+                .password(userData.getPassword()).build();
         List<UserRole> userRoles = new ArrayList<>();
-        for (String role : roles)
+
+        for (String role : userData.getRoles())
             userRoles.add(new UserRole(user, roleRepository.findByName(role)));
         user.setRoles(userRoles);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(userData.getPassword()));
         return userRepository.save(user);
+    }
+
+    public List<User> allUsers() {
+        List<User> res = new ArrayList<>();
+        userRepository.findAll().forEach(res::add);
+        return res;
+    }
+
+    public void deleteUser(@NonNull Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            log.debug("User #{} will be deleted", id);
+
+            // Check if this is a last admin user
+            Role adminRole = roleRepository.findByName("ADMIN");
+            // Get this user roles
+            boolean isAdmin =  user.get().getRoles().stream()
+                    .anyMatch(r -> adminRole.getId() == r.getRole().getId());
+            if (isAdmin) {
+                log.debug("User is administrator, need to check if he isn't the last one");
+                if (1 >= adminRole.getUsers().size())
+                    throw new ConflictException("Last administrative account couldn't be deleted");
+            }
+            userRepository.deleteById(id);
+        } else
+            throw new EntityNotFoundException("User " + id.toString() + " not found");
+    }
+
+    public void deleteUser(@NonNull String name) {
+        User user = userRepository.findByUsername(name);
+        if (null != user)
+            this.deleteUser(user.getId());
+        else
+            throw new EntityNotFoundException("User " + name + " not found");
     }
 
     public static String generateRandomString() {

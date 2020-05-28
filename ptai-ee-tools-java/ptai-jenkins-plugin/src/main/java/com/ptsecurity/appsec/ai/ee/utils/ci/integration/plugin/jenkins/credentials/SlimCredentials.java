@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public interface SlimCredentials extends StandardCredentials {
     String getUserName();
-    Secret getPassword() throws IOException, InterruptedException;
+    Secret getPassword();
     String getServerCaCertificates();
     SlimCredentials clone();
 }

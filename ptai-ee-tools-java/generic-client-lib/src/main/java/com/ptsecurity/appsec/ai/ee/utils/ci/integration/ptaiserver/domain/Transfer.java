@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.io.Serializable;

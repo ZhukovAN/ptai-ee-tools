@@ -6,12 +6,12 @@ import com.cloudbees.plugins.credentials.common.StandardUsernameCredentials;
 import com.cloudbees.plugins.credentials.common.StandardUsernameListBoxModel;
 import com.cloudbees.plugins.credentials.common.UsernamePasswordCredentials;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.LegacyCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.LegacyCredentialsImpl;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.exceptions.CredentialsNotFoundException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import hudson.Extension;
 import hudson.model.FreeStyleProject;
@@ -47,12 +47,12 @@ public class CredentialsAuth extends Auth {
         this.credentialsId = credentialsId;
     }
 
-    public String getUserName(Item item) throws CredentialsNotFoundException {
+    public String getUserName(Item item) {
         UsernamePasswordCredentials creds = getCredentialsById(item, credentialsId);
         return creds.getUsername();
     }
 
-    public String getPassword(Item item) throws CredentialsNotFoundException {
+    public String getPassword(Item item) throws BaseClientException {
         UsernamePasswordCredentials creds = getCredentialsById(item, credentialsId);
         return creds.getPassword().getPlainText();
     }
@@ -63,9 +63,9 @@ public class CredentialsAuth extends Auth {
      *      The item is required to also get Credentials which are defined in the items scope and not Jenkins globally.
      *      Value can be null, but Credentials e.g. configured on a Folder will not be found in this case, only globally configured Credentials.
      * @return the matched credentialsId
-     * @throws CredentialsNotFoundException if not found
+     * @throws BaseClientException if not found
      */
-    private static UsernamePasswordCredentials getCredentialsById(Item item, String credentialsId) throws CredentialsNotFoundException {
+    private static UsernamePasswordCredentials getCredentialsById(Item item, String credentialsId) throws BaseClientException {
         if (item == null)
             // Construct a fake project
             item = new FreeStyleProject((ItemGroup)Jenkins.get(), "fake-" + UUID.randomUUID().toString());
@@ -80,7 +80,7 @@ public class CredentialsAuth extends Auth {
         for (StandardUsernameCredentials credentials : credentialsList)
             if (credentials.getId().equals(credentialsId))
                 return (UsernamePasswordCredentials)credentials;
-        throw new CredentialsNotFoundException(credentialsId);
+        throw new BaseClientException("No credentials found with ID " + credentialsId);
     }
 
     @Symbol("CredentialsAuth")

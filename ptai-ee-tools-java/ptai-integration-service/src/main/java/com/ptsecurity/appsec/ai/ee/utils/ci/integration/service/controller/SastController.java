@@ -26,6 +26,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/sast")
@@ -33,6 +34,13 @@ import java.util.List;
 public class SastController {
     @Autowired
     SastService sastService;
+
+    @PostMapping(value = "/project", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UUID> createProject(
+            @RequestParam(name = "name") String project) {
+        UUID res = sastService.createProject(project);
+        return new ResponseEntity<UUID>(res, HttpStatus.OK);
+    }
 
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
     public ResponseEntity<String> upload(
@@ -69,7 +77,9 @@ public class SastController {
             settings.setSite("http://localhost:8080");
             log.warn("It is strictly recommended to set site address in scan settings");
         }
-        Policy[] policy = jsonMapper.readValue(policyJson, Policy[].class);
+        Policy[] policy = null;
+        if (StringUtils.isNotEmpty(policyJson))
+            policy = jsonMapper.readValue(policyJson, Policy[].class);
         Integer res = sastService.scanJsonManaged(project, node, settings, policy).orElseThrow(ServiceUnavailableException::new);
         return new ResponseEntity<Integer>(res, HttpStatus.OK);
     }

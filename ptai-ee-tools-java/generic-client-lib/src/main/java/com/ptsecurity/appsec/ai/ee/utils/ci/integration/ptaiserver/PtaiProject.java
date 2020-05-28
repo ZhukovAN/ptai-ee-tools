@@ -12,9 +12,7 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.io.File;
 import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class PtaiProject extends Client {
     @Getter
@@ -39,28 +37,32 @@ public class PtaiProject extends Client {
         return searchProject(this.prjApi, this.name).orElse(null);
     }
 
-
-    public UUID createProject(String projectName) throws PtaiClientException, PtaiServerException {
+    public static UUID createProject(ProjectsApi api, String name) throws PtaiServerException {
         try {
             CreateProjectModel model = new CreateProjectModel();
 
             Project project = new Project();
             FieldUtils.writeField(project, "id", UUID.randomUUID(), true);
-            project.setName(projectName);
+            project.setName(name);
             project.setCreationDate(OffsetDateTime.now());
             model.setProject(project);
 
             IScanSettings scanSettings = new IScanSettings();
             FieldUtils.writeField(scanSettings, "id", UUID.randomUUID(), true);
+
             model.setScanSettings(scanSettings);
 
             FieldUtils.writeField(project, "settingsId", scanSettings.getId(), true);
 
-            Project res = this.prjApi.post(model);
+            Project res = api.post(model);
             return res.getId();
         } catch (ApiException | IllegalAccessException e) {
             throw new PtaiServerException("PT AI EE project create failed", e);
         }
+    }
+
+    public UUID createProject(String name) throws PtaiServerException {
+        return createProject(this.prjApi, name);
     }
 
     public UUID createProject(ScanSettings settings) throws PtaiClientException, PtaiServerException {

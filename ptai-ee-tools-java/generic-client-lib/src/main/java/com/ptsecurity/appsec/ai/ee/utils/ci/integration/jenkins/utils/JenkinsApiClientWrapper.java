@@ -12,7 +12,6 @@ import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 
-import java.util.Arrays;
 import java.util.concurrent.Callable;
 import java.util.function.IntPredicate;
 

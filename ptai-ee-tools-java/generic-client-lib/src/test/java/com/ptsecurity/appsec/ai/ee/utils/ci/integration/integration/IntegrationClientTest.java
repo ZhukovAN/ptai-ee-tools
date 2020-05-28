@@ -23,7 +23,7 @@ public class IntegrationClientTest {
             BuildInfo buildInfo = client.getPublicApi().getBuildInfo();
             String buildInfoText = buildInfo.getName() + ".v" + buildInfo.getVersion() + " from " + buildInfo.getDate();
             ComponentsStatus statuses = client.getDiagnosticApi().getStatus();
-            String statusText = "PTAI: " + statuses.getPtai() + "; EMBEDDED: " + statuses.getEmbedded();
+            String statusText = "PT AI: " + statuses.getPtai() + "; EMBEDDED: " + statuses.getEmbedded();
         } catch (ApiException e) {
             BaseClientException clientException = new BaseClientException("", e);
             clientException.printStackTrace();
