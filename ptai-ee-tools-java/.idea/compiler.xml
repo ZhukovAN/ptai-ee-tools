@@ -6,18 +6,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ptai-teamcity-plugin-server" />
-        <module name="jenkins-rest-api" />
         <module name="ptai-cli-plugin" />
-        <module name="ptai-sonar-plugin" />
-        <module name="ptai-rest-api" />
-        <module name="ptai-integration-service" />
-        <module name="generic-client-lib" />
         <module name="ptai-jenkins-plugin" />
-        <module name="jce-restrictions-checker" />
         <module name="ptai-data-structures" />
         <module name="ptai-maven-plugin" />
+        <module name="ptai-sonar-plugin" />
+        <module name="ptai-teamcity-plugin-server" />
+        <module name="generic-client-lib" />
         <module name="integration-rest-api" />
+        <module name="jce-restrictions-checker" />
+        <module name="jenkins-rest-api" />
+        <module name="ptai-integration-service" />
+        <module name="ptai-rest-api" />
+        <module name="ptai-teamcity-plugin-agent" />
+        <module name="ptai-teamcity-plugin-common" />
       </profile>
     </annotationProcessing>
   </component>

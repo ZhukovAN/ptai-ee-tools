@@ -15,6 +15,13 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
+            <artifactId>ptai-teamcity-plugin-common</artifactId>
+            <version>0.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.jetbrains.teamcity</groupId>
             <artifactId>server-api</artifactId>
             <version>${teamcity-version}</version>
@@ -63,7 +70,6 @@
             <version>1.61</version>
         </dependency>
 
-
         <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
         <dependency>
             <groupId>commons-validator</groupId>
@@ -74,7 +80,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.6</version>
+            <version>1.18.10</version>
             <scope>provided</scope>
         </dependency>
 

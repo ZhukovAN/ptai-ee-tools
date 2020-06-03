@@ -59,10 +59,10 @@ public class JenkinsApiClientWrapper {
                 if (HttpStatus.SC_BAD_GATEWAY != e.getCode())
                     processException(e, stage);
                 if (jenkinsMaxRetry <= attempt) {
-                    client.log("Attempt %d failed. Cancel trying\r\n", attempt, jenkinsDelay);
+                    client.log("Attempt %d failed. Cancel trying", attempt, jenkinsDelay);
                     processException(e, stage);
                 } else {
-                    client.log("Attempt %d failed. Wait %d ms\r\n", attempt, jenkinsDelay);
+                    client.log("Attempt %d failed. Wait %d ms", attempt, jenkinsDelay);
                     client.log(e);
                 }
                 attempt++;
@@ -90,10 +90,10 @@ public class JenkinsApiClientWrapper {
     protected String getCrumb() {
         try {
             ApiResponse<DefaultCrumbIssuer> response = client.getJenkinsApi().getCrumbWithHttpInfo();
-            client.log("Crumb: %s\r\n", response.getData().getCrumb());
+            client.log("Crumb: %s", response.getData().getCrumb());
             return response.getData().getCrumb();
         } catch (ApiException dummy) {
-            client.log("No CSRF token issued\r\n");
+            client.log("No CSRF token issued");
             return null;
         }
     }

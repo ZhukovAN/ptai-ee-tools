@@ -3,27 +3,28 @@ var PtaiAdmin = {}
 PtaiAdmin.SettingsForm = OO.extend(BS.AbstractPasswordForm, {
     setupEventHandlers: function() {
         var that = this;
-        $('testConnection').on('click', this.testConnection.bindAsEventListener(this));
+        $('test').on('click', this.test.bindAsEventListener(this));
 
         this.setUpdateStateHandlers({
             updateState: function() {
-                that.storeInSession();
+                that.storeToSession();
             },
             saveState: function() {
-                that.submitSettings();
+                that.storeToFile();
             }
         });
     },
 
-    storeInSession: function() {
-        $("submitSettings").value = 'storeInSession';
+    storeToSession: function() {
+        $("submitMode").value = 'storeToSession';
         BS.PasswordFormSaver.save(this, this.formElement().action, BS.StoreInSessionListener);
     },
 
-    submitSettings: function() {
-        $("submitSettings").value = 'store';
+    storeToFile: function() {
+        $("submitMode").value = 'storeToFile';
         // this.removeUpdateStateHandlers();
-        BS.PasswordFormSaver.save(this, this.formElement().action,
+        BS.PasswordFormSaver.save(
+            this, this.formElement().action,
             OO.extend(BS.ErrorsAwareListener, this.createErrorListener()));
         return false;
     },
@@ -31,50 +32,62 @@ PtaiAdmin.SettingsForm = OO.extend(BS.AbstractPasswordForm, {
     createErrorListener: function() {
         var that = this;
         return {
-            onPtaiServerUrlError: function(elem) {
-                $("ptaiServerUrlError").innerHTML = elem.firstChild.nodeValue;
+            onEmptyPtaiUrlError: function(elem) {
+                $("ptaiUrlError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiUrl"));
             },
-            onCaCertsPemError: function(elem) {
-                $("caCertsPemError").innerHTML = elem.firstChild.nodeValue;
+            onInvalidPtaiUrlError: function(elem) {
+                $("ptaiUrlError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiUrl"));
             },
-            onPtaiKeyPemError: function(elem) {
-                $("ptaiKeyPemError").innerHTML = elem.firstChild.nodeValue;
+            onEmptyPtaiUserError: function(elem) {
+                $("ptaiUserError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiUser"));
             },
-            onJenkinsServerUrlError: function(elem) {
-                $("jenkinsServerUrlError").innerHTML = elem.firstChild.nodeValue;
+            onEmptyPtaiTokenError: function(elem) {
+                $("ptaiTokenError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiToken"));
             },
-            onJenkinsJobNameError: function(elem) {
-                $("jenkinsJobNameError").innerHTML = elem.firstChild.nodeValue;
+            onEmptyPtaiTrustedCertificatesError: function(elem) {
+                $("ptaiTrustedCertificatesError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiTrustedCertificates"));
             },
-            onJenkinsLoginError: function(elem) {
-                $("jenkinsLoginError").innerHTML = elem.firstChild.nodeValue;
+            onInvalidPtaiTrustedCertificatesError: function(elem) {
+                $("ptaiTrustedCertificatesError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiTrustedCertificates"));
             },
-            onCompleteSave: function(form, responseXML, err) {
-                BS.ErrorsAwareListener.onCompleteSave(form, responseXML, err);
-                if (!err) {
-                    BS.XMLResponse.processRedirect(responseXML);
-                } else {
+            onCompleteSave: function(form, xml, err) {
+                BS.ErrorsAwareListener.onCompleteSave(form, xml, err);
+                if (err)
+                    ;
                     // that.setupEventHandlers();
-                }
+                else
+                    BS.XMLResponse.processRedirect(xml);
             }
         }
     },
 
-    testConnection: function () {
-        $("submitSettings").value = 'testConnection';
+    test: function () {
+        $("submitMode").value = 'test';
         var listener = OO.extend(BS.ErrorsAwareListener, this.createErrorListener());
         var oldOnCompleteSave = listener['onCompleteSave'];
-        listener.onCompleteSave = function (form, responseXML, err) {
-            oldOnCompleteSave(form, responseXML, err);
-            if (!err) {
-                form.enable();
-                if (responseXML) {
-                    var res = responseXML.getElementsByTagName("testConnectionResult")[0].
-                        firstChild.nodeValue;
-                    var success = res.includes("Test completed successfully")
-                    BS.TestConnectionDialog.show(success, res, $('testConnection'));
-                }
+        listener.onCompleteSave = function (form, xml, err) {
+            oldOnCompleteSave(form, xml, err);
+            if (err) return;
+            form.enable();
+            if (!xml) return;
+
+            var res = xml.getElementsByTagName("testConnectionResult")[0].textContent;
+            var success = res.includes("SUCCESS")
+
+            res = xml.getElementsByTagName("testConnectionDetails")[0];
+            var details = res.getElementsByTagName("line");
+            var detailsString = "";
+            for (let i = 0; i < details.length; i++) {
+                if (0 != i) detailsString += "\n"
+                detailsString += details[i].textContent;
             }
+            BS.TestConnectionDialog.show(success, detailsString, $('test'));
         };
         BS.PasswordFormSaver.save(this, this.formElement().action, listener);
     }

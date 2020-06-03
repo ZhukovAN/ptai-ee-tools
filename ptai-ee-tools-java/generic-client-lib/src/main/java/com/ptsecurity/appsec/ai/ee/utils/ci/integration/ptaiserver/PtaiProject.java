@@ -82,7 +82,7 @@ public class PtaiProject extends Client {
 
     public void upload(File file) throws PtaiClientException, PtaiServerException {
         try {
-            this.log("Zipped sources are in  %s\r\n", file.getAbsolutePath());
+            this.log("Zipped sources are in  %s", file.getAbsolutePath());
 
             // Search for project
             UUID projectId = this.searchProject();
@@ -94,7 +94,7 @@ public class PtaiProject extends Client {
                     file,
                     null,null,null,null,null,null,
                     null,null,null,null,null);
-            this.log("Sources upload result is %d\r\n", res.getStatusCode());
+            this.log("Sources upload result is %d", res.getStatusCode());
             file.delete();
             if (200 != res.getStatusCode())
                 throw new PtaiClientException("Sources upload failed");

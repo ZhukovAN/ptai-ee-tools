@@ -99,7 +99,7 @@ public class JenkinsClient extends Client {
     @Override
     public void log(Exception exception) {
         if (StringUtils.isNotEmpty(exception.getMessage()))
-            this.log("%s\r\n", exception.getMessage());
+            this.log(exception.getMessage());
         if (this.verbose)
             log.error(exception.getMessage(), exception);
     }

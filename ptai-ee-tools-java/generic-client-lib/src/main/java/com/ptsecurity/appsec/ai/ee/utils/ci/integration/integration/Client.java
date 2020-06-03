@@ -56,11 +56,11 @@ public class Client extends BaseClient {
         try {
             String uploadId = UUID.randomUUID().toString();
             if (chunkSize > Integer.MAX_VALUE) throw new BaseClientException("File chunk size too big");
-            log("Prepare to upload %s of sources\r\n", FileUtils.byteCountToDisplaySize(zip.length()));
+            log("Prepare to upload %s of sources", FileUtils.byteCountToDisplaySize(zip.length()));
 
             if (zip.length() <= chunkSize) {
                 sastApi.uploadArtifacts(0, zip, projectName, 1, uploadId);
-                log("Uploaded as single part\r\n");
+                log("Uploaded as single part");
             } else {
                 try (InputStream in = new FileInputStream(zip)) {
                     final int bufferSize = 512 * 1024;
@@ -85,7 +85,7 @@ public class Client extends BaseClient {
                                 }
                             }
                             sastApi.uploadArtifacts(i, chunkFile.getFile().toFile(), projectName, partsNumber, uploadId);
-                            log("Uploaded part %d of %d\r\n", i, partsNumber);
+                            log("Uploaded part %d of %d", i, partsNumber);
                         }
                     }
                 }

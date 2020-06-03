@@ -7,20 +7,31 @@
   <packaging>pom</packaging>
   <properties>
       <teamcity-version>10.0</teamcity-version>
+      <!-- <teamcity-version>2018.2</teamcity-version> -->
   </properties>
   <repositories>
     <repository>
         <id>JetBrains</id>
-        <url>http://repository.jetbrains.com/all</url>
+        <url>https://download.jetbrains.com/teamcity-repository</url>
     </repository>
   </repositories>
   <pluginRepositories>
       <pluginRepository>
           <id>JetBrains</id>
-          <url>http://repository.jetbrains.com/all</url>
+          <url>https://download.jetbrains.com/teamcity-repository</url>
       </pluginRepository>
   </pluginRepositories>
   <build>
+      <plugins>
+          <plugin>
+              <groupId>org.jetbrains.teamcity</groupId>
+              <artifactId>teamcity-sdk-maven-plugin</artifactId>
+              <version>0.4.1</version>
+              <configuration>
+                  <!-- <teamcityDir>/path/to/tc/distro</teamcityDir> -->
+              </configuration>
+          </plugin>
+      </plugins>
       <pluginManagement>
           <plugins>
               <plugin>
@@ -34,7 +45,7 @@
               <plugin>
                   <groupId>org.jetbrains.teamcity</groupId>
                   <artifactId>teamcity-sdk-maven-plugin</artifactId>
-                  <version>0.4</version>
+                  <version>0.4.1</version>
                   <configuration>
                       <!-- <teamcityDir>/path/to/tc/distro</teamcityDir> -->
                   </configuration>
@@ -44,6 +55,8 @@
   </build>
   <modules>
     <module>ptai-teamcity-plugin-server</module>
+    <module>ptai-teamcity-plugin-agent</module>
+    <module>ptai-teamcity-plugin-common</module>
     <module>build</module>
   </modules>
 </project>

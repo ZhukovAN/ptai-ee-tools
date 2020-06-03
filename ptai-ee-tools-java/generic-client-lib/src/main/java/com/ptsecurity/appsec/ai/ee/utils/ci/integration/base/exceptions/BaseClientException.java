@@ -23,6 +23,7 @@ public class BaseClientException extends RuntimeException {
 
     public BaseClientException(String message, Exception inner) {
         super(message);
+        // TODO: Check if inner is inherited from BaseClientException
         this.inner = inner;
     }
 
@@ -39,13 +40,6 @@ public class BaseClientException extends RuntimeException {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
             return null;
         }
-    }
-
-    public static String getInnerExceptionDetails(Exception exception) {
-        int code = (int) getApiExceptionField(exception, "getCode");
-        if (0 == code) return "";
-        String reason = EnglishReasonPhraseCatalog.INSTANCE.getReason(code, null);
-        return String.format("Code: %d, reason: %s", code, reason);
     }
 
     public static String getApiExceptionDetails(@NonNull Exception e) {
@@ -99,7 +93,7 @@ public class BaseClientException extends RuntimeException {
                     .map(msg -> String.format("inner: %s", msg))
                     .map(msg -> messages.add(msg));
             Optional.ofNullable(inner)
-                    .map(inner -> getInnerExceptionDetails(inner))
+                    .map(inner -> getApiExceptionDetails(inner))
                     .filter(StringUtils::isNotEmpty)
                     .map(msg -> String.format("details: %s", msg))
                     .map(msg -> messages.add(msg));

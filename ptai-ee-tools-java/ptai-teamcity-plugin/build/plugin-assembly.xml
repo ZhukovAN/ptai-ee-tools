@@ -10,12 +10,17 @@
          <source>target/teamcity-plugin.xml</source>
          <outputDirectory>/</outputDirectory>
      </file> 
+     <file>
+         <source>target/ptai-teamcity-plugin-agent.zip</source>
+         <outputDirectory>agent</outputDirectory>
+     </file> 
   </files>
   <moduleSets>
     <moduleSet>
        <useAllReactorProjects>true</useAllReactorProjects>
        <includes>
            <include>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin:ptai-teamcity-plugin-server</include>
+           <include>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin:ptai-teamcity-plugin-common</include>
        </includes> 
        <binaries>
            <outputDirectory>server</outputDirectory>

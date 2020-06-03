@@ -134,7 +134,11 @@ public class Plugin extends Builder implements SimpleBuildStep {
     }
 
     protected void log(TaskListener listener, String format, Object... args) {
-        listener.getLogger().print(consolePrefix + String.format(format, args));
+        listener.getLogger().println(consolePrefix + String.format(format, args));
+    }
+
+    protected void log(TaskListener listener, String data) {
+        listener.getLogger().println(consolePrefix + data);
     }
 
     protected File zipSources(BuildInfo buildInfo, FilePath workspace, Launcher launcher, TaskListener listener) throws IOException, InterruptedException {
@@ -278,7 +282,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
             throw new AbortException(check.getMessage());
         String node = StringUtils.isEmpty(nodeName) ? Base.DEFAULT_PTAI_NODE_NAME : nodeName;
         if (StringUtils.isEmpty(nodeName))
-            verboseLog(listener, Messages.plugin_logDefaultNodeUsed(node) + "\r\n");
+            verboseLog(listener, Messages.plugin_logDefaultNodeUsed(node));
 
         try {
             PtaiProject ptaiProject = null;
@@ -298,7 +302,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 String ptaiToken = ptaiProject.init();
                 if (StringUtils.isEmpty(ptaiToken))
                     throw new AbortException(Messages.validator_test_server_token_invalid());
-                verboseLog(listener, Messages.validator_test_server_success(ptaiToken.substring(0, 10)) + "\r\n");
+                verboseLog(listener, Messages.validator_test_server_success(ptaiToken.substring(0, 10)));
 
                 UUID projectId = ptaiProject.searchProject();
                 if (null == projectId) {
@@ -307,7 +311,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                     else
                         throw new AbortException(Messages.validator_test_ptaiProject_notfound());
                 }
-                verboseLog(listener, Messages.validator_test_ptaiProject_success(projectId.toString().substring(0, 4)) + "\r\n");
+                verboseLog(listener, Messages.validator_test_ptaiProject_success(projectId.toString().substring(0, 4)));
                 File zipFile = this.zipSources(buildInfo, workspace, launcher, listener);
                 ptaiProject.upload(zipFile);
 
@@ -371,10 +375,10 @@ public class Plugin extends Builder implements SimpleBuildStep {
                     } catch (ApiException e) {
                         if (HttpStatus.SC_NOT_FOUND == e.getCode()) {
                             if (!selectedScanSettingsUi) {
-                                log(listener,"Project %s not found, will be created as JSON settings are defined\r\n", projectName);
+                                log(listener,"Project %s not found, will be created as JSON settings are defined", projectName);
                                 client.getSastApi().createProject(projectName);
                             } else {
-                                log(listener,"Project %s not found\r\n", projectName);
+                                log(listener,"Project %s not found", projectName);
                                 throw new AbortException(Messages.validator_test_ptaiProject_notfound());
                             }
                         } else
@@ -399,7 +403,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                         if (state.getPos() != pos) {
                             String[] lines = state.getLog().split("\\r?\\n");
                             for (String line : lines)
-                                log(listener, "%s\r\n", line);
+                                log(listener, line);
                         }
                         pos = state.getPos();
                         if (!state.getStatus().equals(JobState.StatusEnum.UNKNOWN)) break;
@@ -424,13 +428,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 }
             }
         } catch (JenkinsClientException e) {
-            log(listener, com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedJenkinsApiDetails(e) + "\r\n");
+            log(listener, com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedJenkinsApiDetails(e));
             throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failed());
         } catch (PtaiClientException e) {
-            log(listener, com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedPtaiApiDetails(e) + "\r\n");
+            log(listener, com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedPtaiApiDetails(e));
             throw new AbortException(Messages.validator_failed());
         } catch (ApiException e) {
-            log(listener, com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedPtaiApiDetails(new BaseClientException(null, e)) + "\r\n");
+            log(listener, com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedPtaiApiDetails(new BaseClientException(null, e)));
             throw new AbortException(Messages.validator_failed());
         }
     }

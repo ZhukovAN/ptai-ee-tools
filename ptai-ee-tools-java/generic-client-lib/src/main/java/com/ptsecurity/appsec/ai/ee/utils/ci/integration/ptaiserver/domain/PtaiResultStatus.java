@@ -4,7 +4,31 @@ import com.ptsecurity.appsec.ai.ee.aic.ExitCode;
 import lombok.NonNull;
 
 public enum PtaiResultStatus {
-    UNKNOWN, FAILURE, UNSTABLE, SUCCESS, ABORTED, ERROR;
+    /**
+     * Scan is not finished yet
+     */
+    UNKNOWN,
+    /**
+     * Scan complete, AST policy assessment failed
+     */
+    FAILURE,
+    /**
+     * Scan complete, AST policy assessment success, but there were minor warnings
+     */
+    UNSTABLE,
+
+    /**
+     * Scan complete, AST policy assessment success
+     */
+    SUCCESS,
+    /**
+     * Scan was terminated
+     */
+    ABORTED,
+    /**
+     * Scan settings error
+     */
+    ERROR;
 
     public static PtaiResultStatus convert(@NonNull Integer exitCode) {
         PtaiResultStatus res = ERROR;

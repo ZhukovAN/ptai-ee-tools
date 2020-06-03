@@ -58,7 +58,7 @@ public class Client extends BaseClient {
     }
 
     public void log(com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiException e) {
-        this.log("ApiException thrown. %s\r\n", BaseClientException.getInnerExceptionDetails(e));
+        this.log("ApiException thrown. %s", BaseClientException.getApiExceptionDetails(e));
         super.log(e);
     }
 }
