@@ -10,5 +10,7 @@ cd ../ptai-jenkins-plugin
 call mvn clean install -DskipTests=true
 cd ../ptai-cli-plugin
 call mvn clean install -DskipTests=true
+cd ../ptai-teamcity-plugin
+call mvn clean install -DskipTests=true
 cd ../ptai-integration-service
 call mvn clean install -DskipTests=true

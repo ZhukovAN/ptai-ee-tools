@@ -10,8 +10,13 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.Pt
 import hudson.Util;
 import hudson.util.FormValidation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.DomainValidator;
+import org.apache.commons.validator.routines.RegexValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -21,9 +26,18 @@ public class Validator {
         return !StringUtils.isEmpty(value);
     }
 
+    private static final String[] GENERIC_TLDS_PLUS = new String[] { "corp", "local" };
+
+    static {
+        DomainValidator.updateTLDOverride(DomainValidator.ArrayType.GENERIC_PLUS, GENERIC_TLDS_PLUS);
+    }
+
     public static boolean doCheckFieldUrl(String value) {
-        UrlValidator urlValidator = new UrlValidator(new String[] {"http","https"}, UrlValidator.ALLOW_LOCAL_URLS);
+        UrlValidator urlValidator = new UrlValidator(
+                new String[]{"http", "https"},
+                UrlValidator.ALLOW_LOCAL_URLS);
         return urlValidator.isValid(value);
+        // UrlValidation may be failed because of
     }
 
     public static boolean doCheckFieldInteger(Integer value) {

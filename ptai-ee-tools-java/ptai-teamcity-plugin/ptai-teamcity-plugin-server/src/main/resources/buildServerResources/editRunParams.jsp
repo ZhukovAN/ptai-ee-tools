@@ -33,85 +33,17 @@
     }
 
 </style>
-
-${'true'.equals(cxUseDefaultServer) ?
-optionsBean.testConnection(cxGlobalServerUrl, cxGlobalUsername, cxGlobalPassword) :
-optionsBean.testConnection(cxServerUrl, cxUsername, cxPassword)}
-
-
-<c:if test="${propertiesBean.properties[optionsBean.useDefaultServer] == 'true'}">
-    <c:set var="hideServerOverrideSection" value="${optionsBean.noDisplay}"/>
-</c:if>
-
-<c:if test="${propertiesBean.properties[optionsBean.useDefaultSastConfig] == 'true'}">
-    <c:set var="hideSastConfigSection" value="${optionsBean.noDisplay}"/>
-</c:if>
-<c:if test="${propertiesBean.properties[optionsBean.sastEnabled] != 'true'}">
-    <c:set var="hideCxSast" value="${optionsBean.noDisplay}"/>
-</c:if>
-<c:if test="${propertiesBean.properties[optionsBean.useDefaultSastConfig] != 'true'}">
-    <c:set var="hideDefaultSastConfigSection" value="${optionsBean.noDisplay}"/>
-</c:if>
-
-<c:if test="${propertiesBean.properties[optionsBean.globalIsSynchronous] == 'true'}">
-    <c:set var="globalIsSynchronus" value="true"/>
-</c:if>
-<c:if test="${propertiesBean.properties[optionsBean.globalIsSynchronous] != 'true'}">
-    <c:set var="globalIsSynchronus" value="false"/>
-</c:if>
-
-<c:if test="${propertiesBean.properties[optionsBean.globalThresholdEnabled] == 'true'}">
-    <c:set var="globalThresholdEnabled" value="true"/>
-</c:if>
-<c:if test="${propertiesBean.properties[optionsBean.globalThresholdEnabled] != 'true'}">
-    <c:set var="globalThresholdEnabled" value="false"/>
-</c:if>
-
-<c:if test="${propertiesBean.properties[optionsBean.globalProjectPolicyViolation] == 'true'}">
-    <c:set var="globalProjectPolicydEnabled" value="true"/>
-</c:if>
-<c:if test="${propertiesBean.properties[optionsBean.globalProjectPolicyViolation] != 'true'}">
-    <c:set var="globalProjectPolicydEnabled" value="false"/>
-</c:if>
-
-<c:if test="${propertiesBean.properties[optionsBean.globalOsaThresholdEnabled] == 'true'}">
-    <c:set var="globalOsaThresholdEnabled" value="true"/>
-</c:if>
-<c:if test="${propertiesBean.properties[optionsBean.globalOsaThresholdEnabled] != 'true'}">
-    <c:set var="globalOsaThresholdEnabled" value="false"/>
-</c:if>
-
-<c:if test="${propertiesBean.properties[optionsBean.useDefaultScanControl] == 'true'}">
-    <c:set var="hideSpecificScanControlSection" value="${optionsBean.noDisplay}"/>
-</c:if>
-<c:if test="${propertiesBean.properties[optionsBean.useDefaultScanControl] != 'true'}">
-    <c:set var="hideDefaultScanControlSection" value="${optionsBean.noDisplay}"/>
-</c:if>
-
-<c:if test="${propertiesBean.properties[optionsBean.isSynchronous] != 'true'}">
-    <c:set var="hideScanControlSection" value="${optionsBean.noDisplay}"/>
-</c:if>
-
-<c:if test="${propertiesBean.properties[optionsBean.thresholdEnabled] != 'true' }">
-    <c:set var="hideThresholdSection" value="${optionsBean.noDisplay}"/>
-</c:if>
-<c:if test="${propertiesBean.properties[optionsBean.osaEnabled] != 'true'}">
-    <c:set var="hideOsaSection" value="${optionsBean.noDisplay}"/>
-</c:if>
-<c:if test="${propertiesBean.properties[optionsBean.osaThresholdEnabled] != 'true'}">
-    <c:set var="hideOsaThresholdSection" value="${optionsBean.noDisplay}"/>
-</c:if>
 --%>
 
 <c:if test="${propertiesBean.properties[optionsBean.ptaiScanSettings] == SCAN_SETTINGS_UI}">
     <c:set var="hideUi" value=""/>
     <c:set var="hideJson" value="style='display:none'"/>
 </c:if>
+
 <c:if test="${propertiesBean.properties[optionsBean.ptaiScanSettings] == SCAN_SETTINGS_JSON}">
     <c:set var="hideUi" value="style='display:none'"/>
     <c:set var="hideJson" value=""/>
 </c:if>
-
 
 <l:settingsGroup className="ai-title" title="PT AI vulnerability analysis">
     <tr>
@@ -130,6 +62,7 @@ optionsBean.testConnection(cxServerUrl, cxUsername, cxPassword)}
                     BS.Util.hide('${optionsBean.ptaiJsonPolicy}Container');
                     BS.Util.show('${optionsBean.ptaiProjectName}Container');
                 }
+                BS.MultilineProperties.updateVisible();
                 BS.VisibilityHandlers.updateVisibility('mainContent');
             </c:set>
             <props:selectProperty
@@ -286,3 +219,7 @@ optionsBean.testConnection(cxServerUrl, cxUsername, cxPassword)}
         </td>
     </tr>
 </l:settingsGroup>
+
+<script type="text/javascript">
+    $('${optionsBean.ptaiScanSettings}').trigger("change");
+</script>

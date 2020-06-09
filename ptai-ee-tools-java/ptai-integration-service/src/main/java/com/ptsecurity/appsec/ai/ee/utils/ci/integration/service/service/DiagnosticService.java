@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.service;
 
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.ComponentStatus;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.ComponentsStatus;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.Node;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.JenkinsApiClientWrapper;
@@ -13,7 +14,9 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.client.JenkinsCl
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.client.PtaiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.config.ConsulConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.ComputerSet;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.FreeStyleProject;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.HudsonMasterComputer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.RemoteAccessApi;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -86,6 +89,29 @@ public class DiagnosticService {
             log.error(e.getMessage());
             log.trace("Exception details", e);
             res.embedded(ComponentStatus.FAILURE);
+        }
+        return res;
+    }
+
+    public List<Node> getAstNodes() {
+        List<Node> res = new ArrayList<>();
+        try {
+            JenkinsApiClientWrapper apiClient = new JenkinsApiClientWrapper(
+                    jenkinsClient, jenkinsClient.getMaxRetry(), jenkinsClient.getRetryDelay());
+            ComputerSet nodes = apiClient.callApi(
+                    () -> jenkinsClient.getJenkinsApi().getComputer(0),
+                    "Getting list of AST nodes");
+            Set<String> tags = new HashSet<>();
+            for (HudsonMasterComputer node : nodes.getComputer()) {
+                if (!"hudson.slaves.SlaveComputer".equalsIgnoreCase(node.getPropertyClass())) continue;
+                node.getAssignedLabels().stream().forEach(l -> tags.add(l.getName()));
+                res.add(new Node().name(node.getDisplayName()).type(Node.TypeEnum.NAME));
+            }
+            tags.stream().forEach(t -> res.add(new Node().name(t).type(Node.TypeEnum.TAG)));
+        } catch (JenkinsClientException e) {
+            log.error(e.getMessage());
+            log.trace("Exception details", e);
+            return null;
         }
         return res;
     }

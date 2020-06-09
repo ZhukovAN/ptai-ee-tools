@@ -20,7 +20,7 @@ public class Params {
     public static final String FAIL_IF_FAILED = PARAM("FailIfFailed");
     public static final String FAIL_IF_UNSTABLE = PARAM("FailIfUnstable");
     public static final String NODE_NAME = PARAM("NodeName");
-    public static final String VERBOSE = "Verbose";
+    public static final String VERBOSE = PARAM("Verbose");
     public static final String INCLUDES = PARAM("Includes");
     public static final String REMOVE_PREFIX = PARAM("RemovePrefix");
     public static final String EXCLUDES = PARAM("Excludes");

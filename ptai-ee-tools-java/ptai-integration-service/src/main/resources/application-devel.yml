@@ -1,0 +1,32 @@
+spring:
+  jpa:
+    hibernate.ddl-auto: none
+  liquibase:
+    contexts: test
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:ptai
+security:
+  require-ssl: true
+management:
+  endpoint:
+    health.enabled: false
+server:
+  ssl:
+    key-store: classpath:keys/keystore.jks
+    key-store-password: P@ssw0rd
+    enabled: true
+
+ptai-integration-service:
+  # Certificate alias to use to check JWT
+  check-cert-alias: domain.org ptai authorization server (ptai.domain.org)
+
+# There is embedded authorization server that uses the same keystore as server.ssl.key-store
+ptai-authorization-server:
+  # User name that is created in the authorization server DB
+  admin-name: admin
+  # Key alias to use to sign JWT
+  sign-key-alias: domain.org ptai authorization server (ptai.domain.org)
+  sign-key-password: 1q2w3e4r

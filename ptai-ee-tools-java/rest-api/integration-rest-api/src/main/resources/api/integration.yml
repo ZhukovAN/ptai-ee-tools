@@ -120,6 +120,31 @@ paths:
           description: Not Found
           content: {}
       deprecated: false
+  /api/diagnostic/nodes:
+    get:
+      tags:
+        - diagnostic-controller
+      summary: Get list of AST node names and tags
+      operationId: get-ast-nodes
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Node'
+        401:
+          description: Unauthorized
+          content: {}
+        403:
+          description: Forbidden
+          content: {}
+        404:
+          description: Not Found
+          content: {}
+      deprecated: false
   /api/diagnostic/project:
     get:
       tags:
@@ -619,6 +644,17 @@ components:
             - UNSTABLE
             - SUCCESS
             - ABORTED
+    Node:
+      title: Node
+      type: object
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+            - NAME
+            - TAG
     Role:
       title: Role
       type: object

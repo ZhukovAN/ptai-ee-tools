@@ -32,29 +32,29 @@ PtaiAdmin.SettingsForm = OO.extend(BS.AbstractPasswordForm, {
     createErrorListener: function() {
         var that = this;
         return {
-            onEmptyPtaiUrlError: function(elem) {
-                $("ptaiUrlError").innerHTML = elem.firstChild.nodeValue;
-                that.highlightErrorField($("ptaiUrl"));
+            onEmptyPtaiGlobalUrlError: function(elem) {
+                $("ptaiGlobalUrlError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiGlobalUrl"));
             },
-            onInvalidPtaiUrlError: function(elem) {
-                $("ptaiUrlError").innerHTML = elem.firstChild.nodeValue;
-                that.highlightErrorField($("ptaiUrl"));
+            onInvalidPtaiGlobalUrlError: function(elem) {
+                $("ptaiGlobalUrlError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiGlobalUrl"));
             },
-            onEmptyPtaiUserError: function(elem) {
-                $("ptaiUserError").innerHTML = elem.firstChild.nodeValue;
-                that.highlightErrorField($("ptaiUser"));
+            onEmptyPtaiGlobalUserError: function(elem) {
+                $("ptaiGlobalUserError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiGlobalUser"));
             },
-            onEmptyPtaiTokenError: function(elem) {
-                $("ptaiTokenError").innerHTML = elem.firstChild.nodeValue;
-                that.highlightErrorField($("ptaiToken"));
+            onEmptyPtaiGlobalTokenError: function(elem) {
+                $("ptaiGlobalTokenError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiGlobalToken"));
             },
-            onEmptyPtaiTrustedCertificatesError: function(elem) {
-                $("ptaiTrustedCertificatesError").innerHTML = elem.firstChild.nodeValue;
-                that.highlightErrorField($("ptaiTrustedCertificates"));
+            onEmptyPtaiGlobalTrustedCertificatesError: function(elem) {
+                $("ptaiGlobalTrustedCertificatesError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiGlobalTrustedCertificates"));
             },
-            onInvalidPtaiTrustedCertificatesError: function(elem) {
-                $("ptaiTrustedCertificatesError").innerHTML = elem.firstChild.nodeValue;
-                that.highlightErrorField($("ptaiTrustedCertificates"));
+            onInvalidPtaiGlobalTrustedCertificatesError: function(elem) {
+                $("ptaiGlobalTrustedCertificatesError").innerHTML = elem.firstChild.nodeValue;
+                that.highlightErrorField($("ptaiGlobalTrustedCertificates"));
             },
             onCompleteSave: function(form, xml, err) {
                 BS.ErrorsAwareListener.onCompleteSave(form, xml, err);

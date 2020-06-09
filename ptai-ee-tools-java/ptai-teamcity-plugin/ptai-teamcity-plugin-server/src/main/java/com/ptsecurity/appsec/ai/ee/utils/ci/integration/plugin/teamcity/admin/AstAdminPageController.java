@@ -17,6 +17,7 @@ import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.validator.routines.DomainValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -141,29 +142,35 @@ public class AstAdminPageController extends BaseFormXmlController {
         }
     }
 
+    private static final String[] GENERIC_TLDS_PLUS = new String[] { "corp", "local" };
+
+    static {
+        DomainValidator.updateTLDOverride(DomainValidator.ArrayType.GENERIC_PLUS, GENERIC_TLDS_PLUS);
+    }
+
     private static final UrlValidator urlValidator = new UrlValidator(new String[] {"http","https"}, UrlValidator.ALLOW_LOCAL_URLS);
 
     private ActionErrors validate(AstAdminSettingsBean bean) {
         // JavaScript handlers are named as on[Error ID]Error like "onEmptyUrlError"
         ActionErrors res = new ActionErrors();
         if (StringUtil.isEmptyOrSpaces(bean.ptaiGlobalUrl))
-            res.addError("emptyPtaiUrl", MESSAGE_URL_EMPTY);
+            res.addError("emptyPtaiGlobalUrl", MESSAGE_URL_EMPTY);
         else if (!urlValidator.isValid(bean.ptaiGlobalUrl))
-            res.addError("invalidPtaiUrl", MESSAGE_URL_NOT_VALID);
+            res.addError("invalidPtaiGlobalUrl", MESSAGE_URL_NOT_VALID);
         if (StringUtil.isEmptyOrSpaces(bean.ptaiGlobalUser))
-            res.addError("emptyPtaiUser", MESSAGE_USERNAME_EMPTY);
+            res.addError("emptyPtaiGlobalUser", MESSAGE_USERNAME_EMPTY);
         if (StringUtil.isEmptyOrSpaces(bean.ptaiGlobalToken))
-            res.addError("emptyPtaiToken", MESSAGE_TOKEN_EMPTY);
+            res.addError("emptyPtaiGlobalToken", MESSAGE_TOKEN_EMPTY);
 
         if (StringUtils.isNotEmpty(bean.ptaiGlobalTrustedCertificates)) {
             try {
                 List<X509Certificate> certs = new Client().checkCaCerts(emptyIfNull(bean.ptaiGlobalTrustedCertificates));
                 if (certs.isEmpty())
-                    res.addError("emptyTrustedCertificates", "Trusted certificates not found");
+                    res.addError("emptyPtaiGlobalTrustedCertificates", "Trusted certificates not found");
             } catch (Exception e) {
                 BaseClientException base = new BaseClientException("Invalid trusted certificates", e);
                 Loggers.SERVER.info(base);
-                res.addError("invalidTrustedCertificates", base.getMessage());
+                res.addError("invalidPtaiGlobalTrustedCertificates", base.getMessage());
             }
         }
 
