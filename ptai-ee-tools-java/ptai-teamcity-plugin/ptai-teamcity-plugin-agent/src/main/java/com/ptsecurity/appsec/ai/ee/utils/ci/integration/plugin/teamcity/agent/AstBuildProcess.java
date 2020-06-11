@@ -63,19 +63,33 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
     @Override
     public BuildFinishedStatus call() throws Exception {
         Integer res = ast();
+        String message = ExitCode.CODES.getOrDefault(res, ExitCode.CODE_UNKNOWN_ERROR.getDescription());
         PtaiResultStatus status = PtaiResultStatus.convert(res);
-        if (PtaiResultStatus.ABORTED.equals(status))
+        if (PtaiResultStatus.ABORTED.equals(status)) {
+            logger.error(message);
             return BuildFinishedStatus.INTERRUPTED;
-        else if (PtaiResultStatus.ERROR.equals(status))
+        } else if (PtaiResultStatus.ERROR.equals(status)) {
+            logger.error(message);
             return BuildFinishedStatus.FINISHED_FAILED;
-        else if (PtaiResultStatus.FAILURE.equals(status))
+        } else if (PtaiResultStatus.FAILURE.equals(status)) {
+            logger.error(message);
             return BuildFinishedStatus.FINISHED_FAILED;
-        else if (PtaiResultStatus.SUCCESS.equals(status))
+        } else if (PtaiResultStatus.SUCCESS.equals(status)) {
+            logger.info(message);
             return BuildFinishedStatus.FINISHED_SUCCESS;
-        else if (PtaiResultStatus.UNSTABLE.equals(status))
-            return BuildFinishedStatus.FINISHED_WITH_PROBLEMS;
-        else
+        } else if (PtaiResultStatus.UNSTABLE.equals(status)) {
+            Map<String, String> params = buildRunnerContext.getRunnerParameters();
+            if (TRUE.equalsIgnoreCase(params.get(Params.FAIL_IF_UNSTABLE))) {
+                logger.error(ExitCode.CODE_WARNING.getDescription());
+                return BuildFinishedStatus.FINISHED_FAILED;
+            } else {
+                logger.warn(ExitCode.CODE_WARNING.getDescription());
+                return BuildFinishedStatus.FINISHED_SUCCESS;
+            }
+        } else {
+            logger.error(message);
             return BuildFinishedStatus.FINISHED_FAILED;
+        }
     }
 
     protected String validateNotEmpty(final String value) {

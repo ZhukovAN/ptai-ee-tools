@@ -10,6 +10,7 @@ class ValidatorTest {
 
     @Test
     void doCheckFieldUrl() {
+        Assertions.assertTrue(Validator.doCheckFieldUrl("https://poc-ptai.domain.local:8443"));
         Assertions.assertTrue(Validator.doCheckFieldUrl("https://192.168.0.1:8443"));
         Assertions.assertTrue(Validator.doCheckFieldUrl("https://ptai.domain.local:8443"));
         Assertions.assertTrue(Validator.doCheckFieldUrl("http://ptai.domain.org:8443"));
