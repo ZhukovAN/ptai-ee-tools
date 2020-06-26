@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.SERVER_SETTINGS_GLOBAL;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.TRUE;
 
 public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStatus> {
@@ -109,27 +110,30 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
         Map<String, String> params = buildRunnerContext.getRunnerParameters();
         Map<String, String> globals = agentRunningBuild.getSharedConfigParameters();
 
+        boolean globalSettingsUsed = SERVER_SETTINGS_GLOBAL.equalsIgnoreCase(params.get(Params.SERVER_SETTINGS));
+        if (!globalSettingsUsed) globals = params;
+
         Integer res = ExitCode.CODE_UNKNOWN_ERROR.getCode();
         try {
             client = new Client();
-            client.setUrl(validateUrl(globals.get(Params.GLOBAL_URL)));
+            client.setUrl(validateUrl(globals.get(Params.URL)));
             client.setClientId(Constants.CLIENT_ID);
             client.setClientSecret(Constants.CLIENT_SECRET);
             // client.setConsoleLog(this.consoleLog);
             client.setVerbose(TRUE.equalsIgnoreCase(params.get(Params.VERBOSE)));
             // client.setLogPrefix(this.logPrefix);
 
-            if (StringUtils.isNotEmpty(globals.get(Params.GLOBAL_TRUSTED_CERTIFICATES)))
-                client.setCaCertsPem(globals.get(Params.GLOBAL_TRUSTED_CERTIFICATES));
+            if (StringUtils.isNotEmpty(globals.get(Params.CERTIFICATES)))
+                client.setCaCertsPem(globals.get(Params.CERTIFICATES));
 
-            client.setUserName(validateNotEmpty(globals.get(Params.GLOBAL_USER)));
-            client.setPassword(validateNotEmpty(globals.get(Params.GLOBAL_TOKEN)));
+            client.setUserName(validateNotEmpty(globals.get(Params.USER)));
+            client.setPassword(validateNotEmpty(globals.get(Params.TOKEN)));
             client.init();
 
             ScanSettings jsonSettings = null;
             Policy[] jsonPolicy = null;
 
-            if (Constants.SETTINGS_JSON.equalsIgnoreCase(params.get(Params.SCAN_SETTINGS))) {
+            if (Constants.AST_SETTINGS_JSON.equalsIgnoreCase(params.get(Params.AST_SETTINGS))) {
                 jsonSettings = JsonSettingsVerifier.verify(params.get(Params.JSON_SETTINGS));
                 if (StringUtils.isNotEmpty(params.get(Params.JSON_POLICY)))
                     jsonPolicy = JsonPolicyVerifier.verify(params.get(Params.JSON_POLICY));

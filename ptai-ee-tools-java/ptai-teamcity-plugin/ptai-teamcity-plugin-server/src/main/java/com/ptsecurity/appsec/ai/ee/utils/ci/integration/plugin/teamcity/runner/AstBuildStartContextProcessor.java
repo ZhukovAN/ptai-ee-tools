@@ -31,10 +31,10 @@ public class AstBuildStartContextProcessor implements BuildStartContextProcessor
      */
     @Override
     public void updateParameters(@NotNull BuildStartContext context) {
-        context.addSharedParameter(GLOBAL_URL, settings.getValue(GLOBAL_URL));
-        context.addSharedParameter(GLOBAL_USER, settings.getValue(GLOBAL_USER));
-        context.addSharedParameter(GLOBAL_TOKEN, settings.getValue(GLOBAL_TOKEN));
-        context.addSharedParameter(GLOBAL_TRUSTED_CERTIFICATES, settings.getValue(GLOBAL_TRUSTED_CERTIFICATES));
+        context.addSharedParameter(URL, settings.getValue(URL));
+        context.addSharedParameter(USER, settings.getValue(USER));
+        context.addSharedParameter(TOKEN, settings.getValue(TOKEN));
+        context.addSharedParameter(CERTIFICATES, settings.getValue(CERTIFICATES));
     }
 
     public void register() {

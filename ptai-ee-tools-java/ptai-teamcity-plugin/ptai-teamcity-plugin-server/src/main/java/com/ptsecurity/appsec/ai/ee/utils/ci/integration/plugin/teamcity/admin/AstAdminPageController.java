@@ -4,6 +4,8 @@ import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.BuildInfo;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.ComponentsStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client;
+
+import static com.intellij.openapi.util.text.StringUtil.getPropertyName;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Messages.*;
@@ -13,6 +15,7 @@ import jetbrains.buildServer.log.Loggers;
 import static com.ptsecurity.appsec.ai.ee.ptai.integration.rest.ComponentStatus.FAILURE;
 import static jetbrains.buildServer.util.StringUtil.emptyIfNull;
 
+import jetbrains.buildServer.serverSide.crypt.RSACipher;
 import jetbrains.buildServer.util.StringUtil;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
@@ -21,6 +24,7 @@ import org.apache.commons.validator.routines.DomainValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +44,7 @@ public class AstAdminPageController extends BaseFormXmlController {
             AstAdminSettings settings,
             PluginDescriptor descriptor) {
         this.settings = settings;
-        manager.registerController(CONTROLLER_PATH, this);
+        manager.registerController(ADMIN_CONTROLLER_PATH, this);
     }
 
     @Override
@@ -48,43 +52,17 @@ public class AstAdminPageController extends BaseFormXmlController {
         return null;
     }
 
-    /*
-    @Override
-    protected void doPost(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Element xmlResponse) {
-        if (PublicKeyUtil.isPublicKeyExpired(request)) {
-            PublicKeyUtil.writePublicKeyExpiredError(xmlResponse);
-            return;
-        }
+    private final static String PREFIX = "prop:";
+    private final static String ENCRYPTED = "encrypted:";
 
-        ActionErrors actionErrors = validate(request);
-        if (actionErrors.hasErrors()) {
-            actionErrors.serialize(xmlResponse);
-            return;
-        }
-
-        settings.setValue(Settings.GLOBAL_URL, request.getParameter(Settings.GLOBAL_URL));
-        settings.setValue(Settings.GLOBAL_USER, request.getParameter(Settings.GLOBAL_USER));
-        settings.setValue(Settings.GLOBAL_TOKEN, request.getParameter(Settings.GLOBAL_TOKEN));
-        settings.setValue(Settings.GLOBAL_TRUSTED_CERTIFICATES, request.getParameter(Settings.GLOBAL_TRUSTED_CERTIFICATES));
-
-        String pass = RSACipher.decryptWebRequestData(request.getParameter(Settings.GLOBAL_TOKEN));
-        if (!EncryptUtil.isScrambled(pass)) {
-            try {
-                pass = EncryptUtil.scramble(pass);
-            } catch (RuntimeException e) {
-                pass = "";
-            }
-        }
-        settings.setValue(Settings.GLOBAL_TOKEN, pass);
-
-        try {
-            settings.saveConfig();;
-        } catch (IOException e) {
-            Loggers.SERVER.error("Failed to persist global configurations", e);
-        }
-        getOrCreateMessages(request).addMessage("settingsSaved", Settings.MESSAGE_SAVE_SUCCESS);
+    private static String getProperty(@NotNull HttpServletRequest request, @NotNull String name) {
+        return StringUtil.emptyIfNull(request.getParameter(PREFIX + name));
     }
-    */
+
+    private static String getEncryptedProperty(@NotNull HttpServletRequest request, @NotNull String name) {
+        String propertyName = PREFIX + ENCRYPTED + name;
+        return StringUtil.emptyIfNull(request.getParameter(propertyName));
+    }
 
     @Override
     protected void doPost(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Element xmlResponse) {
@@ -93,15 +71,24 @@ public class AstAdminPageController extends BaseFormXmlController {
             return;
         }
 
-        AstAdminSettingsBean bean = new AstAdminSettingsBean(
-                settings.getValue(GLOBAL_URL),
-                settings.getValue(GLOBAL_USER),
-                settings.getValue(GLOBAL_TOKEN),
-                settings.getValue(GLOBAL_TRUSTED_CERTIFICATES));
-        FormUtil.bindFromRequest(request, bean);
+        BasePropertiesBean bean = new BasePropertiesBean(null);
+        String serverSettings = getProperty(request, SERVER_SETTINGS);
+        if (SERVER_SETTINGS_GLOBAL.equalsIgnoreCase(serverSettings)) {
+            bean.setProperty(URL, settings.getValue(URL));
+            bean.setProperty(USER, settings.getValue(USER));
+            bean.setProperty(TOKEN, settings.getValue(TOKEN));
+            bean.setProperty(CERTIFICATES, settings.getValue(CERTIFICATES));
+        } else {
+            bean.setProperty(URL, getProperty(request, URL));
+            bean.setProperty(USER, getProperty(request, USER));
+            String token = RSACipher.decryptWebRequestData(getEncryptedProperty(request, TOKEN));
+            bean.setProperty(TOKEN, token);
+            bean.setProperty(CERTIFICATES, getProperty(request, CERTIFICATES));
+        }
 
-        String submitMode = request.getParameter("submitMode");
-        if ("storeToSession".equalsIgnoreCase(submitMode))
+
+        String submitMode = request.getParameter("mode");
+        if ("modify".equalsIgnoreCase(submitMode))
             XmlResponseUtil.writeFormModifiedIfNeeded(xmlResponse, bean);
         else {
             // Check if settings passed as a subject to save or to test connection are correct
@@ -126,11 +113,8 @@ public class AstAdminPageController extends BaseFormXmlController {
                 // xmlResponse now contains:
                 // <testConnectionResult> as a top-level connection test result like SUCCESS or FAILURE
                 // <testConnectionDetails> -> (*) <line> as a detailed representation
-            } else if (submitMode.equals("storeToFile")) {
-                settings.setValue(GLOBAL_URL, bean.ptaiGlobalUrl);
-                settings.setValue(GLOBAL_USER, bean.ptaiGlobalUser);
-                settings.setValue(GLOBAL_TOKEN, bean.ptaiGlobalToken);
-                settings.setValue(GLOBAL_TRUSTED_CERTIFICATES, bean.ptaiGlobalTrustedCertificates);
+            } else if (submitMode.equals("save")) {
+                bean.getProperties().forEach(settings::setValue);
                 try {
                     settings.saveConfig();
                 } catch (IOException e) {
@@ -150,43 +134,43 @@ public class AstAdminPageController extends BaseFormXmlController {
 
     private static final UrlValidator urlValidator = new UrlValidator(new String[] {"http","https"}, UrlValidator.ALLOW_LOCAL_URLS);
 
-    private ActionErrors validate(AstAdminSettingsBean bean) {
+    private ActionErrors validate(BasePropertiesBean bean) {
         // JavaScript handlers are named as on[Error ID]Error like "onEmptyUrlError"
         ActionErrors res = new ActionErrors();
-        if (StringUtil.isEmptyOrSpaces(bean.ptaiGlobalUrl))
-            res.addError("emptyPtaiGlobalUrl", MESSAGE_URL_EMPTY);
-        else if (!urlValidator.isValid(bean.ptaiGlobalUrl))
-            res.addError("invalidPtaiGlobalUrl", MESSAGE_URL_NOT_VALID);
-        if (StringUtil.isEmptyOrSpaces(bean.ptaiGlobalUser))
-            res.addError("emptyPtaiGlobalUser", MESSAGE_USERNAME_EMPTY);
-        if (StringUtil.isEmptyOrSpaces(bean.ptaiGlobalToken))
-            res.addError("emptyPtaiGlobalToken", MESSAGE_TOKEN_EMPTY);
-
-        if (StringUtils.isNotEmpty(bean.ptaiGlobalTrustedCertificates)) {
+        if (StringUtil.isEmptyOrSpaces(bean.getProperties().get(URL)))
+            res.addError("emptyUrl", MESSAGE_URL_EMPTY);
+        else if (!urlValidator.isValid(bean.getProperties().get(URL)))
+            res.addError("invalidUrl", MESSAGE_URL_NOT_VALID);
+        if (StringUtil.isEmptyOrSpaces(bean.getProperties().get(USER)))
+            res.addError("emptyUser", MESSAGE_USERNAME_EMPTY);
+        if (StringUtil.isEmptyOrSpaces(bean.getProperties().get(TOKEN)))
+            res.addError("emptyToken", MESSAGE_TOKEN_EMPTY);
+        if (StringUtils.isNotEmpty(bean.getProperties().get(CERTIFICATES))) {
             try {
-                List<X509Certificate> certs = new Client().checkCaCerts(emptyIfNull(bean.ptaiGlobalTrustedCertificates));
+                List<X509Certificate> certs = new Client().checkCaCerts(emptyIfNull(bean.getProperties().get(CERTIFICATES)));
                 if (certs.isEmpty())
-                    res.addError("emptyPtaiGlobalTrustedCertificates", "Trusted certificates not found");
+                    res.addError("emptyCertificates", "Trusted certificates not found");
             } catch (Exception e) {
                 BaseClientException base = new BaseClientException("Invalid trusted certificates", e);
                 Loggers.SERVER.info(base);
-                res.addError("invalidPtaiGlobalTrustedCertificates", base.getMessage());
+                res.addError("invalidCertificates", base.getMessage());
             }
         }
-
         return res;
     }
 
-    private String testPtaiConnection(AstAdminSettingsBean bean, List<String> details){
+    public static String testPtaiConnection(
+            @NotNull String url, @NotNull String user,
+            @NotNull String token, @Nullable String trustedCertificates, List<String> details) {
         try {
             com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client client = new com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client();
-            client.setUrl(bean.ptaiGlobalUrl);
+            client.setUrl(url);
             client.setClientId(CLIENT_ID);
             client.setClientSecret(CLIENT_SECRET);
-            client.setUserName(bean.ptaiGlobalUser);
-            client.setPassword(bean.ptaiGlobalToken);
-            if (StringUtils.isNotEmpty(bean.ptaiGlobalTrustedCertificates))
-                client.setCaCertsPem(bean.ptaiGlobalTrustedCertificates);
+            client.setUserName(user);
+            client.setPassword(token);
+            if (StringUtils.isNotEmpty(trustedCertificates))
+                client.setCaCertsPem(trustedCertificates);
             client.init();
             BuildInfo buildInfo = client.getPublicApi().getBuildInfo();
             String buildInfoText = "PT AI EE integration server build info: " + buildInfo.getName() + ".v" + buildInfo.getVersion() + " from " + buildInfo.getDate();
@@ -204,5 +188,13 @@ public class AstAdminPageController extends BaseFormXmlController {
             details.add(base.getMessage());
             return "FAILED";
         }
+    }
+
+    public static String testPtaiConnection(BasePropertiesBean bean, List<String> details) {
+        return testPtaiConnection(
+                bean.getProperties().get(URL),
+                bean.getProperties().get(USER), bean.getProperties().get(TOKEN),
+                bean.getProperties().get(CERTIFICATES),
+                details);
     }
 }

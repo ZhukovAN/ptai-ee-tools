@@ -3,6 +3,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Labels;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
+import jetbrains.buildServer.controllers.BasePropertiesBean;
+import jetbrains.buildServer.controllers.admin.AdminPage;
 import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
 import jetbrains.buildServer.web.openapi.PagePlaces;
@@ -13,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-public class AstAdminPage extends jetbrains.buildServer.controllers.admin.AdminPage {
+public class AstAdminPage extends AdminPage {
     private final AstAdminSettings settings;
     private final String jspHome;
 
@@ -32,7 +34,6 @@ public class AstAdminPage extends jetbrains.buildServer.controllers.admin.AdminP
         register();
 
         Loggers.SERVER.info("PT AI configuration page registered");
-        // controllerManager.registerController("/admin/checkmarxSettings.html", new CxAdminPageController(cxAdminConfig));
     }
 
     @NotNull
@@ -45,15 +46,13 @@ public class AstAdminPage extends jetbrains.buildServer.controllers.admin.AdminP
     public void fillModel(@NotNull Map<String, Object> model, @NotNull HttpServletRequest request) {
         super.fillModel(model, request);
 
-        AstAdminSettingsBean settingsBean = new AstAdminSettingsBean(
-                settings.getValue(Params.GLOBAL_URL),
-                settings.getValue(Params.GLOBAL_USER),
-                settings.getValue(Params.GLOBAL_TOKEN),
-                settings.getValue(Params.GLOBAL_TRUSTED_CERTIFICATES));
+        BasePropertiesBean bean = new BasePropertiesBean(null);
+        settings.getProperties().forEach((k, v) -> bean.setProperty(k.toString(), v.toString()));
 
-        model.put("settingsBean", settingsBean);
-        model.put("key", RSACipher.getHexEncodedPublicKey());
-        model.put("jspHome", this.jspHome);
+        model.put("propertiesBean", bean);
+
+        // This key is used to encrypt sensitive data while being sent from client to server
+        model.put("hexEncodedPublicKey", RSACipher.getHexEncodedPublicKey());
     }
 
 }

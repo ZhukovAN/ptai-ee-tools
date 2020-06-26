@@ -43,19 +43,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
-            <artifactId>generic-client-lib</artifactId>
-            <version>0.1</version>
-            <exclusions>
-                <exclusion>
-                    <!-- Provided by org.bouncycastle-bcprov-jdk16 -->
-                    <groupId>org.jenkins-ci.plugins</groupId>
-                    <artifactId>bouncycastle-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk16 -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
