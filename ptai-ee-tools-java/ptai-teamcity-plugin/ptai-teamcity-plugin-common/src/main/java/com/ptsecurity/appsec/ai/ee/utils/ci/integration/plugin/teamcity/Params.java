@@ -72,6 +72,7 @@ public class Params {
     public static final String FLATTEN = PARAM("Flatten");
 
     private static String PARAM(final String field) {
-        return PREFIX + "." + String.valueOf(field.charAt(0)).toLowerCase() + field.substring(1);
+        // return PREFIX + "." + String.valueOf(field.charAt(0)).toLowerCase() + field.substring(1);
+        return PREFIX + String.valueOf(field.charAt(0)).toUpperCase() + field.substring(1);
     }
 }

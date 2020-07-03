@@ -1,5 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
+import org.apache.tools.ant.DirectoryScanner;
+
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Class contains constants that are used as a hints in UI
  */
@@ -15,9 +21,8 @@ public class Hints {
     public static final String CERTIFICATES =
             "PEM-encoded PT AI server CA certificate chain." +
                     "<br>" +
-                    "You may keep this field empty if PT AI server certificates are" +
-                    "<br>" +
-                    "issued by CA from your JDK truststore";
+                    "You may keep this field empty if PT AI server certificates are " +
+                    "issued by CA from your JDK&nbsp;truststore";
 
     public static final String SERVER_SETTINGS = "Choose how PT AI server connection settings are defined";
     public static final String SERVER_SETTINGS_GLOBAL = "Global scope defined PT AI server config";
@@ -41,21 +46,29 @@ public class Hints {
     public static final String NODE_NAME = "AST agent node name";
     public static final String VERBOSE = "Show verbose log output";
     public static final String INCLUDES =
-            "Files to scan for vulnerabilities. The string is a comma separated" +
-                    "<br>" +
+            "Files to scan for vulnerabilities. The string is a comma separated " +
                     "list of includes for an Ant fileset eg. '**/*.jar' " +
-                    "(see <a href=\"http://ant.apache.org/manual/dirtasks.html#patterns\">Patterns</a>" +
-                    "<br>" +
+                    "(see <a href=\"http://ant.apache.org/manual/dirtasks.html#patterns\">Patterns</a> " +
                     "in the Ant manual). The base directory for this fileset is the workspace";
     public static final String REMOVE_PREFIX = "First part of the file path that should not be created on the remote server";
     public static final String EXCLUDES =
-            "Exclude files from the Transfer set. The string is a comma separated" +
-                    "<br>" +
+            "Exclude files from the Transfer set. The string is a comma separated " +
                     "list of excludes for an Ant fileset eg. '**/*.log, **/*.tmp, .git/' " +
-                    "(see <a href=\"http://ant.apache.org/manual/dirtasks.html#patterns\">Patterns</a>" +
-                    "<br>" +
+                    "(see <a href=\"http://ant.apache.org/manual/dirtasks.html#patterns\">Patterns</a> " +
                     "in the Ant manual)";
     public static final String PATTERN_SEPARATOR = "The regular expression that is used to separate the Source files and Exclude files patterns";
-    public static final String USE_DEFAULT_EXCLUDES = "Select this option to disable the default exclude patterns";
+    public static final String USE_DEFAULT_EXCLUDES =
+            "Select this option to disable the default exclude patterns (" +
+                    joinListGrammatically(Arrays.asList(FileCollector.defaultExcludes())) +
+                    ")";
     public static final String FLATTEN = "Only transfer files, ignore folder structure";
+
+    private static String joinListGrammatically(final List<String> list) {
+        return list.size() > 1
+                ? String.join(", ", list.subList(0, list.size() - 1))
+                    // .concat(String.format("%s and ", list.size() > 2 ? "," : ""))
+                    .concat(" and ")
+                    .concat(list.get(list.size() - 1))
+                : list.get(0);
+    }
 }

@@ -9,17 +9,17 @@
         <module name="ptai-cli-plugin" />
         <module name="ptai-jenkins-plugin" />
         <module name="ptai-data-structures" />
+        <module name="ptai-maven-plugin" />
         <module name="ptai-sonar-plugin" />
         <module name="ptai-teamcity-plugin-server" />
         <module name="generic-client-lib" />
-        <module name="ptai-maven-plugin" />
+        <module name="integration-rest-api" />
         <module name="jce-restrictions-checker" />
         <module name="jenkins-rest-api" />
         <module name="ptai-integration-service" />
         <module name="ptai-rest-api" />
         <module name="ptai-teamcity-plugin-agent" />
         <module name="ptai-teamcity-plugin-common" />
-        <module name="integration-rest-api" />
       </profile>
     </annotationProcessing>
   </component>

@@ -12,3 +12,12 @@
 input[type='text'].errorField, input[type='password'].errorField, textarea.errorField {
     border: 2px solid #ed2c10;
 }
+
+.ptai-group span.smallNote, .ptai-group span.error {
+    width: 500px;
+}
+
+.ptai-group tr td div.saveButtonsBlock {
+    margin-top: 0em;
+    border-top-style: none;
+}

@@ -36,59 +36,62 @@
                 <td colspan="2">PT AI server</td>
             </tr>
 
-            <tr>
-                <th>
-                    <label for="${URL}">${LABEL_URL}<l:star/></label>
-                </th>
-                <td>
-                    <props:textProperty name="${URL}" className="longField"/>
-                    <span class="smallNote">${HINT_URL}</span>
-                    <span class="error" id="${URL}Error"></span>
-                </td>
-            </tr>
+            <tbody class="ptai-group">
 
-            <tr>
-                <th>
-                    <label for="${USER}">${LABEL_USER}<l:star/></label>
-                </th>
-                <td>
-                    <props:textProperty name="${USER}" className="longField"/>
-                    <span class="smallNote">${HINT_USER}</span>
-                    <span class="error" id="${USER}Error"></span>
-                </td>
-            </tr>
+                <tr>
+                    <th>
+                        <label for="${URL}">${LABEL_URL}<l:star/></label>
+                    </th>
+                    <td>
+                        <props:textProperty name="${URL}" className="longField"/>
+                        <span class="smallNote">${HINT_URL}</span>
+                        <span class="error" id="error_${URL}"></span>
+                    </td>
+                </tr>
 
-            <tr>
-                <th>
-                    <label for="${TOKEN}">${LABEL_TOKEN}<l:star/></label>
-                </th>
-                <td>
-                    <props:passwordProperty name="${TOKEN}" className="longField"/>
-                    <span class="smallNote">${HINT_TOKEN}</span>
-                    <span class="error" id="${TOKEN}Error"></span>
-                </td>
-            </tr>
+                <tr>
+                    <th>
+                        <label for="${USER}">${LABEL_USER}<l:star/></label>
+                    </th>
+                    <td>
+                        <props:textProperty name="${USER}" className="longField"/>
+                        <span class="smallNote">${HINT_USER}</span>
+                        <span class="error" id="error_${USER}"></span>
+                    </td>
+                </tr>
 
-            <tr>
-                <th>
-                    <label for="${CERTIFICATES}">${LABEL_CERTIFICATES}</label>
-                </th>
-                <td>
-                    <props:multilineProperty
-                            name="${CERTIFICATES}"
-                            className="longField"
-                            linkTitle="Trust these CA certificates"
-                            rows="3" cols="49" expanded="${true}"
-                            note="${HINT_CERTIFICATES}"/>
-                    <span class="error" id="${CERTIFICATES}Error"></span>
-                </td>
-            </tr>
+                <tr>
+                    <th>
+                        <label for="${TOKEN}">${LABEL_TOKEN}<l:star/></label>
+                    </th>
+                    <td>
+                        <props:passwordProperty name="${TOKEN}" className="longField"/>
+                        <span class="smallNote">${HINT_TOKEN}</span>
+                        <span class="error" id="error_${TOKEN}"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>
+                        <label for="${CERTIFICATES}">${LABEL_CERTIFICATES}</label>
+                    </th>
+                    <td>
+                        <props:multilineProperty
+                                name="${CERTIFICATES}"
+                                className="longField"
+                                linkTitle="Trust these CA certificates"
+                                rows="3" cols="49" expanded="${true}"
+                                note="${HINT_CERTIFICATES}"/>
+                        <span class="error" id="error_${CERTIFICATES}"></span>
+                    </td>
+                </tr>
+            </tbody>
         </table>
 
         <div class="saveButtonsBlock">
             <forms:submit type="submit" label="Save" />
             <forms:submit id="test" type="button" label="<%=Labels.TEST%>"/>
-            <input type="hidden" id="mode" name="mode" value="modify"/>
+            <%-- <input type="hidden" id="mode" name="mode" value="modify"/> --%>
             <input type="hidden" id="publicKey" name="publicKey" value="<c:out value='${hexEncodedPublicKey}'/>"/>
             <forms:saving/>
         </div>

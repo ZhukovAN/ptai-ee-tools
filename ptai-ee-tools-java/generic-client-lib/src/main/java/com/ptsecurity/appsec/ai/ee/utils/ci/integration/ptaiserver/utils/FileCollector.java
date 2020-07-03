@@ -241,4 +241,8 @@ public class FileCollector {
         double num = bytes / Math.pow(1024, idx);
         return (byteCount < 0 ? "-" : "") + new DecimalFormat("#.##").format(num) + " " + suf[idx];
     }
+
+    public static String[] defaultExcludes() {
+        return DirectoryScanner.getDefaultExcludes();
+    }
 }

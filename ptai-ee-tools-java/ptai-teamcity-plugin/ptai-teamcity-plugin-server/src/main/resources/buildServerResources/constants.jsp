@@ -96,4 +96,5 @@
 <c:set var="HINT_FLATTEN" value="<%=Hints.FLATTEN%>"/>
 
 <c:set var="ADMIN_CONTROLLER_PATH" value="<%=Constants.ADMIN_CONTROLLER_PATH%>"/>
+<c:set var="TEST_CONTROLLER_PATH" value="<%=Constants.TEST_CONTROLLER_PATH%>"/>
 

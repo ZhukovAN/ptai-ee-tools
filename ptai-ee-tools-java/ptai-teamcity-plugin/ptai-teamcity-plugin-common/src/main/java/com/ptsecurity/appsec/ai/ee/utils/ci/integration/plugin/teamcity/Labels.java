@@ -6,7 +6,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 public class Labels {
     public static final String PLUGIN_TAB_TITLE = "PT AI";
     public static final String RUNNER = PLUGIN_TAB_TITLE;
-    public static final String TEST  = "Test PT AI server connection";
+    public static final String TEST = "Test PT AI server connection";
+    public static final String CHECK = "Check AST settings";
 
     // PT AI server connection settings labels
     public static final String URL = "PT AI server URL";

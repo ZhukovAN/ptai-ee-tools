@@ -1,8 +1,12 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.runner;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Defaults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.AstAdminSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.TestService;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import jetbrains.buildServer.controllers.ActionErrors;
 import jetbrains.buildServer.controllers.BasePropertiesBean;
 import jetbrains.buildServer.controllers.StatefulObject;
@@ -10,26 +14,18 @@ import jetbrains.buildServer.controllers.admin.projects.BuildTypeForm;
 import jetbrains.buildServer.controllers.admin.projects.EditRunTypeControllerExtension;
 import jetbrains.buildServer.serverSide.BuildTypeSettings;
 import jetbrains.buildServer.serverSide.SBuildServer;
-import jetbrains.buildServer.serverSide.crypt.RSACipher;
-import lombok.SneakyThrows;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
+import jetbrains.buildServer.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.util.FileCopyUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
-import java.lang.reflect.Field;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Messages.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * PT AI build step configuration page requires access to some globally defined
@@ -94,28 +90,48 @@ public class AstEditRunTypeControllerExtension implements EditRunTypeControllerE
         return null;
     }
 
+    /**
+     * This method is called by TeamCity server internally and it checks build step parameters
+     * before save.
+     * @param request
+     * @param form
+     * @return
+     */
     @NotNull
     @Override
     public ActionErrors validate(@NotNull HttpServletRequest request, @NotNull BuildTypeForm form) {
-        final Map<String, String> properties = form.getBuildRunnerBean().getPropertiesBean().getProperties();
-        /*
-        String cxPass = properties.get(CxParam.PASSWORD);
+        BasePropertiesBean bean = form.getBuildRunnerBean().getPropertiesBean();
+        final Map<String, String> properties = bean.getProperties();
+        ActionErrors res = new ActionErrors();
+        // Check if connection settings are valid
+        BasePropertiesBean settingsBean;
+        if (SERVER_SETTINGS_GLOBAL.equalsIgnoreCase(properties.get(SERVER_SETTINGS))) {
+            // Let's check global connection settings using existing validator
+            settingsBean = new BasePropertiesBean(null);
+            settings.getProperties().forEach(
+                    (k, v) -> settingsBean.setProperty(k.toString(), (null == v) ? null : v.toString()));
+            ActionErrors globalSettingsErrors = TestService.validateConnectionSettings(settingsBean);
+            if (globalSettingsErrors.hasErrors())
+                // There may be several errors exist, but we should show only a generic message
+                res.addError(SERVER_SETTINGS, MESSAGE_GLOBAL_SETTINGS_INVALID);
+        } else {
+            res.addAll(TestService.validateConnectionSettings(bean));
+        }
 
-        try {
-            if(cxPass != null && !EncryptUtil.isScrambled(cxPass)) {
-                cxPass = EncryptUtil.scramble(cxPass);
+        res.addAll(TestService.validateScanSettings(bean));
+
+        if (StringUtil.isEmptyOrSpaces(properties.get(INCLUDES)))
+            res.addError(INCLUDES, MESSAGE_INCLUDES_EMPTY);
+        if (StringUtil.isEmptyOrSpaces(properties.get(PATTERN_SEPARATOR)))
+            res.addError(PATTERN_SEPARATOR, MESSAGE_PATTERN_SEPARATOR_EMPTY);
+        else {
+            try {
+                Pattern.compile(properties.get(PATTERN_SEPARATOR));
+            } catch (PatternSyntaxException e) {
+                res.addError(PATTERN_SEPARATOR, MESSAGE_PATTERN_SEPARATOR_INVALID);
             }
-        } catch (RuntimeException e) {
-            cxPass = "";
         }
-        properties.put(CxParam.PASSWORD, cxPass);
-        //the jsp page dosent pass false value, so we need to check if it isnt true, null in this case, set it as false
-        //this way we can distinguish in the build process between an old job (sast enabled == null) and a job where user specified not to run sast (sast_enabled == false)
-        if(!TRUE.equals(properties.get(CxParam.SAST_ENABLED))) {
-            properties.put(CxParam.SAST_ENABLED, CxConstants.FALSE);
-        }
-        */
-        return new ActionErrors();
+        return res;
     }
 
     @Override
