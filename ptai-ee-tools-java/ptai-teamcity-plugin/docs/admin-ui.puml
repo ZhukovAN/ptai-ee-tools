@@ -1,0 +1,16 @@
+@startsalt
+{
+    PT AI server URL | "https://ptai.domain.org:8443"
+    PT AI user name | "admin"
+    PT AI API token | "************************"
+    PT AI server trusted certificates | {SI
+    <PEM-encoded certificate chain>
+
+    .
+    .
+    .
+
+    }
+    {[Save] | [Test connection]}
+}
+@endsalt

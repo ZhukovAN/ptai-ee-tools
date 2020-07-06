@@ -7,5 +7,7 @@
     <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/DEBUG/TEST.OLD" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/DEBUG/TEST1" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/TEST1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ptai-teamcity-plugin/servers/10.0/buildAgent/work/329903db948f2464" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ptai-teamcity-plugin/servers/10.0/buildAgent/work/3bb9bf4c73edb933" vcs="Git" />
   </component>
 </project>

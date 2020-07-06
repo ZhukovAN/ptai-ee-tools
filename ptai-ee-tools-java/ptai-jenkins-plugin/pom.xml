@@ -20,7 +20,7 @@
         <jenkins.version>2.150.2</jenkins.version>
         <!-- <hpi.compatibleSinceVersion>0.4.3</hpi.compatibleSinceVersion> -->
     </properties>
-    <name>PT AI EE Jenkins Plugin</name>
+    <name>ptai-jenkins-plugin</name>
     <url>https://www.ptsecurity.com/ww-en/products/ai/</url>
     <description>This plugin used to implement AST using PT Application Inspector</description>
     <dependencies>

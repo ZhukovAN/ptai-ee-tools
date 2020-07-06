@@ -1,0 +1,23 @@
+/*  Workaround for highlightErrorField: its forms.js implementation
+    adds errorField class to element. This class style is defined in
+    forms.css as ".errorField". But main.css have other border style
+    definitions for both textareas and textfields as
+    "input[type='text']" and "textarea". CSS specificities for these
+    selectors are:
+    "textarea" < ".errorField" < "input[type='text']".
+    That means that applying errorField class to textarea will be
+    successfull as that CSS have higher priority but will fail for
+    textfields. So we need to define more specific CSS for
+    errorField class */
+input[type='text'].errorField, input[type='password'].errorField, textarea.errorField {
+    border: 2px solid #ed2c10;
+}
+
+.ptai-group span.smallNote, .ptai-group span.error {
+    width: 500px;
+}
+
+.ptai-group tr td div.saveButtonsBlock {
+    margin-top: 0em;
+    border-top-style: none;
+}

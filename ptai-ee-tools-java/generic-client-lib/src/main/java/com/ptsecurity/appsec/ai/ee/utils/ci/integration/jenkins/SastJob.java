@@ -92,19 +92,19 @@ public class SastJob extends Client {
                     // There may be a situation where build is not started yet, so we'll get an "not found" exception
                     buildId = getBuildId(jobName, queueId);
                     if (null == buildId) {
-                        this.log("Wait 5 seconds for %s job to start\r\n", this.jobName);
+                        this.log("Wait 5 seconds for %s job to start", this.jobName);
                         Thread.sleep(5000);
                         continue;
                     }
                     final String buildIdStr = buildId.toString();
                     sastBuild = apiClient.callApi(() -> jenkinsApi.getJobBuild(jobName, buildIdStr));
                     if (null != sastBuild) {
-                        this.log("Job %s started\r\n", this.jobName);
+                        this.log("Job %s started", this.jobName);
                         break;
                     } else
                         throw new JenkinsClientException("SAST job build is null");
                 } catch (JenkinsServerException e) {
-                    this.log("%s job start failed, code: %d, message: %s\r\n", this.jobName, e.getCode(), e.getMessage());
+                    this.log("%s job start failed, code: %d, message: %s", this.jobName, e.getCode(), e.getMessage());
                     throw new JenkinsClientException(e.getMessage());
                 }
             } while (true);
@@ -128,7 +128,7 @@ public class SastJob extends Client {
                 if (pos != start) {
                     String[] lines = sastJobLog.getData().split("\\r?\\n");
                     for (String line : lines)
-                        log("%s\r\n", line);
+                        log(line);
                     start = pos;
                 }
                 Thread.sleep(1000);
@@ -142,7 +142,7 @@ public class SastJob extends Client {
                 if (artifact.getFileName().endsWith("status.code")) {
                     res = Integer.parseInt(resultFile);
                     if (ExitCode.CODES.containsKey(res))
-                        log("Status code %d: %s\r\n", res, ExitCode.CODES.get(res));
+                        log("Status code %d: %s", res, ExitCode.CODES.get(res));
                 };
             }
             return res;

@@ -53,12 +53,12 @@ server:
   ssl:
     # SSL settings for integration service HTTPS access
     key-store-type: JKS
-    key-store: classpath:keystore/keystore.jks
+    key-store: classpath:keys/keystore.jks
     key-store-password: P@ssw0rd
     key-alias: domain.org ptai integration server (alzhukov-pc.ptsecurity.ru)
     key-password: 1q2w3e4r
     trust-store-type: JKS
-    trust-store: classpath:keystore/keystore.jks
+    trust-store: classpath:keys/keystore.jks
     trust-store-password: P@ssw0rd
   port: 8443
 

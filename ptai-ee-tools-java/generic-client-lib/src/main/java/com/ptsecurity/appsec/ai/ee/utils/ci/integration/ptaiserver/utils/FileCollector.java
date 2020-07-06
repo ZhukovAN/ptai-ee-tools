@@ -66,8 +66,19 @@ public class FileCollector {
 
     public static File collect(Transfers transfers, final File srcDir, @NonNull Base owner) throws PtaiClientException {
         try {
+            File destFile = File.createTempFile("PTAI_", ".zip");
+            return collect(transfers, srcDir, destFile, owner);
+        } catch (IOException e) {
+            if (null != owner)
+                owner.log(e);
+            throw new PtaiClientException(e.getMessage(), e);
+        }
+    }
+
+    public static File collect(Transfers transfers, final File srcDir, final File destFile, @NonNull Base owner) throws PtaiClientException {
+        try {
             if (owner.isVerbose())
-                owner.log("Create file collector\r\n");
+                owner.log("Create file collector");
             FileCollector collector = new FileCollector(transfers, owner);
 
             if ((null == srcDir) || !srcDir.exists() || !srcDir.canRead()) {
@@ -80,9 +91,8 @@ public class FileCollector {
                     reason = srcDir.getAbsolutePath() + " can not be read";
                 throw new PtaiClientException("Invalid source folder, " + reason);
             } else
-                owner.log("Folder to collect files from is %s\r\n", srcDir.getAbsolutePath());
-            File destFile = File.createTempFile("PTAI_", ".zip");
-            owner.log("Sources will be zipped to %s\r\n", destFile.getAbsolutePath());
+                owner.log("Folder to collect files from is %s", srcDir.getAbsolutePath());
+            owner.log("Sources will be zipped to %s", destFile.getAbsolutePath());
             List<FileCollector.FileEntry> fileEntries = collector.collectFiles(srcDir);
             collector.packCollectedFiles(destFile, fileEntries);
             return destFile;
@@ -97,19 +107,19 @@ public class FileCollector {
     protected void verboseCollectionDetails(String items[], String prefix) {
         if (null != owner && owner.isVerbose()) {
             if (null == items || 0 == items.length)
-                owner.log("=== %s list is empty ===\r\n", prefix);
+                owner.log("=== %s list is empty ===", prefix);
             else {
-                owner.log("=== %s [%d] list begin ===\r\n", prefix, items.length);
+                owner.log("=== %s [%d] list begin ===", prefix, items.length);
                 int total = items.length < MAX_DETAILS ? items.length : MAX_DETAILS;
                 int pre = total >> 1;
                 int post = total - pre;
                 for (int i = 0 ; i < pre ; i++)
-                    owner.log("%d: %s\r\n", i, items[i]);
+                    owner.log("%d: %s", i, items[i]);
                 if (items.length != pre + post)
-                    owner.log("... Skipping %d entries ...\r\n", items.length - pre - post);
+                    owner.log("... Skipping %d entries ...", items.length - pre - post);
                 for (int i = items.length - post ; i < items.length ; i++)
-                    owner.log("%d: %s\r\n", i, items[i]);
-                owner.log("==== %s [%d] list end ====\r\n", prefix, items.length);
+                    owner.log("%d: %s", i, items[i]);
+                owner.log("==== %s [%d] list end ====", prefix, items.length);
             }
         }
     }
@@ -120,7 +130,7 @@ public class FileCollector {
     }
 
     public List<FileEntry> collectFiles(@NonNull final File source) throws PtaiClientException {
-        verbose("collectFiles called for %s\r\n", source.getAbsolutePath());
+        verbose("collectFiles called for %s", source.getAbsolutePath());
         List<FileEntry> res = new ArrayList<>();
         for (Transfer transfer : this.transfers) {
             // Normalize prefix
@@ -130,10 +140,10 @@ public class FileCollector {
                     .orElse("");
             if ('/' == removePrefix.charAt(0))
                 removePrefix = removePrefix.substring(1);
-            verbose("Pattern separator = %s\r\n", transfer.getPatternSeparator().isEmpty() ? "[empty]" : transfer.getPatternSeparator());
-            verbose("Remove prefix = %s\r\n", removePrefix.isEmpty() ? "[empty]" : removePrefix);
-            verbose("Includes = %s\r\n", transfer.getIncludes().isEmpty() ? "[empty]" : transfer.getIncludes());
-            verbose("Use default excludes = %s\r\n", transfer.isUseDefaultExcludes());
+            verbose("Pattern separator = %s", transfer.getPatternSeparator().isEmpty() ? "[empty]" : transfer.getPatternSeparator());
+            verbose("Remove prefix = %s", removePrefix.isEmpty() ? "[empty]" : removePrefix);
+            verbose("Includes = %s", transfer.getIncludes().isEmpty() ? "[empty]" : transfer.getIncludes());
+            verbose("Use default excludes = %s", transfer.isUseDefaultExcludes());
 
             final FileSet fileSet = new FileSet();
             if (source.isDirectory())
@@ -144,13 +154,13 @@ public class FileCollector {
             if (null != transfer.getIncludes())
                 for (String pattern : transfer.getIncludes().split(transfer.getPatternSeparator())) {
                     fileSet.createInclude().setName(pattern);
-                    verbose("Include pattern = %s\r\n", pattern);
+                    verbose("Include pattern = %s", pattern);
                 }
-            verbose("Excludes = %s\r\n", transfer.getExcludes().isEmpty() ? "[empty]" : transfer.getExcludes());
+            verbose("Excludes = %s", transfer.getExcludes().isEmpty() ? "[empty]" : transfer.getExcludes());
             if (null != transfer.getExcludes())
                 for (String pattern : transfer.getExcludes().split(transfer.getPatternSeparator())) {
                     fileSet.createExclude().setName(pattern);
-                    verbose("Exclude pattern = %s\r\n", pattern);
+                    verbose("Exclude pattern = %s", pattern);
                 }
             fileSet.setDefaultexcludes(transfer.isUseDefaultExcludes());
             String[] files = fileSet.getDirectoryScanner().getIncludedFiles();
@@ -174,7 +184,7 @@ public class FileCollector {
                         throw new PtaiClientException(String.format("Failed to remove prefix from file named %s. Prefix %s must be present in all file paths", file, removePrefix));
                     entryName = StringUtils.removeStart(relativePath, removePrefix);
                 }
-                verbose("File %s will be added as %s\r\n", filePath.toString(), entryName);
+                verbose("File %s will be added as %s", filePath.toString(), entryName);
                 res.add(new FileEntry(filePath.toString(), entryName));
             }
         }
@@ -193,30 +203,30 @@ public class FileCollector {
     method.
      */
     public void packCollectedFiles(@NonNull final File destFile, final List<FileEntry> files) throws IOException, ArchiveException {
-        verbose("Pack collected files to %s\r\n", destFile.getAbsolutePath());
+        verbose("Pack collected files to %s", destFile.getAbsolutePath());
         File destDir = destFile.getParentFile();
 
         if (!destDir.exists()) {
-            verbose("Destination folder %s doesn't exist, creating\r\n", destDir.getAbsolutePath());
+            verbose("Destination folder %s doesn't exist, creating", destDir.getAbsolutePath());
             destDir.mkdirs();
         }
         OutputStream zipFileStream = new FileOutputStream(destFile);
         ArchiveOutputStream archiveStream;
         archiveStream = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP, zipFileStream);
-        verbose("Zip stream created\r\n");
+        verbose("Zip stream created");
 
         for (FileEntry fileEntry : files) {
-            verbose("Add %s file as %s to zip stream\r\n", fileEntry.fileName, fileEntry.entryName);
+            verbose("Add %s file as %s to zip stream", fileEntry.fileName, fileEntry.entryName);
             archiveStream.putArchiveEntry(new ZipArchiveEntry(fileEntry.entryName));
 
             BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(fileEntry.fileName));
             int size = IOUtils.copy(inputStream, archiveStream);
-            verbose("%s zipped\r\n", bytesToString(size));
+            verbose("%s zipped", bytesToString(size));
             inputStream.close();
             archiveStream.closeArchiveEntry();
-            verbose("File %s added as %s\r\n", fileEntry.fileName, fileEntry.entryName);
+            verbose("File %s added as %s", fileEntry.fileName, fileEntry.entryName);
         }
-        verbose("Closing zip stream\r\n");
+        verbose("Closing zip stream");
         archiveStream.finish();
         zipFileStream.close();
     }
@@ -230,5 +240,9 @@ public class FileCollector {
         int idx = (int)(Math.floor(Math.log10(bytes) / LOG1024));
         double num = bytes / Math.pow(1024, idx);
         return (byteCount < 0 ? "-" : "") + new DecimalFormat("#.##").format(num) + " " + suf[idx];
+    }
+
+    public static String[] defaultExcludes() {
+        return DirectoryScanner.getDefaultExcludes();
     }
 }

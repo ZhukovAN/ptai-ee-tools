@@ -1,0 +1,14 @@
+@startuml
+hide footbox
+participant xml
+create AstAdminPage
+xml -> AstAdminPage : new
+AstAdminPage -> AstAdminPage : setIncludeUrl("adminPage.jsp")
+create AstAdminPageController
+xml -> AstAdminPageController : new
+AstAdminPageController -> AstAdminPageController : register("adminSettings.html")
+create AstAdminSettings
+xml -> AstAdminSettings : new
+AstAdminSettings -> AstAdminSettings : loadConfig
+
+@enduml

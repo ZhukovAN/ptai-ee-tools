@@ -1,6 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.controller;
 
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.ComponentsStatus;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.Node;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.service.DiagnosticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.naming.ServiceUnavailableException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -34,5 +37,14 @@ public class DiagnosticController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<UUID>(projectId, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/nodes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<Node>> getAstNodes() throws ServiceUnavailableException {
+        List<Node> res = diagnosticService.getAstNodes();
+        if (null == res)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        else
+            return new ResponseEntity<List<Node>>(res, HttpStatus.OK);
     }
 }

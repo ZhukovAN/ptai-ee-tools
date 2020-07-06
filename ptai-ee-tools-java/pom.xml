@@ -18,7 +18,7 @@
         <module>ptai-maven-plugin</module>
         <module>ptai-sonar-plugin</module>
         <module>ptai-integration-service</module>
-        <!-- <module>ptai-teamcity-plugin</module> -->
+        <module>ptai-teamcity-plugin</module>
         <!-- <module>ptai-report-generator</module> -->
     </modules>
     <properties>

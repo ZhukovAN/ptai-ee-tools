@@ -650,6 +650,11 @@ components:
           type: integer
         _class:
           type: string
+    HudsonMasterComputerLabel:
+      type: object
+      properties:
+        name:
+          type: string
     Label1:
       type: object
       properties:
@@ -662,12 +667,16 @@ components:
           type: string
         availablePhysicalMemory:
           type: integer
+          format: int64
         availableSwapSpace:
           type: integer
+          format: int64
         totalPhysicalMemory:
           type: integer
+          format: int64
         totalSwapSpace:
           type: integer
+          format: int64
     DiskSpaceMonitorDescriptorDiskSpace:
       type: object
       properties:
@@ -675,10 +684,12 @@ components:
           type: string
         timestamp:
           type: integer
+          format: int64
         path:
           type: string
         size:
           type: integer
+          format: int64
     ResponseTimeMonitorData:
       type: object
       properties:
@@ -686,8 +697,10 @@ components:
           type: string
         timestamp:
           type: integer
+          format: int64
         average:
           type: integer
+          format: int64
     ClockDifference:
       type: object
       properties:
@@ -695,6 +708,7 @@ components:
           type: string
         diff:
           type: integer
+          format: int64
     HudsonMasterComputermonitorData:
       type: object
       properties:
@@ -719,6 +733,10 @@ components:
           type: string
         displayName:
           type: string
+        assignedLabels:
+          type: array
+          items:
+            $ref: '#/components/schemas/HudsonMasterComputerLabel'
         executors:
           type: array
           items:

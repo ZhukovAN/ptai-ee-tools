@@ -19,6 +19,7 @@ import java.util.logging.Level;
 public class Base {
     public static final String SAST_FOLDER = ".ptai";
     public static final String DEFAULT_PTAI_NODE_NAME = "ptai";
+    public static final String DEFAULT_PTAI_URL = "https://ptai.domain.org:8443";
 
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -40,8 +41,7 @@ public class Base {
 
     public void log(String value) {
         if (null == consoleLog) return;
-        if (null != logPrefix) consoleLog.print(logPrefix);
-        consoleLog.print(value);
+        consoleLog.println(null == logPrefix ? value : logPrefix + value);
     }
 
     public void log(String format, Object ... value) {
@@ -50,7 +50,7 @@ public class Base {
 
     public void log(Exception exception) {
         if (StringUtils.isNotEmpty(exception.getMessage()))
-            this.log("%s\r\n", exception.getMessage());
+            this.log(exception.getMessage());
         if (this.verbose && null != consoleLog)
             exception.printStackTrace(this.consoleLog);
     }

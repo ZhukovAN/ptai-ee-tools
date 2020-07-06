@@ -83,10 +83,10 @@ public class SlimSastJob extends Base {
                 if (HttpStatus.SC_NOT_FOUND == e.getCode()) {
                     // Project not found - create it if AST parameters are defined
                     if (null != jsonSettings) {
-                        log("Project %s not found, will be created as JSON settings are defined\r\n", projectName);
+                        log("Project %s not found, will be created as JSON settings are defined", projectName);
                         client.getSastApi().createProject(projectName);
                     } else {
-                        log("Project %s not found\r\n", projectName);
+                        log("Project %s not found", projectName);
                         return ExitCode.CODE_ERROR_PROJECT_NOT_FOUND.getCode();
                     }
                 } else
@@ -110,7 +110,7 @@ public class SlimSastJob extends Base {
             GracefulShutdown shutdown = new GracefulShutdown(this, client, scanId);
             Runtime.getRuntime().addShutdownHook(shutdown);
 
-            log("SAST job number is %d\r\n", scanId);
+            log("SAST job number is %d", scanId);
 
             JobState state = null;
             int pos = 0;
@@ -119,7 +119,7 @@ public class SlimSastJob extends Base {
                 if (state.getPos() != pos) {
                     String[] lines = state.getLog().split("\\r?\\n");
                     for (String line : lines)
-                        log("%s\r\n", line);
+                        log(line);
                 }
                 pos = state.getPos();
                 if (!state.getStatus().equals(JobState.StatusEnum.UNKNOWN)) break;
@@ -129,7 +129,7 @@ public class SlimSastJob extends Base {
 
             List<String> results = client.getSastApi().getJobResults(scanId);
             if ((null != results) && (!results.isEmpty())) {
-                log("AST results will be stored to %s\r\n", output);
+                log("AST results will be stored to %s", output);
                 if (!output.toFile().exists())
                     Files.createDirectories(output);
             }
@@ -139,7 +139,7 @@ public class SlimSastJob extends Base {
                 if (result.endsWith("status.code")) {
                     res = Integer.parseInt(FileUtils.readFileToString(data, StandardCharsets.UTF_8.name()));
                     if (ExitCode.CODES.containsKey(res))
-                        log("Status code %d: %s\r\n", res, ExitCode.CODES.get(res));
+                        log("Status code %d: %s", res, ExitCode.CODES.get(res));
                     Files.write(Paths.get(fileName), res.toString().getBytes());
                 } else
                     Files.copy(data.toPath(), Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
