@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: prod
   application:
     name: integrationService
   # Spring Cloud Consul settings (https://cloud.spring.io/spring-cloud-consul/reference/html/appendix.html)

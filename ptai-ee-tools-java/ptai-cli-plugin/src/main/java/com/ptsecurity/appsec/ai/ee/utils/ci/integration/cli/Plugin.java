@@ -4,6 +4,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.LegacyUiAst
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.SlimJsonAst;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.SlimServerCheck;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.SlimUiAst;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.admin.ServiceConfigure;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.admin.UserCreate;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.admin.UserDelete;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.admin.UserList;
@@ -18,7 +19,8 @@ import java.util.Comparator;
         subcommands = {
                 SlimUiAst.class, SlimJsonAst.class, SlimServerCheck.class,
                 LegacyUiAst.class,
-                UserCreate.class, UserList.class, UserDelete.class})
+                UserCreate.class, UserList.class, UserDelete.class,
+                ServiceConfigure.class })
 public class Plugin implements Runnable {
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;

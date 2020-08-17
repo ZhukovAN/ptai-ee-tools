@@ -9,4 +9,5 @@
         -Dlogging.level.com.ptsecurity.appsec.ai.ee.utils.ci.integration.service=TRACE -jar
         ptai-integration-service-0.1-spring-boot.jar 10
     </arguments>
+    <startmode>Manual</startmode>
 </service>
