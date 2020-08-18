@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <service>
-    <id>ptai-integration-service</id>
+    <id>AI.Enterprise.IntegrationService</id>
     <name>AI.Enterprise.IntegrationService</name>
     <description>PT AI EE Integration Service</description>
     <executable>java</executable>
     <arguments>-Xmx2g -Xms32m -XX:+UseConcMarkSweepGC -Dspring.main.lazy-initialization=true
-        -Dspring.cloud.consul.token=88471fc2-ff8f-f151-e71d-5ead2ac0feed
         -Dlogging.level.com.ptsecurity.appsec.ai.ee.utils.ci.integration.service=TRACE -jar
-        ptai-integration-service-0.1-spring-boot.jar 10
+        ptai-integration-service.jar 10
     </arguments>
     <startmode>Manual</startmode>
 </service>

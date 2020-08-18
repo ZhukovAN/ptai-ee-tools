@@ -23,6 +23,7 @@ import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import picocli.CommandLine;
 
@@ -546,5 +547,14 @@ public class ServiceConfigure implements Callable<Integer> {
         p7b.stream().forEach(c -> {
             if (null == findCertificate(certificates, c)) certificates.add(c);
         });
+    }
+
+    static {
+        try {
+            Security.addProvider(new BouncyCastleProvider());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            log.trace("Error details", e);
+        }
     }
 }
