@@ -94,7 +94,7 @@ public class BaseClient extends Base {
     protected KeyStore keyStore = null;
     protected List<X509Certificate> caCerts = new ArrayList<>();
 
-    final static Pattern parse = Pattern.compile("(?m)(?s)^-+BEGIN ([^-]+)-+$([^-]*)^-+END \\1-+$");
+    public final static Pattern parse = Pattern.compile("(?m)(?s)^-+BEGIN ([^-]+)-+$([^-]*)^-+END \\1-+$");
 
     public void baseInit() throws BaseClientException {
         if (!jceFixApplied)

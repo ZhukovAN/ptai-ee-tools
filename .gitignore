@@ -17,3 +17,4 @@
 !**/admin/
 **/.ptai/**
 **/*.log
+ptai-ee-tools-nsi/jdk/**

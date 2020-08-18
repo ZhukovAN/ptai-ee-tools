@@ -22,5 +22,8 @@
         <module name="ptai-teamcity-plugin-common" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ptai-integration-service-installer" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
