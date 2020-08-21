@@ -1,19 +1,14 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
-import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.utils.TempFile;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.Node;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.Client;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.utils.JenkinsApiClientWrapper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProject;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.Constants;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.client.JenkinsClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.service.client.PtaiClient;
@@ -43,7 +38,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -56,6 +50,9 @@ public class SastService {
 
     @Autowired
     protected PtaiClient ptaiClient;
+
+    @Autowired
+    protected DiagnosticService diagnosticService;
 
     protected Path tempFolder;
 
@@ -131,18 +128,28 @@ public class SastService {
         return scanJsonManaged(project, node, null, null);
     }
 
-    public Optional<Integer> scanJsonManaged(String project, String node, ScanSettings settings, Policy[] policy) {
+    public Optional<Integer> scanJsonManaged(String project, String nodeName, ScanSettings settings, Policy[] policy) {
+
         String jobName = ApiClient.convertJobName(jenkinsClient.getCiJobName());
         JenkinsApiClientWrapper apiClient = new JenkinsApiClientWrapper(jenkinsClient, 5, 5000);
 
         RemoteAccessApi api = jenkinsClient.getJenkinsApi();
+
+        // Check if node exist
+        List<Node> nodes = diagnosticService.getAstNodes();
+        if (!nodes.stream()
+                .filter(n -> n.getName().equals(nodeName))
+                .findAny().isPresent()) {
+            log.error("No node named or labeled as {}", nodeName);
+            throw new EntityNotFoundException("Node " + nodeName + " not found");
+        }
 
         FreeStyleProject prj = apiClient.callApi(() -> api.getJob(jobName));
 
         // Start SAST job
         ApiResponse<Void> buildQueueInfo = apiClient.callApi(() -> api.postJobBuildWithParametersWithHttpInfo(
                 jobName, 0,
-                Optional.ofNullable(node).orElse(""),
+                Optional.ofNullable(nodeName).orElse(""),
                 Optional.ofNullable(project).orElse(""),
                 null == settings ? "" : new ObjectMapper().writeValueAsString(settings.fix()),
                 null == policy ? "" : new ObjectMapper().writeValueAsString(policy),

@@ -1,3 +1,3 @@
 call mvn tc-sdk:stop
-call mvn install tc-sdk:start -DstartAgent=false
-REM call mvn install tc-sdk:start
+REM call mvn install tc-sdk:start -DstartAgent=false
+call mvn install tc-sdk:start
