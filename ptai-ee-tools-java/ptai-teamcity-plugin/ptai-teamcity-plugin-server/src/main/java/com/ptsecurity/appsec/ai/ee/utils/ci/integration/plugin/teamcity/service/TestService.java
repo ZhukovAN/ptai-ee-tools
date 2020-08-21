@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service
 import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.BuildInfo;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.ComponentsStatus;
+import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.Node;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
@@ -236,6 +237,24 @@ public class TestService {
                 details.add("JSON settings are verified, project name is " + settingsJson.getProjectName());
                 Policy policyJson[] = JsonPolicyVerifier.verify(bean.getProperties().get(JSON_POLICY));
                 details.add("JSON policy is verified, number of rule sets is " + policyJson.length);
+            }
+            // Let's check if node exist
+            try {
+                String nodeName = bean.getProperties().get(NODE_NAME);
+                List<Node> nodes = client.getDiagnosticApi().getAstNodes();
+                if (nodes.stream().filter(n -> n.getName().equals(nodeName)).findAny().isPresent())
+                    details.add("Node named or tagged '" + nodeName + "' found");
+                else {
+                    details.add("Node named or tagged '" + nodeName + "' not found");
+                    res = "FAILED";
+                }
+            } catch (ApiException e) {
+                BaseClientException base = new BaseClientException("PT AI get agent nodes list failed", e);
+                Loggers.SERVER.info(base);
+                details.add("Failed to get PT AI agent nodes list");
+                details.add(base.getMessage());
+                res = "FAILED";
+                break;
             }
         } while (false);
 

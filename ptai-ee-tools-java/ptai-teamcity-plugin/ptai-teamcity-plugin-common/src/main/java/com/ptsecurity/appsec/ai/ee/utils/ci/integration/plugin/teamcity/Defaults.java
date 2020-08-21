@@ -64,11 +64,11 @@ public class Defaults {
     /**
      * Allows verbose logging if equals to Constants.TRUE
      */
-    public static final String VERBOSE = TRUE;
+    public static final String VERBOSE = FALSE;
     public static final String INCLUDES = Transfer.DEFAULT_INCLUDES;
     public static final String REMOVE_PREFIX = "";
     public static final String EXCLUDES = Transfer.DEFAULT_EXCLUDES;
     public static final String PATTERN_SEPARATOR = Transfer.DEFAULT_PATTERN_SEPARATOR;
-    public static final String USE_DEFAULT_EXCLUDES = Transfer.DEFAULT_USE_DEFAULT_EXCLUDES ? Constants.TRUE : Constants.FALSE;
-    public static final String FLATTEN = Transfer.DEFAULT_FLATTEN ? Constants.TRUE : Constants.FALSE;
+    public static final String USE_DEFAULT_EXCLUDES = Transfer.DEFAULT_USE_DEFAULT_EXCLUDES ? TRUE : FALSE;
+    public static final String FLATTEN = Transfer.DEFAULT_FLATTEN ? TRUE : FALSE;
 }

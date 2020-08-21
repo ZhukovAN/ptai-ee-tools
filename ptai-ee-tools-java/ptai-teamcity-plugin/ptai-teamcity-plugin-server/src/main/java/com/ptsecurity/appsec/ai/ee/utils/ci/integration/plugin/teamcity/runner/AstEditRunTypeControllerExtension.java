@@ -60,21 +60,27 @@ public class AstEditRunTypeControllerExtension implements EditRunTypeControllerE
     public void fillModel(@NotNull HttpServletRequest request, @NotNull BuildTypeForm form, @NotNull Map model) {
         BasePropertiesBean bean = form.getBuildRunnerBean().getPropertiesBean();
         final Map<String, String> properties = bean.getProperties();
-        // Setup possibly missing fields
+        // Setup possibly missing fields: Teamcity doesn't save empty or false values to job's
+        // XML file. So when UI opens settings page it compares default values with those
+        // missing ones and marks them as orange "modified" fields. So we need to explicitly
+        // pass empty or false field values
         if (!SERVER_SETTINGS_GLOBAL.equals(properties.get(SERVER_SETTINGS)) && !SERVER_SETTINGS_LOCAL.equals(properties.get(SERVER_SETTINGS)))
             properties.put(SERVER_SETTINGS, Defaults.SERVER_SETTINGS);
         if (!AST_SETTINGS_UI.equals(properties.get(AST_SETTINGS)) && !AST_SETTINGS_JSON.equals(properties.get(AST_SETTINGS)))
             properties.put(AST_SETTINGS, Defaults.AST_SETTINGS);
+
         if (!properties.containsKey(FAIL_IF_FAILED))
-            properties.put(FAIL_IF_FAILED, Defaults.FAIL_IF_FAILED);
+            properties.put(FAIL_IF_FAILED, FALSE);
         if (!properties.containsKey(FAIL_IF_UNSTABLE))
-            properties.put(FAIL_IF_UNSTABLE, Defaults.FAIL_IF_UNSTABLE);
+            properties.put(FAIL_IF_UNSTABLE, FALSE);
         if (!properties.containsKey(VERBOSE))
-            properties.put(VERBOSE, Defaults.VERBOSE);
+            properties.put(VERBOSE, FALSE);
+        if (!properties.containsKey(USE_DEFAULT_EXCLUDES))
+            properties.put(USE_DEFAULT_EXCLUDES, FALSE);
         if (!properties.containsKey(FLATTEN))
-            properties.put(FLATTEN, Defaults.FLATTEN);
+            properties.put(FLATTEN, FALSE);
         if (!properties.containsKey(REMOVE_PREFIX))
-            properties.put(REMOVE_PREFIX, Defaults.REMOVE_PREFIX);
+            properties.put(REMOVE_PREFIX, "");
         // Additional settings are to be defined as a model
         model.put(URL, settings.getValue(URL));
         model.put(USER, settings.getValue(USER));

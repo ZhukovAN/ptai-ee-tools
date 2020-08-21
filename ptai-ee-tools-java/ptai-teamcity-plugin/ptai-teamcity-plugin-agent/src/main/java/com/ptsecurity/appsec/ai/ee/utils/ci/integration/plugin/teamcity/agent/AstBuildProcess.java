@@ -14,6 +14,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
@@ -161,6 +163,12 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                 transfer.setIncludes(params.get(Params.INCLUDES));
             if (StringUtils.isNotEmpty(params.get(Params.EXCLUDES)))
                 transfer.setExcludes(params.get(Params.EXCLUDES));
+            if (StringUtils.isNotEmpty(params.get(Params.PATTERN_SEPARATOR)))
+                transfer.setPatternSeparator(params.get(Params.PATTERN_SEPARATOR));
+            if (StringUtils.isNotEmpty(params.get(Params.REMOVE_PREFIX)))
+                transfer.setRemovePrefix(params.get(Params.REMOVE_PREFIX));
+            transfer.setFlatten(TRUE.equalsIgnoreCase(params.get(Params.FLATTEN)));
+            transfer.setUseDefaultExcludes(TRUE.equalsIgnoreCase(params.get(Params.USE_DEFAULT_EXCLUDES)));
             Base base = new Base() {
                 public void log(String value) {
                     logger.info(value);
@@ -224,6 +232,12 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                     Files.copy(data.toPath(), Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
                 artifactsWatcher.addNewArtifactsPath(fileName + "=>" + Base.SAST_FOLDER);
             }
+        } catch (ApiException e) {
+            String message = BaseClientException.getApiExceptionMessage(e);
+            if (!StringUtils.isEmpty(message))
+                logger.error(message);
+            if (HttpStatus.SC_NOT_FOUND == e.getCode())
+                res = ExitCode.CODE_ERROR_PROJECT_SETTINGS.getCode();
         } catch (InterruptedException e) {
             logger.error("Interrupted exception: " + e.getMessage());
             if ((null != client) && (null != scanId))

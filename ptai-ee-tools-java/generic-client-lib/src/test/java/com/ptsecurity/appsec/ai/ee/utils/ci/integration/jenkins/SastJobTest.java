@@ -3,6 +3,9 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.ApiResponse;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.ComputerSet;
+import com.ptsecurity.appsec.ai.ee.utils.ci.jenkins.server.rest.HudsonMasterComputer;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -76,5 +79,26 @@ class SastJobTest {
         response = new ApiResponse<>(200, headers);
         id = Client.getQueueId(response);
         assertEquals(null, id);
+    }
+
+    @SneakyThrows
+    @Test
+    public void testNodeList() {
+        Client jenkins = new Client();
+        jenkins.setVerbose(true);
+        jenkins.setConsoleLog(System.out);
+        jenkins.setUrl("http://jenkins.domain.org");
+        jenkins.setUserName("svc_ptai");
+        jenkins.setPassword("P@ssw0rd");
+
+        jenkins.init();
+        ComputerSet nodes = jenkins.jenkinsApi.getComputer(0);
+        nodes.getComputer().stream()
+                .map(n -> n.getAssignedLabels())
+                .flatMap(l -> l.stream())
+                .filter(l -> l.getName().equals("PTAI"))
+                .forEach(l -> System.out.println(l.getName()));
+        for (HudsonMasterComputer node : nodes.getComputer())
+            System.out.println(node.getDisplayName());
     }
 }

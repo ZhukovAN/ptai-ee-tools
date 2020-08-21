@@ -104,10 +104,15 @@ public class DiagnosticService {
             Set<String> tags = new HashSet<>();
             for (HudsonMasterComputer node : nodes.getComputer()) {
                 if (!"hudson.slaves.SlaveComputer".equalsIgnoreCase(node.getPropertyClass())) continue;
-                node.getAssignedLabels().stream().forEach(l -> tags.add(l.getName()));
+                node.getAssignedLabels()
+                        .stream()
+                        .filter(l -> !l.getName().equals(node.getDisplayName()))
+                        .forEach(l -> tags.add(l.getName()));
                 res.add(new Node().name(node.getDisplayName()).type(Node.TypeEnum.NAME));
             }
-            tags.stream().forEach(t -> res.add(new Node().name(t).type(Node.TypeEnum.TAG)));
+            tags.stream()
+                    .distinct()
+                    .forEach(t -> res.add(new Node().name(t).type(Node.TypeEnum.TAG)));
         } catch (JenkinsClientException e) {
             log.error(e.getMessage());
             log.trace("Exception details", e);
