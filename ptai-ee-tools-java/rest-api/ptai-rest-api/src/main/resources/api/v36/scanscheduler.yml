@@ -1,0 +1,280 @@
+openapi: 3.0.1
+info:
+  title: scanScheduler
+  version: "3.6"
+servers:
+  - url: https://ptai.domain.org:443/
+security:
+  - Bearer: []
+paths:
+  /api/Scan/start:
+    post:
+      tags:
+        - Scan
+      summary: Start scan. Return scan result id
+      description: "ScanSettings is optional.\r\nAdditionalParameters is optional. Set if you need additional parameters e. g. printing a report"
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/StartScanModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartScanModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/StartScanModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/StartScanModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: uuid
+            application/json:
+              schema:
+                type: string
+                format: uuid
+            text/json:
+              schema:
+                type: string
+                format: uuid
+        '401':
+          description: Unauthorized
+  /api/Scan/stop:
+    post:
+      tags:
+        - Scan
+      summary: Stop scan
+      parameters:
+        - name: scanResultId
+          in: query
+          description: Scan result id.Guid. If empty all scans will be stopped
+          schema:
+            type: string
+            description: Scan result id.Guid. If empty all scans will be stopped
+            format: uuid
+            nullable: true
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/ScanAgent/getAll:
+    get:
+      tags:
+        - ScanAgent
+      summary: Get all scan agents
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanAgent'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanAgent'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanAgent'
+        '401':
+          description: Unauthorized
+  /api/ScanAgent/suspend:
+    post:
+      tags:
+        - ScanAgent
+      summary: Suspend agent
+      parameters:
+        - name: scanAgentId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: stopScan
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '401':
+          description: Unauthorized
+  /api/ScanQueue/getAll:
+    get:
+      tags:
+        - ScanQueue
+      summary: Get active items
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanQueueModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanQueueModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanQueueModel'
+        '401':
+          description: Unauthorized
+components:
+  schemas:
+    ScanType:
+      enum:
+        - Full
+        - Incremental
+      type: string
+    StartScanModel:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanType:
+          $ref: '#/components/schemas/ScanType'
+        additionalParameters:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+      additionalProperties: false
+    ScanAgentStatusType:
+      enum:
+        - Pending
+        - Scan
+        - Suspend
+        - Inactive
+        - Update
+        - Stopping
+      type: string
+    Stage:
+      enum:
+        - Unknown
+        - VFSSetup
+        - Initialize
+        - Precheck
+        - Scan
+        - Finalize
+        - Done
+        - Failed
+        - Aborted
+        - Enqueued
+        - Autocheck
+      type: string
+    ScanProgress:
+      type: object
+      properties:
+        stage:
+          $ref: '#/components/schemas/Stage'
+        subStage:
+          type: string
+          nullable: true
+        value:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ScanAgent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        statusType:
+          $ref: '#/components/schemas/ScanAgentStatusType'
+        agentName:
+          type: string
+          nullable: true
+        registeredDateTime:
+          type: string
+          format: date-time
+        lastActiveDateTime:
+          type: string
+          format: date-time
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: true
+        projectId:
+          type: string
+          format: uuid
+          nullable: true
+        projectName:
+          type: string
+          nullable: true
+        progress:
+          $ref: '#/components/schemas/ScanProgress'
+      additionalProperties: false
+    ScanStatusType:
+      enum:
+        - Pending
+        - Scheduled
+        - Scan
+        - Aborted
+        - Finished
+        - Failed
+      type: string
+    ScanQueueModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        statusType:
+          $ref: '#/components/schemas/ScanStatusType'
+        scanType:
+          $ref: '#/components/schemas/ScanType'
+        agentId:
+          type: string
+          format: uuid
+          nullable: true
+        agentName:
+          type: string
+          nullable: true
+        scanResultId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        queuingDateTime:
+          type: string
+          format: date-time
+        finishedDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        initiator:
+          type: string
+          nullable: true
+        projectName:
+          type: string
+          nullable: true
+        initiatorName:
+          type: string
+          nullable: true
+        initiatorIsUser:
+          type: boolean
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please insert JWT with Bearer into field
+      name: Authorization
+      in: header

@@ -14,8 +14,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
@@ -230,7 +228,7 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                     Files.write(Paths.get(fileName), res.toString().getBytes());
                 } else
                     Files.copy(data.toPath(), Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
-                artifactsWatcher.addNewArtifactsPath(fileName + "=>" + Base.SAST_FOLDER);
+                artifactsWatcher.addNewArtifactsPath(fileName + "=>" + Base.DEFAULT_SAST_FOLDER);
             }
         } catch (ApiException e) {
             String message = BaseClientException.getApiExceptionMessage(e);

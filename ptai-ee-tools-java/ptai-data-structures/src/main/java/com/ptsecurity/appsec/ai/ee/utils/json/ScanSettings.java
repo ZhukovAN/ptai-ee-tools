@@ -3,9 +3,13 @@ package com.ptsecurity.appsec.ai.ee.utils.json;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -20,7 +24,7 @@ public class ScanSettings {
      * instead of null. This method fixes these missing values if those aren't defined
      */
     public ScanSettings fix() {
-        if (null == disabledPatterns) disabledPatterns = new String[0];
+        if (null == disabledPatterns) disabledPatterns = new ArrayList<>();
         if (null == javaNormalizeVersionPattern) javaNormalizeVersionPattern = "";
         return this;
     }
@@ -48,62 +52,74 @@ public class ScanSettings {
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Authentication {
-        @Getter
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class auth_item {
-            @Getter
-            @JsonIgnoreProperties(ignoreUnknown = true)
-            public static class credentials {
-                @Getter
-                @JsonIgnoreProperties(ignoreUnknown = true)
-                public static class login {
-                    @JsonProperty("name")
-                    protected String name;
-                    @JsonProperty("value")
-                    protected String value;
-                    @JsonProperty("regexp")
-                    protected String regexp;
-                    @JsonProperty("is_regexp")
-                    protected boolean is_regexp;
-                }
-                @Getter
-                @JsonIgnoreProperties(ignoreUnknown = true)
-                public static class password {
-                    @JsonProperty("name")
-                    protected String name;
-                    @JsonProperty("value")
-                    protected String value;
-                    @JsonProperty("regexp")
-                    protected String regexp;
-                    @JsonProperty("is_regexp")
-                    protected boolean is_regexp;
-                }
-                @JsonProperty("cookie")
-                protected String cookie;
-                @JsonProperty("type")
-                protected int type;
-                @JsonProperty("login")
-                protected login login;
-                @JsonProperty("password")
-                protected password password;
-            }
-            @JsonProperty("domain")
-            protected String domain;
-            @JsonProperty("credentials")
-            protected credentials credentials;
-            @JsonProperty("test_url")
-            protected String test_url;
-            @JsonProperty("form_url")
-            protected String form_url;
-            @JsonProperty("form_xpath")
-            protected String form_xpath;
-            @JsonProperty("regexp_of_success")
-            protected String regexp_of_success;
-        }
         @JsonProperty("auth_item")
-        protected auth_item auth_item;
+        protected AuthItem authItem;
     }
 
+    @Getter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class AuthItem {
+        @JsonProperty("domain")
+        protected String domain;
+        @JsonProperty("credentials")
+        protected Credentials credentials;
+        @JsonProperty("test_url")
+        protected String testUrl;
+        @JsonProperty("form_url")
+        protected String formUrl;
+        @JsonProperty("form_xpath")
+        protected String formXPath;
+        @JsonProperty("regexp_of_success")
+        protected String regexpOfSuccess;
+    }
+
+    @Getter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Credentials {
+        @JsonProperty("cookie")
+        protected String cookie;
+        @JsonProperty("type")
+        protected CredentialsType type;
+        @JsonProperty("login")
+        protected Login login;
+        @JsonProperty("password")
+        protected Password password;
+    }
+    @Getter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Login {
+        @JsonProperty("name")
+        protected String name;
+        @JsonProperty("value")
+        protected String value;
+        @JsonProperty("regexp")
+        protected String regexp;
+        @JsonProperty("is_regexp")
+        protected boolean regexpUsed;
+    }
+    @Getter
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Password {
+        @JsonProperty("name")
+        protected String name;
+        @JsonProperty("value")
+        protected String value;
+        @JsonProperty("regexp")
+        protected String regexp;
+        @JsonProperty("is_regexp")
+        protected boolean regexpUsed;
+    }
+    @AllArgsConstructor
+    public enum CredentialsType {
+        // 0 = Form, 1 = HTTP, 2 = None, 3 = Cookie
+        FORM(0),
+        HTTP(1),
+        NONE(2),
+        COOKIE(3);
+
+        @JsonValue
+        protected final int type;
+    }
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ProxySettings {
@@ -112,15 +128,25 @@ public class ScanSettings {
         @JsonProperty("Host")
         protected String host;
         @JsonProperty("Port")
-        protected String port;
+        protected int port;
         @JsonProperty("Type")
-        protected String type;
+        protected ProxyType type;
         @JsonProperty("Username")
         protected String username;
         @JsonProperty("Password")
         protected String password;
     }
+    @AllArgsConstructor
+    public enum ProxyType {
+        // 0 or HTTP, 1 or HTTPNOCONNECT, 2 or SOCKS4, 3 or SOCKS5
+        HTTP(0),
+        HTTPNOCONNECT(1),
+        SOCKS4(2),
+        SOCKS5(3);
 
+        @JsonValue
+        protected final int type;
+    }
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ReportParameters {
@@ -164,60 +190,112 @@ public class ScanSettings {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class AutocheckAuthentication {
         @JsonProperty("auth_item")
-        protected ScanSettings.Authentication.auth_item auth_item;
+        protected AuthItem AuthItem;
+    }
+
+    public static enum ProgrammingLanguage {
+        @JsonProperty("Java")
+        JAVA,
+        @JsonProperty("Php")
+        PHP,
+        @JsonProperty("Csharp")
+        CSHARP,
+        @JsonProperty("Vb")
+        VB,
+        @JsonProperty("ObjectiveC")
+        OBJECTIVEC,
+        @JsonProperty("CPlusPlus")
+        CPLUSPLUS,
+        @JsonProperty("Sql")
+        SQL,
+        @JsonProperty("Swift")
+        SWIFT,
+        @JsonProperty("Python")
+        PYTHON,
+        @JsonProperty("JavaScript")
+        JAVASCRIPT,
+        @JsonProperty("Kotlin")
+        KOTLIN,
+        @JsonProperty("Go")
+        GO
+    }
+
+    public static enum BlackBoxScanLevel {
+        @JsonProperty("None")
+        NONE,
+        @JsonProperty("Fast")
+        FAST,
+        @JsonProperty("Normal")
+        NORMAL,
+        @JsonProperty("Full")
+        FULL
     }
 
     // Main settings
     @JsonProperty("ProjectName")
     protected String projectName;
     @JsonProperty("ProgrammingLanguage")
-    protected String programmingLanguage;
+    protected ProgrammingLanguage programmingLanguage;
     @JsonProperty("ScanAppType")
     protected String scanAppType;
+
     @JsonProperty("ThreadCount")
-    protected int threadCount;
+    protected int threadCount = 1;
     @JsonProperty("Site")
-    protected String site;
+    protected String site = "http://localhost";
     @JsonProperty("IsDownloadDependencies")
-    protected boolean isDownloadDependencies;
+    protected boolean isDownloadDependencies = true;
+
     @JsonProperty("IsUsePublicAnalysisMethod")
-    protected boolean isUsePublicAnalysisMethod;
+    protected boolean isUsePublicAnalysisMethod = false;
     @JsonProperty("IsUseEntryAnalysisPoint")
-    protected boolean isUseEntryAnalysisPoint;
-    @JsonProperty("IsGraphEnabled")
-    protected boolean isGraphEnabled;
-    @JsonProperty("UseIncrementalScan")
-    protected boolean useIncrementalScan;
+    protected boolean isUseEntryAnalysisPoint = true;
+
     @JsonProperty("ScanUnitTimeout")
-    protected int scanUnitTimeout;
+    protected long scanUnitTimeout = 600;
     @JsonProperty("PreprocessingTimeout")
-    protected int preprocessingTimeout;
-    @JsonProperty("RunAutocheckAfterScan")
-    protected boolean runAutocheckAfterScan;
+    protected int preprocessingTimeout = 60;
     @JsonProperty("CustomParameters")
     protected String customParameters;
+
     @JsonProperty("SkipFileFormats")
-    protected String[] skipFileFormats;
+    protected List<String> skipFileFormats;
     @JsonProperty("SkipFilesFolders")
-    protected String[] skipFilesFolders;
+    protected List<String> skipFilesFolders;
+
+    // Vulnerabilities to find
+    @JsonProperty("DisabledPatterns")
+    protected List<String> disabledPatterns;
+    @JsonProperty("DisabledTypes")
+    protected List<String> disabledTypes;
+
+    @JsonProperty("UseIncrementalScan")
+    protected boolean useIncrementalScan = true;
+    @JsonProperty("FullRescanOnNewFilesAdded")
+    protected boolean fullRescanOnNewFilesAdded = true;
+
+    @JsonProperty("ConsiderPreviousScan")
+    protected boolean considerPreviousScan = true;
+    @JsonProperty("HideSuspectedVulnerabilities")
+    protected boolean hideSuspectedVulnerabilities = true;
     @JsonProperty("UseIssueTrackerIntegration")
-    protected boolean useIssueTrackerIntegration;
+    protected boolean useIssueTrackerIntegration = true;
 
     // Java settings
     @JsonProperty("IsUnpackUserPackages")
-    protected boolean isUnpackUserPackages;
+    protected boolean isUnpackUserPackages = false;
     @JsonProperty("JavaParameters")
     protected String javaParameters;
     @JsonProperty("JavaVersion")
-    protected int javaVersion;
+    protected int javaVersion = 0;
     @JsonProperty("UseJavaNormalizeVersionPattern")
-    protected String useJavaNormalizeVersionPattern;
+    protected boolean useJavaNormalizeVersionPattern = true;
     @JsonProperty("JavaNormalizeVersionPattern")
-    protected String javaNormalizeVersionPattern;
+    protected String javaNormalizeVersionPattern = "-\\d+(\\.\\d+)*";
 
     // C# settings
     @JsonProperty("ProjectType")
-    protected String projectType;
+    protected String projectType = "Solution";
     @JsonProperty("SolutionFile")
     protected String solutionFile;
     @JsonProperty("WebSiteFolder")
@@ -226,18 +304,45 @@ public class ScanSettings {
     // JavaScript settings
     @JsonProperty("JavaScriptProjectFile")
     protected String javaScriptProjectFile;
+    @JsonProperty("JavaScriptProjectFolder")
+    protected String javaScriptProjectFolder;
 
-    // Vulnerabilities to find
-    @JsonProperty("DisabledPatterns")
-    protected String[] disabledPatterns;
-    @JsonProperty("DisabledTypes")
-    protected String[] disabledTypes;
+    // PMTaint Parameters
+    @JsonProperty("UseTaintAnalysis")
+    protected boolean useTaintAnalysis;
+    @JsonProperty("UsePmAnalysis")
+    protected boolean usePmAnalysis;
+    @JsonProperty("DisableInterpretCores")
+    protected boolean disableInterpretCores;
 
     // YARA Rules
     @JsonProperty("UseDefaultFingerprints")
     protected boolean useDefaultFingerprints;
     @JsonProperty("UseCustomYaraRules")
     protected boolean useCustomYaraRules;
+
+    // BlackBox Settings
+    @JsonProperty("BlackBoxScanLevel")
+    protected BlackBoxScanLevel blackBoxScanLevel;
+    @JsonProperty("CustomHeaders")
+    protected List<List<String>> customHeaders;
+    @JsonProperty("Authentication")
+    protected Authentication authentication;
+
+    @JsonProperty("ProxySettings")
+    protected ProxySettings proxySettings;
+
+    // Autocheck
+    @JsonProperty("RunAutocheckAfterScan")
+    protected boolean runAutocheckAfterScan;
+    @JsonProperty("AutocheckSite")
+    protected String autocheckSite;
+    @JsonProperty("AutocheckCustomHeaders")
+    protected List<List<String>> autocheckCustomHeaders;
+    @JsonProperty("AutocheckAuthentication")
+    protected Authentication autocheckAuthentication;
+    @JsonProperty("AutocheckProxySettings")
+    protected ProxySettings autocheckProxySettings;
 
     @JsonProperty("SendEmailWithReportsAfterScan")
     protected boolean sendEmailWithReportsAfterScan;
@@ -248,26 +353,7 @@ public class ScanSettings {
     @JsonProperty("EmailSettings")
     protected EmailSettings emailSettings;
 
-    // BlackBox Settings
-    @JsonProperty("Level")
-    protected String level;
-    @JsonProperty("CustomHeaders")
-    protected String[][] customHeaders;
-    @JsonProperty("Authentication")
-    protected Authentication authentication;
-
-    @JsonProperty("ProxySettings")
-    protected ProxySettings proxySettings;
+    // Report Settings
     @JsonProperty("ReportParameters")
     protected ReportParameters reportParameters;
-
-    // Autocheck
-    @JsonProperty("AutocheckSite")
-    protected String autocheckSite;
-    @JsonProperty("AutocheckCustomHeaders")
-    protected String[][] autocheckCustomHeaders;
-    @JsonProperty("AutocheckAuthentication")
-    protected Authentication autocheckAuthentication;
-    @JsonProperty("AutocheckProxySettings")
-    protected ProxySettings autocheckProxySettings;
 }

@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
             <artifactId>ptai-rest-api</artifactId>
-            <version>0.1</version>
+            <version>3.6</version>
         </dependency>
         <dependency>
             <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
@@ -69,6 +69,12 @@
             <groupId>org.jenkins-ci.plugins</groupId>
             <artifactId>bouncycastle-api</artifactId>
             <version>2.16.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jooq/joor-java-8 -->
+        <dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>joor-java-8</artifactId>
+            <version>0.9.13</version>
         </dependency>
     </dependencies>
     <repositories>

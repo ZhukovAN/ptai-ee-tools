@@ -2,7 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiResponse;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.deprecated.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiServerException;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
@@ -20,11 +20,11 @@ public class PtaiProject extends Client {
     protected String name;
 
     public static Optional<UUID> searchProject(ProjectsApi api, String name) throws PtaiServerException {
-        ApiResponse<List<com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.Project>> projects = null;
+        ApiResponse<List<Project>> projects = null;
         try {
             projects = api.getWithHttpInfo(true);
             UUID projectId = null;
-            for (com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.Project prj : projects.getData())
+            for (Project prj : projects.getData())
                 if (name.equals(prj.getName()))
                     return Optional.of(prj.getId());
         } catch (ApiException e) {
@@ -82,7 +82,7 @@ public class PtaiProject extends Client {
 
     public void upload(File file) throws PtaiClientException, PtaiServerException {
         try {
-            this.log("Zipped sources are in  %s", file.getAbsolutePath());
+            out("Zipped sources are in  %s", file.getAbsolutePath());
 
             // Search for project
             UUID projectId = this.searchProject();
@@ -94,7 +94,7 @@ public class PtaiProject extends Client {
                     file,
                     null,null,null,null,null,null,
                     null,null,null,null,null);
-            this.log("Sources upload result is %d", res.getStatusCode());
+            out("Sources upload result is %d", res.getStatusCode());
             file.delete();
             if (200 != res.getStatusCode())
                 throw new PtaiClientException("Sources upload failed");

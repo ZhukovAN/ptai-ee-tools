@@ -130,7 +130,7 @@ public class BaseClient extends Base {
                                     if (cert.getPublicKey() instanceof RSAPublicKey)
                                         certs.add((X509Certificate) cert);
                         } catch (UnrecoverableKeyException e) {
-                            this.log(e);
+                            out("Reading key data failed", e);
                         }
                     } else if (keyStore.isCertificateEntry(alias)) {
                         Certificate cert = keyStore.getCertificate(alias);
@@ -349,7 +349,7 @@ public class BaseClient extends Base {
             }
             return true;
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException | CertificateParsingException e) {
-            this.log(e.getMessage());
+            out("Alias " + alias + " check failed", e);
             return false;
         }
     }
@@ -379,7 +379,8 @@ public class BaseClient extends Base {
             tmf.init(trustStore);
             return caCerts;
         } catch (NoSuchProviderException | CertificateException | KeyStoreException | IOException | NoSuchAlgorithmException e) {
-            this.log(e);
+            out("CA certificates check failed", e);
+            log.fine(caCertsPem);
             throw new BaseClientException(e.getMessage(), e);
         }
     }
@@ -417,8 +418,7 @@ public class BaseClient extends Base {
             }
             throw new BaseClientException("Certificate not found for private key");
         } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | NoSuchProviderException | UnrecoverableKeyException e) {
-            log.log(Level.SEVERE, "Key check exception", e);
-            this.log(e);
+            out("Key check failed", e);
             throw new BaseClientException(e.getMessage(), e);
         }
     }
@@ -463,8 +463,7 @@ public class BaseClient extends Base {
             }
             return checkKey(keys, certs);
         } catch (NoSuchProviderException | CertificateException | IOException | NoSuchAlgorithmException | InvalidKeySpecException | PKCSException | OperatorCreationException e) {
-            log.log(Level.SEVERE, "Key check exception", e);
-            this.log(e);
+            out("Key check failed", e);
             throw new BaseClientException(e.getMessage(), e);
         }
     }

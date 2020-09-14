@@ -1,0 +1,3228 @@
+openapi: 3.0.1
+info:
+  title: projectManagement
+  version: "3.6"
+servers:
+  - url: https://ptai.domain.org:443/
+security:
+  - Bearer: []
+paths:
+  /api/License:
+    get:
+      tags:
+        - License
+      summary: Get information about current license
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/EnterpriseLicenseData'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseLicenseData'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseLicenseData'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/EnterpriseLicenseData'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/EnterpriseLicenseData'
+        '401':
+          description: Unauthorized
+  /api/Projects:
+    get:
+      tags:
+        - Projects
+      summary: Get projects
+      parameters:
+        - name: withoutDetails
+          in: query
+          description: 'true only for plugins, not for client applications'
+          schema:
+            type: boolean
+            description: 'true only for plugins, not for client applications'
+            default: false
+      responses:
+        '200':
+          description: Success
+    post:
+      tags:
+        - Projects
+      summary: Create project
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectModel'
+          application/x-msgpack:
+            schema:
+              $ref: '#/components/schemas/CreateProjectModel'
+          application/msgpack:
+            schema:
+              $ref: '#/components/schemas/CreateProjectModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Project'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/Project'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/Project'
+  '/api/Projects/{projectId}':
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Project'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/Project'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/Project'
+    delete:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+    put:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          application/x-msgpack:
+            schema:
+              $ref: '#/components/schemas/Project'
+          application/msgpack:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+            application/x-msgpack:
+              schema:
+                type: boolean
+            application/msgpack:
+              schema:
+                type: boolean
+  '/api/Projects/light/{name}':
+    get:
+      tags:
+        - Projects
+      summary: Get project by name without details
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+        '401':
+          description: Unauthorized
+  '/api/Projects/{projectId}/name':
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/x-msgpack:
+              schema:
+                type: string
+            application/msgpack:
+              schema:
+                type: string
+  /api/Projects/correctNameForNewProject:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: initialName
+          in: query
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+            application/x-msgpack:
+              schema:
+                type: string
+            application/msgpack:
+              schema:
+                type: string
+  '/api/Projects/{name}/exists':
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+            application/x-msgpack:
+              schema:
+                type: boolean
+            application/msgpack:
+              schema:
+                type: boolean
+  '/api/Projects/{projectId}/isNameAvailable':
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: name
+          in: query
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+            application/x-msgpack:
+              schema:
+                type: boolean
+            application/msgpack:
+              schema:
+                type: boolean
+  '/api/Projects/{projectId}/scanResults':
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: authScope
+          in: query
+          schema:
+            $ref: '#/components/schemas/AuthScopeType'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanResult'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanResult'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanResult'
+            application/x-msgpack:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanResult'
+            application/msgpack:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanResult'
+  '/api/Projects/{projectId}/scanResults/{scanResultId}/issues':
+    get:
+      tags:
+        - Projects
+      summary: Read issues and  descriptions and metadatas to stream
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: localeId
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            application/octet-stream:
+              schema:
+                # $ref: '#/components/schemas/IssuesModel'
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+  '/api/Projects/{projectId}/scanSettings':
+    put:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/IScanSettings'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IScanSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/IScanSettings'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/IScanSettings'
+      responses:
+        '200':
+          description: Success
+  '/api/Projects/{projectId}/scanSettings/{scanSettingsId}':
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanSettingsId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/IScanSettings'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IScanSettings'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/IScanSettings'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/IScanSettings'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/IScanSettings'
+  '/api/Projects/{projectId}/policiesRules':
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+    put:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: string
+              nullable: true
+          application/json:
+            schema:
+              type: string
+              nullable: true
+          text/json:
+            schema:
+              type: string
+              nullable: true
+          application/*+json:
+            schema:
+              type: string
+              nullable: true
+          application/x-msgpack:
+            schema:
+              type: string
+              nullable: true
+          application/msgpack:
+            schema:
+              type: string
+              nullable: true
+      responses:
+        '200':
+          description: Success
+  '/api/Projects/{projectId}/scanResults/{scanResultId}':
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+    delete:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: deleteGroup
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+  '/api/Projects/{projectId}/scanResults/last':
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+  '/api/Projects/{projectId}/scanResults/{scanResultId}/errors':
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanError'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanError'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanError'
+            application/x-msgpack:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanError'
+            application/msgpack:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanError'
+  /api/Projects/stages:
+    get:
+      tags:
+        - Projects
+      summary: Get project stages
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectStage'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectStage'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectStage'
+            application/x-msgpack:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectStage'
+            application/msgpack:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectStage'
+        '401':
+          description: Unauthorized
+  /api/Reports/templates:
+    get:
+      tags:
+        - Reports
+      summary: Get all report`s templates
+      parameters:
+        - name: withContent
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportTemplateModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportTemplateModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportTemplateModel'
+            application/x-msgpack:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportTemplateModel'
+            application/msgpack:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportTemplateModel'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  '/api/Reports/templates/{id}':
+    get:
+      tags:
+        - Reports
+      summary: "Get report template by id\r\n<param name=\"id\">Report`s id</param>"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: needAddCss
+          in: query
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+  /api/Reports/generate:
+    post:
+      tags:
+        - Reports
+      summary: "Generate report.\r\n <param name=\"model\">Report`s generate model (settings, templates...)</param>"
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateModel'
+          application/x-msgpack:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateModel'
+          application/msgpack:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/File'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/File'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/File'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/File'
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+components:
+  schemas:
+    ScanAppType:
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+      x-enum-varnames:
+        - None
+        - Binary
+        - Configuration
+        - Fingerprint
+        - Java
+        - CSharp
+        - PHP
+        - PmTaint
+        - BlackBox
+        - JavaScript
+        - DependencyCheck
+      type: string
+    ProgrammingLanguage:
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+        - 21
+      x-enum-varnames:
+        - None
+        - DotNet
+        - Php
+        - Java
+        - Html
+        - JavaScript
+        - All
+        - SandBox
+        - Binary
+        - PlSql
+        - TSql
+        - MySql
+        - Aspx
+        - C
+        - CPlusPlus
+        - ObjectiveC
+        - Swift
+        - Python
+        - CSharp
+        - VB
+        - Go
+        - Kotlin
+      type: integer
+    EnterpriseLicenseData:
+      type: object
+      properties:
+        key:
+          type: string
+          nullable: true
+        circuit:
+          type: string
+          nullable: true
+        currentDate:
+          type: string
+          format: date-time
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        limitProjects:
+          type: integer
+          format: int32
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProgrammingLanguage'
+          nullable: true
+        isBlackBoxDisabled:
+          type: boolean
+        isValid:
+          type: boolean
+        licenseNumber:
+          type: integer
+          format: int32
+      additionalProperties: false
+    RepositoryType:
+      enum:
+        - None
+        - Git
+        - TFS
+      type: string
+    SourceControlCredentalsType:
+      enum:
+        - None
+        - Anonymous
+        - Password
+        - AuthenticationToken
+        - SshKeys
+      type: string
+    SourceControlSettings:
+      type: object
+      properties:
+        repositoryType:
+          $ref: '#/components/schemas/RepositoryType'
+        repositoryUrl:
+          type: string
+          nullable: true
+        checkoutDir:
+          type: string
+          nullable: true
+        sourceControlCredentalsType:
+          $ref: '#/components/schemas/SourceControlCredentalsType'
+        user:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        catalog:
+          type: string
+          nullable: true
+        project:
+          type: string
+          nullable: true
+        branch:
+          type: string
+          nullable: true
+        publicSSHKey:
+          type: string
+          nullable: true
+        privateSSHKey:
+          type: string
+          nullable: true
+        includeSubmodules:
+          type: boolean
+        updateSourcesBeforeScan:
+          type: boolean
+        useProxy:
+          type: boolean
+        credentialsId:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    ISourceScanSettings:
+      type: object
+      properties:
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isGraphEnabled:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        disableInterpretCores:
+          type: boolean
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    JavaVersions:
+      enum:
+        - v1_8
+        - v1_11
+      type: string
+    IJavaSettings:
+      type: object
+      properties:
+        javaParameters:
+          type: string
+          nullable: true
+        javaVersion:
+          $ref: '#/components/schemas/JavaVersions'
+        javaNormalizeVersionPattern:
+          type: string
+          nullable: true
+        useJavaNormalizeVersionPattern:
+          type: boolean
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isGraphEnabled:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        disableInterpretCores:
+          type: boolean
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    DotNetProjectType:
+      enum:
+        - None
+        - Solution
+        - WebSite
+      type: string
+    ICSharpSettings:
+      type: object
+      properties:
+        projectType:
+          $ref: '#/components/schemas/DotNetProjectType'
+        solutionFile:
+          type: string
+          nullable: true
+        webSiteFolder:
+          type: string
+          nullable: true
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isGraphEnabled:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        disableInterpretCores:
+          type: boolean
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    IJavaScriptSettings:
+      type: object
+      properties:
+        javaScriptProjectFile:
+          type: string
+          nullable: true
+        javaScriptProjectFolder:
+          type: string
+          nullable: true
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isGraphEnabled:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        disableInterpretCores:
+          type: boolean
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    IPhpSettings:
+      type: object
+      properties:
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isGraphEnabled:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        disableInterpretCores:
+          type: boolean
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          # : true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    IBinarySettings:
+      type: object
+      properties:
+        isUseIssueScan:
+          type: boolean
+        isUseTaintScan:
+          type: boolean
+        isUsePatternmatchingScan:
+          type: boolean
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isGraphEnabled:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        disableInterpretCores:
+          type: boolean
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    IPmTaintSettings:
+      type: object
+      properties:
+        disabledPatterns:
+          type: array
+          items:
+            type: string
+          nullable: true
+        enabledPatterns:
+          type: array
+          items:
+            type: string
+          nullable: true
+        usePmAnalysis:
+          type: boolean
+          nullable: true
+        useTaintAnalysis:
+          type: boolean
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isGraphEnabled:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        disableInterpretCores:
+          type: boolean
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    IConfigSettings:
+      type: object
+      properties:
+        configurationFiles:
+          type: array
+          items:
+            type: string
+          nullable: true
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isGraphEnabled:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        disableInterpretCores:
+          type: boolean
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    IFingerprintSettings:
+      type: object
+      properties:
+        customYaraRules:
+          type: string
+          nullable: true
+        useDefaultFingerprints:
+          type: boolean
+        useCustomYaraRules:
+          type: boolean
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isGraphEnabled:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        disableInterpretCores:
+          type: boolean
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    IDependencyCheckSettings:
+      type: object
+      properties:
+        isDependencyCheckAutoUpdateEnabled:
+          type: boolean
+        dependencyCheckAutoUpdateBaseUrl:
+          type: string
+          nullable: true
+        dependencyCheckAutoUpdateModifiedUrl:
+          type: string
+          nullable: true
+        dependencyCheckDataBaseFolder:
+          type: string
+          nullable: true
+        dependencyCheckAutoUpdateRetireJsUrl:
+          type: string
+          nullable: true
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isGraphEnabled:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        disableInterpretCores:
+          type: boolean
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    BlackBoxScanLevel:
+      enum:
+        - None
+        - Fast
+        - Normal
+        - Full
+      type: string
+    ScanScope:
+      enum:
+        - Folder
+        - Domain
+        - Path
+      type: string
+    AuthType:
+      enum:
+        - Form
+        - Http
+        - None
+        - RawCookie
+      type: string
+    MappedAuthenticationObject:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
+        regexp:
+          type: string
+          nullable: true
+        is_regexp:
+          type: boolean
+      additionalProperties: false
+    AuthenticationCredentials:
+      type: object
+      properties:
+        cookie:
+          type: string
+          nullable: true
+        cookies:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          nullable: true
+        type:
+          $ref: '#/components/schemas/AuthType'
+        login:
+          $ref: '#/components/schemas/MappedAuthenticationObject'
+        password:
+          $ref: '#/components/schemas/MappedAuthenticationObject'
+        credentials_id:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    AuthenticationItem:
+      type: object
+      properties:
+        domain:
+          type: string
+          nullable: true
+        credentials:
+          $ref: '#/components/schemas/AuthenticationCredentials'
+        test_url:
+          type: string
+          nullable: true
+        form_url:
+          type: string
+          nullable: true
+        form_xpath:
+          type: string
+          nullable: true
+        regexp_of_success:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BlackBoxAuthentication:
+      type: object
+      properties:
+        auth_item:
+          $ref: '#/components/schemas/AuthenticationItem'
+      additionalProperties: false
+    ProxyType:
+      enum:
+        - Http
+        - HttpNoConnect
+        - Socks4
+        - Socks5
+      type: string
+    BlackBoxProxySettings:
+      type: object
+      properties:
+        isEnabled:
+          type: boolean
+        host:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+          nullable: true
+        type:
+          $ref: '#/components/schemas/ProxyType'
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        credentialsId:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    IBlackBoxSettings:
+      type: object
+      properties:
+        level:
+          $ref: '#/components/schemas/BlackBoxScanLevel'
+        scanScope:
+          $ref: '#/components/schemas/ScanScope'
+        autocheckSite:
+          type: string
+          nullable: true
+        autocheckCustomHeaders:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          nullable: true
+        customHeaders:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          nullable: true
+        authentication:
+          $ref: '#/components/schemas/BlackBoxAuthentication'
+        autocheckAuthentication:
+          $ref: '#/components/schemas/BlackBoxAuthentication'
+        proxySettings:
+          $ref: '#/components/schemas/BlackBoxProxySettings'
+        autocheckProxySettings:
+          $ref: '#/components/schemas/BlackBoxProxySettings'
+        configurationPath:
+          type: string
+          nullable: true
+        bindAddress:
+          type: string
+          nullable: true
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    ICommonSettings:
+      type: object
+      properties:
+        threadCount:
+          type: integer
+          format: int32
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        customParameters:
+          type: string
+          nullable: true
+        scanUnitTimeout:
+          type: integer
+          format: int64
+        useIncrementalScan:
+          type: boolean
+          deprecated: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+          deprecated: true
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        hideSuspectedVulnerabilities:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        tempDir:
+          type: string
+          nullable: true
+        useIssueTrackerIntegration:
+          type: boolean
+      additionalProperties: false
+    ReportMailSenderParameters:
+      type: object
+      properties:
+        smtpServerAddress:
+          type: string
+          nullable: true
+        userName:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        useDefaultSettings:
+          type: boolean
+        emailRecipients:
+          type: string
+          nullable: true
+        enableSsl:
+          type: boolean
+        subject:
+          type: string
+          nullable: true
+        considerCertificateErrors:
+          type: boolean
+        senderEmail:
+          type: string
+          nullable: true
+        credentialsId:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    IScanSettings:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+        source:
+          $ref: '#/components/schemas/ISourceScanSettings'
+        java:
+          $ref: '#/components/schemas/IJavaSettings'
+        dotNet:
+          $ref: '#/components/schemas/ICSharpSettings'
+        javaScript:
+          $ref: '#/components/schemas/IJavaScriptSettings'
+        php:
+          $ref: '#/components/schemas/IPhpSettings'
+        binary:
+          $ref: '#/components/schemas/IBinarySettings'
+        pmTaint:
+          $ref: '#/components/schemas/IPmTaintSettings'
+        configuration:
+          $ref: '#/components/schemas/IConfigSettings'
+        fingerprint:
+          $ref: '#/components/schemas/IFingerprintSettings'
+        dependencyCheck:
+          $ref: '#/components/schemas/IDependencyCheckSettings'
+        blackBox:
+          $ref: '#/components/schemas/IBlackBoxSettings'
+        common:
+          $ref: '#/components/schemas/ICommonSettings'
+        reportMailSenderParameters:
+          $ref: '#/components/schemas/ReportMailSenderParameters'
+      additionalProperties: false
+    CreateProjectModel:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        scanSettings:
+          $ref: '#/components/schemas/IScanSettings'
+      additionalProperties: false
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        creationDate:
+          type: string
+          format: date-time
+        settingsId:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        lastScanDate:
+          type: string
+          # format: date-time
+        filePatterns:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    ProjectLight:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        settingsId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    AuthScopeType:
+      enum:
+        - None
+        - Agent
+        - Viewer
+        - Internal
+        - Web
+        - WebRefresh
+        - WebLongRefresh
+        - AccessToken
+        - AccessTokenRefresh
+      type: string
+    Stage:
+      enum:
+        - Unknown
+        - VFSSetup
+        - Initialize
+        - Precheck
+        - Scan
+        - Finalize
+        - Done
+        - Failed
+        - Aborted
+        - Enqueued
+        - Autocheck
+      type: string
+    ScanProgress:
+      type: object
+      properties:
+        stage:
+          $ref: '#/components/schemas/Stage'
+        subStage:
+          type: string
+          nullable: true
+        value:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ScanResultState:
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+      x-enum-varnames:
+        - None
+        - Inaccurate
+        - Incremental
+        - Incorrect
+      type: string
+    PolicyState:
+      enum:
+        - None
+        - Rejected
+        - Confirmed
+      type: string
+    ScanResultStatistic:
+      type: object
+      properties:
+        highLevelVulnerabilityCount:
+          type: integer
+          format: int32
+        mediumLevelVulnerabilityCount:
+          type: integer
+          format: int32
+        lowLevelVulnerabilityCount:
+          type: integer
+          format: int32
+        potentialVulnerabilityCount:
+          type: integer
+          format: int32
+        totalBlackBoxVulnerabilityCount:
+          type: integer
+          format: int32
+        totalStaticVulnerabilityCount:
+          type: integer
+          format: int32
+        totalVulnerabilityCount:
+          type: integer
+          format: int32
+        totalFileCount:
+          type: integer
+          format: int32
+        totalUrlCount:
+          type: integer
+          format: int32
+        scannedUrlCount:
+          type: integer
+          format: int32
+        scannedFileCount:
+          type: integer
+          format: int32
+        scanDuration:
+          type: string
+          format: date-span
+        state:
+          $ref: '#/components/schemas/ScanResultState'
+        policyState:
+          $ref: '#/components/schemas/PolicyState'
+      additionalProperties: false
+    ComponentVersion:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        version:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ScanExtraOptions:
+      type: object
+      properties:
+        fullRescanOnNewFilesAdded:
+          type: boolean
+      additionalProperties: false
+    ScanEnvironment:
+      type: object
+      properties:
+        infrastructureVersion:
+          $ref: '#/components/schemas/ComponentVersion'
+        componentVersions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentVersion'
+          nullable: true
+        installatorVersion:
+          $ref: '#/components/schemas/ComponentVersion'
+        clientVersion:
+          $ref: '#/components/schemas/ComponentVersion'
+        yaraHash:
+          type: string
+          format: byte
+          nullable: true
+        sastHashes:
+          type: object
+          properties:
+            None:
+              type: string
+              format: byte
+            Binary:
+              type: string
+              format: byte
+            Configuration:
+              type: string
+              format: byte
+            Fingerprint:
+              type: string
+              format: byte
+            Java:
+              type: string
+              format: byte
+            CSharp:
+              type: string
+              format: byte
+            PHP:
+              type: string
+              format: byte
+            PmTaint:
+              type: string
+              format: byte
+            BlackBox:
+              type: string
+              format: byte
+            JavaScript:
+              type: string
+              format: byte
+            DependencyCheck:
+              type: string
+              format: byte
+          additionalProperties: false
+          nullable: true
+        extraOptions:
+          $ref: '#/components/schemas/ScanExtraOptions'
+      additionalProperties: false
+    ScanResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        settingsId:
+          type: string
+          format: uuid
+        version:
+          type: integer
+          format: int32
+        scanDate:
+          type: string
+          # TODO: fix RFC 3339 in 3.7
+          # format: date-time
+        progress:
+          $ref: '#/components/schemas/ScanProgress'
+        statistic:
+          $ref: '#/components/schemas/ScanResultStatistic'
+        scanEnvironment:
+          $ref: '#/components/schemas/ScanEnvironment'
+        previousScanResultId:
+          type: string
+          format: uuid
+          nullable: true
+        isRunFromQueue:
+          type: boolean
+      additionalProperties: false
+    RvpGrammar:
+      enum:
+        - Undefined
+        - SqlCommon
+        - SqlCe
+        - MySql
+        - MsSql
+        - NpgSql
+        - OracleSql
+        - Sqlite
+        - SqlTableName
+        - ConnectionStringText
+        - ConnectionStringItem
+        - Xquery
+        - ConfigurationKey
+        - ConfigurationValue
+        - FileName
+        - LogEntry
+        - CommandLineArguments
+        - Ldap
+        - Linq
+        - HttpHeaderName
+        - HttpHeaderValue
+        - Host
+        - Port
+        - IpAddress
+        - WebSocketUri
+        - HttpUri
+        - HtmlText
+        - JavaScriptCode
+        - SerializedBase64XmlData
+        - SerializedXmlData
+        - SerializedJsonData
+        - XPath
+        - XmlDocument
+        - ArbitraryIntData
+        - ArbitraryStringData
+      type: string
+    IRvpExpression:
+      type: object
+      additionalProperties: false
+    RvpPvo:
+      type: object
+      properties:
+        grammar:
+          $ref: '#/components/schemas/RvpGrammar'
+        requestPath:
+          type: string
+          nullable: true
+        condition:
+          $ref: '#/components/schemas/IRvpExpression'
+        argument:
+          $ref: '#/components/schemas/IRvpExpression'
+      additionalProperties: false
+    IssueType:
+      enum:
+        - Unknown
+        - Vulnerability
+        - Weakness
+        - Configuration
+        - Fingerprint
+        - BlackBox
+        - YaraMatch
+      type: string
+    IssueApprovalState:
+      enum:
+        - None
+        - Approval
+        - Discard
+        - NotExist
+        - AutoApproval
+      type: string
+    TrackerType:
+      enum:
+        - Unknown
+        - Jira
+        - Tfs
+        - Youtrack
+      type: string
+    TicketLink:
+      type: object
+      properties:
+        trackerType:
+          $ref: '#/components/schemas/TrackerType'
+        connectionId:
+          type: string
+          format: uuid
+        ticketId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IssueLevel:
+      enum:
+        - None
+        - Potential
+        - Low
+        - Medium
+        - High
+      type: string
+    IssueBase:
+      type: object
+      properties:
+        rvpPvo:
+          $ref: '#/components/schemas/RvpPvo'
+        Class:
+          $ref: '#/components/schemas/IssueType'
+        internalId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          nullable: true
+        isOldInScanResultId:
+          type: string
+          format: uuid
+          nullable: true
+        isFavorite:
+          type: boolean
+        groupId:
+          type: string
+          nullable: true
+        approvalState:
+          $ref: '#/components/schemas/IssueApprovalState'
+        isNewInScanResultId:
+          type: string
+          format: uuid
+          nullable: true
+        scanResultId:
+          type: string
+          format: uuid
+        isSuspected:
+          type: boolean
+        isSuppressed:
+          type: boolean
+        type:
+          type: string
+          nullable: true
+        linkedTickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketLink'
+          nullable: true
+        counter:
+          type: integer
+          format: int64
+        level:
+          $ref: '#/components/schemas/IssueLevel'
+      additionalProperties: false
+    DescriptionBaseValue:
+      type: object
+      properties:
+        header:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IssueDescriptionModel:
+      type: object
+      properties:
+        identity:
+          type: string
+          nullable: true
+        issueType:
+          $ref: '#/components/schemas/IssueType'
+        descriptionValue:
+          $ref: '#/components/schemas/DescriptionBaseValue'
+      additionalProperties: false
+    IssueBaseMetadata:
+      type: object
+      properties:
+        key:
+          type: string
+          nullable: true
+        issueType:
+          $ref: '#/components/schemas/IssueType'
+        level:
+          $ref: '#/components/schemas/IssueLevel'
+      additionalProperties: false
+    IssuesModel:
+      type: object
+      properties:
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssueBase'
+          nullable: true
+        descriptions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/IssueDescriptionModel'
+          nullable: true
+        metadatas:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/IssueBaseMetadata'
+          nullable: true
+      additionalProperties: false
+    WorkType:
+      enum:
+        - Unknown
+        - Scan
+        - Autocheck
+      type: string
+    ErrorLevel:
+      enum:
+        - Error
+        - Warn
+        - Info
+        - Debug
+        - Trace
+      type: string
+    ScanError:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: byte
+          nullable: true
+        scanResultId:
+          type: string
+          format: uuid
+        errorType:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        scanStage:
+          $ref: '#/components/schemas/Stage'
+        workType:
+          $ref: '#/components/schemas/WorkType'
+        primaryFile:
+          type: string
+          nullable: true
+        isCritical:
+          type: boolean
+        level:
+          $ref: '#/components/schemas/ErrorLevel'
+      additionalProperties: false
+    ProjectStage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        policyState:
+          $ref: '#/components/schemas/PolicyState'
+        progress:
+          $ref: '#/components/schemas/ScanProgress'
+      additionalProperties: false
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+        extensions:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties: false
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    ReportType:
+      enum:
+        - Custom
+        - PlainReport
+        - AutoCheck
+        - Nist
+        - Oud4
+        - Owasp
+        - Owaspm
+        - Pcidss
+        - Sans
+      type: string
+    ReportTemplateModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        data:
+          type: string
+          nullable: true
+        isReadOnly:
+          type: boolean
+        isFavorite:
+          type: boolean
+        type:
+          $ref: '#/components/schemas/ReportType'
+        outputFileName:
+          type: string
+          nullable: true
+        userCreator:
+          type: string
+          nullable: true
+        userCreatorName:
+          type: string
+          nullable: true
+        creationDate:
+          type: string
+          format: date-time
+      additionalProperties: false
+    ReportParametrs:
+      type: object
+      properties:
+        saveAsPath:
+          type: string
+          nullable: true
+        useFilters:
+          type: boolean
+        useElectronicSignature:
+          type: boolean
+        certificatePath:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        showSignatureTime:
+          type: boolean
+        signatureReason:
+          type: string
+          nullable: true
+        location:
+          type: string
+          nullable: true
+        doSignatureVisible:
+          type: boolean
+        includeDiscardedVulnerabilities:
+          type: boolean
+        includeSuspectedVulnerabilities:
+          type: boolean
+        includeGraph:
+          type: boolean
+        includeGlossary:
+          type: boolean
+        converHtmlToPdf:
+          type: boolean
+        removeHtml:
+          type: boolean
+        createPdfPrintVersion:
+          type: boolean
+        makeAFReport:
+          type: boolean
+        includeDFD:
+          type: boolean
+        includeSuppressedVulnerabilities:
+          type: boolean
+        credentialsId:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    IssuesFilterLevel:
+      enum:
+        - None
+        - Low
+        - Medium
+        - High
+        - Potential
+        - All
+      type: string
+    IssuesFilterConfirmationStatus:
+      enum:
+        - Undefined
+        - None
+        - Approved
+        - AutoApproved
+        - Discarded
+        - All
+      type: string
+    IssuesFilterExploitationCondition:
+      enum:
+        - None
+        - NoCondition
+        - UnderCondition
+        - All
+      type: string
+    IssuesFilterSuppressStatus:
+      enum:
+        - None
+        - Suppressed
+        - ExceptSuppressed
+        - All
+      type: string
+    IssuesFilterSourceType:
+      enum:
+        - None
+        - Static
+        - BlackBox
+        - All
+      type: string
+    IssuesFilterScanMode:
+      enum:
+        - None
+        - FromEntryPoint
+        - FromPublicProtected
+        - FromOther
+        - All
+      type: string
+    IssuesFilterActualStatus:
+      enum:
+        - All
+        - IsNew
+        - NotIsNew
+      type: string
+    IssuesFilterType:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        enable:
+          type: boolean
+      additionalProperties: false
+    IssuesFilterPathInfo:
+      type: object
+      properties:
+        path:
+          type: string
+          nullable: true
+        physicalPath:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IssuesFilter:
+      type: object
+      properties:
+        issueLevel:
+          $ref: '#/components/schemas/IssuesFilterLevel'
+        confirmationStatus:
+          $ref: '#/components/schemas/IssuesFilterConfirmationStatus'
+        exploitationCondition:
+          $ref: '#/components/schemas/IssuesFilterExploitationCondition'
+        suppressStatus:
+          $ref: '#/components/schemas/IssuesFilterSuppressStatus'
+        sourceType:
+          $ref: '#/components/schemas/IssuesFilterSourceType'
+        scanMode:
+          $ref: '#/components/schemas/IssuesFilterScanMode'
+        actualStatus:
+          $ref: '#/components/schemas/IssuesFilterActualStatus'
+        hideSecondOrder:
+          type: boolean
+        hideSuspected:
+          type: boolean
+        hidePotential:
+          type: boolean
+        byFavorite:
+          type: boolean
+        byBestPlaceToFix:
+          type: boolean
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssuesFilterType'
+          nullable: true
+        pathInfo:
+          $ref: '#/components/schemas/IssuesFilterPathInfo'
+        pattern:
+          type: string
+          nullable: true
+        selectAllLevelsSeparately:
+          type: boolean
+        selectAllConfirmationStatusSeparately:
+          type: boolean
+        selectAllExploitationConditionSeparately:
+          type: boolean
+        selectAllSuppressStatusSeparately:
+          type: boolean
+        selectAllScanModeSeparately:
+          type: boolean
+        selectAllActualStatusSeparately:
+          type: boolean
+      additionalProperties: false
+    ReportFormatType:
+      enum:
+        - Html
+        - Xml
+        - Json
+        - Custom
+        - Pdf
+      type: string
+    ReportGenerateModel:
+      type: object
+      properties:
+        parameters:
+          $ref: '#/components/schemas/ReportParametrs'
+        templateId:
+          type: string
+          format: uuid
+        filters:
+          $ref: '#/components/schemas/IssuesFilter'
+        scanResultId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        localeId:
+          type: string
+          nullable: true
+        formatType:
+          $ref: '#/components/schemas/ReportFormatType'
+      additionalProperties: false
+    File:
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please insert JWT with Bearer into field
+      name: Authorization
+      in: header

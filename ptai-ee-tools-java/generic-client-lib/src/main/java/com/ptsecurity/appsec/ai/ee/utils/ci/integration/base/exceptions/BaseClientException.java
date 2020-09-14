@@ -13,15 +13,38 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * As OpenAPI generator creates individual ApiException classes
+ * for every YAML definition file, we need a simple way to "generalize"
+ * them. BaseClientException checks root cause exception for its class
+ * and encapsulates exception data
+ */
 @NoArgsConstructor
 public class BaseClientException extends RuntimeException {
-    // Root cause of this "boxing" exception
+    /**
+     * Root cause of this "boxing" exception
+     */
     @Getter
     protected Exception inner = null;
 
-    private static String apiExceptionClassRegex = "com\\.ptsecurity\\.appsec\\.ai\\.ee\\.[\\w\\.]+\\.ApiException";
+    /**
+     * Regular expression pattern to check if root exception is an instance
+     * of ApiException
+     */
+    private static final String APIEXCEPTION_CLASS_REGEX = "com\\.ptsecurity\\.appsec\\.ai\\.ee\\.[\\w\\.]+\\.ApiException";
+
+    /**
+     * Method checks if exception is an instance of ApiException
+     * @param e
+     * @return
+     */
+    protected static boolean check(@NonNull Exception e) {
+        Class clazz = e.getClass();
+        return !clazz.getCanonicalName().matches(APIEXCEPTION_CLASS_REGEX);
+    }
 
     public BaseClientException(String message, Exception inner) {
+
         super(message);
         // TODO: Check if inner is inherited from BaseClientException
         this.inner = inner;
@@ -33,7 +56,7 @@ public class BaseClientException extends RuntimeException {
 
     public static Object getApiExceptionField(@NonNull Exception e, @NonNull String methodName) {
         Class clazz = e.getClass();
-        if (!clazz.getCanonicalName().matches(apiExceptionClassRegex)) return "";
+        if (!clazz.getCanonicalName().matches(APIEXCEPTION_CLASS_REGEX)) return "";
         try {
             Method method = clazz.getMethod(methodName);
             return method.invoke(e);
@@ -44,7 +67,7 @@ public class BaseClientException extends RuntimeException {
 
     public static String getApiExceptionDetails(@NonNull Exception e) {
         Class clazz = e.getClass();
-        if (!clazz.getCanonicalName().matches(apiExceptionClassRegex)) return "";
+        if (!clazz.getCanonicalName().matches(APIEXCEPTION_CLASS_REGEX)) return "";
 
         int code = (int) getApiExceptionField(e, "getCode");
         if (0 != code) {
@@ -56,7 +79,7 @@ public class BaseClientException extends RuntimeException {
 
     public static String getApiExceptionMessage(@NonNull Exception e) {
         Class clazz = e.getClass();
-        if (!clazz.getCanonicalName().matches(apiExceptionClassRegex)) return "";
+        if (!clazz.getCanonicalName().matches(APIEXCEPTION_CLASS_REGEX)) return "";
         // As API exception may be thrown due to client-side issues like
         // lack of certificate in local trust store, we need to check both detailMessage
         // and response body

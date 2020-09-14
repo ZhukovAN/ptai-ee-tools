@@ -1,14 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsServerException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.exceptions.ApiException;
 import hudson.Util;
 import hudson.util.FormValidation;
+import lombok.NonNull;
+import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.DomainValidator;
 import org.apache.commons.validator.routines.RegexValidator;
@@ -18,9 +17,11 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+@Log
 public class Validator {
     public static boolean doCheckFieldNotEmpty(String value) {
         return !StringUtils.isEmpty(value);
@@ -32,12 +33,15 @@ public class Validator {
         DomainValidator.updateTLDOverride(DomainValidator.ArrayType.GENERIC_PLUS, GENERIC_TLDS_PLUS);
     }
 
+    protected static boolean checkViaException(@NonNull final Runnable call) {
+        try { call.run(); return true; } catch (Exception e) { return false; }
+    }
+
     public static boolean doCheckFieldUrl(String value) {
         UrlValidator urlValidator = new UrlValidator(
                 new String[]{"http", "https"},
                 UrlValidator.ALLOW_LOCAL_URLS);
         return urlValidator.isValid(value);
-        // UrlValidation may be failed because of
     }
 
     public static boolean doCheckFieldInteger(Integer value) {
@@ -50,31 +54,15 @@ public class Validator {
     }
 
     public static boolean doCheckFieldRegEx(String value) {
-        try {
-            Pattern.compile(value);
-            return true;
-        } catch (PatternSyntaxException e) {
-            return false;
-        }
+        return checkViaException(() -> Pattern.compile(value));
     }
 
     public static boolean doCheckFieldJsonSettings(String value) {
-        try {
-            JsonSettingsVerifier.verify(value);
-            return true;
-        } catch (PtaiClientException e) {
-            return false;
-        }
+        return checkViaException(() -> JsonSettingsVerifier.verify(value));
     }
 
     public static boolean doCheckFieldJsonPolicy(String value) {
-        try {
-            if (doCheckFieldNotEmpty(value))
-                JsonPolicyVerifier.verify(value);
-            return true;
-        } catch (PtaiClientException e) {
-            return false;
-        }
+        return checkViaException(() -> { if (doCheckFieldNotEmpty(value)) JsonPolicyVerifier.verify(value); });
     }
 
     public static FormValidation doCheckFieldNotEmpty(String value, String errorMessage) {
@@ -106,15 +94,25 @@ public class Validator {
     }
 
     public static FormValidation error(Exception e) {
-        Throwable exception = e;
-        String details = e.getMessage();
-        if (e instanceof BaseClientException) {
-            BaseClientException baseClientException = (BaseClientException)(e);
-            exception = Optional.ofNullable(baseClientException.getInner()).orElse(baseClientException);
+        // log.log(Level.FINEST, "FormValidation error", e);
+        String caption = e.getMessage();
+        if (StringUtils.isEmpty(caption))
+            return FormValidation.error(e, Messages.validator_test_failed());
+        else {
+            Exception cause = e;
+            if (e instanceof ApiException) cause = ((ApiException) e).getInner();
+            return FormValidation.error(cause, Messages.validator_test_failed_details(caption));
         }
-        if (StringUtils.isEmpty(details))
-            return FormValidation.error(exception, Messages.validator_test_failed());
-        else
-            return FormValidation.error(exception, Messages.validator_test_failed_details(details));
+    }
+
+    public static FormValidation error(@NonNull final String message, Exception e) {
+        // log.log(Level.FINEST, "FormValidation error", e);
+        Exception cause = e;
+        if (e instanceof ApiException) cause = ((ApiException) e).getInner();
+        return FormValidation.error(cause, Messages.validator_test_failed_details(message));
+    }
+
+    public static FormValidation error(String message) {
+        return FormValidation.error(message);
     }
 }

@@ -1,0 +1,663 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "filesStore"
+  },
+  "host": "127.0.0.1:443",
+  "paths": {
+    "/api/DirectoryContent/{projectId}/{path}": {
+      "get": {
+        "tags": ["DirectoryContent"],
+        "operationId": "DirectoryContent",
+        "consumes": [],
+        "produces": ["application/json"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "path",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/DirectoryContent"
+            }
+          }
+        }
+      }
+    },
+    "/api/FileContent/{projectId}/{file}": {
+      "get": {
+        "tags": ["FileContent"],
+        "operationId": "GetFileContent",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "file",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Health/status": {
+      "get": {
+        "tags": ["Health"],
+        "operationId": "Status",
+        "consumes": [],
+        "produces": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/SourceControl/checkout/{projectId}": {
+      "get": {
+        "tags": ["SourceControl"],
+        "operationId": "Checkout",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/IAsyncResult"
+            }
+          }
+        }
+      }
+    },
+    "/api/SourceControl/update/{projectId}": {
+      "get": {
+        "tags": ["SourceControl"],
+        "operationId": "Update",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/IAsyncResult"
+            }
+          }
+        }
+      }
+    },
+    "/api/Store/temp/{projectId}": {
+      "get": {
+        "tags": ["Store"],
+        "operationId": "DownloadTemp",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Store"],
+        "operationId": "UploadTemp",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "ContentType",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "ContentDisposition",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "Headers",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "Length",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int64"
+        }, {
+          "name": "Name",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "FileName",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Store/sources/{projectId}": {
+      "get": {
+        "tags": ["Store"],
+        "operationId": "DownloadSources",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Store"],
+        "operationId": "UploadSources",
+        "consumes": ["multipart/form-data"],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "ContentType",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "ContentDisposition",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "Headers",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "Length",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int64"
+        }, {
+          "name": "Name",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "FileName",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "file",
+          "in": "formData",
+          "required": true,
+          "type": "file",
+          "description": "The file to upload"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Store/logs/{projectId}/{scanResultId}": {
+      "get": {
+        "tags": ["Store"],
+        "operationId": "DownloadLogs",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Store"],
+        "operationId": "UploadLogs",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "projectId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "scanResultId",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }, {
+          "name": "ContentType",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "ContentDisposition",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "Headers",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "Length",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int64"
+        }, {
+          "name": "Name",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "FileName",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "IsCancellationRequested",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "CanBeCanceled",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.Handle",
+          "in": "query",
+          "required": false,
+          "type": "object"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsInvalid",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }, {
+          "name": "WaitHandle.SafeWaitHandle.IsClosed",
+          "in": "query",
+          "required": false,
+          "type": "boolean"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DirectoryContent": {
+      "type": "object",
+      "properties": {
+        "directories": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true
+        },
+        "files": {
+          "uniqueItems": false,
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "readOnly": true
+        }
+      }
+    },
+    "IAsyncResult": {
+      "type": "object",
+      "properties": {
+        "isCompleted": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "asyncWaitHandle": {
+          "$ref": "#/definitions/WaitHandle",
+          "readOnly": true
+        },
+        "asyncState": {
+          "type": "object",
+          "readOnly": true
+        },
+        "completedSynchronously": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      }
+    },
+    "WaitHandle": {
+      "type": "object",
+      "properties": {
+        "handle": {
+          "type": "object"
+        },
+        "safeWaitHandle": {
+          "$ref": "#/definitions/SafeWaitHandle"
+        }
+      }
+    },
+    "SafeWaitHandle": {
+      "type": "object",
+      "properties": {
+        "isInvalid": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "isClosed": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      }
+    }
+  },
+  "security": [{
+    "Bearer": []
+  }
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "name": "Authorization",
+      "in": "header",
+      "type": "apiKey",
+      "description": "Please insert JWT with Bearer into field"
+    }
+  }
+}

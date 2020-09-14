@@ -4,7 +4,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVer
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import hudson.Extension;
@@ -56,7 +55,7 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
                 @QueryParameter("jsonSettings") final String jsonSettings) {
             try {
                 if (!Validator.doCheckFieldNotEmpty(jsonSettings))
-                    throw new PtaiClientException(Messages.validator_check_jsonSettings_empty());
+                    return Validator.error(Messages.validator_check_jsonSettings_empty());
 
                 ScanSettings settings = JsonSettingsVerifier.verify(jsonSettings);
                 return FormValidation.ok(Messages.validator_test_jsonSettings_success(settings.getProjectName(), settings.getProgrammingLanguage()));

@@ -1,0 +1,53 @@
+openapi: 3.0.1
+info:
+  title: systemManagement
+  version: "3.6"
+servers:
+  - url: https://ptai.domain.org:443/
+security:
+  - Bearer: []
+paths:
+  /health/summary:
+    get:
+      tags:
+        - HealthCheck
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              # schema: {}
+              schema:
+                $ref: '#/components/schemas/HealthCheck'
+                type: string
+components:
+  schemas:
+    HealthCheck:
+      type: object
+      properties:
+        TotalResponseTime:
+          type: string
+          nullable: true
+        Services:
+          type: array
+          items:
+            $ref: '#/components/schemas/ServiceHealth'
+          nullable: true
+    ServiceHealth:
+      type: object
+      properties:
+        Service:
+          type: string
+          nullable: true
+        Status:
+          type: string
+          nullable: true
+        ResponseTime:
+          type: string
+          nullable: true
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please insert JWT with Bearer into field
+      name: Authorization
+      in: header

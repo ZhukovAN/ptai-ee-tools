@@ -69,7 +69,7 @@ public class SlimJsonAst implements Callable<Integer> {
             names = {"--output"}, order = 5,
             paramLabel = "<path>",
             description = "Folder where AST reports are to be stored. By default .ptai folder is used")
-    protected Path output = Paths.get(System.getProperty("user.dir")).resolve(Base.SAST_FOLDER);
+    protected Path output = Paths.get(System.getProperty("user.dir")).resolve(Base.DEFAULT_SAST_FOLDER);
 
     @CommandLine.Option(
             names = {"--settings-json"}, order = 6,
@@ -208,7 +208,7 @@ public class SlimJsonAst implements Callable<Integer> {
                 .truststoreType(truststoreType)
                 .truststorePassword(truststorePassword)
                 .build();
-        job.setConsoleLog(System.out);
+        job.setConsole(System.out);
         job.setLogPrefix(null);
         job.setVerbose(verbose);
         return PtaiResultStatus.convert(job.execute());

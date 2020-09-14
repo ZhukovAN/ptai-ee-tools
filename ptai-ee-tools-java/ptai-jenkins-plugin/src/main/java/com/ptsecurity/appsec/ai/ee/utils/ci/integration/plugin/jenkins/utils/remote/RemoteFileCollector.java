@@ -2,34 +2,35 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.re
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.exceptions.ApiException;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.TaskListener;
-import hudson.remoting.Channel;
 import jenkins.security.MasterToSlaveCallable;
 import lombok.AllArgsConstructor;
-import org.apache.commons.compress.archivers.ArchiveException;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.List;
 
-public class RemoteFileCollector extends MasterToSlaveCallable<FilePath, PtaiClientException> {
+/**
+ * Class collects files on a Jenkins node (both master and remotes due to
+ * MasterToSlaveCallable inheritance) and returns FilePath to resulting zip archive
+ */
+public class RemoteFileCollector extends MasterToSlaveCallable<FilePath, ApiException> {
     Executor executor;
 
-    public FilePath collect(Launcher launcher, TaskListener listener, Transfers transfers, String srcFolderName, boolean verbose) throws InterruptedException, IOException, PtaiClientException {
-        executor = new Executor(transfers, srcFolderName);
-        executor.setConsoleLog(listener.getLogger());
+    public FilePath collect(Launcher launcher, TaskListener listener, Transfers transfers, String folder, boolean verbose) throws InterruptedException, IOException, ApiException {
+        executor = new Executor(transfers, folder);
+        executor.setConsole(listener.getLogger());
         executor.setVerbose(verbose);
 
         return launcher.getChannel().call(this);
     }
 
     @Override
-    public FilePath call() throws PtaiClientException {
+    public FilePath call() throws ApiException {
         return new FilePath(executor.collect());
     }
 
@@ -38,7 +39,7 @@ public class RemoteFileCollector extends MasterToSlaveCallable<FilePath, PtaiCli
         Transfers transfers;
         String srcFolderName;
 
-        public File collect() throws PtaiClientException {
+        public File collect() throws ApiException {
             return FileCollector.collect(transfers, new File(srcFolderName), this);
         }
     }

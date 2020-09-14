@@ -23,7 +23,7 @@ class SastJobTest {
     void execute() {
         SastJob sast = new SastJob();
         sast.setVerbose(true);
-        sast.setConsoleLog(System.out);
+        sast.setConsole(System.out);
         sast.setJobName("SAST/UI-managed SAST pipeline");
         sast.setUrl("http://" + ip + ":38080/jenkins");
         sast.setUserName("svc_ptai");
@@ -44,7 +44,7 @@ class SastJobTest {
         try {
             SastJob sast = new SastJob();
             sast.setVerbose(true);
-            sast.setConsoleLog(System.out);
+            sast.setConsole(System.out);
             sast.setJobName("SAST/UI-managed SAST pipeline");
             sast.setUrl("https://" + ip + ":38443/jenkins");
             // sast.setCaCertsPem(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\keys\\ca.chain.pem.crt"))));
@@ -86,7 +86,7 @@ class SastJobTest {
     public void testNodeList() {
         Client jenkins = new Client();
         jenkins.setVerbose(true);
-        jenkins.setConsoleLog(System.out);
+        jenkins.setConsole(System.out);
         jenkins.setUrl("http://jenkins.domain.org");
         jenkins.setUserName("svc_ptai");
         jenkins.setPassword("P@ssw0rd");

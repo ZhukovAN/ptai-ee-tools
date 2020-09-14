@@ -70,7 +70,7 @@ script("""
         document.getElementById("${scanSettingsId}_value").value = e.options[e.selectedIndex].text;
         e = document.getElementById("${configId}");
         document.getElementById("${configId}_value").value = e.options[e.selectedIndex].text;
-        validateButton('${descriptor.descriptorFullUrl}/testProject','selectedScanSettings,selectedConfig,jsonSettings,jsonPolicy,projectName,serverLegacyUrl,serverLegacyCredentialsId,jenkinsServerUrl,jenkinsJobName,serverSlimUrl,serverSlimCredentialsId,userName,apiToken,configName',button);
+        validateButton('${descriptor.descriptorFullUrl}/testProject','selectedScanSettings,selectedConfig,jsonSettings,jsonPolicy,projectName,serverUrl,serverCredentialsId,configName',button);
     }
 """)
 
@@ -80,7 +80,7 @@ f.block() {
             title: _('testProject'),
             progress: _('testProjectProgress'),
             method: 'testProject',
-            with: 'jsonSettings,jsonPolicy,projectName,serverLegacyUrl,serverLegacyCredentialsId,jenkinsServerUrl,jenkinsJobName,serverSlimUrl,serverSlimCredentialsId,userName,apiToken,configName',
+            with: 'jsonSettings,jsonPolicy,projectName,serverUrl,serverCredentialsId,configName',
             customScript: 'testPt(this)'
     )
 }
@@ -99,20 +99,6 @@ f.entry(
         field: 'failIfUnstable',
         default: 'true') {
     f.checkbox()
-}
-
-f.advanced() {
-    f.entry(title: _("nodeName"), field: "nodeName") {
-        f.textbox(
-                id: descriptor.createElementId()
-        )
-    }
-    f.entry(
-            title: _('verbose'),
-            field: 'verbose',
-            default: 'false') {
-        f.checkbox()
-    }
 }
 
 f.entry(
@@ -144,3 +130,20 @@ f.entry(
         }
     }
 }
+
+// f.advanced() {
+f.invisibleEntry(
+        title: _("nodeName"),
+        field: "nodeName") {
+    f.textbox(
+            id: descriptor.createElementId()
+    )
+}
+f.entry(
+        title: _('verbose'),
+        field: 'verbose',
+        default: 'false') {
+    f.checkbox()
+}
+// }
+

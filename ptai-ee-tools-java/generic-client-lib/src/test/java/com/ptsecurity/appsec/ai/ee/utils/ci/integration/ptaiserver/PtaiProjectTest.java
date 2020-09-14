@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.JSON;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.Project;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.deprecated.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
@@ -59,7 +59,7 @@ class PtaiProjectTest {
         PtaiProject ptai = new PtaiProject();
         try {
             ptai.setVerbose(true);
-            ptai.setConsoleLog(System.out);
+            ptai.setConsole(System.out);
 
             ptai.setUrl("https://ptai.domain.org:443");
             ptai.setKeyStoreFile(KEYSTORE.toString());
@@ -86,7 +86,7 @@ class PtaiProjectTest {
         PtaiProject ptai = new PtaiProject();
         try {
             ptai.setVerbose(true);
-            ptai.setConsoleLog(System.out);
+            ptai.setConsole(System.out);
 
             // ptai.setUrl("https://127.0.0.1:30443");
             ptai.setUrl("https://ptaisrv.domain.org:443");
@@ -112,7 +112,7 @@ class PtaiProjectTest {
         PtaiProject ptai = new PtaiProject();
         try {
             ptai.setVerbose(true);
-            ptai.setConsoleLog(System.out);
+            ptai.setConsole(System.out);
 
             ptai.setUrl("https://127.0.0.1:30443");
             ptai.setKeyStoreFile("src\\test\\resources\\keys\\private.p12");

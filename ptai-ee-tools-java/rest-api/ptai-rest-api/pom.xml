@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>ptai-rest-api</artifactId>
-    <version>0.1</version>
+    <version>3.6</version>
 
     <name>ptai-rest-api</name>
     <packaging>jar</packaging>
@@ -23,7 +23,7 @@
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
                 <!-- <version>3.2.0</version> -->
-                <version>4.2.2</version>
+                <version>4.3.1</version>
                 <executions>
                     <execution>
                         <id>PTAI EE server authentication API</id>
@@ -31,14 +31,14 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/auth.yml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/deprecated/auth.yml</inputSpec>
                             <generatorName>java</generatorName>
                             <library>okhttp-gson</library>
                             <configOptions>
                                 <dateLibrary>java8</dateLibrary>
                             </configOptions>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.auth.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.auth.rest</modelPackage>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.auth.deprecated</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.auth.deprecated</modelPackage>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
                         </configuration>
@@ -49,14 +49,14 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/filesstore.yml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/deprecated/filesstore.yml</inputSpec>
                             <generatorName>java</generatorName>
                             <library>okhttp-gson</library>
                             <configOptions>
                                 <dateLibrary>java8</dateLibrary>
                             </configOptions>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest</modelPackage>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.deprecated</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.deprecated</modelPackage>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
                         </configuration>
@@ -67,14 +67,14 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/gateway.yml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/deprecated/gateway.yml</inputSpec>
                             <generatorName>java</generatorName>
                             <library>okhttp-gson</library>
                             <configOptions>
                                 <dateLibrary>java8</dateLibrary>
                             </configOptions>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest</modelPackage>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.deprecated</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.deprecated</modelPackage>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
                         </configuration>
@@ -85,94 +85,128 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/projectmanagement.yml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/deprecated/projectmanagement.yml</inputSpec>
                             <generatorName>java</generatorName>
                             <library>okhttp-gson</library>
                             <configOptions>
                                 <dateLibrary>java8</dateLibrary>
                             </configOptions>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest</modelPackage>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.deprecated</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.deprecated</modelPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>PTAI EE server authentication API v3.6</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api/v36/auth.yml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>okhttp-gson</library>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.auth.v36</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.auth.v36</modelPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>PTAI EE server files store API v3.6</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api/v36/filesstore.yml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>okhttp-gson</library>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.v36</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.v36</modelPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>PTAI EE server gateway API v3.6</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api/v36/gateway.yml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>okhttp-gson</library>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.v36</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.v36</modelPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>PTAI EE server project management API v3.6</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api/v36/projectmanagement.yml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>okhttp-gson</library>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36</modelPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>PTAI EE server scan scheduler API v3.6</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api/v36/scanscheduler.yml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>okhttp-gson</library>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36</modelPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModelTests>false</generateModelTests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>PTAI EE server system management API v3.6</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api/v36/systemmanagement.yml</inputSpec>
+                            <generatorName>java</generatorName>
+                            <library>okhttp-gson</library>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                            </configOptions>
+                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36</apiPackage>
+                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36</modelPackage>
                             <generateApiTests>false</generateApiTests>
                             <generateModelTests>false</generateModelTests>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>io.swagger.codegen.v3</groupId>
-                <artifactId>swagger-codegen-maven-plugin</artifactId>
-                <version>3.0.14</version>
-                <executions>
-                    <execution>
-                        <id>PTAI EE server gateway API</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/gateway.json
-                            </inputSpec>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest</modelPackage>
-                            <language>java</language>
-                            <library>retrofit2</library>
-                            <generateApiTests>false</generateApiTests>
-                            <generateModelTests>false</generateModelTests>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>PTAI EE server project management API</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>
-                                ${project.basedir}/src/main/resources/api/projectmanagement.json
-                            </inputSpec>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest</modelPackage>
-                            <language>java</language>
-                            <library>retrofit2</library>
-                            <generateApiTests>false</generateApiTests>
-                            <generateModelTests>false</generateModelTests>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>PTAI EE server files store API</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/filesstore.json
-                            </inputSpec>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest</modelPackage>
-                            <language>java</language>
-                            <library>retrofit2</library>
-                            <generateApiTests>false</generateApiTests>
-                            <generateModelTests>false</generateModelTests>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>PTAI EE server authentication API</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/authservice.json
-                            </inputSpec>
-                            <apiPackage>com.ptsecurity.appsec.ai.ee.ptai.server.authservice.rest</apiPackage>
-                            <modelPackage>com.ptsecurity.appsec.ai.ee.ptai.server.authservice.rest</modelPackage>
-                            <language>java</language>
-                            <library>retrofit</library>
-                            <generateApiTests>false</generateApiTests>
-                            <generateModelTests>false</generateModelTests>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
         </plugins>
     </build>
 </project>

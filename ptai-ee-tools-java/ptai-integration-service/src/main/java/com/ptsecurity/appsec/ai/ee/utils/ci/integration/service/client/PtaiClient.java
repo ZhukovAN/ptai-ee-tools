@@ -91,10 +91,10 @@ public class PtaiClient extends Client {
     }
 
     @Override
-    public void log(Exception exception) {
-        if (StringUtils.isNotEmpty(exception.getMessage()))
-            this.log("%s", exception.getMessage());
+    public void log(Exception e) {
+        if (StringUtils.isNotEmpty(e.getMessage()))
+            this.log("%s", e.getMessage());
         if (this.verbose)
-            log.error(exception.getMessage(), exception);
+            log.error(e.getMessage(), e);
     }
 }

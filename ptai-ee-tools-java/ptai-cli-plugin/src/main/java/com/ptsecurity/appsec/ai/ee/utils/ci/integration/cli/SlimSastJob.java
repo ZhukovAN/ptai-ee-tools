@@ -3,7 +3,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.aic.ExitCode;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils.GracefulShutdown;
@@ -27,7 +26,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.UUID;
 
 @Setter
 @Builder
@@ -61,7 +59,7 @@ public class SlimSastJob extends Base {
             client.setUrl(url.toString());
             client.setClientId(clientId);
             client.setClientSecret(clientSecret);
-            client.setConsoleLog(this.consoleLog);
+            client.setConsole(this.console);
             client.setVerbose(verbose);
             client.setLogPrefix(this.logPrefix);
 

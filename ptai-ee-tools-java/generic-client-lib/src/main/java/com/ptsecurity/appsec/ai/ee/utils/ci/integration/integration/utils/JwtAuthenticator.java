@@ -42,7 +42,7 @@ public class JwtAuthenticator extends Base implements Authenticator {
         do {
             String authResponse = response.header("WWW-Authenticate");
             if (StringUtils.isEmpty(authResponse) || !authResponse.startsWith("Bearer")) {
-                log("Unauthorized, but invalid WWW-Authenticate response header");
+                out("Unauthorized, but invalid WWW-Authenticate response header");
                 break;
             }
             RequestBody body = null;
@@ -74,7 +74,7 @@ public class JwtAuthenticator extends Base implements Authenticator {
                 jwtResponse = clientHelper.getHttpClient().newBuilder().build().newCall(request).execute();
                 if (HttpStatus.SC_OK != jwtResponse.code()) {
                     // JWT refresh failed. May be refrest token expored, let's re-authenticate using full set of credentials
-                    log("JWT refresh failed. Code is {}", jwtResponse.code());
+                    out("JWT refresh failed. Code is {}", jwtResponse.code());
                     jwt = null;
                     body = new FormBody.Builder()
                             .add("username", userName)
@@ -90,7 +90,7 @@ public class JwtAuthenticator extends Base implements Authenticator {
                 }
             } else break;
             if (HttpStatus.SC_OK != jwtResponse.code()) {
-                log("Authorization failed. Code is {}", jwtResponse.code());
+                out("Authorization failed. Code is {}", jwtResponse.code());
                 break;
             }
             jwt = new ObjectMapper().readValue(jwtResponse.body().string(), JwtResponse.class);

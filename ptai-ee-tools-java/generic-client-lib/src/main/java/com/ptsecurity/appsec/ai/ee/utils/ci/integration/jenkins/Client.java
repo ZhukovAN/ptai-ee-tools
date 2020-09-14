@@ -76,8 +76,8 @@ public class Client extends BaseClient {
         } catch (JenkinsServerException e) {
             //  Jenkins API cancelItem redirects to missing URL, so we need to ignore 404 error
             if (HttpStatus.SC_NOT_FOUND == e.getCode()) return;
-            this.log("Queue item stop failed, SAST job may be started already");
-            this.log(e);
+            out("Queue item stop failed, SAST job may be started already");
+            verbose("AST job stop failed", e);
         }
     }
 
@@ -116,8 +116,8 @@ public class Client extends BaseClient {
                     String.format("Getting extended job info for queueId %d", queueId));
             return (null == xml) ? null : new XmlMapper().readValue(xml, Build.class).number;
         } catch (JenkinsServerException e) {
-            this.log(String.format("Queued ID %d build not found, assuming it wasn't started yet", queueId));
-            this.log(e);
+            out("Queued ID %d build not found, assuming it wasn't started yet", queueId);
+            verbose("Build ID read failed", e);
             throw e;
         } catch (IOException e) {
             throw new JenkinsServerException("Failed to parse server response", e);

@@ -1,11 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.auth.rest.AuthApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.rest.StoreApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.auth.deprecated.AuthApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.deprecated.StoreApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.ApiResponse;
-import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.rest.AgentAuthApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.rest.ProjectsApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.gateway.deprecated.AgentAuthApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.deprecated.ProjectsApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.BaseClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
@@ -58,7 +58,7 @@ public class Client extends BaseClient {
     }
 
     public void log(com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiException e) {
-        this.log("ApiException thrown. %s", BaseClientException.getApiExceptionDetails(e));
-        super.log(e);
+        out("ApiException thrown. %s", BaseClientException.getApiExceptionDetails(e));
+        // super.log(e);
     }
 }

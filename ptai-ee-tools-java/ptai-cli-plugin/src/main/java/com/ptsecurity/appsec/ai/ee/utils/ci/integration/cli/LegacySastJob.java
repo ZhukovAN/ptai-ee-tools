@@ -44,7 +44,7 @@ public class LegacySastJob extends Base {
     public Integer execute() {
         PtaiProject ptaiPrj = new PtaiProject();
         ptaiPrj.setVerbose(verbose);
-        ptaiPrj.setConsoleLog(System.out);
+        ptaiPrj.setConsole(System.out);
         ptaiPrj.setUrl(ptaiUrl.toString());
         ptaiPrj.setKeyStoreFile(keystore.toString());
         ptaiPrj.setKeyStoreType(keystoreType);
@@ -82,7 +82,7 @@ public class LegacySastJob extends Base {
             // Let's start analysis
             com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob jenkinsSastJob = new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob();
             jenkinsSastJob.setVerbose(verbose);
-            jenkinsSastJob.setConsoleLog(System.out);
+            jenkinsSastJob.setConsole(System.out);
             jenkinsSastJob.setUrl(jenkinsUrl.toString());
             jenkinsSastJob.setJobName(sastJob);
             if (null != truststore) {

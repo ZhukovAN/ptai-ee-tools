@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.base;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
@@ -17,9 +18,10 @@ import java.util.logging.Level;
 
 @Log
 public class Base {
-    public static final String SAST_FOLDER = ".ptai";
+    public static final String DEFAULT_SAST_FOLDER = ".ptai";
     public static final String DEFAULT_PTAI_NODE_NAME = "ptai";
-    public static final String DEFAULT_PTAI_URL = "https://ptai.domain.org:8443";
+    public static final String DEFAULT_PTAI_URL = "https://ptai.domain.org:443";
+    public static final String DEFAULT_PREFIX = "[PT AI] ";
 
     static {
         Security.addProvider(new BouncyCastleProvider());
@@ -28,39 +30,56 @@ public class Base {
     protected static boolean jceFixApplied = false;
 
     @Setter
-    @Getter
     protected boolean verbose = false;
 
     @Setter
     @Getter
-    protected PrintStream consoleLog = null;
+    protected PrintStream console = null;
 
     @Setter
     @Getter
-    protected String logPrefix = "[PTAI] ";
+    protected String prefix = DEFAULT_PREFIX;
 
-    public void log(String value) {
-        if (null == consoleLog) return;
-        consoleLog.println(null == logPrefix ? value : logPrefix + value);
+    public void out(String value) {
+        if (null == console) return;
+        if (StringUtils.isEmpty(value)) return;
+        console.println(null == prefix ? value : prefix + value);
+        log.info(null == prefix ? value : prefix + value);
     }
 
-    public void log(String format, Object ... value) {
-        this.log(String.format(format, value));
+    public final void out(String format, Object ... value) {
+        out(String.format(format, value));
     }
 
-    public void log(Exception exception) {
-        if (StringUtils.isNotEmpty(exception.getMessage()))
-            this.log(exception.getMessage());
-        if (this.verbose && null != consoleLog)
-            exception.printStackTrace(this.consoleLog);
+    public void out(@NonNull final String message, @NonNull final Exception e) {
+        out(message);
+        if (StringUtils.isEmpty(e.getMessage())) out(e.getMessage());
+        log.log(Level.SEVERE, message, e);
+        if (verbose && null != console) e.printStackTrace(console);
+    }
+
+    public void verbose(String value) {
+        if (verbose) out(value);
+    }
+
+    public final void verbose(String format, Object ... value) {
+        verbose(String.format(format, value));
+    }
+
+    public void verbose(@NonNull final String message, @NonNull final Exception e) {
+        out(message);
+        if (StringUtils.isEmpty(e.getMessage())) out(e.getMessage());
+        log.log(Level.SEVERE, message, e);
+        if (verbose && null != console) e.printStackTrace(console);
     }
 
     protected void removeCryptographyRestrictions() {
         if (!isRestrictedCryptography()) {
-            log.log(Level.FINEST, "No need to fix JCE");
+            log.fine("No need to fix JCE");
             jceFixApplied = true;
             return;
         }
+
         try {
             /*
              * Do the following, but with reflection to bypass access checks:
@@ -89,8 +108,9 @@ public class Base {
             instance.setAccessible(true);
             defaultPolicy.add((Permission)instance.get(null));
             jceFixApplied = true;
-        } catch (final Exception e) {
-            log.log(Level.SEVERE, "Restrictions removal failed", e);
+        } catch (Exception e) {
+            log.info("Restrictions removal failed");
+            log.log(Level.FINE, e.getMessage(), e);
             jceFixApplied = false;
         }
     }

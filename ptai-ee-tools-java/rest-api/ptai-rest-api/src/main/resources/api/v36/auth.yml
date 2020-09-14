@@ -1,0 +1,233 @@
+openapi: 3.0.1
+info:
+  title: authService
+  version: "3.6"
+servers:
+  - url: https://ptai.domain.org:443/
+paths:
+  /api/auth/accessToken/create:
+    post:
+      tags:
+        - AccessToken
+      summary: Create access key
+      requestBody:
+        description: Access token
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+      responses:
+        '200':
+          description: Return created key
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+  /api/Auth/signin:
+    get:
+      security:
+        - Basic:[]
+      tags:
+        - Auth
+      summary: "Login user by NTLM or client certificate or access token in request headers\r\nSend access token in header with name AccessToken"
+      parameters:
+        - name: scopeType
+          in: query
+          schema:
+            $ref: '#/components/schemas/AuthScopeType'
+      responses:
+        '200':
+          description: Returns the created JWT token
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+  /api/Auth/refreshToken:
+    get:
+      tags:
+        - Auth
+      summary: Refresh token
+      responses:
+        '200':
+          description: Returns the created JWT token
+        '401':
+          description: Unauthorized
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+  /api/Auth/signout:
+    post:
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Success
+components:
+  schemas:
+    ApiErrorType:
+      enum:
+        - None
+        - INCORRECT_USER_AND_PASSWORD
+        - USER_ID_IS_EMPTY
+        - MEMBER_ALREADY_EXISTS
+        - PROJECT_ROLE_PERMISSIONS_ALREADY_EXISTS
+        - ACCESS_TOKEN_IS_INCORRECT
+        - ACCESS_TOKEN_WITH_SAME_NAME_ALREADY_EXISTS
+        - UPDATE_PACKAGE_VERSION_IS_ALREADY_UPLOADED
+        - UPDATE_PACKAGE_UPLOADED_IS_ALREADY_STARTED
+        - UPDATE_PACKAGE_UNKNOWN_PRODUCT
+        - UPDATE_PACKAGE_VERSION_INVALID
+        - UPDATE_PACKAGE_VERSION_IS_NOT_UPLOADED
+        - UPDATE_SERVER_PROCESS_RUN_TIMEOUT
+        - UPDATE_SERVER_PARAMETERS_INVALID
+        - UPDATE_SERVER_INSTALLER_EXIT_WITH_ERROR
+        - UPDATE_SERVER_PACKAGE_IS_INCORRECT
+        - CERTIFICATE_FILE_IS_EMPTY
+        - CERTIFICATE_IS_ALREADY_INSTALLED
+        - CERTIFICATE_IS_NOT_VALID
+        - URI_IS_NOT_VALID
+        - PROJECT_WITH_SAME_NAME_ALREADY_EXISTS
+        - UNEXPECTED_SCAN_STAGE
+        - ISSUE_TRACKER_CONNECTION_NOT_FOUND
+        - ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET
+        - ISSUE_TRACKER_SETTINGS_ID_NOT_SET
+        - ISSUE_TRACKER_CREDENTIALS_NOT_SET
+        - ISSUE_TRACKER_HOST_IS_INCORRECT
+        - ISSUE_TRACKER_OAUTH_DATA_NOT_SET
+        - ISSUE_TRACKER_TRACKER_NOT_FOUND
+        - ISSUE_TRACKER_TRACKER_NOT_FOUND_WITH_OAUTH
+        - ISSUE_TRACKER_INVALID_TICKET_LINK
+        - ISSUE_TRACKER_IMPOSSIBLE_SKIP_UPDATE_CREDENTIALS
+        - ISSUE_TRACKER_UNSUPPORTED_FIELDS_COFIGURATION
+        - ISSUE_TRACKER_TICKET_CREATION_FAILED
+        - ISSUE_TRACKER_PRIORITIES_GETTING_FAILED
+        - ISSUE_TRACKER_USERS_GETTING_FAILED
+        - ISSUE_TRACKER_STATUSES_GETTING_FAILED
+        - ISSUE_TRACKER_FIELDS_GETTING_FAILED
+        - ISSUE_TRACKER_OPTIONS_GETTING_FAILED
+        - ISSUE_TRACKER_EXISTING_TICKETS_GETTING_FAILED
+        - ISSUE_TRACKER_COMPONENTS_GETTING_FAILED
+        - ISSUE_TRACKER_CAPTCHA_CHALLENGE
+        - ISSUE_TRACKER_AUTHENTICATION_DENIED_DETAILED
+        - ISSUE_TRACKER_AUTHENTICATION_DENIED
+        - ISSUE_TRACKER_AUTHENTICATION_FAILED
+        - FS_SOURCE_IS_BUSY
+        - ISSUE_ATTACH_TICKET_LINK_FAILED
+        - COMMENT_POLICY_FAILED_COMMENT_IS_EMPTY
+        - PROJECTS_COUNT_LIMITED_BY_LICENSE
+        - LICENSE_FILE_IS_INVALID
+        - LICENSE_FINGERPRINT_ERROR
+        - UNKNOWN_SOURCE_VERSION_CONTROL_SYSTEM
+        - SOURCE_VERSION_CONTROL_SYSTEM_ERROR
+        - REQUEST_WEB_SOCKETS_ONLY
+        - INVALID_VERSION_CONTROL_SYSTEM_SETTINGS
+        - SCAN_AGENT_NOT_FOUND
+        - SCAN_ALREADY_SCHEDULED
+        - INCORRECT_AGENT_STATUS
+        - SCAN_AGENT_WAS_SUSPENDED
+        - SCAN_AGENT_IS_SCANNING
+        - SCAN_NOT_FOUND
+        - ACTIVE_SCAN_AGENTS_NOT_FOUND
+        - SCAN_AGENT_IS_ACTIVE
+        - SERVER_CERTIFICATE_NOT_FOUND
+        - FILESYSTEM_ERROR_ACCESS_DENIED
+        - VAULT_CREDENTIALS_NOT_FOUND
+        - REPORT_TEMPLATE_NOT_FOUND
+        - REPORT_GENERATE_FAILED
+        - REPORT_TEMPLATE_INVALID
+        - REPORT_TEMPLATE_UNKNOWN_FORMAT
+        - REPORT_TEMPLATE_WITH_SAME_NAME_ALREADY_EXISTS
+        - REPORT_TEMPLATE_FILE_NAME_INCORRECT_MACROS
+      type: string
+    ApiErrorModel:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ApiErrorType'
+        details:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+      additionalProperties: false
+    AccessTokenScopeType:
+      enum:
+        - None
+        - ScanAgent
+        - LightClientAndPlugins
+      type: string
+    AccessTokenCreateModel:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        expiresDateTime:
+          type: string
+          format: date-time
+        scopes:
+          $ref: '#/components/schemas/AccessTokenScopeType'
+      additionalProperties: false
+    AuthScopeType:
+      enum:
+        - None
+        - Agent
+        - Viewer
+        - Internal
+        - Web
+        - WebRefresh
+        - WebLongRefresh
+        - AccessToken
+        - AccessTokenRefresh
+      type: string
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please insert JWT with Bearer into field
+      name: Authorization
+      in: header
+    Basic:
+      type: http
+      scheme: basic

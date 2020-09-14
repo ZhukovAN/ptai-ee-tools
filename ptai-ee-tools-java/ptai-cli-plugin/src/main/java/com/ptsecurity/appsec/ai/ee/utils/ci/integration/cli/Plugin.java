@@ -1,9 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.LegacyUiAst;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.SlimJsonAst;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.SlimServerCheck;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.SlimUiAst;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.admin.ServiceConfigure;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.admin.UserCreate;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.admin.UserDelete;
@@ -18,6 +15,7 @@ import java.util.Comparator;
         mixinStandardHelpOptions = true, version = "ptai-cli-plugin v.0.1",
         subcommands = {
                 SlimUiAst.class, SlimJsonAst.class, SlimServerCheck.class,
+                ServerCheck.class,
                 LegacyUiAst.class,
                 UserCreate.class, UserList.class, UserDelete.class,
                 ServiceConfigure.class })

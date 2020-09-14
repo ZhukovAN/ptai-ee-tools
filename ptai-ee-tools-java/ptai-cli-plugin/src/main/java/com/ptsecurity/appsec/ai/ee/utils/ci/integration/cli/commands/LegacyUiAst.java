@@ -70,7 +70,7 @@ public class LegacyUiAst implements Callable<Integer> {
             names = {"--output"}, order = 7,
             paramLabel = "<path>",
             description = "Folder where AST reports are to be stored. By default .ptai folder is used")
-    protected Path output = Paths.get(System.getProperty("user.dir")).resolve(Base.SAST_FOLDER);
+    protected Path output = Paths.get(System.getProperty("user.dir")).resolve(Base.DEFAULT_SAST_FOLDER);
 
     @CommandLine.Option(
             names = {"-p", "--project"}, order = 8,
@@ -185,7 +185,7 @@ public class LegacyUiAst implements Callable<Integer> {
                 .excludes(excludes)
                 .username(username)
                 .password(token).build();
-        job.setConsoleLog(System.out);
+        job.setConsole(System.out);
         job.setLogPrefix(null);
         job.setVerbose(verbose);
         return PtaiResultStatus.convert(job.execute());

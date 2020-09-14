@@ -1,45 +1,35 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
-import com.ptsecurity.appsec.ai.ee.aic.ExitCode;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiResponse;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.SastJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jenkins.exceptions.JenkinsClientException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.Auth;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.CredentialsAuth;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.auth.TokenAuth;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.V36Credentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.V36CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.BaseConfig;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.LegacyConfig;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.SlimConfig;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.V36Config;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigGlobal;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigLegacyCustom;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigSlimCustom;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigV36Custom;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsManual;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.LegacyServerSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.SlimServerSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.V36ServerSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildEnv;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildInfo;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.remote.RemoteFileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.remote.RemoteSastJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.PtaiProject;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.PtaiClientException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import hudson.*;
 import hudson.init.InitMilestone;
 import hudson.init.Initializer;
-import hudson.model.*;
+import hudson.model.AbstractBuild;
+import hudson.model.Item;
+import hudson.model.Run;
+import hudson.model.TaskListener;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
@@ -55,10 +45,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import javax.annotation.Nonnull;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
@@ -183,22 +169,18 @@ public class Plugin extends Builder implements SimpleBuildStep {
         ScanSettingsUi.Descriptor scanSettingsUiDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class);
         // "JSON-defined" scan settings descriptor
         ScanSettingsManual.Descriptor scanSettingsManualDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsManual.Descriptor.class);
-        // "PT AI EE server connection settings (both legacy or slim) are defined globally" descriptor
+        // "PT AI EE server connection settings are defined globally" descriptor
         ConfigGlobal.Descriptor configGlobalDescriptor = Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
-        // "PT AI EE server legacy connection settings are defined locally" descriptor
-        ConfigLegacyCustom.Descriptor configLegacyCustomDescriptor = Jenkins.get().getDescriptorByType(ConfigLegacyCustom.Descriptor.class);
-        // "PT AI EE server slim connection settings are defined locally" descriptor
-        ConfigSlimCustom.Descriptor configSlimCustomDescriptor = Jenkins.get().getDescriptorByType(ConfigSlimCustom.Descriptor.class);
+        // "PT AI EE server connection settings are defined locally" descriptor
+        ConfigV36Custom.Descriptor configV36CustomDescriptor = Jenkins.get().getDescriptorByType(ConfigV36Custom.Descriptor.class);
 
         boolean selectedScanSettingsUi = scanSettings instanceof ScanSettingsUi;
         String selectedScanSettings = selectedScanSettingsUi
                 ? scanSettingsUiDescriptor.getDisplayName()
                 : scanSettingsManualDescriptor.getDisplayName();
 
-        String selectedConfig = config instanceof ConfigLegacyCustom
-                ? configLegacyCustomDescriptor.getDisplayName()
-                : config instanceof ConfigSlimCustom
-                ? configSlimCustomDescriptor.getDisplayName()
+        String selectedConfig = config instanceof ConfigV36Custom
+                ? configV36CustomDescriptor.getDisplayName()
                 : configGlobalDescriptor.getDisplayName();
 
         String jsonSettings = selectedScanSettingsUi ? null : ((ScanSettingsManual) scanSettings).getJsonSettings();
@@ -225,51 +207,25 @@ public class Plugin extends Builder implements SimpleBuildStep {
             jsonPolicy = JsonPolicyVerifier.minimize(jsonPolicy);
         }
 
-        LegacyServerSettings legacyServerSettings = null;
-        SlimServerSettings slimServerSettings = null;
+        V36ServerSettings serverSettings;
         String configName = null;
-        LegacyCredentials legacyCredentials = null;
-        String legacyCredentialsId = null;
-        SlimCredentials slimCredentials = null;
-        String slimCredentialsId = null;
+        V36Credentials credentials;
+        String credentialsId;
         String serverUrl = null;
-        String jenkinsServerUrl = null;
-        String jenkinsJobName = null;
-        Auth jenkinsServerCredentials = null;
 
         if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
             // Settings are defined globally, job just refers them using configName
             configName = ((ConfigGlobal)config).getConfigName();
             BaseConfig base = descriptor.getConfig(configName);
-            // What is the type of global config?
-            if (base instanceof LegacyConfig) {
-                legacyServerSettings = ((LegacyConfig) base).getLegacyServerSettings();
-                legacyCredentialsId = legacyServerSettings.getServerLegacyCredentialsId();
-                legacyCredentials = LegacyCredentialsImpl.getCredentialsById(item, legacyCredentialsId);
-                serverUrl = legacyServerSettings.getServerLegacyUrl();
-                jenkinsServerUrl = legacyServerSettings.getJenkinsServerUrl();
-                jenkinsJobName = legacyServerSettings.getJenkinsServerUrl();
-                jenkinsServerCredentials = legacyServerSettings.getJenkinsServerCredentials();
-            } else {
-                slimServerSettings = ((SlimConfig) base).getSlimServerSettings();
-                slimCredentialsId = slimServerSettings.getServerSlimCredentialsId();
-                slimCredentials = SlimCredentialsImpl.getCredentialsById(item, slimCredentialsId);
-                serverUrl = slimServerSettings.getServerSlimUrl();
-            }
-        } else if (configLegacyCustomDescriptor.getDisplayName().equals(selectedConfig)) {
-            ConfigLegacyCustom configLegacyCustom = (ConfigLegacyCustom) config;
-            legacyServerSettings = configLegacyCustom.getLegacyServerSettings();
-            legacyCredentialsId = configLegacyCustom.getLegacyServerSettings().getServerLegacyCredentialsId();
-            legacyCredentials = LegacyCredentialsImpl.getCredentialsById(item, legacyCredentialsId);
-            serverUrl = configLegacyCustom.getLegacyServerSettings().getServerLegacyUrl();
-            jenkinsServerUrl = legacyServerSettings.getJenkinsServerUrl();
-            jenkinsJobName = legacyServerSettings.getJenkinsServerUrl();
-            jenkinsServerCredentials = legacyServerSettings.getJenkinsServerCredentials();
+            serverSettings = ((V36Config) base).getServerSettings();
+            credentialsId = serverSettings.getServerCredentialsId();
+            credentials = V36CredentialsImpl.getCredentialsById(item, credentialsId);
+            serverUrl = serverSettings.getServerUrl();
         } else {
-            ConfigSlimCustom configSlimCustom = (ConfigSlimCustom) config;
-            slimCredentialsId = configSlimCustom.getSlimServerSettings().getServerSlimCredentialsId();
-            slimCredentials = SlimCredentialsImpl.getCredentialsById(item, slimCredentialsId);
-            serverUrl = configSlimCustom.getSlimServerSettings().getServerSlimUrl();
+            ConfigV36Custom configV36Custom = (ConfigV36Custom) config;
+            credentialsId = configV36Custom.getServerSettings().getServerCredentialsId();
+            credentials = V36CredentialsImpl.getCredentialsById(item, credentialsId);
+            serverUrl = configV36Custom.getServerSettings().getServerUrl();
         }
 
         check = descriptor.doTestProjectFields(
@@ -277,164 +233,83 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 selectedConfig,
                 jsonSettings, jsonPolicy,
                 projectName,
-                serverUrl, legacyCredentialsId, jenkinsServerUrl, jenkinsJobName, serverUrl, slimCredentialsId, configName);
+                serverUrl, credentialsId, configName);
         if (FormValidation.Kind.OK != check.kind)
             throw new AbortException(check.getMessage());
         String node = StringUtils.isEmpty(nodeName) ? Base.DEFAULT_PTAI_NODE_NAME : nodeName;
         if (StringUtils.isEmpty(nodeName))
             verboseLog(listener, Messages.plugin_logDefaultNodeUsed(node));
 
+        Project project = new Project(projectName);
+        project.setConsole(listener.getLogger());
+        project.setVerbose(this.verbose);
+        project.setPrefix(this.consolePrefix);
         try {
-            PtaiProject ptaiProject = null;
-            Client client = null;
-            if (null != legacyServerSettings) {
-                // Legacy mode
-                ptaiProject = new PtaiProject();
-                ptaiProject.setName(projectName);
-                ptaiProject.setVerbose(this.verbose);
-                ptaiProject.setConsoleLog(listener.getLogger());
-                ptaiProject.setLogPrefix(this.consolePrefix);
-                ptaiProject.setUrl(legacyServerSettings.getServerLegacyUrl());
-                ptaiProject.setKeyPem(legacyCredentials.getClientCertificate());
-                ptaiProject.setKeyPassword(legacyCredentials.getClientKey().getPlainText());
-                ptaiProject.setCaCertsPem(legacyCredentials.getServerCaCertificates());
-                // Try to authenticate
-                String ptaiToken = ptaiProject.init();
-                if (StringUtils.isEmpty(ptaiToken))
-                    throw new AbortException(Messages.validator_test_server_token_invalid());
-                verboseLog(listener, Messages.validator_test_server_success(ptaiToken.substring(0, 10)));
+            UUID scanResultId = null;
+            try {
+                project.setUrl(serverUrl);
+                project.setToken(credentials.getPassword().getPlainText());
+                if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
+                    project.setCaCertsPem(credentials.getServerCaCertificates());
+                project.init();
 
-                UUID projectId = ptaiProject.searchProject();
+                UUID projectId = project.searchProject();
                 if (null == projectId) {
-                    if (!selectedScanSettingsUi)
-                        projectId = ptaiProject.createProject(projectName);
-                    else
+                    if (!selectedScanSettingsUi) {
+                        project.out("Project %s not found, will be created as JSON settings are defined", projectName);
+                        // TODO: implement project creation login
+                        // project.getSastApi().createProject(projectName);
+                    } else {
+                        project.out("Project %s not found", projectName);
                         throw new AbortException(Messages.validator_test_ptaiProject_notfound());
+                    }
                 }
-                verboseLog(listener, Messages.validator_test_ptaiProject_success(projectId.toString().substring(0, 4)));
-                File zipFile = this.zipSources(buildInfo, workspace, launcher, listener);
-                ptaiProject.upload(zipFile);
 
-                // Let's start analysis
+                File zip = zipSources(buildInfo, workspace, launcher, listener);
+                project.setSources(zip);
+                project.upload();
+
+                scanResultId = project.scan(node);
+                project.out("PT AI AST result ID is " + scanResultId);
+
+                Stage stage = null;
+                ScanProgress previousProgress = null;
+                ScanResultStatistic previousStatistic = null;
+
+                do {
+                    Thread.sleep(5000);
+                    ScanResult state = project.poll(projectId, scanResultId);
+                    ScanProgress progress = state.getProgress();
+                    ScanResultStatistic statistic = state.getStatistic();
+                    if (null != progress || !progress.equals(previousProgress)) {
+                        String progressInfo = "AST stage: " + progress.getStage() + ", percentage: " + progress.getValue();
+                        project.out(progressInfo);
+                        previousProgress = progress;
+                    }
+                    if (null != statistic || !statistic.equals(previousStatistic)) {
+                        project.out("Scan duration: %s", statistic.getScanDuration());
+                        if (0 != statistic.getTotalFileCount())
+                            project.out("Scanned files: %d out of %d", statistic.getScannedFileCount(), statistic.getTotalFileCount());
+                        previousStatistic = statistic;
+                    }
+                    if (null != progress) stage = progress.getStage();
+                } while (!Stage.DONE.equals(stage) && !Stage.ABORTED.equals(stage) && !Stage.FAILED.equals(stage));
+
                 RemoteSastJob sastJob = new RemoteSastJob(launcher);
-                sastJob.setVerbose(verbose);
-                sastJob.setConsoleLog(listener.getLogger());
-                sastJob.setLogPrefix(this.consolePrefix);
-                sastJob.setUrl(legacyServerSettings.getJenkinsServerUrl());
-                sastJob.setJobName(legacyServerSettings.getJenkinsJobName());
-                sastJob.setCaCertsPem(legacyCredentials.getServerCaCertificates());
-                sastJob.setProjectName(ptaiProject.getName());
-                sastJob.setJenkinsMaxRetry(legacyServerSettings.getJenkinsMaxRetry());
-                sastJob.setJenkinsRetryDelay(legacyServerSettings.getJenkinsRetryDelay());
-                if (!selectedScanSettingsUi) {
-                    sastJob.setSettingsJson(jsonSettings);
-                    sastJob.setPolicyJson(jsonPolicy);
-                }
-                sastJob.setNodeName(node);
-                // Set authentication parameters
-                if (null == jenkinsServerCredentials)
-                    throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedJenkinsAuthNotSet());
-                if (jenkinsServerCredentials instanceof CredentialsAuth) {
-                    CredentialsAuth auth = (CredentialsAuth)jenkinsServerCredentials;
-                    sastJob.setUserName(auth.getUserName(item));
-                    sastJob.setPassword(auth.getPassword(item));
-                } else if (jenkinsServerCredentials instanceof TokenAuth) {
-                    // Jenkins API token authentication is not the same as JWT (i.e. "bearer" one)
-                    // It is just another form of login/password authentication
-                    TokenAuth auth = (TokenAuth)jenkinsServerCredentials;
-                    sastJob.setUserName(auth.getUserName());
-                    sastJob.setPassword(auth.getApiToken());
-                }
-                sastJob.init();
-                PtaiResultStatus sastJobRes = PtaiResultStatus.convert(sastJob.execute(workspace.getRemote()));
+                File json = project.getJsonResult(projectId, scanResultId);
+                sastJob.saveReport(workspace.getRemote(), "report.json", FileUtils.readFileToString(json, StandardCharsets.UTF_8));
 
-                if (failIfFailed && PtaiResultStatus.FAILURE.equals(sastJobRes))
+                if (failIfFailed && PolicyState.REJECTED.equals(previousStatistic.getPolicyState()))
                     throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastFailed());
-                if (failIfUnstable && PtaiResultStatus.UNSTABLE.equals(sastJobRes))
-                    throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastUnstable());
-            } else {
-                // Slim mode
-                Integer scanId = null;
-                try {
-                    client = new Client();
-                    client.setConsoleLog(listener.getLogger());
-                    client.setVerbose(this.verbose);
-                    client.setLogPrefix(this.consolePrefix);
-
-                    client.setUrl(serverUrl);
-                    client.setClientId(Plugin.CLIENT_ID);
-                    client.setClientSecret(Plugin.CLIENT_SECRET);
-                    client.setUserName(slimCredentials.getUserName());
-                    client.setPassword(slimCredentials.getPassword().getPlainText());
-                    if (!org.apache.commons.lang.StringUtils.isEmpty(slimCredentials.getServerCaCertificates()))
-                        client.setCaCertsPem(slimCredentials.getServerCaCertificates());
-                    client.init();
-
-                    try {
-                        UUID projectId = client.getDiagnosticApi().getProjectId(projectName);
-                    } catch (ApiException e) {
-                        if (HttpStatus.SC_NOT_FOUND == e.getCode()) {
-                            if (!selectedScanSettingsUi) {
-                                log(listener,"Project %s not found, will be created as JSON settings are defined", projectName);
-                                client.getSastApi().createProject(projectName);
-                            } else {
-                                log(listener,"Project %s not found", projectName);
-                                throw new AbortException(Messages.validator_test_ptaiProject_notfound());
-                            }
-                        } else
-                            throw e;
-                    }
-
-                    File zipFile = zipSources(buildInfo, workspace, launcher, listener);
-                    client.uploadZip(projectName, zipFile, 1024 * 1024);
-                    if (selectedScanSettingsUi)
-                        scanId = client.getSastApi().startUiJob(projectName, node);
-                    else
-                        scanId = client.getSastApi().startJsonJob(
-                                projectName, node,
-                                JsonSettingsVerifier.minimize(jsonSettings),
-                                JsonPolicyVerifier.minimize(jsonPolicy));
-                    log(listener, "SAST job number is " + scanId);
-
-                    JobState state = null;
-                    int pos = 0;
-                    do {
-                        state = client.getSastApi().getScanJobState(scanId, pos);
-                        if (state.getPos() != pos) {
-                            String[] lines = state.getLog().split("\\r?\\n");
-                            for (String line : lines)
-                                log(listener, line);
-                        }
-                        pos = state.getPos();
-                        if (!state.getStatus().equals(JobState.StatusEnum.UNKNOWN)) break;
-                        Thread.sleep(2000);
-                    } while (true);
-
-                    RemoteSastJob sastJob = new RemoteSastJob(launcher);
-                    List<String> results = client.getSastApi().getJobResults(scanId);
-                    for (String result : results) {
-                        File data = client.getSastApi().getJobResult(scanId, result);
-                        String fileName = result.replaceAll("REPORTS/", "");
-                        sastJob.saveReport(workspace.getRemote(), fileName, FileUtils.readFileToString(data, StandardCharsets.UTF_8));
-                    }
-                    if (failIfFailed && JobState.StatusEnum.FAILURE.equals(state.getStatus()))
-                        throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastFailed());
-                    if (failIfUnstable && JobState.StatusEnum.UNSTABLE.equals(state.getStatus()))
-                        throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastUnstable());
-                } catch (InterruptedException e) {
-                    if ((null != client) && (null != scanId))
-                        client.getSastApi().stopScan(scanId);
-                    throw e;
-                }
+                // TODO: Implement processing logic for unstable scans
+                // if (failIfUnstable && JobState.StatusEnum.UNSTABLE.equals(state.getStatus()))
+                //     throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastUnstable());
+            } catch (InterruptedException e) {
+                if ((null != project) && (null != scanResultId)) project.stop(scanResultId);
+                throw e;
             }
-        } catch (JenkinsClientException e) {
-            log(listener, com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedJenkinsApiDetails(e));
-            throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failed());
-        } catch (PtaiClientException e) {
-            log(listener, com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedPtaiApiDetails(e));
-            throw new AbortException(Messages.validator_failed());
         } catch (ApiException e) {
-            log(listener, com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.validator_failedPtaiApiDetails(new BaseClientException(null, e)));
+            project.out(Messages.validator_failedPtaiApiDetails(e.getMessage()), e);
             throw new AbortException(Messages.validator_failed());
         }
     }
@@ -463,36 +338,5 @@ public class Plugin extends Builder implements SimpleBuildStep {
         } else {
             throw new IllegalArgumentException("Both null, Run and Current Item!");
         }
-    }
-
-    @Initializer(before = InitMilestone.PLUGINS_STARTED)
-    public static void beforeInitMilestonePluginsStarted() {
-        // See also PluginDescriptor.load()
-        Jenkins.XSTREAM2.addCompatibilityAlias(
-                "com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.ServerCredentialsImpl",
-                LegacyCredentialsImpl.class);
-        Items.XSTREAM2.addCompatibilityAlias(
-                "com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigGlobal",
-                ConfigGlobal.class);
-        Items.XSTREAM2.addCompatibilityAlias(
-                "com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.config.ConfigCustom",
-                ConfigLegacyCustom.class);
-        /*
-        Items.XSTREAM2.addCompatibilityAlias(
-                "hudson.plugins.column.console.LastFailedBuildColumn",
-                LastFailedBuildColumn.class);
-        Items.XSTREAM2.addCompatibilityAlias(
-                "hudson.plugins.column.console.LastStableBuildColumn",
-                LastStableBuildColumn.class);
-        Items.XSTREAM2.addCompatibilityAlias(
-                "hudson.plugins.column.console.LastSuccessfulBuildColumn",
-                LastSuccessfulBuildColumn.class);
-        Items.XSTREAM2.addCompatibilityAlias(
-                "hudson.plugins.column.console.LastUnstableBuildColumn",
-                LastUnstableBuildColumn.class);
-        Items.XSTREAM2.addCompatibilityAlias(
-                "hudson.plugins.column.console.LastUnsuccessfulBuildColumn",
-                LastUnsuccessfulBuildColumn.class);
-         */
     }
 }

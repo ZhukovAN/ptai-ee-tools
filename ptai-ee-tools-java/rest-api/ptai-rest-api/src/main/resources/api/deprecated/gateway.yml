@@ -1,0 +1,39 @@
+openapi: 3.0.1
+info:
+  title: gateway
+  version: "1.0"
+servers:
+  - url: https://127.0.0.1:443/
+paths:
+  /api/AgentAuth/signin:
+    get:
+      tags:
+        - AgentAuth
+      operationId: SignIn
+      parameters:
+        - name: scopeType
+          in: query
+          schema:
+            type: string
+            enum:
+              - None
+              - Agent
+              - Viewer
+              - Internal
+              - Web
+              - WebRefresh
+              - WebLongRefresh
+      responses:
+        200:
+          description: Success
+          content:
+            '*/*':
+              schema:
+                type: string
+components:
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please insert JWT with Bearer into field
+      name: Authorization
+      in: header

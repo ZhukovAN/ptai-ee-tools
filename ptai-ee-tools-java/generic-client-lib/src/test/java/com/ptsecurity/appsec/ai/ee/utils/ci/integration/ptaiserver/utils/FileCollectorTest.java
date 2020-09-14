@@ -160,7 +160,7 @@ public class FileCollectorTest {
          */
         Base owner = new Base();
         owner.setVerbose(true);
-        owner.setConsoleLog(System.out);
+        owner.setConsole(System.out);
 
         try (TempDirectory dir = new TempDirectory()) {
             Path sources = Files.createDirectory(dir.getFile().resolve("sources"));

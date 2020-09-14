@@ -58,7 +58,7 @@ public class SastJob extends Client {
             FreeStyleProject prj = this.jenkinsApi.getJob(jobName);
             return prj.getDisplayName();
         } catch (ApiException e) {
-            log(e);
+            out("Jenkins job details read failed", e);
             throw new JenkinsServerException("Jenkins API exception", e);
         }
     }
@@ -92,19 +92,19 @@ public class SastJob extends Client {
                     // There may be a situation where build is not started yet, so we'll get an "not found" exception
                     buildId = getBuildId(jobName, queueId);
                     if (null == buildId) {
-                        this.log("Wait 5 seconds for %s job to start", this.jobName);
+                        out("Wait 5 seconds for %s job to start", this.jobName);
                         Thread.sleep(5000);
                         continue;
                     }
                     final String buildIdStr = buildId.toString();
                     sastBuild = apiClient.callApi(() -> jenkinsApi.getJobBuild(jobName, buildIdStr));
                     if (null != sastBuild) {
-                        this.log("Job %s started", this.jobName);
+                        out("Job %s started", this.jobName);
                         break;
                     } else
                         throw new JenkinsClientException("SAST job build is null");
                 } catch (JenkinsServerException e) {
-                    this.log("%s job start failed, code: %d, message: %s", this.jobName, e.getCode(), e.getMessage());
+                    out("%s job start failed, code: %d, message: %s", this.jobName, e.getCode(), e.getMessage());
                     throw new JenkinsClientException(e.getMessage());
                 }
             } while (true);
@@ -128,7 +128,7 @@ public class SastJob extends Client {
                 if (pos != start) {
                     String[] lines = sastJobLog.getData().split("\\r?\\n");
                     for (String line : lines)
-                        log(line);
+                        out(line);
                     start = pos;
                 }
                 Thread.sleep(1000);
@@ -142,15 +142,15 @@ public class SastJob extends Client {
                 if (artifact.getFileName().endsWith("status.code")) {
                     res = Integer.parseInt(resultFile);
                     if (ExitCode.CODES.containsKey(res))
-                        log("Status code %d: %s", res, ExitCode.CODES.get(res));
+                        out("Status code %d: %s", res, ExitCode.CODES.get(res));
                 };
             }
             return res;
         } catch (IOException e) {
-            log(e);
+            out("AST job execution failed", e);
             throw new JenkinsServerException(e.getMessage(), e);
         } catch (InterruptedException e) {
-            log(e);
+            out("AST job interrupted", e);
             if (null != queueId)
                 stopJob(jobName, queueId);
             throw new JenkinsClientException(e.getMessage(), e);
@@ -158,7 +158,7 @@ public class SastJob extends Client {
     }
 
     protected static void saveReportData(String folder, String artifact, String data) throws IOException {
-        Path destination = Paths.get(folder).resolve(Base.SAST_FOLDER).resolve(artifact);
+        Path destination = Paths.get(folder).resolve(Base.DEFAULT_SAST_FOLDER).resolve(artifact);
         destination.toFile().getParentFile().mkdirs();
         Files.write(
                 destination,

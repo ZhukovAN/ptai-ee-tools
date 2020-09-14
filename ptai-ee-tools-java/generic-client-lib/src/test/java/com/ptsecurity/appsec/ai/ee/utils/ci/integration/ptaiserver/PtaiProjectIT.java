@@ -108,7 +108,7 @@ class PtaiProjectIT {
         PtaiProject ptai = new PtaiProject();
 
         ptai.setVerbose(true);
-        ptai.setConsoleLog(System.out);
+        ptai.setConsole(System.out);
 
         ptai.setUrl(PTAIURL);
         ptai.setKeyStoreFile(KEYSTORE_PATH.toString());

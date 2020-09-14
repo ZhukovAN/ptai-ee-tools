@@ -1,0 +1,89 @@
+openapi: 3.0.1
+info:
+  title: filesStore
+  version: "1.0"
+servers:
+  - url: https://127.0.0.1:443/
+security:
+  - Bearer: []
+paths:
+  /api/Store/sources/{projectId}:
+    post:
+      tags:
+        - Store
+      operationId: UploadSources
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: ContentType
+          in: query
+          schema:
+            type: string
+        - name: ContentDisposition
+          in: query
+          schema:
+            type: string
+        - name: Headers
+          in: query
+          schema:
+            type: object
+        - name: Length
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: Name
+          in: query
+          schema:
+            type: string
+        - name: FileName
+          in: query
+          schema:
+            type: string
+        - name: IsCancellationRequested
+          in: query
+          schema:
+            type: boolean
+        - name: CanBeCanceled
+          in: query
+          schema:
+            type: boolean
+        - name: WaitHandle.Handle
+          in: query
+          schema:
+            type: object
+        - name: WaitHandle.SafeWaitHandle.IsInvalid
+          in: query
+          schema:
+            type: boolean
+        - name: WaitHandle.SafeWaitHandle.IsClosed
+          in: query
+          schema:
+            type: boolean
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  description: The file to upload
+                  format: binary
+        required: true
+      responses:
+        200:
+          description: Success
+          content: {}
+components:
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please insert JWT with Bearer into field
+      name: Authorization
+      in: header

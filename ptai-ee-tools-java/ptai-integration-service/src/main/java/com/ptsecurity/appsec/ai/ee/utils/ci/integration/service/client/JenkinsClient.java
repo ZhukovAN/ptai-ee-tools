@@ -84,7 +84,7 @@ public class JenkinsClient extends Client {
 
     @Override
     public void log(String value) {
-        if (null == consoleLog) return;
+        if (null == console) return;
         if (null != logPrefix)
             log.info(this.logPrefix + value);
         else
@@ -97,10 +97,10 @@ public class JenkinsClient extends Client {
     }
 
     @Override
-    public void log(Exception exception) {
-        if (StringUtils.isNotEmpty(exception.getMessage()))
-            this.log(exception.getMessage());
+    public void log(Exception e) {
+        if (StringUtils.isNotEmpty(e.getMessage()))
+            this.log(e.getMessage());
         if (this.verbose)
-            log.error(exception.getMessage(), exception);
+            log.error(e.getMessage(), e);
     }
 }

@@ -1,0 +1,968 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "authService"
+  },
+  "host": "127.0.0.1:443",
+  "paths": {
+    "/api/Auth/signin": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Login user by NTLM or client certificate in request headers",
+        "operationId": "SignIn",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "scopeType",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "enum": ["None", "Agent", "Viewer", "Internal", "Web", "WebRefresh", "WebLongRefresh"]
+        }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "description": "Returns the created JWT token",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/userLogin": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Login user by credentials",
+        "operationId": "UserLogin",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json"],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "userModel",
+          "in": "body",
+          "description": "Model with username and password",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/UserModel"
+          }
+        }, {
+          "name": "scopeType",
+          "in": "query",
+          "description": "Scope type",
+          "required": false,
+          "type": "string",
+          "enum": ["None", "Agent", "Viewer", "Internal", "Web", "WebRefresh", "WebLongRefresh"]
+        }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorModel"
+            }
+          },
+          "200": {
+            "description": "Returns JWT token or pair of access and refresh tokes for Web scope",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "/api/Auth/refreshToken": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Refresh token",
+        "operationId": "RefreshToken",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [],
+        "responses": {
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorModel"
+            }
+          },
+          "200": {
+            "description": "Returns the created JWT token"
+          }
+        }
+      }
+    },
+    "/api/Auth/signout": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "SignOut",
+        "consumes": [],
+        "produces": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Auth/validateToken": {
+      "post": {
+        "tags": ["Auth"],
+        "operationId": "ValidateToken",
+        "consumes": [],
+        "produces": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/auth/globalMembers": {
+      "get": {
+        "tags": ["GlobalMember"],
+        "operationId": "GetAll",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GlobalMember"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["GlobalMember"],
+        "operationId": "Update",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json"],
+        "produces": [],
+        "parameters": [{
+          "name": "globalMember",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/GlobalMember"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": ["GlobalMember"],
+        "operationId": "Create",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json"],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "globalMember",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/GlobalMember"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["GlobalMember"],
+        "operationId": "Remove",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "id",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int64"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/auth/globalMembers/applyGlobalMembers": {
+      "put": {
+        "tags": ["GlobalMember"],
+        "operationId": "Apply",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json"],
+        "produces": [],
+        "parameters": [{
+          "name": "projectMembers",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "Add": {
+                "uniqueItems": false,
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/GlobalMember"
+                }
+              },
+              "Remove": {
+                "uniqueItems": false,
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/GlobalMember"
+                }
+              },
+              "Update": {
+                "uniqueItems": false,
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/GlobalMember"
+                }
+              }
+            }
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Health/status": {
+      "get": {
+        "tags": ["Health"],
+        "operationId": "Status",
+        "consumes": [],
+        "produces": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/auth/projectMembers/get": {
+      "get": {
+        "tags": ["ProjectMember"],
+        "operationId": "GetMembersInProject",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProjectMember"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/projectMembers": {
+      "put": {
+        "tags": ["ProjectMember"],
+        "operationId": "Update",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json"],
+        "produces": [],
+        "parameters": [{
+          "name": "projectMember",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/ProjectMember"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "tags": ["ProjectMember"],
+        "operationId": "Create",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json"],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "projectMember",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/ProjectMember"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "format": "int64",
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["ProjectMember"],
+        "operationId": "Remove",
+        "consumes": [],
+        "produces": [],
+        "parameters": [{
+          "name": "id",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int64"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/auth/projectMembers/applyProjectMembers": {
+      "put": {
+        "tags": ["ProjectMember"],
+        "operationId": "Apply",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json"],
+        "produces": [],
+        "parameters": [{
+          "name": "projectMembers",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "Add": {
+                "uniqueItems": false,
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/ProjectMember"
+                }
+              },
+              "Remove": {
+                "uniqueItems": false,
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/ProjectMember"
+                }
+              },
+              "Update": {
+                "uniqueItems": false,
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/ProjectMember"
+                }
+              }
+            }
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/auth/projectPermissions/get": {
+      "get": {
+        "tags": ["ProjectPermissions"],
+        "summary": "Get project permissions",
+        "operationId": "Get",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "projectId",
+          "in": "query",
+          "description": "Project Id",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorModel"
+            }
+          },
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProjectPermissions"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/projectPermissions/allowedTypes": {
+      "get": {
+        "tags": ["ProjectPermissions"],
+        "summary": "Permissions available for assignment to projects",
+        "operationId": "GetAllowedPermissions",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorModel"
+            }
+          },
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "enum": ["None", "ManageIssueTrackerTicket", "ManagePermissions", "ViewProject", "CreateProject", "DeleteProject", "ChangeIssueStatus", "ManageScan", "ManageGlobalParams", "DeleteScanResult", "UpdateProject", "ManageUpdate", "ManageIssueTracker", "DiscardIssueWithoutComment", "ApproveIssueWithoutComment", "ManageIssueTrackerIntegration", "ManageLicense", "DeleteIssueTrackerTicket"],
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/projectPermissions/apply": {
+      "put": {
+        "tags": ["ProjectPermissions"],
+        "summary": "Apply project permissions changes",
+        "operationId": "Apply",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json"],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "projectRoles",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "uniqueItems": false,
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ProjectPermissions"
+            }
+          }
+        }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ApiErrorModel"
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/roles": {
+      "get": {
+        "tags": ["Role"],
+        "operationId": "GetAll",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "name",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Role"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/roles/api/auth/roles": {
+      "put": {
+        "tags": ["Role"],
+        "operationId": "Update",
+        "consumes": ["application/json-patch+json", "application/json", "text/json", "application/*+json"],
+        "produces": [],
+        "parameters": [{
+          "name": "role",
+          "in": "body",
+          "required": false,
+          "schema": {
+            "$ref": "#/definitions/Role"
+          }
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/auth/roles/permissions": {
+      "get": {
+        "tags": ["Role"],
+        "operationId": "GetPermissions",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "id",
+          "in": "query",
+          "required": false,
+          "type": "integer",
+          "format": "int64"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "enum": ["None", "ManageIssueTrackerTicket", "ManagePermissions", "ViewProject", "CreateProject", "DeleteProject", "ChangeIssueStatus", "ManageScan", "ManageGlobalParams", "DeleteScanResult", "UpdateProject", "ManageUpdate", "ManageIssueTracker", "DiscardIssueWithoutComment", "ApproveIssueWithoutComment", "ManageIssueTrackerIntegration", "ManageLicense", "DeleteIssueTrackerTicket"],
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/user": {
+      "get": {
+        "tags": ["User"],
+        "operationId": "GetUser",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "sid",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/current": {
+      "get": {
+        "tags": ["User"],
+        "operationId": "GetCurrentUser",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/search": {
+      "get": {
+        "tags": ["User"],
+        "operationId": "Search",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "searchValue",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/UserSearchResult"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/globalRoles": {
+      "get": {
+        "tags": ["User"],
+        "operationId": "GetGlobalRoles",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "sid",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Role"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/projectRoles": {
+      "get": {
+        "tags": ["User"],
+        "operationId": "GetProjectRoles",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "sid",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Role"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/permissions": {
+      "get": {
+        "tags": ["User"],
+        "operationId": "GetPermissions",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "sid",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "enum": ["None", "ManageIssueTrackerTicket", "ManagePermissions", "ViewProject", "CreateProject", "DeleteProject", "ChangeIssueStatus", "ManageScan", "ManageGlobalParams", "DeleteScanResult", "UpdateProject", "ManageUpdate", "ManageIssueTracker", "DiscardIssueWithoutComment", "ApproveIssueWithoutComment", "ManageIssueTrackerIntegration", "ManageLicense", "DeleteIssueTrackerTicket"],
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/projectPermissions": {
+      "get": {
+        "tags": ["User"],
+        "operationId": "GetProjectPermissions",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "sid",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "projectId",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "uuid"
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "enum": ["None", "ManageIssueTrackerTicket", "ManagePermissions", "ViewProject", "CreateProject", "DeleteProject", "ChangeIssueStatus", "ManageScan", "ManageGlobalParams", "DeleteScanResult", "UpdateProject", "ManageUpdate", "ManageIssueTracker", "DiscardIssueWithoutComment", "ApproveIssueWithoutComment", "ManageIssueTrackerIntegration", "ManageLicense", "DeleteIssueTrackerTicket"],
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/users/projects": {
+      "get": {
+        "tags": ["User"],
+        "operationId": "GetProjects",
+        "consumes": [],
+        "produces": ["text/plain", "application/json", "text/json"],
+        "parameters": [{
+          "name": "sid",
+          "in": "query",
+          "required": false,
+          "type": "string"
+        }, {
+          "name": "permissions",
+          "in": "query",
+          "required": false,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["None", "ManageIssueTrackerTicket", "ManagePermissions", "ViewProject", "CreateProject", "DeleteProject", "ChangeIssueStatus", "ManageScan", "ManageGlobalParams", "DeleteScanResult", "UpdateProject", "ManageUpdate", "ManageIssueTracker", "DiscardIssueWithoutComment", "ApproveIssueWithoutComment", "ManageIssueTrackerIntegration", "ManageLicense", "DeleteIssueTrackerTicket"]
+          },
+          "collectionFormat": "multi",
+          "uniqueItems": false
+        }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "uniqueItems": false,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Project"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "UserModel": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "rememberMe": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ApiErrorModel": {
+      "type": "object",
+      "properties": {
+        "errorCode": {
+          "enum": ["None", "INCORRECT_USER_AND_PASSWORD", "USER_SID_IS_EMPTY", "MEMBER_ALREADY_EXISTS", "PROJECT_ROLE_PERMISSIONS_ALREADY_EXISTS", "UPDATE_PACKAGE_INVALID_CHECK_SUM", "UPDATE_PACKAGE_VERSION_IS_ALREADY_UPLOADED", "UPDATE_PACKAGE_UPLOADED_IS_ALREADY_STARTED", "UPDATE_PACKAGE_UNKNOWN_PRODUCT", "UPDATE_PACKAGE_VERSION_INVALID", "UPDATE_PACKAGE_VERSION_IS_NOT_UPLOADED", "UPDATE_SERVER_PROCESS_RUN_TIMEOUT", "UPDATE_SERVER_PARAMETERS_ARE_NOT_FILLED", "UPDATE_SERVER_PARAMETERS_INVALID", "UPDATE_SERVER_INSTALLER_EXIT_WITH_ERROR", "CERTIFICATE_FILE_IS_EMPTY", "CERTIFICATE_IS_ALREADY_INSTALLED", "CERTIFICATE_IS_NOT_VALID", "PROJECT_WITH_SAME_NAME_ALREADY_EXISTS", "ISSUE_TRACKER_CONNECTION_NOT_FOUND", "ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET", "ISSUE_TRACKER_SETTINGS_ID_NOT_SET", "ISSUE_TRACKER_CREDENTIALS_NOT_SET", "ISSUE_TRACKER_HOST_IS_INCORRECT", "ISSUE_TRACKER_OAUTH_DATA_NOT_SET", "ISSUE_TRACKER_TRACKER_NOT_FOUND", "ISSUE_TRACKER_TRACKER_NOT_FOUND_WITH_OAUTH", "ISSUE_TRACKER_INVALID_TICKET_LINK", "ISSUE_TRACKER_IMPOSSIBLE_SKIP_UPDATE_CREDENTIALS", "ISSUE_TRACKER_UNSUPPORTED_FIELDS_COFIGURATION", "ISSUE_TRACKER_TICKET_CREATION_FAILED", "ISSUE_TRACKER_PRIORITIES_GETTING_FAILED", "ISSUE_TRACKER_USERS_GETTING_FAILED", "ISSUE_TRACKER_STATUSES_GETTING_FAILED", "ISSUE_TRACKER_FIELDS_GETTING_FAILED", "ISSUE_TRACKER_OPTIONS_GETTING_FAILED", "ISSUE_TRACKER_EXISTING_TICKETS_GETTING_FAILED", "ISSUE_TRACKER_COMPONENTS_GETTING_FAILED", "ISSUE_TRACKER_CAPTCHA_CHALLENGE", "ISSUE_TRACKER_AUTHENTICATION_DENIED_DETAILED", "ISSUE_TRACKER_AUTHENTICATION_DENIED", "ISSUE_TRACKER_AUTHENTICATION_FAILED", "ISSUE_ATTACH_TICKET_LINK_FAILED", "COMMENT_POLICY_FAILED_COMMENT_IS_EMPTY", "PROJECTS_COUNT_LIMITED_BY_LICENSE", "LICENSE_FILE_IS_INVALID", "LICENSE_FINGERPRINT_ERROR"],
+          "type": "string",
+          "readOnly": true
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "readOnly": true
+        }
+      }
+    },
+    "GlobalMember": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "sid": {
+          "type": "string"
+        },
+        "roleId": {
+          "format": "int64",
+          "type": "integer"
+        }
+      }
+    },
+    "ProjectMember": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "projectId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "sid": {
+          "type": "string"
+        },
+        "roleId": {
+          "format": "int64",
+          "type": "integer"
+        }
+      }
+    },
+    "ProjectPermissions": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "projectId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "roleId": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "permissions": {
+          "enum": ["None", "ManageIssueTrackerTicket", "ManagePermissions", "ViewProject", "CreateProject", "DeleteProject", "ChangeIssueStatus", "ManageScan", "ManageGlobalParams", "DeleteScanResult", "UpdateProject", "ManageUpdate", "ManageIssueTracker", "DiscardIssueWithoutComment", "ApproveIssueWithoutComment", "ManageIssueTrackerIntegration", "ManageLicense", "DeleteIssueTrackerTicket"],
+          "type": "string"
+        }
+      }
+    },
+    "Role": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "isAdmin": {
+          "type": "boolean"
+        },
+        "isGlobal": {
+          "type": "boolean"
+        },
+        "permissions": {
+          "enum": ["None", "ManageIssueTrackerTicket", "ManagePermissions", "ViewProject", "CreateProject", "DeleteProject", "ChangeIssueStatus", "ManageScan", "ManageGlobalParams", "DeleteScanResult", "UpdateProject", "ManageUpdate", "ManageIssueTracker", "DiscardIssueWithoutComment", "ApproveIssueWithoutComment", "ManageIssueTrackerIntegration", "ManageLicense", "DeleteIssueTrackerTicket"],
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "email": {
+          "type": "string",
+          "readOnly": true
+        },
+        "sid": {
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "UserSearchResult": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User",
+          "readOnly": true
+        },
+        "levenshteinDistance": {
+          "format": "double",
+          "type": "number",
+          "readOnly": true
+        }
+      }
+    },
+    "Project": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "name": "Authorization",
+      "in": "header",
+      "type": "apiKey",
+      "description": "Please insert JWT with Bearer into field"
+    }
+  }
+}
