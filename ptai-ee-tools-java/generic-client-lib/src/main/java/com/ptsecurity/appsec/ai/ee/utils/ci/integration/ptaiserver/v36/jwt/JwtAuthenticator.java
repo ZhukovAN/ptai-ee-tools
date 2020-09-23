@@ -3,7 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.BaseClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ApiClientHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.ApiClientHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;

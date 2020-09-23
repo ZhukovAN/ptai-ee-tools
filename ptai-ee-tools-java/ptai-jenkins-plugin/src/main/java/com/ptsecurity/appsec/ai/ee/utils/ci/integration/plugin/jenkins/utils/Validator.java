@@ -1,25 +1,17 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.exceptions.ApiException;
-import hudson.Util;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import hudson.util.FormValidation;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.DomainValidator;
-import org.apache.commons.validator.routines.RegexValidator;
 import org.apache.commons.validator.routines.UrlValidator;
 
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.logging.Level;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 @Log
 public class Validator {
@@ -58,11 +50,11 @@ public class Validator {
     }
 
     public static boolean doCheckFieldJsonSettings(String value) {
-        return checkViaException(() -> JsonSettingsVerifier.verify(value));
+        return checkViaException(() -> JsonSettingsHelper.verify(value));
     }
 
     public static boolean doCheckFieldJsonPolicy(String value) {
-        return checkViaException(() -> { if (doCheckFieldNotEmpty(value)) JsonPolicyVerifier.verify(value); });
+        return checkViaException(() -> { if (doCheckFieldNotEmpty(value)) JsonPolicyHelper.verify(value); });
     }
 
     public static FormValidation doCheckFieldNotEmpty(String value, String errorMessage) {

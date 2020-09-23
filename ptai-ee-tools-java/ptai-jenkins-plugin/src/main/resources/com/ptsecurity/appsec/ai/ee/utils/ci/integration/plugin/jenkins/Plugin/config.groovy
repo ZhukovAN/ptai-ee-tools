@@ -85,20 +85,23 @@ f.block() {
     )
 }
 
-f.entry(
-        title: _('failIfFailed'),
-        field: 'failIfFailed') {
-    f.checkbox(
-            name: 'failIfFailed',
-            default: true
-    )
-}
+workModeId = descriptor.createElementId()
 
-f.entry(
-        title: _('failIfUnstable'),
-        field: 'failIfUnstable',
-        default: 'true') {
-    f.checkbox()
+pt.dropdownDescriptorSelector(
+        id: workModeId,
+        title: _('workMode'),
+        field: 'workMode',
+        default: descriptor.getDefaultWorkModeDescriptor(),
+        descriptors: descriptor.getWorkModeDescriptors())
+
+f.invisibleEntry() {
+    input(
+            type: "hidden",
+            // Use unique ID. We must auto generate it because user may add PT AI step twice
+            // and there'll be duplicates otherwise
+            id: "${workModeId}_value",
+            name: "selectedWorkMode",
+            value: "")
 }
 
 f.entry(

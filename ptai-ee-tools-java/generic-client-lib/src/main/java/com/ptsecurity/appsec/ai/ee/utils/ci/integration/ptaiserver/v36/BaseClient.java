@@ -3,19 +3,19 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.v36.StoreApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.LicenseApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ProjectsApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ReportsApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanAgentApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheckApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.jwt.JwtResponse;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ApiClientHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.CertificateHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.ApiClientHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.CertificateHelper;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileInputStream;
@@ -31,6 +31,9 @@ public class BaseClient extends Base {
 
     @Getter
     protected final ProjectsApi projectsApi = new ProjectsApi(new com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiClient());
+
+    @Getter
+    protected final ReportsApi reportsApi = new ReportsApi(new com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiClient());
 
     @Getter
     protected final LicenseApi licenseApi = new LicenseApi(new com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiClient());
@@ -52,7 +55,7 @@ public class BaseClient extends Base {
 
     public BaseClient() {
         super();
-        apis.addAll(Arrays.asList(projectsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi));
+        apis.addAll(Arrays.asList(projectsApi, reportsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi));
     }
 
     /**

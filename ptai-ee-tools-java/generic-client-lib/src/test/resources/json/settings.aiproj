@@ -1,8 +1,8 @@
 {
 	// Main Settings
 	"ProjectName": "Test_Proj", // Имя проекта
-	"ProgrammingLanguage": "Csharp", // Язык приложения. Доступны: Java, Php, Csharp, Vb, ObjectiveC, CPlusPlus, Sql, Swift, Python, JavaScript, Kotlin, Go
-	"ScanAppType": "CSharp , Configuration, Fingerprint, PmTaint ", // Модули поиска уязвимостей. Доступны:  Php, Java, CSharp, Configuration, Fingerprint (включает в себя DependencyCheck), PmTaint , BlackBox, JavaScript
+	"ProgrammingLanguage": "Java", // Язык приложения. Доступны: Java, Php, Csharp, Vb, ObjectiveC, CPlusPlus, Sql, Swift, Python, JavaScript, Kotlin, Go
+	"ScanAppType": "Java , Configuration, Fingerprint, PmTaint ", // Модули поиска уязвимостей. Доступны:  Php, Java, CSharp, Configuration, Fingerprint (включает в себя DependencyCheck), PmTaint , BlackBox, JavaScript
 
 	"ThreadCount": 1, // Количество потоков
 	"Site": "http://localhost", // Адрес сайта

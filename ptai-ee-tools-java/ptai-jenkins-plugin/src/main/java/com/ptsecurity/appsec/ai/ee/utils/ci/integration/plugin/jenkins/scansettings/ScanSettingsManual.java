@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
@@ -40,12 +40,12 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
         public FormValidation doCheckJsonSettings(@QueryParameter("jsonSettings") String jsonSettings) {
             FormValidation res = Validator.doCheckFieldNotEmpty(jsonSettings, Messages.validator_check_field_empty());
             if (FormValidation.Kind.OK != res.kind) return res;
-            return Validator.doCheckFieldJsonSettings(jsonSettings, Messages.validator_check_jsonSettings_incorrect());
+            return Validator.doCheckFieldJsonSettings(jsonSettings, Messages.validator_check_jsonSettings_invalid());
         }
 
         public FormValidation doCheckJsonPolicy(@QueryParameter("jsonPolicy") String jsonPolicy) {
             if (Validator.doCheckFieldNotEmpty(jsonPolicy))
-                return Validator.doCheckFieldJsonPolicy(jsonPolicy, Messages.validator_check_jsonPolicy_incorrect());
+                return Validator.doCheckFieldJsonPolicy(jsonPolicy, Messages.validator_check_jsonPolicy_invalid());
             else
                 return FormValidation.ok();
         }
@@ -57,8 +57,8 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
                 if (!Validator.doCheckFieldNotEmpty(jsonSettings))
                     return Validator.error(Messages.validator_check_jsonSettings_empty());
 
-                ScanSettings settings = JsonSettingsVerifier.verify(jsonSettings);
-                return FormValidation.ok(Messages.validator_test_jsonSettings_success(settings.getProjectName(), settings.getProgrammingLanguage()));
+                ScanSettings settings = JsonSettingsHelper.verify(jsonSettings);
+                return FormValidation.ok(Messages.validator_check_jsonSettings_success(settings.getProjectName(), settings.getProgrammingLanguage()));
             } catch (Exception e) {
                 return Validator.error(e);
             }
@@ -69,13 +69,13 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
                 @QueryParameter("jsonPolicy") final String jsonPolicy) {
             try {
                 if (!Validator.doCheckFieldNotEmpty(jsonPolicy))
-                    return FormValidation.ok(Messages.validator_test_jsonPolicy_empty());
+                    return FormValidation.ok(Messages.validator_check_jsonPolicy_empty());
 
-                Policy policy[] = JsonPolicyVerifier.verify(jsonPolicy);
+                Policy policy[] = JsonPolicyHelper.verify(jsonPolicy);
                 if (0 == policy.length)
-                    return FormValidation.ok(Messages.validator_test_jsonPolicy_empty());
+                    return FormValidation.ok(Messages.validator_check_jsonPolicy_empty());
                 else
-                    return FormValidation.ok(Messages.validator_test_jsonPolicy_success(policy.length));
+                    return FormValidation.ok(Messages.validator_check_jsonPolicy_success(policy.length));
             } catch (Exception e) {
                 return Validator.error(e);
             }

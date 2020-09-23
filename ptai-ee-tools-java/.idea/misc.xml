@@ -12,6 +12,7 @@
     </option>
     <option name="ignoredFiles">
       <set>
+        <option value="$PROJECT_DIR$/jce-restrictions-checker/pom.xml" />
         <option value="$PROJECT_DIR$/ptai-integration-service-installer/pom.xml" />
       </set>
     </option>

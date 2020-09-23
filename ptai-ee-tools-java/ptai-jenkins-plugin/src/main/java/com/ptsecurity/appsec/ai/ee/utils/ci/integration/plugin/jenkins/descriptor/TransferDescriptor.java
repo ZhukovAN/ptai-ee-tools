@@ -32,6 +32,6 @@ public class TransferDescriptor extends Descriptor<Transfer> {
     }
 
     public FormValidation doCheckPatternSeparator(@QueryParameter final String value) {
-        return Validator.doCheckFieldRegEx(value, Messages.validator_check_regex_incorrect());
+        return Validator.doCheckFieldRegEx(value, Messages.validator_check_regex_invalid());
     }
 }

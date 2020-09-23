@@ -1,25 +1,27 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.V36Credentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.V36CredentialsImpl;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.V36Config;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigV36Custom;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.V36ServerSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.BaseConfig;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.Config;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigGlobal;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.BaseConfig;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsManual;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import hudson.Extension;
-import hudson.model.*;
+import hudson.model.AbstractProject;
+import hudson.model.Item;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.CopyOnWriteList;
@@ -35,6 +37,7 @@ import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,7 +64,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
 
     @JavaScriptMethod
     public synchronized String createElementId() {
-        return "ptaiJenkinsPlugin_" + String.valueOf(lastElementId++);
+        return "ptaiJenkinsPlugin_" + lastElementId++;
     }
 
     @Override
@@ -76,17 +79,21 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
     }
 
     @Override
-    public boolean configure(StaplerRequest request, JSONObject formData) throws FormException {
+    public boolean configure(StaplerRequest request, JSONObject formData) {
         do {
             globalConfigs.clear();
             if (formData.isEmpty()) break;
+
             Object jsonConfigs = formData.get("globalConfigs");
             if (null == jsonConfigs) break;
+
             if (!(jsonConfigs instanceof JSONArray) && !(jsonConfigs instanceof JSONObject)) break;
             if ((jsonConfigs instanceof JSONArray) && ((JSONArray) jsonConfigs).isEmpty()) break;
             if ((jsonConfigs instanceof JSONObject) && ((JSONObject) jsonConfigs).isEmpty()) break;
+
             globalConfigs.replaceBy(request.bindJSONToList(BaseConfig.class, jsonConfigs));
         } while (false);
+
         save();
         return true;
     }
@@ -114,7 +121,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         ScanSettingsUi.Descriptor scanSettingsUiDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class);
         ScanSettingsManual.Descriptor scanSettingsManualDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsManual.Descriptor.class);
         ConfigGlobal.Descriptor configGlobalDescriptor = Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
-        ConfigV36Custom.Descriptor configLocalDescriptor = Jenkins.get().getDescriptorByType(ConfigV36Custom.Descriptor.class);
+        ConfigCustom.Descriptor configLocalDescriptor = Jenkins.get().getDescriptorByType(ConfigCustom.Descriptor.class);
 
         do {
             if (scanSettingsUiDescriptor.getDisplayName().equals(selectedScanSettings)) {
@@ -132,7 +139,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
                     break;
                 }
             } else if (configLocalDescriptor.getDisplayName().equals(selectedConfig)) {
-                V36ServerSettingsDescriptor serverSettingsDescriptor = Jenkins.get().getDescriptorByType(V36ServerSettingsDescriptor.class);
+                ServerSettingsDescriptor serverSettingsDescriptor = Jenkins.get().getDescriptorByType(ServerSettingsDescriptor.class);
                 res = serverSettingsDescriptor.doCheckServerUrl(serverUrl);
                 if (FormValidation.Kind.OK != res.kind) break;
                 if (!Validator.doCheckFieldNotEmpty(serverCredentialsId)) {
@@ -153,7 +160,6 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             @QueryParameter("projectName") final String projectName,
             @QueryParameter("serverUrl") final String serverUrl,
             @QueryParameter("serverCredentialsId") final String serverCredentialsId,
-            @QueryParameter("apiToken") final String apiToken,
             @QueryParameter("configName") final String configName) {
         FormValidation res = doTestProjectFields(
                 selectedScanSettings, selectedConfig,
@@ -165,25 +171,25 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
 
         ConfigGlobal.Descriptor configGlobalDescriptor = Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
          try {
-            V36Credentials credentials;
+            Credentials credentials;
             String realServerUrl;
 
             if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
                 // Settings are defined globally, job just refers them using configName
                 BaseConfig base = getConfig(configName);
                 // What is the type of global config?
-                V36ServerSettings serverSettings = ((V36Config) base).getServerSettings();
-                credentials = V36CredentialsImpl.getCredentialsById(item, serverSettings.getServerCredentialsId());
+                ServerSettings serverSettings = ((Config) base).getServerSettings();
+                credentials = CredentialsImpl.getCredentialsById(item, serverSettings.getServerCredentialsId());
                 realServerUrl = serverSettings.getServerUrl();
             } else {
-                credentials = V36CredentialsImpl.getCredentialsById(item, serverCredentialsId);
+                credentials = CredentialsImpl.getCredentialsById(item, serverCredentialsId);
                 realServerUrl = serverUrl;
             }
             // Depending on settings real project name may be defined using UI or JSON
             boolean selectedScanSettingsUi = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class).getDisplayName().equals(selectedScanSettings);
             String realProjectName = selectedScanSettingsUi
                     ? projectName
-                    : JsonSettingsVerifier.verify(jsonSettings).getProjectName();
+                    : JsonSettingsHelper.verify(jsonSettings).getProjectName();
             UUID projectId = searchProject(realProjectName, realServerUrl, credentials);
             if (null == projectId) {
                 // For manual defined (JSON) scan settings lack of project isn't a crime itself, just show warning
@@ -198,18 +204,20 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         }
     }
 
-    protected UUID searchProject(
+    private UUID searchProject(
             @NonNull final String name, @NonNull final String url,
-            @NonNull final V36Credentials credentials) throws ApiException {
+            @NonNull final Credentials credentials) throws ApiException {
         Project project = new Project(name);
         project.setUrl(url);
-        project.setToken(credentials.getPassword().getPlainText());
+        project.setToken(credentials.getToken().getPlainText());
         if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
             project.setCaCertsPem(credentials.getServerCaCertificates());
         project.init();
         return project.searchProject();
     }
 
+    @Override
+    @Nonnull
     public String getDisplayName() {
         return Messages.captions_plugin_displayName();
     }
@@ -229,4 +237,13 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
     public static ScanSettings.ScanSettingsDescriptor getDefaultScanSettingsDescriptor() {
         return ScanSettingsUi.DESCRIPTOR;
     }
+
+    public static List<WorkMode.WorkModeDescriptor> getWorkModeDescriptors() {
+        return WorkMode.getAll();
+    }
+
+    public static WorkMode.WorkModeDescriptor getDefaultWorkModeDescriptor() {
+        return WorkModeSync.DESCRIPTOR;
+    }
+
 }

@@ -2,7 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.TestUtils;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.utils.TempDirectory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.TempDirectory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import org.apache.commons.io.IOUtils;

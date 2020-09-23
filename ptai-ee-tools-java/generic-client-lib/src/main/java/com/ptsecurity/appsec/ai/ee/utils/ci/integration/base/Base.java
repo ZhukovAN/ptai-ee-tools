@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.base;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -38,39 +39,71 @@ public class Base {
 
     @Setter
     @Getter
+    @NonNull
     protected String prefix = DEFAULT_PREFIX;
 
-    public void out(String value) {
+    protected void out(final String value) {
+        if (null == value) return;
+        if (null != console) console.println(prefix + value);
+    }
+
+    protected void exception(@NonNull final String message, @NonNull final Exception e, @NonNull final Level level) {
+        Exception cause = e;
+        String details = null;
+        if (e instanceof ApiException) {
+            ApiException apiException = (ApiException) e;
+            cause = apiException.getInner();
+            details = apiException.getDetails();
+        }
+        log.log(level, message, cause);
+        if (StringUtils.isNotEmpty(details)) log.log(level, details);
+
         if (null == console) return;
-        if (StringUtils.isEmpty(value)) return;
-        console.println(null == prefix ? value : prefix + value);
-        log.info(null == prefix ? value : prefix + value);
-    }
 
-    public final void out(String format, Object ... value) {
-        out(String.format(format, value));
-    }
-
-    public void out(@NonNull final String message, @NonNull final Exception e) {
         out(message);
-        if (StringUtils.isEmpty(e.getMessage())) out(e.getMessage());
-        log.log(Level.SEVERE, message, e);
-        if (verbose && null != console) e.printStackTrace(console);
+        if (verbose)
+            // No need to output exception message to console as it will
+            // be printed as part of printStackTrace call
+            cause.printStackTrace(console);
+        else
+            out(cause.getMessage());
+        out(details);
     }
 
-    public void verbose(String value) {
+    public void info(final String value) {
+        log.info(value);
+        out(value);
+    }
+
+    public void info(@NonNull final String format, final Object ... values) {
+        info(String.format(format, values));
+    }
+
+    public void warning(final String value) {
+        log.warning(value);
+        out(value);
+    }
+
+    public void warning(@NonNull final String message, @NonNull final Exception e) {
+        exception(message, e, Level.WARNING);
+    }
+
+    public void severe(final String value) {
+        log.severe(value);
+        out(value);
+    }
+
+    public void severe(@NonNull final String message, @NonNull final Exception e) {
+        exception(message, e, Level.SEVERE);
+    }
+
+    public void fine(final String value) {
+        log.fine(value);
         if (verbose) out(value);
     }
 
-    public final void verbose(String format, Object ... value) {
-        verbose(String.format(format, value));
-    }
-
-    public void verbose(@NonNull final String message, @NonNull final Exception e) {
-        out(message);
-        if (StringUtils.isEmpty(e.getMessage())) out(e.getMessage());
-        log.log(Level.SEVERE, message, e);
-        if (verbose && null != console) e.printStackTrace(console);
+    public void fine(@NonNull final String format, final Object ... values) {
+        fine(String.format(format, values));
     }
 
     protected void removeCryptographyRestrictions() {

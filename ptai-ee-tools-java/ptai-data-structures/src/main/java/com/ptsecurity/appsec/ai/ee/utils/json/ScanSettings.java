@@ -15,6 +15,11 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ScanSettings {
+
+    public enum ScanAppType {
+        Php, Java, CSharp, Configuration, Fingerprint, PmTaint , BlackBox, JavaScript
+    }
+
     /**
      * This is workaround for project creation: when AST is started using JSON files
      * it sets scan parameters in the DB. But currently there's a problem: if

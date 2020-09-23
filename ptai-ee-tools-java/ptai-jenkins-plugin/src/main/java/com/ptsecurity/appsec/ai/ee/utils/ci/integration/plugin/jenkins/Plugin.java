@@ -2,30 +2,31 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonPolicyVerifier;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.JsonSettingsVerifier;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.V36Credentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.V36CredentialsImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.BaseConfig;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.V36Config;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.Config;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigGlobal;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigV36Custom;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.Report;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsManual;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.V36ServerSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildEnv;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildInfo;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.remote.RemoteFileCollector;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.remote.RemoteSastJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.RemoteFileUtils;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeAsync;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import hudson.*;
-import hudson.init.InitMilestone;
-import hudson.init.Initializer;
 import hudson.model.AbstractBuild;
 import hudson.model.Item;
 import hudson.model.Run;
@@ -36,10 +37,9 @@ import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpStatus;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import javax.annotation.Nonnull;
@@ -49,13 +49,10 @@ import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
-@Slf4j
+@Log
 @ToString
 public class Plugin extends Builder implements SimpleBuildStep {
-    public static final String CLIENT_ID = "ptai-jenkins-plugin";
-    public static final String CLIENT_SECRET = "etg76M18UsOGMPLRliwCn2r3g8BlO7TZ";
-
-    private static final String consolePrefix = com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.console_message_prefix();
+    private static final String CONSOLE_PREFIX = Base.DEFAULT_PREFIX;
 
     @Getter
     private final ConfigBase config;
@@ -64,13 +61,10 @@ public class Plugin extends Builder implements SimpleBuildStep {
     private final com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings scanSettings;
 
     @Getter
-    private final boolean failIfFailed;
-
-    @Getter
-    private final boolean failIfUnstable;
-
-    @Getter
     private final String nodeName;
+
+    @Getter
+    private final WorkMode workMode;
 
     @Getter
     private final boolean verbose;
@@ -88,15 +82,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
     @DataBoundConstructor
     public Plugin(final com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings scanSettings,
                   final ConfigBase config,
-                  final boolean failIfFailed,
-                  final boolean failIfUnstable,
+                  final WorkMode workMode,
                   final String nodeName,
                   final boolean verbose,
                   final ArrayList<Transfer> transfers) {
         this.scanSettings = scanSettings;
         this.config = config;
-        this.failIfFailed = failIfFailed;
-        this.failIfUnstable = failIfUnstable;
+        this.workMode = workMode;
         this.verbose = verbose;
         this.nodeName = nodeName;
         this.transfers = transfers;
@@ -110,25 +102,11 @@ public class Plugin extends Builder implements SimpleBuildStep {
             }
             return env;
         } catch (Exception e) {
-            throw new RuntimeException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.exception_failedToGetEnvVars(), e);
+            throw new RuntimeException(Messages.exception_failedToGetEnvVars(), e);
         }
     }
 
-    protected void verboseLog(TaskListener listener, String format, Object... args) {
-        if (!this.verbose) return;
-        log(listener, format, args);
-    }
-
-    protected void log(TaskListener listener, String format, Object... args) {
-        listener.getLogger().println(consolePrefix + String.format(format, args));
-    }
-
-    protected void log(TaskListener listener, String data) {
-        listener.getLogger().println(consolePrefix + data);
-    }
-
-    protected File zipSources(BuildInfo buildInfo, FilePath workspace, Launcher launcher, TaskListener listener) throws IOException, InterruptedException {
-        // Zip sources
+    private File zipSources(BuildInfo buildInfo, FilePath workspace, Launcher launcher, TaskListener listener) throws IOException, InterruptedException {
         Transfers transfers = new Transfers();
         for (Transfer transfer : this.transfers)
             transfers.addTransfer(com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer.builder()
@@ -140,7 +118,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                     .removePrefix(Util.replaceMacro(transfer.getRemovePrefix(), buildInfo.getEnvVars()))
                     .build());
         // Upload project sources
-        FilePath remoteZip = new RemoteFileCollector().collect(launcher, listener, transfers, workspace.getRemote(), verbose);
+        FilePath remoteZip = RemoteFileUtils.collect(launcher, listener, transfers, workspace.getRemote(), verbose);
         File zipFile = File.createTempFile("PTAI_", ".zip");
         try (OutputStream fos = new FileOutputStream(zipFile)) {
             remoteZip.copyTo(fos);
@@ -153,8 +131,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
     public void perform(@Nonnull Run<?, ?> build, @Nonnull FilePath workspace, @Nonnull Launcher launcher, @Nonnull TaskListener listener) throws IOException, InterruptedException {
         Jenkins jenkins = Jenkins.get();
         final BuildEnv currentBuildEnv = new BuildEnv(getEnvironmentVariables(build, listener), workspace, build.getTimestamp());
-        final BuildEnv targetBuildEnv = null;
-        final BuildInfo buildInfo = new BuildInfo(currentBuildEnv, targetBuildEnv);
+        final BuildInfo buildInfo = new BuildInfo(currentBuildEnv, null);
         buildInfo.setEffectiveEnvironmentInBuildInfo();
 
         Item item = jenkins.getItem("/");
@@ -163,7 +140,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
 
         PluginDescriptor descriptor = this.getDescriptor();
 
-        FormValidation check = null;
+        FormValidation check;
         // Get all descriptors that may be used by plugin:
         // "UI-defined" scan settings descriptor
         ScanSettingsUi.Descriptor scanSettingsUiDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class);
@@ -172,21 +149,24 @@ public class Plugin extends Builder implements SimpleBuildStep {
         // "PT AI EE server connection settings are defined globally" descriptor
         ConfigGlobal.Descriptor configGlobalDescriptor = Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
         // "PT AI EE server connection settings are defined locally" descriptor
-        ConfigV36Custom.Descriptor configV36CustomDescriptor = Jenkins.get().getDescriptorByType(ConfigV36Custom.Descriptor.class);
+        ConfigCustom.Descriptor configCustomDescriptor = Jenkins.get().getDescriptorByType(ConfigCustom.Descriptor.class);
+
+        boolean failIfFailed = (workMode instanceof WorkModeSync) && ((WorkModeSync) workMode).isFailIfFailed();
+        boolean failIfUnstable = (workMode instanceof WorkModeSync) && ((WorkModeSync) workMode).isFailIfUnstable();
 
         boolean selectedScanSettingsUi = scanSettings instanceof ScanSettingsUi;
         String selectedScanSettings = selectedScanSettingsUi
                 ? scanSettingsUiDescriptor.getDisplayName()
                 : scanSettingsManualDescriptor.getDisplayName();
 
-        String selectedConfig = config instanceof ConfigV36Custom
-                ? configV36CustomDescriptor.getDisplayName()
+        String selectedConfig = config instanceof ConfigCustom
+                ? configCustomDescriptor.getDisplayName()
                 : configGlobalDescriptor.getDisplayName();
 
         String jsonSettings = selectedScanSettingsUi ? null : ((ScanSettingsManual) scanSettings).getJsonSettings();
         String jsonPolicy = selectedScanSettingsUi ? null : ((ScanSettingsManual) scanSettings).getJsonPolicy();
 
-        String projectName = null;
+        String projectName;
         if (selectedScanSettingsUi) {
             projectName = ((ScanSettingsUi) scanSettings).getProjectName();
             projectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
@@ -197,35 +177,36 @@ public class Plugin extends Builder implements SimpleBuildStep {
             check = scanSettingsManualDescriptor.doTestJsonPolicy(item, jsonPolicy);
             if (FormValidation.Kind.OK != check.kind)
                 throw new AbortException(check.getMessage());
-            ScanSettings scanSettings = JsonSettingsVerifier.verify(jsonSettings);
+            ScanSettings scanSettings = JsonSettingsHelper.verify(jsonSettings);
             projectName = scanSettings.getProjectName();
             String changedProjectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
             if (!projectName.equals(changedProjectName))
                 scanSettings.setProjectName(projectName);
             // These lines also minimize settings and policy JSONs
-            jsonSettings = JsonSettingsVerifier.serialize(scanSettings);
-            jsonPolicy = JsonPolicyVerifier.minimize(jsonPolicy);
+            jsonSettings = JsonSettingsHelper.serialize(scanSettings);
+            if (StringUtils.isNotEmpty(jsonPolicy))
+                jsonPolicy = JsonPolicyHelper.minimize(jsonPolicy);
         }
 
-        V36ServerSettings serverSettings;
+        ServerSettings serverSettings;
         String configName = null;
-        V36Credentials credentials;
+        Credentials credentials;
         String credentialsId;
-        String serverUrl = null;
+        String serverUrl;
 
-        if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
+        if (config instanceof ConfigGlobal) {
             // Settings are defined globally, job just refers them using configName
             configName = ((ConfigGlobal)config).getConfigName();
             BaseConfig base = descriptor.getConfig(configName);
-            serverSettings = ((V36Config) base).getServerSettings();
+            serverSettings = ((Config) base).getServerSettings();
             credentialsId = serverSettings.getServerCredentialsId();
-            credentials = V36CredentialsImpl.getCredentialsById(item, credentialsId);
+            credentials = CredentialsImpl.getCredentialsById(item, credentialsId);
             serverUrl = serverSettings.getServerUrl();
         } else {
-            ConfigV36Custom configV36Custom = (ConfigV36Custom) config;
-            credentialsId = configV36Custom.getServerSettings().getServerCredentialsId();
-            credentials = V36CredentialsImpl.getCredentialsById(item, credentialsId);
-            serverUrl = configV36Custom.getServerSettings().getServerUrl();
+            ConfigCustom configCustom = (ConfigCustom) config;
+            credentialsId = configCustom.getServerSettings().getServerCredentialsId();
+            credentials = CredentialsImpl.getCredentialsById(item, credentialsId);
+            serverUrl = configCustom.getServerSettings().getServerUrl();
         }
 
         check = descriptor.doTestProjectFields(
@@ -236,80 +217,142 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 serverUrl, credentialsId, configName);
         if (FormValidation.Kind.OK != check.kind)
             throw new AbortException(check.getMessage());
+        // TODO: Implement scan node support when PT AI will be able to
         String node = StringUtils.isEmpty(nodeName) ? Base.DEFAULT_PTAI_NODE_NAME : nodeName;
-        if (StringUtils.isEmpty(nodeName))
-            verboseLog(listener, Messages.plugin_logDefaultNodeUsed(node));
 
         Project project = new Project(projectName);
         project.setConsole(listener.getLogger());
-        project.setVerbose(this.verbose);
-        project.setPrefix(this.consolePrefix);
-        try {
-            UUID scanResultId = null;
-            try {
-                project.setUrl(serverUrl);
-                project.setToken(credentials.getPassword().getPlainText());
-                if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
-                    project.setCaCertsPem(credentials.getServerCaCertificates());
-                project.init();
+        project.setVerbose(verbose);
+        project.setPrefix(CONSOLE_PREFIX);
+        UUID scanResultId = null;
 
-                UUID projectId = project.searchProject();
-                if (null == projectId) {
-                    if (!selectedScanSettingsUi) {
-                        project.out("Project %s not found, will be created as JSON settings are defined", projectName);
-                        // TODO: implement project creation login
-                        // project.getSastApi().createProject(projectName);
-                    } else {
-                        project.out("Project %s not found", projectName);
-                        throw new AbortException(Messages.validator_test_ptaiProject_notfound());
+        try {
+            project.setUrl(serverUrl);
+            project.setToken(credentials.getToken().getPlainText());
+            if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
+                project.setCaCertsPem(credentials.getServerCaCertificates());
+            project.init();
+
+            UUID projectId = project.searchProject();
+            if (null == projectId) {
+                if (!selectedScanSettingsUi) {
+                    project.info("Project %s not found, will be created as JSON settings are defined", projectName);
+                    projectId = project.setupFromJson(JsonSettingsHelper.verify(jsonSettings), JsonPolicyHelper.verify(jsonPolicy));
+                } else {
+                    project.info("Project %s not found", projectName);
+                    throw new AbortException(Messages.validator_test_ptaiProject_notfound());
+                }
+            } else if (!selectedScanSettingsUi)
+                project.setupFromJson(JsonSettingsHelper.verify(jsonSettings), JsonPolicyHelper.verify(jsonPolicy));
+
+            File zip = zipSources(buildInfo, workspace, launcher, listener);
+            project.setSources(zip);
+            project.upload();
+
+            scanResultId = project.scan(node);
+            project.info("PT AI AST result ID is " + scanResultId);
+
+            if (workMode instanceof WorkModeAsync) {
+                // Asynchronous mode means that we aren't need to wait AST job
+                // completion. Just write scan result access URL and exit
+                String url = String.format("%s/api/Projects/%s/scanResults/%s", project.getUrl(), projectId, scanResultId);
+                RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(), "result.url", url, verbose);
+                return;
+            }
+
+            WorkModeSync workModeSync = (WorkModeSync) workMode;
+
+            boolean failed = false;
+            boolean unstable = false;
+            String reason;
+
+            Stage stage = null;
+            ScanProgress previousProgress = null;
+            ScanResultStatistic previousStatistic = null;
+
+            do {
+                Thread.sleep(5000);
+                ScanResult state = project.poll(projectId, scanResultId);
+                ScanProgress progress = state.getProgress();
+                ScanResultStatistic statistic = state.getStatistic();
+                boolean somethingChanged = false;
+                if (null != progress && !progress.equals(previousProgress)) {
+                    String progressInfo = "AST stage: " + progress.getStage() + ", percentage: " + progress.getValue();
+                    project.info(progressInfo);
+                    previousProgress = progress;
+                    somethingChanged = true;
+                };
+                if (null != statistic && !statistic.equals(previousStatistic)) {
+                    project.info("Scan duration: %s", statistic.getScanDuration());
+                    if (0 != statistic.getTotalFileCount())
+                        project.info("Scanned files: %d out of %d", statistic.getScannedFileCount(), statistic.getTotalFileCount());
+                    previousStatistic = statistic;
+                    somethingChanged = true;
+                };
+                if (!somethingChanged)
+                    project.fine("Scan status polling done, no change detected");
+                if (null != progress) stage = progress.getStage();
+            } while (!Stage.DONE.equals(stage) && !Stage.ABORTED.equals(stage) && !Stage.FAILED.equals(stage));
+
+            log.finer("Resulting stage is " + stage);
+            log.finer("Resulting statistics is " + previousStatistic);
+
+            // Step is failed if scan aborted or failed (i.e. because of license problems)
+            failed |= !Stage.DONE.equals(stage);
+            if (Stage.ABORTED.equals(stage))
+                reason = Messages.plugin_result_ast_aborted();
+            else if (Stage.FAILED.equals(stage))
+                reason = Messages.plugin_result_ast_failed();
+            else
+                reason = Messages.plugin_result_ast_success();
+
+            // Step also failed if policy assessment fails
+            // TODO: Swap REJECTED/CONFIRMED states
+            //  when https://jira.ptsecurity.com/browse/AI-4866 will be fixed
+            if (!failed) {
+                failed |= PolicyState.CONFIRMED.equals(previousStatistic.getPolicyState());
+                // If scan is done, than the only reason to fail is policy violation
+                if (failed)
+                    reason = Messages.plugin_result_ast_policy_failed();
+                else if (PolicyState.REJECTED.equals(previousStatistic.getPolicyState()))
+                    reason = Messages.plugin_result_ast_policy_success();
+                else
+                    reason = Messages.plugin_result_ast_policy_empty();
+            }
+
+            if (Stage.DONE.equals(stage) || Stage.ABORTED.equals(stage)) {
+                // Save reports if scan was started ever
+                int idx = 0;
+                for (Report report : workModeSync.getReports()) {
+                    // Need to wrap report generation to try-catch block as incorrect
+                    // report generation template setting must not lead to invalid build
+                    try {
+                        ReportFormatType type = ReportFormatType.fromValue(report.getFormat());
+                        File reportFile = project.generateReport(projectId, scanResultId, report.getTemplate(), type, report.getLocale());
+                        String reportName = String.format("report.%d.%s", idx++, report.getFormat().toLowerCase());
+                        String data = FileUtils.readFileToString(reportFile, StandardCharsets.UTF_8);
+                        RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(), reportName, data, verbose);
+                    } catch (ApiException e) {
+                        project.warning(Messages.plugin_result_ast_warning(e.getMessage()), e);
+                        unstable = true;
                     }
                 }
-
-                File zip = zipSources(buildInfo, workspace, launcher, listener);
-                project.setSources(zip);
-                project.upload();
-
-                scanResultId = project.scan(node);
-                project.out("PT AI AST result ID is " + scanResultId);
-
-                Stage stage = null;
-                ScanProgress previousProgress = null;
-                ScanResultStatistic previousStatistic = null;
-
-                do {
-                    Thread.sleep(5000);
-                    ScanResult state = project.poll(projectId, scanResultId);
-                    ScanProgress progress = state.getProgress();
-                    ScanResultStatistic statistic = state.getStatistic();
-                    if (null != progress || !progress.equals(previousProgress)) {
-                        String progressInfo = "AST stage: " + progress.getStage() + ", percentage: " + progress.getValue();
-                        project.out(progressInfo);
-                        previousProgress = progress;
-                    }
-                    if (null != statistic || !statistic.equals(previousStatistic)) {
-                        project.out("Scan duration: %s", statistic.getScanDuration());
-                        if (0 != statistic.getTotalFileCount())
-                            project.out("Scanned files: %d out of %d", statistic.getScannedFileCount(), statistic.getTotalFileCount());
-                        previousStatistic = statistic;
-                    }
-                    if (null != progress) stage = progress.getStage();
-                } while (!Stage.DONE.equals(stage) && !Stage.ABORTED.equals(stage) && !Stage.FAILED.equals(stage));
-
-                RemoteSastJob sastJob = new RemoteSastJob(launcher);
+                // TODO: Implement additional processing logic for unstable scans
                 File json = project.getJsonResult(projectId, scanResultId);
-                sastJob.saveReport(workspace.getRemote(), "report.json", FileUtils.readFileToString(json, StandardCharsets.UTF_8));
-
-                if (failIfFailed && PolicyState.REJECTED.equals(previousStatistic.getPolicyState()))
-                    throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastFailed());
-                // TODO: Implement processing logic for unstable scans
-                // if (failIfUnstable && JobState.StatusEnum.UNSTABLE.equals(state.getStatus()))
-                //     throw new AbortException(com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages.plugin_resultSastUnstable());
-            } catch (InterruptedException e) {
-                if ((null != project) && (null != scanResultId)) project.stop(scanResultId);
-                throw e;
+                RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(),
+                        "issues.json", FileUtils.readFileToString(json, StandardCharsets.UTF_8), verbose);
             }
+
+            if (failIfFailed && failed)
+                throw new AbortException(reason);
+            if (failIfUnstable && unstable)
+                 throw new AbortException(Messages.plugin_result_ast_unstable());
+            project.info(reason);
+        } catch (InterruptedException e) {
+            if (null != scanResultId) project.stop(scanResultId);
+            throw e;
         } catch (ApiException e) {
-            project.out(Messages.validator_failedPtaiApiDetails(e.getMessage()), e);
+            project.severe(Messages.plugin_result_ast_error(e.getMessage()), e);
             throw new AbortException(Messages.validator_failed());
         }
     }

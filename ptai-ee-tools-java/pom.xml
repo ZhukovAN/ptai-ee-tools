@@ -9,16 +9,14 @@
     <packaging>pom</packaging>
     <name>ptai-ee-tools</name>
     <modules>
-        <module>rest-api</module>
+        <module>ptai-rest-api</module>
         <module>ptai-data-structures</module>
         <module>generic-client-lib</module>
         <module>ptai-jenkins-plugin</module>
-        <module>ptai-cli-plugin</module>
-        <module>jce-restrictions-checker</module>
-        <module>ptai-maven-plugin</module>
-        <module>ptai-sonar-plugin</module>
-        <module>ptai-integration-service</module>
-        <module>ptai-teamcity-plugin</module>
+        <!-- <module>ptai-cli-plugin</module> -->
+        <!-- <module>ptai-maven-plugin</module> -->
+        <!-- <module>ptai-sonar-plugin</module> -->
+        <!-- <module>ptai-teamcity-plugin</module> -->
         <!-- <module>ptai-report-generator</module> -->
     </modules>
     <properties>
