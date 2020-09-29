@@ -13,7 +13,7 @@
         <module>ptai-data-structures</module>
         <module>generic-client-lib</module>
         <module>ptai-jenkins-plugin</module>
-        <!-- <module>ptai-cli-plugin</module> -->
+        <module>ptai-cli-plugin</module>
         <!-- <module>ptai-maven-plugin</module> -->
         <!-- <module>ptai-sonar-plugin</module> -->
         <!-- <module>ptai-teamcity-plugin</module> -->

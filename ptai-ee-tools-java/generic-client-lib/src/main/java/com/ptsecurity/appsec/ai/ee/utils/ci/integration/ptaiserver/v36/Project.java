@@ -69,19 +69,19 @@ public class Project extends Utils {
                 "PT AI project scan status read failed");
     }
 
-    public void stop(@NonNull final UUID scanResultId) {
+    public void stop(@NonNull final UUID scanResultId) throws ApiException {
         callApi(
                 () -> scanApi.apiScanStopPost(scanResultId),
                 "PT AI project scan stop failed");
     }
 
-    public File getJsonResult(@NonNull final UUID projectId, @NonNull final UUID scanResultId) {
+    public File getJsonResult(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws ApiException {
         return callApi(
                 () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdIssuesGet(projectId, scanResultId, null),
                 "PT AI project scan status JSON read failed");
     }
 
-    public UUID setupFromJson(@NonNull final ScanSettings settings, final Policy[] policy) {
+    public UUID setupFromJson(@NonNull final ScanSettings settings, final Policy[] policy) throws ApiException {
         final V36ScanSettings scanSettings = new V36ScanSettings();
         new V36ScanSettingsHelper().fillV36ScanSettings(scanSettings, settings);
 
@@ -113,7 +113,7 @@ public class Project extends Utils {
 
     public File generateReport(
             @NonNull final UUID projectId, @NonNull final UUID scanResultId,
-            @NonNull final UUID template, @NonNull final ReportFormatType type, @NonNull final String locale) {
+            @NonNull final UUID template, @NonNull final ReportFormatType type, @NonNull final String locale) throws ApiException {
         ReportGenerateModel model = new ReportGenerateModel()
                 .parameters(new UserReportParameters()
                         .includeDFD(true)
@@ -124,7 +124,7 @@ public class Project extends Utils {
                 .scanResultId(scanResultId)
                 .projectId(projectId)
                 .localeId(locale);
-
+        fine("Generating report for project %s, scan result %s. Report template %s, type %s, locale %s", projectId, scanResultId, template, type, locale);
         return callApi(
                 () -> reportsApi.apiReportsGeneratePost(model),
                 "Report generation failed");
@@ -132,8 +132,8 @@ public class Project extends Utils {
 
     public File generateReport(
             @NonNull final UUID projectId, @NonNull final UUID scanResultId,
-            @NonNull final String template, @NonNull final ReportFormatType type, @NonNull final String locale) {
-        List<ReportTemplateModel> templates = getReportTemplates();
+            @NonNull final String template, @NonNull final ReportFormatType type, @NonNull final String locale) throws ApiException {
+        List<ReportTemplateModel> templates = getReportTemplates(locale);
         ReportTemplateModel templateModel = templates.stream().filter(t -> t.getName().equalsIgnoreCase(template)).findAny().orElse(null);
         if (null == templateModel)
                 throw ApiException.raise("Report generation failed", new IllegalArgumentException("PT AI template " + template + " not found"));

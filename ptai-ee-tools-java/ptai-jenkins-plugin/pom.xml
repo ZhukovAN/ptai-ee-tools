@@ -9,7 +9,7 @@
     </parent>
     <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
     <artifactId>ptai-jenkins-plugin</artifactId>
-    <version>0.4.3</version>
+    <version>3.6</version>
     <packaging>hpi</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -128,7 +128,7 @@ public class ProjectScanIT extends BaseIT {
         utils.setCaCertsPem(client.getCaCertsPem());
         utils.init();
 
-        List<ReportTemplateModel> templates = utils.getReportTemplates();
+        List<ReportTemplateModel> templates = utils.getReportTemplates("ru-RU");
         for (ReportTemplateModel template : templates) {
             System.out.println(template.getName());
         }
@@ -143,7 +143,7 @@ public class ProjectScanIT extends BaseIT {
         project.setCaCertsPem(client.getCaCertsPem());
         project.init();
 
-        List<ReportTemplateModel> templates = project.getReportTemplates();
+        List<ReportTemplateModel> templates = project.getReportTemplates("en-US");
         int templateIdx = (int) Math.round(Math.random() * templates.size());
         UUID templateId = templates.get(templateIdx).getId();
         UUID projectId = project.searchProject();

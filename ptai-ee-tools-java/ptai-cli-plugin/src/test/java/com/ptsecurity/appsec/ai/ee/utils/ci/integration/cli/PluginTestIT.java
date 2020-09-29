@@ -3,7 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseSlimAst;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseAst;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import org.apache.commons.io.FileUtils;
@@ -27,10 +27,11 @@ class PluginTestIT {
     protected static File TEMP_FOLDER;
     protected static File TEMP_SOURCES_FOLDER;
     protected static File TEMP_REPORT_FOLDER;
-    protected static File TEMPJSONFOLDER;
+    protected static File TEMP_JSON_FOLDER;
 
     protected static Path KEYSTORE_PATH = null;
     protected static Path TRUSTSTORE_PATH = null;
+    protected static Path PEM_PATH = null;
     protected static Path SETTINGS_PATH = null;
     protected static Path POLICY_PATH = null;
     protected static Path EMPTY_POLICY_PATH = null;
@@ -39,32 +40,20 @@ class PluginTestIT {
     protected static Policy[] EMPTY_POLICY = new Policy[0];
 
     protected static final String NEW_PROJECT_NAME = "JUNIT-" + UUID.randomUUID().toString();
+    protected static final String EXISTING_PROJECT_NAME = "app01";
 
-    protected static final String ADMIN = "admin";
-    protected static String ADMINTOKEN = "cNaodFZZRqevd85L54Pa5NI4J0XNpO8d";
-
-    protected static final String USER = "junit-" + UUID.randomUUID().toString();
-    protected static final String USERTOKEN = UUID.randomUUID().toString();
-
-    protected static final String PTAIURL = "https://ptai.domain.org:8443/";
+    protected static final String TOKEN = "k+bwoHZBrpi+2TV7Ne25cbFeTXGn+idS";
+    protected static final String PTAIURL = "https://10.0.216.109:443/";
 
     @BeforeAll
     public static void init() throws URISyntaxException, IOException {
         TEMP_SOURCES_FOLDER = TEMP_FOLDER.toPath().resolve("src").toFile();
         TEMP_REPORT_FOLDER = TEMP_FOLDER.toPath().resolve(".ptai").toFile();
-        TEMPJSONFOLDER = TEMP_FOLDER.toPath().resolve("json").toFile();
+        TEMP_JSON_FOLDER = TEMP_FOLDER.toPath().resolve("json").toFile();
 
         KEYSTORE_PATH = Paths.get(PluginTestIT.class.getClassLoader().getResource("keys/keystore.jks").toURI());
         TRUSTSTORE_PATH = Paths.get(PluginTestIT.class.getClassLoader().getResource("keys/truststore.jks").toURI());
-
-        new CommandLine(new Plugin()).execute(
-                "admin-user-create",
-                "--url", PTAIURL,
-                "--truststore", TRUSTSTORE_PATH.toString(),
-                "--administrator", ADMIN,
-                "--token", ADMINTOKEN,
-                "--user", USER,
-                "--password", USERTOKEN);
+        PEM_PATH = Paths.get(PluginTestIT.class.getClassLoader().getResource("keys/pt.pem").toURI());
 
         ObjectMapper jsonMapper = new ObjectMapper();
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -81,13 +70,6 @@ class PluginTestIT {
 
     @AfterAll
     public static void fini() {
-        new CommandLine(new Plugin()).execute(
-                "admin-user-delete",
-                "--url", PTAIURL,
-                "--truststore", TRUSTSTORE_PATH.toString(),
-                "--administrator", ADMIN,
-                "--token", ADMINTOKEN,
-                "--user", USER);
     }
 
     @BeforeEach
@@ -118,9 +100,9 @@ class PluginTestIT {
     }
 
     protected static void saveJsons() throws IOException {
-        SETTINGS_PATH = TEMPJSONFOLDER.toPath().resolve("settings.json");
-        POLICY_PATH = TEMPJSONFOLDER.toPath().resolve("policy.json");
-        EMPTY_POLICY_PATH = TEMPJSONFOLDER.toPath().resolve("empty.policy.json");
+        SETTINGS_PATH = TEMP_JSON_FOLDER.toPath().resolve("settings.json");
+        POLICY_PATH = TEMP_JSON_FOLDER.toPath().resolve("policy.json");
+        EMPTY_POLICY_PATH = TEMP_JSON_FOLDER.toPath().resolve("empty.policy.json");
         String json = new ObjectMapper().writeValueAsString(SETTINGS.fix());
         FileUtils.writeStringToFile(SETTINGS_PATH.toFile(), json, StandardCharsets.UTF_8);
         json = new ObjectMapper().writeValueAsString(POLICY);
@@ -128,7 +110,7 @@ class PluginTestIT {
         json = new ObjectMapper().writeValueAsString(EMPTY_POLICY);
         FileUtils.writeStringToFile(EMPTY_POLICY_PATH.toFile(), json, StandardCharsets.UTF_8);
     }
-
+/*
     @Test
     public void testSlimJsonAst() throws IOException {
         SETTINGS.setProjectName(NEW_PROJECT_NAME);
@@ -145,7 +127,7 @@ class PluginTestIT {
                 "--output", TEMP_REPORT_FOLDER. toPath().toString(),
                 "--settings-json", SETTINGS_PATH.toString(),
                 "--policy-json", POLICY_PATH.toString());
-        Assertions.assertEquals(BaseSlimAst.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
 
         SETTINGS.setDownloadDependencies(false);
         saveJsons();
@@ -159,7 +141,7 @@ class PluginTestIT {
                 "--input", TEMP_SOURCES_FOLDER.toPath().toString(),
                 "--output", TEMP_REPORT_FOLDER.toPath().toString(),
                 "--settings-json", SETTINGS_PATH.toString());
-        Assertions.assertEquals(BaseSlimAst.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
         res = new CommandLine(new Plugin()).execute(
                 "slim-json-ast",
                 "--url", PTAIURL,
@@ -171,40 +153,37 @@ class PluginTestIT {
                 "--output", TEMP_REPORT_FOLDER.toPath().toString(),
                 "--settings-json", SETTINGS_PATH.toString(),
                 "--policy-json", EMPTY_POLICY_PATH.toString());
-        Assertions.assertEquals(BaseSlimAst.ExitCode.SUCCESS.getCode(), res);
+        Assertions.assertEquals(BaseAst.ExitCode.SUCCESS.getCode(), res);
+    }
+*/
+    @Test
+    public void testUiAst() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "ui-ast",
+                "--project", EXISTING_PROJECT_NAME,
+                "--input", TEMP_SOURCES_FOLDER.toPath().toString(),
+                "--output", TEMP_REPORT_FOLDER.toPath().toString(),
+                "--url", PTAIURL,
+                "--truststore", PEM_PATH.toString(),
+                "--token", TOKEN);
+        Assertions.assertEquals(0, res);
     }
 
     @Test
-    public void testAdmin() {
+    public void testJsonAst() {
+        SETTINGS.setUseIssueTrackerIntegration(false);
+        SETTINGS.setSendEmailWithReportsAfterScan(false);
+        SETTINGS.setProjectName(NEW_PROJECT_NAME);
         Integer res = new CommandLine(new Plugin()).execute(
-                "admin-user-list",
+                "json-ast",
+                "--settings-json", SETTINGS_PATH.toString(),
+                "--policy-json", POLICY_PATH.toString(),
+                "--input", TEMP_SOURCES_FOLDER.toPath().toString(),
+                "--output", TEMP_REPORT_FOLDER.toPath().toString(),
                 "--url", PTAIURL,
-                "--truststore", TRUSTSTORE_PATH.toString(),
-                "--administrator", ADMIN,
-                "--token", ADMINTOKEN);
+                "--truststore", PEM_PATH.toString(),
+                "--token", TOKEN);
         Assertions.assertEquals(0, res);
-
-        String username = "junit-" + UUID.randomUUID().toString();
-        String password = UUID.randomUUID().toString();
-        res = new CommandLine(new Plugin()).execute(
-                "admin-user-create",
-                "--url", PTAIURL,
-                "--truststore", TRUSTSTORE_PATH.toString(),
-                "--administrator", ADMIN,
-                "--token", ADMINTOKEN,
-                "--user", username,
-                "--password", password,
-                "--is-admin");
-        Assertions.assertEquals(0, res);
-
-        res = new CommandLine(new Plugin()).execute(
-                "admin-user-delete",
-                "--url", PTAIURL,
-                "--truststore", TRUSTSTORE_PATH.toString(),
-                "--administrator", ADMIN,
-                "--token", ADMINTOKEN,
-                "--user", username);
-        Assertions.assertEquals(0, res);
-
     }
+
 }

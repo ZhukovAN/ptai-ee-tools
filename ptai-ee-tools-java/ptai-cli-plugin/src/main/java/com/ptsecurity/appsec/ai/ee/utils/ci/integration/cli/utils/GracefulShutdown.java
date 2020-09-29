@@ -1,30 +1,34 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils;
 
-import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.java.Log;
 
-@Log4j2
+import java.util.UUID;
+
+@Log
 @RequiredArgsConstructor
 public class GracefulShutdown extends Thread {
     @Setter
     protected boolean stopped = false;
 
+    @NonNull
     protected final Base owner;
-    protected final Client client;
-    protected final Integer scanId;
+    @NonNull
+    protected final Project project;
+    @NonNull
+    protected final UUID scanResultId;
 
     public void run() {
         if (stopped) return;
-        if ((null != client) && (null != scanId)) {
-            try {
-                client.getSastApi().stopScan(scanId);
-            } catch (ApiException e1) {
-                owner.log("Build %d stop failed", scanId);
-            }
+        try {
+            project.stop(scanResultId);
+        } catch (ApiException e) {
+            owner.severe("Build stop failed", e);
         }
     }
 }

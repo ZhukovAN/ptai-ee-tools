@@ -49,14 +49,12 @@ public class ScanSettingsHelper {
         on(settings).call("rootFolder", (String) null);
         on(settings).call("runAutocheckAfterScan", json.isRunAutocheckAfterScan());
         on(settings).call("scanTarget", (String) null);
-        on(settings).call("scanUnitTimeout", json.getScanUnitTimeout());
         on(settings).call("scope", (String) null);
         on(settings).call("sendEmailWithReportsAfterScan", json.isSendEmailWithReportsAfterScan());
         on(settings).call("site", json.getSite());
         on(settings).call("skipFileFormats", json.getSkipFileFormats());
         on(settings).call("skipFilesFolders", json.getSkipFilesFolders());
         on(settings).call("tempDir", (String) null);
-        on(settings).call("threadCount", json.getThreadCount());
         on(settings).call("useIncrementalScan", json.isUseIncrementalScan());
         on(settings).call("useIssueTrackerIntegration", json.isUseIssueTrackerIntegration());
 
@@ -183,9 +181,7 @@ public class ScanSettingsHelper {
             fillCommonFields(languageSettings, json);
             languageSettings
                     .javaParameters(json.getJavaParameters())
-                    .javaVersion(0 == json.getJavaVersion() ? JavaVersions.v1_8 : JavaVersions.v1_11)
-                    .useJavaNormalizeVersionPattern(json.isUseJavaNormalizeVersionPattern())
-                    .javaNormalizeVersionPattern(json.getJavaNormalizeVersionPattern());
+                    .javaVersion(0 == json.getJavaVersion() ? JavaVersions.v1_8 : JavaVersions.v1_11);
             settings.setJava(languageSettings);
         }
 

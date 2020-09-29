@@ -31,8 +31,8 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
         return launcher.getChannel().call(new RemoteFileUtils(collector));
     }
 
-    public static FilePath saveReport(Launcher launcher, TaskListener listener, String dir, String artifact, String data, boolean verbose) throws IOException, InterruptedException {
-        ReportSaver saver = new ReportSaver(dir, artifact, data);
+    public static FilePath saveReport(Launcher launcher, TaskListener listener, String dir, String artifact, byte[] data, boolean verbose) throws IOException, InterruptedException {
+        BinaryReportSaver saver = new BinaryReportSaver(dir, artifact, data);
         saver.setConsole(listener.getLogger());
         saver.setVerbose(verbose);
 
@@ -71,6 +71,26 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
                 return Files.write(
                         destination,
                         data.getBytes(StandardCharsets.UTF_8),
+                        StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING).toFile();
+            } catch (IOException e) {
+                throw ApiException.raise("Report file save failed", e);
+            }
+        }
+    }
+
+    @RequiredArgsConstructor
+    protected static class BinaryReportSaver extends Base implements Executor, Serializable {
+        protected final String dir;
+        protected final String artifact;
+        protected final byte[] data;
+
+        public File execute() throws ApiException {
+            try {
+                Path destination = Paths.get(dir).resolve(Base.DEFAULT_SAST_FOLDER).resolve(artifact);
+                destination.toFile().getParentFile().mkdirs();
+                return Files.write(
+                        destination,
+                        data,
                         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING).toFile();
             } catch (IOException e) {
                 throw ApiException.raise("Report file save failed", e);

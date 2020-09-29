@@ -252,11 +252,12 @@ public class Plugin extends Builder implements SimpleBuildStep {
             scanResultId = project.scan(node);
             project.info("PT AI AST result ID is " + scanResultId);
 
+            // Save scan result URL for future use
+            String url = String.format("%s/api/Projects/%s/scanResults/%s", project.getUrl(), projectId, scanResultId);
+            RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(), "result.url", url.getBytes(StandardCharsets.UTF_8), verbose);
             if (workMode instanceof WorkModeAsync) {
                 // Asynchronous mode means that we aren't need to wait AST job
                 // completion. Just write scan result access URL and exit
-                String url = String.format("%s/api/Projects/%s/scanResults/%s", project.getUrl(), projectId, scanResultId);
-                RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(), "result.url", url, verbose);
                 return;
             }
 
@@ -330,8 +331,9 @@ public class Plugin extends Builder implements SimpleBuildStep {
                         ReportFormatType type = ReportFormatType.fromValue(report.getFormat());
                         File reportFile = project.generateReport(projectId, scanResultId, report.getTemplate(), type, report.getLocale());
                         String reportName = String.format("report.%d.%s", idx++, report.getFormat().toLowerCase());
-                        String data = FileUtils.readFileToString(reportFile, StandardCharsets.UTF_8);
+                        byte[] data = FileUtils.readFileToByteArray(reportFile);
                         RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(), reportName, data, verbose);
+                        project.fine("Report saved as %s", reportName);
                     } catch (ApiException e) {
                         project.warning(Messages.plugin_result_ast_warning(e.getMessage()), e);
                         unstable = true;
@@ -340,7 +342,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 // TODO: Implement additional processing logic for unstable scans
                 File json = project.getJsonResult(projectId, scanResultId);
                 RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(),
-                        "issues.json", FileUtils.readFileToString(json, StandardCharsets.UTF_8), verbose);
+                        "issues.json", FileUtils.readFileToByteArray(json), verbose);
             }
 
             if (failIfFailed && failed)

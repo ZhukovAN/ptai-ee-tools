@@ -47,7 +47,9 @@ pt.dropdownDescriptorSelector(
         title: _('config'),
         field: 'config',
         default: descriptor.getDefaultConfigDescriptor(),
-        descriptors: descriptor.getConfigDescriptors())
+        descriptors: descriptor.getConfigDescriptors(),
+        capture: ""
+)
 
 f.invisibleEntry() {
     input(
@@ -56,7 +58,7 @@ f.invisibleEntry() {
             // and there'll be duplicates otherwise
             id: "${configId}_value",
             name: "selectedConfig",
-            value: "")
+            value: "serverUrl,serverCredentialsId,configName")
 }
 
 /*
@@ -71,7 +73,44 @@ script("""
         e = document.getElementById("${configId}");
         document.getElementById("${configId}_value").value = e.options[e.selectedIndex].text;
         validateButton('${descriptor.descriptorFullUrl}/testProject','selectedScanSettings,selectedConfig,jsonSettings,jsonPolicy,projectName,serverUrl,serverCredentialsId,configName',button);
-    }
+    };
+    
+    function triggerEvent(element, event){
+        if (document.createEventObject) {
+            // dispatch for IE
+            var evt = document.createEventObject();
+            return element.fireEvent('on'+event,evt);
+        } else {
+            // dispatch for firefox + others
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent(event, true, true ); // event type,bubbling,cancelable
+            return !element.dispatchEvent(evt);
+        }
+    };
+    
+    function saveSelectedItem(e) {
+        var cb = e.target;
+        // As dropdownDescriptorSelector have no its own readable property to store
+        // currently selected item, we need to create corresponding hidden field 
+        // and add event handler to read selected item and store it there
+        // And as hidden fields do not automatically fire change event, we need to 
+        // trigger it explicitly
+        var selected = \$(cb.id + "_value"); 
+        selected.value = cb.options[cb.selectedIndex].text;
+        triggerEvent(selected, "change");
+    };
+    
+    function init(e) {
+        \$(e.id + "_value").value = e.options[e.selectedIndex].text;    
+        // Need to add event handlers to store currently selected descriptor's displayName
+        e.observe("change", saveSelectedItem);      
+    };
+    
+    (function() {
+        // Initial fill
+        init(\$("${scanSettingsId}"));
+        init(\$("${configId}"));
+    })();    
 """)
 
 // Customized validateButton that allows to use custom validation script

@@ -42,7 +42,7 @@ import java.util.zip.ZipInputStream;
 
 public class BaseIT {
     public static final String TEAMCITY_PLUGIN_API_TOKEN = "EviL0KKic2FplOuBGz6Ox98+JWkRbio4";
-    public static final String JENKINS_PLUGIN_API_TOKEN = "xlk5Ug07ex7KQHcEodcm9IK5qKgO8brJ";
+    public static final String JENKINS_PLUGIN_API_TOKEN = "k+bwoHZBrpi+2TV7Ne25cbFeTXGn+idS";
     public static final String PTAI_URL = "https://10.0.216.109";
 
     @TempDir
@@ -93,7 +93,7 @@ public class BaseIT {
     public void pre() {
         client = new BaseClient();
         client.setUrl(PTAI_URL);
-        client.setToken(TEAMCITY_PLUGIN_API_TOKEN);
+        client.setToken(JENKINS_PLUGIN_API_TOKEN);
         client.setCaCertsPem(CertificateHelper.trustStoreToPem(TRUSTSTORE));
         client.init();
 
@@ -205,7 +205,7 @@ public class BaseIT {
     @SneakyThrows
     @Test
     public void testApiTokenCreate() {
-        String bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaWQiOiJTLTEtNS0yMS0xMDIzMTkxNzMwLTcyNzgyOTkyNy0zOTg1MDUwMTkyLTI3MjU5IiwiQXV0aFNjb3BlIjoiVmlld2VyIiwic3ViIjoiUy0xLTUtMjEtMTAyMzE5MTczMC03Mjc4Mjk5MjctMzk4NTA1MDE5Mi0yNzI1OSIsIm5iZiI6MTU5ODM2MTE4NiwiZXhwIjoxNTk4MzYxNDg2LCJpYXQiOjE1OTgzNjExODYsImlzcyI6IkFJLkVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUwMDY1LyJ9.1VbG54p6O71NK8rOSqiEp7PUQI8wJHqVSijac8sO-70";
+        String bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaWQiOiJTLTEtNS0yMS0xMDIzMTkxNzMwLTcyNzgyOTkyNy0zOTg1MDUwMTkyLTI3MjU5IiwiQXV0aFNjb3BlIjoiVmlld2VyIiwic3ViIjoiUy0xLTUtMjEtMTAyMzE5MTczMC03Mjc4Mjk5MjctMzk4NTA1MDE5Mi0yNzI1OSIsIm5iZiI6MTYwMTI4OTE5NSwiZXhwIjoxNjAxMjg5NDk1LCJpYXQiOjE2MDEyODkxOTUsImlzcyI6IkFJLkVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUwMDY1LyJ9.UuL9XGIFqu8WZAKSPoD3X3TD8DTJ7VcJM7BZ-PgUKO4";
 
         AccessTokenApi tokenApi = new AccessTokenApi(new ApiClient());
         tokenApi.getApiClient().setApiKeyPrefix("Bearer");
@@ -218,7 +218,7 @@ public class BaseIT {
         // client.baseInit();
         // client.initClients(tokenApi);
 
-        OffsetDateTime tokenExpiration = OffsetDateTime.now().plusMonths(1);
+        OffsetDateTime tokenExpiration = OffsetDateTime.now().plusYears(1);
         // Name field is unique: if you'll try to create multiple tokens that API error will be raised
         AccessTokenCreateModel tokenModel = new AccessTokenCreateModel()
                 .name("ptai-jenkins-plugin")

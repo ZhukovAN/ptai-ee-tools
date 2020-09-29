@@ -74,6 +74,8 @@ public class ExitCode {
     public static final ExitCode CODE_ERROR_TERMINATED = new ExitCode(100, "Scan terminated (Ctrl-C)");
     // 1000    Неопознанная ошибка
     public static final ExitCode CODE_UNKNOWN_ERROR = new ExitCode(1000, "Unknown error");
+    // 2000    Policy not defined
+    public static final ExitCode CODE_POLICY_NOT_DEFINED = new ExitCode(2000, "AST policy not defined");
 
     public static Map<Integer, String> CODES = new HashMap<>();
 
@@ -88,6 +90,6 @@ public class ExitCode {
                 CODE_ERROR_POLICY, CODE_ERROR_KERNEL_CRITICAL, CODE_ERROR_KERNEL_NOTFOUND,
                 CODE_ERROR_SRC_DOWNLOAD, CODE_ERROR_HEARTBEAT, CODE_ERROR_UPDATE,
                 CODE_ERROR_PASSWORD_INCORRECT, CODE_ERROR_SERVER_CERTIFICATE_NOTFOUND, CODE_ERROR_TERMINATED,
-                CODE_UNKNOWN_ERROR).stream().forEach(c -> CODES.put(c.code, c.description));
+                CODE_UNKNOWN_ERROR, CODE_POLICY_NOT_DEFINED).stream().forEach(c -> CODES.put(c.code, c.description));
     }
 }

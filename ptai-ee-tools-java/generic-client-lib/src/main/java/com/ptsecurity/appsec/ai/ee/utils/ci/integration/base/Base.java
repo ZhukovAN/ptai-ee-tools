@@ -28,7 +28,7 @@ public class Base {
         Security.addProvider(new BouncyCastleProvider());
     }
 
-    protected static boolean jceFixApplied = false;
+    private static boolean jceFixApplied = false;
 
     @Setter
     protected boolean verbose = false;
@@ -88,7 +88,7 @@ public class Base {
         exception(message, e, Level.WARNING);
     }
 
-    public void severe(final String value) {
+    public void severe(@NonNull final String value) {
         log.severe(value);
         out(value);
     }
@@ -97,7 +97,7 @@ public class Base {
         exception(message, e, Level.SEVERE);
     }
 
-    public void fine(final String value) {
+    public void fine(@NonNull final String value) {
         log.fine(value);
         if (verbose) out(value);
     }

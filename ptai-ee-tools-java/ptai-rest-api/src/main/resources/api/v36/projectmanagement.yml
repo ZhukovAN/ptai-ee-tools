@@ -1773,6 +1773,11 @@ paths:
         - Reports
       summary: Get all report`s templates
       parameters:
+        - name: localeId
+          in: query
+          schema:
+            type: string
+            nullable: true
         - name: withContent
           in: query
           schema:
@@ -1882,6 +1887,11 @@ paths:
           schema:
             type: string
             format: uuid
+        - name: localeId
+          in: query
+          schema:
+            type: string
+            nullable: true
         - name: needAddCss
           in: query
           schema:
@@ -2013,16 +2023,18 @@ paths:
       tags:
         - Reports
       summary: "Get report template by id\r\n<param name=\"id\">Report`s id</param>"
+      operationId: TemplateByType
       parameters:
-        - name: reportType
-          in: query
-          schema:
-            $ref: '#/components/schemas/ReportType'
         - name: type
           in: path
           required: true
           schema:
+            $ref: '#/components/schemas/ReportType'
+        - name: localeId
+          in: query
+          schema:
             type: string
+            nullable: true
       responses:
         '200':
           description: Success
@@ -2064,33 +2076,7 @@ paths:
     post:
       tags:
         - Reports
-      summary: "Check template on errors\r\n <param name=\"template\">Template text</param>"
-      requestBody:
-        content:
-          application/json-patch+json:
-            schema:
-              type: string
-              nullable: true
-          application/json:
-            schema:
-              type: string
-              nullable: true
-          text/json:
-            schema:
-              type: string
-              nullable: true
-          application/*+json:
-            schema:
-              type: string
-              nullable: true
-          application/x-msgpack:
-            schema:
-              type: string
-              nullable: true
-          application/msgpack:
-            schema:
-              type: string
-              nullable: true
+      summary: Check template on errors. Pass template text in body
       responses:
         '200':
           description: Success
@@ -2950,9 +2936,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -2975,9 +2958,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -3044,11 +3024,6 @@ components:
           nullable: true
         javaVersion:
           $ref: '#/components/schemas/JavaVersions'
-        javaNormalizeVersionPattern:
-          type: string
-          nullable: true
-        useJavaNormalizeVersionPattern:
-          type: boolean
         isUnpackUserPackages:
           type: boolean
         isDownloadDependencies:
@@ -3061,9 +3036,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -3086,9 +3058,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -3172,9 +3141,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -3197,9 +3163,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -3270,9 +3233,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -3295,9 +3255,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -3362,9 +3319,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -3387,9 +3341,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -3460,9 +3411,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -3485,9 +3433,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -3567,9 +3512,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -3592,9 +3534,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -3664,9 +3603,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -3689,9 +3625,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -3763,9 +3696,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -3788,9 +3718,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -3869,9 +3796,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -3894,9 +3818,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -4125,9 +4046,6 @@ components:
         bindAddress:
           type: string
           nullable: true
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -4150,9 +4068,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -4205,9 +4120,6 @@ components:
     ICommonSettings:
       type: object
       properties:
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -4230,9 +4142,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
@@ -5360,6 +5269,7 @@ components:
         - UPDATE_SERVER_PARAMETERS_INVALID
         - UPDATE_SERVER_INSTALLER_EXIT_WITH_ERROR
         - UPDATE_SERVER_PACKAGE_IS_INCORRECT
+        - UPDATE_SERVER_NOT_ENOUGH_SPACE
         - CERTIFICATE_FILE_IS_EMPTY
         - CERTIFICATE_IS_ALREADY_INSTALLED
         - CERTIFICATE_IS_NOT_VALID
@@ -5561,9 +5471,6 @@ components:
           type: boolean
         disableInterpretCores:
           type: boolean
-        threadCount:
-          type: integer
-          format: int32
         scope:
           type: string
           nullable: true
@@ -5590,9 +5497,6 @@ components:
         customParameters:
           type: string
           nullable: true
-        scanUnitTimeout:
-          type: integer
-          format: int64
         useIncrementalScan:
           type: boolean
           deprecated: true
