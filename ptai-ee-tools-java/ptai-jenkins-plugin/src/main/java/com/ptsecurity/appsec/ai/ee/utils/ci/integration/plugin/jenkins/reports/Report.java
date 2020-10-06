@@ -62,7 +62,7 @@ public class Report implements Describable<Report>, Serializable {
         public ReportDescriptor() {
             super(Report.class);
         }
-
+        /*
         public ListBoxModel doFillTemplateItems(
                 @AncestorInPath Item item,
                 @RelativePath("../..") @QueryParameter("selectedConfig") final String selectedConfig,
@@ -107,6 +107,7 @@ public class Report implements Describable<Report>, Serializable {
                 return null;
             }
         }
+        */
 
         public ListBoxModel doFillFormatItems() {
             ListBoxModel model = new ListBoxModel();

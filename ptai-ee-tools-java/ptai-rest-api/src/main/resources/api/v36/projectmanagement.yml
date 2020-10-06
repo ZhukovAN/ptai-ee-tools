@@ -80,6 +80,152 @@ paths:
           description: Success
         '401':
           description: Unauthorized
+  /api/Configs/sastRules:
+    get:
+      tags:
+        - Configs
+      summary: Get sast rules
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: object
+                properties:
+                  None:
+                    type: string
+                  Binary:
+                    type: string
+                  Configuration:
+                    type: string
+                  Fingerprint:
+                    type: string
+                  Java:
+                    type: string
+                  CSharp:
+                    type: string
+                  PHP:
+                    type: string
+                  PmTaint:
+                    type: string
+                  BlackBox:
+                    type: string
+                  JavaScript:
+                    type: string
+                  DependencyCheck:
+                    type: string
+                additionalProperties: false
+            application/json:
+              schema:
+                type: object
+                properties:
+                  None:
+                    type: string
+                  Binary:
+                    type: string
+                  Configuration:
+                    type: string
+                  Fingerprint:
+                    type: string
+                  Java:
+                    type: string
+                  CSharp:
+                    type: string
+                  PHP:
+                    type: string
+                  PmTaint:
+                    type: string
+                  BlackBox:
+                    type: string
+                  JavaScript:
+                    type: string
+                  DependencyCheck:
+                    type: string
+                additionalProperties: false
+            text/json:
+              schema:
+                type: object
+                properties:
+                  None:
+                    type: string
+                  Binary:
+                    type: string
+                  Configuration:
+                    type: string
+                  Fingerprint:
+                    type: string
+                  Java:
+                    type: string
+                  CSharp:
+                    type: string
+                  PHP:
+                    type: string
+                  PmTaint:
+                    type: string
+                  BlackBox:
+                    type: string
+                  JavaScript:
+                    type: string
+                  DependencyCheck:
+                    type: string
+                additionalProperties: false
+            application/x-msgpack:
+              schema:
+                type: object
+                properties:
+                  None:
+                    type: string
+                  Binary:
+                    type: string
+                  Configuration:
+                    type: string
+                  Fingerprint:
+                    type: string
+                  Java:
+                    type: string
+                  CSharp:
+                    type: string
+                  PHP:
+                    type: string
+                  PmTaint:
+                    type: string
+                  BlackBox:
+                    type: string
+                  JavaScript:
+                    type: string
+                  DependencyCheck:
+                    type: string
+                additionalProperties: false
+            application/msgpack:
+              schema:
+                type: object
+                properties:
+                  None:
+                    type: string
+                  Binary:
+                    type: string
+                  Configuration:
+                    type: string
+                  Fingerprint:
+                    type: string
+                  Java:
+                    type: string
+                  CSharp:
+                    type: string
+                  PHP:
+                    type: string
+                  PmTaint:
+                    type: string
+                  BlackBox:
+                    type: string
+                  JavaScript:
+                    type: string
+                  DependencyCheck:
+                    type: string
+                additionalProperties: false
+        '401':
+          description: Unauthorized
   '/api/Configs/sastRules/{type}':
     get:
       tags:
@@ -3215,12 +3361,6 @@ components:
     IJavaScriptSettings:
       type: object
       properties:
-        javaScriptProjectFile:
-          type: string
-          nullable: true
-        javaScriptProjectFolder:
-          type: string
-          nullable: true
         isUnpackUserPackages:
           type: boolean
         isDownloadDependencies:

@@ -262,9 +262,6 @@ public class ScanSettingsHelper {
         if (scanAppType.stream().anyMatch(t -> ("JavaScript".equalsIgnoreCase(t)))) {
             IJavaScriptSettings languageSettings = new IJavaScriptSettings().scanAppType(ScanAppType.JavaScript);
             fillCommonFields(languageSettings, json);
-            languageSettings
-                    .javaScriptProjectFile(json.getJavaScriptProjectFile())
-                    .javaScriptProjectFolder(json.getJavaScriptProjectFolder());
             settings.setJavaScript(languageSettings);
         }
     }

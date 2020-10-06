@@ -42,8 +42,10 @@ import java.util.zip.ZipInputStream;
 
 public class BaseIT {
     public static final String TEAMCITY_PLUGIN_API_TOKEN = "EviL0KKic2FplOuBGz6Ox98+JWkRbio4";
-    public static final String JENKINS_PLUGIN_API_TOKEN = "k+bwoHZBrpi+2TV7Ne25cbFeTXGn+idS";
-    public static final String PTAI_URL = "https://10.0.216.109";
+    // public static final String JENKINS_PLUGIN_API_TOKEN = "k+bwoHZBrpi+2TV7Ne25cbFeTXGn+idS";
+    public static final String JENKINS_PLUGIN_API_TOKEN = "6M9Qsct5fg20/UEzN7/hvR2RlXkTWOI5";
+    // public static final String PTAI_URL = "https://10.0.216.109";
+    public static final String PTAI_URL = "https://ptai.domain.org";
 
     @TempDir
     protected static File TEMPFOLDER;
