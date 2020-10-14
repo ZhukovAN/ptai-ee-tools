@@ -249,17 +249,17 @@ public class BaseClient extends Base {
 
         // Register subscriptions
         connection.on("NeedUpdateConnectedDate", (message) -> {
-            log.finest("NeedUpdateConnectedDate: " + message);
+            log.finest("Event:NeedUpdateConnectedDate: " + message);
             connectedDate = message;
         }, String.class);
 
-        connection.on("NeedRefreshToken", (data) -> {
-            log.finest("NeedRefreshToken");
+        connection.on("NeedRefreshToken", () -> {
+            log.finest("Event:NeedRefreshToken");
             authenticate();
-        }, String.class);
+        });
 
         connection.on("NeedSyncClientState", () -> {
-            log.finest("NeedSyncClientState");
+            log.finest("Event:NeedSyncClientState");
             subscribe(connection, scanResultId);
         });
 
