@@ -301,7 +301,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                     }
                     try {
                         ReportFormatType type = ReportFormatType.fromValue(report.getFormat());
-                        File reportFile = project.generateReport(projectId, scanResultId, report.getTemplate(), type, report.getLocale());
+                        File reportFile = project.generateReport(projectId, scanResultId, report.getTemplate(), report.getLocale(), type);
                         byte[] data = FileUtils.readFileToByteArray(reportFile);
                         RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(), name, data, verbose);
                         project.fine("Report saved as %s", name);

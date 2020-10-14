@@ -222,28 +222,30 @@ public class BaseClient extends Base {
                 .withAccessTokenProvider(accessTokenProvider)
                 .withHeader("connectedDate", connectedDate)
                 .build();
-        // Here goes a lot of reflections to setup custom CA certificate chain
-        //
-        // Create in-memory keystore and fill it with caCertsPem data
-        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keyStore.load(null, null);
-        List<X509Certificate> certs = CertificateHelper.readPem(caCertsPem);
-        for (X509Certificate cert : certs)
-            keyStore.setCertificateEntry(UUID.randomUUID().toString(), cert);
-        // Init trustManagerFactory with custom CA certificates
-        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        trustManagerFactory.init(keyStore);
-        TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustManagers, new SecureRandom());
-        // Modify default settings
-        Object httpClient = Reflect.on(connection).get("httpClient");
-        OkHttpClient okHttpClient = Reflect.on(httpClient).get("client");
-        okHttpClient = okHttpClient.newBuilder()
-                .hostnameVerifier((hostname, session) -> true)
-                .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0])
-                .build();
-        Reflect.on(httpClient).set("client", okHttpClient);
+        if (StringUtils.isNotEmpty(caCertsPem)) {
+            // Here goes a lot of reflections to setup custom CA certificate chain
+            //
+            // Create in-memory keystore and fill it with caCertsPem data
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(null, null);
+            List<X509Certificate> certs = CertificateHelper.readPem(caCertsPem);
+            for (X509Certificate cert : certs)
+                keyStore.setCertificateEntry(UUID.randomUUID().toString(), cert);
+            // Init trustManagerFactory with custom CA certificates
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init(keyStore);
+            TrustManager[] trustManagers = trustManagerFactory.getTrustManagers();
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustManagers, new SecureRandom());
+            // Modify default settings
+            Object httpClient = Reflect.on(connection).get("httpClient");
+            OkHttpClient okHttpClient = Reflect.on(httpClient).get("client");
+            okHttpClient = okHttpClient.newBuilder()
+                    .hostnameVerifier((hostname, session) -> true)
+                    .sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustManagers[0])
+                    .build();
+            Reflect.on(httpClient).set("client", okHttpClient);
+        }
 
         // Register subscriptions
         connection.on("NeedUpdateConnectedDate", (message) -> {

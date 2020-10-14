@@ -67,52 +67,6 @@ public class Report implements Describable<Report>, Serializable {
         public ReportDescriptor() {
             super(Report.class);
         }
-        /*
-        public ListBoxModel doFillTemplateItems(
-                @AncestorInPath Item item,
-                @RelativePath("../..") @QueryParameter("selectedConfig") final String selectedConfig,
-                @RelativePath("../../config/serverSettings") @QueryParameter("serverUrl") final String serverUrl,
-                @RelativePath("../../config/serverSettings") @QueryParameter("serverCredentialsId") final String serverCredentialsId,
-                @RelativePath("../../config") @QueryParameter("configName") final String configName) {
-
-            PluginDescriptor descriptor = Jenkins.get().getDescriptorByType(PluginDescriptor.class);
-            ConfigGlobal.Descriptor configGlobalDescriptor = Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
-
-            Credentials credentials;
-            String realServerUrl;
-
-            if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
-                BaseConfig base = descriptor.getConfig(configName);
-                ServerSettings serverSettings = ((Config) base).getServerSettings();
-                String credentialsId = serverSettings.getServerCredentialsId();
-                credentials = CredentialsImpl.getCredentialsById(item, credentialsId);
-                realServerUrl = serverSettings.getServerUrl();
-            } else {
-                credentials = CredentialsImpl.getCredentialsById(item, serverCredentialsId);
-                realServerUrl = serverUrl;
-            }
-
-            try {
-                Utils utils = new Utils();
-                utils.setUrl(realServerUrl);
-                utils.setToken(credentials.getToken().getPlainText());
-                if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
-                    utils.setCaCertsPem(credentials.getServerCaCertificates());
-                utils.init();
-
-                ListBoxModel model = new ListBoxModel();
-                // TODO: 20200929: Remove doFillTemplateItems as it becomes
-                //  too complex: template list depends on locale
-                List<ReportTemplateModel> templates = utils.getReportTemplates("en-US");
-                for (ReportTemplateModel template : templates)
-                    model.add(template.getName(), template.getId().toString());
-
-                return model;
-            } catch (ApiException e) {
-                return null;
-            }
-        }
-        */
 
         public ListBoxModel doFillFormatItems() {
             ListBoxModel model = new ListBoxModel();

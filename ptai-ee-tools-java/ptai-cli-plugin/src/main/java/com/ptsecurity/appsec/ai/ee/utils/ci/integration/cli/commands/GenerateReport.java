@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ReportFormatType;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ReportTemplateModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
@@ -123,9 +124,12 @@ public class GenerateReport extends BaseAst implements Callable<Integer> {
             output.toFile().mkdirs();
             File reportFile = utils.generateReport(
                     projectInfo.id, scanResultId,
-                    report.template, report.format, report.locale);
+                    report.template, report.locale.getValue(),
+                    ReportFormatType.fromValue(report.format.getValue()));
             String reportName = ReportHelper.generateReportFileNameTemplate(
-                    report.template, report.locale, report.format.getValue());
+                    report.template,
+                    report.locale.getValue(),
+                    ReportFormatType.fromValue(report.format.getValue()).getValue());
             reportName = ReportHelper.removePlaceholder(reportName);
             FileUtils.moveFile(reportFile, output.resolve(reportName).toFile());
             utils.fine("Report saved as %s", reportName);

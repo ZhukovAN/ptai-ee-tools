@@ -48,7 +48,7 @@ public class ListReportTemplates extends BaseAst implements Callable<Integer> {
     protected Path truststore = null;
 
     @CommandLine.Option(
-            names = {"--locale"}, order = 4,
+            names = {"--locale"}, required = true, order = 4,
             paramLabel = "<locale>",
             description = "Locale ID of templates to be listed, i.e. en-US, ru-RU etc.")
     protected String locale = "";

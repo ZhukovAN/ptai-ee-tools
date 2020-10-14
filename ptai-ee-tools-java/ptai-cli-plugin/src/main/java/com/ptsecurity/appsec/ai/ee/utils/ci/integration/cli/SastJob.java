@@ -128,9 +128,10 @@ public class SastJob extends Base {
                         output.toFile().mkdirs();
                         File reportFile = project.generateReport(
                                 projectId, scanResultId,
-                                report.template, report.format, report.locale);
+                                report.template, report.locale.getValue(),
+                                ReportFormatType.fromValue(report.format.getValue()));
                         String reportName = ReportHelper.generateReportFileNameTemplate(
-                                report.template, report.locale, report.format.getValue());
+                                report.template, report.locale.getValue(), report.format.getValue());
                         reportName = ReportHelper.removePlaceholder(reportName);
                         FileUtils.moveFile(reportFile, output.resolve(reportName).toFile());
                         project.fine("Report saved as %s", reportName);

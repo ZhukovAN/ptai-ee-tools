@@ -25,6 +25,27 @@ import java.util.zip.ZipInputStream;
 @DisplayName("Check UI-defined AST scans")
 class UiAstIT extends BaseIT {
     @Test
+    @DisplayName("Show usage of UI-defined AST")
+    public void testUiAstShowUsage() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "ui-ast");
+        Assertions.assertEquals(BaseAst.ExitCode.INVALID_INPUT.getCode(), res);
+    }
+
+    @Test
+    @DisplayName("Execute UI-defined AST of existing project without custom truststore")
+    public void testUiAstWithoutTruststore() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "ui-ast",
+                "--project", EXISTING_PROJECT_NAME,
+                "--input", TEMP_SOURCES_FOLDER.toPath().toString(),
+                "--output", TEMP_REPORT_FOLDER.toPath().toString(),
+                "--url", PTAI_URL,
+                "--token", TOKEN);
+        Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
+    }
+
+    @Test
     @DisplayName("Execute UI-defined AST of existing project")
     public void testUiAst() {
         Integer res = new CommandLine(new Plugin()).execute(
@@ -50,8 +71,8 @@ class UiAstIT extends BaseIT {
                 "--truststore", PEM_PATH.toString(),
                 "--token", TOKEN,
                 "--report-template", "OWASP top 10 2017 report",
-                "--report-format", "Html",
-                "--report-locale", "en-US");
+                "--report-format", "HTML",
+                "--report-locale", "EN");
         Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
     }
 }

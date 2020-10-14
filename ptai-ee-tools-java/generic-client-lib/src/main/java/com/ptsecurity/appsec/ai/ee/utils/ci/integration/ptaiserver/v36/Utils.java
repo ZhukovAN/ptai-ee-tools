@@ -76,7 +76,9 @@ public class Utils extends BaseClient {
 
     public File generateReport(
             @NonNull final UUID projectId, @NonNull final UUID scanResultId,
-            @NonNull final String template, @NonNull final ReportFormatType type, @NonNull final String locale) throws ApiException {
+            @NonNull final String template,
+            @NonNull final String locale,
+            @NonNull final ReportFormatType type) throws ApiException {
         List<ReportTemplateModel> templates = getReportTemplates(locale);
         ReportTemplateModel templateModel = templates.stream().filter(t -> t.getName().equalsIgnoreCase(template)).findAny().orElse(null);
         if (null == templateModel)

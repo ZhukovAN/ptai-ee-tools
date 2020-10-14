@@ -7,10 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ptai-jenkins-plugin" />
-        <module name="generic-client-lib" />
         <module name="ptai-cli-plugin" />
-        <module name="ptai-data-structures" />
         <module name="ptai-rest-api" />
+        <module name="ptai-data-structures" />
+        <module name="generic-client-lib" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

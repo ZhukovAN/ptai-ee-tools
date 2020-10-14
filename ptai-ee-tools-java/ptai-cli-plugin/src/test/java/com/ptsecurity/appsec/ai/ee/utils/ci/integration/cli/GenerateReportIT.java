@@ -21,8 +21,8 @@ class GenerateReportIT extends BaseIT {
                 "--output", TEMP_REPORT_FOLDER.toPath().toString(),
                 "--project-name", EXISTING_PROJECT_NAME,
                 "--report-template", "Scan results report",
-                "--report-locale", "en-US",
-                "--report-format", "Json");
+                "--report-locale", "EN",
+                "--report-format", "JSON");
         Assertions.assertEquals(BaseAst.ExitCode.SUCCESS.getCode(), res);
     }
 
@@ -38,8 +38,8 @@ class GenerateReportIT extends BaseIT {
                 "--project-name", EXISTING_PROJECT_NAME,
                 "--scan-result-id", "e53a53e3-e80f-456d-a033-c67d0b574d5b",
                 "--report-template", "OWASP top 10 2017 report",
-                "--report-locale", "en-US",
-                "--report-format", "Html");
+                "--report-locale", "EN",
+                "--report-format", "HTML");
         Assertions.assertEquals(BaseAst.ExitCode.SUCCESS.getCode(), res);
     }
 
