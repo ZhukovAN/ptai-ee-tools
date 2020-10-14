@@ -102,8 +102,11 @@ public class JsonAst implements Callable<Integer> {
             description = "Path to PEM file that stores trusted CA certificates")
     protected Path truststore = null;
 
+    @CommandLine.ArgGroup(exclusive = false)
+    BaseAst.Report report;
+
     @CommandLine.Option(
-            names = {"-v", "--verbose"}, order = 11,
+            names = {"-v", "--verbose"}, order = 99,
             description = "Provide verbose console log output")
     protected boolean verbose = false;
 
@@ -168,6 +171,7 @@ public class JsonAst implements Callable<Integer> {
                 .excludes(excludes)
                 .jsonSettings(settings)
                 .jsonPolicy(policy)
+                .report(report)
                 .build();
         if (null != truststore) {
             String pem = new String(Files.readAllBytes(truststore), StandardCharsets.UTF_8);

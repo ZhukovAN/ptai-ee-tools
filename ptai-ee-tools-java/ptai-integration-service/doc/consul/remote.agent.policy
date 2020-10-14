@@ -1,9 +1,0 @@
-node "devel-node" {
-  policy = "write"
-}
-service_prefix "" {
-  policy = "read"
-}
-key_prefix "_rexec" {
-  policy = "write"
-}

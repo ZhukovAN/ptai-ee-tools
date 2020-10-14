@@ -86,8 +86,11 @@ public class UiAst extends BaseAst implements Callable<Integer> {
             description = "Path to PEM file that stores trusted CA certificates")
     protected Path truststore = null;
 
+    @CommandLine.ArgGroup(exclusive = false)
+    Report report;
+
     @CommandLine.Option(
-            names = {"-v", "--verbose"}, order = 10,
+            names = {"-v", "--verbose"}, order = 12,
             description = "Provide verbose console log output")
     protected boolean verbose = false;
 
@@ -111,6 +114,7 @@ public class UiAst extends BaseAst implements Callable<Integer> {
                 .output(output)
                 .includes(includes)
                 .excludes(excludes)
+                .report(report)
                 .build();
         if (null != truststore) {
             String pem = new String(Files.readAllBytes(truststore), StandardCharsets.UTF_8);

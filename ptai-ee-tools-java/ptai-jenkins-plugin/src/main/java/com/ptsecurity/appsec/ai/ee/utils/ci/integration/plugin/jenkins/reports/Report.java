@@ -12,6 +12,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalcon
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigGlobal;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ReportHelper;
 import hudson.Extension;
 import hudson.RelativePath;
 import hudson.model.Describable;
@@ -50,6 +51,10 @@ public class Report implements Describable<Report>, Serializable {
         this.template = template;
         this.format = format;
         this.locale = locale;
+    }
+
+    public String fileNameTemplate() {
+        return ReportHelper.generateReportFileNameTemplate(template, locale, format);
     }
 
     public ReportDescriptor getDescriptor() {

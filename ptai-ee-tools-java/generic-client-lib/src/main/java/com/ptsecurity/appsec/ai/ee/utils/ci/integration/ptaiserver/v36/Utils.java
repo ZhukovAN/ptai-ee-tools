@@ -1,11 +1,26 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
+import com.microsoft.signalr.HubConnection;
+import com.microsoft.signalr.HubConnectionBuilder;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheck;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.CertificateHelper;
+import io.reactivex.Single;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
+import okhttp3.OkHttpClient;
+import org.joor.Reflect;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import java.io.File;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.*;
 
 @Log
@@ -22,5 +37,57 @@ public class Utils extends BaseClient {
         return callApi(
                 () -> reportsApi.apiReportsTemplatesGet(locale, false),
                 "PT AI report templates list read failed");
+    }
+
+    public UUID searchProject(
+            @NonNull final String name) throws ApiException {
+        ProjectLight projectLight = callApi(
+                () -> projectsApi.apiProjectsLightNameGet(name),
+                "PT AI project search failed");
+        return (null == projectLight) ? null : projectLight.getId();
+    }
+
+    public String searchProject(
+            @NonNull final UUID id) throws ApiException {
+        com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Project project = callApi(
+                () -> projectsApi.apiProjectsProjectIdGet(id),
+                "PT AI project search failed");
+        return (null == project) ? null : project.getName();
+    }
+
+    public File generateReport(
+            @NonNull final UUID projectId, @NonNull final UUID scanResultId,
+            @NonNull final UUID template, @NonNull final ReportFormatType type, @NonNull final String locale) throws ApiException {
+        ReportGenerateModel model = new ReportGenerateModel()
+                .parameters(new UserReportParameters()
+                        .includeDFD(true)
+                        .includeGlossary(true)
+                        .formatType(type)
+                        .reportTemplateId(template)
+                        .saveAsPath(""))
+                .scanResultId(scanResultId)
+                .projectId(projectId)
+                .localeId(locale);
+        fine("Generating report for project %s, scan result %s. Report template %s, type %s, locale %s", projectId, scanResultId, template, type, locale);
+        return callApi(
+                () -> reportsApi.apiReportsGeneratePost(model),
+                "Report generation failed");
+    }
+
+    public File generateReport(
+            @NonNull final UUID projectId, @NonNull final UUID scanResultId,
+            @NonNull final String template, @NonNull final ReportFormatType type, @NonNull final String locale) throws ApiException {
+        List<ReportTemplateModel> templates = getReportTemplates(locale);
+        ReportTemplateModel templateModel = templates.stream().filter(t -> t.getName().equalsIgnoreCase(template)).findAny().orElse(null);
+        if (null == templateModel)
+            throw ApiException.raise("Report generation failed", new IllegalArgumentException("PT AI template " + template + " not found"));
+        return generateReport(projectId, scanResultId, templateModel.getId(), type, locale);
+    }
+
+    public UUID latestScanResult(@NonNull final UUID projectId) {
+        ScanResult scanResult = callApi(
+                () -> projectsApi.apiProjectsProjectIdScanResultsLastGet(projectId),
+                "PT AI project latest scan result search failed");
+        return (null == scanResult) ? null : scanResult.getId();
     }
 }

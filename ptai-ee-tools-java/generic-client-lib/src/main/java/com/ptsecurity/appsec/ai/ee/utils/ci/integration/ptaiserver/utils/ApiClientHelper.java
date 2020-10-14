@@ -82,6 +82,7 @@ public class ApiClientHelper {
     public OkHttpClient getHttpClient() {
         return on(apiClient).call("getHttpClient").get();
     }
+
     public void setApiKey(String key) {
         on(apiClient).call("setApiKey", key);
     }

@@ -25,6 +25,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ReportHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import hudson.*;
 import hudson.model.AbstractBuild;
@@ -46,6 +47,7 @@ import javax.annotation.Nonnull;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -267,36 +269,51 @@ public class Plugin extends Builder implements SimpleBuildStep {
             boolean unstable = false;
             String reason;
 
-            Stage stage = null;
-            ScanProgress previousProgress = null;
-            ScanResultStatistic previousStatistic = null;
-
-            do {
-                Thread.sleep(5000);
-                ScanResult state = project.poll(projectId, scanResultId);
-                ScanProgress progress = state.getProgress();
-                ScanResultStatistic statistic = state.getStatistic();
-                boolean somethingChanged = false;
-                if (null != progress && !progress.equals(previousProgress)) {
-                    String progressInfo = "AST stage: " + progress.getStage() + ", percentage: " + progress.getValue();
-                    project.info(progressInfo);
-                    previousProgress = progress;
-                    somethingChanged = true;
-                };
-                if (null != statistic && !statistic.equals(previousStatistic)) {
-                    project.info("Scan duration: %s", statistic.getScanDuration());
-                    if (0 != statistic.getTotalFileCount())
-                        project.info("Scanned files: %d out of %d", statistic.getScannedFileCount(), statistic.getTotalFileCount());
-                    previousStatistic = statistic;
-                    somethingChanged = true;
-                };
-                if (!somethingChanged)
-                    project.fine("Scan status polling done, no change detected");
-                if (null != progress) stage = progress.getStage();
-            } while (!Stage.DONE.equals(stage) && !Stage.ABORTED.equals(stage) && !Stage.FAILED.equals(stage));
+            ScanResult state = project.waitForComplete(scanResultId);
+            Stage stage = state.getProgress().getStage();
 
             log.finer("Resulting stage is " + stage);
-            log.finer("Resulting statistics is " + previousStatistic);
+            log.finer("Resulting statistics is " + state.getStatistic());
+
+            List<ScanError> scanErrors = project.getScanErrors(projectId, scanResultId);
+            failed |=  scanErrors.stream().filter(ScanError::getIsCritical).findAny().isPresent();
+            unstable |=  scanErrors.stream().filter(e -> !e.getIsCritical()).findAny().isPresent();
+
+            if (Stage.DONE.equals(stage) || Stage.ABORTED.equals(stage)) {
+                // Save reports if scan was started ever
+                int idx = 0;
+                // Generate unique report names as reports defined in job settings may have duplicates
+                final String duplicateReportIndexPlaceholder = UUID.randomUUID().toString();
+                Map<String, Long> counters = workModeSync.getReports().stream()
+                        .collect(Collectors.groupingBy(r -> r.fileNameTemplate(), Collectors.counting()));
+                Map<String, Long> duplicateIndexes = new HashMap<>();
+
+                for (Report report : workModeSync.getReports()) {
+                    String name = report.fileNameTemplate();
+                    if (1 == counters.get(name))
+                        name = ReportHelper.removePlaceholder(name);
+                    else {
+                        Long duplicateIndex = duplicateIndexes.getOrDefault(name, Long.valueOf(1));
+                        String duplicateName = ReportHelper.replacePlaceholder(name, "." + duplicateIndex);
+                        duplicateIndex++;
+                        duplicateIndexes.put(name, duplicateIndex);
+                        name = duplicateName;
+                    }
+                    try {
+                        ReportFormatType type = ReportFormatType.fromValue(report.getFormat());
+                        File reportFile = project.generateReport(projectId, scanResultId, report.getTemplate(), type, report.getLocale());
+                        byte[] data = FileUtils.readFileToByteArray(reportFile);
+                        RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(), name, data, verbose);
+                        project.fine("Report saved as %s", name);
+                    } catch (ApiException e) {
+                        project.warning(Messages.plugin_result_ast_warning(e.getMessage()), e);
+                        unstable = true;
+                    }
+                }
+                File json = project.getJsonResult(projectId, scanResultId);
+                RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(),
+                        "issues.json", FileUtils.readFileToByteArray(json), verbose);
+            }
 
             // Step is failed if scan aborted or failed (i.e. because of license problems)
             failed |= !Stage.DONE.equals(stage);
@@ -311,38 +328,14 @@ public class Plugin extends Builder implements SimpleBuildStep {
             // TODO: Swap REJECTED/CONFIRMED states
             //  when https://jira.ptsecurity.com/browse/AI-4866 will be fixed
             if (!failed) {
-                failed |= PolicyState.CONFIRMED.equals(previousStatistic.getPolicyState());
+                failed |= PolicyState.CONFIRMED.equals(state.getStatistic().getPolicyState());
                 // If scan is done, than the only reason to fail is policy violation
                 if (failed)
                     reason = Messages.plugin_result_ast_policy_failed();
-                else if (PolicyState.REJECTED.equals(previousStatistic.getPolicyState()))
+                else if (PolicyState.REJECTED.equals(state.getStatistic().getPolicyState()))
                     reason = Messages.plugin_result_ast_policy_success();
                 else
                     reason = Messages.plugin_result_ast_policy_empty();
-            }
-
-            if (Stage.DONE.equals(stage) || Stage.ABORTED.equals(stage)) {
-                // Save reports if scan was started ever
-                int idx = 0;
-                for (Report report : workModeSync.getReports()) {
-                    // Need to wrap report generation to try-catch block as incorrect
-                    // report generation template setting must not lead to invalid build
-                    try {
-                        ReportFormatType type = ReportFormatType.fromValue(report.getFormat());
-                        File reportFile = project.generateReport(projectId, scanResultId, report.getTemplate(), type, report.getLocale());
-                        String reportName = String.format("report.%d.%s", idx++, report.getFormat().toLowerCase());
-                        byte[] data = FileUtils.readFileToByteArray(reportFile);
-                        RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(), reportName, data, verbose);
-                        project.fine("Report saved as %s", reportName);
-                    } catch (ApiException e) {
-                        project.warning(Messages.plugin_result_ast_warning(e.getMessage()), e);
-                        unstable = true;
-                    }
-                }
-                // TODO: Implement additional processing logic for unstable scans
-                File json = project.getJsonResult(projectId, scanResultId);
-                RemoteFileUtils.saveReport(launcher, listener, workspace.getRemote(),
-                        "issues.json", FileUtils.readFileToByteArray(json), verbose);
             }
 
             if (failIfFailed && failed)

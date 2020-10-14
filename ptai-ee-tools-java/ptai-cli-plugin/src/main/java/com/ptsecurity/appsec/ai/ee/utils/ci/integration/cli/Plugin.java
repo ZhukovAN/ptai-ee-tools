@@ -5,12 +5,15 @@ import org.fusesource.jansi.AnsiConsole;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Comparator;
+import java.util.logging.LogManager;
 
 @Command (name = "java -jar ptai-cli-plugin.jar", synopsisSubcommandLabel = "COMMAND",
         mixinStandardHelpOptions = true, version = "ptai-cli-plugin v.0.1",
         subcommands = {
-                UiAst.class, JsonAst.class, ServerCheck.class })
+                UiAst.class, JsonAst.class, CheckServer.class, ListReportTemplates.class, GenerateReport.class })
 public class Plugin implements Runnable {
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
@@ -48,6 +51,15 @@ public class Plugin implements Runnable {
     static class SortByOrder<T extends CommandLine.Model.IOrdered> implements Comparator<T> {
         public int compare(T o1, T o2) {
             return Integer.signum(o1.order() - o2.order());
+        }
+    }
+
+    static {
+        try {
+            InputStream stream = Plugin.class.getResourceAsStream("/logging.properties");
+            LogManager.getLogManager().readConfiguration(stream);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

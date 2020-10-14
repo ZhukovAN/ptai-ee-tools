@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
+import com.microsoft.signalr.HubConnection;
+import com.microsoft.signalr.HubConnectionBuilder;
 import com.ptsecurity.appsec.ai.ee.ptai.server.auth.ApiClient;
 import com.ptsecurity.appsec.ai.ee.ptai.server.auth.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.ptai.server.auth.v36.*;
@@ -13,19 +15,23 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanResult;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Stage;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.CertificateHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.jwt.JwtResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ProgrammingLanguageHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
-import lombok.NonNull;
-import lombok.SneakyThrows;
+import io.jsonwebtoken.*;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.SingleObserver;
+import lombok.*;
 import okhttp3.Call;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
-
 import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -287,4 +293,27 @@ public class BaseIT {
         }
         return builder.toString();
     }
+
+    @SneakyThrows
+    @Test
+    public void testJwt() {
+        JwtResponse response = client.authenticate();
+
+        // Let's extract data from JWT. As we have no signing key we need to strip signature from JWT
+        String jwt = response.getAccessToken().substring(0, response.getAccessToken().lastIndexOf('.') + 1);
+        Jwt<Header,Claims> untrusted = Jwts.parser()
+                .setAllowedClockSkewSeconds(300)
+                .parseClaimsJwt(jwt);
+        Date expiration = untrusted.getBody().getExpiration();
+
+        Thread.sleep(1000);
+
+        response = client.authenticate();
+        jwt = response.getAccessToken().substring(0, response.getAccessToken().lastIndexOf('.') + 1);
+        untrusted = Jwts.parser()
+                .setAllowedClockSkewSeconds(300)
+                .parseClaimsJwt(jwt);
+        Assertions.assertTrue(untrusted.getBody().getExpiration().after(expiration));
+    }
+
 }

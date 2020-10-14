@@ -47,8 +47,7 @@ pt.dropdownDescriptorSelector(
         title: _('config'),
         field: 'config',
         default: descriptor.getDefaultConfigDescriptor(),
-        descriptors: descriptor.getConfigDescriptors(),
-        capture: ""
+        descriptors: descriptor.getConfigDescriptors()
 )
 
 f.invisibleEntry() {
@@ -58,7 +57,7 @@ f.invisibleEntry() {
             // and there'll be duplicates otherwise
             id: "${configId}_value",
             name: "selectedConfig",
-            value: "serverUrl,serverCredentialsId,configName")
+            value: "")
 }
 
 /*
@@ -105,12 +104,6 @@ script("""
         // Need to add event handlers to store currently selected descriptor's displayName
         e.observe("change", saveSelectedItem);      
     };
-    
-    (function() {
-        // Initial fill
-        init(\$("${scanSettingsId}"));
-        init(\$("${configId}"));
-    })();    
 """)
 
 // Customized validateButton that allows to use custom validation script

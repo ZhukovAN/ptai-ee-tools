@@ -157,7 +157,7 @@ paths:
   /api/Auth/signin:
     get:
       security:
-        - Basic: []
+        - ApiKeyAuth: []
       tags:
         - Auth
       summary: "Login user by NTLM or client certificate or access token in request headers\r\nSend access token in header with name AccessToken"
@@ -231,12 +231,24 @@ paths:
                 $ref: '#/components/schemas/ApiErrorModel'
   /api/Auth/refreshToken:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Auth
       summary: Refresh token
       responses:
         '200':
           description: Returns the created JWT token
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
         '401':
           description: Unauthorized
           content:
@@ -1493,6 +1505,10 @@ components:
           format: uuid
       additionalProperties: false
   securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Access-Token
+      in: header
     Bearer:
       type: apiKey
       description: Please insert JWT with Bearer into field

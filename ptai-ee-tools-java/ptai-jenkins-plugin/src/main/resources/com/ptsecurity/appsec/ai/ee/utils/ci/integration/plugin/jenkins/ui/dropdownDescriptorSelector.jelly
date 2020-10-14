@@ -1,24 +1,3 @@
-<!--
-Removed dropdownListBlock's lazy attribute value to avoid lazy render: during
-lazy render unselected descriptor fields aren't rendered. That means that during
-initial page load existing components with @RelativePath dependencies will fail
-for subscribe for control value changes (browser console will show "Unable to
-find nearby [path]").
-For example, report template type combobox is to be filled with values being read
-from PT AI server. That server may be defined both as global- or task-based setting,
-so doFillXXX method's parameters should look like this:
-    @RelativePath("../..") @QueryParameter("selectedConfig") final String selectedConfig, // Config type (i.e. descriptor displayName)
-    @RelativePath("../../config/serverSettings") @QueryParameter("serverUrl") final String serverUrl, // Task-based config server URL
-    @RelativePath("../../config/serverSettings") @QueryParameter("serverCredentialsId") final String serverCredentialsId, // Task-based config server credential
-    @RelativePath("../../config") @QueryParameter("configName") final String configName) // Global config name
-Let's imagine that job is being set up for a global PT AI configuration "PT". If lazy
-render is used then Jenkins will not render task-based config field names, those only
-will appear after first config type change. But controls are bind to change event
-only at the page load event, so they will fail to monitor serverUrl and
-serverCredentialsId changes.
-So we need to disable lazy render by removing lazy="descriptor,it,${capture} from
-dropdownListBlock node
--->
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:pt="/com/ptsecurity/appsec/ai/ee/utils/ci/integration/plugin/jenkins/ui">
   <st:documentation>
@@ -58,7 +37,8 @@ dropdownListBlock node
     <j:set var="capture" value="${attrs.capture?:''}" />
     <j:forEach var="descriptor" items="${attrs.descriptors}" varStatus="loop">
       <f:dropdownListBlock value="${loop.index}" title="${descriptor.displayName}"
-        selected="${current.descriptor==descriptor || (current==null and descriptor==attrs.default)}" staplerClass="${descriptor.clazz.name}">
+        selected="${current.descriptor==descriptor || (current==null and descriptor==attrs.default)}" staplerClass="${descriptor.clazz.name}"
+        lazy="descriptor,it,${capture}">
         <l:ajax>
           <j:set var="instance" value="${current.descriptor==descriptor ? current : null}" />
           <st:include from="${descriptor}" page="${descriptor.configPage}" optional="true" />

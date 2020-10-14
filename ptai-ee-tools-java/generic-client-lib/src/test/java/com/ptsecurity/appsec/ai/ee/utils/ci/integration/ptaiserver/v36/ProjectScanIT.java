@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
+import com.microsoft.signalr.HubConnection;
 import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.v36.StoreApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Project;
@@ -14,17 +15,16 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transf
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.V36ScanSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
-import lombok.NonNull;
-import lombok.SneakyThrows;
+import io.reactivex.Single;
+import lombok.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.Semaphore;
 import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings.ProgrammingLanguage.*;
@@ -225,5 +225,145 @@ public class ProjectScanIT extends BaseIT {
             }
             if (null != progress) stage = progress.getStage();
         } while (!Stage.DONE.equals(stage) && !Stage.ABORTED.equals(stage) && !Stage.FAILED.equals(stage));
+    }
+
+    @RequiredArgsConstructor
+    public final class SubscriptionOnNotification {
+        @Getter @Setter
+        public String ClientId;
+        @Getter @Setter
+        public String NotificationTypeName;
+        @Getter @Setter
+        public Set<UUID> Ids = new HashSet<>();
+
+        @Getter
+        public final Date CreatedDate;
+
+        public SubscriptionOnNotification() {
+            this.CreatedDate = new Date();
+        }
+    }
+
+    @Getter @Setter @ToString
+    public final class ScanEnqueuedEvent {
+        protected ScanResult result;
+    }
+
+    @Getter @Setter @ToString
+    public final class ScanStartedEvent {
+        protected ScanResult result;
+        protected V36ScanSettings settings;
+    }
+
+    @Getter @Setter @ToString
+    public final class ScanProgressEvent {
+        protected UUID scanResultId;
+        protected ScanProgress progress;
+        protected UUID Id;
+    }
+
+    @Getter @Setter @ToString
+    public final class ScanCompleteEvent {
+        protected ScanResult result;
+    }
+
+
+    @SneakyThrows
+    @Test
+    public void testExistingProjectScanRx() {
+        Semaphore semaphore = new Semaphore(1);
+        semaphore.acquire();
+
+        com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project project = new com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project(EXISTING_PROJECT);
+        project.setUrl(client.getUrl());
+        project.setToken(client.getToken());
+        project.setCaCertsPem(client.getCaCertsPem());
+        project.init();
+
+        UUID scanResultId = project.scan("ptai-node");
+        project.waitForComplete(scanResultId);
+
+        /*
+
+        ProjectsApi projectsApi = client.getProjectsApi();
+        ProjectLight projectInfo = projectsApi.apiProjectsLightNameGet(EXISTING_PROJECT);
+
+        ScanApi scanApi = client.getScanApi();
+        StartScanModel startScanModel = new StartScanModel();
+        startScanModel.setProjectId(projectInfo.getId());
+        startScanModel.setScanType(ScanType.FULL);
+        scanResultId =  scanApi.apiScanStartPost(startScanModel);
+        System.out.println("Scan result ID is " + scanResultId.toString());
+
+        Single<String> accessTokenProvider = Single.defer(() -> {
+            return Single.just(client.getJWT().getAccessToken());
+        });
+        HubConnection connection = connect(
+                PTAI_URL + "/notifyApi/notifications?clientId=" + client.getId(),
+                accessTokenProvider, "");
+
+        connection.on("NeedUpdateConnectedDate", (message) -> {
+            System.out.println("NeedUpdateConnectedDate: " + message);
+
+            connection.on("ScanStarted", (data) -> {
+                System.out.println("ScanStarted: " + data);
+            }, ScanStartedEvent.class);
+
+            connection.on("ScanProgress", (data) -> {
+                System.out.println("ScanProgress: " + data);
+            }, ScanProgressEvent.class);
+
+            connection.on("ScanCompleted", (data) -> {
+                System.out.println("ScanCompleted: " + data);
+                System.out.println("Policy state is " + data.getResult().getStatistic().getPolicyState());
+                semaphore.release();
+            }, ScanCompleteEvent.class);
+
+            connection.on("ScanEnqueued", (data) -> {
+                System.out.println("ScanEnqueued: " + data);
+            }, ScanEnqueuedEvent.class);
+
+            // helper.getConnection().start().blockingAwait();
+            SubscriptionOnNotification subscription = new SubscriptionOnNotification();
+            subscription.setClientId(client.getId());
+            subscription.getIds().add(scanResultId);
+
+            subscription.setNotificationTypeName("ScanEnqueued");
+            connection.send("SubscribeOnNotification", subscription);
+
+            subscription.setNotificationTypeName("ScanProgress");
+            connection.send("SubscribeOnNotification", subscription);
+
+            subscription.setNotificationTypeName("ScanStarted");
+            connection.send("SubscribeOnNotification", subscription);
+
+            subscription.setNotificationTypeName("ScanCompleted");
+            connection.send("SubscribeOnNotification", subscription);
+        }, String.class);
+
+        connection.start().blockingAwait();
+
+        semaphore.acquire();
+        // Thread.sleep(600000);
+
+        connection.stop();
+*/
+        /*
+        Stage stage;
+        ScanResult scanResult;
+        do {
+            scanResult = projectsApi.apiProjectsProjectIdScanResultsScanResultIdGet(projectInfo.getId(), scanResultId);
+            System.out.println(scanResult);
+            ScanProgress progress = scanResult.getProgress();
+            stage = progress.getStage();
+            Thread.sleep(5000);
+        } while (!Stage.DONE.equals(stage) && !Stage.ABORTED.equals(stage) && !Stage.FAILED.equals(stage));
+        Assertions.assertEquals(Stage.DONE, stage);
+        System.out.println("Policy state is " + scanResult.getStatistic().getPolicyState());
+        File issuesTempFile = projectsApi.apiProjectsProjectIdScanResultsScanResultIdIssuesGet(projectInfo.getId(), scanResultId, null);
+        File issues = TEMPREPORTFOLDER.toPath().resolve("report.json").toFile();
+        FileUtils.copyFile(issuesTempFile, issues);
+        FileUtils.forceDelete(issuesTempFile);
+        */
     }
 }

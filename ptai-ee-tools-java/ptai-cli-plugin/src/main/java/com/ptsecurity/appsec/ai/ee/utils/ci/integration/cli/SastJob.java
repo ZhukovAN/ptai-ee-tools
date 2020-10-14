@@ -1,18 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.aic.ExitCode;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseAst;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils.GracefulShutdown;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ReportHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.Builder;
@@ -20,14 +18,11 @@ import lombok.Setter;
 import lombok.extern.java.Log;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpStatus;
 
 import java.io.File;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
@@ -51,6 +46,8 @@ public class SastJob extends Base {
     protected final Path output;
 
     protected final boolean async;
+
+    protected BaseAst.Report report;
 
     public Integer execute() {
         Project project = null;
@@ -82,6 +79,7 @@ public class SastJob extends Base {
                 }
             } else if (null != jsonSettings)
                 project.setupFromJson(jsonSettings, jsonPolicy);
+            project.info("PT AI project ID is " + projectId);
 
             Transfer transfer = new Transfer();
             if (StringUtils.isNotEmpty(includes)) transfer.setIncludes(includes);
@@ -107,38 +105,41 @@ public class SastJob extends Base {
             boolean failed = false;
             boolean unstable = false;
 
-            Stage stage = null;
-            ScanProgress previousProgress = null;
-            ScanResultStatistic previousStatistic = null;
+            ScanResult state = project.waitForComplete(scanResultId);
 
-            do {
-                Thread.sleep(5000);
-                ScanResult state = project.poll(projectId, scanResultId);
-                ScanProgress progress = state.getProgress();
-                ScanResultStatistic statistic = state.getStatistic();
-                boolean somethingChanged = false;
-                if (null != progress && !progress.equals(previousProgress)) {
-                    String progressInfo = "AST stage: " + progress.getStage() + ", percentage: " + progress.getValue();
-                    project.info(progressInfo);
-                    previousProgress = progress;
-                    somethingChanged = true;
-                };
-                if (null != statistic && !statistic.equals(previousStatistic)) {
-                    project.info("Scan duration: %s", statistic.getScanDuration());
-                    if (0 != statistic.getTotalFileCount())
-                        project.info("Scanned files: %d out of %d", statistic.getScannedFileCount(), statistic.getTotalFileCount());
-                    previousStatistic = statistic;
-                    somethingChanged = true;
-                };
-                if (!somethingChanged)
-                    project.fine("Scan status polling done, no change detected");
-                if (null != progress) stage = progress.getStage();
-            } while (!Stage.DONE.equals(stage) && !Stage.ABORTED.equals(stage) && !Stage.FAILED.equals(stage));
+            Stage stage = state.getProgress().getStage();
 
             shutdown.setStopped(true);
 
-            log.finer("Resulting stage is " + stage);
-            log.finer("Resulting statistics is " + previousStatistic);
+            project.fine("Resulting stage is " + stage);
+            project.fine("Resulting statistics is " + state.getStatistic());
+
+            List<ScanError> scanErrors = project.getScanErrors(projectId, scanResultId);
+            failed |=  scanErrors.stream().filter(ScanError::getIsCritical).findAny().isPresent();
+            unstable |=  scanErrors.stream().filter(e -> !e.getIsCritical()).findAny().isPresent();
+
+            if (Stage.DONE.equals(stage) || Stage.ABORTED.equals(stage)) {
+                // Save reports if scan was started ever
+                File json = project.getJsonResult(projectId, scanResultId);
+                Files.move(json.toPath(), output.resolve("issues.json"), StandardCopyOption.REPLACE_EXISTING);
+
+                if (null != report) {
+                    try {
+                        output.toFile().mkdirs();
+                        File reportFile = project.generateReport(
+                                projectId, scanResultId,
+                                report.template, report.format, report.locale);
+                        String reportName = ReportHelper.generateReportFileNameTemplate(
+                                report.template, report.locale, report.format.getValue());
+                        reportName = ReportHelper.removePlaceholder(reportName);
+                        FileUtils.moveFile(reportFile, output.resolve(reportName).toFile());
+                        project.fine("Report saved as %s", reportName);
+                    } catch (ApiException e) {
+                        project.warning("Report save failed", e);
+                        unstable = true;
+                    }
+                }
+            }
 
             // Step is failed if scan aborted or failed (i.e. because of license problems)
             failed |= !Stage.DONE.equals(stage);
@@ -151,22 +152,16 @@ public class SastJob extends Base {
 
             // Step also failed if policy assessment fails
             // TODO: Swap REJECTED/CONFIRMED states
-            //  when https://jira.ptsecurity.com/browse/AI-4866 will be fixed
+            // when https://jira.ptsecurity.com/browse/AI-4866 will be fixed
             if (!failed) {
-                failed |= PolicyState.CONFIRMED.equals(previousStatistic.getPolicyState());
+                failed |= PolicyState.CONFIRMED.equals(state.getStatistic().getPolicyState());
                 // If scan is done, than the only reason to fail is policy violation
                 if (failed)
                     res = ExitCode.CODE_FAILED;
-                else if (PolicyState.REJECTED.equals(previousStatistic.getPolicyState()))
-                    res = ExitCode.CODE_SUCCESS;
+                else if (PolicyState.REJECTED.equals(state.getStatistic().getPolicyState()))
+                    res = unstable ? ExitCode.CODE_WARNING : ExitCode.CODE_SUCCESS;
                 else
-                    res = ExitCode.CODE_POLICY_NOT_DEFINED;
-            }
-
-            if (Stage.DONE.equals(stage) || Stage.ABORTED.equals(stage)) {
-                // Save reports if scan was started ever
-                File json = project.getJsonResult(projectId, scanResultId);
-                Files.move(json.toPath(), output.resolve("issues.json"), StandardCopyOption.REPLACE_EXISTING);
+                    res = unstable ? ExitCode.CODE_WARNING : ExitCode.CODE_POLICY_NOT_DEFINED;
             }
 
             project.info(res.getDescription());

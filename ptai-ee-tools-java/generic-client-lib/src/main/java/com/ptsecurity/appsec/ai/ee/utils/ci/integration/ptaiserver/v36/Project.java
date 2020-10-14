@@ -1,23 +1,29 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
+import com.microsoft.signalr.HubConnection;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.ScanCompleteEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.V36ScanSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Log
 public class Project extends Utils {
+    @NonNull
     protected final String name;
 
     @Setter
@@ -29,10 +35,7 @@ public class Project extends Utils {
     }
 
     public UUID searchProject() throws ApiException {
-        ProjectLight projectLight = callApi(
-                () -> projectsApi.apiProjectsLightNameGet(name),
-                "PT AI project search failed");
-        return (null == projectLight) ? null : projectLight.getId();
+        return searchProject(name);
     }
 
     public void upload() throws ApiException {
@@ -54,6 +57,29 @@ public class Project extends Utils {
                 () -> scanApi.apiScanStartPost(startScanModel),
                 "PT AI project scan start failed");
         return scanResultId;
+    }
+
+    @SneakyThrows
+    public ScanResult waitForComplete(@NonNull final UUID scanResultId) throws ApiException {
+        // Need this container to save data from lambda
+        AtomicReference<ScanResult> res = new AtomicReference<>();
+
+        Semaphore semaphore = new Semaphore(1);
+        semaphore.acquire();
+
+        HubConnection connection = createSignalrConnection(scanResultId);
+
+        connection.on("ScanCompleted", (data) -> {
+            res.set(data.getResult());
+            semaphore.release();
+        }, ScanCompleteEvent.class);
+
+        connection.start().blockingAwait();
+
+        semaphore.acquire();
+        connection.stop();
+
+        return res.get();
     }
 
     public ScanResult poll(@NonNull final UUID scanResultId) throws ApiException {
@@ -79,6 +105,12 @@ public class Project extends Utils {
         return callApi(
                 () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdIssuesGet(projectId, scanResultId, null),
                 "PT AI project scan status JSON read failed");
+    }
+
+    public List<ScanError> getScanErrors(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws ApiException {
+        return callApi(
+                () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdErrorsGet(projectId, scanResultId),
+                "PT AI project scan errors read failed");
     }
 
     public UUID setupFromJson(@NonNull final ScanSettings settings, final Policy[] policy) throws ApiException {
@@ -110,34 +142,4 @@ public class Project extends Utils {
                 "PT AI project policy update failed");
         return projectId;
     }
-
-    public File generateReport(
-            @NonNull final UUID projectId, @NonNull final UUID scanResultId,
-            @NonNull final UUID template, @NonNull final ReportFormatType type, @NonNull final String locale) throws ApiException {
-        ReportGenerateModel model = new ReportGenerateModel()
-                .parameters(new UserReportParameters()
-                        .includeDFD(true)
-                        .includeGlossary(true)
-                        .formatType(type)
-                        .reportTemplateId(template)
-                .saveAsPath(""))
-                .scanResultId(scanResultId)
-                .projectId(projectId)
-                .localeId(locale);
-        fine("Generating report for project %s, scan result %s. Report template %s, type %s, locale %s", projectId, scanResultId, template, type, locale);
-        return callApi(
-                () -> reportsApi.apiReportsGeneratePost(model),
-                "Report generation failed");
-    }
-
-    public File generateReport(
-            @NonNull final UUID projectId, @NonNull final UUID scanResultId,
-            @NonNull final String template, @NonNull final ReportFormatType type, @NonNull final String locale) throws ApiException {
-        List<ReportTemplateModel> templates = getReportTemplates(locale);
-        ReportTemplateModel templateModel = templates.stream().filter(t -> t.getName().equalsIgnoreCase(template)).findAny().orElse(null);
-        if (null == templateModel)
-                throw ApiException.raise("Report generation failed", new IllegalArgumentException("PT AI template " + template + " not found"));
-        return generateReport(projectId, scanResultId, templateModel.getId(), type, locale);
-    }
-
 }
