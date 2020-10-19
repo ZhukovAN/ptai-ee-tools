@@ -45,7 +45,7 @@ public abstract class BaseAst {
                 names = {"--report-format", "-f"}, order = 2,
                 required = true,
                 paramLabel = "<format>",
-                description = "Format type of report to be generated")
+                description = "Format type of report to be generated, one of: HTML, XML, JSON, PDF")
         public Format format = null;
 
         @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -60,7 +60,7 @@ public abstract class BaseAst {
                 names = {"--report-locale", "-l"}, order = 3,
                 required = true,
                 paramLabel = "<locale>",
-                description = "Locale ID of report to be generated, i.e. en-US, ru-RU etc.")
+                description = "Locale ID of report to be generated, one of EN, RU")
         public Locale locale = null;
     }
 }

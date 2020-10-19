@@ -75,12 +75,6 @@ public class UiAst extends BaseAst implements Callable<Integer> {
     protected String excludes = null;
 
     @CommandLine.Option(
-            names = {"-n", "--node"}, order = 8,
-            paramLabel = "<name>",
-            description = "Node name or tag for SAST to be executed on")
-    protected String node = Base.DEFAULT_PTAI_NODE_NAME;
-
-    @CommandLine.Option(
             names = {"--truststore"}, order = 9,
             paramLabel = "<path>",
             description = "Path to PEM file that stores trusted CA certificates")
@@ -109,7 +103,6 @@ public class UiAst extends BaseAst implements Callable<Integer> {
                 .url(url)
                 .projectName(project)
                 .input(input)
-                .node(node)
                 .token(token)
                 .output(output)
                 .includes(includes)

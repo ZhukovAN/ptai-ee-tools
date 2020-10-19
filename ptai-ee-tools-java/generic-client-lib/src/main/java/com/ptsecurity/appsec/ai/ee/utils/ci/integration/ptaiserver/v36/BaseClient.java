@@ -265,6 +265,7 @@ public class BaseClient extends Base {
 
         connection.on("ScanStarted", (data) -> {
             info("Scan started");
+            log.finest(data.toString());
         }, ScanStartedEvent.class);
 
         connection.on("ScanProgress", (data) -> {
@@ -273,10 +274,13 @@ public class BaseClient extends Base {
                 message += " -> " + data.getProgress().getSubStage() + "";
             message += " " + data.getProgress().getValue() + "%";
             info(message);
+            log.finest(data.toString());
         }, ScanProgressEvent.class);
 
         connection.on("ScanEnqueued", (data) -> {
-            info("Scan enqueued");
+            if (scanResultId.equals(data.getScanResult().getId()))
+                info("Scan enqueued");
+            log.finest(data.toString());
         }, ScanEnqueuedEvent.class);
 
         return connection;

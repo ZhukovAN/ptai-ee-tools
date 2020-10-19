@@ -13,4 +13,5 @@ import java.util.UUID;
 @ToString
 public class ScanCompleteEvent {
     protected ScanResult result;
+    protected UUID id;
 }

@@ -50,7 +50,7 @@ public class ListReportTemplates extends BaseAst implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--locale"}, required = true, order = 4,
             paramLabel = "<locale>",
-            description = "Locale ID of templates to be listed, i.e. en-US, ru-RU etc.")
+            description = "Locale ID of templates to be listed, one of EN, RU")
     protected String locale = "";
 
     @CommandLine.Option(

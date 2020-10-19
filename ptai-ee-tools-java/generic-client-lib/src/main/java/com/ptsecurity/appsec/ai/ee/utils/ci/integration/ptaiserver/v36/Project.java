@@ -45,7 +45,14 @@ public class Project extends Utils {
         callApi(() -> storeApi.uploadSources(id, sources), "PT AI project sources upload failed");
     }
 
-    public UUID scan(@NonNull final String node) throws ApiException {
+    /**
+     * @param node PT AI scan agent node name where scan is to be
+     *             executed. If empty, node will be assigned using
+     *             internal load balancer
+     * @return Scan identifier
+     * @throws ApiException
+     */
+    public UUID scan(final String node) throws ApiException {
         StartScanModel startScanModel = new StartScanModel();
         UUID id = searchProject();
         if (null == id)
