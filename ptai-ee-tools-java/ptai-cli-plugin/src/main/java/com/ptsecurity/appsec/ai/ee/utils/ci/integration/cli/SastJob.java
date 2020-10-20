@@ -21,11 +21,16 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseAst.*;
 
 @Log
 @Setter
@@ -47,7 +52,7 @@ public class SastJob extends Base {
 
     protected final boolean async;
 
-    protected BaseAst.Report report;
+    protected Report report;
 
     public Integer execute() {
         Project project = null;
@@ -126,15 +131,38 @@ public class SastJob extends Base {
                 if (null != report) {
                     try {
                         output.toFile().mkdirs();
-                        File reportFile = project.generateReport(
-                                projectId, scanResultId,
-                                report.template, report.locale.getValue(),
-                                ReportFormatType.fromValue(report.format.getValue()));
-                        String reportName = ReportHelper.generateReportFileNameTemplate(
-                                report.template, report.locale.getValue(), report.format.getValue());
-                        reportName = ReportHelper.removePlaceholder(reportName);
-                        FileUtils.moveFile(reportFile, output.resolve(reportName).toFile());
-                        project.fine("Report saved as %s", reportName);
+
+                        List<NamedReportDefinition> reportDefinitions = new ArrayList<>();
+                        if (null == report.reportJson) {
+                            String reportName = ReportHelper.generateReportFileNameTemplate(
+                                    report.reportDefinition.template, report.reportDefinition.locale.getValue(), report.reportDefinition.format.getValue());
+                            reportName = ReportHelper.removePlaceholder(reportName);
+                            reportDefinitions.add(NamedReportDefinition.builder()
+                                    .name(reportName)
+                                    .template(report.reportDefinition.template)
+                                    .locale(report.reportDefinition.locale)
+                                    .format(report.reportDefinition.format)
+                                    .build());
+                        } else {
+                            String jsonStr = FileUtils.readFileToString(report.reportJson.toFile(), StandardCharsets.UTF_8);
+                            NamedReportDefinition[] reportDefinitionsFromJson = BaseAst.NamedReportDefinition.load(jsonStr);
+                            reportDefinitions = Arrays.asList(reportDefinitionsFromJson);
+                        }
+
+                        for (NamedReportDefinition reportDefinition : reportDefinitions) {
+                            File reportFile = project.generateReport(
+                                    projectId, scanResultId,
+                                    reportDefinition.getTemplate(), reportDefinition.getLocale().getValue(),
+                                    ReportFormatType.fromValue(reportDefinition.getFormat().getValue()));
+                            if (output.resolve(reportDefinition.getName()).toFile().exists()) {
+                                log.warning("Existing report " + reportDefinition.getName() + " will be overwritten");
+                                if (!output.resolve(reportDefinition.getName()).toFile().delete())
+                                    log.severe("Report " + reportDefinition.getName() + " delete failed");
+                            }
+                            FileUtils.moveFile(reportFile, output.resolve(reportDefinition.getName()).toFile());
+                            project.fine("Report saved as %s", reportDefinition.getName());
+
+                        }
                     } catch (ApiException e) {
                         project.warning("Report save failed", e);
                         unstable = true;

@@ -9,6 +9,7 @@ import hudson.Launcher;
 import hudson.model.TaskListener;
 import jenkins.security.MasterToSlaveCallable;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
+@Log
 @RequiredArgsConstructor
 public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiException> {
     protected final Executor executor;
@@ -88,6 +90,12 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
             try {
                 Path destination = Paths.get(dir).resolve(Base.DEFAULT_SAST_FOLDER).resolve(artifact);
                 destination.toFile().getParentFile().mkdirs();
+                if (destination.toFile().exists()) {
+                    log.warning("Existing report " + destination.getFileName().toString() + " will be overwritten");
+                    if (!destination.toFile().delete())
+                        log.severe("Report " + destination.getFileName().toString() + " delete failed");
+                }
+
                 return Files.write(
                         destination,
                         data,

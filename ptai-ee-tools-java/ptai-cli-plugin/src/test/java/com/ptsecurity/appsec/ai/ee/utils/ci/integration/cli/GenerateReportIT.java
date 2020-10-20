@@ -66,4 +66,18 @@ class GenerateReportIT extends BaseIT {
                 "--report-format", "HTML");
         Assertions.assertEquals(BaseAst.ExitCode.SUCCESS.getCode(), res);
     }
+
+    @Test
+    @DisplayName("Generate multiple JSON-defined reports for latest app01 scan results")
+    public void testLatestJsonDefinedReportsGeneration() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "generate-report",
+                "--url", PTAI_URL,
+                "--truststore", PEM_PATH.toString(),
+                "--token", TOKEN,
+                "--output", TEMP_REPORT_FOLDER.toPath().toString(),
+                "--project-name", EXISTING_PROJECT_NAME,
+                "--report-json", REPORTS_JSON_PATH.toString());
+        Assertions.assertEquals(BaseAst.ExitCode.SUCCESS.getCode(), res);
+    }
 }

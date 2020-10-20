@@ -80,7 +80,7 @@ public class UiAst extends BaseAst implements Callable<Integer> {
             description = "Path to PEM file that stores trusted CA certificates")
     protected Path truststore = null;
 
-    @CommandLine.ArgGroup(exclusive = false)
+    @CommandLine.ArgGroup(exclusive = true, multiplicity = "1")
     Report report;
 
     @CommandLine.Option(

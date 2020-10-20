@@ -32,6 +32,7 @@ class BaseIT {
     protected static Path SETTINGS_PATH = null;
     protected static Path POLICY_PATH = null;
     protected static Path EMPTY_POLICY_PATH = null;
+    protected static Path REPORTS_JSON_PATH = null;
     protected static ScanSettings SETTINGS;
     protected static Policy[] POLICY;
     protected static Policy[] EMPTY_POLICY = new Policy[0];
@@ -46,6 +47,8 @@ class BaseIT {
     // protected static final String PEM_RESOURCE = "keys/pt.pem";
     protected static final String PEM_RESOURCE = "keys/domain.org.pem";
 
+    protected static final String REPORTS_JSON_RESOURCE = "json/reports.json";
+
     @BeforeAll
     public static void init() throws URISyntaxException, IOException {
         TEMP_SOURCES_FOLDER = TEMP_FOLDER.toPath().resolve("src").toFile();
@@ -53,6 +56,7 @@ class BaseIT {
         TEMP_JSON_FOLDER = TEMP_FOLDER.toPath().resolve("json").toFile();
 
         PEM_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(PEM_RESOURCE).toURI());
+        REPORTS_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_JSON_RESOURCE).toURI());
 
         ObjectMapper jsonMapper = new ObjectMapper();
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
