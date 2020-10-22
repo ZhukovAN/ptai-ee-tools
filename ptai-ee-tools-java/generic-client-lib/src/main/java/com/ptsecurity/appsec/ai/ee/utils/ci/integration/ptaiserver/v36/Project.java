@@ -14,6 +14,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.UUID;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 
-@Log
+@Slf4j
 public class Project extends Utils {
     @NonNull
     protected final String name;

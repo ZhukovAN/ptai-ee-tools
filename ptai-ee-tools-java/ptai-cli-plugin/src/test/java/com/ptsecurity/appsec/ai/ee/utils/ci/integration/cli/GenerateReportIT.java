@@ -1,12 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseAst;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
-
-import java.util.UUID;
 
 @DisplayName("Report generation tests")
 class GenerateReportIT extends BaseIT {
@@ -15,7 +13,7 @@ class GenerateReportIT extends BaseIT {
     public void testUiAstShowUsage() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report");
-        Assertions.assertEquals(BaseAst.ExitCode.INVALID_INPUT.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.INVALID_INPUT.getCode(), res);
     }
 
     @Test
@@ -31,7 +29,7 @@ class GenerateReportIT extends BaseIT {
                 "--report-template", "Scan results report",
                 "--report-locale", "EN",
                 "--report-format", "JSON");
-        Assertions.assertEquals(BaseAst.ExitCode.SUCCESS.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
     @Test
@@ -48,7 +46,7 @@ class GenerateReportIT extends BaseIT {
                 "--report-template", "OWASP top 10 2017 report",
                 "--report-locale", "EN",
                 "--report-format", "HTML");
-        Assertions.assertEquals(BaseAst.ExitCode.SUCCESS.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
     @Test
@@ -64,7 +62,7 @@ class GenerateReportIT extends BaseIT {
                 "--report-template", "OWASP top 10 2017 report",
                 "--report-locale", "EN",
                 "--report-format", "HTML");
-        Assertions.assertEquals(BaseAst.ExitCode.SUCCESS.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
     @Test
@@ -77,7 +75,7 @@ class GenerateReportIT extends BaseIT {
                 "--token", TOKEN,
                 "--output", TEMP_REPORT_FOLDER.toPath().toString(),
                 "--project-name", EXISTING_PROJECT_NAME,
-                "--report-json", REPORTS_JSON_PATH.toString());
-        Assertions.assertEquals(BaseAst.ExitCode.SUCCESS.getCode(), res);
+                "--report-json", REPORTS_GOOD_JSON_PATH.toString());
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 }

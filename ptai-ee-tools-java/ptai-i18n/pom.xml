@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
+        <artifactId>ptai-ee-tools</artifactId>
+        <version>0.1</version>
+    </parent>
+
+    <artifactId>ptai-i18n</artifactId>
+    <version>0.1</version>
+    <name>ptai-i18n</name>
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.jvnet.localizer/maven-localizer-plugin -->
+        <dependency>
+            <groupId>org.jvnet.localizer</groupId>
+            <artifactId>maven-localizer-plugin</artifactId>
+            <version>1.24</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jvnet.localizer</groupId>
+                <artifactId>maven-localizer-plugin</artifactId>
+                <version>1.24</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <fileMask>Messages.properties</fileMask>
+                            <outputDirectory>target/generated-sources/localizer</outputDirectory>
+                            <accessModifierAnnotations>true</accessModifierAnnotations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>repo.jenkins-ci.org</id>
+            <url>https://repo.jenkins-ci.org/public/</url>
+        </repository>
+        <repository>
+            <id>repo.jenkins-ci-releases.org</id>
+            <url>http://repo.jenkins-ci.org/releases/</url>
+        </repository>
+    </repositories>
+</project>

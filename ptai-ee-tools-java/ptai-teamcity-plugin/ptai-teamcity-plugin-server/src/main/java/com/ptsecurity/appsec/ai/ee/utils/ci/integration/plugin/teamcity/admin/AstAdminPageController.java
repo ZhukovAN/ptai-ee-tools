@@ -46,7 +46,6 @@ public class AstAdminPageController extends BaseFormXmlController {
 
         BasePropertiesBean bean = new BasePropertiesBean(null);
         bean.setProperty(URL, getProperty(request, URL));
-        bean.setProperty(USER, getProperty(request, USER));
         bean.setProperty(TOKEN, RSACipher.decryptWebRequestData(getEncryptedProperty(request, TOKEN)));
         bean.setProperty(CERTIFICATES, getProperty(request, CERTIFICATES));
 

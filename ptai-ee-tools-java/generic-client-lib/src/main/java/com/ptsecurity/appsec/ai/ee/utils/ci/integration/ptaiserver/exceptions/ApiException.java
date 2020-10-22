@@ -36,16 +36,16 @@ public class ApiException extends RuntimeException {
      * Regular expression pattern to check if root exception is an instance
      * of ApiException
      */
-    private static final String APIEXCEPTION_CLASS_REGEX = "com\\.ptsecurity\\.appsec\\.ai\\.ee\\.[\\w\\.]+\\.ApiException";
+    private static final String APIEXCEPTION_CLASS_REGEX = "com\\.ptsecurity\\.appsec\\.ai\\.ee\\.[\\w.]+\\.ApiException";
 
     /**
-     * Method checks if exception is an instance of ApiException
-     * @param e
-     * @return
+     * Method checks if exception is not an instance of ApiException
+     * @param e Exception to be checked
+     * @return True if exception is not an instance of ApiException
      */
-    protected static boolean isApi(@NonNull Exception e) {
+    private static boolean isNotApi(@NonNull Exception e) {
         Class clazz = e.getClass();
-        return clazz.getCanonicalName().matches(APIEXCEPTION_CLASS_REGEX);
+        return !clazz.getCanonicalName().matches(APIEXCEPTION_CLASS_REGEX);
     }
 
     public static ApiException raise(@NonNull final String caption, @NonNull final Exception cause) {
@@ -64,7 +64,7 @@ public class ApiException extends RuntimeException {
     }
 
     protected static String getCode(@NonNull final Exception e) {
-        if (!isApi(e)) return null;
+        if (isNotApi(e)) return null;
         int code = on(e).call("getCode").get();
         if (0 != code) {
             String reason = EnglishReasonPhraseCatalog.INSTANCE.getReason(code, null);
@@ -73,8 +73,8 @@ public class ApiException extends RuntimeException {
             return null;
     }
 
-    protected static String getDetails(@NonNull Exception e) {
-        if (!isApi(e)) return null;
+    private static String getDetails(@NonNull Exception e) {
+        if (isNotApi(e)) return null;
         // As API exception may be thrown due to client-side issues like
         // lack of certificate in local trust store or JSON parse error,
         // we need to check both detailMessage and response body
@@ -87,5 +87,14 @@ public class ApiException extends RuntimeException {
     @Override
     public void printStackTrace(PrintStream s) {
         inner.printStackTrace(s);
+    }
+
+    public String getDetailedMessage() {
+        String res = getMessage();
+        if (StringUtils.isNotEmpty(inner.getMessage()))
+            res += ". " + inner.getMessage();
+        if (StringUtils.isNotEmpty(details))
+            res += ". " + details;
+        return res;
     }
 }

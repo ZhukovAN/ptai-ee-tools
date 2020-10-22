@@ -1,16 +1,15 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.ptsecurity.appsec.ai.ee.aic.ExitCode;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseAst;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils.GracefulShutdown;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.AstStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ReportHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.Builder;
@@ -30,7 +29,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseAst.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.*;
 
 @Log
 @Setter
@@ -54,11 +53,10 @@ public class SastJob extends Base {
 
     protected Report report;
 
-    public Integer execute() {
+    public AstStatus execute() {
         Project project = null;
         UUID scanResultId = null;
-        ExitCode res = ExitCode.CODE_UNKNOWN_ERROR;
-
+        AstStatus res = AstStatus.UNKNOWN;
         try {
             String projectName = null == jsonSettings ? this.projectName : jsonSettings.getProjectName();
 
@@ -73,6 +71,10 @@ public class SastJob extends Base {
                 project.setCaCertsPem(serverCaCertificates);
             project.init();
 
+            List<NamedReportDefinition> reportDefinitions = null;
+            if (null != report)
+                reportDefinitions = report.validate(project);
+
             UUID projectId = project.searchProject();
             if (null == projectId) {
                 if (null != jsonSettings) {
@@ -80,7 +82,7 @@ public class SastJob extends Base {
                     projectId = project.setupFromJson(jsonSettings, jsonPolicy);
                 } else {
                     project.info("Project %s not found", projectName);
-                    return ExitCode.CODE_ERROR_PROJECT_NOT_FOUND.getCode();
+                    return AstStatus.ERROR;
                 }
             } else if (null != jsonSettings)
                 project.setupFromJson(jsonSettings, jsonPolicy);
@@ -105,7 +107,7 @@ public class SastJob extends Base {
             if (async)
                 // Asynchronous mode means that we aren't need to wait AST job
                 // completion. Just write scan result access URL and exit
-                return ExitCode.CODE_SUCCESS.getCode();
+                return AstStatus.SUCCESS;
 
             boolean failed = false;
             boolean unstable = false;
@@ -119,10 +121,6 @@ public class SastJob extends Base {
             project.fine("Resulting stage is " + stage);
             project.fine("Resulting statistics is " + state.getStatistic());
 
-            List<ScanError> scanErrors = project.getScanErrors(projectId, scanResultId);
-            failed |=  scanErrors.stream().filter(ScanError::getIsCritical).findAny().isPresent();
-            unstable |=  scanErrors.stream().filter(e -> !e.getIsCritical()).findAny().isPresent();
-
             if (Stage.DONE.equals(stage) || Stage.ABORTED.equals(stage)) {
                 // Save reports if scan was started ever
                 File json = project.getJsonResult(projectId, scanResultId);
@@ -131,24 +129,6 @@ public class SastJob extends Base {
                 if (null != report) {
                     try {
                         output.toFile().mkdirs();
-
-                        List<NamedReportDefinition> reportDefinitions = new ArrayList<>();
-                        if (null == report.reportJson) {
-                            String reportName = ReportHelper.generateReportFileNameTemplate(
-                                    report.reportDefinition.template, report.reportDefinition.locale.getValue(), report.reportDefinition.format.getValue());
-                            reportName = ReportHelper.removePlaceholder(reportName);
-                            reportDefinitions.add(NamedReportDefinition.builder()
-                                    .name(reportName)
-                                    .template(report.reportDefinition.template)
-                                    .locale(report.reportDefinition.locale)
-                                    .format(report.reportDefinition.format)
-                                    .build());
-                        } else {
-                            String jsonStr = FileUtils.readFileToString(report.reportJson.toFile(), StandardCharsets.UTF_8);
-                            NamedReportDefinition[] reportDefinitionsFromJson = BaseAst.NamedReportDefinition.load(jsonStr);
-                            reportDefinitions = Arrays.asList(reportDefinitionsFromJson);
-                        }
-
                         for (NamedReportDefinition reportDefinition : reportDefinitions) {
                             File reportFile = project.generateReport(
                                     projectId, scanResultId,
@@ -170,33 +150,16 @@ public class SastJob extends Base {
                 }
             }
 
-            // Step is failed if scan aborted or failed (i.e. because of license problems)
-            failed |= !Stage.DONE.equals(stage);
-            if (Stage.ABORTED.equals(stage))
-                res = ExitCode.CODE_ERROR_TERMINATED;
-            else if (Stage.FAILED.equals(stage))
-                res = ExitCode.CODE_UNKNOWN_ERROR;
-            else
-                res = ExitCode.CODE_ERROR_TERMINATED;
-
-            // Step also failed if policy assessment fails
-            // TODO: Swap REJECTED/CONFIRMED states
-            // when https://jira.ptsecurity.com/browse/AI-4866 will be fixed
-            if (!failed) {
-                failed |= PolicyState.CONFIRMED.equals(state.getStatistic().getPolicyState());
-                // If scan is done, than the only reason to fail is policy violation
-                if (failed)
-                    res = ExitCode.CODE_FAILED;
-                else if (PolicyState.REJECTED.equals(state.getStatistic().getPolicyState()))
-                    res = unstable ? ExitCode.CODE_WARNING : ExitCode.CODE_SUCCESS;
-                else
-                    res = unstable ? ExitCode.CODE_WARNING : ExitCode.CODE_POLICY_NOT_DEFINED;
-            }
+            res = AstStatus.convert(state, project.getScanErrors(projectId, scanResultId));
 
             project.info(res.getDescription());
+        } catch (ApiException e) {
+            project.severe(e.getMessage(), e.getInner());
+            res = AstStatus.ERROR;
         } catch (Exception e) {
-            project.severe(ExitCode.CODE_UNKNOWN_ERROR.getDescription(), e);
+            project.severe(Messages.messages_error_generic(), e);
+            res = AstStatus.ERROR;
         }
-        return res.getCode();
+        return res;
     }
 }

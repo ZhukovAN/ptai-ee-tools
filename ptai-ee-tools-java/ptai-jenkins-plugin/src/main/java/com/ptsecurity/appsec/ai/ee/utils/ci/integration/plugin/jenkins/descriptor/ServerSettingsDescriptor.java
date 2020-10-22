@@ -26,6 +26,8 @@ import org.kohsuke.stapler.QueryParameter;
 import java.util.Collections;
 import java.util.UUID;
 
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils.TestResult.*;
+
 @Extension
 public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
     public ServerSettingsDescriptor() {
@@ -64,37 +66,13 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
                 client.setCaCertsPem(credentials.getServerCaCertificates());
             client.init();
 
-            boolean error = false;
-            boolean warning = urlInvalid;
-            String buildInfoText = "";
-            HealthCheck healthCheck = client.healthCheck();
-            if (null == healthCheck) {
-                buildInfoText += Messages.validator_test_server_health_empty();
-                error = true;
-            } else {
-                long total = healthCheck.getServices().size();
-                long healthy = healthCheck.getServices().stream()
-                        .filter(s -> "Healthy".equalsIgnoreCase(s.getStatus()))
-                        .count();
-                buildInfoText += Messages.validator_test_server_health_success(healthy, total);
-                if (0 == healthy) warning = true;
-            }
-            buildInfoText += ", ";
-            EnterpriseLicenseData licenseData = client.getLicenseData();
-            if (null == licenseData) {
-                buildInfoText += Messages.validator_test_server_license_empty();
-                error = true;
-            } else {
-                buildInfoText += Messages.validator_test_server_license_success(
-                        licenseData.getLicenseNumber(),
-                        licenseData.getStartDate(), licenseData.getEndDate());
-                if (!licenseData.getIsValid()) warning = true;
-            }
-            return error
-                    ? FormValidation.error(buildInfoText)
-                    : warning
-                    ? FormValidation.warning(buildInfoText)
-                    : FormValidation.ok(buildInfoText);
+            Utils.TestResult res = client.testConnection();
+
+            return State.ERROR.equals(res.state())
+                    ? FormValidation.error(res.text())
+                    : State.WARNING.equals(res.state())
+                    ? FormValidation.warning(res.text())
+                    : FormValidation.ok(res.text());
         } catch (Exception e) {
             return Validator.error(e);
         }

@@ -27,6 +27,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.Certifi
 import io.reactivex.Single;
 import lombok.*;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -48,7 +49,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 
-@Log
+@Slf4j
 public class BaseClient extends Base {
     @Getter
     protected final String id = UUID.randomUUID().toString();
@@ -142,7 +143,7 @@ public class BaseClient extends Base {
         // to avoid multiple parsing calls
         if (StringUtils.isEmpty(res.getRefreshToken()))
             res.setRefreshToken(JWT.getRefreshToken());
-        log.finest("JWT: " + res);
+        log.trace("JWT: " + res);
         setJWT(res);
 
         return res;
@@ -249,23 +250,23 @@ public class BaseClient extends Base {
 
         // Register subscriptions
         connection.on("NeedUpdateConnectedDate", (message) -> {
-            log.finest("Event:NeedUpdateConnectedDate: " + message);
+            log.trace("Event:NeedUpdateConnectedDate: " + message);
             connectedDate = message;
         }, String.class);
 
         connection.on("NeedRefreshToken", () -> {
-            log.finest("Event:NeedRefreshToken");
+            log.trace("Event:NeedRefreshToken");
             authenticate();
         });
 
         connection.on("NeedSyncClientState", () -> {
-            log.finest("Event:NeedSyncClientState");
+            log.trace("Event:NeedSyncClientState");
             subscribe(connection, scanResultId);
         });
 
         connection.on("ScanStarted", (data) -> {
             info("Scan started");
-            log.finest(data.toString());
+            log.trace(data.toString());
         }, ScanStartedEvent.class);
 
         connection.on("ScanProgress", (data) -> {
@@ -274,13 +275,13 @@ public class BaseClient extends Base {
                 message += " -> " + data.getProgress().getSubStage() + "";
             message += " " + data.getProgress().getValue() + "%";
             info(message);
-            log.finest(data.toString());
+            log.trace(data.toString());
         }, ScanProgressEvent.class);
 
         connection.on("ScanEnqueued", (data) -> {
             if (scanResultId.equals(data.getScanResult().getId()))
                 info("Scan enqueued");
-            log.finest(data.toString());
+            log.trace(data.toString());
         }, ScanEnqueuedEvent.class);
 
         return connection;

@@ -12,9 +12,7 @@
     <file url="file://$PROJECT_DIR$/ptai-data-structures" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ptai-data-structures/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ptai-data-structures/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptai-integration-service" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptai-integration-service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/ptai-integration-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ptai-i18n" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ptai-jenkins-plugin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ptai-jenkins-plugin/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ptai-jenkins-plugin/src/main/resources" charset="UTF-8" />
@@ -28,16 +26,6 @@
     <file url="file://$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-agent" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-common" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-server" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rest-api" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rest-api/integration-rest-api" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rest-api/integration-rest-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rest-api/integration-rest-api/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rest-api/jenkins-rest-api" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rest-api/jenkins-rest-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rest-api/jenkins-rest-api/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rest-api/ptai-rest-api" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rest-api/ptai-rest-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rest-api/ptai-rest-api/src/main/resources" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

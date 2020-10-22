@@ -80,7 +80,6 @@ public class AstEditRunTypeControllerExtension implements EditRunTypeControllerE
             properties.put(REMOVE_PREFIX, "");
         // Additional settings are to be defined as a model
         model.put(URL, settings.getValue(URL));
-        model.put(USER, settings.getValue(USER));
         // We don't need publicKey property in the model as TeamCity did that for us
     }
 

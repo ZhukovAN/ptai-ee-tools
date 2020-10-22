@@ -24,7 +24,7 @@ import java.util.concurrent.Callable;
                 "2:Warning",
                 "1000:Invalid input"},
         description = "Checks PT AI server connection")
-public class CheckServer extends BaseAst implements Callable<Integer> {
+public class CheckServer extends BaseCommand implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--url"},
             required = true, order = 1,

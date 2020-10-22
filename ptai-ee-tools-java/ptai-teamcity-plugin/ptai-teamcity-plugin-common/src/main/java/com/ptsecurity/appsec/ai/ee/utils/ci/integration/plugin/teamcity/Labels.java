@@ -11,7 +11,6 @@ public class Labels {
 
     // PT AI server connection settings labels
     public static final String URL = "PT AI server URL";
-    public static final String USER = "PT AI user name";
     public static final String TOKEN = "PT AI API token";
     public static final String CERTIFICATES = "PT AI server trusted certificates";
 

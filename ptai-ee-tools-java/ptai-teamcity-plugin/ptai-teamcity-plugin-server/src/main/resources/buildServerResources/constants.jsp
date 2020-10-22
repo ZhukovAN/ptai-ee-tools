@@ -7,10 +7,6 @@
 <c:set var="LABEL_URL" value="<%=Labels.URL%>"/>
 <c:set var="HINT_URL" value="<%=Hints.URL%>"/>
 
-<c:set var="USER" value="<%=Params.USER%>"/>
-<c:set var="LABEL_USER" value="<%=Labels.USER%>"/>
-<c:set var="HINT_USER" value="<%=Hints.USER%>"/>
-
 <c:set var="TOKEN" value="<%=Params.TOKEN%>"/>
 <c:set var="LABEL_TOKEN" value="<%=Labels.TOKEN%>"/>
 <c:set var="HINT_TOKEN" value="<%=Hints.TOKEN%>"/>

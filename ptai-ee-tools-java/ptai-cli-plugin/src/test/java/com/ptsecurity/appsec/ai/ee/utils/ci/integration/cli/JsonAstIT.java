@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseAst;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +26,7 @@ class JsonAstIT extends BaseIT {
                 "--output", TEMP_REPORT_FOLDER.toPath().toString(),
                 "--settings-json", SETTINGS_PATH.toString(),
                 "--policy-json", POLICY_PATH.toString());
-        Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
 /*
         SETTINGS.setDownloadDependencies(false);
         saveJsons();
@@ -39,7 +39,7 @@ class JsonAstIT extends BaseIT {
                 "--output", TEMP_REPORT_FOLDER.toPath().toString(),
                 "--settings-json", SETTINGS_PATH.toString(),
                 "--policy-json", POLICY_PATH.toString());
-        Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
 
         res = new CommandLine(new Plugin()).execute(
                 "json-ast",
@@ -50,6 +50,6 @@ class JsonAstIT extends BaseIT {
                 "--output", TEMP_REPORT_FOLDER.toPath().toString(),
                 "--settings-json", SETTINGS_PATH.toString(),
                 "--policy-json", POLICY_PATH.toString());
-        Assertions.assertEquals(BaseAst.ExitCode.SUCCESS.getCode(), res);*/
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);*/
     }
 }

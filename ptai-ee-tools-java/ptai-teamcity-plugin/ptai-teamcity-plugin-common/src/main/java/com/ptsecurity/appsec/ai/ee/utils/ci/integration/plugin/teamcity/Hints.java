@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.StringHelper;
 import org.apache.tools.ant.DirectoryScanner;
 
 import java.util.Arrays;
@@ -16,7 +17,6 @@ public class Hints {
             "PT AI server URL. By default, PT AI server using secure port 8443." +
                     "<br>" +
                     "For example: https://ptai.domain.org:8443";
-    public static final String USER = "PT AI user name to use";
     public static final String TOKEN = "PT AI API token to use";
     public static final String CERTIFICATES =
             "PEM-encoded PT AI server CA certificate chain." +
@@ -59,16 +59,7 @@ public class Hints {
     public static final String PATTERN_SEPARATOR = "The regular expression that is used to separate the Source files and Exclude files patterns";
     public static final String USE_DEFAULT_EXCLUDES =
             "Select this option to disable the default exclude patterns (" +
-                    joinListGrammatically(Arrays.asList(FileCollector.defaultExcludes())) +
+                    StringHelper.joinListGrammatically(Arrays.asList(FileCollector.defaultExcludes())) +
                     ")";
     public static final String FLATTEN = "Only transfer files, ignore folder structure";
-
-    private static String joinListGrammatically(final List<String> list) {
-        return list.size() > 1
-                ? String.join(", ", list.subList(0, list.size() - 1))
-                    // .concat(String.format("%s and ", list.size() > 2 ? "," : ""))
-                    .concat(" and ")
-                    .concat(list.get(list.size() - 1))
-                : list.get(0);
-    }
 }

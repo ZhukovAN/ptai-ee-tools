@@ -70,13 +70,11 @@ public class AstSettingsTestController extends BaseFormXmlController {
         if (SERVER_SETTINGS_GLOBAL.equalsIgnoreCase(serverSettings)) {
             // If global settings mode is selected - init bean with global field values
             bean.setProperty(URL, settings.getValue(URL));
-            bean.setProperty(USER, settings.getValue(USER));
             bean.setProperty(TOKEN, settings.getValue(TOKEN));
             bean.setProperty(CERTIFICATES, settings.getValue(CERTIFICATES));
         } else {
             // If task-scope settings mode is selected - init bean from request
             bean.setProperty(URL, getProperty(request, URL));
-            bean.setProperty(USER, getProperty(request, USER));
             String token = RSACipher.decryptWebRequestData(getEncryptedProperty(request, TOKEN));
             bean.setProperty(TOKEN, token);
             bean.setProperty(CERTIFICATES, getProperty(request, CERTIFICATES));

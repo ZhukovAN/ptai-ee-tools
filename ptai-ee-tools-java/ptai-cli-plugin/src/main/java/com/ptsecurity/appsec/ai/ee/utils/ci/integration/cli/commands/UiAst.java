@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.SastJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.AstStatus;
 import lombok.extern.java.Log;
 import picocli.CommandLine;
 
@@ -26,7 +26,7 @@ import picocli.CommandLine;
                 "1:AST complete, policy (if set up) assessment failed",
                 "2:AST complete, policy (if set up) assessment success, minor warnings were reported",
                 "3:AST failed", "1000:Invalid input"})
-public class UiAst extends BaseAst implements Callable<Integer> {
+public class UiAst extends BaseCommand implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--url"},
             required = true, order = 1,
@@ -80,25 +80,30 @@ public class UiAst extends BaseAst implements Callable<Integer> {
             description = "Path to PEM file that stores trusted CA certificates")
     protected Path truststore = null;
 
-    @CommandLine.ArgGroup(exclusive = true, multiplicity = "1")
-    Report report;
+    @CommandLine.ArgGroup(exclusive = false)
+    BaseCommand.Report report;
 
     @CommandLine.Option(
-            names = {"-v", "--verbose"}, order = 12,
+            names = {"--async"}, order = 20,
+            description = "Do not wait AST to complete and exit immediately")
+    protected boolean async = false;
+
+    @CommandLine.Option(
+            names = {"-v", "--verbose"}, order = 99,
             description = "Provide verbose console log output")
     protected boolean verbose = false;
 
     @Override
     public Integer call() throws Exception {
         switch (execute()) {
-            case UNSTABLE: return BaseAst.ExitCode.WARNINGS.getCode();
-            case FAILURE: return BaseAst.ExitCode.FAILED.getCode();
-            case SUCCESS: return BaseAst.ExitCode.SUCCESS.getCode();
+            case UNSTABLE: return BaseCommand.ExitCode.WARNINGS.getCode();
+            case FAILURE: return BaseCommand.ExitCode.FAILED.getCode();
+            case SUCCESS: return BaseCommand.ExitCode.SUCCESS.getCode();
             default: return ExitCode.ERROR.getCode();
         }
     }
 
-    private PtaiResultStatus execute() throws IOException {
+    private AstStatus execute() throws IOException {
         SastJob job = SastJob.builder()
                 .url(url)
                 .projectName(project)
@@ -108,6 +113,7 @@ public class UiAst extends BaseAst implements Callable<Integer> {
                 .includes(includes)
                 .excludes(excludes)
                 .report(report)
+                .async(async)
                 .build();
         if (null != truststore) {
             String pem = new String(Files.readAllBytes(truststore), StandardCharsets.UTF_8);
@@ -116,6 +122,6 @@ public class UiAst extends BaseAst implements Callable<Integer> {
         job.setConsole(System.out);
         job.setPrefix("");
         job.setVerbose(verbose);
-        return PtaiResultStatus.convert(job.execute());
+        return job.execute();
     }
 }

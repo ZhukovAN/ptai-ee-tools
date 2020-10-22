@@ -18,6 +18,13 @@
         <!-- <teamcity-version>2018.2</teamcity-version> -->
         <!-- <teamcity-version>2020.1</teamcity-version> -->
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
+            <artifactId>ptai-i18n</artifactId>
+            <version>0.1</version>
+        </dependency>
+    </dependencies>
     <repositories>
         <repository>
             <id>JetBrains</id>

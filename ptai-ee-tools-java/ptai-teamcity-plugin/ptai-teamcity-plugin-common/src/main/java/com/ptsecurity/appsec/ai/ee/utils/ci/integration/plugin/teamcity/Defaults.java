@@ -11,7 +11,6 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.C
 public class Defaults {
     // PT AI connection parameter names
     public static final String URL = "https://ptai.domain.corp:8443";
-    public static final String USER = "svc-teamcity";
     public static final String TOKEN = "P@ssw0rd";
     public static final String CERTIFICATES = "";
     /**

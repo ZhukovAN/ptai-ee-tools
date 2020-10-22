@@ -39,7 +39,6 @@ public class AstAdminSettings {
 
     private void initConfig(@NotNull final Path path) throws IOException {
         this.properties.put(URL, Base.DEFAULT_PTAI_URL);
-        this.properties.put(USER, "");
         this.properties.put(TOKEN, "");
         this.properties.put(CERTIFICATES, "");
         getConfigFile().toFile().getParentFile().mkdirs();

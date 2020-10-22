@@ -52,7 +52,6 @@
                 <span class="error" id="error_${SERVER_SETTINGS}"></span>
                <%-- Remaining properties are defined through model --%>
                 <input type="hidden" id="global:${URL}" name="global:${URL}" value="<c:out value='${URL}'/>"/>
-                <input type="hidden" id="global:${USER}" name="global:${USER}" value="<c:out value='${USER}'/>"/>
             </td>
         </tr>
 
@@ -64,17 +63,6 @@
                 <props:textProperty name="${URL}" className="longField"/>
                 <span class="smallNote">${HINT_URL}</span>
                 <span class="error" id="error_${URL}"></span>
-            </td>
-        </tr>
-
-        <tr class="ptai-connection-settings-local" style="display:none;">
-            <th>
-                <label for="${USER}">${LABEL_USER}<l:star/></label>
-            </th>
-            <td>
-                <props:textProperty name="${USER}" className="longField"/>
-                <span class="smallNote">${HINT_USER}</span>
-                <span class="error" id="error_${USER}"></span>
             </td>
         </tr>
 

@@ -21,16 +21,6 @@
         </dependency>
         <dependency>
             <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
-            <artifactId>jenkins-rest-api</artifactId>
-            <version>0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
-            <artifactId>integration-rest-api</artifactId>
-            <version>0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
             <artifactId>ptai-data-structures</artifactId>
             <version>0.1</version>
         </dependency>
@@ -58,17 +48,23 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.8.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.6</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-digester</groupId>
+                    <artifactId>commons-digester</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
         <dependency>
             <groupId>org.apache.ant</groupId>
             <artifactId>ant</artifactId>
-            <version>1.10.5</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.jenkins-ci.plugins/bouncycastle-api -->
-        <dependency>
-            <groupId>org.jenkins-ci.plugins</groupId>
-            <artifactId>bouncycastle-api</artifactId>
-            <version>2.16.2</version>
+            <version>1.10.9</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jooq/joor-java-8 -->
         <dependency>

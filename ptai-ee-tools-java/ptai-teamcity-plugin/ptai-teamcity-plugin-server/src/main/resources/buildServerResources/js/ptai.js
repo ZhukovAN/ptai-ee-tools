@@ -32,10 +32,6 @@ PtaiConnectionSettingsForm = OO.extend(BS.AbstractPasswordForm, {
                 this.handle("ptaiUrl", elem);
             },
 
-            onPtaiUserError: function(elem) {
-                this.handle("ptaiUser", elem);
-            },
-
             onPtaiTokenError: function(elem) {
                 this.handle("ptaiToken", elem);
             },

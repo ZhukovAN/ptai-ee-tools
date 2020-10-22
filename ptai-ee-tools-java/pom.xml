@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
     <name>ptai-ee-tools</name>
     <modules>
+        <module>ptai-i18n</module>
         <module>ptai-rest-api</module>
         <module>ptai-data-structures</module>
         <module>generic-client-lib</module>
@@ -16,7 +17,7 @@
         <module>ptai-cli-plugin</module>
         <!-- <module>ptai-maven-plugin</module> -->
         <!-- <module>ptai-sonar-plugin</module> -->
-        <!-- <module>ptai-teamcity-plugin</module> -->
+        <module>ptai-teamcity-plugin</module>
         <!-- <module>ptai-report-generator</module> -->
     </modules>
     <properties>
@@ -26,7 +27,7 @@
         <java-version>1.8</java-version>
         <java.level>8</java.level>
         <junit.version>5.5.2</junit.version>
-        <log4j.version>2.13.3</log4j.version>
+        <slf4j.version>1.7.25</slf4j.version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
@@ -36,25 +37,11 @@
             <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->

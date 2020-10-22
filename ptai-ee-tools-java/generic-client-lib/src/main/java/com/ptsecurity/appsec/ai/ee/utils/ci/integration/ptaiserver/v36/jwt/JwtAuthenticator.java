@@ -8,6 +8,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.ApiClie
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
@@ -23,7 +24,7 @@ import java.util.regex.Pattern;
  * have no common ancestor we need to pass Object type to constructor and use
  * ApiClientHelper to call methods.
  */
-@Log
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticator extends Base implements Authenticator {
     private static final Pattern INVALID_TOKEN_ERROR = Pattern.compile("\\s*error\\s*=\\s*\"?invalid_token\"?");
@@ -56,7 +57,7 @@ public class JwtAuthenticator extends Base implements Authenticator {
             do {
                 String authResponse = response.header("WWW-Authenticate");
                 if (StringUtils.isEmpty(authResponse) || !authResponse.startsWith("Bearer")) {
-                    log.severe("Unauthorized, but invalid WWW-Authenticate response header");
+                    log.error("Unauthorized, but invalid WWW-Authenticate response header");
                     break;
                 }
                 JwtResponse jwtResponse;

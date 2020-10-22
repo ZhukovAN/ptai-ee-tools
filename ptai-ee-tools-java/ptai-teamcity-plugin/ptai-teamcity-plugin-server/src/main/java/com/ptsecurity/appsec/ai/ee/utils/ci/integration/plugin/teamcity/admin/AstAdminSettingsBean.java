@@ -13,12 +13,11 @@ import lombok.Setter;
 public class AstAdminSettingsBean extends BasePropertiesBean {
     public AstAdminSettingsBean(
             String url,
-            String user, String token,
+            String token,
             String certificates) {
         super(null);
 
         this.setProperty(Params.URL, url);
-        this.setProperty(Params.USER, user);
         this.setProperty(Params.TOKEN, token);
         this.setProperty(Params.CERTIFICATES, certificates);
 

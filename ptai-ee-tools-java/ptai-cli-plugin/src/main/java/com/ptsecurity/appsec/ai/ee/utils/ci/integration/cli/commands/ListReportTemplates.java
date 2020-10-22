@@ -1,8 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.EnterpriseLicenseData;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ReportTemplateModel;
-import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheck;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
 import lombok.extern.java.Log;
 import picocli.CommandLine;
@@ -26,7 +24,7 @@ import java.util.concurrent.Callable;
                 "2:Warning",
                 "1000:Invalid input"},
         description = "Lists available PT AI report templates")
-public class ListReportTemplates extends BaseAst implements Callable<Integer> {
+public class ListReportTemplates extends BaseCommand implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--url"},
             required = true, order = 1,

@@ -51,17 +51,6 @@
 
                 <tr>
                     <th>
-                        <label for="${USER}">${LABEL_USER}<l:star/></label>
-                    </th>
-                    <td>
-                        <props:textProperty name="${USER}" className="longField"/>
-                        <span class="smallNote">${HINT_USER}</span>
-                        <span class="error" id="error_${USER}"></span>
-                    </td>
-                </tr>
-
-                <tr>
-                    <th>
                         <label for="${TOKEN}">${LABEL_TOKEN}<l:star/></label>
                     </th>
                     <td>

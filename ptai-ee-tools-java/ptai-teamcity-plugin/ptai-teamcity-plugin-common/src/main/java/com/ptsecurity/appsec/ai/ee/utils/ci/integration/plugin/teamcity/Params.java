@@ -8,7 +8,6 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.C
 public class Params {
     // PT AI connection parameter names
     public static final String URL = PARAM("Url");
-    public static final String USER = PARAM("User");
     public static final String TOKEN = PARAM("Token");
     public static final String CERTIFICATES = PARAM("Certificates");
 

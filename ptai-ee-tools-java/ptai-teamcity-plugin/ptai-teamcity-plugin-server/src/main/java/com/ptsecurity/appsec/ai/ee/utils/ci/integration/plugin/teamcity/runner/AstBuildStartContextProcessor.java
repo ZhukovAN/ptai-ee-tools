@@ -32,7 +32,6 @@ public class AstBuildStartContextProcessor implements BuildStartContextProcessor
     @Override
     public void updateParameters(@NotNull BuildStartContext context) {
         context.addSharedParameter(URL, settings.getValue(URL));
-        context.addSharedParameter(USER, settings.getValue(USER));
         context.addSharedParameter(TOKEN, settings.getValue(TOKEN));
         context.addSharedParameter(CERTIFICATES, settings.getValue(CERTIFICATES));
     }

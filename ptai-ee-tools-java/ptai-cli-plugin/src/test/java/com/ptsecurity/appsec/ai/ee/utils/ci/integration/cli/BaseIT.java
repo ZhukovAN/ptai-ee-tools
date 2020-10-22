@@ -9,7 +9,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
-import picocli.CommandLine;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -32,7 +31,9 @@ class BaseIT {
     protected static Path SETTINGS_PATH = null;
     protected static Path POLICY_PATH = null;
     protected static Path EMPTY_POLICY_PATH = null;
-    protected static Path REPORTS_JSON_PATH = null;
+    protected static Path REPORTS_GOOD_JSON_PATH = null;
+    protected static Path REPORTS_BAD_JSON_PATH = null;
+    protected static Path REPORTS_MISSING_JSON_PATH = null;
     protected static ScanSettings SETTINGS;
     protected static Policy[] POLICY;
     protected static Policy[] EMPTY_POLICY = new Policy[0];
@@ -47,7 +48,9 @@ class BaseIT {
     // protected static final String PEM_RESOURCE = "keys/pt.pem";
     protected static final String PEM_RESOURCE = "keys/domain.org.pem";
 
-    protected static final String REPORTS_JSON_RESOURCE = "json/reports.json";
+    protected static final String REPORTS_GOOD_JSON_RESOURCE = "json/reports.good.json";
+    protected static final String REPORTS_BAD_JSON_RESOURCE = "json/reports.bad.json";
+    protected static final String REPORTS_MISSING_JSON_RESOURCE = "json/reports.missing.json";
 
     @BeforeAll
     public static void init() throws URISyntaxException, IOException {
@@ -56,7 +59,9 @@ class BaseIT {
         TEMP_JSON_FOLDER = TEMP_FOLDER.toPath().resolve("json").toFile();
 
         PEM_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(PEM_RESOURCE).toURI());
-        REPORTS_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_JSON_RESOURCE).toURI());
+        REPORTS_GOOD_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_GOOD_JSON_RESOURCE).toURI());
+        REPORTS_BAD_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_BAD_JSON_RESOURCE).toURI());
+        REPORTS_MISSING_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_MISSING_JSON_RESOURCE).toURI());
 
         ObjectMapper jsonMapper = new ObjectMapper();
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

@@ -1,20 +1,21 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.aic.ExitCode;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.ApiException;
-import com.ptsecurity.appsec.ai.ee.ptai.integration.rest.JobState;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.exceptions.BaseClientException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyVerifier;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsVerifier;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.integration.Client;
+import com.intellij.openapi.diagnostic.Logger;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanError;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanResult;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Stage;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.AstStatus;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.UrlHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import jetbrains.buildServer.RunBuildException;
@@ -23,139 +24,136 @@ import jetbrains.buildServer.agent.BuildFinishedStatus;
 import jetbrains.buildServer.agent.BuildProcess;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.io.FileUtils;
+import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.validator.routines.UrlValidator;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.*;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.SERVER_SETTINGS_GLOBAL;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.TRUE;
 
+@Log
 public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStatus> {
+    private static Logger LOG = Logger.getInstance(AstBuildProcess.class.getName());
 
     private Future<BuildFinishedStatus> future;
 
     private final BuildRunnerContext buildRunnerContext;
     private final AgentRunningBuild agentRunningBuild;
     private final ArtifactsWatcher artifactsWatcher;
-    private final AstLoggerAdapter logger;
 
-    Client client = null;
-    Integer scanId = null;
+    private Project project = null;
+    private UUID scanResultId = null;
 
     public AstBuildProcess(AgentRunningBuild agentRunningBuild, BuildRunnerContext buildRunnerContext, ArtifactsWatcher artifactsWatcher) {
         this.agentRunningBuild = agentRunningBuild;
         this.buildRunnerContext = buildRunnerContext;
         this.artifactsWatcher = artifactsWatcher;
-        logger = new AstLoggerAdapter(agentRunningBuild.getBuildLogger());
+        // logger = new AstLoggerAdapter(agentRunningBuild.getBuildLogger());
     }
 
+    // TODO: Get rid of AstStatus / ExitCode etc.
     @Override
     public BuildFinishedStatus call() throws Exception {
-        Integer res = ast();
-        String message = ExitCode.CODES.getOrDefault(res, ExitCode.CODE_UNKNOWN_ERROR.getDescription());
-        PtaiResultStatus status = PtaiResultStatus.convert(res);
-        if (PtaiResultStatus.ABORTED.equals(status)) {
-            logger.error(message);
+        AstStatus status = ast();
+        if (AstStatus.ABORTED.equals(status)) {
+            log.severe(status.getDescription());
             return BuildFinishedStatus.INTERRUPTED;
-        } else if (PtaiResultStatus.ERROR.equals(status)) {
-            logger.error(message);
+        } else if (AstStatus.ERROR.equals(status)) {
+            log.severe(status.getDescription());
             return BuildFinishedStatus.FINISHED_FAILED;
-        } else if (PtaiResultStatus.FAILURE.equals(status)) {
-            logger.error(message);
+        } else if (AstStatus.FAILURE.equals(status)) {
+            log.severe(status.getDescription());
             return BuildFinishedStatus.FINISHED_FAILED;
-        } else if (PtaiResultStatus.SUCCESS.equals(status)) {
-            logger.info(message);
+        } else if (AstStatus.SUCCESS.equals(status)) {
+            log.info(status.getDescription());
             return BuildFinishedStatus.FINISHED_SUCCESS;
-        } else if (PtaiResultStatus.UNSTABLE.equals(status)) {
+        } else if (AstStatus.UNSTABLE.equals(status)) {
             Map<String, String> params = buildRunnerContext.getRunnerParameters();
             if (TRUE.equalsIgnoreCase(params.get(Params.FAIL_IF_UNSTABLE))) {
-                logger.error(ExitCode.CODE_WARNING.getDescription());
+                log.severe(status.getDescription());
                 return BuildFinishedStatus.FINISHED_FAILED;
             } else {
-                logger.warn(ExitCode.CODE_WARNING.getDescription());
+                log.warning(status.getDescription());
                 return BuildFinishedStatus.FINISHED_SUCCESS;
             }
         } else {
-            logger.error(message);
+            log.severe(status.getDescription());
             return BuildFinishedStatus.FINISHED_FAILED;
         }
     }
 
     protected String validateNotEmpty(final String value) {
         if (StringUtils.isNotEmpty(value)) return value;
-        throw new BaseClientException("Empty value is not allowed");
+        throw new IllegalArgumentException(Messages.validator_check_field_empty());
     }
-
-    private static final UrlValidator urlValidator = new UrlValidator(new String[] {"http","https"}, UrlValidator.ALLOW_LOCAL_URLS);
 
     protected String validateUrl(final String value) {
         String url = validateNotEmpty(value);
-        if (urlValidator.isValid(url)) return url;
-        throw new BaseClientException("Invalid URL");
+        if (UrlHelper.checkUrl(url)) return url;
+        throw new IllegalArgumentException(Messages.validator_check_url_invalid());
     }
 
-    protected Integer ast() throws Exception {
+    private AstStatus ast() throws Exception {
         Map<String, String> params = buildRunnerContext.getRunnerParameters();
         Map<String, String> globals = agentRunningBuild.getSharedConfigParameters();
 
         boolean globalSettingsUsed = SERVER_SETTINGS_GLOBAL.equalsIgnoreCase(params.get(Params.SERVER_SETTINGS));
         if (!globalSettingsUsed) globals = params;
 
-        Integer res = ExitCode.CODE_UNKNOWN_ERROR.getCode();
+        AstStatus res;
+        ScanSettings jsonSettings = null;
+        Policy[] jsonPolicy = null;
+
+        if (Constants.AST_SETTINGS_JSON.equalsIgnoreCase(params.get(Params.AST_SETTINGS))) {
+            jsonSettings = JsonSettingsHelper.verify(params.get(Params.JSON_SETTINGS));
+            if (StringUtils.isNotEmpty(params.get(Params.JSON_POLICY)))
+                jsonPolicy = JsonPolicyHelper.verify(params.get(Params.JSON_POLICY));
+        }
+
+        String projectName = null == jsonSettings ? validateNotEmpty(params.get(Params.PROJECT_NAME)) : jsonSettings.getProjectName();
+
+        project = new Project(projectName) {
+            @Override
+            protected void out(final String value) {
+                if (null == value) return;
+                agentRunningBuild.getBuildLogger().message(value);
+            }
+            @Override
+            protected void out(final Throwable t) {
+                if (null == t) return;
+                agentRunningBuild.getBuildLogger().exception(t);
+            }
+        };
+        // TODO: Implement JUL custom handler to send generic-client-lib events to TeamCity logger (see https://www.logicbig.com/tutorials/core-java-tutorial/logging/custom-handler.html)
+
+        // No need to set console log and prefix as we override out methods
+        project.setVerbose(TRUE.equalsIgnoreCase(params.get(Params.VERBOSE)));
+
         try {
-            client = new Client();
-            client.setUrl(validateUrl(globals.get(Params.URL)));
-            client.setClientId(Constants.CLIENT_ID);
-            client.setClientSecret(Constants.CLIENT_SECRET);
-            // client.setConsoleLog(this.consoleLog);
-            client.setVerbose(TRUE.equalsIgnoreCase(params.get(Params.VERBOSE)));
-            // client.setLogPrefix(this.logPrefix);
-
+            project.setUrl(validateUrl(globals.get(Params.URL)));
+            project.setToken(validateNotEmpty(globals.get(Params.TOKEN)));
             if (StringUtils.isNotEmpty(globals.get(Params.CERTIFICATES)))
-                client.setCaCertsPem(globals.get(Params.CERTIFICATES));
+                project.setCaCertsPem(globals.get(Params.CERTIFICATES));
+            project.init();
 
-            client.setUserName(validateNotEmpty(globals.get(Params.USER)));
-            client.setPassword(validateNotEmpty(globals.get(Params.TOKEN)));
-            client.init();
+            UUID projectId = project.searchProject();
+            if (null == projectId) {
+                if (null != jsonSettings) {
+                    project.info("Project %s not found, will be created as JSON settings are defined", projectName);
+                    projectId = project.setupFromJson(jsonSettings, jsonPolicy);
+                } else {
+                    project.info("Project %s not found", projectName);
+                    return AstStatus.ERROR;
+                }
+            } else if (null != jsonSettings)
+                project.setupFromJson(jsonSettings, jsonPolicy);
 
-            ScanSettings jsonSettings = null;
-            Policy[] jsonPolicy = null;
-
-            if (Constants.AST_SETTINGS_JSON.equalsIgnoreCase(params.get(Params.AST_SETTINGS))) {
-                jsonSettings = JsonSettingsVerifier.verify(params.get(Params.JSON_SETTINGS));
-                if (StringUtils.isNotEmpty(params.get(Params.JSON_POLICY)))
-                    jsonPolicy = JsonPolicyVerifier.verify(params.get(Params.JSON_POLICY));
-            }
-
-            String projectName = null == jsonSettings ? validateNotEmpty(params.get(Params.PROJECT_NAME)) : jsonSettings.getProjectName();
-
-            try {
-                client.getDiagnosticApi().getProjectId(projectName);
-            } catch (ApiException e) {
-                if (HttpStatus.SC_NOT_FOUND == e.getCode()) {
-                    // Project not found - create it if AST parameters are defined
-                    if (null != jsonSettings) {
-                        logger.info("Project {} not found, will be created as JSON settings are defined", projectName);
-                        client.getSastApi().createProject(projectName);
-                    } else {
-                        logger.error("Project {} not found", projectName);
-                        return ExitCode.CODE_ERROR_PROJECT_NOT_FOUND.getCode();
-                    }
-                } else
-                    throw e;
-            }
             Transfer transfer = new Transfer();
             if (StringUtils.isNotEmpty(params.get(Params.INCLUDES)))
                 transfer.setIncludes(params.get(Params.INCLUDES));
@@ -167,59 +165,47 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                 transfer.setRemovePrefix(params.get(Params.REMOVE_PREFIX));
             transfer.setFlatten(TRUE.equalsIgnoreCase(params.get(Params.FLATTEN)));
             transfer.setUseDefaultExcludes(TRUE.equalsIgnoreCase(params.get(Params.USE_DEFAULT_EXCLUDES)));
-            Base base = new Base() {
-                public void log(String value) {
-                    logger.info(value);
-                }
-            };
-            base.setVerbose(TRUE.equalsIgnoreCase(params.get(Params.VERBOSE)));
 
             File zip = agentRunningBuild.getBuildTempDirectory().toPath()
                     .resolve(agentRunningBuild.getProjectName())
                     .resolve(agentRunningBuild.getBuildTypeName())
                     .resolve(agentRunningBuild.getBuildNumber() + ".zip").toFile();
-            FileCollector.collect(new Transfers().addTransfer(transfer), agentRunningBuild.getCheckoutDirectory(), zip, base);
-            client.uploadZip(projectName, zip, 1024 * 1024);
+            FileCollector.collect(new Transfers().addTransfer(transfer), agentRunningBuild.getCheckoutDirectory(), zip, project);
+
+            project.setSources(zip);
+            project.upload();
 
             String node = params.get(Params.NODE_NAME);
+            scanResultId = project.scan(node);
+            project.info("PT AI AST result ID is " + scanResultId);
 
-            if (null == jsonSettings)
-                scanId = client.getSastApi().startUiJob(projectName, StringUtils.isEmpty(node) ? Base.DEFAULT_PTAI_NODE_NAME : node);
-            else
-                scanId = client.getSastApi().startJsonJob(
-                        projectName,
-                        StringUtils.isEmpty(node) ? Base.DEFAULT_PTAI_NODE_NAME : node,
-                        new ObjectMapper().writeValueAsString(jsonSettings.fix()),
-                        null == jsonPolicy ? "" : new ObjectMapper().writeValueAsString(jsonPolicy));
+            // TODO: Implement save scan result URL for future use
 
-            logger.info("SAST job number is {}", scanId);
+            boolean failed = false;
+            boolean unstable = false;
+            String reason;
 
-            JobState state = null;
-            int pos = 0;
-            do {
-                state = client.getSastApi().getScanJobState(scanId, pos);
-                if (state.getPos() != pos) {
-                    String[] lines = state.getLog().split("\\r?\\n");
-                    for (String line : lines)
-                        logger.info(line);
-                }
-                pos = state.getPos();
-                if (!state.getStatus().equals(JobState.StatusEnum.UNKNOWN)) break;
-                Thread.sleep(2000);
-            } while (true);
+            ScanResult state = project.waitForComplete(scanResultId);
+            Stage stage = state.getProgress().getStage();
 
+            LOG.debug("Resulting stage is " + stage);
+            LOG.debug("Resulting statistics is " + state.getStatistic());
+
+            // Generate reports
+            if (Stage.DONE.equals(stage) || Stage.ABORTED.equals(stage)) {
+                /*
             // Save results to temp folder and tell agent to publish them
             Path out = agentRunningBuild.getBuildTempDirectory().toPath()
                     .resolve(agentRunningBuild.getProjectName())
                     .resolve(agentRunningBuild.getBuildTypeName());
-            List<String> results = client.getSastApi().getJobResults(scanId);
+            List<String> results = project.getSastApi().getJobResults(scanId);
             if ((null != results) && (!results.isEmpty())) {
                 logger.info("AST results will be stored to {}", out);
                 if (!out.toFile().exists())
                     Files.createDirectories(out);
             }
             for (String result : results) {
-                File data = client.getSastApi().getJobResult(scanId, result);
+                File data = project.getSastApi().getJobResult(scanId, result);
                 String fileName = out.resolve(result.replaceAll("REPORTS/", "")).toString();
                 if (result.endsWith("status.code")) {
                     res = Integer.parseInt(FileUtils.readFileToString(data, StandardCharsets.UTF_8.name()));
@@ -230,20 +216,19 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                     Files.copy(data.toPath(), Paths.get(fileName), StandardCopyOption.REPLACE_EXISTING);
                 artifactsWatcher.addNewArtifactsPath(fileName + "=>" + Base.DEFAULT_SAST_FOLDER);
             }
+                 */
+
+            }
+            res = AstStatus.convert(state, project.getScanErrors(projectId, scanResultId));
+
+            project.info(res.getDescription());
         } catch (ApiException e) {
-            String message = BaseClientException.getApiExceptionMessage(e);
-            if (!StringUtils.isEmpty(message))
-                logger.error(message);
-            if (HttpStatus.SC_NOT_FOUND == e.getCode())
-                res = ExitCode.CODE_ERROR_PROJECT_SETTINGS.getCode();
-        } catch (InterruptedException e) {
-            logger.error("Interrupted exception: " + e.getMessage());
-            if ((null != client) && (null != scanId))
-                client.getSastApi().stopScan(scanId);
-            throw new RunBuildException(e.getMessage());
+            project.severe(Messages.plugin_result_ast_error(e.getMessage()), e);
+            res = AstStatus.ERROR;
         } catch (Exception e) {
-            logger.error("Exception thrown: " + e.getMessage(), e);
-            throw new RunBuildException(e);
+            // TODO: check catch / ApiException.raise sequences for log redundancy
+            log.severe("Exception thrown: " + e.getMessage());
+            throw ApiException.raise("Scan error", e);
         }
         return res;
     }
@@ -269,11 +254,11 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
 
     @Override
     public void interrupt() {
-        if ((null != client) && (null != scanId)) {
+        if ((null != project) && (null != scanResultId)) {
             try {
-                client.getSastApi().stopScan(scanId);
+                project.stop(scanResultId);
             } catch (ApiException e) {
-                logger.error("AST job stop failed", e);
+                log.severe("AST job stop failed" + e.getDetailedMessage());
             }
         }
         future.cancel(true);
@@ -283,11 +268,8 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
     @Override
     public BuildFinishedStatus waitFor() throws RunBuildException {
         try {
-            final BuildFinishedStatus status = future.get();
-            return status;
-        } catch (final InterruptedException e) {
-            throw new RunBuildException(e);
-        } catch (final ExecutionException e) {
+            return future.get();
+        } catch (final InterruptedException | ExecutionException e) {
             throw new RunBuildException(e);
         } catch (final CancellationException e) {
             return BuildFinishedStatus.INTERRUPTED;

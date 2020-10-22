@@ -1,27 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseAst;
-import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
 import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.io.TempDir;
 import picocli.CommandLine;
-
-import java.io.*;
-import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.UUID;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 @DisplayName("Check UI-defined AST scans")
 class UiAstIT extends BaseIT {
@@ -30,7 +13,7 @@ class UiAstIT extends BaseIT {
     public void testUiAstShowUsage() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast");
-        Assertions.assertEquals(BaseAst.ExitCode.INVALID_INPUT.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.INVALID_INPUT.getCode(), res);
     }
 
     @Test
@@ -43,7 +26,7 @@ class UiAstIT extends BaseIT {
                 "--output", TEMP_REPORT_FOLDER.toPath().toString(),
                 "--url", PTAI_URL,
                 "--token", TOKEN);
-        Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
     @Test
@@ -60,7 +43,7 @@ class UiAstIT extends BaseIT {
                 "--report-template", "OWASP top 10 2017 report",
                 "--report-format", "JSON",
                 "--report-locale", "EN");
-        Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
         res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
                 "--project", EXISTING_PROJECT_NAME,
@@ -72,7 +55,7 @@ class UiAstIT extends BaseIT {
                 "--report-template", "OWASP top 10 2017 report",
                 "--report-format", "JSON",
                 "--report-locale", "EN");
-        Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
     @Test
@@ -89,22 +72,22 @@ class UiAstIT extends BaseIT {
                 "--report-template", "OWASP top 10 2017 report",
                 "--report-format", "HTML",
                 "--report-locale", "EN");
-        Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
     @SneakyThrows
     @Test
     public void testNamedReportDefinitionProcessing() {
-        BaseAst.NamedReportDefinition[] reports = new BaseAst.NamedReportDefinition[2];
-        reports[0] = BaseAst.NamedReportDefinition.builder()
-                .format(BaseAst.ReportDefinition.Format.JSON)
-                .locale(BaseAst.ReportDefinition.Locale.EN)
+        BaseCommand.NamedReportDefinition[] reports = new BaseCommand.NamedReportDefinition[2];
+        reports[0] = BaseCommand.NamedReportDefinition.builder()
+                .format(BaseCommand.ReportDefinition.Format.JSON)
+                .locale(BaseCommand.ReportDefinition.Locale.EN)
                 .template("OWASP top 10 2017 report")
                 .name("owasp.top.10.en.json")
                 .build();
-        reports[1] = BaseAst.NamedReportDefinition.builder()
-                .format(BaseAst.ReportDefinition.Format.XML)
-                .locale(BaseAst.ReportDefinition.Locale.EN)
+        reports[1] = BaseCommand.NamedReportDefinition.builder()
+                .format(BaseCommand.ReportDefinition.Format.XML)
+                .locale(BaseCommand.ReportDefinition.Locale.EN)
                 .template("OWASP top 10 2017 report")
                 .name("owasp.top.10.en.xml")
                 .build();
@@ -112,8 +95,8 @@ class UiAstIT extends BaseIT {
         String jsonStr = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(reports);
         System.out.println(jsonStr);
 
-        reports = BaseAst.NamedReportDefinition.load(jsonStr);
-        for (BaseAst.NamedReportDefinition report : reports)
+        reports = BaseCommand.NamedReportDefinition.load(jsonStr);
+        for (BaseCommand.NamedReportDefinition report : reports)
             System.out.println(report.getName());
     }
 
@@ -128,7 +111,51 @@ class UiAstIT extends BaseIT {
                 "--url", PTAI_URL,
                 "--truststore", PEM_PATH.toString(),
                 "--token", TOKEN,
-                "--report-json", REPORTS_JSON_PATH.toString());
-        Assertions.assertEquals(BaseAst.ExitCode.FAILED.getCode(), res);
+                "--report-json", REPORTS_GOOD_JSON_PATH.toString());
+        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
+    }
+
+    @Test
+    @DisplayName("Test existing project scan with bad JSON-defined reports")
+    public void testUiAstBadJsonDefinedReports() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "ui-ast",
+                "--project", EXISTING_PROJECT_NAME,
+                "--input", TEMP_SOURCES_FOLDER.toPath().toString(),
+                "--output", TEMP_REPORT_FOLDER.toPath().toString(),
+                "--url", PTAI_URL,
+                "--truststore", PEM_PATH.toString(),
+                "--token", TOKEN,
+                "--report-json", REPORTS_BAD_JSON_PATH.toString());
+        Assertions.assertEquals(BaseCommand.ExitCode.ERROR.getCode(), res);
+    }
+
+    @Test
+    @DisplayName("Test existing project scan with JSON-defined reports with missing templates")
+    public void testUiAstMissingJsonDefinedReports() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "ui-ast",
+                "--project", EXISTING_PROJECT_NAME,
+                "--input", TEMP_SOURCES_FOLDER.toPath().toString(),
+                "--output", TEMP_REPORT_FOLDER.toPath().toString(),
+                "--url", PTAI_URL,
+                "--truststore", PEM_PATH.toString(),
+                "--token", TOKEN,
+                "--report-json", REPORTS_MISSING_JSON_PATH.toString());
+        Assertions.assertEquals(BaseCommand.ExitCode.ERROR.getCode(), res);
+    }
+
+    @Test
+    @DisplayName("Execute asynchronous UI-defined AST of existing project without custom truststore")
+    public void testAsyncUiAstWithoutTruststore() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "ui-ast",
+                "--project", EXISTING_PROJECT_NAME,
+                "--input", TEMP_SOURCES_FOLDER.toPath().toString(),
+                "--output", TEMP_REPORT_FOLDER.toPath().toString(),
+                "--url", PTAI_URL,
+                "--token", TOKEN,
+                "--async");
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 }

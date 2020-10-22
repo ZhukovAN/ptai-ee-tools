@@ -4,12 +4,12 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPol
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.UrlHelper;
 import hudson.util.FormValidation;
 import lombok.NonNull;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.DomainValidator;
-import org.apache.commons.validator.routines.UrlValidator;
 
 import java.util.regex.Pattern;
 
@@ -30,10 +30,7 @@ public class Validator {
     }
 
     public static boolean doCheckFieldUrl(String value) {
-        UrlValidator urlValidator = new UrlValidator(
-                new String[]{"http", "https"},
-                UrlValidator.ALLOW_LOCAL_URLS);
-        return urlValidator.isValid(value);
+        return UrlHelper.checkUrl(value);
     }
 
     public static boolean doCheckFieldInteger(Integer value) {

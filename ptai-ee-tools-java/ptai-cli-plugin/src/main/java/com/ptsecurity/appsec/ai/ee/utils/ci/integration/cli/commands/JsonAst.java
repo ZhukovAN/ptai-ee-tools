@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.SastJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.PtaiResultStatus;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.AstStatus;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.extern.java.Log;
@@ -103,7 +103,12 @@ public class JsonAst implements Callable<Integer> {
     protected Path truststore = null;
 
     @CommandLine.ArgGroup(exclusive = false)
-    BaseAst.Report report;
+    BaseCommand.Report report;
+
+    @CommandLine.Option(
+            names = {"--async"}, order = 20,
+            description = "Do not wait AST to complete and exit immediately")
+    protected boolean async = false;
 
     @CommandLine.Option(
             names = {"-v", "--verbose"}, order = 99,
@@ -113,14 +118,14 @@ public class JsonAst implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         switch (execute()) {
-            case UNSTABLE: return BaseAst.ExitCode.WARNINGS.getCode();
-            case FAILURE: return BaseAst.ExitCode.FAILED.getCode();
-            case SUCCESS: return BaseAst.ExitCode.SUCCESS.getCode();
+            case UNSTABLE: return BaseCommand.ExitCode.WARNINGS.getCode();
+            case FAILURE: return BaseCommand.ExitCode.FAILED.getCode();
+            case SUCCESS: return BaseCommand.ExitCode.SUCCESS.getCode();
             default: return 3;
         }
     }
 
-    public PtaiResultStatus execute() throws IOException {
+    public AstStatus execute() throws IOException {
         ObjectMapper jsonMapper = new ObjectMapper();
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         jsonMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
@@ -137,11 +142,11 @@ public class JsonAst implements Callable<Integer> {
         } catch (JsonParseException | JsonMappingException e) {
             log.severe("JSON settings file parse failed");
             log.log(Level.FINE, "Error details", e);
-            return PtaiResultStatus.FAILURE;
+            return AstStatus.FAILURE;
         } catch (IOException e) {
             log.severe("JSON settings file read failed");
             log.log(Level.FINE, "Error details", e);
-            return PtaiResultStatus.FAILURE;
+            return AstStatus.FAILURE;
         }
 
         Policy[] policy = null;
@@ -153,11 +158,11 @@ public class JsonAst implements Callable<Integer> {
             } catch (JsonParseException | JsonMappingException e) {
                 log.severe("JSON policy file parse failed");
                 log.log(Level.FINE, "Error details", e);
-                return PtaiResultStatus.FAILURE;
+                return AstStatus.FAILURE;
             } catch (IOException e) {
                 log.severe("JSON policy file read failed");
                 log.log(Level.FINE, "Error details", e);
-                return PtaiResultStatus.FAILURE;
+                return AstStatus.FAILURE;
             }
         }
 
@@ -172,6 +177,7 @@ public class JsonAst implements Callable<Integer> {
                 .jsonSettings(settings)
                 .jsonPolicy(policy)
                 .report(report)
+                .async(async)
                 .build();
         if (null != truststore) {
             String pem = new String(Files.readAllBytes(truststore), StandardCharsets.UTF_8);
@@ -180,6 +186,6 @@ public class JsonAst implements Callable<Integer> {
         job.setConsole(System.out);
         job.setPrefix("");
         job.setVerbose(verbose);
-        return PtaiResultStatus.convert(job.execute());
+        return job.execute();
     }
 }

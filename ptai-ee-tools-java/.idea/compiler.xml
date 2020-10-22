@@ -9,6 +9,7 @@
         <module name="ptai-teamcity-plugin-server" />
         <module name="ptai-teamcity-plugin-agent" />
         <module name="ptai-jenkins-plugin" />
+        <module name="ptai-i18n" />
         <module name="ptai-cli-plugin" />
         <module name="generic-client-lib" />
         <module name="ptai-rest-api" />

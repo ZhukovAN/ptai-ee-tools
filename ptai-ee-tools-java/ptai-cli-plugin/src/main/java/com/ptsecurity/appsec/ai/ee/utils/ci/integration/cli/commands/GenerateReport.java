@@ -1,13 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ReportFormatType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ReportTemplateModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ReportHelper;
 import lombok.extern.java.Log;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine;
 
 import java.io.File;
@@ -31,7 +29,7 @@ import java.util.concurrent.Callable;
                 "2:Warning",
                 "1000:Invalid input"},
         description = "Generates PT AI report based on AST results")
-public class GenerateReport extends BaseAst implements Callable<Integer> {
+public class GenerateReport extends BaseCommand implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--url"},
             required = true, order = 1,
@@ -133,7 +131,7 @@ public class GenerateReport extends BaseAst implements Callable<Integer> {
                         .build());
             } else {
                 String jsonStr = FileUtils.readFileToString(report.reportJson.toFile(), StandardCharsets.UTF_8);
-                NamedReportDefinition[] reportDefinitionsFromJson = BaseAst.NamedReportDefinition.load(jsonStr);
+                NamedReportDefinition[] reportDefinitionsFromJson = BaseCommand.NamedReportDefinition.load(jsonStr);
                 reportDefinitions = Arrays.asList(reportDefinitionsFromJson);
             }
 

@@ -28,6 +28,13 @@
             <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
             <artifactId>generic-client-lib</artifactId>
             <version>0.1</version>
+            <exclusions>
+                <exclusion>
+                    <!-- https://mvnrepository.com/artifact/org.jvnet.localizer/maven-localizer-plugin -->
+                    <groupId>org.jvnet.localizer</groupId>
+                    <artifactId>maven-localizer-plugin</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jenkins-ci.plugins/credentials -->
         <dependency>
@@ -46,18 +53,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.8.1</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
-        <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
-            <version>1.6</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-digester</groupId>
-                    <artifactId>commons-digester</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
         <dependency>

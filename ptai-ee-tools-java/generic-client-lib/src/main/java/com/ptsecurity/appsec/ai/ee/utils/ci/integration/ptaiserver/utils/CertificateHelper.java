@@ -3,15 +3,15 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import lombok.NonNull;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchProviderException;
+import java.security.*;
 import java.security.cert.*;
+import java.security.cert.Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Log
+@Slf4j
 public class CertificateHelper {
     /**
      * Regular expression to extract certificate data from PEM-encoded file
@@ -37,7 +37,7 @@ public class CertificateHelper {
         Matcher match = parse.matcher(new String(pem.getBytes(), StandardCharsets.ISO_8859_1));
         List<X509Certificate> res = new ArrayList<>();
         try {
-            CertificateFactory cf = CertificateFactory.getInstance("X.509", "BC");
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
             while (match.find()) {
                 byte[] binaryContent = Base64.getMimeDecoder().decode(match.group(2));
                 if (!"CERTIFICATE".equalsIgnoreCase(match.group(1))) continue;
@@ -47,7 +47,7 @@ public class CertificateHelper {
                         res.add((X509Certificate) certificate);
             }
             return res;
-        } catch (NoSuchProviderException | CertificateException e) {
+        } catch (CertificateException e) {
             throw ApiException.raise("PEM read failed", e);
         }
     }

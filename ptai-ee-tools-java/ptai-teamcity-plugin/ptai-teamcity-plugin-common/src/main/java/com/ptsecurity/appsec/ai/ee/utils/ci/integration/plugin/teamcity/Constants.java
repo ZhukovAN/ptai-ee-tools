@@ -8,15 +8,6 @@ public class Constants {
     public static final String ADMIN_CONTROLLER_PATH = "/" + PREFIX + "/adminSettings.html";
     public static final String TEST_CONTROLLER_PATH = "/" + PREFIX + "/testSettings.html";
 
-    /**
-     * OAuth client ID
-     */
-    public static final String CLIENT_ID = "ptai-teamcity-plugin";
-    /**
-     * OAuth client secret
-     */
-    public static final String CLIENT_SECRET = "ZW3r0QB3YFZvhmG8pmYDMC0VtGP0IC17";
-
     public static final String TRUE = "true";
     public static final String FALSE = "false";
 
