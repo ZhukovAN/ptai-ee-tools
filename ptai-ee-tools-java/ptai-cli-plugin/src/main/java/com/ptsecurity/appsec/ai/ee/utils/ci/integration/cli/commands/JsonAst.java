@@ -126,46 +126,6 @@ public class JsonAst implements Callable<Integer> {
     }
 
     public AstStatus execute() throws IOException {
-        ObjectMapper jsonMapper = new ObjectMapper();
-        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        jsonMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-
-        ScanSettings settings = null;
-        try (Stream<String> stream = Files.lines(jsonSettings, StandardCharsets.UTF_8)) {
-            StringBuilder builder = new StringBuilder();
-            stream.forEach(s -> builder.append(s).append("\n"));
-            settings = jsonMapper.readValue(builder.toString(), ScanSettings.class);
-            if (StringUtils.isEmpty(settings.getSite())) {
-                settings.setSite("http://localhost:8080");
-                log.warning("It is strictly recommended to set site address in scan settings");
-            }
-        } catch (JsonParseException | JsonMappingException e) {
-            log.severe("JSON settings file parse failed");
-            log.log(Level.FINE, "Error details", e);
-            return AstStatus.FAILURE;
-        } catch (IOException e) {
-            log.severe("JSON settings file read failed");
-            log.log(Level.FINE, "Error details", e);
-            return AstStatus.FAILURE;
-        }
-
-        Policy[] policy = null;
-        if (null != jsonPolicy) {
-            StringBuilder builder = new StringBuilder();
-            try (Stream<String> stream = Files.lines(jsonPolicy, StandardCharsets.UTF_8)) {
-                stream.forEach(s -> builder.append(s).append("\n"));
-                policy = jsonMapper.readValue(builder.toString(), Policy[].class);
-            } catch (JsonParseException | JsonMappingException e) {
-                log.severe("JSON policy file parse failed");
-                log.log(Level.FINE, "Error details", e);
-                return AstStatus.FAILURE;
-            } catch (IOException e) {
-                log.severe("JSON policy file read failed");
-                log.log(Level.FINE, "Error details", e);
-                return AstStatus.FAILURE;
-            }
-        }
-
         SastJob job = SastJob.builder()
                 .url(url)
                 .input(input)
@@ -174,8 +134,8 @@ public class JsonAst implements Callable<Integer> {
                 .output(output)
                 .includes(includes)
                 .excludes(excludes)
-                .jsonSettings(settings)
-                .jsonPolicy(policy)
+                .jsonSettings(jsonSettings)
+                .jsonPolicy(jsonPolicy)
                 .report(report)
                 .async(async)
                 .build();

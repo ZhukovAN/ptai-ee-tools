@@ -49,7 +49,7 @@ public class ListReportTemplates extends BaseCommand implements Callable<Integer
             names = {"--locale"}, required = true, order = 4,
             paramLabel = "<locale>",
             description = "Locale ID of templates to be listed, one of EN, RU")
-    protected String locale = "";
+    protected ReportDefinition.Locale locale;
 
     @CommandLine.Option(
             names = {"-v", "--verbose"}, order = 5,
@@ -72,7 +72,7 @@ public class ListReportTemplates extends BaseCommand implements Callable<Integer
             }
             utils.init();
 
-            List<ReportTemplateModel> templates = utils.getReportTemplates(locale);
+            List<ReportTemplateModel> templates = utils.getReportTemplates(locale.getValue());
             for (ReportTemplateModel template : templates) {
                 System.out.println(template.getName());
             }

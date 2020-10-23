@@ -1,5 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
@@ -19,6 +24,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -28,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.*;
 
@@ -37,8 +44,8 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.Base
 public class SastJob extends Base {
     protected final URL url;
     protected final String projectName;
-    protected ScanSettings jsonSettings;
-    protected Policy[] jsonPolicy;
+    protected Path jsonSettings;
+    protected Path jsonPolicy;
 
     protected String serverCaCertificates;
 
@@ -58,12 +65,47 @@ public class SastJob extends Base {
         UUID scanResultId = null;
         AstStatus res = AstStatus.UNKNOWN;
         try {
-            String projectName = null == jsonSettings ? this.projectName : jsonSettings.getProjectName();
+            String projectName = null == jsonSettings ? this.projectName : UUID.randomUUID().toString();
 
             project = new Project(projectName);
             project.setConsole(this.console);
             project.setVerbose(verbose);
             project.setPrefix(this.prefix);
+
+            ObjectMapper jsonMapper = new ObjectMapper();
+            jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            jsonMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+
+            ScanSettings settings = null;
+            if (null != jsonSettings) {
+                try (Stream<String> stream = Files.lines(jsonSettings, StandardCharsets.UTF_8)) {
+                    StringBuilder builder = new StringBuilder();
+                    stream.forEach(s -> builder.append(s).append("\n"));
+                    settings = jsonMapper.readValue(builder.toString(), ScanSettings.class);
+                    if (StringUtils.isEmpty(settings.getSite())) {
+                        settings.setSite("http://localhost:8080");
+                        log.warning("It is strictly recommended to set site address in scan settings");
+                    }
+                    project.setName(settings.getProjectName());
+                } catch (JsonParseException | JsonMappingException e) {
+                    throw ApiException.raise("JSON settings file parse failed", e);
+                } catch (IOException e) {
+                    throw ApiException.raise("JSON settings file read failed", e);
+                }
+            }
+
+            Policy[] policy = null;
+            if (null != jsonPolicy) {
+                try (Stream<String> stream = Files.lines(jsonPolicy, StandardCharsets.UTF_8)) {
+                    StringBuilder builder = new StringBuilder();
+                    stream.forEach(s -> builder.append(s).append("\n"));
+                    policy = jsonMapper.readValue(builder.toString(), Policy[].class);
+                } catch (JsonParseException | JsonMappingException e) {
+                    throw ApiException.raise("JSON policy file parse failed", e);
+                } catch (IOException e) {
+                    throw ApiException.raise("JSON policy file read failed", e);
+                }
+            }
 
             project.setUrl(url.toString());
             project.setToken(token);
@@ -78,14 +120,14 @@ public class SastJob extends Base {
             UUID projectId = project.searchProject();
             if (null == projectId) {
                 if (null != jsonSettings) {
-                    project.info("Project %s not found, will be created as JSON settings are defined", projectName);
-                    projectId = project.setupFromJson(jsonSettings, jsonPolicy);
+                    project.info("Project %s not found, will be created as JSON settings are defined", project.getName());
+                    projectId = project.setupFromJson(settings, policy);
                 } else {
                     project.info("Project %s not found", projectName);
                     return AstStatus.ERROR;
                 }
-            } else if (null != jsonSettings)
-                project.setupFromJson(jsonSettings, jsonPolicy);
+            } else if (null != settings)
+                project.setupFromJson(settings, policy);
             project.info("PT AI project ID is " + projectId);
 
             Transfer transfer = new Transfer();

@@ -10,6 +10,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.Sc
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.V36ScanSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -25,7 +26,9 @@ import java.util.concurrent.atomic.AtomicReference;
 @Slf4j
 public class Project extends Utils {
     @NonNull
-    protected final String name;
+    @Getter
+    @Setter
+    protected String name;
 
     @Setter
     protected File sources;
