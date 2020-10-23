@@ -15,7 +15,7 @@ class ListReportTemplatesIT extends BaseIT {
                 "--url", PTAI_URL,
                 "--truststore", PEM_PATH.toString(),
                 "--token", TOKEN,
-                "--locale", "ru-RU");
+                "--locale", "RU");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
@@ -27,7 +27,20 @@ class ListReportTemplatesIT extends BaseIT {
                 "--url", PTAI_URL,
                 "--truststore", PEM_PATH.toString(),
                 "--token", TOKEN,
-                "--locale", "en-US");
+                "--locale", "EN");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
+
+    @Test
+    @DisplayName("Read korean report template names")
+    public void testReportTemplatesKo() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "list-report-templates",
+                "--url", PTAI_URL,
+                "--truststore", PEM_PATH.toString(),
+                "--token", TOKEN,
+                "--locale", "KO");
+        Assertions.assertEquals(BaseCommand.ExitCode.INVALID_INPUT.getCode(), res);
+    }
+
 }
