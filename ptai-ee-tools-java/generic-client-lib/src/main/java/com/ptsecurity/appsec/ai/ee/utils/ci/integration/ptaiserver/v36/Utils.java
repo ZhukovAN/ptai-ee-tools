@@ -17,6 +17,7 @@ import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.StringUtils;
 import org.joor.Reflect;
 
+import javax.annotation.Nullable;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
@@ -61,17 +62,21 @@ public class Utils extends BaseClient {
 
     public File generateReport(
             @NonNull final UUID projectId, @NonNull final UUID scanResultId,
-            @NonNull final UUID template, @NonNull final ReportFormatType type, @NonNull final String locale) throws ApiException {
+            @NonNull final UUID template, @NonNull final String locale,
+            @NonNull final ReportFormatType type,
+            @Nullable final IssuesFilter filters) throws ApiException {
         ReportGenerateModel model = new ReportGenerateModel()
                 .parameters(new UserReportParameters()
                         .includeDFD(true)
                         .includeGlossary(true)
+                        .useFilters(null != filters)
                         .formatType(type)
                         .reportTemplateId(template)
                         .saveAsPath(""))
                 .scanResultId(scanResultId)
                 .projectId(projectId)
                 .localeId(locale);
+        if (null != filters) model.setFilters(filters);
         fine("Generating report for project %s, scan result %s. Report template %s, type %s, locale %s", projectId, scanResultId, template, type, locale);
         return callApi(
                 () -> reportsApi.apiReportsGeneratePost(model),
@@ -82,12 +87,13 @@ public class Utils extends BaseClient {
             @NonNull final UUID projectId, @NonNull final UUID scanResultId,
             @NonNull final String template,
             @NonNull final String locale,
-            @NonNull final ReportFormatType type) throws ApiException {
+            @NonNull final ReportFormatType type,
+            @Nullable final IssuesFilter filters) throws ApiException {
         List<ReportTemplateModel> templates = getReportTemplates(locale);
         ReportTemplateModel templateModel = templates.stream().filter(t -> template.equalsIgnoreCase(t.getName())).findAny().orElse(null);
         if (null == templateModel)
             throw ApiException.raise("Report generation failed", new IllegalArgumentException("PT AI template " + template + " not found"));
-        return generateReport(projectId, scanResultId, templateModel.getId(), type, locale);
+        return generateReport(projectId, scanResultId, templateModel.getId(), locale, type, filters);
     }
 
     public UUID latestScanResult(@NonNull final UUID projectId) {

@@ -2,8 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ReportFormatType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ReportTemplateModel;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.StringHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
@@ -21,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.IssuesFilterExploitationCondition.ALL;
 
 @Log
 public abstract class BaseCommand {
@@ -141,14 +142,45 @@ public abstract class BaseCommand {
         @NonNull
         public String name;
 
+        protected IssuesFilter filters;
+
         public static NamedReportDefinition[] load(String json) throws ApiException {
             try {
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-                return mapper.readValue(json, NamedReportDefinition[].class);
+                NamedReportDefinition[] res = mapper.readValue(json, NamedReportDefinition[].class);
+                for (NamedReportDefinition def : res)
+                    def.fixMissingFields();
+                return res;
             } catch (Exception e) {
                 throw ApiException.raise("JSON settings parse failed", e);
             }
+        }
+
+        /**
+         * All the filters that use enum values are treated as NONE if no value
+         * is defined in JSON. But this is not convenient for user as he thinks that if
+         * no filter is defined then filtering must not be done on that field. So we need
+         * to fix all the missing filters with ALL enum
+         * @return Fixed NamedReportDefinition where all missing fields are filled with "ALL" value
+         */
+        public NamedReportDefinition fixMissingFields() {
+            if (null == filters) return this;
+
+            if (null == filters.getIssueLevel())
+                filters.setIssueLevel(IssuesFilterLevel.ALL);
+            if (null == filters.getExploitationCondition())
+                filters.setExploitationCondition(ALL);
+            if (null == filters.getScanMode())
+                filters.setScanMode(IssuesFilterScanMode.ALL);
+            if (null == filters.getSuppressStatus())
+                filters.setSuppressStatus(IssuesFilterSuppressStatus.ALL);
+            if (null == filters.getConfirmationStatus())
+                filters.setConfirmationStatus(IssuesFilterConfirmationStatus.ALL);
+            if (null == filters.getSourceType())
+                filters.setSourceType(IssuesFilterSourceType.ALL);
+
+            return this;
         }
     }
 }

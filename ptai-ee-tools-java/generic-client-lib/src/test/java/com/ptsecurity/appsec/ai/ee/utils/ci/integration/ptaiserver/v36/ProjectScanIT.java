@@ -148,9 +148,9 @@ public class ProjectScanIT extends BaseIT {
         UUID templateId = templates.get(templateIdx).getId();
         UUID projectId = project.searchProject();
 
-        File reportTempFile = project.generateReport(projectId, EXISTING_SCAN_RESULT_ID, "\"Scan Result\"", "ru-RU", ReportFormatType.HTML);
-        reportTempFile = project.generateReport(projectId, EXISTING_SCAN_RESULT_ID, "\"Scan Result\"", "ru-RU", ReportFormatType.JSON);
-        reportTempFile = project.generateReport(projectId, EXISTING_SCAN_RESULT_ID, "\"Scan Result\"", "ru-RU", ReportFormatType.PDF);
+        File reportTempFile = project.generateReport(projectId, EXISTING_SCAN_RESULT_ID, "\"Scan Result\"", "ru-RU", ReportFormatType.HTML, null);
+        reportTempFile = project.generateReport(projectId, EXISTING_SCAN_RESULT_ID, "\"Scan Result\"", "ru-RU", ReportFormatType.JSON, null);
+        reportTempFile = project.generateReport(projectId, EXISTING_SCAN_RESULT_ID, "\"Scan Result\"", "ru-RU", ReportFormatType.PDF, null);
         File report = TEMPREPORTFOLDER.toPath().resolve("report.json").toFile();
         // FileUtils.copyFile(issuesTempFile, issues);
         // FileUtils.forceDelete(issuesTempFile);

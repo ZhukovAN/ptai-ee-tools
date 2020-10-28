@@ -175,7 +175,7 @@ public class SastJob extends Base {
                             File reportFile = project.generateReport(
                                     projectId, scanResultId,
                                     reportDefinition.getTemplate(), reportDefinition.getLocale().getValue(),
-                                    ReportFormatType.fromValue(reportDefinition.getFormat().getValue()));
+                                    ReportFormatType.fromValue(reportDefinition.getFormat().getValue()), null);
                             if (output.resolve(reportDefinition.getName()).toFile().exists()) {
                                 log.warning("Existing report " + reportDefinition.getName() + " will be overwritten");
                                 if (!output.resolve(reportDefinition.getName()).toFile().delete())

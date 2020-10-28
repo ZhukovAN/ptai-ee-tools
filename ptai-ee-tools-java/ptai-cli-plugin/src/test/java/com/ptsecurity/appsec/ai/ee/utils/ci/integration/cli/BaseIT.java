@@ -34,6 +34,7 @@ class BaseIT {
     protected static Path REPORTS_GOOD_JSON_PATH = null;
     protected static Path REPORTS_BAD_JSON_PATH = null;
     protected static Path REPORTS_MISSING_JSON_PATH = null;
+    protected static Path REPORTS_FILTERED_CRITICAL_JSON_PATH = null;
     protected static ScanSettings JAVA_SETTINGS;
     protected static Policy[] POLICY;
     protected static Policy[] EMPTY_POLICY = new Policy[0];
@@ -48,10 +49,10 @@ class BaseIT {
     // protected static final String PEM_RESOURCE = "keys/pt.pem";
     protected static final String PEM_RESOURCE = "keys/domain.org.pem";
 
-    protected static final String REPORTS_GOOD_JSON_RESOURCE = "json/reports.good.json";
-    protected static final String REPORTS_BAD_JSON_RESOURCE = "json/reports.bad.json";
-    protected static final String REPORTS_MISSING_JSON_RESOURCE = "json/reports.missing.json";
-
+    private static final String REPORTS_GOOD_JSON_RESOURCE = "json/reports.good.json";
+    private static final String REPORTS_BAD_JSON_RESOURCE = "json/reports.bad.json";
+    private static final String REPORTS_MISSING_JSON_RESOURCE = "json/reports.missing.json";
+    private static final String REPORTS_FILTERED_CRITICAL_JSON_RESOURCE = "json/reports.filtered.critical.json";
     @BeforeAll
     public static void init() throws URISyntaxException, IOException {
         TEMP_SOURCES_FOLDER = TEMP_FOLDER.toPath().resolve("src").toFile();
@@ -62,6 +63,7 @@ class BaseIT {
         REPORTS_GOOD_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_GOOD_JSON_RESOURCE).toURI());
         REPORTS_BAD_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_BAD_JSON_RESOURCE).toURI());
         REPORTS_MISSING_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_MISSING_JSON_RESOURCE).toURI());
+        REPORTS_FILTERED_CRITICAL_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_FILTERED_CRITICAL_JSON_RESOURCE).toURI());
 
         ObjectMapper jsonMapper = new ObjectMapper();
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

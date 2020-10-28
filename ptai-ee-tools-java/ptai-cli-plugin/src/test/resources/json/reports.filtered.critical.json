@@ -1,0 +1,27 @@
+[ {
+  "template" : "OWASP top 10 2017 report",
+  "format" : "JSON",
+  "locale" : "EN",
+  "name" : "owasp.top.10.en.json"
+}, {
+  "template" : "OWASP top 10 2017 report",
+  "format" : "HTML",
+  "locale" : "EN",
+  "name" : "owasp.top.10.en.html",
+  "filters": {
+    "issueLevel": "ALL",
+    "exploitationCondition": "ALL",
+    "scanMode": "ALL",
+    "suppressStatus": "ALL",
+    "confirmationStatus": "ALL",
+    "sourceType": "ALL"
+  }
+},{
+  "template" : "Отчет PCI DSS 3.2",
+  "format" : "HTML",
+  "locale" : "RU",
+  "name" : "pci.dss.3.2.high.ru.html",
+  "filters": {
+    "issueLevel": "HIGH"
+  }
+} ]

@@ -139,7 +139,8 @@ public class GenerateReport extends BaseCommand implements Callable<Integer> {
                 File reportFile = utils.generateReport(
                         projectInfo.id, scanResultId,
                         reportDefinition.getTemplate(), reportDefinition.getLocale().getValue(),
-                        ReportFormatType.fromValue(reportDefinition.getFormat().getValue()));
+                        ReportFormatType.fromValue(reportDefinition.getFormat().getValue()),
+                        reportDefinition.filters);
                 if (output.resolve(reportDefinition.getName()).toFile().exists()) {
                     log.warning("Existing report " + reportDefinition.getName() + " will be overwritten");
                     if (!output.resolve(reportDefinition.getName()).toFile().delete())
