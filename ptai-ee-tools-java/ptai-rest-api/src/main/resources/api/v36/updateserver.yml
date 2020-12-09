@@ -1,0 +1,452 @@
+openapi: 3.0.1
+info:
+  title: updateServer
+  version: "3.6"
+servers:
+  - url: https://ptai.domain.org:443/
+security:
+  - Bearer: []
+paths:
+  /api/download/latestDistr:
+    get:
+      tags:
+        - Download
+      parameters:
+        - name: product
+          in: query
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+  /api/download/distr:
+    get:
+      tags:
+        - Download
+      parameters:
+        - name: product
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: version
+          in: query
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+  /api/download/notes:
+    get:
+      tags:
+        - Download
+      parameters:
+        - name: lang
+          in: query
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+  /api/download/currentnotes:
+    get:
+      tags:
+        - Download
+      parameters:
+        - name: lang
+          in: query
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+  /api/download/downloadPackageFromFus:
+    get:
+      tags:
+        - Download
+      responses:
+        '200':
+          description: Success
+  /api/update/runServerUpdate:
+    post:
+      tags:
+        - ServerUpdate
+      parameters:
+        - name: isHardUpdate
+          in: query
+          schema:
+            type: boolean
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ServerUpdateRunParameters'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServerUpdateRunParameters'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ServerUpdateRunParameters'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ServerUpdateRunParameters'
+      responses:
+        '200':
+          description: Success
+  /api/update/validate:
+    post:
+      tags:
+        - ServerUpdate
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+              nullable: true
+          application/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+              nullable: true
+          text/json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+              nullable: true
+          application/*+json:
+            schema:
+              type: object
+              additionalProperties:
+                type: string
+              nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/ValidationResult'
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/ValidationResult'
+            text/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/ValidationResult'
+  /api/update/serverStatus:
+    get:
+      tags:
+        - ServerUpdate
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UpdateStatusType'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateStatusType'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UpdateStatusType'
+  /api/update/compareConfigs:
+    get:
+      tags:
+        - ServerUpdate
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServerConfigParameterMetadata'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServerConfigParameterMetadata'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServerConfigParameterMetadata'
+  /api/update/compareCurrentConfigsWithCandidate:
+    get:
+      tags:
+        - ServerUpdate
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServerConfigParameterMetadata'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServerConfigParameterMetadata'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServerConfigParameterMetadata'
+  /api/systemUpdating:
+    get:
+      tags:
+        - SystemUpdating
+      responses:
+        '200':
+          description: Success
+  /api/systemUpdating/stopShowPage:
+    post:
+      tags:
+        - SystemUpdating
+      responses:
+        '200':
+          description: Success
+  /api/systemUpdating/serverStatus:
+    get:
+      tags:
+        - SystemUpdating
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UpdateStatusType'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateStatusType'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UpdateStatusType'
+  /api/upload/enterpriseArchive:
+    post:
+      tags:
+        - Upload
+      responses:
+        '200':
+          description: Success
+  /api/upload/stop:
+    get:
+      tags:
+        - Upload
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/version/getLatest:
+    get:
+      tags:
+        - Version
+      parameters:
+        - name: product
+          in: query
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+  /api/version/getCurrent:
+    get:
+      tags:
+        - Version
+      parameters:
+        - name: product
+          in: query
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+  /api/version/hasNew:
+    get:
+      tags:
+        - Version
+      parameters:
+        - name: product
+          in: query
+          schema:
+            type: string
+            nullable: true
+        - name: version
+          in: query
+          schema:
+            type: string
+            nullable: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+  /api/version/checkNewPackageFromFus:
+    get:
+      tags:
+        - Version
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+  /api/version/hasCandidate:
+    get:
+      tags:
+        - Version
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+components:
+  schemas:
+    ServerUpdateRunParameters:
+      type: object
+      properties:
+        newParameters:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+        updateRequestId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    ParameterValidateRuleType:
+      enum:
+        - RequiredField
+        - Regex
+        - Port
+      type: string
+    ValidationResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+          readOnly: true
+        failedRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterValidateRuleType'
+          nullable: true
+      additionalProperties: false
+    UpdateStatusType:
+      enum:
+        - None
+        - Started
+        - WaitingForStarted
+        - Finished
+        - Aborted
+        - UploadPackage
+        - UploadPackageFinished
+      type: string
+    ServerConfigParameterDescription:
+      type: object
+      properties:
+        title:
+          type: string
+          nullable: true
+        validationErrorText:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ServerConfigParameterMetadata:
+      type: object
+      properties:
+        parameterKey:
+          type: string
+          nullable: true
+        regexValidation:
+          type: string
+          nullable: true
+        descriptions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/ServerConfigParameterDescription'
+          nullable: true
+        additionalRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterValidateRuleType'
+          nullable: true
+        defaultValue:
+          type: string
+          nullable: true
+        isOptional:
+          type: boolean
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please insert JWT with Bearer into field
+      name: Authorization
+      in: header

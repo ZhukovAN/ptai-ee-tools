@@ -3,9 +3,12 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.BaseClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
-import lombok.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.BaseClient;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
@@ -20,8 +23,12 @@ import org.apache.tools.ant.types.FileSet;
 import java.io.*;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
+import static org.apache.commons.compress.archivers.ArchiveStreamFactory.ZIP;
 import static org.joor.Reflect.on;
 
 @RequiredArgsConstructor
@@ -43,7 +50,7 @@ public class FileCollector {
     @Getter
     static class FileEntry {
         private final String fileName;
-        private final String entryName;
+        private final String name;
     }
 
     private final Transfers transfers;
@@ -57,12 +64,14 @@ public class FileCollector {
     }
 
     public static File collect(Transfers transfers, final File dir, @NonNull Base owner) throws ApiException {
-        try {
-            File zip = File.createTempFile("ptai.", ".zip");
-            return collect(transfers, dir, zip, owner);
-        } catch (IOException | RuntimeException e) {
-            throw ApiException.raise("File collect error", e);
-        }
+        File zip = createTempFile();
+        return collect(transfers, dir, zip, owner);
+    }
+
+    public static File createTempFile() throws ApiException {
+        return Base.callApi(
+                () -> File.createTempFile("ptai.", ".zip"),
+                "Temp file create error");
     }
 
     public static File collect(Transfers transfers, @NonNull final File dir, @NonNull final File zip, @NonNull Base owner) throws ApiException {
@@ -81,9 +90,11 @@ public class FileCollector {
                 owner.info("Folder to collect files from is %s", dir.getAbsolutePath());
             owner.info("Sources will be zipped to %s", zip.getAbsolutePath());
             List<FileCollector.FileEntry> fileEntries = collector.collectFiles(dir);
+            if (fileEntries.isEmpty())
+                throw new IllegalArgumentException("No files are match defined transfer settings");
             collector.packCollectedFiles(zip, fileEntries);
             return zip;
-        } catch (IOException | ArchiveException e) {
+        } catch (Exception e) {
             throw ApiException.raise("File collect failed", e);
         }
     }
@@ -194,25 +205,24 @@ public class FileCollector {
             verbose("Destination folder %s doesn't exist, creating", destDir.getAbsolutePath());
             destDir.mkdirs();
         }
-        OutputStream zipFileStream = new FileOutputStream(zip);
-        ArchiveOutputStream archiveStream;
-        archiveStream = new ArchiveStreamFactory().createArchiveOutputStream(ArchiveStreamFactory.ZIP, zipFileStream);
+        OutputStream zfs = new FileOutputStream(zip);
+        ArchiveOutputStream as = new ArchiveStreamFactory().createArchiveOutputStream(ZIP, zfs);
         verbose("Zip stream created");
 
-        for (FileEntry fileEntry : files) {
-            verbose("Add %s file as %s to zip stream", fileEntry.fileName, fileEntry.entryName);
-            archiveStream.putArchiveEntry(new ZipArchiveEntry(fileEntry.entryName));
+        for (FileEntry entry : files) {
+            verbose("Add %s file as %s to zip stream", entry.fileName, entry.name);
+            as.putArchiveEntry(new ZipArchiveEntry(entry.name));
 
-            BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(fileEntry.fileName));
-            int size = IOUtils.copy(inputStream, archiveStream);
+            BufferedInputStream is = new BufferedInputStream(new FileInputStream(entry.fileName));
+            int size = IOUtils.copy(is, as);
             verbose("%s zipped", bytesToString(size));
-            inputStream.close();
-            archiveStream.closeArchiveEntry();
-            verbose("File %s added as %s", fileEntry.fileName, fileEntry.entryName);
+            is.close();
+            as.closeArchiveEntry();
+            verbose("File %s added as %s", entry.fileName, entry.name);
         }
         verbose("Closing zip stream");
-        archiveStream.finish();
-        zipFileStream.close();
+        as.finish();
+        zfs.close();
     }
 
     private static final double LOG1024 = Math.log10(1024);

@@ -27,7 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.AST_SETTINGS_UI;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.TRUE;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Messages.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
 import static jetbrains.buildServer.controllers.XmlResponseUtil.writeErrors;
@@ -77,20 +78,19 @@ public class TestService {
     }
 
     private static Utils createClient(
-            @NotNull String url,
-            @NotNull String token, @Nullable String trustedCertificates) {
+            @NotNull String url, @NotNull String token,
+            @Nullable String trustedCertificates, @NonNull String insecure) {
         Utils utils = new Utils();
         utils.setUrl(url);
         utils.setToken(token);
         if (StringUtils.isNotEmpty(trustedCertificates))
             utils.setCaCertsPem(trustedCertificates);
+        utils.setInsecure(TRUE.equals(insecure));
         return utils;
     }
 
     private static String testConnection(
-            @NotNull Utils client,
-            @NotNull String url,
-            @NotNull String token, @Nullable String trustedCertificates, List<String> details) {
+            @NotNull Utils client, List<String> details) {
         try {
             client.init();
             Utils.TestResult result = client.testConnection();
@@ -107,9 +107,10 @@ public class TestService {
 
     private static String testConnection(
             @NotNull String url, @NotNull String token,
-            @Nullable String trustedCertificates, List<String> details) {
-        Utils client = createClient(url, token, trustedCertificates);
-        return testConnection(client, url, token, trustedCertificates, details);
+            @Nullable String trustedCertificates, @NotNull String insecure,
+            List<String> details) {
+        Utils client = createClient(url, token, trustedCertificates, insecure);
+        return testConnection(client, details);
     }
 
     private static String testConnection(BasePropertiesBean bean, List<String> details) {
@@ -117,16 +118,12 @@ public class TestService {
                 bean.getProperties().get(URL),
                 bean.getProperties().get(TOKEN),
                 bean.getProperties().get(CERTIFICATES),
+                bean.getProperties().get(INSECURE),
                 details);
     }
 
     private static String testConnection(Utils client, BasePropertiesBean bean, List<String> details) {
-        return testConnection(
-                client,
-                bean.getProperties().get(URL),
-                bean.getProperties().get(TOKEN),
-                bean.getProperties().get(CERTIFICATES),
-                details);
+        return testConnection(client, details);
     }
 
     public static void testConnection(@NotNull BasePropertiesBean bean,
@@ -181,8 +178,6 @@ public class TestService {
                 res.addError(JSON_POLICY, MESSAGE_JSON_POLICY_INVALID);
             }
         }
-        if (StringUtil.isEmptyOrSpaces(bean.getProperties().get(NODE_NAME)))
-            res.addError(NODE_NAME, MESSAGE_NODE_NAME_EMPTY);
         return res;
     }
 
@@ -207,7 +202,8 @@ public class TestService {
             Utils client = createClient(
                     bean.getProperties().get(URL),
                     bean.getProperties().get(TOKEN),
-                    bean.getProperties().get(CERTIFICATES));
+                    bean.getProperties().get(CERTIFICATES),
+                    bean.getProperties().get(INSECURE));
             res = testConnection(client, bean, details);
             if (!"SUCCESS".equalsIgnoreCase(res)) break;
             // If project name is defined it must exist as we have no AST settings defined elsewhere

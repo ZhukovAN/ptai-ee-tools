@@ -1,8 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.runner;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.*;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
@@ -82,7 +80,6 @@ public class AstRunType extends RunType {
         parameters.put(Params.FAIL_IF_FAILED, Defaults.FAIL_IF_FAILED);
         parameters.put(Params.FAIL_IF_UNSTABLE, Defaults.FAIL_IF_UNSTABLE);
 
-        parameters.put(Params.NODE_NAME, Defaults.NODE_NAME);
         parameters.put(Params.VERBOSE, Defaults.VERBOSE);
         parameters.put(Params.INCLUDES, Defaults.INCLUDES);
         parameters.put(Params.REMOVE_PREFIX, Defaults.REMOVE_PREFIX);
@@ -90,6 +87,8 @@ public class AstRunType extends RunType {
         parameters.put(Params.PATTERN_SEPARATOR, Defaults.PATTERN_SEPARATOR);
         parameters.put(Params.USE_DEFAULT_EXCLUDES, Defaults.USE_DEFAULT_EXCLUDES);
         parameters.put(Params.FLATTEN, Defaults.FLATTEN);
+
+        parameters.put(Params.REPORT_SETTINGS, Defaults.REPORT_SETTINGS);
 
         return parameters;
     }

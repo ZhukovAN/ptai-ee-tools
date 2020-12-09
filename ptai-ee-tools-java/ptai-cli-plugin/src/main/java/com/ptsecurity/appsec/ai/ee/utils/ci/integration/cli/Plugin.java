@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils.ManifestVersionProvider;
 import org.fusesource.jansi.AnsiConsole;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -11,10 +12,23 @@ import java.util.Comparator;
 import java.util.logging.LogManager;
 
 @Command (name = "java -jar ptai-cli-plugin.jar", synopsisSubcommandLabel = "COMMAND",
-        mixinStandardHelpOptions = true, version = "ptai-cli-plugin v.0.1",
+        mixinStandardHelpOptions = true, versionProvider = ManifestVersionProvider.class,
         subcommands = {
                 UiAst.class, JsonAst.class, CheckServer.class, ListReportTemplates.class, GenerateReport.class })
 public class Plugin implements Runnable {
+    /**
+     * Return code for successful plugin execution result
+     */
+    public static final int SUCCESS = 0;
+    /**
+     * Return code for failed plugin execution result
+     */
+    public static final int FAILED = 1;
+    /**
+     * Return code for invalid input
+     */
+    public static final int INVALID_INPUT = 1000;
+
     @CommandLine.Spec
     CommandLine.Model.CommandSpec spec;
     public void run() {

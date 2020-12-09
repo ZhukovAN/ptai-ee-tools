@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Labels;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import jetbrains.buildServer.controllers.BasePropertiesBean;
 import jetbrains.buildServer.controllers.admin.AdminPage;
 import jetbrains.buildServer.log.Loggers;

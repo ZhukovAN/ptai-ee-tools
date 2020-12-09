@@ -5,18 +5,18 @@
 	<parent>
 		<groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
 		<artifactId>ptai-ee-tools</artifactId>
-		<version>0.1</version>
+		<version>3.6.1</version>
 	</parent>
 
 	<artifactId>ptai-data-structures</artifactId>
-	<version>0.1</version>
+	<version>3.6.1</version>
 	<name>ptai-data-structures</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
 			<artifactId>ptai-i18n</artifactId>
-			<version>0.1</version>
+			<version>3.6.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
 		<dependency>

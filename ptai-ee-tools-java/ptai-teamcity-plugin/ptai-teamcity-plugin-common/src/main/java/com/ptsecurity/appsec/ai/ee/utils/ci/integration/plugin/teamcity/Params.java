@@ -10,6 +10,7 @@ public class Params {
     public static final String URL = PARAM("Url");
     public static final String TOKEN = PARAM("Token");
     public static final String CERTIFICATES = PARAM("Certificates");
+    public static final String INSECURE = PARAM("Insecure");
 
     /**
      * Field that stores scan settings type: UI- or JSON-based. If this
@@ -55,11 +56,6 @@ public class Params {
      */
     public static final String FAIL_IF_UNSTABLE = PARAM("FailIfUnstable");
     /**
-     * PT AI agent node name or tag where AST is to be executed. Allows to implement
-     * load balancing if PT AI is being shared between multiple R&D teams
-     */
-    public static final String NODE_NAME = PARAM("NodeName");
-    /**
      * Allows verbose logging if equals to Constants.TRUE
      */
     public static final String VERBOSE = PARAM("Verbose");
@@ -69,6 +65,39 @@ public class Params {
     public static final String PATTERN_SEPARATOR = PARAM("PatternSeparator");
     public static final String USE_DEFAULT_EXCLUDES = PARAM("UseDefaultExcludes");
     public static final String FLATTEN = PARAM("Flatten");
+
+    /**
+     * Defines what are the reports to be generated. If this field equals to
+     * Constants.REPORT_SETTINGS_NONE then no report will be generated at all. If field
+     * equals to Constants.REPORT_SETTINGS_SINGLE then single report with template TEMPLATE_NAME,
+     * format REPORT_FORMAT and locale REPORT_LOCALE will be generated. And if
+     * this field equals to Constants.REPORT_SETTINGS_JSON then full set of reports as defined in JSON AST_SETTINGS_UI then settings are defined via viewer
+     */
+    public static final String REPORT_SETTINGS = PARAM("ReportSettings");
+
+    /**
+     * PT AI report template name that will be used for report generation
+     * if REPORT_SETTINGS equals to Constants.REPORT_SETTINGS_SINGLE
+     */
+    public static final String REPORT_TEMPLATE_NAME = PARAM("ReportTemplateName");
+
+    /**
+     * PT AI report format that will be used for report generation
+     * if REPORT_SETTINGS equals to Constants.REPORT_SETTINGS_SINGLE
+     */
+    public static final String REPORT_FORMAT = PARAM("ReportFormat");
+
+    /**
+     * PT AI report locale ID that will be used for report generation
+     * if REPORT_SETTINGS equals to Constants.REPORT_SETTINGS_SINGLE
+     */
+    public static final String REPORT_LOCALE = PARAM("ReportLocale");
+
+    /**
+     * PT AI reports generation JSON that will be used for report generation
+     * if REPORT_SETTINGS field value equals to Constants.REPORT_SETTINGS_JSON
+     */
+    public static final String REPORT_JSON = PARAM("ReportJson");
 
     private static String PARAM(final String field) {
         // return PREFIX + "." + String.valueOf(field.charAt(0)).toLowerCase() + field.substring(1);

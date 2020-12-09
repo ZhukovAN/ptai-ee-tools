@@ -1,15 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.*;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
-
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.TestService;
 import jetbrains.buildServer.controllers.*;
 import jetbrains.buildServer.log.Loggers;
-
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.TestService.getEncryptedProperty;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.TestService.getProperty;
-
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
@@ -20,6 +13,12 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.ADMIN_CONTROLLER_PATH;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.PLUGIN_NAME;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.TestService.getEncryptedProperty;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.TestService.getProperty;
 
 public class AstAdminPageController extends BaseFormXmlController {
     private final AstAdminSettings settings;
@@ -48,6 +47,7 @@ public class AstAdminPageController extends BaseFormXmlController {
         bean.setProperty(URL, getProperty(request, URL));
         bean.setProperty(TOKEN, RSACipher.decryptWebRequestData(getEncryptedProperty(request, TOKEN)));
         bean.setProperty(CERTIFICATES, getProperty(request, CERTIFICATES));
+        bean.setProperty(INSECURE, getProperty(request, INSECURE));
 
         String mode = request.getParameter("mode");
         if ("modify".equalsIgnoreCase(mode))

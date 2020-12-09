@@ -18,11 +18,18 @@ f.entry(
     c.select()
 }
 
+f.entry(
+        title: _('serverInsecure'),
+        field: 'serverInsecure',
+        default: 'false') {
+    f.checkbox()
+}
+
 f.block() {
     f.validateButton(
             title: _('testServer'),
             progress: _('testServerProgress'),
             method: 'testServer',
-            with: 'serverUrl,serverCredentialsId'
+            with: 'serverUrl,serverCredentialsId,serverInsecure'
     )
 }

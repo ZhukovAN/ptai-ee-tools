@@ -1,47 +1,61 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
-import com.microsoft.signalr.HubConnection;
-import com.microsoft.signalr.HubConnectionBuilder;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheck;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.CertificateHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.UrlHelper;
-import io.reactivex.Single;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.Setter;
 import lombok.experimental.Accessors;
-import lombok.extern.java.Log;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.StringUtils;
-import org.joor.Reflect;
 
 import javax.annotation.Nullable;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 import java.io.File;
-import java.security.KeyStore;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
+@SuperBuilder
+@NoArgsConstructor
 public class Utils extends BaseClient {
+
     public EnterpriseLicenseData getLicenseData() throws ApiException {
-        return callApi(() -> licenseApi.apiLicenseGet(), "PT AI license information retrieve failed");
+        return callApi(licenseApi::apiLicenseGet, "PT AI license information retrieve failed");
     }
 
     public HealthCheck healthCheck() throws ApiException {
-        return callApi(() -> healthCheckApi.healthSummaryGet(), "PT AI health check failed");
+        return callApi(healthCheckApi::healthSummaryGet, "PT AI health check failed");
     }
 
-    public List<ReportTemplateModel> getReportTemplates(@NonNull String locale) throws ApiException {
+    public List<ReportTemplateModel> getReportTemplates(@NonNull Reports.Locale locale) throws ApiException {
         return callApi(
-                () -> reportsApi.apiReportsTemplatesGet(locale, false),
+                () -> reportsApi.apiReportsTemplatesGet(locale.getValue(), false),
                 "PT AI report templates list read failed");
+    }
+
+    /** XML and JSON reports are ignoring template name as those formats are
+     * solely dedicated to be used for subsequent automated processing like
+     * parsing, uploading to BI etc. But 3.6.1 API doesn't allow to generate
+     * report without template ID, so we need to provide API with any
+     * template ID. This method searches for templates and returns built-in ID
+     * for PlainReport type
+     * @param locale PlainReport locale ID
+     * @return PlainReport template metadata
+     * @throws ApiException Report not found or API call failed
+     */
+    protected ReportTemplateModel getDummyReportTemplate(@NonNull Reports.Locale locale) throws ApiException {
+        List<ReportTemplateModel> templates = callApi(
+                () -> reportsApi.apiReportsTemplatesGet(locale.getValue(), false),
+                "PT AI report templates list read failed");
+        return templates.stream()
+                .filter(t -> ReportType.PLAINREPORT.equals(t.getType()))
+                .findAny()
+                .orElseThrow(() -> ApiException.raise("Built-in PT AI report template missing", new IllegalArgumentException(ReportType.PLAINREPORT.getValue())));
     }
 
     public UUID searchProject(
@@ -62,7 +76,7 @@ public class Utils extends BaseClient {
 
     public File generateReport(
             @NonNull final UUID projectId, @NonNull final UUID scanResultId,
-            @NonNull final UUID template, @NonNull final String locale,
+            @NonNull final UUID template, @NonNull final Reports.Locale locale,
             @NonNull final ReportFormatType type,
             @Nullable final IssuesFilter filters) throws ApiException {
         ReportGenerateModel model = new ReportGenerateModel()
@@ -75,7 +89,7 @@ public class Utils extends BaseClient {
                         .saveAsPath(""))
                 .scanResultId(scanResultId)
                 .projectId(projectId)
-                .localeId(locale);
+                .localeId(locale.getValue());
         if (null != filters) model.setFilters(filters);
         fine("Generating report for project %s, scan result %s. Report template %s, type %s, locale %s", projectId, scanResultId, template, type, locale);
         return callApi(
@@ -86,7 +100,7 @@ public class Utils extends BaseClient {
     public File generateReport(
             @NonNull final UUID projectId, @NonNull final UUID scanResultId,
             @NonNull final String template,
-            @NonNull final String locale,
+            @NonNull final Reports.Locale locale,
             @NonNull final ReportFormatType type,
             @Nullable final IssuesFilter filters) throws ApiException {
         List<ReportTemplateModel> templates = getReportTemplates(locale);
@@ -103,9 +117,9 @@ public class Utils extends BaseClient {
         return (null == scanResult) ? null : scanResult.getId();
     }
 
-    @Accessors(fluent = true, chain = true)
     @Getter @Setter
     @NoArgsConstructor
+    @Accessors(chain = true, fluent = true)
     public static class TestResult {
         public enum State {
             OK, WARNING, ERROR
@@ -120,7 +134,7 @@ public class Utils extends BaseClient {
     public TestResult testConnection() throws ApiException {
         TestResult result = new TestResult();
         if (StringUtils.isEmpty(url)) {
-            result.text(Messages.validator_check_serverUrl_empty());
+            result.text = Messages.validator_check_serverUrl_empty();
             return result;
         }
 
@@ -149,7 +163,7 @@ public class Utils extends BaseClient {
             details += Messages.validator_test_server_license_success(
                     licenseData.getLicenseNumber(),
                     licenseData.getStartDate(), licenseData.getEndDate());
-            if (!licenseData.getIsValid()) warning = true;
+            if (Boolean.FALSE.equals(licenseData.getIsValid())) warning = true;
         }
         result.text(details);
         return error
@@ -157,5 +171,11 @@ public class Utils extends BaseClient {
                 : warning
                 ? result.state(TestResult.State.WARNING)
                 : result.state(TestResult.State.OK);
+    }
+
+    public File getJsonResult(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws ApiException {
+        return callApi(
+                () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdIssuesGet(projectId, scanResultId, null),
+                "PT AI project scan status JSON read failed");
     }
 }

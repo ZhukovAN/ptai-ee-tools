@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
     <artifactId>ptai-teamcity-plugin</artifactId>
-    <version>0.1</version>
+    <version>3.6.1</version>
     <packaging>pom</packaging>
     <parent>
         <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
         <artifactId>ptai-ee-tools</artifactId>
-        <version>0.1</version>
+        <version>3.6.1</version>
     </parent>
 
     <properties>
@@ -22,7 +22,13 @@
         <dependency>
             <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
             <artifactId>ptai-i18n</artifactId>
-            <version>0.1</version>
+            <version>3.6.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.30</version>
         </dependency>
     </dependencies>
     <repositories>

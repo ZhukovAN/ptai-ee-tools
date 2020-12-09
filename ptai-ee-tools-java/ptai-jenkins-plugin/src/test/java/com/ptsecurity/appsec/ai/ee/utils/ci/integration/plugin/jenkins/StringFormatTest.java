@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
-import hudson.model.TaskListener;
 import org.junit.jupiter.api.Test;
 
 public class StringFormatTest {

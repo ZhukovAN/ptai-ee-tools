@@ -4,7 +4,7 @@ import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.CredentialsScope;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
 import com.cloudbees.plugins.credentials.impl.BaseStandardCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.CertificateHelper;
@@ -21,6 +21,7 @@ import hudson.util.Secret;
 import jenkins.model.Jenkins;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -30,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public class CredentialsImpl extends BaseStandardCredentials implements Credentials {
+public class CredentialsImpl extends BaseStandardCredentials implements Credentials, Cloneable {
     @Getter
     Secret token;
     @Getter
@@ -73,6 +74,7 @@ public class CredentialsImpl extends BaseStandardCredentials implements Credenti
 
     @Extension
     public static class ServerCredentialsDescriptor extends BaseStandardCredentialsDescriptor {
+        @NotNull
         @Override
         public String getDisplayName() {
             return Messages.captions_credentials_displayName();
@@ -93,8 +95,8 @@ public class CredentialsImpl extends BaseStandardCredentials implements Credenti
             } catch (Exception e) {
                 return Validator.error(Messages.validator_check_serverCaCertificates_failed(), e);
             }
+        }
 
-    }
         public FormValidation doCheckToken(@QueryParameter("token") String token) {
             return Validator.doCheckFieldNotEmpty(token, Messages.validator_check_token_empty());
         }

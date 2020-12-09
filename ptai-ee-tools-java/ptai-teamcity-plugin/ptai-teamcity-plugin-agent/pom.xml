@@ -5,15 +5,16 @@
     <parent>
         <artifactId>ptai-teamcity-plugin</artifactId>
         <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
-        <version>0.1</version>
+        <version>3.6.1</version>
     </parent>
     <artifactId>ptai-teamcity-plugin-agent</artifactId>
+    <version>3.6.1</version>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
             <artifactId>ptai-teamcity-plugin-common</artifactId>
-            <version>0.1</version>
+            <version>3.6.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -28,18 +29,6 @@
             <version>${teamcity-version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
-            <artifactId>generic-client-lib</artifactId>
-            <version>0.1</version>
-            <exclusions>
-                <exclusion>
-                    <!-- Provided by org.bouncycastle-bcprov-jdk16 -->
-                    <groupId>org.jenkins-ci.plugins</groupId>
-                    <artifactId>bouncycastle-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
         <dependency>
             <groupId>commons-validator</groupId>
@@ -51,18 +40,6 @@
                     <artifactId>commons-digester</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk16 -->
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>1.46</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on -->
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcpkix-jdk15on</artifactId>
-            <version>1.61</version>
         </dependency>
     </dependencies>
     <build>

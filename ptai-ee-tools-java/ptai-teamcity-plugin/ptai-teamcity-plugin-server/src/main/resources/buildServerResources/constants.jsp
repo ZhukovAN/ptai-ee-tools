@@ -1,7 +1,7 @@
-<%@ page import="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params" %>
-<%@ page import="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Labels" %>
-<%@ page import="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Hints" %>
 <%@ page import="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants" %>
+<%@ page import="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Hints" %>
+<%@ page import="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Labels" %>
+<%@ page import="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params" %>
 
 <c:set var="URL" value="<%=Params.URL%>"/>
 <c:set var="LABEL_URL" value="<%=Labels.URL%>"/>
@@ -14,6 +14,10 @@
 <c:set var="CERTIFICATES" value="<%=Params.CERTIFICATES%>"/>
 <c:set var="LABEL_CERTIFICATES" value="<%=Labels.CERTIFICATES%>"/>
 <c:set var="HINT_CERTIFICATES" value="<%=Hints.CERTIFICATES%>"/>
+
+<c:set var="INSECURE" value="<%=Params.INSECURE%>"/>
+<c:set var="LABEL_INSECURE" value="<%=Labels.INSECURE%>"/>
+<c:set var="HINT_INSECURE" value="<%=Hints.INSECURE%>"/>
 
 <c:set var="SERVER_SETTINGS" value="<%=Params.SERVER_SETTINGS%>"/>
 <c:set var="LABEL_SERVER_SETTINGS" value="<%=Labels.SERVER_SETTINGS%>"/>
@@ -59,10 +63,6 @@
 <c:set var="LABEL_FAIL_IF_UNSTABLE" value="<%=Labels.FAIL_IF_UNSTABLE%>"/>
 <c:set var="HINT_FAIL_IF_UNSTABLE" value="<%=Hints.FAIL_IF_UNSTABLE%>"/>
 
-<c:set var="NODE_NAME" value="<%=Params.NODE_NAME%>"/>
-<c:set var="LABEL_NODE_NAME" value="<%=Labels.NODE_NAME%>"/>
-<c:set var="HINT_NODE_NAME" value="<%=Hints.NODE_NAME%>"/>
-
 <c:set var="VERBOSE" value="<%=Params.VERBOSE%>"/>
 <c:set var="LABEL_VERBOSE" value="<%=Labels.VERBOSE%>"/>
 <c:set var="HINT_VERBOSE" value="<%=Hints.VERBOSE%>"/>
@@ -90,6 +90,38 @@
 <c:set var="FLATTEN" value="<%=Params.FLATTEN%>"/>
 <c:set var="LABEL_FLATTEN" value="<%=Labels.FLATTEN%>"/>
 <c:set var="HINT_FLATTEN" value="<%=Hints.FLATTEN%>"/>
+
+<c:set var="REPORT_SETTINGS" value="<%=Params.REPORT_SETTINGS%>"/>
+<c:set var="LABEL_REPORT_SETTINGS" value="<%=Labels.REPORT_SETTINGS%>"/>
+<c:set var="HINT_REPORT_SETTINGS" value="<%=Hints.REPORT_SETTINGS%>"/>
+
+<c:set var="REPORT_SETTINGS_NONE" value="<%=Constants.REPORT_SETTINGS_NONE%>"/>
+<c:set var="LABEL_REPORT_SETTINGS_NONE" value="<%=Labels.REPORT_SETTINGS_NONE%>"/>
+<c:set var="HINT_REPORT_SETTINGS_NONE" value="<%=Hints.REPORT_SETTINGS_NONE%>"/>
+
+<c:set var="REPORT_SETTINGS_SINGLE" value="<%=Constants.REPORT_SETTINGS_SINGLE%>"/>
+<c:set var="LABEL_REPORT_SETTINGS_SINGLE" value="<%=Labels.REPORT_SETTINGS_SINGLE%>"/>
+<c:set var="HINT_REPORT_SETTINGS_SINGLE" value="<%=Hints.REPORT_SETTINGS_SINGLE%>"/>
+
+<c:set var="REPORT_SETTINGS_JSON" value="<%=Constants.REPORT_SETTINGS_JSON%>"/>
+<c:set var="LABEL_REPORT_SETTINGS_JSON" value="<%=Labels.REPORT_JSON%>"/>
+<c:set var="HINT_REPORT_SETTINGS_JSON" value="<%=Hints.REPORT_JSON%>"/>
+
+<c:set var="REPORT_TEMPLATE_NAME" value="<%=Params.REPORT_TEMPLATE_NAME%>"/>
+<c:set var="LABEL_REPORT_TEMPLATE_NAME" value="<%=Labels.REPORT_TEMPLATE_NAME%>"/>
+<c:set var="HINT_REPORT_TEMPLATE_NAME" value="<%=Hints.REPORT_TEMPLATE_NAME%>"/>
+
+<c:set var="REPORT_FORMAT" value="<%=Params.REPORT_FORMAT%>"/>
+<c:set var="LABEL_REPORT_FORMAT" value="<%=Labels.REPORT_FORMAT%>"/>
+<c:set var="HINT_REPORT_FORMAT" value="<%=Hints.REPORT_FORMAT%>"/>
+
+<c:set var="REPORT_LOCALE" value="<%=Params.REPORT_LOCALE%>"/>
+<c:set var="LABEL_REPORT_LOCALE" value="<%=Labels.REPORT_LOCALE%>"/>
+<c:set var="HINT_REPORT_LOCALE" value="<%=Hints.REPORT_LOCALE%>"/>
+
+<c:set var="REPORT_JSON" value="<%=Params.REPORT_JSON%>"/>
+<c:set var="LABEL_REPORT_JSON" value="<%=Labels.REPORT_JSON%>"/>
+<c:set var="HINT_REPORT_JSON" value="<%=Hints.REPORT_JSON%>"/>
 
 <c:set var="ADMIN_CONTROLLER_PATH" value="<%=Constants.ADMIN_CONTROLLER_PATH%>"/>
 <c:set var="TEST_CONTROLLER_PATH" value="<%=Constants.TEST_CONTROLLER_PATH%>"/>

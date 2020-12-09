@@ -12,6 +12,7 @@
 <style id="ptaicss"></style>
 
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
+<jsp:useBean id="labelsBean" class="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Labels"/>
 
 <script type="text/javascript">
     $j(function() {
@@ -26,6 +27,11 @@
             TaskScanSettingsForm.toggle(${propertiesBean.properties[AST_SETTINGS].equals(AST_SETTINGS_UI)});
             TaskScanSettingsForm.setTestUrl('${TEST_CONTROLLER_PATH}');
             // TaskScanSettingsForm.setupEventHandlers();
+            ReportSettingsForm.toggle(${propertiesBean.properties[REPORT_SETTINGS].equals(REPORT_SETTINGS_SINGLE)}
+                ? 1
+                : ${propertiesBean.properties[REPORT_SETTINGS].equals(REPORT_SETTINGS_JSON)}
+                ? 2
+                : 0);
         });
     });
 </script>
@@ -92,6 +98,18 @@
                 <span class="error" id="error_${CERTIFICATES}"></span>
             </td>
         </tr>
+
+        <tr class="ptai-connection-settings-local" style="display:none;">
+            <th>
+                <label for="${INSECURE}">${LABEL_INSECURE}</label>
+            </th>
+            <td>
+                <props:checkboxProperty name="${INSECURE}"/>
+                <span class="smallNote">${HINT_INSECURE}</span>
+                <span class="error" id="error_${INSECURE}"></span>
+            </td>
+        </tr>
+
         <tr>
             <th></th>
             <td>
@@ -203,17 +221,6 @@
 
         <tr class="advancedSetting">
             <th>
-                <label for="${NODE_NAME}">${LABEL_NODE_NAME}<l:star/></label>
-            </th>
-            <td>
-                <props:textProperty name="${NODE_NAME}" className="longField"/>
-                <span class="smallNote">${HINT_NODE_NAME}</span>
-                <span class="error" id="error_${NODE_NAME}"></span>
-            </td>
-        </tr>
-
-        <tr class="advancedSetting">
-            <th>
                 <label for="${VERBOSE}">${LABEL_VERBOSE}</label>
             </th>
             <td>
@@ -301,5 +308,121 @@
                 <span class="smallNote">${HINT_FLATTEN}</span>
             </td>
         </tr>
+    </tbody>
+</l:settingsGroup>
+
+<l:settingsGroup title="AST report settings">
+    <tbody id="ptai-report-settings" class="ptai-group">
+    <tr>
+        <th>
+            <label for="${REPORT_SETTINGS}">${LABEL_REPORT_SETTINGS}</label></th>
+        <td>
+            <c:set var="onchange">
+                let sel = $('${REPORT_SETTINGS}');
+                let settingsMode = sel[sel.selectedIndex].value;
+                ReportSettingsForm.toggle('${REPORT_SETTINGS_SINGLE}' === settingsMode
+                    ? 1
+                    : '${REPORT_SETTINGS_JSON}' === settingsMode
+                    ? 2
+                    : 0);
+            </c:set>
+            <props:selectProperty
+                    name="${REPORT_SETTINGS}" enableFilter="true"
+                    className="mediumField" onchange="${onchange}">
+                <props:option value="${REPORT_SETTINGS_NONE}" currValue="${propertiesBean.properties[REPORT_SETTINGS]}">${HINT_REPORT_SETTINGS_NONE}</props:option>
+                <props:option value="${REPORT_SETTINGS_SINGLE}" currValue="${propertiesBean.properties[REPORT_SETTINGS]}">${HINT_REPORT_SETTINGS_SINGLE}</props:option>
+                <props:option value="${REPORT_SETTINGS_JSON}" currValue="${propertiesBean.properties[REPORT_SETTINGS]}">${HINT_REPORT_SETTINGS_JSON}</props:option>
+            </props:selectProperty>
+            <span class="smallNote">${HINT_REPORT_SETTINGS}</span>
+            <span class="error" id="error_${REPORT_SETTINGS}"></span>
+        </td>
+    </tr>
+
+    <tr class="ptai-report-settings-single" style="display:none;">
+        <th>
+            <label for="${REPORT_TEMPLATE_NAME}">${LABEL_REPORT_TEMPLATE_NAME}<l:star/></label>
+        </th>
+        <td>
+            <props:textProperty name="${REPORT_TEMPLATE_NAME}" className="longField"/>
+            <span class="smallNote">${HINT_REPORT_TEMPLATE_NAME}</span>
+                <%-- We do not implement custom error handler as teamcity does that for us:
+                 it puts error message to error_${id} element (see submitBuildRunner
+                 in editBuildType.js) --%>
+            <span class="error" id="error_${REPORT_TEMPLATE_NAME}"></span>
+        </td>
+    </tr>
+
+    <tr class="ptai-report-settings-single" style="display:none;">
+        <th>
+            <label for="${REPORT_FORMAT}">${LABEL_REPORT_FORMAT}<l:star/></label>
+        </th>
+        <td>
+            <props:selectProperty
+                    name="${REPORT_FORMAT}" enableFilter="true"
+                    className="smallField">
+                <c:forEach var="item" items="${labelsBean.reportFormatTypes}">
+                    <props:option value="${item.value}">
+                        <c:out value="${item.value}"/>
+                    </props:option>
+                </c:forEach>
+            </props:selectProperty>
+            <span class="smallNote">${HINT_REPORT_FORMAT}</span>
+                <%-- We do not implement custom error handler as teamcity does that for us:
+                 it puts error message to error_${id} element (see submitBuildRunner
+                 in editBuildType.js) --%>
+            <span class="error" id="error_${REPORT_FORMAT}"></span>
+        </td>
+    </tr>
+
+    <tr class="ptai-report-settings-single" style="display:none;">
+        <th>
+            <label for="${REPORT_LOCALE}">${LABEL_REPORT_LOCALE}<l:star/></label>
+        </th>
+        <td>
+            <props:selectProperty
+                    name="${REPORT_LOCALE}" enableFilter="true"
+                    className="smallField">
+                <props:option value="RU" currValue="${propertiesBean.properties[REPORT_LOCALE]}">Russian</props:option>
+                <props:option value="EN" currValue="${propertiesBean.properties[REPORT_LOCALE]}">English</props:option>
+            </props:selectProperty>
+            <span class="smallNote">${HINT_REPORT_LOCALE}</span>
+                <%-- We do not implement custom error handler as teamcity does that for us:
+                 it puts error message to error_${id} element (see submitBuildRunner
+                 in editBuildType.js) --%>
+            <span class="error" id="error_${REPORT_LOCALE}"></span>
+        </td>
+    </tr>
+
+    <tr class="ptai-report-settings-json" style="display:none;">
+        <th>
+            <label for="${REPORT_JSON}">${LABEL_REPORT_JSON}</label>
+        </th>
+        <td>
+            <props:multilineProperty
+                    name="${REPORT_JSON}"
+                    className="longField"
+                    linkTitle="Edit JSON report settings"
+                    rows="3"
+                    cols="49"
+                    expanded="${true}"
+                    note="${HINT_REPORT_JSON}"/>
+            <span class="error" id="error_${REPORT_JSON}"></span>
+        </td>
+    </tr>
+
+<%--
+    <tr>
+        <th></th>
+        <td>
+            <div class="saveButtonsBlock">
+                <c:set var="onclick">
+                    TaskScanSettingsForm.test();
+                </c:set>
+                <forms:submit id="testSettings" type="button" label="<%=Labels.CHECK%>" onclick="${onclick}" />
+                <forms:saving id="testingSettings"/>
+            </div>
+        </td>
+    </tr>
+    --%>
     </tbody>
 </l:settingsGroup>

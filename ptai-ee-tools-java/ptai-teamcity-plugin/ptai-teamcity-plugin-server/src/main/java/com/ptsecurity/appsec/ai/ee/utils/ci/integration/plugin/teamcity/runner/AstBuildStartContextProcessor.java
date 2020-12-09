@@ -34,6 +34,7 @@ public class AstBuildStartContextProcessor implements BuildStartContextProcessor
         context.addSharedParameter(URL, settings.getValue(URL));
         context.addSharedParameter(TOKEN, settings.getValue(TOKEN));
         context.addSharedParameter(CERTIFICATES, settings.getValue(CERTIFICATES));
+        context.addSharedParameter(INSECURE, settings.getValue(INSECURE));
     }
 
     public void register() {

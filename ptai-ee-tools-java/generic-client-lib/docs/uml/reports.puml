@@ -1,0 +1,36 @@
+@startuml
+class Reports
+
+enum Locale {
+    EN
+    RU
+}
+
+abstract AbstractReport {
+    String fileName
+    IssuesFilter filters
+}
+AbstractReport -up-> "locale" Locale
+
+class Report {
+    .. HTML or PDF ..
+    Format format
+}
+
+class Data {
+    .. XML or JSON ..
+    Format format
+}
+
+class RawData {
+    String fileName
+}
+
+AbstractReport <|-down- Data
+AbstractReport <|-down- Report
+
+Reports -up-> "0..*" Report : report
+Reports -up-> "0..*" Data : data
+Reports -up-> RawData : raw
+
+@enduml

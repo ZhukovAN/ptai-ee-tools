@@ -1,3 +1,0 @@
-cd ../target
-java -jar ptai-cli-plugin-0.1-jar-with-dependencies.jar --folder D:\TEMP\20200220\SRC\app01 --node ptai --project DEVEL.TEST.JAVA --username admin --token 46UCfqZkZQ9ZVV1qb2MC6w8Sss6CCOdI --url https://alzhukov-pc.ptsecurity.ru:8443 --verbose
-REM java -jar ptai-cli-plugin-0.1-jar-with-dependencies.jar --folder D:\TEMP\20200220\SRC\app01 --node ptai --project DEVEL.TEST.JAVA --username admin --token 46UCfqZkZQ9ZVV1qb2MC6w8Sss6CCOdI --url https://alzhukov-pc.ptsecurity.ru:8443

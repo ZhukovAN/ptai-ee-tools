@@ -2,16 +2,15 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import lombok.NonNull;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
 import java.security.cert.*;
-import java.security.cert.Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Base64;

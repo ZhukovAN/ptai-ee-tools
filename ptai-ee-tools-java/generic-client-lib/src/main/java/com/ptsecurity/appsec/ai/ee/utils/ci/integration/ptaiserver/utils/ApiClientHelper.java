@@ -4,12 +4,25 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.BaseClien
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.jwt.JwtAuthenticator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
-import static org.joor.Reflect.*;
+import static org.joor.Reflect.on;
 
 /**
  * As different openapi-generated XxxApi and ApiClient classes aren't implement
@@ -26,28 +39,71 @@ public class ApiClientHelper {
 
     /**
      * Initialize XxxApi and its ApiClient: set up URL, timeouts, trusted
-     * certificate chains and JWT authentication class
+     * certificate chains and jwt authentication class
      * @param client from where to get URL, timeouts etc.
      * @param api API that is to be initialized with parameters above
      */
-    protected static void initClientApi(BaseClient client, Object api) {
-        ApiClientHelper helper = new ApiClientHelper(api).init();
+    @SneakyThrows
+    private static void initClientApi(BaseClient client, Object api) {
+        ApiClientHelper helper = new ApiClientHelper(api)
+                .init()
+                .setBasePath(client.getUrl())
+                .setReadTimeout(client.getTimeout())
+                .setWriteTimeout(client.getTimeout());
+        if (null != client.getCaCertsPem())
+                helper.setSslCaCert(CertificateHelper.cleanupCaPem(client.getCaCertsPem()));
 
-        helper.setBasePath(client.getUrl());
-        helper.setReadTimeout(client.getTimeout());
-        helper.setWriteTimeout(client.getTimeout());
-        helper.setSslCaCert(CertificateHelper.cleanupCaPem(client.getCaCertsPem()));
+        X509TrustManager trustManager = createTrustManager(client.getCaCertsPem(), client.isInsecure());
 
-        OkHttpClient httpClient = helper.getHttpClient();
-        httpClient = httpClient.newBuilder()
+        OkHttpClient.Builder builder = helper.getHttpClient().newBuilder()
                 .hostnameVerifier((hostname, session) -> true)
                 .authenticator(new JwtAuthenticator(client, helper))
-                .build();
-        helper.setHttpClient(httpClient);
+                .addInterceptor(new LoggingInterceptor())
+                .protocols(Arrays.asList(Protocol.HTTP_1_1));
+        if (null != trustManager) {
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, new TrustManager[] { trustManager }, new SecureRandom());
+            builder.sslSocketFactory(sslContext.getSocketFactory(), trustManager);
+        }
+        helper.setHttpClient(builder.build());
     }
 
-    public static void initClientApis(@NonNull final BaseClient client, @NonNull final Object ... apis) {
-        for (Object api : apis) initClientApi(client, api);
+    @SneakyThrows
+    public static X509TrustManager createTrustManager(final String caCertsPem, boolean insecure) {
+        if (insecure) {
+            return new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(java.security.cert.X509Certificate[] chain,
+                                               String authType) throws CertificateException {
+                }
+
+                @Override
+                public void checkServerTrusted(java.security.cert.X509Certificate[] chain,
+                                               String authType) throws CertificateException {
+                }
+
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+            };
+        } else {
+            // Create in-memory keystore and fill it with caCertsPem data
+            KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            keyStore.load(null, null);
+            if (StringUtils.isNotEmpty(caCertsPem)) {
+                List<X509Certificate> certs = CertificateHelper.readPem(caCertsPem);
+                for (X509Certificate cert : certs)
+                    keyStore.setCertificateEntry(UUID.randomUUID().toString(), cert);
+            }
+            // To avoid trustAnchors parameter must be non-empty we need to process separately
+            // empty keystore case
+            if (0 == keyStore.size()) return null;
+            // Init trustManagerFactory with custom CA certificates
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init(keyStore);
+            return (X509TrustManager) trustManagerFactory.getTrustManagers()[0];
+        }
     }
 
     public static void initClientApis(@NonNull final BaseClient client, @NonNull final List<Object> apis) {
@@ -59,35 +115,41 @@ public class ApiClientHelper {
         return this;
     }
 
-    public void setBasePath(String path) {
+    public ApiClientHelper setBasePath(String path) {
         on(apiClient).call("setBasePath", path);
+        return this;
     }
 
-    public void setReadTimeout(int value) {
+    private ApiClientHelper setReadTimeout(int value) {
         on(apiClient).call("setReadTimeout", value);
+        return this;
     }
 
-    public void setWriteTimeout(int value) {
+    private ApiClientHelper setWriteTimeout(int value) {
         on(apiClient).call("setWriteTimeout", value);
+        return this;
     }
 
-    public void setSslCaCert(InputStream data) {
+    private ApiClientHelper setSslCaCert(InputStream data) {
         on(apiClient).call("setSslCaCert", data);
+        return this;
     }
 
-    public void setHttpClient(OkHttpClient client) {
+    private void setHttpClient(OkHttpClient client) {
         on(apiClient).call("setHttpClient", client);
     }
 
-    public OkHttpClient getHttpClient() {
+    private OkHttpClient getHttpClient() {
         return on(apiClient).call("getHttpClient").get();
     }
 
-    public void setApiKey(String key) {
+    public ApiClientHelper setApiKey(String key) {
         on(apiClient).call("setApiKey", key);
+        return this;
     }
 
-    public void setApiKeyPrefix(String prefix) {
+    public ApiClientHelper setApiKeyPrefix(String prefix) {
         on(apiClient).call("setApiKeyPrefix", prefix);
+        return this;
     }
 }

@@ -7,26 +7,19 @@
     <parent>
         <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
         <artifactId>ptai-ee-tools</artifactId>
-        <version>0.1</version>
+        <version>3.6.1</version>
     </parent>
 
     <artifactId>ptai-cli-plugin</artifactId>
-    <version>0.1</version>
+    <version>3.6.1</version>
     <name>ptai-cli-plugin</name>
     <packaging>jar</packaging>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <java-version>1.8</java-version>
-        <java.level>8</java.level>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
             <artifactId>generic-client-lib</artifactId>
-            <version>0.1</version>
+            <version>3.6.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/info.picocli/picocli -->
         <dependency>
@@ -65,8 +58,52 @@
             <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
+    <!-- As buildnumber-maven-plugin requires scm settings we need to use dummy one -->
+    <scm>
+        <connection>scm:git:http://127.0.0.1/dummy</connection>
+        <developerConnection>scm:git:https://127.0.0.1/dummy</developerConnection>
+        <tag>HEAD</tag>
+        <url>http://127.0.0.1/dummy</url>
+    </scm>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <!-- <format>{0,date,yyyyMMddHHmmss}</format> -->
+                    <format>{0,date,yyyyMMddHHmm}</format>
+                    <items>
+                        <item>timestamp</item>
+                    </items>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Implementation-Build>${buildNumber}</Implementation-Build>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -77,12 +114,19 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
+                            <!-- <finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName> -->
+                            <finalName>${project.artifactId}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
                             <archive>
                                 <manifest>
                                     <mainClass>
                                         com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin
                                     </mainClass>
+                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                                 </manifest>
+                                <manifestEntries>
+                                    <Implementation-Build>${buildNumber}</Implementation-Build>
+                                </manifestEntries>
                             </archive>
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>

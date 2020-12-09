@@ -17,5 +17,8 @@ public class Constants {
     public static final String SERVER_SETTINGS_GLOBAL = "SettingsGlobal";
     public static final String SERVER_SETTINGS_LOCAL = "SettingsTask";
 
+    public static final String REPORT_SETTINGS_NONE = "ReportNone";
+    public static final String REPORT_SETTINGS_SINGLE = "ReportSingle";
+    public static final String REPORT_SETTINGS_JSON = "ReportJson";
 
 }

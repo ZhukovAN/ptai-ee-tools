@@ -15,20 +15,25 @@ import java.io.Serializable;
 @EqualsAndHashCode
 @ToString
 @Symbol("ServerSettings")
-public class ServerSettings implements Describable<ServerSettings>, Cloneable, Serializable {
+public class ServerSettings implements Describable<ServerSettings>, Serializable {
     @Getter
     private String serverUrl;
     @Getter
     private String serverCredentialsId;
+    @Getter
+    private boolean serverInsecure;
+
     @DataBoundConstructor
     public ServerSettings(
             final String serverUrl,
-            final String serverCredentialsId) {
+            final String serverCredentialsId,
+            final boolean serverInsecure) {
         this.serverUrl = fixApiUrl(serverUrl);
         this.serverCredentialsId = serverCredentialsId;
+        this.serverInsecure = serverInsecure;
     }
 
-    public static String fixApiUrl(String apiUrl) {
+    private static String fixApiUrl(String apiUrl) {
         return StringUtils.removeEnd(apiUrl.trim(), "/");
     }
 

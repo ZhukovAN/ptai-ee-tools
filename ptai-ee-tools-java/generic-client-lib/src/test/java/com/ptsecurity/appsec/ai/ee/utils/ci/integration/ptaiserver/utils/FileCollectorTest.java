@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.utils.TestUtils;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.TempDirectory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import org.apache.commons.io.IOUtils;
@@ -73,7 +72,7 @@ public class FileCollectorTest {
                     Files.createDirectories(path.getParent());
                 if (!Files.exists(path))
                     Files.createFile(path);
-                Files.write(path, entry.getEntryName().getBytes());
+                Files.write(path, entry.getName().getBytes());
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

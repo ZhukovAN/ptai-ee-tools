@@ -11,7 +11,6 @@ public class Messages {
     public static final String MESSAGE_JSON_SETTINGS_INVALID = "JSON-defined scan settings are invalid";
     public static final String MESSAGE_JSON_POLICY_INVALID = "JSON-defined scan policy is invalid";
     public static final String MESSAGE_PROJECT_NAME_EMPTY = "Project name must not be empty";
-    public static final String MESSAGE_NODE_NAME_EMPTY = "AST agent node name must not be empty";
     public static final String MESSAGE_INCLUDES_EMPTY = "Files to analyse pattern must not be empty";
     public static final String MESSAGE_PATTERN_SEPARATOR_EMPTY = "Pattern separator must not be empty";
     public static final String MESSAGE_PATTERN_SEPARATOR_INVALID = "Pattern separator is invalid";

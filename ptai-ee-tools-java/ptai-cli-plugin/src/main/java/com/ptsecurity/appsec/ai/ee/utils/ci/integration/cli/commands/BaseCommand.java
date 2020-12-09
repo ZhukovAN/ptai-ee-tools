@@ -1,99 +1,186 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.StringHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ReportHelper;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import picocli.CommandLine;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.IssuesFilterExploitationCondition.ALL;
-
-@Log
+@Slf4j
 public abstract class BaseCommand {
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class ExitCode {
-        @Getter
-        protected int code;
+    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+    public enum ExitCode {
+        SUCCESS(Plugin.SUCCESS),
+        FAILED(Plugin.FAILED),
+        INVALID_INPUT(Plugin.INVALID_INPUT);
 
-        public static final ExitCode SUCCESS = new ExitCode(0);
-        public static final ExitCode FAILED = new ExitCode(1);
-        public static final ExitCode WARNINGS = new ExitCode(2);
-        public static final ExitCode ERROR = new ExitCode(3);
-        public static final ExitCode INVALID_INPUT = new ExitCode(1000);
+        @Getter
+        @NonNull
+        @JsonProperty
+        protected int code;
     }
 
-    public static class Report {
-        @CommandLine.ArgGroup(exclusive = false)
-        public ReportDefinition reportDefinition;
-
+    /**
+     * This class defines set of output files to be generated after
+     * AST complete. Class allows to generate reports using explicit
+     * definition of templates, locales, file names etc. using CLI
+     * parameters or define bunch of reports in JSON file. These
+     * options are mutually exclusive, so corresponding class instance
+     * must be annotated with @CommandLine.ArgGroup(exclusive = true)
+     */
+    public static class Reporting {
         @CommandLine.Option(
                 names = {"--report-json"}, order = 1,
                 required = true,
                 paramLabel = "<file>",
                 description = "JSON file that defines reports to be generated")
-        public Path reportJson = null;
+        Path reportingJson = null;
 
-        public List<NamedReportDefinition> validate(@NonNull final Utils utils) throws ApiException {
-            final List<NamedReportDefinition> reportDefinitions = new ArrayList<>();
-            if (null != reportDefinition) {
-                String reportName = ReportHelper.generateReportFileNameTemplate(
-                        reportDefinition.template, reportDefinition.locale.getValue(), reportDefinition.format.getValue());
-                reportName = ReportHelper.removePlaceholder(reportName);
-                reportDefinitions.add(NamedReportDefinition.builder()
-                        .name(reportName)
-                        .template(reportDefinition.template)
-                        .locale(reportDefinition.locale)
-                        .format(reportDefinition.format)
-                        .build());
-            } else if (null != reportJson) {
-                try {
-                    String jsonStr = FileUtils.readFileToString(reportJson.toFile(), StandardCharsets.UTF_8);
-                    NamedReportDefinition[] reportDefinitionsFromJson = BaseCommand.NamedReportDefinition.load(jsonStr);
-                    reportDefinitions.addAll(Arrays.asList(reportDefinitionsFromJson));
-                } catch (IOException e) {
-                    throw ApiException.raise("File " + reportJson.toString() + " read failed", e);
+        @CommandLine.ArgGroup(exclusive = false)
+        ExplicitReporting reporting = null;
+
+        Reports validate(@NonNull final Utils utils) throws ApiException {
+            Reports reports;
+            if (null != reporting) {
+                reports = new Reports();
+                // Convert CLI-defined report / export data to generic Reports instance
+                if (null != reporting.data) {
+                    Reports.Data data = new Reports.Data();
+                    data.setFileName(reporting.data.file.normalize().toString());
+                    data.setFormat(reporting.data.format);
+                    data.setLocale(reporting.data.locale);
+                    reports.getData().add(data);
                 }
+                if (null != reporting.report) {
+                    Reports.Report report = new Reports.Report();
+                    report.setFileName(reporting.report.file.normalize().toString());
+                    report.setFormat(reporting.report.format);
+                    report.setLocale(reporting.report.locale);
+                    report.setTemplate(reporting.report.template);
+                    reports.getReport().add(report);
+                }
+                if (null != reporting.raw) {
+                    Reports.RawData raw = new Reports.RawData();
+                    raw.setFileName(reporting.raw.normalize().toString());
+                    reports.getRaw().add(raw);
+                }
+            } else if (null != reportingJson) {
+                // Load Reports instance from JSON file
+                try {
+                    String json = FileUtils.readFileToString(reportingJson.toFile(), StandardCharsets.UTF_8);
+                    reports = load(json);
+                } catch (IOException e) {
+                    throw ApiException.raise("File " + reportingJson.toString() + " read failed", e);
+                }
+            } else {
+                log.error("Reporting settings validation failed");
+                return null;
             }
-            // Check if all the reports are exist
-            List<String> missingReports = new ArrayList<>();
-            reportDefinitions.stream().map(r -> r.locale).distinct().forEach(l -> {
-                List<String> templates = utils.getReportTemplates(l.getValue()).stream()
-                        .map(ReportTemplateModel::getName)
-                        .collect(Collectors.toList());
-                reportDefinitions.stream()
-                        .filter(r -> l.equals(r.getLocale()))
-                        .map(ReportDefinition::getTemplate)
-                        .forEach(t -> {
-                            if (!templates.contains(t)) missingReports.add(t + " [" + l + "]");
-                        });
-            });
-            if (!missingReports.isEmpty())
-                throw ApiException.raise(
-                        "Not all report templates are exist on server",
-                        new IllegalArgumentException("Missing reports are " + StringHelper.joinListGrammatically(missingReports)));
-            return reportDefinitions;
+            return reports.validate(utils).fix();
+        }
+
+        static Reports load(String json) throws ApiException {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+                Reports res = mapper.readValue(json, Reports.class);
+                return res.fix();
+            } catch (Exception e) {
+                throw ApiException.raise("JSON-defined reporting settings parse failed", e);
+            }
         }
     }
 
+    /**
+     * Class defines AST reporting settings where all the report files
+     * are defined explicitly i.e. if we need HTML/PDF report then we
+     * define its format, template and locale using @report field
+     */
+    public static class ExplicitReporting {
+        /**
+         * Machine-readable data export file definition that
+         * includes format (XML or JSON), locate and optional filters
+         */
+        @CommandLine.ArgGroup(exclusive = false)
+        Data data = null;
+
+        /**
+         * Human-readable report definition that includes
+         * format (html or PDF), template name, locale and
+         * optional filters
+         */
+        @CommandLine.ArgGroup(exclusive = false)
+        public Report report = null;
+
+        /**
+         * Machine-readable report that generated via
+         * /api/Projects/{projectId}/scanResults/{scanResultId}/issues API call
+         */
+        @CommandLine.Option(
+                names = { "--raw-data-file" }, order = 1,
+                paramLabel = "<file>",
+                description = "JSON file where raw issues data are to be saved")
+        Path raw = null;
+    }
+
+    /**
+     * Class defines group of CLI parameters to define single exported
+     * data file. As those files aren't template-dependent, we need
+     * to define only locale and format
+     */
     @Getter @Setter
-    @SuperBuilder
     @NoArgsConstructor
-    public static class ReportDefinition {
+    public static class Data {
+        /**
+         * Exported data file format. PT AI allows data export using XML and JSON formats
+         */
+        @CommandLine.Option(
+                names = { "--data-format" }, order = 2,
+                required = true,
+                paramLabel = "<format>",
+                description = "Format type of data to be exported, one of: ${COMPLETION-CANDIDATES}")
+        public Reports.Data.Format format;
+
+        /**
+         * Exported data locale. PT AI allows data export using EN and RU locales
+         */
+        @CommandLine.Option(
+                names = { "--data-locale" }, order = 3,
+                required = true,
+                paramLabel = "<locale>",
+                description = "Locale ID of data to be exported, one of ${COMPLETION-CANDIDATES}")
+        public Reports.Locale locale;
+
+        /**
+         * Generated report file name
+         */
+        @CommandLine.Option(
+                names = { "--data-file" }, order = 4,
+                required = true,
+                paramLabel = "<file>",
+                description = "File name where exported data is to be saved")
+        public Path file;
+    }
+
+    /**
+     * Class defines group of CLI parameters to define single
+     * generated report file. As those files are template-dependent,
+     * we need to define template name, locale and format
+     */
+    @Getter @Setter
+    @NoArgsConstructor
+    public static class Report {
         @CommandLine.Option(
                 names = {"--report-template"}, order = 1,
                 required = true,
@@ -101,86 +188,66 @@ public abstract class BaseCommand {
                 description = "Template name of report to be generated")
         public String template;
 
-        @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-        public enum Format {
-            HTML(ReportFormatType.HTML.getValue()),
-            XML(ReportFormatType.XML.getValue()),
-            JSON(ReportFormatType.JSON.getValue()),
-            PDF(ReportFormatType.PDF.getValue());
-
-            @Getter
-            private final String value;
-        }
-
+        /**
+         * Exported report file format. PT AI allows report generation using PDF and HTML formats
+         */
         @CommandLine.Option(
-                names = {"--report-format", "-f"}, order = 2,
+                names = { "--report-format" }, order = 2,
                 required = true,
                 paramLabel = "<format>",
-                description = "Format type of report to be generated, one of: HTML, XML, JSON, PDF")
-        public Format format;
-
-        @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-        public enum Locale {
-            EN("en-US"), RU("ru-RU");
-
-            @Getter
-            private final String value;
-        }
-
-        @CommandLine.Option(
-                names = {"--report-locale", "-l"}, order = 3,
-                required = true,
-                paramLabel = "<locale>",
-                description = "Locale ID of report to be generated, one of EN, RU")
-        public Locale locale;
-    }
-
-    @Getter @Setter
-    @SuperBuilder
-    @NoArgsConstructor
-    public static class NamedReportDefinition extends ReportDefinition {
-        @NonNull
-        public String name;
-
-        protected IssuesFilter filters;
-
-        public static NamedReportDefinition[] load(String json) throws ApiException {
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-                NamedReportDefinition[] res = mapper.readValue(json, NamedReportDefinition[].class);
-                for (NamedReportDefinition def : res)
-                    def.fixMissingFields();
-                return res;
-            } catch (Exception e) {
-                throw ApiException.raise("JSON settings parse failed", e);
-            }
-        }
+                description = "Format type of report to be generated, one of: ${COMPLETION-CANDIDATES}")
+        public Reports.Report.Format format;
 
         /**
-         * All the filters that use enum values are treated as NONE if no value
-         * is defined in JSON. But this is not convenient for user as he thinks that if
-         * no filter is defined then filtering must not be done on that field. So we need
-         * to fix all the missing filters with ALL enum
-         * @return Fixed NamedReportDefinition where all missing fields are filled with "ALL" value
+         * Generated report locale. PT AI allows report generation using EN and RU locales
          */
-        public NamedReportDefinition fixMissingFields() {
-            if (null == filters) return this;
+        @CommandLine.Option(
+                names = { "--report-locale" }, order = 3,
+                required = true,
+                paramLabel = "<locale>",
+                description = "Locale ID of report to be generated, one of ${COMPLETION-CANDIDATES}")
+        public Reports.Locale locale;
 
-            if (null == filters.getIssueLevel())
-                filters.setIssueLevel(IssuesFilterLevel.ALL);
-            if (null == filters.getExploitationCondition())
-                filters.setExploitationCondition(ALL);
-            if (null == filters.getScanMode())
-                filters.setScanMode(IssuesFilterScanMode.ALL);
-            if (null == filters.getSuppressStatus())
-                filters.setSuppressStatus(IssuesFilterSuppressStatus.ALL);
-            if (null == filters.getConfirmationStatus())
-                filters.setConfirmationStatus(IssuesFilterConfirmationStatus.ALL);
-            if (null == filters.getSourceType())
-                filters.setSourceType(IssuesFilterSourceType.ALL);
-
-            return this;
-        }
+        /**
+         * Generated report file name
+         */
+        @CommandLine.Option(
+                names = { "--report-file" }, order = 4,
+                required = true,
+                paramLabel = "<file>",
+                description = "File name where generated report is to be saved")
+        public Path file;
     }
+
+    @CommandLine.Option(
+            names = {"--url"},
+            required = true, order = 1,
+            paramLabel = "<url>",
+            description = "PT AI server URL, i.e. https://ptai.domain.org:443")
+    protected URL url;
+
+    @CommandLine.Option(
+            names = {"-t", "--token"},
+            required = true, order = 2,
+            paramLabel = "<token>",
+            description = "PT AI server API token")
+    protected String token = null;
+
+    @CommandLine.Option(
+            names = {"--truststore"}, order = 3,
+            paramLabel = "<path>",
+            description = "Path to PEM file that stores trusted CA certificates")
+    protected Path truststore = null;
+
+    @CommandLine.Option(
+            names = {"-v", "--verbose"}, order = 4,
+            description = "Provide verbose console log output")
+    protected boolean verbose = false;
+
+    @CommandLine.Option(
+            names = {"--insecure"}, order = 99,
+            description = "Do not verify CA certificate chain")
+    protected boolean insecure = false;
+
+
 }

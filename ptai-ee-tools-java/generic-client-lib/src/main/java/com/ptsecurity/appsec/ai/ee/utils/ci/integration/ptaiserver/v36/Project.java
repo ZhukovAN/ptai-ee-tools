@@ -4,8 +4,8 @@ import com.microsoft.signalr.HubConnection;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.StartScanModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.ScanCompleteEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.V36ScanSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import lombok.extern.java.Log;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -24,19 +24,15 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
+@SuperBuilder
 public class Project extends Utils {
-    @NonNull
     @Getter
     @Setter
+    @NonNull
     protected String name;
 
     @Setter
     protected File sources;
-
-    public Project(@NonNull final String name) {
-        super();
-        this.name = name;
-    }
 
     public UUID searchProject() throws ApiException {
         return searchProject(name);
@@ -54,7 +50,7 @@ public class Project extends Utils {
      *             executed. If empty, node will be assigned using
      *             internal load balancer
      * @return Scan identifier
-     * @throws ApiException
+     * @throws ApiException Project not found or scan start failed
      */
     public UUID scan(final String node) throws ApiException {
         StartScanModel startScanModel = new StartScanModel();
@@ -64,10 +60,9 @@ public class Project extends Utils {
         startScanModel.setProjectId(id);
         // TODO: Check if there's more intelligent approach required
         startScanModel.setScanType(ScanType.FULL);
-        UUID scanResultId = callApi(
+        return callApi(
                 () -> scanApi.apiScanStartPost(startScanModel),
                 "PT AI project scan start failed");
-        return scanResultId;
     }
 
     @SneakyThrows
@@ -110,12 +105,6 @@ public class Project extends Utils {
         callApi(
                 () -> scanApi.apiScanStopPost(scanResultId),
                 "PT AI project scan stop failed");
-    }
-
-    public File getJsonResult(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws ApiException {
-        return callApi(
-                () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdIssuesGet(projectId, scanResultId, null),
-                "PT AI project scan status JSON read failed");
     }
 
     public List<ScanError> getScanErrors(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws ApiException {

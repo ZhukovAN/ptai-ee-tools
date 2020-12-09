@@ -1,17 +1,14 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.defaults.TransferDefaults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Transfer;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.defaults.TransferDefaults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.util.FormValidation;
 import lombok.Getter;
 import org.kohsuke.stapler.QueryParameter;
-
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 @Extension
 public class TransferDescriptor extends Descriptor<Transfer> {

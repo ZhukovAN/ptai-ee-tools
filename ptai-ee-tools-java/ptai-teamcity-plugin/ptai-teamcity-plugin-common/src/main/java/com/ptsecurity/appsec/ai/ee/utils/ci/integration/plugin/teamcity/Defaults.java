@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.*;
@@ -13,6 +12,7 @@ public class Defaults {
     public static final String URL = "https://ptai.domain.corp:8443";
     public static final String TOKEN = "P@ssw0rd";
     public static final String CERTIFICATES = "";
+    public static final String INSECURE = FALSE;
     /**
      * Field that stores scan settings type: UI- or JSON-based. If this
      * field equals to Constants.SERVER_SETTINGS_GLOBAL then globally defined PT AI
@@ -56,11 +56,6 @@ public class Defaults {
      */
     public static final String FAIL_IF_UNSTABLE = FALSE;
     /**
-     * PT AI agent node name or tag where AST is to be executed. Allows to implement
-     * load balancing if PT AI is being shared between multiple R&D teams
-     */
-    public static final String NODE_NAME = Base.DEFAULT_PTAI_NODE_NAME;
-    /**
      * Allows verbose logging if equals to Constants.TRUE
      */
     public static final String VERBOSE = FALSE;
@@ -70,4 +65,6 @@ public class Defaults {
     public static final String PATTERN_SEPARATOR = Transfer.DEFAULT_PATTERN_SEPARATOR;
     public static final String USE_DEFAULT_EXCLUDES = Transfer.DEFAULT_USE_DEFAULT_EXCLUDES ? TRUE : FALSE;
     public static final String FLATTEN = Transfer.DEFAULT_FLATTEN ? TRUE : FALSE;
+
+    public static final String REPORT_SETTINGS = REPORT_SETTINGS_NONE;
 }

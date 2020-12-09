@@ -74,6 +74,17 @@
                         <span class="error" id="error_${CERTIFICATES}"></span>
                     </td>
                 </tr>
+                <tr>
+                    <th>
+                        <label for="${INSECURE}">${LABEL_INSECURE}</label>
+                    </th>
+                    <td>
+                        <props:checkboxProperty name="${INSECURE}"/>
+						<span class="smallNote">${HINT_INSECURE}</span>
+                        <span class="error" id="error_${INSECURE}"></span>
+                    </td>
+                </tr>
+			
             </tbody>
         </table>
 

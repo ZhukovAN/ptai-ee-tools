@@ -2,10 +2,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.StringHelper;
-import org.apache.tools.ant.DirectoryScanner;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Class contains constants that are used as a hints in UI
@@ -23,6 +21,7 @@ public class Hints {
                     "<br>" +
                     "You may keep this field empty if PT AI server certificates are " +
                     "issued by CA from your JDK&nbsp;truststore";
+    public static final String INSECURE = "Use insecure SSL";
 
     public static final String SERVER_SETTINGS = "Choose how PT AI server connection settings are defined";
     public static final String SERVER_SETTINGS_GLOBAL = "Global scope defined PT AI server config";
@@ -43,7 +42,6 @@ public class Hints {
 
     public static final String FAIL_IF_FAILED = "Mark build step as failed if AST policy assessment failed";
     public static final String FAIL_IF_UNSTABLE = "Mark build step as failed if AST policy assessment success but there were some minor warnings reported";
-    public static final String NODE_NAME = "AST agent node name";
     public static final String VERBOSE = "Show verbose log output";
     public static final String INCLUDES =
             "Files to scan for vulnerabilities. The string is a comma separated " +
@@ -62,4 +60,13 @@ public class Hints {
                     StringHelper.joinListGrammatically(Arrays.asList(FileCollector.defaultExcludes())) +
                     ")";
     public static final String FLATTEN = "Only transfer files, ignore folder structure";
+
+    public static final String REPORT_SETTINGS = "Choose what are the AST reports to be generated";
+    public static final String REPORT_SETTINGS_NONE = "No report will be generated";
+    public static final String REPORT_SETTINGS_SINGLE = "Generate single AST report";
+    public static final String REPORT_SETTINGS_JSON = "JSON-defined report settings";
+    public static final String REPORT_TEMPLATE_NAME = "Report template name to use for report generation";
+    public static final String REPORT_FORMAT = "Report format";
+    public static final String REPORT_LOCALE = "Report locale";
+    public static final String REPORT_JSON = "JSON-defined report list";
 }

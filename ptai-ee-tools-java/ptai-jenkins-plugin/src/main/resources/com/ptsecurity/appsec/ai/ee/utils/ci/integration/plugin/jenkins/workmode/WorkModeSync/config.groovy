@@ -22,28 +22,12 @@ f.entry(
 }
 
 f.entry(
-        title: _('reports')) {
-    set('descriptor', descriptor.reportDescriptor)
-    f.repeatable(
-            var: 'instance',
-            items: instance?.reports,
-            name: 'reports',
-            minimum: '0',
-            header: _('report'),
-            add: _('reportAdd')) {
-        table(width: '100%', padding: '0') {
-            st.include(
-                    page: 'config.groovy',
-                    class: descriptor?.clazz
-            )
-            f.entry(title: '') {
-                div(align: 'right') {
-                    f.repeatableDeleteButton(
-                            value: _('reportDelete')
-                    )
-                }
-            }
-        }
-    }
+        title: _('reports'),
+        help: descriptor.getHelpFile()) {
+
+    f.repeatableHeteroProperty(
+            field: 'reports',
+            hasHeader: 'true',
+            addCaption: _('reportAdd'))
 }
 

@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Defaults;
 import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.serverSide.crypt.EncryptUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
@@ -8,7 +9,8 @@ import jetbrains.buildServer.util.StringUtil;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.*;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,6 +43,7 @@ public class AstAdminSettings {
         this.properties.put(URL, Base.DEFAULT_PTAI_URL);
         this.properties.put(TOKEN, "");
         this.properties.put(CERTIFICATES, "");
+        this.properties.put(INSECURE, Defaults.INSECURE);
         getConfigFile().toFile().getParentFile().mkdirs();
         PropertiesUtil.storeProperties(properties, path.toFile(), "PT AI EE");
     }

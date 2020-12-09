@@ -2,12 +2,13 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.TaskListener;
 import jenkins.security.MasterToSlaveCallable;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 
@@ -19,26 +20,30 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 
 @Log
 @RequiredArgsConstructor
 public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiException> {
     protected final Executor executor;
 
-    public static FilePath collect(Launcher launcher, TaskListener listener, Transfers transfers, String dir, boolean verbose) throws IOException, InterruptedException {
+    public static FilePath collect(Launcher launcher, TaskListener listener, Transfers transfers, String dir, boolean verbose) throws ApiException {
         Collector collector = new Collector(transfers, dir);
         collector.setConsole(listener.getLogger());
         collector.setVerbose(verbose);
 
-        return launcher.getChannel().call(new RemoteFileUtils(collector));
+        return Base.callApi(
+                () -> launcher.getChannel().call(new RemoteFileUtils(collector)),
+                "Remote file collect call failed");
     }
 
-    public static FilePath saveReport(Launcher launcher, TaskListener listener, String dir, String artifact, byte[] data, boolean verbose) throws IOException, InterruptedException {
+    public static FilePath saveReport(Launcher launcher, TaskListener listener, String dir, String artifact, final byte[] data, boolean verbose) throws ApiException {
         BinaryReportSaver saver = new BinaryReportSaver(dir, artifact, data);
         saver.setConsole(listener.getLogger());
         saver.setVerbose(verbose);
-
-        return launcher.getChannel().call(new RemoteFileUtils(saver));
+        return Base.callApi(
+                () -> launcher.getChannel().call(new RemoteFileUtils(saver)),
+                "Remote save report call failed");
     }
 
     @Override
@@ -69,7 +74,10 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
         public File execute() throws ApiException {
             try {
                 Path destination = Paths.get(dir).resolve(Base.DEFAULT_SAST_FOLDER).resolve(artifact);
-                destination.toFile().getParentFile().mkdirs();
+                if (!destination.toFile().getParentFile().exists()) {
+                    if (!destination.toFile().getParentFile().mkdirs())
+                        throw new IOException("Failed to create folder structure for " + destination.toFile().toString());
+                }
                 return Files.write(
                         destination,
                         data.getBytes(StandardCharsets.UTF_8),
@@ -80,20 +88,32 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
         }
     }
 
-    @RequiredArgsConstructor
     protected static class BinaryReportSaver extends Base implements Executor, Serializable {
+
+        public BinaryReportSaver(@NonNull final String dir, @NonNull final String artifact, final byte[] data) {
+            this.dir = dir;
+            this.artifact = artifact;
+            this.data = Arrays.copyOf(data, data.length);
+        }
+
         protected final String dir;
         protected final String artifact;
-        protected final byte[] data;
+        private final byte[] data;
 
         public File execute() throws ApiException {
             try {
                 Path destination = Paths.get(dir).resolve(Base.DEFAULT_SAST_FOLDER).resolve(artifact);
-                destination.toFile().getParentFile().mkdirs();
+                String fileName = Base.callApi(
+                        () -> destination.getFileName().toString(),
+                        "Empty destination file name");
+                if (!destination.toFile().getParentFile().exists()) {
+                    if (!destination.toFile().getParentFile().mkdirs())
+                        throw new IOException("Failed to create folder structure for " + destination.toFile().toString());
+                }
                 if (destination.toFile().exists()) {
-                    log.warning("Existing report " + destination.getFileName().toString() + " will be overwritten");
+                    log.warning("Existing report " + fileName + " will be overwritten");
                     if (!destination.toFile().delete())
-                        log.severe("Report " + destination.getFileName().toString() + " delete failed");
+                        log.severe("Report " + fileName + " delete failed");
                 }
 
                 return Files.write(

@@ -1,5 +1,12 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ReportFormatType;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
 /**
  * Class contains constants that are used as a labels in UI
  */
@@ -10,9 +17,10 @@ public class Labels {
     public static final String CHECK = "Check AST settings";
 
     // PT AI server connection settings labels
-    public static final String URL = "PT AI server URL";
+    public static final String URL =  "PT AI server URL";
     public static final String TOKEN = "PT AI API token";
     public static final String CERTIFICATES = "PT AI server trusted certificates";
+    public static final String INSECURE = "Insecure SSL";
 
     // Task settings labels
     public static final String SERVER_SETTINGS = "PT AI server connection";
@@ -30,7 +38,6 @@ public class Labels {
     public static final String FAIL_IF_FAILED = "Fail step if SAST failed";
     public static final String FAIL_IF_UNSTABLE = "Fail step if SAST unstable";
 
-    public static final String NODE_NAME = "AST agent node name";
     public static final String VERBOSE = "Verbose logging";
     public static final String INCLUDES = "Files to analyse";
     public static final String REMOVE_PREFIX = "Remove prefix";
@@ -38,5 +45,20 @@ public class Labels {
     public static final String PATTERN_SEPARATOR = "Pattern separator";
     public static final String USE_DEFAULT_EXCLUDES = "Use default excludes";
     public static final String FLATTEN = "Flatten files";
+
+    public static final String REPORT_SETTINGS = "AST report settings type";
+    public static final String REPORT_SETTINGS_NONE = "Do not generate AST report";
+    public static final String REPORT_SETTINGS_SINGLE = "Generate single AST report";
+    public static final String REPORT_SETTINGS_JSON = "JSON-defined report settings";
+    public static final String REPORT_TEMPLATE_NAME = "Template";
+    public static final String REPORT_FORMAT = "Format";
+    public static final String REPORT_LOCALE = "Locale";
+    public static final String REPORT_JSON = "Reports";
+
+    @NotNull
+    public Collection<ReportFormatType> getReportFormatTypes() {
+        final Collection formats = Arrays.stream(ReportFormatType.values()).collect(Collectors.toList());
+        return formats;
+    }
 
 }

@@ -3,45 +3,39 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.reflect.TypeToken;
-import com.microsoft.signalr.HubConnection;
-import com.microsoft.signalr.HubConnectionBuilder;
-import com.ptsecurity.appsec.ai.ee.ptai.server.auth.ApiClient;
-import com.ptsecurity.appsec.ai.ee.ptai.server.auth.ApiResponse;
-import com.ptsecurity.appsec.ai.ee.ptai.server.auth.v36.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanProgress;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanResult;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Stage;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanAgentApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
+import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.CertificateHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.jwt.JwtResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ProgrammingLanguageHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
-import io.jsonwebtoken.*;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.SingleObserver;
-import lombok.*;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Header;
+import io.jsonwebtoken.Jwt;
+import io.jsonwebtoken.Jwts;
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
+
 import java.io.*;
-import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyStore;
-import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+import java.util.logging.LogManager;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -71,6 +65,9 @@ public class BaseIT {
     @SneakyThrows
     @BeforeAll
     public static void init() {
+        InputStream stream = BaseIT.class.getResourceAsStream("/logging.properties");
+        LogManager.getLogManager().readConfiguration(stream);
+
         TEMPSRCFOLDER = TEMPFOLDER.toPath().resolve("src").toFile();
         TEMPREPORTFOLDER = TEMPFOLDER.toPath().resolve(".ptai").toFile();
         TEMPJSONFOLDER = TEMPFOLDER.toPath().resolve("json").toFile();
@@ -186,7 +183,7 @@ public class BaseIT {
     @SneakyThrows
     @Test
     public void testProjectOperations() {
-        com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.BaseClient client = new com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.BaseClient();
+        BaseClient client = new BaseClient();
         client.setUrl("https://10.0.216.109");
         client.setToken(TEAMCITY_PLUGIN_API_TOKEN);
         client.setCaCertsPem(CertificateHelper.trustStoreToPem(TRUSTSTORE));
@@ -208,43 +205,6 @@ public class BaseIT {
 
         // EnterpriseLicenseData license = licenseApi.apiLicenseGet();
         // System.out.println(license);
-    }
-
-    @SneakyThrows
-    @Test
-    public void testApiTokenCreate() {
-        String bearerToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaWQiOiJTLTEtNS0yMS0xMDIzMTkxNzMwLTcyNzgyOTkyNy0zOTg1MDUwMTkyLTI3MjU5IiwiQXV0aFNjb3BlIjoiVmlld2VyIiwic3ViIjoiUy0xLTUtMjEtMTAyMzE5MTczMC03Mjc4Mjk5MjctMzk4NTA1MDE5Mi0yNzI1OSIsIm5iZiI6MTYwMTI4OTE5NSwiZXhwIjoxNjAxMjg5NDk1LCJpYXQiOjE2MDEyODkxOTUsImlzcyI6IkFJLkVudGVycHJpc2UiLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjUwMDY1LyJ9.UuL9XGIFqu8WZAKSPoD3X3TD8DTJ7VcJM7BZ-PgUKO4";
-
-        AccessTokenApi tokenApi = new AccessTokenApi(new ApiClient());
-        tokenApi.getApiClient().setApiKeyPrefix("Bearer");
-        tokenApi.getApiClient().setApiKey(bearerToken);
-
-        BaseClient client = new BaseClient();
-        client.setUrl("https://10.0.216.109");
-        // client.setTrustStoreFile(TRUSTSTORE_PATH.toString());
-        // client.setTrustStorePassword("");
-        // client.baseInit();
-        // client.initClients(tokenApi);
-
-        OffsetDateTime tokenExpiration = OffsetDateTime.now().plusYears(1);
-        // Name field is unique: if you'll try to create multiple tokens that API error will be raised
-        AccessTokenCreateModel tokenModel = new AccessTokenCreateModel()
-                .name("ptai-jenkins-plugin")
-                .expiresDateTime(tokenExpiration)
-                .scopes(AccessTokenScopeType.LIGHTCLIENTANDPLUGINS);
-
-        Call call = tokenApi.apiAuthAccessTokenCreatePostCall(tokenModel, null);
-        Request request = call.request().newBuilder().header("Authorization", "Bearer " + bearerToken).build();
-        call = tokenApi.getApiClient().getHttpClient().newCall(request);
-        Type localVarReturnType = new TypeToken<String>(){}.getType();
-        ApiResponse<String> response = tokenApi.getApiClient().execute(call, localVarReturnType);
-
-        // Type localVarReturnType = new TypeToken<String>(){}.getType();
-        // return localVarApiClient.execute(localVarCall, localVarReturnType);
-
-        // call.
-        String token = response.getData();
-        System.out.println(token);
     }
 
     @SneakyThrows
@@ -285,7 +245,7 @@ public class BaseIT {
             builder.append(", LANGUAGES: ");
             List<String> languageNames = licenseData.getLanguages().stream()
                     .map(l -> ProgrammingLanguageHelper.LANGUAGES.getOrDefault(l, ""))
-                    .filter(l -> StringUtils.isNotEmpty(l))
+                    .filter(StringUtils::isNotEmpty)
                     .sorted().collect(Collectors.toList());
             String[] languageNamesArray = new String[languageNames.size()];
             languageNamesArray = languageNames.toArray(languageNamesArray);
@@ -299,7 +259,7 @@ public class BaseIT {
     public void testJwt() {
         JwtResponse response = client.authenticate();
 
-        // Let's extract data from JWT. As we have no signing key we need to strip signature from JWT
+        // Let's extract data from jwt. As we have no signing key we need to strip signature from jwt
         String jwt = response.getAccessToken().substring(0, response.getAccessToken().lastIndexOf('.') + 1);
         Jwt<Header,Claims> untrusted = Jwts.parser()
                 .setAllowedClockSkewSeconds(300)
@@ -316,4 +276,22 @@ public class BaseIT {
         Assertions.assertTrue(untrusted.getBody().getExpiration().after(expiration));
     }
 
+    public Project createProject(@NonNull final String name) {
+        Project project = Project.builder()
+                .name(name)
+                .url(client.getUrl())
+                .token(client.getToken())
+                .caCertsPem(client.getCaCertsPem()).build();
+        project.init();
+        return project;
+    }
+
+    public Utils createUtils() {
+        Utils project = new Utils();
+        project.setUrl(client.getUrl());
+        project.setToken(client.getToken());
+        project.setCaCertsPem(client.getCaCertsPem());
+        project.init();
+        return project;
+    }
 }

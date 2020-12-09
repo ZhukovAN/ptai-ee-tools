@@ -5,7 +5,7 @@
     <parent>
         <artifactId>ptai-teamcity-plugin</artifactId>
         <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
-        <version>0.1</version>
+        <version>3.6.1</version>
     </parent>
     <artifactId>ptai-teamcity-plugin-server</artifactId>
     <packaging>jar</packaging>
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
             <artifactId>ptai-teamcity-plugin-common</artifactId>
-            <version>0.1</version>
+            <version>3.6.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -36,27 +36,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.jetbrains.teamcity</groupId>
-            <artifactId>tests-support</artifactId>
-            <version>${teamcity-version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk16 -->
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
-            <version>1.46</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on -->
-        <dependency>
-            <groupId>org.bouncycastle</groupId>
-            <artifactId>bcpkix-jdk15on</artifactId>
-            <version>1.61</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
         <dependency>
             <groupId>commons-validator</groupId>
@@ -65,10 +44,10 @@
         </dependency>
 
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.10</version>
-            <scope>provided</scope>
+            <groupId>org.jetbrains.teamcity</groupId>
+            <artifactId>tests-support</artifactId>
+            <version>${teamcity-version}</version>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>

@@ -4,7 +4,7 @@
   <parent>
     <artifactId>ptai-teamcity-plugin</artifactId>
     <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
-    <version>0.1</version>
+    <version>3.6</version>
   </parent>
   <artifactId>build</artifactId>
   <packaging>pom</packaging>
@@ -18,17 +18,17 @@
       <dependency>
            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
            <artifactId>ptai-teamcity-plugin-agent</artifactId>
-           <version>0.1</version>
+           <version>3.6</version>
       </dependency>
       <dependency>
            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
            <artifactId>ptai-teamcity-plugin-common</artifactId>
-           <version>0.1</version>
+           <version>3.6</version>
       </dependency>
       <dependency>
            <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
            <artifactId>ptai-teamcity-plugin-server</artifactId>
-           <version>0.1</version>
+           <version>3.6</version>
       </dependency>
   </dependencies>
   <build>

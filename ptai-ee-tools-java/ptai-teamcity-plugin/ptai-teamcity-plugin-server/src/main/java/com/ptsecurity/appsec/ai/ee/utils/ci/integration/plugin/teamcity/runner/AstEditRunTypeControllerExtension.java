@@ -65,6 +65,8 @@ public class AstEditRunTypeControllerExtension implements EditRunTypeControllerE
             properties.put(SERVER_SETTINGS, Defaults.SERVER_SETTINGS);
         if (!AST_SETTINGS_UI.equals(properties.get(AST_SETTINGS)) && !AST_SETTINGS_JSON.equals(properties.get(AST_SETTINGS)))
             properties.put(AST_SETTINGS, Defaults.AST_SETTINGS);
+        if (!REPORT_SETTINGS_NONE.equals(properties.get(REPORT_SETTINGS)) && !REPORT_SETTINGS_SINGLE.equals(properties.get(REPORT_SETTINGS)) && !REPORT_SETTINGS_JSON.equals(properties.get(REPORT_SETTINGS)))
+            properties.put(REPORT_SETTINGS, Defaults.REPORT_SETTINGS);
 
         if (!properties.containsKey(FAIL_IF_FAILED))
             properties.put(FAIL_IF_FAILED, FALSE);

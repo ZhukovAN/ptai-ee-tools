@@ -1,10 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.UrlHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import hudson.util.FormValidation;
 import lombok.NonNull;
 import lombok.extern.java.Log;
@@ -54,6 +55,10 @@ public class Validator {
         return checkViaException(() -> { if (doCheckFieldNotEmpty(value)) JsonPolicyHelper.verify(value); });
     }
 
+    public static boolean doCheckFieldJsonIssuesFilter(String value) {
+        return checkViaException(() -> Reports.verify(value));
+    }
+
     public static FormValidation doCheckFieldNotEmpty(String value, String errorMessage) {
         return doCheckFieldNotEmpty(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
     }
@@ -80,6 +85,10 @@ public class Validator {
 
     public static FormValidation doCheckFieldJsonSettings(String value, String errorMessage) {
         return doCheckFieldJsonSettings(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
+    }
+
+    public static FormValidation doCheckFieldJsonIssuesFilter(String value, String errorMessage) {
+        return doCheckFieldJsonIssuesFilter(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
     }
 
     public static FormValidation error(Exception e) {

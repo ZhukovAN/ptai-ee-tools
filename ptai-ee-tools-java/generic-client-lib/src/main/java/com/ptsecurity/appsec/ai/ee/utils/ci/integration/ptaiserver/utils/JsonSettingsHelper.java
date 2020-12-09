@@ -14,8 +14,8 @@ public class JsonSettingsHelper {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
             ScanSettings res = mapper.readValue(json, ScanSettings.class);
-            if (StringUtils.isEmpty(res.getProjectName())) throw new Exception("ProjectName field is not defined or empty");
-            if (null == res.getProgrammingLanguage()) throw new Exception("ProgrammingLanguage field is not defined or empty");
+            if (StringUtils.isEmpty(res.getProjectName())) throw new IllegalArgumentException("ProjectName field is not defined or empty");
+            if (null == res.getProgrammingLanguage()) throw new IllegalArgumentException("ProgrammingLanguage field is not defined or empty");
             return res;
         } catch (Exception e) {
             throw ApiException.raise("JSON settings parse failed", e);

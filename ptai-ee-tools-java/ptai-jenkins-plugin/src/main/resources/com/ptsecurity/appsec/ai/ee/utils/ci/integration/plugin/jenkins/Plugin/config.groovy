@@ -71,7 +71,7 @@ script("""
         document.getElementById("${scanSettingsId}_value").value = e.options[e.selectedIndex].text;
         e = document.getElementById("${configId}");
         document.getElementById("${configId}_value").value = e.options[e.selectedIndex].text;
-        validateButton('${descriptor.descriptorFullUrl}/testProject','selectedScanSettings,selectedConfig,jsonSettings,jsonPolicy,projectName,serverUrl,serverCredentialsId,configName',button);
+        validateButton('${descriptor.descriptorFullUrl}/testProject','selectedScanSettings,selectedConfig,jsonSettings,jsonPolicy,projectName,serverUrl,serverCredentialsId,serverInsecure,configName',button);
     };
     
     function triggerEvent(element, event){

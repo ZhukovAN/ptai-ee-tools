@@ -48,12 +48,13 @@ public class ApiException extends RuntimeException {
         return !clazz.getCanonicalName().matches(APIEXCEPTION_CLASS_REGEX);
     }
 
+    @NonNull
     public static ApiException raise(@NonNull final String caption, @NonNull final Exception cause) {
         // If inner exception is ApiException or its descendants itself, than there's no need
         // to encapsulate it one more time, just return it
         if (cause instanceof ApiException)
             return (ApiException) cause;
-        return new ApiException(caption, getDetails(cause), cause);
+        return new ApiException(caption, extractDetails(cause), cause);
     }
 
     protected ApiException(@NonNull final String message, final String details, @NonNull final Exception inner) {
@@ -73,7 +74,7 @@ public class ApiException extends RuntimeException {
             return null;
     }
 
-    private static String getDetails(@NonNull Exception e) {
+    private static String extractDetails(@NonNull Exception e) {
         if (isNotApi(e)) return null;
         // As API exception may be thrown due to client-side issues like
         // lack of certificate in local trust store or JSON parse error,
@@ -89,6 +90,12 @@ public class ApiException extends RuntimeException {
         inner.printStackTrace(s);
     }
 
+    /**
+     * @return Detailed info about exception. This info contains custom
+     * top level reason description like "Report settings validation fail"
+     * concatenated with inner exception message and additional exception
+     * details extracted from inner exception data
+     */
     public String getDetailedMessage() {
         String res = getMessage();
         if (StringUtils.isNotEmpty(inner.getMessage()))

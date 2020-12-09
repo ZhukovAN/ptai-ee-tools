@@ -4,12 +4,13 @@
     <parent>
         <groupId>org.jenkins-ci.plugins</groupId>
         <artifactId>plugin</artifactId>
-        <version>3.36</version>
+        <!-- <version>3.36</version> -->
+        <version>4.10</version>
         <relativePath />
     </parent>
     <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
     <artifactId>ptai-jenkins-plugin</artifactId>
-    <version>3.6</version>
+    <version>3.6.1</version>
     <packaging>hpi</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,17 +18,16 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <java-version>1.8</java-version>
         <java.level>8</java.level>
-        <jenkins.version>2.150.2</jenkins.version>
-        <!-- <hpi.compatibleSinceVersion>0.4.3</hpi.compatibleSinceVersion> -->
+        <jenkins.version>2.164.3</jenkins.version>
     </properties>
-    <name>ptai-jenkins-plugin</name>
+    <name>PT AI Application Inspector</name>
     <url>https://www.ptsecurity.com/ww-en/products/ai/</url>
     <description>This plugin used to implement AST using PT Application Inspector</description>
     <dependencies>
         <dependency>
             <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
             <artifactId>generic-client-lib</artifactId>
-            <version>0.1</version>
+            <version>3.6.1</version>
             <exclusions>
                 <exclusion>
                     <!-- https://mvnrepository.com/artifact/org.jvnet.localizer/maven-localizer-plugin -->
@@ -52,13 +52,19 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
+            <version>3.11</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.11</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.25</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>

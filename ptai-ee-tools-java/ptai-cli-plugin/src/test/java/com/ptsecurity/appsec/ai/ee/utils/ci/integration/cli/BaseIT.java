@@ -1,17 +1,19 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.*;
-import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,75 +23,87 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 class BaseIT {
+    /**
+     * Temporal folder where three subfolders will be created: for
+     * unzipped sources, for modified JSON-defined policy / scan settings
+     * and for generated reports
+     */
     @TempDir
-    protected static File TEMP_FOLDER;
-    protected static File TEMP_SOURCES_FOLDER;
-    protected static File TEMP_REPORT_FOLDER;
-    protected static File TEMP_JSON_FOLDER;
+    static File TEMP_FOLDER;
+    /**
+     * Temporal folder where test sources will be unziipped
+     */
+    static String SOURCES_FOLDER;
+    /**
+     * Temporal folder where reports will be generated
+     */
+    static String REPORT_FOLDER;
+    /**
+     * Temporal fodler where modified JSON-defined policy / scan settings will be saved
+     */
+    static String JSON_FOLDER;
 
-    protected static Path PEM_PATH = null;
-    protected static Path JAVA_SETTINGS_PATH = null;
-    protected static Path POLICY_PATH = null;
-    protected static Path EMPTY_POLICY_PATH = null;
-    protected static Path REPORTS_GOOD_JSON_PATH = null;
-    protected static Path REPORTS_BAD_JSON_PATH = null;
-    protected static Path REPORTS_MISSING_JSON_PATH = null;
-    protected static Path REPORTS_FILTERED_CRITICAL_JSON_PATH = null;
-    protected static ScanSettings JAVA_SETTINGS;
-    protected static Policy[] POLICY;
-    protected static Policy[] EMPTY_POLICY = new Policy[0];
+    /**
+     * Path to PEM file with CA certificate chain
+     */
+    static String PEM_PATH = null;
 
-    protected static final String NEW_PROJECT_NAME = "JUNIT-" + UUID.randomUUID().toString();
-    protected static final String EXISTING_PROJECT_NAME = "app01";
+    static String SCAN_SETTINGS_PATH = null;
+    static ScanSettings SCAN_SETTINGS;
+    static String POLICY_PATH = null;
+    static Policy[] POLICY;
+    static Policy[] EMPTY_POLICY = new Policy[0];
+
+    static String NEW_PROJECT;
+    static final String EXISTING_PROJECT = "app01";
 
     // protected static final String TOKEN = "k+bwoHZBrpi+2TV7Ne25cbFeTXGn+idS";
-    protected static final String TOKEN = "6M9Qsct5fg20/UEzN7/hvR2RlXkTWOI5";
+    static final String TOKEN = "6M9Qsct5fg20/UEzN7/hvR2RlXkTWOI5";
     // protected static final String PTAI_URL = "https://10.0.216.109:443/";
-    protected static final String PTAI_URL = "https://ptai.domain.org:443/";
+    static final String PTAI_URL = "https://ptai.domain.org:443/";
     // protected static final String PEM_RESOURCE = "keys/pt.pem";
-    protected static final String PEM_RESOURCE = "keys/domain.org.pem";
+    static final String PEM_RESOURCE = "keys/domain.org.pem";
 
-    private static final String REPORTS_GOOD_JSON_RESOURCE = "json/reports.good.json";
-    private static final String REPORTS_BAD_JSON_RESOURCE = "json/reports.bad.json";
-    private static final String REPORTS_MISSING_JSON_RESOURCE = "json/reports.missing.json";
-    private static final String REPORTS_FILTERED_CRITICAL_JSON_RESOURCE = "json/reports.filtered.critical.json";
     @BeforeAll
-    public static void init() throws URISyntaxException, IOException {
-        TEMP_SOURCES_FOLDER = TEMP_FOLDER.toPath().resolve("src").toFile();
-        TEMP_REPORT_FOLDER = TEMP_FOLDER.toPath().resolve(".ptai").toFile();
-        TEMP_JSON_FOLDER = TEMP_FOLDER.toPath().resolve("json").toFile();
+    public static void init() throws IOException {
+        SOURCES_FOLDER = TEMP_FOLDER.toPath().resolve("src").toString();
+        REPORT_FOLDER = TEMP_FOLDER.toPath().resolve(".ptai").toString();
+        JSON_FOLDER = TEMP_FOLDER.toPath().resolve("json").toString();
 
-        PEM_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(PEM_RESOURCE).toURI());
-        REPORTS_GOOD_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_GOOD_JSON_RESOURCE).toURI());
-        REPORTS_BAD_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_BAD_JSON_RESOURCE).toURI());
-        REPORTS_MISSING_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_MISSING_JSON_RESOURCE).toURI());
-        REPORTS_FILTERED_CRITICAL_JSON_PATH = Paths.get(BaseIT.class.getClassLoader().getResource(REPORTS_FILTERED_CRITICAL_JSON_RESOURCE).toURI());
+        PEM_PATH = getResourcePath(PEM_RESOURCE);
 
-        ObjectMapper jsonMapper = new ObjectMapper();
-        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        jsonMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+        SCAN_SETTINGS_PATH = getResourcePath("json/settings.aiproj");
+        POLICY_PATH = getResourcePath("json/policy.json");
+    }
 
-        Path path = Paths.get(BaseIT.class.getClassLoader().getResource("json/policy.json").toURI());
-        String jsonData = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-        POLICY = jsonMapper.readValue(jsonData, Policy[].class);
+    @SneakyThrows
+    static String getResourcePath(@NonNull final String name) {
+        return getResourceFile(name).toString();
+    }
 
-        path = Paths.get(BaseIT.class.getClassLoader().getResource("json/settings.java.aiproj").toURI());
-        FileUtils.copyFile(path.toFile(), TEMP_JSON_FOLDER.toPath().resolve("settings.java.original").toFile());
-        jsonData = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
-        JAVA_SETTINGS = jsonMapper.readValue(jsonData, ScanSettings.class);
-
-        path = Paths.get(BaseIT.class.getClassLoader().getResource("json/settings.csharp.aiproj").toURI());
-        FileUtils.copyFile(path.toFile(), TEMP_JSON_FOLDER.toPath().resolve("settings.csharp.original").toFile());
+    @SneakyThrows
+    static File getResourceFile(@NonNull final String name) {
+        @NonNull URL url = BaseIT.class.getClassLoader().getResource(name);
+        Assertions.assertNotNull(url);
+        Assertions.assertNotNull(url.toURI());
+        return Paths.get(url.toURI()).toFile();
     }
 
     @AfterAll
     public static void fini() {
     }
 
+    @SneakyThrows
     @BeforeEach
-    public void pre() throws IOException {
-        unzipTestSources(TEMP_SOURCES_FOLDER.toPath());
-        saveJsons();
+    public void pre() {
+        NEW_PROJECT = "junit-" + UUID.randomUUID().toString();
+        unzipTestSources();
+
+        String json = new String(Files.readAllBytes(Paths.get(SCAN_SETTINGS_PATH)), StandardCharsets.UTF_8);
+        SCAN_SETTINGS = JsonSettingsHelper.verify(json);
+
+        json = new String(Files.readAllBytes(Paths.get(POLICY_PATH)), StandardCharsets.UTF_8);
+        POLICY = JsonPolicyHelper.verify(json);
     }
 
     @AfterEach
@@ -97,13 +111,14 @@ class BaseIT {
         FileUtils.cleanDirectory(TEMP_FOLDER);
     }
 
-    protected void unzipTestSources(final Path destination) throws IOException {
-        File zip = new File(getClass().getClassLoader().getResource("code/app01.zip").getFile());
+    @SneakyThrows
+    private void unzipTestSources() {
+        File zip = getResourceFile("code/app01.zip");
         ZipInputStream zis = new ZipInputStream(new FileInputStream(zip));
         ZipEntry entry = zis.getNextEntry();
         while (null != entry) {
             if (!entry.isDirectory()) {
-                File out = new File(destination.resolve(entry.getName()).toString());
+                File out = new File(Paths.get(SOURCES_FOLDER).resolve(entry.getName()).toString());
                 out.getParentFile().mkdirs();
                 OutputStream fos = new FileOutputStream(out);
                 IOUtils.copy(zis, fos);
@@ -113,15 +128,11 @@ class BaseIT {
         }
     }
 
-    protected static void saveJsons() throws IOException {
-        JAVA_SETTINGS_PATH = TEMP_JSON_FOLDER.toPath().resolve("settings.java.json");
-        POLICY_PATH = TEMP_JSON_FOLDER.toPath().resolve("policy.json");
-        EMPTY_POLICY_PATH = TEMP_JSON_FOLDER.toPath().resolve("empty.policy.json");
-        String json = new ObjectMapper().writeValueAsString(JAVA_SETTINGS.fix());
-        FileUtils.writeStringToFile(JAVA_SETTINGS_PATH.toFile(), json, StandardCharsets.UTF_8);
-        json = new ObjectMapper().writeValueAsString(POLICY);
-        FileUtils.writeStringToFile(POLICY_PATH.toFile(), json, StandardCharsets.UTF_8);
-        json = new ObjectMapper().writeValueAsString(EMPTY_POLICY);
-        FileUtils.writeStringToFile(EMPTY_POLICY_PATH.toFile(), json, StandardCharsets.UTF_8);
+    @SneakyThrows
+    protected String saveScanSettings() {
+        Path res = Paths.get(JSON_FOLDER).resolve(UUID.randomUUID().toString() + ".aiproj");
+        String json = new ObjectMapper().writeValueAsString(SCAN_SETTINGS.fix());
+        FileUtils.writeStringToFile(res.toFile(), json, StandardCharsets.UTF_8);
+        return res.toString();
     }
 }

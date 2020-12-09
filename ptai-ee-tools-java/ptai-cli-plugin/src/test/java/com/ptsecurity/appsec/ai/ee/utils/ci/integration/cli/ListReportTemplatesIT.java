@@ -1,7 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
-import org.junit.jupiter.api.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
 @DisplayName("Report templates list read tests")
@@ -15,7 +18,7 @@ class ListReportTemplatesIT extends BaseIT {
                 "--url", PTAI_URL,
                 "--truststore", PEM_PATH.toString(),
                 "--token", TOKEN,
-                "--locale", "RU");
+                "--locale", Reports.Locale.RU.name());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
@@ -27,7 +30,7 @@ class ListReportTemplatesIT extends BaseIT {
                 "--url", PTAI_URL,
                 "--truststore", PEM_PATH.toString(),
                 "--token", TOKEN,
-                "--locale", "EN");
+                "--locale", Reports.Locale.EN.name());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 

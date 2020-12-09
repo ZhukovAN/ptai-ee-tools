@@ -1,17 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.NonNull;
-import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings.ProgrammingLanguage.JAVA;
-import static org.joor.Reflect.on;
 
 public class ReportHelper {
     protected static final String DUPLICATE_INDEX_PLACEHOLDER = "." + UUID.randomUUID().toString();

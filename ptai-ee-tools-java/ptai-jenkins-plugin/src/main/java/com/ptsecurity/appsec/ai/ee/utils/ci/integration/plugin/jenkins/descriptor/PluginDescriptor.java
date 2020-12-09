@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
@@ -8,8 +7,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentia
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.BaseConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.Config;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigGlobal;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigGlobal;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsManual;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
@@ -17,8 +16,9 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serverset
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Item;
@@ -30,7 +30,6 @@ import jenkins.model.Jenkins;
 import lombok.NonNull;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang3.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
@@ -116,6 +115,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             final String jsonSettings, final String jsonPolicy,
             final String projectName,
             final String serverUrl, final String serverCredentialsId,
+            final boolean serverInsecure,
             final String configName) {
         FormValidation res = null;
         ScanSettingsUi.Descriptor scanSettingsUiDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class);
@@ -160,12 +160,13 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             @QueryParameter("projectName") final String projectName,
             @QueryParameter("serverUrl") final String serverUrl,
             @QueryParameter("serverCredentialsId") final String serverCredentialsId,
+            @QueryParameter("serverInsecure") final boolean serverInsecure,
             @QueryParameter("configName") final String configName) {
         FormValidation res = doTestProjectFields(
                 selectedScanSettings, selectedConfig,
                 jsonSettings, jsonPolicy,
                 projectName,
-                serverUrl, serverCredentialsId,
+                serverUrl, serverCredentialsId, serverInsecure,
                 configName);
         if (FormValidation.Kind.OK != res.kind) return res;
 
@@ -173,6 +174,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
          try {
             Credentials credentials;
             String realServerUrl;
+            boolean insecure;
 
             if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
                 // Settings are defined globally, job just refers them using configName
@@ -181,16 +183,18 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
                 ServerSettings serverSettings = ((Config) base).getServerSettings();
                 credentials = CredentialsImpl.getCredentialsById(item, serverSettings.getServerCredentialsId());
                 realServerUrl = serverSettings.getServerUrl();
+                insecure = serverSettings.isServerInsecure();
             } else {
                 credentials = CredentialsImpl.getCredentialsById(item, serverCredentialsId);
                 realServerUrl = serverUrl;
+                insecure = serverInsecure;
             }
             // Depending on settings real project name may be defined using UI or JSON
             boolean selectedScanSettingsUi = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class).getDisplayName().equals(selectedScanSettings);
             String realProjectName = selectedScanSettingsUi
                     ? projectName
                     : JsonSettingsHelper.verify(jsonSettings).getProjectName();
-            UUID projectId = searchProject(realProjectName, realServerUrl, credentials);
+            UUID projectId = searchProject(realProjectName, realServerUrl, credentials, insecure);
             if (null == projectId) {
                 // For manual defined (JSON) scan settings lack of project isn't a crime itself, just show warning
                 // instead of error
@@ -206,14 +210,14 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
 
     private UUID searchProject(
             @NonNull final String name, @NonNull final String url,
-            @NonNull final Credentials credentials) throws ApiException {
-        Project project = new Project(name);
-        project.setUrl(url);
-        project.setToken(credentials.getToken().getPlainText());
-        if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
-            project.setCaCertsPem(credentials.getServerCaCertificates());
-        project.init();
-        return project.searchProject();
+            @NonNull final Credentials credentials, final boolean insecure) throws ApiException {
+        Utils utils = Utils.builder()
+                .url(url)
+                .token(credentials.getToken().getPlainText())
+                .insecure(insecure)
+                .caCertsPem(credentials.getServerCaCertificates()).build();
+        utils.init();
+        return utils.searchProject(name);
     }
 
     @Override

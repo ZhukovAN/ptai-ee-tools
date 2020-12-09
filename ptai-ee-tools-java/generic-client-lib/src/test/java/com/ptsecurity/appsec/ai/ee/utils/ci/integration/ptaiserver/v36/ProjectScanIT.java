@@ -1,10 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
-import com.microsoft.signalr.HubConnection;
 import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.v36.StoreApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Project;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanAgentApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.StartScanModel;
@@ -13,22 +11,14 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheckA
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.V36ScanSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
-import io.reactivex.Single;
 import lombok.*;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.Semaphore;
-import java.util.stream.Collectors;
-
-import static com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings.ProgrammingLanguage.*;
-import static org.joor.Reflect.on;
 
 public class ProjectScanIT extends BaseIT {
     protected static final String EXISTING_PROJECT = "app01";
@@ -121,43 +111,6 @@ public class ProjectScanIT extends BaseIT {
 
     @SneakyThrows
     @Test
-    public void testReportTemplatesList() {
-        Utils utils = new Utils();
-        utils.setUrl(client.getUrl());
-        utils.setToken(client.getToken());
-        utils.setCaCertsPem(client.getCaCertsPem());
-        utils.init();
-
-        List<ReportTemplateModel> templates = utils.getReportTemplates("ru-RU");
-        for (ReportTemplateModel template : templates) {
-            System.out.println(template.getName());
-        }
-    }
-
-    @SneakyThrows
-    @Test
-    public void testReportGeneration() {
-        com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project project = new com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project(EXISTING_PROJECT);
-        project.setUrl(client.getUrl());
-        project.setToken(client.getToken());
-        project.setCaCertsPem(client.getCaCertsPem());
-        project.init();
-
-        List<ReportTemplateModel> templates = project.getReportTemplates("en-US");
-        int templateIdx = (int) Math.round(Math.random() * templates.size());
-        UUID templateId = templates.get(templateIdx).getId();
-        UUID projectId = project.searchProject();
-
-        File reportTempFile = project.generateReport(projectId, EXISTING_SCAN_RESULT_ID, "\"Scan Result\"", "ru-RU", ReportFormatType.HTML, null);
-        reportTempFile = project.generateReport(projectId, EXISTING_SCAN_RESULT_ID, "\"Scan Result\"", "ru-RU", ReportFormatType.JSON, null);
-        reportTempFile = project.generateReport(projectId, EXISTING_SCAN_RESULT_ID, "\"Scan Result\"", "ru-RU", ReportFormatType.PDF, null);
-        File report = TEMPREPORTFOLDER.toPath().resolve("report.json").toFile();
-        // FileUtils.copyFile(issuesTempFile, issues);
-        // FileUtils.forceDelete(issuesTempFile);
-    }
-
-    @SneakyThrows
-    @Test
     public void testGetExistingPolicyAssessment() {
         ProjectsApi projectsApi = client.getProjectsApi();
         ProjectLight projectInfo = projectsApi.apiProjectsLightNameGet(EXISTING_PROJECT);
@@ -185,11 +138,7 @@ public class ProjectScanIT extends BaseIT {
     @SneakyThrows
     @Test
     public void testNewProjectScan() {
-        com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project project = new com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project(PROJECT);
-        project.setUrl(client.getUrl());
-        project.setToken(client.getToken());
-        project.setCaCertsPem(client.getCaCertsPem());
-        project.init();
+        com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project project = createProject(PROJECT);
 
         SETTINGS.setUseIssueTrackerIntegration(false);
         SETTINGS.setSendEmailWithReportsAfterScan(false);
@@ -274,11 +223,7 @@ public class ProjectScanIT extends BaseIT {
         Semaphore semaphore = new Semaphore(1);
         semaphore.acquire();
 
-        com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project project = new com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project(EXISTING_PROJECT);
-        project.setUrl(client.getUrl());
-        project.setToken(client.getToken());
-        project.setCaCertsPem(client.getCaCertsPem());
-        project.init();
+        com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project project = createProject(EXISTING_PROJECT);
 
         UUID scanResultId = project.scan("ptai-node");
         project.waitForComplete(scanResultId);

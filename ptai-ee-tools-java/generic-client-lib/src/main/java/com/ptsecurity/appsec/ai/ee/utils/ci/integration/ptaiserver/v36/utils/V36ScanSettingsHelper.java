@@ -4,13 +4,11 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.NonNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings.ProgrammingLanguage.JAVA;
-import static org.joor.Reflect.on;
 
 /**
  * As v.3.6 REST API definition contain errors, we need utility to fill manually

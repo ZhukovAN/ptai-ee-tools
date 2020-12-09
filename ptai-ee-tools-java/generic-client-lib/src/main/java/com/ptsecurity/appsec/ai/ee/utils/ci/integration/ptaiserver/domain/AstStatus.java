@@ -15,15 +15,18 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Deprecated
 public enum AstStatus {
     /**
      * Scan is not finished yet
      */
     UNKNOWN(Messages.ast_status_unknown()),
+
     /**
      * Scan complete, AST policy assessment failed
      */
     FAILURE(Messages.ast_status_failure()),
+
     /**
      * Scan complete, AST policy assessment success, but there were scan warnings or errors
      */
@@ -33,14 +36,17 @@ public enum AstStatus {
      * Scan complete, AST policy assessment success
      */
     SUCCESS(Messages.ast_status_success()),
+
     /**
      * Scan complete, AST policy not defined
      */
     POLICY_EMPTY(Messages.ast_status_policy_empty()),
+
     /**
      * Scan was terminated
      */
     ABORTED(Messages.ast_status_aborted()),
+
     /**
      * Scan error
      */
@@ -86,5 +92,9 @@ public enum AstStatus {
             return UNSTABLE;
 
         return PolicyState.NONE.equals(policyState) ? POLICY_EMPTY : SUCCESS;
+    }
+
+    public boolean astDone() {
+        return equals(FAILURE) || equals(SUCCESS) || equals(UNSTABLE) || equals(POLICY_EMPTY);
     }
 }

@@ -3,8 +3,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descript
 import com.cloudbees.plugins.credentials.CredentialsMatchers;
 import com.cloudbees.plugins.credentials.common.StandardListBoxModel;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.EnterpriseLicenseData;
-import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheck;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
@@ -26,7 +24,7 @@ import org.kohsuke.stapler.QueryParameter;
 import java.util.Collections;
 import java.util.UUID;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils.TestResult.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils.TestResult.State;
 
 @Extension
 public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
@@ -49,7 +47,8 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
     public FormValidation doTestServer(
             @AncestorInPath Item item,
             @QueryParameter("serverUrl") final String serverUrl,
-            @QueryParameter("serverCredentialsId") final String serverCredentialsId) {
+            @QueryParameter("serverCredentialsId") final String serverCredentialsId,
+            @QueryParameter("serverInsecure") final boolean serverInsecure) {
         try {
             if (!Validator.doCheckFieldNotEmpty(serverUrl))
                 throw new RuntimeException(Messages.validator_check_serverUrl_empty());
@@ -64,6 +63,7 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
             client.setToken(credentials.getToken().getPlainText());
             if (!StringUtils.isEmpty(credentials.getServerCaCertificates()))
                 client.setCaCertsPem(credentials.getServerCaCertificates());
+            client.setInsecure(serverInsecure);
             client.init();
 
             Utils.TestResult res = client.testConnection();

@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.runner;
 
 import jetbrains.buildServer.serverSide.InvalidProperty;
 import jetbrains.buildServer.serverSide.PropertiesProcessor;
-import jetbrains.buildServer.serverSide.RunType;
 
 import java.util.Collection;
 import java.util.Map;

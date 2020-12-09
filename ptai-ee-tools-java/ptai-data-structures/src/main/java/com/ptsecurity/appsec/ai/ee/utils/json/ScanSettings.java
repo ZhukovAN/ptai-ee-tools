@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +30,12 @@ public class ScanSettings {
      * instead of null. This method fixes these missing values if those aren't defined
      */
     public ScanSettings fix() {
-        if (null == disabledPatterns) disabledPatterns = new ArrayList<>();
-        if (null == javaNormalizeVersionPattern) javaNormalizeVersionPattern = "";
+        if (null == disabledPatterns)
+            disabledPatterns = new ArrayList<>();
+        if (null == javaNormalizeVersionPattern)
+            javaNormalizeVersionPattern = "";
+        if (StringUtils.isEmpty(site))
+            site = "http://localhost:8080";
         return this;
     }
 

@@ -2,27 +2,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>ptai-teamcity-plugin</artifactId>
+        <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
+        <version>3.6.1</version>
+    </parent>
+    <artifactId>ptai-teamcity-plugin-common</artifactId>
+    <packaging>jar</packaging>
+    <version>3.6.1</version>
+
     <dependencies>
         <dependency>
             <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
             <artifactId>generic-client-lib</artifactId>
-            <version>0.1</version>
-            <exclusions>
-                <exclusion>
-                    <!-- Provided by org.bouncycastle-bcprov-jdk16 -->
-                    <groupId>org.jenkins-ci.plugins</groupId>
-                    <artifactId>bouncycastle-api</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>3.6.1</version>
         </dependency>
     </dependencies>
-    <parent>
-        <artifactId>ptai-teamcity-plugin</artifactId>
-        <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin</groupId>
-        <version>0.1</version>
-    </parent>
-    <artifactId>ptai-teamcity-plugin-common</artifactId>
-    <packaging>jar</packaging>
 
     <build>
         <plugins>

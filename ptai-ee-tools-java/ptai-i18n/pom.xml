@@ -6,18 +6,18 @@
     <parent>
         <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
         <artifactId>ptai-ee-tools</artifactId>
-        <version>0.1</version>
+        <version>3.6.1</version>
     </parent>
 
     <artifactId>ptai-i18n</artifactId>
-    <version>0.1</version>
+    <version>3.6.1</version>
     <name>ptai-i18n</name>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.jvnet.localizer/maven-localizer-plugin -->
         <dependency>
             <groupId>org.jvnet.localizer</groupId>
             <artifactId>maven-localizer-plugin</artifactId>
-            <version>1.24</version>
+            <version>1.26</version>
         </dependency>
     </dependencies>
     <build>
@@ -25,7 +25,7 @@
             <plugin>
                 <groupId>org.jvnet.localizer</groupId>
                 <artifactId>maven-localizer-plugin</artifactId>
-                <version>1.24</version>
+                <version>1.26</version>
                 <executions>
                     <execution>
                         <goals>
@@ -34,7 +34,7 @@
                         <configuration>
                             <fileMask>Messages.properties</fileMask>
                             <outputDirectory>target/generated-sources/localizer</outputDirectory>
-                            <accessModifierAnnotations>true</accessModifierAnnotations>
+                            <!-- <accessModifierAnnotations>true</accessModifierAnnotations> -->
                         </configuration>
                     </execution>
                 </executions>
@@ -44,14 +44,14 @@
 
     <repositories>
         <repository>
-            <id>repo.spring.io-libs-release</id>
-            <url>https://repo.spring.io/libs-release/</url>
+            <id>repo.jenkins-ci.org-releases</id>
+            <url>https://repo.jenkins-ci.org/releases/</url>
         </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>repo.spring.io-libs-release</id>
-            <url>https://repo.spring.io/libs-release/</url>
+            <id>repo.jenkins-ci.org-releases</id>
+            <url>https://repo.jenkins-ci.org/releases/</url>
         </pluginRepository>
     </pluginRepositories>
 </project>

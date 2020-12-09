@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ptsecurity.appsec.ai.ee.utils.ci.integration</groupId>
     <artifactId>ptai-ee-tools</artifactId>
-    <version>0.1</version>
+    <version>3.6.1</version>
     <packaging>pom</packaging>
     <name>ptai-ee-tools</name>
     <modules>
@@ -13,12 +13,9 @@
         <module>ptai-rest-api</module>
         <module>ptai-data-structures</module>
         <module>generic-client-lib</module>
-        <module>ptai-jenkins-plugin</module>
         <module>ptai-cli-plugin</module>
-        <!-- <module>ptai-maven-plugin</module> -->
-        <!-- <module>ptai-sonar-plugin</module> -->
+        <module>ptai-jenkins-plugin</module>
         <module>ptai-teamcity-plugin</module>
-        <!-- <module>ptai-report-generator</module> -->
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
