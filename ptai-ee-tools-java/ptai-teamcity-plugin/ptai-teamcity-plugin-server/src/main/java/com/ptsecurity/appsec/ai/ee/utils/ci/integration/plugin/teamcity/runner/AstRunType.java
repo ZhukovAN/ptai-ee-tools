@@ -93,6 +93,11 @@ public class AstRunType extends RunType {
         return parameters;
     }
 
+    /**
+     * Method generates "Parameters description" value in the "Build steps" table
+     * @param parameters PT AI AST job parameters map
+     * @return PT AI AST job parameters description
+     */
     @NotNull
     @Override
     public String describeParameters(@NotNull Map<String, String> parameters) {

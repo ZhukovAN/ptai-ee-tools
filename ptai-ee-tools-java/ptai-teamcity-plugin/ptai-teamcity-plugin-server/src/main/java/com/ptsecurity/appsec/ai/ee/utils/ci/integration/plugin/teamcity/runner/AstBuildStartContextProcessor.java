@@ -4,6 +4,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.As
 import jetbrains.buildServer.ExtensionHolder;
 import jetbrains.buildServer.serverSide.BuildStartContext;
 import jetbrains.buildServer.serverSide.BuildStartContextProcessor;
+import lombok.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
@@ -17,9 +18,11 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.P
  */
 public class AstBuildStartContextProcessor implements BuildStartContextProcessor {
     private ExtensionHolder extensionHolder;
+
+    @NonNull
     private AstAdminSettings settings;
 
-    public AstBuildStartContextProcessor(@NotNull final ExtensionHolder extensionHolder, AstAdminSettings settings) {
+    public AstBuildStartContextProcessor(@NotNull final ExtensionHolder extensionHolder, @NonNull AstAdminSettings settings) {
         this.extensionHolder = extensionHolder;
         this.settings = settings;
     }
@@ -27,7 +30,7 @@ public class AstBuildStartContextProcessor implements BuildStartContextProcessor
     /**
      * Adds globally defined parameter values to agent job as these parameters aren't
      * part of build step configuration
-     * @param context
+     * @param context Agent job context
      */
     @Override
     public void updateParameters(@NotNull BuildStartContext context) {

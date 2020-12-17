@@ -21,12 +21,24 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.P
 public class AstAdminSettings {
     @Getter
     private final Properties properties = new Properties();
+
+    /**
+     * Teamcity server paths. Constructor uses getConfigDir from that paths to
+     * load global plugin settings from file
+     */
     private final ServerPaths serverPaths;
 
     public void init() throws IOException {
         loadConfig();
     }
 
+    /**
+     * Constructor tries to load global plugin settings from configuration file. If file
+     * not exists, constructor fills it with default parameter values
+     * @param serverPaths Teamcity server paths. Constructor uses getConfigDir
+     *                    from that paths to load global plugin settings from file
+     * @throws IOException
+     */
     public AstAdminSettings(@NotNull ServerPaths serverPaths) throws IOException {
         this.serverPaths = serverPaths;
         Path config = getConfigFile();
@@ -35,14 +47,22 @@ public class AstAdminSettings {
         loadConfig(config);
     }
 
+    /**
+     * @return Path to plugin configuration file
+     */
     private Path getConfigFile() {
         return Paths.get(serverPaths.getConfigDir()).resolve("ptai-plugin.properties");
     }
 
+    /**
+     * Method initializes plugin configuration file with default global settings like URL, token etc.
+     * @param path Plugin configuration file
+     * @throws IOException
+     */
     private void initConfig(@NotNull final Path path) throws IOException {
-        this.properties.put(URL, Base.DEFAULT_PTAI_URL);
-        this.properties.put(TOKEN, "");
-        this.properties.put(CERTIFICATES, "");
+        this.properties.put(URL, Defaults.URL);
+        this.properties.put(TOKEN, Defaults.TOKEN);
+        this.properties.put(CERTIFICATES, Defaults.CERTIFICATES);
         this.properties.put(INSECURE, Defaults.INSECURE);
         getConfigFile().toFile().getParentFile().mkdirs();
         PropertiesUtil.storeProperties(properties, path.toFile(), "PT AI EE");

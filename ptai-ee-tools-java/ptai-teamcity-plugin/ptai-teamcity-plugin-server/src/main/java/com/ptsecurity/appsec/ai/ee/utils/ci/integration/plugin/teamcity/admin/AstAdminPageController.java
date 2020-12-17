@@ -1,11 +1,14 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.TestService;
-import jetbrains.buildServer.controllers.*;
-import jetbrains.buildServer.log.Loggers;
-import jetbrains.buildServer.serverSide.crypt.RSACipher;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.BaseAstController;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.AstSettingsService;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.PropertiesBean;
+import jetbrains.buildServer.controllers.FormUtil;
+import jetbrains.buildServer.controllers.PublicKeyUtil;
+import jetbrains.buildServer.controllers.XmlResponseUtil;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
+import lombok.extern.slf4j.Slf4j;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,12 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.ADMIN_CONTROLLER_PATH;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.PLUGIN_NAME;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.TestService.getEncryptedProperty;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.TestService.getProperty;
 
-public class AstAdminPageController extends BaseFormXmlController {
+@Slf4j
+public class AstAdminPageController extends BaseAstController {
     private final AstAdminSettings settings;
 
     public AstAdminPageController(
@@ -37,39 +38,32 @@ public class AstAdminPageController extends BaseFormXmlController {
     }
 
     @Override
-    protected void doPost(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Element xmlResponse) {
+    protected void doPost(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Element xml) {
         if (PublicKeyUtil.isPublicKeyExpired(request)) {
-            PublicKeyUtil.writePublicKeyExpiredError(xmlResponse);
+            PublicKeyUtil.writePublicKeyExpiredError(xml);
             return;
         }
 
-        BasePropertiesBean bean = new BasePropertiesBean(null);
-        bean.setProperty(URL, getProperty(request, URL));
-        bean.setProperty(TOKEN, RSACipher.decryptWebRequestData(getEncryptedProperty(request, TOKEN)));
-        bean.setProperty(CERTIFICATES, getProperty(request, CERTIFICATES));
-        bean.setProperty(INSECURE, getProperty(request, INSECURE));
+        PropertiesBean bean = new PropertiesBean().fill(URL, request).fill(CERTIFICATES, request).fill(INSECURE, request).fillSecret(TOKEN, request);
 
         String mode = request.getParameter("mode");
         if ("modify".equalsIgnoreCase(mode))
-            XmlResponseUtil.writeFormModifiedIfNeeded(xmlResponse, bean);
+            XmlResponseUtil.writeFormModifiedIfNeeded(xml, bean);
         else {
             // Check if settings passed as a subject to save or to test connection are correct
-            ActionErrors errors = TestService.validateConnectionSettings(bean);
-            if (errors.hasErrors()) {
-                writeErrors(xmlResponse, errors);
-                return;
-            }
-            if ("test".equalsIgnoreCase(mode))
-                TestService.testConnection(bean, xmlResponse);
-            else if (mode.equals("save")) {
+            if ("test".equalsIgnoreCase(mode)) {
+                AstSettingsService.VerificationResults results = AstSettingsService.checkConnectionSettings(bean, false);
+                saveVerificationResults(xml, results);
+            } else if (mode.equals("save")) {
                 bean.getProperties().forEach(settings::setValue);
                 try {
                     settings.saveConfig();
                 } catch (IOException e) {
-                    Loggers.SERVER.error("Failed to persist PT AI global configuration", e);
+                    log.error("Failed to persist PT AI global configuration", e);
                 }
                 FormUtil.removeAllFromSession(request.getSession(), bean.getClass());
-                writeRedirect(xmlResponse, request.getContextPath() + "/admin/admin.html?item=" + PLUGIN_NAME);
+                // writeRedirect(xml, request.getContextPath() + "/admin/admin.html?item=" + PLUGIN_NAME);
+                writeRedirect(xml, request.getContextPath() + "/admin/admin.html");
             }
         }
     }

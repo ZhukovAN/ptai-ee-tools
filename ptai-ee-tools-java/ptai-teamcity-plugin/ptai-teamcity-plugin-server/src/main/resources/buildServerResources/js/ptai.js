@@ -13,8 +13,7 @@
 * - test - user clicked "test" button, settings are to be checked and
 * connectivity test is to be performed*
 * */
-PtaiConnectionSettingsForm = OO.extend(BS.AbstractPasswordForm, {
-    mode: 'modify',
+PtaiAbstractSettingsForm = OO.extend(BS.AbstractPasswordForm, {
     /*
     * As we have two points where connection verification takes place,
     * we need to create single function that will process error messages
@@ -28,25 +27,16 @@ PtaiConnectionSettingsForm = OO.extend(BS.AbstractPasswordForm, {
                 that.highlightErrorField($(field));
             },
 
-            onPtaiUrlError: function(elem) {
-                this.handle("ptaiUrl", elem);
-            },
-
-            onPtaiTokenError: function(elem) {
-                this.handle("ptaiToken", elem);
-            },
-
-            onPtaiCertificatesError: function(elem) {
-                this.handle("ptaiCertificates", elem);
-            },
-
             onCompleteSave: function(form, xml, err) {
+                let mode = ($('mode') && $('mode').value) ? $('mode').value : '';
+                if (0 === mode.length)
+                    window.console.error('No mode value found');
+
                 // Call parent listener onCompleteSave method to reenable
                 // controls, stop spinning saving progress, show error fields etc.
                 BS.ErrorsAwareListener.onCompleteSave(form, xml, err);
-                // If we have errors in the fields, all of them are processed above, so just exit
-                if (err) return;
                 form.enable();
+
                 // If there weren't message from the server about connection settings
                 // result - that's strange, let's inform user about that
                 if (!xml) {
@@ -54,30 +44,37 @@ PtaiConnectionSettingsForm = OO.extend(BS.AbstractPasswordForm, {
                     return;
                 }
                 // If we are saving no matter if connection test succeeded or not
-                if ("save" === form.mode) {
+                if ("save" === mode) {
                     BS.XMLResponse.processRedirect(xml);
                     return;
                 }
+                // As we do not implement "modify" event listener we need to show diagnostic messages even if error fields are already marked red
+                // if (err) return;
+
+                // If we are editing then no need to show TestConnectionDialog
+                // TODO Investigate if on-the-fly fields verification is required
+                // if ("modify" === mode) return;
+
                 let status = xml.getElementsByTagName("testConnectionResult")[0].textContent;
                 let success = status && status.includes("SUCCESS");
 
-                let details = xml.getElementsByTagName("testConnectionDetails")[0];
+                let details = xml.getElementsByTagName("testConnectionDetails");
                 let detailsString = "No additional info available";
-                if (details) {
-                    let lines = details.getElementsByTagName("line");
+                if (details && details.length > 0) {
                     detailsString = "";
-                    for (let i = 0; i < lines.length; i++) {
+                    for (let i = 0; i < details.length; i++) {
                         if (0 !== i) detailsString += "\n";
-                        detailsString += lines[i].textContent;
+                        let lines = details[i].getElementsByTagName("line");
+                        for (let j = 0; j < lines.length; j++) {
+                            if (0 !== j) detailsString += "\n";
+                            detailsString += lines[j].textContent;
+                        }
                     }
+
                 }
                 BS.TestConnectionDialog.show(success, detailsString);
             }
         });
-    },
-
-    formElement: function() {
-        return $('connection-settings');
     },
 
     /*
@@ -152,275 +149,123 @@ PtaiConnectionSettingsForm = OO.extend(BS.AbstractPasswordForm, {
     },
 
     setupEventHandlers(form) {
-        form.setUpdateStateHandlers({
+        let safeForm = (form) ? form : this;
+        safeForm.setUpdateStateHandlers({
             updateState: function() {
-                form.modify();
+                // TODO Investigate if on-the-fly fields verification is required
+                // safeForm.modify();
             },
             saveState: function() {
-                form.save();
+                safeForm.save();
             }
         });
     },
 
     modify: function() {
-        this.mode = 'modify';
-        BS.PasswordFormSaver.save(this, this.formElement().action, BS.StoreInSessionListener);
+        if ($('mode')) $('mode').value = 'modify';
+        BS.PasswordFormSaver.save(this, this.actionUrl(), BS.StoreInSessionListener);
     },
 
     save: function() {
-        this.mode = 'save';
-        BS.PasswordFormSaver.save(this, this.action(), this.createErrorListener());
+        if ($('mode')) $('mode').value = 'save';
+        BS.PasswordFormSaver.save(this, this.actionUrl(), this.createErrorListener());
         return false;
     },
 
     test: function() {
-        this.mode = 'test';
-        BS.PasswordFormSaver.save(this, this.action(), this.createErrorListener());
+        if ($('mode')) $('mode').value = 'test';
+        BS.PasswordFormSaver.save(this, this.actionUrl(), this.createErrorListener());
     },
 
     /*
     * As formElement may be not a form, we might need to override URL in
     * descendant classes that aren't form-bound
      */
-    action: function() {
+    actionUrl: function() {
         return this.formElement().action;
-    },
-
-    /*
-    * Need to override AbstractPasswordForm's serializeParameters as that method
-    * uses getEncryptedPassword call that isn't implemented for "props:passwordProperty"
-     */
-    serializeParameters: function(addMode = true) {
-        let params = BS.AbstractWebForm.serializeParameters.bind(this)();
-        if (addMode) params += "&mode=" + this.mode;
-        let passwordFields = Form.getInputs(this.formElement(), "password");
-        if (!passwordFields) return params;
-        for (let i = 0; i < passwordFields.length; i++) {
-            if (BS.Util.isParameterIgnored(passwordFields[i])) continue;
-            let name = passwordFields[i].name;
-            // Skip Chrome autofill workaround fields
-            if (0 === name.length) continue;
-
-            let encryptedField = name.replace("prop:", "prop:encrypted:");
-
-            params += "&" + encryptedField + "=";
-
-            if (0 === passwordFields[i].value.length) continue;
-            // The "prop:encrypted:${name}" hidden field is initialized with encrypted
-            // password value and cleaned on any change of password field
-            let encryptedValue = "";
-            if (0 === $(encryptedField).value.length)
-                encryptedValue = BS.Encrypt.encryptData(passwordFields[i].value, this.publicKey());
-            else
-                encryptedValue = $(encryptedField).value;
-            params += encryptedValue;
-        }
-        return params;
     }
 });
 
-GlobalConnectionSettingsForm = OO.extend(PtaiConnectionSettingsForm, {
+PtaiConnectionSettingsForm = OO.extend(PtaiAbstractSettingsForm, {
+    createErrorListener: function() {
+        let that = this;
+        let parentListener = PtaiAbstractSettingsForm.createErrorListener();
+
+        return OO.extend(parentListener, {
+            onPtaiServerSettingsError: function(elem) {
+                this.handle("ptaiServerSettings", elem);
+            },
+
+            onPtaiUrlError: function(elem) {
+                this.handle("ptaiUrl", elem);
+            },
+
+            onPtaiTokenError: function(elem) {
+                this.handle("ptaiToken", elem);
+            },
+
+            onPtaiCertificatesError: function(elem) {
+                this.handle("ptaiCertificates", elem);
+            }
+        });
+    },
+
     formElement: function() {
         return $('adminForm');
     },
 
-    savingIndicator: function() {
-        return $('saving');
-    },
-
     setupEventHandlers() {
         $('test').on('click', this.test.bindAsEventListener(this));
-        PtaiConnectionSettingsForm.setupEventHandlers(this);
+        PtaiAbstractSettingsForm.setupEventHandlers(this);
     }
 });
 
-TaskConnectionSettingsForm = OO.extend(PtaiConnectionSettingsForm, {
+PtaiTaskSettingsForm = OO.extend(PtaiAbstractSettingsForm, {
+
+    url: null,
+
     formElement: function() {
-        return $('ptai-connection-settings');
+        // return $('ptai-scan-settings');
+        return $('editBuildTypeForm');
     },
 
+    createErrorListener: function() {
+        let that = this;
+        let parentListener = PtaiConnectionSettingsForm.createErrorListener();
+
+        return OO.extend(parentListener, {
+            onPtaiProjectNameError: function (elem) {
+                this.handle("ptaiProjectName", elem);
+            },
+
+            onPtaiJsonSettingsError: function (elem) {
+                this.handle("ptaiJsonSettings", elem);
+            },
+
+            onPtaiJsonPolicyError: function (elem) {
+                this.handle("ptaiJsonPolicy", elem);
+            },
+
+            onPtaiIncludesError: function (elem) {
+                this.handle("ptaiIncludes", elem);
+            },
+
+            onPtaiPatternSeparatorError: function (elem) {
+                this.handle("ptaiPatternSeparator", elem);
+            }
+        });
+    },
+
+    /*
+    * Need to override this as form may have more than one saving indicator
+    * */
     savingIndicator: function() {
-        return $('testingConnection');
-    },
-
-    /*
-    * No need to setupEventHandlers as there's form saver already exist
-    * and listens for events
-    * */
-    setupEventHandlers() {
-        $('testConnection').on('click', this.test.bindAsEventListener(this));
-    },
-
-    setTestUrl(url) {
-        this.testUrl = url;
-    },
-
-    action: function() {
-        return this.testUrl;
-    },
-
-    /*
-    * For build step settings publicKey field is generated by TeamCity and
-    * isn't a part of connection settings area, so we need to add it manually
-    * */
-    serializeParameters: function(addMode = true) {
-        let params = PtaiConnectionSettingsForm.serializeParameters.bind(this, addMode)();
-        params += "&publicKey=";
-        params += $("publicKey").value;
-        return params;
-    },
-
-    toggle: function(global) {
-        if (global)
-            $j("#ptai-connection-settings").find(".ptai-connection-settings-local").hide();
-        else
-            $j("#ptai-connection-settings").find(".ptai-connection-settings-local").show();
-        BS.MultilineProperties.updateVisible();
-        BS.VisibilityHandlers.updateVisibility('mainContent');
-    }
-});
-
-TaskScanSettingsForm = OO.extend(PtaiConnectionSettingsForm, {
-    formElement: function () {
-        return $('ptai-scan-settings');
-    },
-
-    savingIndicator: function () {
         return $('testingSettings');
     },
 
-    /*
-    * No need to setupEventHandlers as there's form saver already exist
-    * and listens for events
-    * */
-    setupEventHandlers() {
-        $('testSettings').on('click', this.test.bindAsEventListener(this));
-    },
-
-    setTestUrl(url) {
-        this.testUrl = url;
-    },
-
-    action: function () {
-        return this.testUrl;
-    },
-
-    /*
-    * For build step settings publicKey field is generated by TeamCity and
-    * isn't a part of connection settings area, so we need to add it manually
-    * */
-    serializeParameters: function () {
-        let params = PtaiConnectionSettingsForm.serializeParameters.bind(this)();
-        params += "&" + TaskConnectionSettingsForm.serializeParameters(false);
-        return params;
-    },
-
-    test: function () {
-        this.mode = 'check';
-        BS.PasswordFormSaver.save(this, this.action(), this.createErrorListener());
-    },
-
-    toggle: function (ui) {
-        if (ui) {
-            $j("#ptai-scan-settings").find(".ptai-scan-settings-ui").show();
-            $j("#ptai-scan-settings").find(".ptai-scan-settings-json").hide();
-        } else {
-            $j("#ptai-scan-settings").find(".ptai-scan-settings-ui").hide();
-            $j("#ptai-scan-settings").find(".ptai-scan-settings-json").show();
-        }
-        BS.MultilineProperties.updateVisible();
-        BS.VisibilityHandlers.updateVisibility('mainContent');
-    },
-
-    createErrorListener: function () {
-        let that = this;
-        let parentListener = PtaiConnectionSettingsForm.createErrorListener();
-        return OO.extend(parentListener, {
-            onPtaiProjectNameError: function (elem) {
-                parentListener.handle("ptaiProjectName", elem);
-            },
-
-            onPtaiJsonSettingsError: function (elem) {
-                parentListener.handle("ptaiJsonSettings", elem);
-            },
-
-            onPtaiJsonPolicyError: function (elem) {
-                parentListener.handle("ptaiJsonPolicy", elem);
-            }
-        });
+    actionUrl: function(url) {
+        if (url) this.url = url;
+        return this.url;
     }
 });
 
-ReportSettingsForm = OO.extend(PtaiConnectionSettingsForm, {
-    formElement: function () {
-        return $('ptai-report-settings');
-    },
-
-    savingIndicator: function () {
-        return $('testingSettings');
-    },
-
-    /*
-    * No need to setupEventHandlers as there's form saver already exist
-    * and listens for events
-    * */
-    setupEventHandlers() {
-        $('testSettings').on('click', this.test.bindAsEventListener(this));
-    },
-
-    setTestUrl(url) {
-        this.testUrl = url;
-    },
-
-    action: function () {
-        return this.testUrl;
-    },
-
-    /*
-    * For build step settings publicKey field is generated by TeamCity and
-    * isn't a part of connection settings area, so we need to add it manually
-    * */
-    serializeParameters: function () {
-        let params = PtaiConnectionSettingsForm.serializeParameters.bind(this)();
-        params += "&" + ReportSettingsForm.serializeParameters(false);
-        return params;
-    },
-
-    test: function () {
-        this.mode = 'check';
-        BS.PasswordFormSaver.save(this, this.action(), this.createErrorListener());
-    },
-
-    toggle: function (id) {
-        if (0 == id) {
-            $j("#ptai-report-settings").find(".ptai-report-settings-single").hide();
-            $j("#ptai-report-settings").find(".ptai-report-settings-json").hide();
-        } else if (1 == id) {
-            $j("#ptai-report-settings").find(".ptai-report-settings-single").show();
-            $j("#ptai-report-settings").find(".ptai-report-settings-json").hide();
-        } else {
-            $j("#ptai-report-settings").find(".ptai-report-settings-single").hide();
-            $j("#ptai-report-settings").find(".ptai-report-settings-json").show();
-        }
-        BS.MultilineProperties.updateVisible();
-        BS.VisibilityHandlers.updateVisibility('mainContent');
-    },
-
-    createErrorListener: function () {
-        let that = this;
-        let parentListener = PtaiConnectionSettingsForm.createErrorListener();
-        return OO.extend(parentListener, {
-            onPtaiProjectNameError: function (elem) {
-                parentListener.handle("ptaiProjectName", elem);
-            },
-
-            onPtaiJsonSettingsError: function (elem) {
-                parentListener.handle("ptaiJsonSettings", elem);
-            },
-
-            onPtaiJsonPolicyError: function (elem) {
-                parentListener.handle("ptaiJsonPolicy", elem);
-            }
-        });
-    }
-});

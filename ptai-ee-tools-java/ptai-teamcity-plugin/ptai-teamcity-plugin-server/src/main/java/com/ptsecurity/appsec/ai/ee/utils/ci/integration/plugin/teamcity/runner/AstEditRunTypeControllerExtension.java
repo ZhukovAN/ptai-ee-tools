@@ -3,7 +3,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.runner;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Defaults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.AstAdminSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.TestService;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.AstSettingsService;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service.PropertiesBean;
 import jetbrains.buildServer.controllers.ActionErrors;
 import jetbrains.buildServer.controllers.BasePropertiesBean;
 import jetbrains.buildServer.controllers.StatefulObject;
@@ -11,23 +12,21 @@ import jetbrains.buildServer.controllers.admin.projects.BuildTypeForm;
 import jetbrains.buildServer.controllers.admin.projects.EditRunTypeControllerExtension;
 import jetbrains.buildServer.serverSide.BuildTypeSettings;
 import jetbrains.buildServer.serverSide.SBuildServer;
-import jetbrains.buildServer.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.*;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Messages.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
 
 /**
  * PT AI build step configuration page requires access to some globally defined
  * serrings. This class publishes these settings using fillModel method
  */
+@Slf4j
 public class AstEditRunTypeControllerExtension implements EditRunTypeControllerExtension {
     private final AstAdminSettings settings;
 
@@ -86,7 +85,9 @@ public class AstEditRunTypeControllerExtension implements EditRunTypeControllerE
     }
 
     @Override
-    public void updateState(@NotNull HttpServletRequest request, @NotNull BuildTypeForm form) {}
+    public void updateState(@NotNull HttpServletRequest request, @NotNull BuildTypeForm form) {
+        log.trace("Update state request to %s", request.getRequestURI());
+    }
 
     @Nullable
     @Override
@@ -104,42 +105,18 @@ public class AstEditRunTypeControllerExtension implements EditRunTypeControllerE
     @NotNull
     @Override
     public ActionErrors validate(@NotNull HttpServletRequest request, @NotNull BuildTypeForm form) {
-        BasePropertiesBean bean = form.getBuildRunnerBean().getPropertiesBean();
-        final Map<String, String> properties = bean.getProperties();
-        ActionErrors res = new ActionErrors();
-        // Check if connection settings are valid
-        BasePropertiesBean settingsBean;
-        if (SERVER_SETTINGS_GLOBAL.equalsIgnoreCase(properties.get(SERVER_SETTINGS))) {
-            // Let's check global connection settings using existing validator
-            settingsBean = new BasePropertiesBean(null);
-            settings.getProperties().forEach(
-                    (k, v) -> settingsBean.setProperty(k.toString(), (null == v) ? null : v.toString()));
-            ActionErrors globalSettingsErrors = TestService.validateConnectionSettings(settingsBean);
-            if (globalSettingsErrors.hasErrors())
-                // There may be several errors exist, but we should show only a generic message
-                res.addError(SERVER_SETTINGS, MESSAGE_GLOBAL_SETTINGS_INVALID);
-        } else {
-            res.addAll(TestService.validateConnectionSettings(bean));
-        }
-
-        res.addAll(TestService.validateScanSettings(bean));
-
-        if (StringUtil.isEmptyOrSpaces(properties.get(INCLUDES)))
-            res.addError(INCLUDES, MESSAGE_INCLUDES_EMPTY);
-        if (StringUtil.isEmptyOrSpaces(properties.get(PATTERN_SEPARATOR)))
-            res.addError(PATTERN_SEPARATOR, MESSAGE_PATTERN_SEPARATOR_EMPTY);
-        else {
-            try {
-                Pattern.compile(properties.get(PATTERN_SEPARATOR));
-            } catch (PatternSyntaxException e) {
-                res.addError(PATTERN_SEPARATOR, MESSAGE_PATTERN_SEPARATOR_INVALID);
-            }
-        }
-        return res;
+        PropertiesBean bean = new PropertiesBean(form.getBuildRunnerBean().getPropertiesBean());
+        AstSettingsService.VerificationResults results = AstSettingsService.checkConnectionSettings(bean, true);
+        AstSettingsService.checkAstSettings(bean, results, true);
+        ActionErrors errors = new ActionErrors();
+        results.stream().filter(r -> null != r.getLeft()).forEach(e -> errors.addError(e.getLeft(), e.getRight()));
+        return errors;
     }
 
     @Override
     public void updateBuildType(
             @NotNull HttpServletRequest request, @NotNull BuildTypeForm form,
-            @NotNull BuildTypeSettings buildTypeSettings, @NotNull ActionErrors errors) {}
+            @NotNull BuildTypeSettings buildTypeSettings, @NotNull ActionErrors errors) {
+        log.trace("Update build type request to %s", request.getRequestURI());
+    }
 }

@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.*;
@@ -9,10 +10,10 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.C
  */
 public class Defaults {
     // PT AI connection parameter names
-    public static final String URL = "https://ptai.domain.corp:8443";
+    public static final String URL = Base.DEFAULT_PTAI_URL;
     public static final String TOKEN = "P@ssw0rd";
     public static final String CERTIFICATES = "";
-    public static final String INSECURE = FALSE;
+    public static final String INSECURE = TRUE;
     /**
      * Field that stores scan settings type: UI- or JSON-based. If this
      * field equals to Constants.SERVER_SETTINGS_GLOBAL then globally defined PT AI

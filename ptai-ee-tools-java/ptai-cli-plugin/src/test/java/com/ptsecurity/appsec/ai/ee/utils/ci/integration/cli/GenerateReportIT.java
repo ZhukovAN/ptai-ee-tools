@@ -173,4 +173,20 @@ class GenerateReportIT extends BaseIT {
                 "--report-json", getResourcePath("json/reports.1.json"));
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
+
+    @Test
+    @DisplayName("Generate invalid JSON-defined reports for specific app01 scan results")
+    public void testLatestInvalidJsonDefinedReportsGeneration() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "generate-report",
+                "--url", PTAI_URL,
+                "--truststore", PEM_PATH,
+                "--token", TOKEN,
+                "--output", REPORT_FOLDER,
+                "--project-name", EXISTING_PROJECT,
+                "--scan-result-id", getLatestCompleteScanResults(EXISTING_PROJECT).toString(),
+                "--report-json", getResourcePath("json/reports.4.json"));
+        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
+    }
+
 }

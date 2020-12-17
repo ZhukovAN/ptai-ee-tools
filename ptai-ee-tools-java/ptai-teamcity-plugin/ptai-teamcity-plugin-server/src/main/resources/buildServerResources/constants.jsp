@@ -124,5 +124,5 @@
 <c:set var="HINT_REPORT_JSON" value="<%=Hints.REPORT_JSON%>"/>
 
 <c:set var="ADMIN_CONTROLLER_PATH" value="<%=Constants.ADMIN_CONTROLLER_PATH%>"/>
-<c:set var="TEST_CONTROLLER_PATH" value="<%=Constants.TEST_CONTROLLER_PATH%>"/>
+<c:set var="TEST_CONTROLLER_PATH" value="<%=Constants.AST_CONTROLLER_PATH%>"/>
 

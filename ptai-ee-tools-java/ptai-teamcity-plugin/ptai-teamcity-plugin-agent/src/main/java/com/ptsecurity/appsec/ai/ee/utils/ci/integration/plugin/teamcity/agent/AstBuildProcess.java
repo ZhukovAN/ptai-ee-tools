@@ -113,7 +113,7 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                 // .prefix(CONSOLE_PREFIX)
                 .url(validateUrl(globals.get(Params.URL)))
                 .token(validateNotEmpty(globals.get(Params.TOKEN)))
-                .insecure(TRUE.equalsIgnoreCase(globals.get(Params.CERTIFICATES)))
+                .insecure(TRUE.equalsIgnoreCase(globals.get(Params.INSECURE)))
                 // .async(workMode instanceof WorkModeAsync)
                 .failIfFailed(TRUE.equalsIgnoreCase(params.get(Params.FAIL_IF_FAILED)))
                 .failIfUnstable(TRUE.equalsIgnoreCase(params.get(Params.FAIL_IF_UNSTABLE)))

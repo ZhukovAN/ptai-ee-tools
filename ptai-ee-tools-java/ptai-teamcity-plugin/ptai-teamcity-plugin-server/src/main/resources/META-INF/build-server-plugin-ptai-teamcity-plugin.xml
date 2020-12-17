@@ -10,5 +10,5 @@
     <bean class="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.runner.AstRunType"/>
     <bean class="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.runner.AstBuildStartContextProcessor" init-method="register"/>
     <bean class="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.runner.AstEditRunTypeControllerExtension"/>
-    <bean class="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.runner.AstSettingsTestController"/>
+    <bean class="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.runner.AstSettingsPageController"/>
 </beans>

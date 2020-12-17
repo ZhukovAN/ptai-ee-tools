@@ -4,16 +4,17 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constant
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Labels;
 import jetbrains.buildServer.controllers.BasePropertiesBean;
 import jetbrains.buildServer.controllers.admin.AdminPage;
-import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+@Slf4j
 public class AstAdminPage extends AdminPage {
     private final AstAdminSettings settings;
     private final String jspHome;
@@ -32,7 +33,7 @@ public class AstAdminPage extends AdminPage {
         setTabTitle(Labels.PLUGIN_TAB_TITLE);
         register();
 
-        Loggers.SERVER.info("PT AI configuration page registered");
+        log.info("PT AI configuration page registered");
     }
 
     @NotNull

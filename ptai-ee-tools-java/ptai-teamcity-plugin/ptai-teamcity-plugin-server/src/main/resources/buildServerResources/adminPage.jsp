@@ -20,7 +20,18 @@
 
 <script type="text/javascript">
     $j(function() {
-        GlobalConnectionSettingsForm.setupEventHandlers();
+        PtaiConnectionSettingsForm.setupEventHandlers();
+
+        $('${TOKEN}').getEncryptedPassword = function(pubKey) {
+            let initialValueField = $("prop:encrypted:${TOKEN}");
+            let initialValue = (initialValueField && initialValueField.value && initialValueField.value.length > 0) ? initialValueField.value : '';
+            window.console.log('Initial value length ' + initialValue.length);
+            if (0 === initialValue.length)
+                initialValue = BS.Encrypt.encryptData(this.value, pubKey);
+            window.console.log('Sending initial value ' + initialValue);
+            return initialValue;
+        };
+        window.console.log('getEncryptedPassword is set up');
     });
 </script>
 
@@ -29,7 +40,7 @@
 <div id="settingsContainer">
     <form id="adminForm" action="<c:url value='${ADMIN_CONTROLLER_PATH}'/>"
           method="post"
-          onsubmit="return GlobalConnectionSettingsForm.save()">
+          onsubmit="return PtaiConnectionSettingsForm.save()">
 
         <table class="runnerFormTable">
             <tr class="groupingTitle">
@@ -91,13 +102,13 @@
         <div class="saveButtonsBlock">
             <forms:submit type="submit" label="Save" />
             <forms:submit id="test" type="button" label="<%=Labels.TEST%>"/>
-            <%-- <input type="hidden" id="mode" name="mode" value="modify"/> --%>
+            <input type="hidden" id="mode" name="mode" value="modify"/>
             <input type="hidden" id="publicKey" name="publicKey" value="<c:out value='${hexEncodedPublicKey}'/>"/>
             <forms:saving/>
         </div>
     </form>
     <%-- testConnectionDialog, testConnectionStatus and testConnectionDetails are
-     identifiers that are hardcoded in testConnection.js --%>
+     identifiers that are hardcoded in checkConnectionSettings.js --%>
     <bs:dialog dialogId="testConnectionDialog"
                title="Test PT AI server connection"
                closeCommand="BS.TestConnectionDialog.close();"

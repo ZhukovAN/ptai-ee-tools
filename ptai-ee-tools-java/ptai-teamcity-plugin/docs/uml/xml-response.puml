@@ -1,0 +1,44 @@
+@startuml
+class response {
+    String testConnectionResult
+}
+note right of response::testConnectionResult
+    SUCCESS or FAILURE, written
+    using XmlResponseUtil.writeTestResult
+end note
+
+class testConnectionDetails
+response --> "*" testConnectionDetails
+
+class line
+testConnectionDetails --> "*" line
+note right of line
+    Text to be shown in
+    popup dialog like
+    <i>"Project ABC not found"</i>
+end note
+
+class errors
+note right of errors
+    List of errors. Each error consists of id
+    and text message (see error class). Errors
+    are written to XML response using
+    BaseFormXmlController.writeErrors
+end note
+
+class error {
+    String id
+    ..
+    String text
+}
+note right of error::id
+    Stored as attribute that value correspods to
+    invalid plugin field like "<i>ptaiServerSettings</i>"
+end note
+note right of error::text
+    Stored as element body and contains error
+    message like "<i>Global connection settings are invalid</i>"
+end note
+response --> errors
+errors --> "*" error
+@enduml

@@ -1,7 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.EnterpriseLicenseData;
-import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheck;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
@@ -42,31 +40,10 @@ public class CheckServer extends BaseCommand implements Callable<Integer> {
             }
             utils.init();
 
-            boolean error = false;
-            String buildInfoText = "";
-            HealthCheck healthCheck = utils.healthCheck();
-            if (null == healthCheck || null == healthCheck.getServices()) {
-                buildInfoText += "Server returned empty components health data";
-                error = true;
-            } else {
-                long total = healthCheck.getServices().size();
-                long healthy = healthCheck.getServices().stream()
-                        .filter(s -> "Healthy".equalsIgnoreCase(s.getStatus()))
-                        .count();
-                buildInfoText += String.format("Healthy services: %d out of %d", healthy, total);
-            }
-            buildInfoText += ", ";
-            EnterpriseLicenseData licenseData = utils.getLicenseData();
-            if (null == licenseData) {
-                buildInfoText += "Server returned empty license data";
-                error = true;
-            } else
-                buildInfoText += String.format("License: %s, vaildity period: from %s to %s",
-                        licenseData.getLicenseNumber(),
-                        licenseData.getStartDate(), licenseData.getEndDate());
-
-            utils.info(buildInfoText);
-            return error
+            Utils.TestResult result = utils.testConnection();
+            // result.stream().forEach(r -> utils.info(r));
+            utils.info(result.text());
+            return Utils.TestResult.State.ERROR.equals(result.state())
                     ? ExitCode.FAILED.getCode()
                     : ExitCode.SUCCESS.getCode();
         } catch (ApiException e) {

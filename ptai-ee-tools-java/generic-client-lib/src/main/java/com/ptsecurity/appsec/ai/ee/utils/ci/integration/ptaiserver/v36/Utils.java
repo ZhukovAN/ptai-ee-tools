@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -120,52 +121,51 @@ public class Utils extends BaseClient {
     @Getter @Setter
     @NoArgsConstructor
     @Accessors(chain = true, fluent = true)
-    public static class TestResult {
+    public static class TestResult extends ArrayList<String> {
         public enum State {
             OK, WARNING, ERROR
         }
 
         @NonNull
         protected State state = State.ERROR;
-        @NonNull
-        protected String text = "";
+
+        public String text() {
+            return String.join(". ", this);
+        }
     }
 
     public TestResult testConnection() throws ApiException {
         TestResult result = new TestResult();
         if (StringUtils.isEmpty(url)) {
-            result.text = Messages.validator_check_serverUrl_empty();
+            result.add(Messages.validator_check_serverUrl_empty());
             return result;
         }
 
         boolean error = false;
         boolean warning = !UrlHelper.checkUrl(url);
 
-        String details = "";
         HealthCheck healthCheck = healthCheck();
         if (null == healthCheck || null == healthCheck.getServices()) {
-            details += Messages.validator_test_server_health_empty();
+            result.add(Messages.validator_test_server_health_empty());
             error = true;
         } else {
             long total = healthCheck.getServices().size();
             long healthy = healthCheck.getServices().stream()
                     .filter(s -> "Healthy".equalsIgnoreCase(s.getStatus()))
                     .count();
-            details += Messages.validator_test_server_health_success(healthy, total);
+            result.add(Messages.validator_test_server_health_success(healthy, total));
             if (0 == healthy) warning = true;
         }
-        details += ", ";
         EnterpriseLicenseData licenseData = getLicenseData();
         if (null == licenseData) {
-            details += Messages.validator_test_server_license_empty();
+            result.add(Messages.validator_test_server_license_empty());
             error = true;
         } else {
-            details += Messages.validator_test_server_license_success(
+            result.add(Messages.validator_test_server_license_success(
                     licenseData.getLicenseNumber(),
-                    licenseData.getStartDate(), licenseData.getEndDate());
+                    licenseData.getStartDate(), licenseData.getEndDate()));
             if (Boolean.FALSE.equals(licenseData.getIsValid())) warning = true;
         }
-        result.text(details);
         return error
                 ? result.state(TestResult.State.ERROR)
                 : warning

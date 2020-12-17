@@ -5,6 +5,7 @@ import jetbrains.buildServer.controllers.BasePropertiesBean;
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
 
 public class AstAdminSettingsBean extends BasePropertiesBean {
+
     public AstAdminSettingsBean(
             String url,
             String token,
