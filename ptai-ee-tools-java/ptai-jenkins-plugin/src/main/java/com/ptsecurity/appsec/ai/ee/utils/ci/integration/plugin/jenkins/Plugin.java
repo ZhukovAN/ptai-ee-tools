@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
@@ -104,7 +104,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
             }
             return env;
         } catch (Exception e) {
-            throw new RuntimeException(Messages.exception_failedToGetEnvVars(), e);
+            throw new RuntimeException(Resources.exception_failedToGetEnvVars(), e);
         }
     }
 
@@ -234,7 +234,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 job.setReports(reports);
         }
         if (!AstJob.JobFinishedStatus.SUCCESS.equals(job.execute()))
-            throw new AbortException(Messages.validator_failed());
+            throw new AbortException(Resources.validator_failed());
     }
 
     @Override

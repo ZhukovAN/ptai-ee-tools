@@ -59,9 +59,10 @@ public class AstSettingsPageController extends BaseAstController {
         String mode = request.getParameter("mode");
         log.trace("AST job settings test request with mode {}", mode);
 
-        // Load request parameters into bean
+        // Load request parameters into bean and replace connection parameters with global ones if needed
         PropertiesBean bean = AstSettingsService.parseConnectionSettings(request, settings, null);
         AstSettingsService.parseAstSettings(request, bean);
+        bean.injectGlobalSettings(settings);
 
         if (MODE_MODIFY.equals(mode)) {
             // Perform as-you-type field validation

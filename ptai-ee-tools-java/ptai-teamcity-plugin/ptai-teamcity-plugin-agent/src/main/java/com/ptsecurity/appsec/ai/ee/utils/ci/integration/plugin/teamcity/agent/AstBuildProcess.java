@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
@@ -64,13 +64,13 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
 
     protected String validateNotEmpty(final String value) {
         if (StringUtils.isNotEmpty(value)) return value;
-        throw new IllegalArgumentException(Messages.validator_check_field_empty());
+        throw new IllegalArgumentException(Resources.validator_check_field_empty());
     }
 
     protected String validateUrl(final String value) {
         String url = validateNotEmpty(value);
         if (UrlHelper.checkUrl(url)) return url;
-        throw new IllegalArgumentException(Messages.validator_check_url_invalid());
+        throw new IllegalArgumentException(Resources.validator_check_url_invalid());
     }
 
     private AstJob.JobFinishedStatus ast() throws Exception {

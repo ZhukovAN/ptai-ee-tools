@@ -95,6 +95,16 @@ public class Reports {
     @Getter
     @Setter
     public static class Data extends AbstractReport {
+        /**
+         * Default report locale to be used for new data exports
+         */
+        public static final String DEFAULT_LOCALE = Locale.RU.name();
+
+        /**
+         * Default report format to be used for new data exports
+         */
+        public static final String DEFAULT_FORMAT = Format.JSON.name();
+
         @NoArgsConstructor(access = AccessLevel.PACKAGE)
         @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
         public enum Format {
@@ -115,6 +125,17 @@ public class Reports {
     @Getter
     @Setter
     public static class Report extends AbstractReport {
+
+        /**
+         * Default report locale to be used for new reports
+         */
+        public static final String DEFAULT_LOCALE = Locale.RU.name();
+
+        /**
+         * Default report format to be used for new reports
+         */
+        public static final String DEFAULT_FORMAT = Format.HTML.name();
+
         @NonNull
         @JsonProperty
         protected String template;

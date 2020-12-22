@@ -9,6 +9,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,29 +69,22 @@ public class AstRunType extends RunType {
         return this.descriptor.getPluginResourcesPath("viewRunParams.jsp");
     }
 
+    /**
+     * Teamcity calls this method to get default job properties. Then UI compares
+     * with actual ones and marks fields that are differ as modified
+     * @return Map of default field values
+     */
     @Nullable
     @Override
     public Map<String, String> getDefaultRunnerProperties() {
-        Map<String, String> parameters = new HashMap<>();
+        final Map<String, String> parameters = new HashMap<>();
 
-        parameters.put(Params.SERVER_SETTINGS, Defaults.SERVER_SETTINGS);
-
-        parameters.put(Params.AST_SETTINGS, Defaults.AST_SETTINGS);
-        parameters.put(Params.PROJECT_NAME, Defaults.PROJECT_NAME);
-        parameters.put(Params.JSON_SETTINGS, Defaults.JSON_SETTINGS);
-        parameters.put(Params.JSON_POLICY, Defaults.JSON_POLICY);
-        parameters.put(Params.FAIL_IF_FAILED, Defaults.FAIL_IF_FAILED);
-        parameters.put(Params.FAIL_IF_UNSTABLE, Defaults.FAIL_IF_UNSTABLE);
-
-        parameters.put(Params.VERBOSE, Defaults.VERBOSE);
-        parameters.put(Params.INCLUDES, Defaults.INCLUDES);
-        parameters.put(Params.REMOVE_PREFIX, Defaults.REMOVE_PREFIX);
-        parameters.put(Params.EXCLUDES, Defaults.EXCLUDES);
-        parameters.put(Params.PATTERN_SEPARATOR, Defaults.PATTERN_SEPARATOR);
-        parameters.put(Params.USE_DEFAULT_EXCLUDES, Defaults.USE_DEFAULT_EXCLUDES);
-        parameters.put(Params.FLATTEN, Defaults.FLATTEN);
-
-        parameters.put(Params.REPORT_SETTINGS, Defaults.REPORT_SETTINGS);
+        Arrays.stream(Params.class.getDeclaredFields())
+                .filter(f -> Modifier.isPublic(f.getModifiers()))
+                .filter(f -> Modifier.isStatic(f.getModifiers()))
+                .filter(f -> Modifier.isFinal(f.getModifiers()))
+                .map(Field::getName)
+                .forEach(n -> parameters.put(Params.value(n), Defaults.value(n)));
 
         return parameters;
     }

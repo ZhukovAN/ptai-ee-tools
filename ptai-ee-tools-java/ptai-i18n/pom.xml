@@ -32,7 +32,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <fileMask>Messages.properties</fileMask>
+                            <fileMask>Resources.properties</fileMask>
                             <outputDirectory>target/generated-sources/localizer</outputDirectory>
                             <!-- <accessModifierAnnotations>true</accessModifierAnnotations> -->
                         </configuration>

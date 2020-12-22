@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Defaults;
 import jetbrains.buildServer.serverSide.ServerPaths;
 import jetbrains.buildServer.serverSide.crypt.EncryptUtil;
@@ -61,7 +60,7 @@ public class AstAdminSettings {
      */
     private void initConfig(@NotNull final Path path) throws IOException {
         this.properties.put(URL, Defaults.URL);
-        this.properties.put(TOKEN, Defaults.TOKEN);
+        this.properties.put(TOKEN, scramble(Defaults.TOKEN));
         this.properties.put(CERTIFICATES, Defaults.CERTIFICATES);
         this.properties.put(INSECURE, Defaults.INSECURE);
         getConfigFile().toFile().getParentFile().mkdirs();

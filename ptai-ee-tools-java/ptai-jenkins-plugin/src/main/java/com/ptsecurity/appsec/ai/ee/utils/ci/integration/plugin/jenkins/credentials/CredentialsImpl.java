@@ -4,7 +4,7 @@ import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.CredentialsScope;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
 import com.cloudbees.plugins.credentials.impl.BaseStandardCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.CertificateHelper;
@@ -77,28 +77,28 @@ public class CredentialsImpl extends BaseStandardCredentials implements Credenti
         @NotNull
         @Override
         public String getDisplayName() {
-            return Messages.captions_credentials_displayName();
+            return Resources.captions_credentials_displayName();
         }
 
         public FormValidation doTestServerCaCertificates(
                 @QueryParameter("serverCaCertificates") final String serverCaCertificates) {
             if (StringUtils.isEmpty(serverCaCertificates))
-                return FormValidation.warning(Messages.validator_check_serverCaCertificates_empty());
+                return FormValidation.warning(Resources.validator_check_serverCaCertificates_empty());
             try {
                 List<X509Certificate> certs = CertificateHelper.readPem(serverCaCertificates);
                 StringBuilder dn = new StringBuilder();
                 for (X509Certificate cert : certs)
                     dn.append("{").append(cert.getSubjectDN().getName()).append("}, ");
-                return FormValidation.ok(Messages.validator_check_serverCaCertificates_success("[" + StringUtils.removeEnd(dn.toString().trim(), ",") + "]"));
+                return FormValidation.ok(Resources.validator_check_serverCaCertificates_success("[" + StringUtils.removeEnd(dn.toString().trim(), ",") + "]"));
             } catch (ApiException e) {
                 return Validator.error(e);
             } catch (Exception e) {
-                return Validator.error(Messages.validator_check_serverCaCertificates_failed(), e);
+                return Validator.error(Resources.validator_check_serverCaCertificates_failed(), e);
             }
         }
 
         public FormValidation doCheckToken(@QueryParameter("token") String token) {
-            return Validator.doCheckFieldNotEmpty(token, Messages.validator_check_token_empty());
+            return Validator.doCheckFieldNotEmpty(token, Resources.validator_check_token_empty());
         }
     }
 }

@@ -4,7 +4,7 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.PolicyState
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanError;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanResult;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Stage;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -20,37 +20,37 @@ public enum AstStatus {
     /**
      * Scan is not finished yet
      */
-    UNKNOWN(Messages.ast_status_unknown()),
+    UNKNOWN(Resources.ast_status_unknown()),
 
     /**
      * Scan complete, AST policy assessment failed
      */
-    FAILURE(Messages.ast_status_failure()),
+    FAILURE(Resources.ast_status_failure()),
 
     /**
      * Scan complete, AST policy assessment success, but there were scan warnings or errors
      */
-    UNSTABLE(Messages.ast_status_unstable()),
+    UNSTABLE(Resources.ast_status_unstable()),
 
     /**
      * Scan complete, AST policy assessment success
      */
-    SUCCESS(Messages.ast_status_success()),
+    SUCCESS(Resources.ast_status_success()),
 
     /**
      * Scan complete, AST policy not defined
      */
-    POLICY_EMPTY(Messages.ast_status_policy_empty()),
+    POLICY_EMPTY(Resources.ast_status_policy_empty()),
 
     /**
      * Scan was terminated
      */
-    ABORTED(Messages.ast_status_aborted()),
+    ABORTED(Resources.ast_status_aborted()),
 
     /**
      * Scan error
      */
-    ERROR(Messages.ast_status_error());
+    ERROR(Resources.ast_status_error());
 
     @Getter
     private final String description;

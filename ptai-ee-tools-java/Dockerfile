@@ -13,6 +13,10 @@ COPY generic-client-lib/src $BUILD_HOME/generic-client-lib/src
 COPY generic-client-lib/pom.xml $BUILD_HOME/generic-client-lib/
 COPY ptai-cli-plugin/src $BUILD_HOME/ptai-cli-plugin/src
 COPY ptai-cli-plugin/pom.xml $BUILD_HOME/ptai-cli-plugin/
+COPY ptai-jenkins-plugin/src $BUILD_HOME/ptai-jenkins-plugin/src
+COPY ptai-jenkins-plugin/pom.xml $BUILD_HOME/ptai-jenkins-plugin/
+COPY ptai-teamcity-plugin/src $BUILD_HOME/ptai-teamcity-plugin/src
+COPY ptai-teamcity-plugin/pom.xml $BUILD_HOME/ptai-teamcity-plugin/
 
 WORKDIR $BUILD_HOME
 RUN mvn clean install -DskipTests=true

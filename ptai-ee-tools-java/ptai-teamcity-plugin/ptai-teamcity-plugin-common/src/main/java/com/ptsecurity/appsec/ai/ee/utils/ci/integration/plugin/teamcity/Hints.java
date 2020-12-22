@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.StringHelper;
 
@@ -11,17 +12,10 @@ import java.util.Arrays;
 public class Hints {
     public static final String RUNNER = "PT AI AST scan";
 
-    public static final String URL =
-            "PT AI server URL. By default, PT AI server using secure port 8443." +
-                    "<br>" +
-                    "For example: https://ptai.domain.org:8443";
-    public static final String TOKEN = "PT AI API token to use";
-    public static final String CERTIFICATES =
-            "PEM-encoded PT AI server CA certificate chain." +
-                    "<br>" +
-                    "You may keep this field empty if PT AI server certificates are " +
-                    "issued by CA from your JDK&nbsp;truststore";
-    public static final String INSECURE = "Use insecure SSL";
+    public static final String URL = Resources.i18n_ast_settings_server_url_hint();
+    public static final String TOKEN = Resources.i18n_ast_settings_server_token_hint();
+    public static final String CERTIFICATES = Resources.i18n_ast_settings_server_ca_pem_hint();
+    public static final String INSECURE = Resources.i18n_ast_settings_server_insecure_hint();
 
     public static final String SERVER_SETTINGS = "Choose how PT AI server connection settings are defined";
     public static final String SERVER_SETTINGS_GLOBAL = "Global scope defined PT AI server config";
@@ -39,6 +33,10 @@ public class Hints {
                     "If this parameter is empty then SAST policy will be downloaded from PT AI EE server." +
                     "<br>" +
                     "If you need to scan project without policy use [] value";
+
+    public static final String AST_MODE = Resources.i18n_ast_settings_mode_hint();
+    public static final String AST_MODE_SYNC = Resources.i18n_ast_settings_mode_synchronous_hint();
+    public static final String AST_MODE_ASYNC = Resources.i18n_ast_settings_mode_asynchronous_hint();
 
     public static final String FAIL_IF_FAILED = "Mark build step as failed if AST policy assessment failed";
     public static final String FAIL_IF_UNSTABLE = "Mark build step as failed if AST policy assessment success but there were some minor warnings reported";
@@ -61,12 +59,78 @@ public class Hints {
                     ")";
     public static final String FLATTEN = "Only transfer files, ignore folder structure";
 
-    public static final String REPORT_SETTINGS = "Choose what are the AST reports to be generated";
-    public static final String REPORT_SETTINGS_NONE = "No report will be generated";
-    public static final String REPORT_SETTINGS_SINGLE = "Generate single AST report";
-    public static final String REPORT_SETTINGS_JSON = "JSON-defined report settings";
-    public static final String REPORT_TEMPLATE_NAME = "Report template name to use for report generation";
-    public static final String REPORT_FORMAT = "Report format";
-    public static final String REPORT_LOCALE = "Report locale";
-    public static final String REPORT_JSON = "JSON-defined report list";
+    /**
+     * See {@link Params#REPORTING_REPORT}
+     */
+    public static final String REPORTING_REPORT = Resources.i18n_ast_result_reporting_report_hint();
+
+    /**
+     * See {@link Params#REPORTING_DATA}
+     */
+    public static final String REPORTING_DATA = Resources.i18n_ast_result_reporting_data_hint();
+
+    /**
+     * See {@link Params#REPORTING_RAWDATA}
+     */
+    public static final String REPORTING_RAWDATA = Resources.i18n_ast_result_reporting_rawdata_hint();
+    /**
+     * See {@link Params#REPORTING_JSON}
+     */
+    public static final String REPORTING_JSON = Resources.i18n_ast_result_reporting_json_hint();
+
+    /**
+     * See {@link Params#REPORTING_REPORT_FILE}
+     */
+    public static final String REPORTING_REPORT_FILE = Resources.i18n_ast_result_reporting_report_file_hint();
+
+    /**
+     * See {@link Params#REPORTING_REPORT_TEMPLATE}
+     */
+    public static final String REPORTING_REPORT_TEMPLATE = Resources.i18n_ast_result_reporting_report_template_hint();
+
+    /**
+     * See {@link Params#REPORTING_REPORT_FORMAT}
+     */
+    public static final String REPORTING_REPORT_FORMAT = Resources.i18n_ast_result_reporting_report_format_hint();
+
+    /**
+     * See {@link Params#REPORTING_REPORT_LOCALE}
+     */
+    public static final String REPORTING_REPORT_LOCALE = Resources.i18n_ast_result_reporting_report_locale_hint();
+
+    /**
+     * See {@link Params#REPORTING_REPORT_FILTER}
+     */
+    public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_result_reporting_report_filter_hint();
+
+    /**
+     * See {@link Params#REPORTING_DATA_FILE}
+     */
+    public static final String REPORTING_DATA_FILE = Resources.i18n_ast_result_reporting_data_file_hint();
+
+    /**
+     * See {@link Params#REPORTING_DATA_FORMAT}
+     */
+    public static final String REPORTING_DATA_FORMAT = Resources.i18n_ast_result_reporting_data_format_hint();
+
+    /**
+     * See {@link Params#REPORTING_DATA_LOCALE}
+     */
+    public static final String REPORTING_DATA_LOCALE = Resources.i18n_ast_result_reporting_data_locale_hint();
+
+    /**
+     * See {@link Params#REPORTING_DATA_FILTER}
+     */
+    public static final String REPORTING_DATA_FILTER = Resources.i18n_ast_result_reporting_data_filter_hint();
+
+    /**
+     * See {@link Params#REPORTING_RAWDATA_FILE}
+     */
+    public static final String REPORTING_RAWDATA_FILE = Resources.i18n_ast_result_reporting_rawdata_file_hint();
+
+    /**
+     * See {@link Params#REPORTING_JSON_SETTINGS}
+     */
+    public static final String REPORTING_JSON_SETTINGS = Resources.i18n_ast_result_reporting_json_settings_hint();
+
 }

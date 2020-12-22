@@ -10,7 +10,7 @@
   <packaging>pom</packaging>
   <properties>
       <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-      <teamcity.ptai-teamcity-plugin.plugin.version>v.0.4.4 (${maven.build.timestamp})</teamcity.ptai-teamcity-plugin.plugin.version>
+      <teamcity.ptai-teamcity-plugin.plugin.version>${project.parent.version}-${maven.build.timestamp}</teamcity.ptai-teamcity-plugin.plugin.version>
       <teamcity.ptai-teamcity-plugin.plugin.vendorName>Positive Technologies</teamcity.ptai-teamcity-plugin.plugin.vendorName>
       <teamcity.ptai-teamcity-plugin.plugin.vendorUrl>https://www.ptsecurity.com/</teamcity.ptai-teamcity-plugin.plugin.vendorUrl>
   </properties>

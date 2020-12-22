@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
@@ -111,15 +111,22 @@ public abstract class AstJob extends Project {
             astOps.scanStartedCallback(this, scanResultId);
 
             // Save result URL to artifacts
-            String url = projectsApi.apiProjectsProjectIdScanResultsScanResultIdGetCall(projectId, scanResultId, null).request().url().toString();
+            final String url = projectsApi.apiProjectsProjectIdScanResultsScanResultIdGetCall(projectId, scanResultId, null).request().url().toString();
             callApi(
-                    () -> fileOps.saveArtifact("result.url", url.getBytes()),
-                    "AST result URL save failed");
+                    () -> fileOps.saveArtifact("rest.url", url.getBytes()),
+                    "AST result REST API URL save failed");
+            info("AST result REST API URL: " + url);
+
+            final String ptaiUrl = "ptai://navigation/show?project=" + projectId.toString() + "&result=" + scanResultId.toString();
+            callApi(
+                    () -> fileOps.saveArtifact("ptai.url", ptaiUrl.getBytes()),
+                    "AST result PT AI URL save failed");
+            info("AST result PT AI URL: " + ptaiUrl);
 
             if (async) {
                 // Asynchronous mode means that we aren't need to wait AST job
                 // completion. Just write scan result access URL and exit
-                info(Messages.i18n_ast_result_success());
+                info(Resources.i18n_ast_result_status_success());
                 return JobFinishedStatus.SUCCESS;
             }
 
@@ -142,7 +149,7 @@ public abstract class AstJob extends Project {
                         new IllegalArgumentException(String.valueOf(stage)));
 
             if (FAILED.equals(stage)) {
-                info(Messages.i18n_ast_result_failed_server());
+                info(Resources.i18n_ast_result_status_failed_server());
                 return JobFinishedStatus.FAILED;
             }
 
@@ -151,7 +158,7 @@ public abstract class AstJob extends Project {
                 if (null != reports) generateReports(projectId, scanResultId, reports);
 
             if (ABORTED.equals(stage)) {
-                info(Messages.i18n_ast_result_interrupted());
+                info(Resources.i18n_ast_result_status_interrupted());
                 return JobFinishedStatus.INTERRUPTED;
             }
 
@@ -170,23 +177,23 @@ public abstract class AstJob extends Project {
             if (PolicyState.CONFIRMED.equals(policyState)) {
                 // AST policy assessment failed
                 if (failIfFailed) {
-                    info(Messages.i18n_ast_result_failed_policy());
+                    info(Resources.i18n_ast_result_status_failed_policy());
                     return JobFinishedStatus.FAILED;
                 }
             } else if (PolicyState.REJECTED.equals(policyState)) {
                 // AST policy assessment OK, check errors / warnings
                 if (failIfUnstable && !errors.isEmpty()) {
-                    info(Messages.i18n_ast_result_failed_unstable());
+                    info(Resources.i18n_ast_result_status_failed_unstable());
                     return JobFinishedStatus.FAILED;
                 }
             } else {
                 // No AST policy defined. AST success depends on minor errors / warnings
                 if (failIfUnstable && !errors.isEmpty()) {
-                    info(Messages.i18n_ast_result_failed_unstable());
+                    info(Resources.i18n_ast_result_status_failed_unstable());
                     return JobFinishedStatus.FAILED;
                 }
             }
-            info(Messages.i18n_ast_result_success());
+            info(Resources.i18n_ast_result_status_success());
             return JobFinishedStatus.SUCCESS;
         } catch (ApiException e) {
             severe(e);
@@ -194,10 +201,10 @@ public abstract class AstJob extends Project {
         } catch (Exception e) {
             if (e instanceof InterruptedException) {
                 stop();
-                severe(Messages.i18n_ast_result_interrupted());
+                severe(Resources.i18n_ast_result_status_interrupted());
                 return JobFinishedStatus.INTERRUPTED;
             } else {
-                severe(ApiException.raise(Messages.i18n_ast_result_failed(), e));
+                severe(ApiException.raise(Resources.i18n_ast_result_status_failed(), e));
                 return JobFinishedStatus.FAILED;
             }
         }

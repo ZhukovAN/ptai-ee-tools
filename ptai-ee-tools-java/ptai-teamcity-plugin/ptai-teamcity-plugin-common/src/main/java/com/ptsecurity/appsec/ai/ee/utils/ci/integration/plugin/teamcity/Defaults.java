@@ -2,6 +2,11 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import lombok.NonNull;
+import lombok.SneakyThrows;
+
+import java.lang.reflect.Field;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.*;
 
@@ -9,63 +14,187 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.C
  * Default parameter values that are used in plugin settings
  */
 public class Defaults {
-    // PT AI connection parameter names
-    public static final String URL = Base.DEFAULT_PTAI_URL;
-    public static final String TOKEN = "P@ssw0rd";
-    public static final String CERTIFICATES = "";
-    public static final String INSECURE = TRUE;
+
     /**
-     * Field that stores scan settings type: UI- or JSON-based. If this
-     * field equals to Constants.SERVER_SETTINGS_GLOBAL then globally defined PT AI
-     * server connection settings will be used
-     * (see URL..CERTIFICATES). If equals to
-     * Constants.CONFIG_LOCAL then PT AI server connection settings are
-     * defined as a build step parameters
+     * See {@link Params#URL}
+     */
+    public static final String URL = Base.DEFAULT_PTAI_URL;
+
+    /**
+     * See {@link Params#TOKEN}
+     */
+    public static final String TOKEN = "P@ssw0rd";
+
+    /**
+     * See {@link Params#CERTIFICATES}
+     */
+    public static final String CERTIFICATES = "";
+
+    /**
+     * See {@link Params#INSECURE}
+     */
+    public static final String INSECURE = TRUE;
+
+    /**
+     * See {@link Params#SERVER_SETTINGS} and {@link Constants#SERVER_SETTINGS_GLOBAL}
      */
     public static final String SERVER_SETTINGS = SERVER_SETTINGS_GLOBAL;
+
     /**
-     * Defines how code AST settings are defined. If this field equals to
-     * Constants.AST_SETTINGS_JSON then settings are defined via two JSONs, if
-     * equals to Constants.AST_SETTINGS_UI then settings are defined via viewer
+     * See {@link Params#AST_SETTINGS} and {@link Constants#AST_SETTINGS_UI}
      */
     public static final String AST_SETTINGS = AST_SETTINGS_UI;
+
     /**
-     * PT AI project name whose AST settings are used if AST_SETTINGS equals
-     * to  Constants.AST_SETTINGS_UI
+     * See {@link Params#PROJECT_NAME}
      */
     public static final String PROJECT_NAME = "PROJECT";
+
     /**
-     * AST settings defined via JSON. This value used if AST_SETTINGS equals
-     * to Constants.AST_SETTINGS_JSON
+     * See {@link Params#JSON_SETTINGS}
      */
     // TODO: Add minimal JSON settings from resource
     public static final String JSON_SETTINGS = "";
+
     /**
-     * AST policy (optional value) defined via JSON. This value used if
-     * AST_SETTINGS equals to Constants.AST_SETTINGS_JSON
+     * See {@link Params#JSON_POLICY}
      */
     public static final String JSON_POLICY = "[]";
+
     /**
-     * What to do if AST policy assessment failed. If equals to Constants.TRUE
-     * then build step will be marked as failed
+     * See {@link Params#AST_MODE} and {@link Constants#AST_MODE_SYNC}
+     */
+    public static final String AST_MODE = AST_MODE_SYNC;
+
+    /**
+     * See {@link Params#FAIL_IF_FAILED}
      */
     public static final String FAIL_IF_FAILED = TRUE;
+
     /**
-     * What to do if there were minor warnings during AST (i.e. aic.exe
-     * returned exit code 6). If equals to Constants.TRUE then build
-     * step will be marked as failed
+     * See {@link Params#FAIL_IF_UNSTABLE}
      */
     public static final String FAIL_IF_UNSTABLE = FALSE;
+
     /**
-     * Allows verbose logging if equals to Constants.TRUE
+     * See {@link Params#VERBOSE}
      */
     public static final String VERBOSE = FALSE;
+
+    /**
+     * See {@link Params#INCLUDES} and {@link Transfer#DEFAULT_INCLUDES}
+     */
     public static final String INCLUDES = Transfer.DEFAULT_INCLUDES;
+
+    /**
+     * See {@link Params#REMOVE_PREFIX}
+     */
     public static final String REMOVE_PREFIX = "";
+
+    /**
+     * See {@link Params#EXCLUDES} and {@link Transfer#DEFAULT_EXCLUDES}
+     */
     public static final String EXCLUDES = Transfer.DEFAULT_EXCLUDES;
+
+    /**
+     * See {@link Params#PATTERN_SEPARATOR} and {@link Transfer#DEFAULT_PATTERN_SEPARATOR}
+     */
     public static final String PATTERN_SEPARATOR = Transfer.DEFAULT_PATTERN_SEPARATOR;
+
+    /**
+     * See {@link Params#USE_DEFAULT_EXCLUDES} and {@link Transfer#DEFAULT_USE_DEFAULT_EXCLUDES}
+     */
     public static final String USE_DEFAULT_EXCLUDES = Transfer.DEFAULT_USE_DEFAULT_EXCLUDES ? TRUE : FALSE;
+
+    /**
+     * See {@link Params#FLATTEN} and {@link Transfer#DEFAULT_FLATTEN}
+     */
     public static final String FLATTEN = Transfer.DEFAULT_FLATTEN ? TRUE : FALSE;
 
-    public static final String REPORT_SETTINGS = REPORT_SETTINGS_NONE;
+    /**
+     * See {@link Params#REPORTING_REPORT}
+     */
+    public static final String REPORTING_REPORT = FALSE;
+
+    /**
+     * See {@link Params#REPORTING_DATA}
+     */
+    public static final String REPORTING_DATA = FALSE;
+
+    /**
+     * See {@link Params#REPORTING_RAWDATA}
+     */
+    public static final String REPORTING_RAWDATA = FALSE;
+
+    /**
+     * See {@link Params#REPORTING_JSON}
+     */
+    public static final String REPORTING_JSON = FALSE;
+
+    /**
+     * See {@link Params#REPORTING_REPORT_FILE}
+     */
+    public static final String REPORTING_REPORT_FILE = EMPTY;
+
+    /**
+     * See {@link Params#REPORTING_REPORT_TEMPLATE}
+     */
+    public static final String REPORTING_REPORT_TEMPLATE = EMPTY;
+
+    /**
+     * See {@link Params#REPORTING_REPORT_FORMAT}
+     */
+    public static final String REPORTING_REPORT_FORMAT = Reports.Report.DEFAULT_FORMAT;
+
+    /**
+     * See {@link Params#REPORTING_REPORT_LOCALE}
+     */
+    public static final String REPORTING_REPORT_LOCALE = Reports.Report.DEFAULT_LOCALE;
+
+    /**
+     * See {@link Params#REPORTING_REPORT_FILTER}
+     */
+    public static final String REPORTING_REPORT_FILTER = EMPTY;
+
+    /**
+     * See {@link Params#REPORTING_DATA_FILE}
+     */
+    public static final String REPORTING_DATA_FILE = EMPTY;
+
+    /**
+     * See {@link Params#REPORTING_DATA_FORMAT}
+     */
+    public static final String REPORTING_DATA_FORMAT = Reports.Data.DEFAULT_FORMAT;
+
+    /**
+     * See {@link Params#REPORTING_DATA_LOCALE}
+     */
+    public static final String REPORTING_DATA_LOCALE = Reports.Data.DEFAULT_LOCALE;
+
+    /**
+     * See {@link Params#REPORTING_DATA_FILTER}
+     */
+    public static final String REPORTING_DATA_FILTER = EMPTY;
+
+    /**
+     * See {@link Params#REPORTING_RAWDATA_FILE}
+     */
+    public static final String REPORTING_RAWDATA_FILE = EMPTY;
+
+    /**
+     * See {@link Params#REPORTING_JSON_SETTINGS}
+     */
+    public static final String REPORTING_JSON_SETTINGS = EMPTY;
+
+    /**
+     * Method returns default value for field passed by its name. This is implemented
+     * using reflection and required to optimize functions like creation of property map with default field values
+     * @param fieldName Defaults's public static final String field name like "URL" or "SERVER_SETTINGS"
+     * @return Field's default value
+     */
+    @SneakyThrows
+    public static String value(@NonNull final String fieldName) {
+        Field field = Defaults.class.getField(fieldName);
+        return (String) field.get(null);
+    }
 }

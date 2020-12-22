@@ -269,3 +269,12 @@ PtaiTaskSettingsForm = OO.extend(PtaiAbstractSettingsForm, {
     }
 });
 
+ptaiReportGenerateClick = function () {
+    var selector = $('GENERATE_REPORT');
+    if (true == selector.checked)
+        BS.Util.show('REPORT_FILE_ROW', 'REPORT_TEMPLATE_ROW');
+    else
+        BS.Util.hide('REPORT_FILE_ROW', 'REPORT_TEMPLATE_ROW');
+    BS.VisibilityHandlers.updateVisibility($('runnerParams'))
+};
+// ptaiReportGenerateClick();

@@ -1,9 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+
 public class Messages {
-    public static final String MESSAGE_URL_EMPTY = "PT AI server URL must not be empty";
-    public static final String MESSAGE_URL_NOT_VALID = "PT AI server URL is not valid";
-    public static final String MESSAGE_TOKEN_EMPTY = "API token must not be empty";
+    public static final String MESSAGE_URL_EMPTY = Resources.i18n_ast_settings_server_url_message_empty();
+    public static final String MESSAGE_URL_NOT_VALID = Resources.i18n_ast_settings_server_url_message_invalid();
+    public static final String MESSAGE_TOKEN_EMPTY = Resources.i18n_ast_settings_server_token_message_empty();
 
     public static final String MESSAGE_GLOBAL_SETTINGS_INVALID = "Global connection settings are invalid";
 

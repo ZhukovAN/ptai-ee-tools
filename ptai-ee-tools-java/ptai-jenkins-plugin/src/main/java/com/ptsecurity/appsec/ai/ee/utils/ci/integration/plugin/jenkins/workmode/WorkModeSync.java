@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import hudson.Extension;
 import lombok.Getter;
@@ -43,7 +43,7 @@ public class WorkModeSync extends WorkMode {
         @NotNull
         @Override
         public String getDisplayName() {
-            return Messages.captions_workMode_sync_displayName();
+            return Resources.captions_workMode_sync_displayName();
         }
     }
 

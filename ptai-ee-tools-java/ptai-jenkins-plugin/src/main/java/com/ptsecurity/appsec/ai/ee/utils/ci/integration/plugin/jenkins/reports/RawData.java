@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import hudson.Extension;
 import lombok.Getter;
 import org.jenkinsci.Symbol;
@@ -20,7 +20,7 @@ public class RawData extends BaseReport {
     public static class RawDataDescriptor extends BaseReportDescriptor {
         @Override
         public String getDisplayName() {
-            return Messages.i18n_reporting_rawdata_caption();
+            return Resources.i18n_ast_result_reporting_rawdata_label();
         }
     }
 }

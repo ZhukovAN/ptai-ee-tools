@@ -9,3 +9,8 @@
 ### 20201217
 + [Fix] Restored functions of Teamcity plugin, plan to implement async scan and report generation
 + [Feature] CLI plugin now uses Log4J2 and stores non-trace and trace logs separately
+### 20201222
++ [Fix] More existing sources are using ptai-i18n library
++ [Feature] Scan results link saved in ptai.url. But PT AI Viewer not supports it
++ [Feature] Default report locale and format are added
++ [Feature] Teamcity plugin now supports report definitions (UI only, no generation yet)

@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import hudson.Extension;
 import hudson.util.ListBoxModel;
@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.jenkinsci.Symbol;
+import org.jetbrains.annotations.NotNull;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.util.Arrays;
@@ -39,9 +40,10 @@ public class Data extends BaseReport {
     @Symbol("Data")
     @Extension
     public static class DataDescriptor extends BaseReportDescriptor {
+        @NotNull
         @Override
         public String getDisplayName() {
-            return Messages.i18n_reporting_data_caption();
+            return Resources.i18n_ast_result_reporting_data_label();
         }
 
         public ListBoxModel doFillFormatItems() {
@@ -53,8 +55,8 @@ public class Data extends BaseReport {
 
         public ListBoxModel doFillLocaleItems() {
             ListBoxModel model = new ListBoxModel();
-            model.add(Messages.captions_locale_english_displayName(), Reports.Locale.EN.name());
-            model.add(Messages.captions_locale_russian_displayName(), Reports.Locale.RU.name());
+            model.add(Resources.captions_locale_english_displayName(), Reports.Locale.EN.name());
+            model.add(Resources.captions_locale_russian_displayName(), Reports.Locale.RU.name());
             return model;
         }
     }

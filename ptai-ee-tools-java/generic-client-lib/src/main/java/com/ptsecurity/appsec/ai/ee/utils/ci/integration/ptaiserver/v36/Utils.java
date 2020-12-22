@@ -2,7 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheck;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.UrlHelper;
 import lombok.Getter;
@@ -137,7 +137,7 @@ public class Utils extends BaseClient {
     public TestResult testConnection() throws ApiException {
         TestResult result = new TestResult();
         if (StringUtils.isEmpty(url)) {
-            result.add(Messages.validator_check_serverUrl_empty());
+            result.add(Resources.validator_check_serverUrl_empty());
             return result;
         }
 
@@ -146,22 +146,22 @@ public class Utils extends BaseClient {
 
         HealthCheck healthCheck = healthCheck();
         if (null == healthCheck || null == healthCheck.getServices()) {
-            result.add(Messages.validator_test_server_health_empty());
+            result.add(Resources.validator_test_server_health_empty());
             error = true;
         } else {
             long total = healthCheck.getServices().size();
             long healthy = healthCheck.getServices().stream()
                     .filter(s -> "Healthy".equalsIgnoreCase(s.getStatus()))
                     .count();
-            result.add(Messages.validator_test_server_health_success(healthy, total));
+            result.add(Resources.validator_test_server_health_success(healthy, total));
             if (0 == healthy) warning = true;
         }
         EnterpriseLicenseData licenseData = getLicenseData();
         if (null == licenseData) {
-            result.add(Messages.validator_test_server_license_empty());
+            result.add(Resources.validator_test_server_license_empty());
             error = true;
         } else {
-            result.add(Messages.validator_test_server_license_success(
+            result.add(Resources.validator_test_server_license_success(
                     licenseData.getLicenseNumber(),
                     licenseData.getStartDate(), licenseData.getEndDate()));
             if (Boolean.FALSE.equals(licenseData.getIsValid())) warning = true;
