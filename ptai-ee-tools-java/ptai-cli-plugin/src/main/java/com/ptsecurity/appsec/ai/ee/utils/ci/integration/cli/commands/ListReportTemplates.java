@@ -5,7 +5,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
 import java.nio.charset.StandardCharsets;
@@ -13,7 +13,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-@Log
+@Slf4j
 @CommandLine.Command(
         name = "list-report-templates",
         sortOptions = false,

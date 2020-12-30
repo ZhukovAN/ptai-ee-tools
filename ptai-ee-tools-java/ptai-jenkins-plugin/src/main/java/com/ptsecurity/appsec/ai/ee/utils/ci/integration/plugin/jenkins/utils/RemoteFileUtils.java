@@ -10,7 +10,7 @@ import hudson.model.TaskListener;
 import jenkins.security.MasterToSlaveCallable;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 
-@Log
+@Slf4j
 @RequiredArgsConstructor
 public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiException> {
     protected final Executor executor;
@@ -111,9 +111,9 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
                         throw new IOException("Failed to create folder structure for " + destination.toFile().toString());
                 }
                 if (destination.toFile().exists()) {
-                    log.warning("Existing report " + fileName + " will be overwritten");
+                    log.warn("Existing report " + fileName + " will be overwritten");
                     if (!destination.toFile().delete())
-                        log.severe("Report " + fileName + " delete failed");
+                        log.error("Report " + fileName + " delete failed");
                 }
 
                 return Files.write(

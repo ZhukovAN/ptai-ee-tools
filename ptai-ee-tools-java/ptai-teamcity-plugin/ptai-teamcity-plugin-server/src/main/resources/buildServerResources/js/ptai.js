@@ -252,6 +252,34 @@ PtaiTaskSettingsForm = OO.extend(PtaiAbstractSettingsForm, {
 
             onPtaiPatternSeparatorError: function (elem) {
                 this.handle("ptaiPatternSeparator", elem);
+            },
+
+            onPtaiReportingReportFileError: function (elem) {
+                this.handle("ptaiReportingReportFile", elem);
+            },
+
+            onPtaiReportingReportTemplateError: function (elem) {
+                this.handle("ptaiReportingReportTemplate", elem);
+            },
+
+            onPtaiReportingReportFilterError: function (elem) {
+                this.handle("ptaiReportingReportFilter", elem);
+            },
+
+            onPtaiReportingDataFileError: function (elem) {
+                this.handle("ptaiReportingDataFile", elem);
+            },
+
+            onPtaiReportingDataFilterError: function (elem) {
+                this.handle("ptaiReportingDataFilter", elem);
+            },
+
+            onPtaiReportingRawDataFileError: function (elem) {
+                this.handle("ptaiReportingRawDataFile", elem);
+            },
+
+            onPtaiReportingJsonSettingsError: function (elem) {
+                this.handle("ptaiReportingJsonSettings", elem);
             }
         });
     },
@@ -269,12 +297,3 @@ PtaiTaskSettingsForm = OO.extend(PtaiAbstractSettingsForm, {
     }
 });
 
-ptaiReportGenerateClick = function () {
-    var selector = $('GENERATE_REPORT');
-    if (true == selector.checked)
-        BS.Util.show('REPORT_FILE_ROW', 'REPORT_TEMPLATE_ROW');
-    else
-        BS.Util.hide('REPORT_FILE_ROW', 'REPORT_TEMPLATE_ROW');
-    BS.VisibilityHandlers.updateVisibility($('runnerParams'))
-};
-// ptaiReportGenerateClick();

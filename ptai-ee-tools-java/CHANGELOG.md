@@ -14,3 +14,5 @@
 + [Feature] Scan results link saved in ptai.url. But PT AI Viewer not supports it
 + [Feature] Default report locale and format are added
 + [Feature] Teamcity plugin now supports report definitions (UI only, no generation yet)
+### 20201230
++ [Feature] Teamcity plugin now supports report generation

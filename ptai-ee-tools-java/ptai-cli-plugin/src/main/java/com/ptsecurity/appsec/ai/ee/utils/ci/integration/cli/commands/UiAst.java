@@ -3,16 +3,14 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
+
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob.JobFinishedStatus.SUCCESS;
 
 @Slf4j
 @CommandLine.Command(
@@ -79,38 +77,20 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        switch (execute()) {
-            case FAILED: return ExitCode.FAILED.getCode();
-            case INTERRUPTED: return BaseCommand.ExitCode.FAILED.getCode();
-            case SUCCESS: return ExitCode.SUCCESS.getCode();
-            default: return ExitCode.FAILED.getCode();
-        }
-    }
-
-    private AstJob.JobFinishedStatus execute() throws IOException {
         CliAstJob job = CliAstJob.builder()
-                .input(input)
-                .output(output)
-                .includes(includes)
-                .excludes(excludes)
-                .failIfFailed(failIfFailed)
-                .failIfUnstable(failIfUnstable)
-                .async(async)
+                .console(System.out).prefix("").verbose(verbose)
+                .url(url.toString()).token(token).insecure(insecure)
                 .name(project)
-                .url(url.toString())
-                .token(token)
-                .console(System.out)
-                .prefix("")
-                .verbose(verbose)
-                .insecure(insecure)
+                .async(async)
+                .failIfFailed(failIfFailed).failIfUnstable(failIfUnstable)
+                .input(input).output(output)
+                .includes(includes).excludes(excludes)
+                .reporting(reports)
+                .truststore(truststore)
                 .build();
-        if (null != truststore) {
-            String pem = new String(Files.readAllBytes(truststore), StandardCharsets.UTF_8);
-            job.setCaCertsPem(pem);
-        }
-        job.init();
-        if (null != reports)
-            job.setReports(reports.validate(job));
-        return job.execute();
+        if (!job.init()) return BaseCommand.ExitCode.FAILED.getCode();
+        return (SUCCESS == job.execute())
+                ? BaseCommand.ExitCode.SUCCESS.getCode()
+                : BaseCommand.ExitCode.FAILED.getCode();
     }
 }

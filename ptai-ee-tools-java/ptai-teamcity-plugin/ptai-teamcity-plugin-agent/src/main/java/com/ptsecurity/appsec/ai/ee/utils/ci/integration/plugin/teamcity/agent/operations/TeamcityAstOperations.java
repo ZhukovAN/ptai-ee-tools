@@ -23,7 +23,7 @@ public class TeamcityAstOperations implements AstOperations {
     public File createZip() {
         Transfers transfers = new Transfers();
 
-        for (Transfer transfer : this.owner.getTransfers())
+        for (Transfer transfer : owner.getTransfers())
             transfers.addTransfer(transfer);
 
         File zip = owner.getAgent().getBuildTempDirectory().toPath()

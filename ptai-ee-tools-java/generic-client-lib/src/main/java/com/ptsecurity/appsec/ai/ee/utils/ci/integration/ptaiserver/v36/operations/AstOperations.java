@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
 import lombok.NonNull;
 
@@ -22,7 +23,7 @@ public interface AstOperations {
      * Method may return null if resulting archive file is empty
      * @return Zip archive with sources ready to be uploaded to PT AI server
      */
-    abstract File createZip();
+    File createZip() throws ApiException;
 
     /**
      * Callback method is being called when AST job is started on PT AI server.

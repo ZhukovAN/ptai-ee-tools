@@ -2,7 +2,10 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.operations.JenkinsAstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.operations.JenkinsFileOperations;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildInfo;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -54,14 +57,24 @@ public class JenkinsAstJob extends AstJob {
      */
     private List<Transfer> transfers;
 
+    /**
+     * Jenkins job work mode
+     */
+    private WorkMode workMode;
+
     @Override
-    public void init() {
-        super.init();
+    public boolean unsafeInit() {
+        if (workMode instanceof WorkModeSync) {
+            WorkModeSync workModeSync = (WorkModeSync) workMode;
+            List<BaseReport> reports = workModeSync.getReports();
+            if (null != reports) setReports(BaseReport.convert(reports));
+        }
         astOps = JenkinsAstOperations.builder()
                 .owner(this)
                 .build();
         fileOps = JenkinsFileOperations.builder()
                 .owner(this)
                 .build();
+        return super.unsafeInit();
     }
 }

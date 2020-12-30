@@ -22,8 +22,8 @@
     $j(function() {
         PtaiConnectionSettingsForm.setupEventHandlers();
 
-        $('${TOKEN}').getEncryptedPassword = function(pubKey) {
-            let initialValueField = $("prop:encrypted:${TOKEN}");
+        $('${SERVER_SETTINGS_GLOBAL_TOKEN}').getEncryptedPassword = function(pubKey) {
+            let initialValueField = $("prop:encrypted:${SERVER_SETTINGS_GLOBAL_TOKEN}");
             let initialValue = (initialValueField && initialValueField.value && initialValueField.value.length > 0) ? initialValueField.value : '';
             window.console.log('Initial value length ' + initialValue.length);
             if (0 === initialValue.length)
@@ -51,48 +51,48 @@
 
                 <tr>
                     <th>
-                        <label for="${URL}">${LABEL_URL}<l:star/></label>
+                        <label for="${SERVER_SETTINGS_GLOBAL_URL}">${LABEL_SERVER_SETTINGS_GLOBAL_URL}<l:star/></label>
                     </th>
                     <td>
-                        <props:textProperty name="${URL}" className="longField"/>
-                        <span class="smallNote">${HINT_URL}</span>
-                        <span class="error" id="error_${URL}"></span>
+                        <props:textProperty name="${SERVER_SETTINGS_GLOBAL_URL}" className="longField"/>
+                        <span class="smallNote">${HINT_SERVER_SETTINGS_GLOBAL_URL}</span>
+                        <span class="error" id="error_${SERVER_SETTINGS_GLOBAL_URL}"></span>
                     </td>
                 </tr>
 
                 <tr>
                     <th>
-                        <label for="${TOKEN}">${LABEL_TOKEN}<l:star/></label>
+                        <label for="${SERVER_SETTINGS_GLOBAL_TOKEN}">${LABEL_SERVER_SETTINGS_GLOBAL_TOKEN}<l:star/></label>
                     </th>
                     <td>
-                        <props:passwordProperty name="${TOKEN}" className="longField"/>
-                        <span class="smallNote">${HINT_TOKEN}</span>
-                        <span class="error" id="error_${TOKEN}"></span>
+                        <props:passwordProperty name="${SERVER_SETTINGS_GLOBAL_TOKEN}" className="longField"/>
+                        <span class="smallNote">${HINT_SERVER_SETTINGS_GLOBAL_TOKEN}</span>
+                        <span class="error" id="error_${SERVER_SETTINGS_GLOBAL_TOKEN}"></span>
                     </td>
                 </tr>
 
                 <tr>
                     <th>
-                        <label for="${CERTIFICATES}">${LABEL_CERTIFICATES}</label>
+                        <label for="${SERVER_SETTINGS_GLOBAL_CERTIFICATES}">${LABEL_SERVER_SETTINGS_GLOBAL_CERTIFICATES}</label>
                     </th>
                     <td>
                         <props:multilineProperty
-                                name="${CERTIFICATES}"
+                                name="${SERVER_SETTINGS_GLOBAL_CERTIFICATES}"
                                 className="longField"
                                 linkTitle="Trust these CA certificates"
                                 rows="3" cols="49" expanded="${true}"
-                                note="${HINT_CERTIFICATES}"/>
-                        <span class="error" id="error_${CERTIFICATES}"></span>
+                                note="${HINT_SERVER_SETTINGS_GLOBAL_CERTIFICATES}"/>
+                        <span class="error" id="error_${SERVER_SETTINGS_GLOBAL_CERTIFICATES}"></span>
                     </td>
                 </tr>
                 <tr>
                     <th>
-                        <label for="${INSECURE}">${LABEL_INSECURE}</label>
+                        <label for="${SERVER_SETTINGS_GLOBAL_INSECURE}">${LABEL_SERVER_SETTINGS_GLOBAL_INSECURE}</label>
                     </th>
                     <td>
-                        <props:checkboxProperty name="${INSECURE}"/>
-						<span class="smallNote">${HINT_INSECURE}</span>
-                        <span class="error" id="error_${INSECURE}"></span>
+                        <props:checkboxProperty name="${SERVER_SETTINGS_GLOBAL_INSECURE}"/>
+						<span class="smallNote">${HINT_SERVER_SETTINGS_GLOBAL_INSECURE}</span>
+                        <span class="error" id="error_${SERVER_SETTINGS_GLOBAL_INSECURE}"></span>
                     </td>
                 </tr>
 			

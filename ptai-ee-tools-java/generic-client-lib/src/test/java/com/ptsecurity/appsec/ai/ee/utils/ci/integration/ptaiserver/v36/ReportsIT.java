@@ -75,7 +75,7 @@ public class ReportsIT extends BaseIT {
 
         reports.fix();
 
-        Exception e = assertThrows(ApiException.class, () -> reports.validate(utils));
+        Exception e = assertThrows(ApiException.class, () -> reports.validate().check(utils));
         utils.severe((ApiException) e);
     }
 

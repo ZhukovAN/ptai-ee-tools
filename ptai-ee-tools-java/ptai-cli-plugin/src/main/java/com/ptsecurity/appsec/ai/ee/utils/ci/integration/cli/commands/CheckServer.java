@@ -1,16 +1,18 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.concurrent.Callable;
 
-@Log
+@Slf4j
 @CommandLine.Command(
         name = "check-server",
         sortOptions = false,
@@ -35,7 +37,9 @@ public class CheckServer extends BaseCommand implements Callable<Integer> {
 
         try {
             if (null != truststore) {
-                String pem = new String(Files.readAllBytes(truststore), StandardCharsets.UTF_8);
+                String pem = Base.callApi(
+                        () -> new String(Files.readAllBytes(truststore), StandardCharsets.UTF_8),
+                        Resources.i18n_ast_settings_server_ca_pem_message_file_read_failed());
                 utils.setCaCertsPem(pem);
             }
             utils.init();

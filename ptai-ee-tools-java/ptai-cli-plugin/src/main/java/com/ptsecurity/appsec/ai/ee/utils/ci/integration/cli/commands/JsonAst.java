@@ -2,19 +2,16 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 
-@Log
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob.JobFinishedStatus.SUCCESS;
+
+@Slf4j
 @CommandLine.Command(
         name = "json-ast",
         sortOptions = false,
@@ -85,42 +82,21 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
 
     @Override
     public Integer call() throws Exception {
-        switch (execute()) {
-            case FAILED: return BaseCommand.ExitCode.FAILED.getCode();
-            case INTERRUPTED: return BaseCommand.ExitCode.FAILED.getCode();
-            case SUCCESS: return BaseCommand.ExitCode.SUCCESS.getCode();
-            default: return BaseCommand.ExitCode.FAILED.getCode();
-        }
-    }
-
-    public AstJob.JobFinishedStatus execute() throws IOException {
-        String settings = new String(Files.readAllBytes(jsonSettings), StandardCharsets.UTF_8);
         CliAstJob job = CliAstJob.builder()
-                .input(input)
-                .output(output)
-                .includes(includes)
-                .excludes(excludes)
-                .failIfFailed(failIfFailed)
-                .failIfUnstable(failIfUnstable)
+                .console(System.out).prefix("").verbose(verbose)
+                .url(url.toString()).token(token).insecure(insecure)
                 .async(async)
-                .name(JsonSettingsHelper.verify(settings).getProjectName())
-                .url(url.toString())
-                .token(token)
-                .console(System.out)
-                .prefix("")
-                .verbose(verbose)
-                .insecure(insecure)
-                .jsonSettings(settings)
+                .failIfFailed(failIfFailed).failIfUnstable(failIfUnstable)
+                .input(input).output(output)
+                .includes(includes).excludes(excludes)
+                .reporting(reports)
+                .truststore(truststore)
+                .settings(jsonSettings)
+                .policy(jsonPolicy)
                 .build();
-        if (null != truststore) {
-            String pem = new String(Files.readAllBytes(truststore), StandardCharsets.UTF_8);
-            job.setCaCertsPem(pem);
-        }
-        if (null != jsonPolicy)
-            job.setJsonPolicy(new String(Files.readAllBytes(jsonPolicy), StandardCharsets.UTF_8));
-        job.init();
-        if (null != reports)
-            job.setReports(reports.validate(job));
-        return job.execute();
+        if (!job.init()) return BaseCommand.ExitCode.FAILED.getCode();
+        return (SUCCESS == job.execute())
+                ? BaseCommand.ExitCode.SUCCESS.getCode()
+                : BaseCommand.ExitCode.FAILED.getCode();
     }
 }

@@ -144,7 +144,6 @@ public class BaseClient extends Base {
      */
     @Getter
     @Setter
-    @NonNull
     protected String url;
 
     /**
@@ -152,7 +151,6 @@ public class BaseClient extends Base {
      */
     @Setter
     @Getter
-    @NonNull
     protected String token;
 
     /**
@@ -182,10 +180,20 @@ public class BaseClient extends Base {
     /**
      * Init all PT AI endpoints API clients
      */
-    public void init() {
+    public boolean init() {
+        try {
+            return unsafeInit();
+        } catch (ApiException e) {
+            warning(e);
+            return false;
+        }
+    }
+
+    public boolean unsafeInit() throws ApiException {
         url = StringUtils.removeEnd(url.trim(), "/");
         ApiClientHelper.initClientApis(this, apis);
         initialized = true;
+        return true;
     }
 
     @Builder.Default

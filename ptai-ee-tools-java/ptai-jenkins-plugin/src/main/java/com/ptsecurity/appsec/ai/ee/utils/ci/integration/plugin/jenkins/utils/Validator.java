@@ -8,13 +8,13 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.UrlHelp
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import hudson.util.FormValidation;
 import lombok.NonNull;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.DomainValidator;
 
 import java.util.regex.Pattern;
 
-@Log
+@Slf4j
 public class Validator {
     public static boolean doCheckFieldNotEmpty(String value) {
         return !StringUtils.isEmpty(value);
@@ -56,7 +56,7 @@ public class Validator {
     }
 
     public static boolean doCheckFieldJsonIssuesFilter(String value) {
-        return checkViaException(() -> Reports.verify(value));
+        return checkViaException(() -> Reports.validateJsonFilter(value));
     }
 
     public static FormValidation doCheckFieldNotEmpty(String value, String errorMessage) {

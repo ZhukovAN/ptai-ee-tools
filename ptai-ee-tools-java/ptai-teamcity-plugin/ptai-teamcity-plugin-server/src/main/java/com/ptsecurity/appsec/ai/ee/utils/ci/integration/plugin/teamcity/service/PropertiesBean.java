@@ -1,6 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.ReportsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.AstAdminSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import jetbrains.buildServer.controllers.BasePropertiesBean;
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
 import jetbrains.buildServer.util.StringUtil;
@@ -12,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.SERVER_SETTINGS_GLOBAL;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.TRUE;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.SERVER_SETTINGS;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
 
 public class PropertiesBean extends BasePropertiesBean {
     private final static String PROPERTY_PREFIX = "prop:";
@@ -78,5 +81,9 @@ public class PropertiesBean extends BasePropertiesBean {
         settings.getProperties().forEach(
                 (k, v) -> setProperty(k.toString(), (null == v) ? "" : v.toString()));
         return true;
+    }
+
+    public Reports convert() throws ApiException {
+        return ReportsHelper.convert(getProperties());
     }
 }

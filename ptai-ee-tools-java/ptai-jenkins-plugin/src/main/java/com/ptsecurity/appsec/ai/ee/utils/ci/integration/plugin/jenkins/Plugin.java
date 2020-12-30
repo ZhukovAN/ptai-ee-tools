@@ -10,7 +10,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalcon
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigGlobal;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsManual;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
@@ -22,7 +21,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import hudson.AbortException;
 import hudson.FilePath;
@@ -38,7 +36,6 @@ import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import lombok.Getter;
 import lombok.ToString;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -51,7 +48,6 @@ import java.util.TreeMap;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Slf4j
-@Log
 @ToString
 public class Plugin extends Builder implements SimpleBuildStep {
     private static final String CONSOLE_PREFIX = Base.DEFAULT_PREFIX;
@@ -100,7 +96,8 @@ public class Plugin extends Builder implements SimpleBuildStep {
         try {
             final TreeMap<String, String> env = build.getEnvironment(listener);
             if (build instanceof AbstractBuild) {
-                env.putAll(((AbstractBuild) build).getBuildVariables());
+                AbstractBuild abstractBuild = (AbstractBuild) build;
+                env.putAll(abstractBuild.getBuildVariables());
             }
             return env;
         } catch (Exception e) {
@@ -176,9 +173,11 @@ public class Plugin extends Builder implements SimpleBuildStep {
         String serverUrl;
         boolean serverInsecure;
 
+        //TODO Move all settings processing to JenkinsAstJob.unsafeInit method
+
         if (config instanceof ConfigGlobal) {
             // Settings are defined globally, job just refers them using configName
-            configName = ((ConfigGlobal)config).getConfigName();
+            configName = ((ConfigGlobal) config).getConfigName();
             BaseConfig base = descriptor.getConfig(configName);
             serverSettings = ((Config) base).getServerSettings();
             credentialsId = serverSettings.getServerCredentialsId();
@@ -222,17 +221,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .listener(listener)
                 .buildInfo(buildInfo)
                 .transfers(transfers)
+                .workMode(workMode)
                 .build();
         if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
             job.setCaCertsPem(credentials.getServerCaCertificates());
-        job.init();
+        if (!job.init())
+            throw new AbortException(Resources.validator_failed());
 
-        if (workMode instanceof WorkModeSync) {
-            WorkModeSync workModeSync = (WorkModeSync) workMode;
-            Reports reports = BaseReport.validate(workModeSync.getReports(), job);
-            if (null != reports)
-                job.setReports(reports);
-        }
         if (!AstJob.JobFinishedStatus.SUCCESS.equals(job.execute()))
             throw new AbortException(Resources.validator_failed());
     }

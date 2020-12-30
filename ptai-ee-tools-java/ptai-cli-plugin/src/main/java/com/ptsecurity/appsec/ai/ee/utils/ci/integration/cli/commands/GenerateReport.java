@@ -4,11 +4,10 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -49,7 +48,11 @@ public class GenerateReport extends BaseCommand implements Callable<Integer> {
             description = "PT AI project scan result ID. If no value is defined latest scan result will be used for report generation")
     private UUID scanResultId;
 
-    @CommandLine.ArgGroup(multiplicity = "1", order = 6)
+    /**
+     * Reports to be generated. As multiplicity equals 1 this parameter is required,
+     * so at least one report is to be defined
+     */
+    @CommandLine.ArgGroup(multiplicity = "1", order = 6, exclusive = true)
     private BaseCommand.Reporting reports;
 
     @CommandLine.Option(
@@ -58,41 +61,40 @@ public class GenerateReport extends BaseCommand implements Callable<Integer> {
             description = "Folder where AST report is to be stored. By default .ptai folder is used")
     protected Path output = Paths.get(System.getProperty("user.dir")).resolve(Base.DEFAULT_SAST_FOLDER);
 
+    /**
+     * Generate reports defined by CLI parameters. As report generation
+     * does not start AST process, this method creates dummy AST job with
+     * random name and cals its
+     * {@link com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob#generateReports(UUID, UUID, Reports)}
+     * report generation method
+     * @return Reports generation exit code
+     * @throws Exception
+     */
     @Override
     public Integer call() throws Exception {
+        // Create dummy AST job that will be used for reports generation
         CliAstJob job = CliAstJob.builder()
-                .name(UUID.randomUUID().toString())
-                .console(System.out)
-                .prefix("")
-                .verbose(verbose)
-                .insecure(insecure)
-                .url(url.toString())
-                .token(token)
+                .console(System.out).prefix("").verbose(verbose)
+                .url(url.toString()).token(token).insecure(insecure)
                 .output(output)
+                .truststore(truststore)
                 .build();
 
         try {
-            if (null != truststore) {
-                String pem = new String(Files.readAllBytes(truststore), StandardCharsets.UTF_8);
-                job.setCaCertsPem(pem);
-            }
-            job.init();
+            if (!job.init())
+                return ExitCode.FAILED.getCode();
 
             if (null == projectInfo.id)
                 projectInfo.id = job.searchProject(projectInfo.name);
-            if (null == projectInfo.id) {
-                job.severe("Project " + projectInfo.name + " not found");
-                return ExitCode.FAILED.getCode();
-            }
+            if (null == projectInfo.id)
+                throw ApiException.raise("Project " + projectInfo.name + " not found", new IllegalArgumentException(projectInfo.name));
 
             if (null == scanResultId)
                 scanResultId = job.latestScanResult(projectInfo.id);
-            if (null == scanResultId) {
-                job.severe("Latest scan result not found");
-                return ExitCode.FAILED.getCode();
-            }
+            if (null == scanResultId)
+                throw ApiException.raise("Latest scan result not found", new IllegalArgumentException(projectInfo.name));
 
-            job.generateReports(projectInfo.id, scanResultId, reports.validate(job));
+            job.generateReports(projectInfo.id, scanResultId, reports.convert());
             return ExitCode.SUCCESS.getCode();
         } catch (ApiException e) {
             job.severe(e);

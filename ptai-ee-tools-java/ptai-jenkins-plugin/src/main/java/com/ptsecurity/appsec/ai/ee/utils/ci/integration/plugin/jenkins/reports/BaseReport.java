@@ -4,14 +4,12 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
 import hudson.DescriptorExtensionList;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
 import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import lombok.Getter;
-import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -23,8 +21,15 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
     private static final DescriptorExtensionList<BaseReport, BaseReportDescriptor> all =
             DescriptorExtensionList.createDescriptorList(Jenkins.get(), BaseReport.class);
 
-    public static Reports validate(final List<BaseReport> reports,
-                                   @NonNull final Utils utils) throws ApiException {
+    /**
+     * Method converts list of miscellaneous report defined for a job to Reports
+     * instance. If there were conversion errors like JSON parse fail,
+     * an ApiException will be thrown
+     * @param reports List of miscellaneous reports defined for a job
+     * @return Reports instance that containt all the reports defined for a job
+     * @throws ApiException Exception that contains error details
+     */
+    public static Reports convert(final List<BaseReport> reports) throws ApiException {
         if (null == reports || reports.isEmpty()) return null;
         Reports res = new Reports();
         for (BaseReport r : reports) {
@@ -35,7 +40,7 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
                 item.setLocale(Reports.Locale.valueOf(data.getLocale()));
                 item.setFileName(data.getFileName());
                 if (StringUtils.isNotEmpty(data.getFilter()))
-                    item.setFilters(Reports.verify(data.getFilter()));
+                    item.setFilters(Reports.validateJsonFilter(data.getFilter()));
                 res.getData().add(item);
             } else if (r instanceof Report) {
                 Report data = (Report) r;
@@ -45,16 +50,19 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
                 item.setFileName(data.getFileName());
                 item.setTemplate(data.getTemplate());
                 if (StringUtils.isNotEmpty(data.getFilter()))
-                    item.setFilters(Reports.verify(data.getFilter()));
+                    item.setFilters(Reports.validateJsonFilter(data.getFilter()));
                 res.getReport().add(item);
             } else if (r instanceof RawData) {
                 RawData data = (RawData) r;
                 Reports.RawData item = new Reports.RawData();
                 item.setFileName(data.getFileName());
                 res.getRaw().add(item);
+            } else if (r instanceof Json) {
+                Json json = (Json) r;
+                res.append(Reports.validateJsonReports(json.getJson()));
             }
         }
-        return res.validate(utils).fix();
+        return res;
     }
 
     public static abstract class BaseReportDescriptor extends Descriptor<BaseReport> {
@@ -77,6 +85,6 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
 
     @Override
     public BaseReport clone() throws CloneNotSupportedException {
-        return (BaseReport)super.clone();
+        return (BaseReport) super.clone();
     }
 }

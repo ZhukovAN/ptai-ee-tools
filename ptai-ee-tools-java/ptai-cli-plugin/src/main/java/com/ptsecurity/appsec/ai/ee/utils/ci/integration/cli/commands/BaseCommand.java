@@ -1,18 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import picocli.CommandLine;
 
-import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -40,6 +38,10 @@ public abstract class BaseCommand {
      * must be annotated with @CommandLine.ArgGroup(exclusive = true)
      */
     public static class Reporting {
+        /**
+         * Reports to be generated are defined using JSON file and
+         * no other reports are to be done
+         */
         @CommandLine.Option(
                 names = {"--report-json"}, order = 1,
                 required = true,
@@ -47,13 +49,21 @@ public abstract class BaseCommand {
                 description = "JSON file that defines reports to be generated")
         Path reportingJson = null;
 
+        /**
+         * Reports to be generated are directly defined in CLI parameters
+         * as file names, template, locale, format etc.
+         */
         @CommandLine.ArgGroup(exclusive = false)
         ExplicitReporting reporting = null;
 
-        Reports validate(@NonNull final Utils utils) throws ApiException {
-            Reports reports;
+        /**
+         * Method converts CLI reporting parameters to {@link Reports} instance.
+         * @return {@link Reports} instance that is made of CLI parameters
+         * @throws ApiException EXception that contains error details if CLI-to-Reports conversion failed
+         */
+        public Reports convert() throws ApiException {
             if (null != reporting) {
-                reports = new Reports();
+                Reports reports = new Reports();
                 // Convert CLI-defined report / export data to generic Reports instance
                 if (null != reporting.data) {
                     Reports.Data data = new Reports.Data();
@@ -75,29 +85,13 @@ public abstract class BaseCommand {
                     raw.setFileName(reporting.raw.normalize().toString());
                     reports.getRaw().add(raw);
                 }
-            } else if (null != reportingJson) {
-                // Load Reports instance from JSON file
-                try {
-                    String json = FileUtils.readFileToString(reportingJson.toFile(), StandardCharsets.UTF_8);
-                    reports = load(json);
-                } catch (IOException e) {
-                    throw ApiException.raise("File " + reportingJson.toString() + " read failed", e);
-                }
+                return reports;
             } else {
-                log.error("Reporting settings validation failed");
-                return null;
-            }
-            return reports.validate(utils).fix();
-        }
-
-        static Reports load(String json) throws ApiException {
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-                Reports res = mapper.readValue(json, Reports.class);
-                return res.fix();
-            } catch (Exception e) {
-                throw ApiException.raise("JSON-defined reporting settings parse failed", e);
+                // Load Reports instance from JSON file
+                String json = Base.callApi(
+                        () -> FileUtils.readFileToString(reportingJson.toFile(), StandardCharsets.UTF_8),
+                        Resources.i18n_ast_result_reporting_json_message_file_read_failed());
+                return Reports.validateJsonReports(json);
             }
         }
     }
@@ -248,6 +242,4 @@ public abstract class BaseCommand {
             names = {"--insecure"}, order = 99,
             description = "Do not verify CA certificate chain")
     protected boolean insecure = false;
-
-
 }

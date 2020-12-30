@@ -3,6 +3,22 @@
 <%@ page import="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Labels" %>
 <%@ page import="com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params" %>
 
+<c:set var="SERVER_SETTINGS_GLOBAL_URL" value="<%=Params.URL%>"/>
+<c:set var="LABEL_SERVER_SETTINGS_GLOBAL_URL" value="<%=Labels.URL%>"/>
+<c:set var="HINT_SERVER_SETTINGS_GLOBAL_URL" value="<%=Hints.URL%>"/>
+
+<c:set var="SERVER_SETTINGS_GLOBAL_TOKEN" value="<%=Params.TOKEN%>"/>
+<c:set var="LABEL_SERVER_SETTINGS_GLOBAL_TOKEN" value="<%=Labels.TOKEN%>"/>
+<c:set var="HINT_SERVER_SETTINGS_GLOBAL_TOKEN" value="<%=Hints.TOKEN%>"/>
+
+<c:set var="SERVER_SETTINGS_GLOBAL_CERTIFICATES" value="<%=Params.CERTIFICATES%>"/>
+<c:set var="LABEL_SERVER_SETTINGS_GLOBAL_CERTIFICATES" value="<%=Labels.CERTIFICATES%>"/>
+<c:set var="HINT_SERVER_SETTINGS_GLOBAL_CERTIFICATES" value="<%=Hints.CERTIFICATES%>"/>
+
+<c:set var="SERVER_SETTINGS_GLOBAL_INSECURE" value="<%=Params.INSECURE%>"/>
+<c:set var="LABEL_SERVER_SETTINGS_GLOBAL_INSECURE" value="<%=Labels.INSECURE%>"/>
+<c:set var="HINT_SERVER_SETTINGS_GLOBAL_INSECURE" value="<%=Hints.INSECURE%>"/>
+
 <c:set var="SERVER_SETTINGS" value="<%=Params.SERVER_SETTINGS%>"/>
 <c:set var="LABEL_SERVER_SETTINGS" value="<%=Labels.SERVER_SETTINGS%>"/>
 <c:set var="HINT_SERVER_SETTINGS" value="<%=Hints.SERVER_SETTINGS%>"/>

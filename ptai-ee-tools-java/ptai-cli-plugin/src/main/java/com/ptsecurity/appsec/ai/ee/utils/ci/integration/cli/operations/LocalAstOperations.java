@@ -4,6 +4,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils.GracefulShutdown;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations.AstOperations;
@@ -32,11 +33,11 @@ public class LocalAstOperations implements AstOperations {
      * @param input Folder where files to be zipped are located
      * @return Zip archive with sources ready to be uploaded to PT AI server
      */
-    private File createLocalZip(@NonNull final Transfers transfers, @NonNull final Path input) {
+    private File createLocalZip(@NonNull final Transfers transfers, @NonNull final Path input) throws ApiException {
         return FileCollector.collect(transfers, input.toFile(), owner);
     }
 
-    public File createZip() {
+    public File createZip() throws ApiException {
         Transfer transfer = new Transfer();
         if (StringUtils.isNotEmpty(owner.getIncludes())) transfer.setIncludes(owner.getIncludes());
         if (StringUtils.isNotEmpty(owner.getExcludes())) transfer.setExcludes(owner.getExcludes());

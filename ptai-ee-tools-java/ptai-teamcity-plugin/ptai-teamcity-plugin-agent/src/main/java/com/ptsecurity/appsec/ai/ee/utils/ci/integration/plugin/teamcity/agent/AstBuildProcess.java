@@ -1,15 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.UrlHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildFinishedStatus;
@@ -23,9 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.*;
-
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.SERVER_SETTINGS_GLOBAL;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.TRUE;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -77,62 +67,13 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
         Map<String, String> params = buildRunnerContext.getRunnerParameters();
         Map<String, String> globals = agentRunningBuild.getSharedConfigParameters();
 
-        boolean globalSettingsUsed = SERVER_SETTINGS_GLOBAL.equalsIgnoreCase(params.get(Params.SERVER_SETTINGS));
-        if (!globalSettingsUsed) globals = params;
-
-        String jsonSettings = null;
-        String jsonPolicy = null;
-
-        String projectName = null;
-
-        if (Constants.AST_SETTINGS_JSON.equalsIgnoreCase(params.get(Params.AST_SETTINGS))) {
-            ScanSettings scanSettings = JsonSettingsHelper.verify(params.get(Params.JSON_SETTINGS));
-            projectName = validateNotEmpty(scanSettings.getProjectName());
-            jsonSettings = JsonSettingsHelper.minimize(params.get(Params.JSON_SETTINGS));
-            jsonPolicy = JsonPolicyHelper.minimize(params.get(Params.JSON_POLICY));
-        } else
-            projectName = validateNotEmpty(params.get(Params.PROJECT_NAME));
-
-        Transfer transfer = new Transfer();
-        if (StringUtils.isNotEmpty(params.get(Params.INCLUDES)))
-            transfer.setIncludes(params.get(Params.INCLUDES));
-        if (StringUtils.isNotEmpty(params.get(Params.EXCLUDES)))
-            transfer.setExcludes(params.get(Params.EXCLUDES));
-        if (StringUtils.isNotEmpty(params.get(Params.PATTERN_SEPARATOR)))
-            transfer.setPatternSeparator(params.get(Params.PATTERN_SEPARATOR));
-        if (StringUtils.isNotEmpty(params.get(Params.REMOVE_PREFIX)))
-            transfer.setRemovePrefix(params.get(Params.REMOVE_PREFIX));
-        transfer.setFlatten(TRUE.equalsIgnoreCase(params.get(Params.FLATTEN)));
-        transfer.setUseDefaultExcludes(TRUE.equalsIgnoreCase(params.get(Params.USE_DEFAULT_EXCLUDES)));
-
         job = TeamcityAstJob.builder()
-                .name(projectName)
-                .jsonSettings(jsonSettings)
-                .jsonPolicy(jsonPolicy)
-                .verbose(TRUE.equalsIgnoreCase(params.get(Params.VERBOSE)))
-                // .prefix(CONSOLE_PREFIX)
-                .url(validateUrl(globals.get(Params.URL)))
-                .token(validateNotEmpty(globals.get(Params.TOKEN)))
-                .insecure(TRUE.equalsIgnoreCase(globals.get(Params.INSECURE)))
-                // .async(workMode instanceof WorkModeAsync)
-                .failIfFailed(TRUE.equalsIgnoreCase(params.get(Params.FAIL_IF_FAILED)))
-                .failIfUnstable(TRUE.equalsIgnoreCase(params.get(Params.FAIL_IF_UNSTABLE)))
                 .agent(agentRunningBuild)
                 .artifactsWatcher(artifactsWatcher)
-                .transfers(new Transfers().addTransfer(transfer))
+                .globals(globals)
+                .params(params)
                 .build();
-        if (StringUtils.isNotEmpty(globals.get(Params.CERTIFICATES)))
-            job.setCaCertsPem(globals.get(Params.CERTIFICATES));
         job.init();
-        // TODO: Add async mode support
-        /*
-        if (workMode instanceof WorkModeSync) {
-            WorkModeSync workModeSync = (WorkModeSync) workMode;
-            Reports reports = BaseReport.validate(workModeSync.getReports(), job);
-            if (null != reports)
-                job.setReports(reports);
-        }
-        */
         return job.execute();
     }
 

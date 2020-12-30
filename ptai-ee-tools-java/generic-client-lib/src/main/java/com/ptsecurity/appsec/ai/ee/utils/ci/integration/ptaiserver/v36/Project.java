@@ -28,7 +28,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class Project extends Utils {
     @Getter
     @Setter
-    @NonNull
     protected String name;
 
     @Setter

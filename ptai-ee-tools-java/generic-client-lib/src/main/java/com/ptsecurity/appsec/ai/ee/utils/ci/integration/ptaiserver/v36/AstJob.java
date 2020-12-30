@@ -75,126 +75,159 @@ public abstract class AstJob extends Project {
 
     protected FileOperations fileOps;
 
-    public JobFinishedStatus execute() {
-        try {
-            ScanSettings settings = (StringUtils.isEmpty(jsonSettings))
-                    ? null
-                    : JsonSettingsHelper.verify(jsonSettings);
-            Policy[] policy = (StringUtils.isEmpty(jsonPolicy))
-                    ? null
-                    : JsonPolicyHelper.verify(jsonPolicy);
+    /**
+     * Method sets up AST job and executes it. Method returns FAILED if:
+     * - AST complete, policy assessment failed and "fail-if-failed" is defined
+     * - AST complete, minor errors / warnings are thrown and "fail-if-unstable" is defined
+     * Method throws an exception if:
+     * - there were API exceptions
+     * - there were settings errors like JSON problems, project not found etc.
+     * - sources sip / upload failed
+     * @return AST job execution status
+     * @throws ApiException Error details
+     */
+    protected JobFinishedStatus unsafeExecute() throws ApiException {
+        // Check if all the reports are exist. Throw an exception if there are problems
+        if (null != reports)
+            reports = reports.validate().fix().check(this);
 
-            if (null != settings)
-                name = settings.getProjectName();
+        // Check if JSON settings and policy are defined correctly. Throw an exception if there are problems
+        ScanSettings settings = (StringUtils.isEmpty(jsonSettings))
+                ? null
+                : JsonSettingsHelper.verify(jsonSettings);
+        Policy[] policy = (StringUtils.isEmpty(jsonPolicy))
+                ? null
+                : JsonPolicyHelper.verify(jsonPolicy);
 
-            // If project not exist - JSON settings are to be defined
-            UUID projectId = searchProject();
-            if (null == projectId) {
-                if (null != settings) {
-                    info("Project %s not found, will be created as JSON settings are defined", name);
-                    projectId = setupFromJson(settings, policy);
-                } else {
-                    info("Project %s not found", name);
-                    return JobFinishedStatus.FAILED;
-                }
-            } else if (null != settings)
-                setupFromJson(settings, policy);
-            info("PT AI project ID is " + projectId);
+        if (null != settings)
+            name = settings.getProjectName();
 
-            // Zip sources and upload to server
-            sources = astOps.createZip();
-            upload();
-
-            // Start scan
-            scanResultId = scan(node);
-            info("PT AI AST result ID is " + scanResultId);
-            astOps.scanStartedCallback(this, scanResultId);
-
-            // Save result URL to artifacts
-            final String url = projectsApi.apiProjectsProjectIdScanResultsScanResultIdGetCall(projectId, scanResultId, null).request().url().toString();
-            callApi(
-                    () -> fileOps.saveArtifact("rest.url", url.getBytes()),
-                    "AST result REST API URL save failed");
-            info("AST result REST API URL: " + url);
-
-            final String ptaiUrl = "ptai://navigation/show?project=" + projectId.toString() + "&result=" + scanResultId.toString();
-            callApi(
-                    () -> fileOps.saveArtifact("ptai.url", ptaiUrl.getBytes()),
-                    "AST result PT AI URL save failed");
-            info("AST result PT AI URL: " + ptaiUrl);
-
-            if (async) {
-                // Asynchronous mode means that we aren't need to wait AST job
-                // completion. Just write scan result access URL and exit
-                info(Resources.i18n_ast_result_status_success());
-                return JobFinishedStatus.SUCCESS;
-            }
-
-            // Wait for AST to complete and process results
-            ScanResult state = waitForComplete(scanResultId);
-            astOps.scanCompleteCallback();
-
-            Stage stage = Optional.of(state)
-                    .map(ScanResult::getProgress)
-                    .map(ScanProgress::getStage)
-                    .orElseThrow(() -> ApiException.raise(
-                            "PT AI server API error",
-                            new NullPointerException("Failed to get finished job scan progress")));
-            fine("Resulting stage is " + stage);
-            fine("Resulting statistics is " + state.getStatistic());
-
-            if (!EnumSet.of(DONE, ABORTED, FAILED).contains(stage))
-                throw ApiException.raise(
-                        "Unexpected finished scan result stage",
-                        new IllegalArgumentException(String.valueOf(stage)));
-
-            if (FAILED.equals(stage)) {
-                info(Resources.i18n_ast_result_status_failed_server());
+        // If project not exist - JSON settings are to be defined
+        UUID projectId = searchProject();
+        if (null == projectId) {
+            if (null != settings) {
+                info("Project %s not found, will be created as JSON settings are defined", name);
+                projectId = setupFromJson(settings, policy);
+            } else {
+                info("Project %s not found", name);
                 return JobFinishedStatus.FAILED;
             }
+        } else if (null != settings)
+            setupFromJson(settings, policy);
+        info("PT AI project ID is " + projectId);
 
-            if (DONE.equals(stage) || ABORTED.equals(stage))
-                // Save user defined reports if scan was started ever
-                if (null != reports) generateReports(projectId, scanResultId, reports);
+        // Zip sources and upload to server. Throw an exception if there are problems
+        sources = astOps.createZip();
+        upload();
 
-            if (ABORTED.equals(stage)) {
-                info(Resources.i18n_ast_result_status_interrupted());
-                return JobFinishedStatus.INTERRUPTED;
-            }
+        // Start scan
+        scanResultId = scan(node);
+        info("PT AI AST result ID is " + scanResultId);
+        astOps.scanStartedCallback(this, scanResultId);
 
-            // Let's process DONE stage warnings / errors and AST policy assessment result
-            List<ScanError> errors = getScanErrors(projectId, scanResultId);
+        // Save result URL to artifacts
+        final UUID finalProjectId = projectId;
+        final String url = callApi(
+                () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdGetCall(finalProjectId, scanResultId, null).request().url().toString(),
+                "Failed to get AST result URL");
+        callApi(
+                () -> fileOps.saveArtifact("rest.url", url.getBytes()),
+                "AST result REST API URL save failed");
+        info("AST result REST API URL: " + url);
 
-            // OK, scan complete, let's check for policy violations
-            PolicyState policyState = Optional.of(state)
-                    .map(ScanResult::getStatistic)
-                    .map(ScanResultStatistic::getPolicyState)
-                    .orElseThrow(() -> ApiException.raise(
-                            "PT AI server API error",
-                            new NullPointerException("Failed to get finished job policy assessment state")));
+        final String ptaiUrl = "ptai://navigation/show?project=" + projectId.toString() + "&result=" + scanResultId.toString();
+        callApi(
+                () -> fileOps.saveArtifact("ptai.url", ptaiUrl.getBytes()),
+                "AST result PT AI URL save failed");
+        info("AST result PT AI URL: " + ptaiUrl);
 
-            // TODO: Swap REJECTED/CONFIRMED states when https://jira.ptsecurity.com/browse/AI-4866 will be fixed
-            if (PolicyState.CONFIRMED.equals(policyState)) {
-                // AST policy assessment failed
-                if (failIfFailed) {
-                    info(Resources.i18n_ast_result_status_failed_policy());
-                    return JobFinishedStatus.FAILED;
-                }
-            } else if (PolicyState.REJECTED.equals(policyState)) {
-                // AST policy assessment OK, check errors / warnings
-                if (failIfUnstable && !errors.isEmpty()) {
-                    info(Resources.i18n_ast_result_status_failed_unstable());
-                    return JobFinishedStatus.FAILED;
-                }
-            } else {
-                // No AST policy defined. AST success depends on minor errors / warnings
-                if (failIfUnstable && !errors.isEmpty()) {
-                    info(Resources.i18n_ast_result_status_failed_unstable());
-                    return JobFinishedStatus.FAILED;
-                }
-            }
+        if (async) {
+            // Asynchronous mode means that we aren't need to wait AST job
+            // completion. Just write scan result access URL and exit
             info(Resources.i18n_ast_result_status_success());
             return JobFinishedStatus.SUCCESS;
+        }
+
+        // Wait for AST to complete and process results
+        ScanResult state = waitForComplete(scanResultId);
+        astOps.scanCompleteCallback();
+
+        Stage stage = Optional.of(state)
+                .map(ScanResult::getProgress)
+                .map(ScanProgress::getStage)
+                .orElseThrow(() -> ApiException.raise(
+                        "PT AI server API error",
+                        new NullPointerException("Failed to get finished job scan progress")));
+        fine("Resulting stage is " + stage);
+        fine("Resulting statistics is " + state.getStatistic());
+
+        if (!EnumSet.of(DONE, ABORTED, FAILED).contains(stage))
+            throw ApiException.raise(
+                    "Unexpected finished scan result stage",
+                    new IllegalArgumentException(String.valueOf(stage)));
+
+        if (FAILED.equals(stage)) {
+            info(Resources.i18n_ast_result_status_failed_server());
+            return JobFinishedStatus.FAILED;
+        }
+
+        if (DONE.equals(stage) || ABORTED.equals(stage))
+            // Save user defined reports if scan was started ever
+            if (null != reports) generateReports(projectId, scanResultId, reports);
+
+        if (ABORTED.equals(stage)) {
+            info(Resources.i18n_ast_result_status_interrupted());
+            return JobFinishedStatus.INTERRUPTED;
+        }
+
+        // Let's process DONE stage warnings / errors and AST policy assessment result
+        List<ScanError> errors = getScanErrors(projectId, scanResultId);
+
+        // OK, scan complete, let's check for policy violations
+        PolicyState policyState = Optional.of(state)
+                .map(ScanResult::getStatistic)
+                .map(ScanResultStatistic::getPolicyState)
+                .orElseThrow(() -> ApiException.raise(
+                        "PT AI server API error",
+                        new NullPointerException("Failed to get finished job policy assessment state")));
+
+        // TODO: Swap REJECTED/CONFIRMED states when https://jira.ptsecurity.com/browse/AI-4866 will be fixed
+        if (PolicyState.CONFIRMED.equals(policyState)) {
+            // AST policy assessment failed
+            if (failIfFailed) {
+                info(Resources.i18n_ast_result_status_failed_policy());
+                return JobFinishedStatus.FAILED;
+            }
+        } else if (PolicyState.REJECTED.equals(policyState)) {
+            // AST policy assessment OK, check errors / warnings
+            if (failIfUnstable && !errors.isEmpty()) {
+                info(Resources.i18n_ast_result_status_failed_unstable());
+                return JobFinishedStatus.FAILED;
+            }
+        } else {
+            // No AST policy defined. AST success depends on minor errors / warnings
+            if (failIfUnstable && !errors.isEmpty()) {
+                info(Resources.i18n_ast_result_status_failed_unstable());
+                return JobFinishedStatus.FAILED;
+            }
+        }
+        info(Resources.i18n_ast_result_status_success());
+        return JobFinishedStatus.SUCCESS;
+    }
+
+    /**
+     * Method sets up AST job and executes it. Method returns FAILED if:
+     * - there were API exceptions
+     * - there were settings errors like JSON problems, project not found etc.
+     * - sources sip / upload failed
+     * - AST complete, policy assessment failed and "fail-if-failed" is defined
+     * - AST complete, minor errors / warnings are thrown and "fail-if-unstable" is defined
+     * If there were errors despite AST started or there were just settings misconfiguration, return FAILED
+     * @return AST job execution status
+     */
+    public JobFinishedStatus execute() {
+        try {
+            return unsafeExecute();
         } catch (ApiException e) {
             severe(e);
             return JobFinishedStatus.FAILED;
@@ -210,14 +243,37 @@ public abstract class AstJob extends Project {
         }
     }
 
-    public void generateReports(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Reports reports) {
+    public void stop() {
+        if (null == scanResultId) return;
+        try {
+            this.stop(scanResultId);
+        } catch (ApiException e) {
+            severe(e);
+        }
+    }
+
+    /**
+     * Generate reports for specific AST result. As this method may be called both
+     * for AST job and for CLI reports generation we need to explicitly check reports
+     * and not to imply that such check will be done as a first step in
+     * calling {@link AstJob#execute()} method
+     * @param projectId PT AI project ID
+     * @param scanResultId PT AI AST result ID
+     * @param reports Reports to be generated. These reports are explicitly checked
+     *                as this method may be called directly as not the part
+     *                of {@link AstJob#execute()} call
+     * @throws ApiException Exception that contains details about failed report validation / generation
+     */
+    public void generateReports(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Reports reports) throws ApiException {
         if (null == fileOps)
             throw ApiException.raise("File operations aren't defined", new NullPointerException());
+
+        final Reports checkedReports = reports.validate().fix().check(this);
 
         UUID dummyTemplate = getDummyReportTemplate(Reports.Locale.EN).getId();
         final AtomicReference<UUID> finalProjectId = new AtomicReference<>(projectId);
 
-        Stream.concat(reports.getData().stream(), reports.getReport().stream())
+        Stream.concat(checkedReports.getData().stream(), checkedReports.getReport().stream())
                 .forEach(r -> {
                     File reportFile;
                     try {
@@ -245,22 +301,13 @@ public abstract class AstJob extends Project {
                         warning(e);
                     }
                 });
-        if (null != reports.getRaw()) {
+        if (null != checkedReports.getRaw()) {
             // Save raw JSON report
             File json = getJsonResult(projectId, scanResultId);
-            for (Reports.RawData raw : reports.getRaw())
+            for (Reports.RawData raw : checkedReports.getRaw())
                 callApi(
                         () -> fileOps.saveArtifact(raw.getFileName(), json),
                         "Raw JSON result save failed");
-        }
-    }
-
-    public void stop() {
-        if (null == scanResultId) return;
-        try {
-            this.stop(scanResultId);
-        } catch (ApiException e) {
-            severe(e);
         }
     }
 }
