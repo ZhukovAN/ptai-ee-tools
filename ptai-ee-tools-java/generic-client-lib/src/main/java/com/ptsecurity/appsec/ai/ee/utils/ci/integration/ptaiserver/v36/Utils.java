@@ -79,7 +79,7 @@ public class Utils extends BaseClient {
             @NonNull final UUID projectId, @NonNull final UUID scanResultId,
             @NonNull final UUID template, @NonNull final Reports.Locale locale,
             @NonNull final ReportFormatType type,
-            @Nullable final IssuesFilter filters) throws ApiException {
+            @Nullable final Reports.IssuesFilterEx filters) throws ApiException {
         ReportGenerateModel model = new ReportGenerateModel()
                 .parameters(new UserReportParameters()
                         .includeDFD(true)
@@ -91,7 +91,7 @@ public class Utils extends BaseClient {
                 .scanResultId(scanResultId)
                 .projectId(projectId)
                 .localeId(locale.getValue());
-        if (null != filters) model.setFilters(filters);
+        if (null != filters) model.setFilters(filters.convert());
         fine("Generating report for project %s, scan result %s. Report template %s, type %s, locale %s", projectId, scanResultId, template, type, locale);
         return callApi(
                 () -> reportsApi.apiReportsGeneratePost(model),
@@ -103,7 +103,7 @@ public class Utils extends BaseClient {
             @NonNull final String template,
             @NonNull final Reports.Locale locale,
             @NonNull final ReportFormatType type,
-            @Nullable final IssuesFilter filters) throws ApiException {
+            @Nullable final Reports.IssuesFilterEx filters) throws ApiException {
         List<ReportTemplateModel> templates = getReportTemplates(locale);
         ReportTemplateModel templateModel = templates.stream().filter(t -> template.equalsIgnoreCase(t.getName())).findAny().orElse(null);
         if (null == templateModel)

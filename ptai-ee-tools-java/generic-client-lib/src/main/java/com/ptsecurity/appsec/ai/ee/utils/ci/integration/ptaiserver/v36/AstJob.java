@@ -89,7 +89,7 @@ public abstract class AstJob extends Project {
     protected JobFinishedStatus unsafeExecute() throws ApiException {
         // Check if all the reports are exist. Throw an exception if there are problems
         if (null != reports)
-            reports = reports.validate().fix().check(this);
+            reports = reports.validate().check(this);
 
         // Check if JSON settings and policy are defined correctly. Throw an exception if there are problems
         ScanSettings settings = (StringUtils.isEmpty(jsonSettings))
@@ -268,7 +268,7 @@ public abstract class AstJob extends Project {
         if (null == fileOps)
             throw ApiException.raise("File operations aren't defined", new NullPointerException());
 
-        final Reports checkedReports = reports.validate().fix().check(this);
+        final Reports checkedReports = reports.validate().check(this);
 
         UUID dummyTemplate = getDummyReportTemplate(Reports.Locale.EN).getId();
         final AtomicReference<UUID> finalProjectId = new AtomicReference<>(projectId);

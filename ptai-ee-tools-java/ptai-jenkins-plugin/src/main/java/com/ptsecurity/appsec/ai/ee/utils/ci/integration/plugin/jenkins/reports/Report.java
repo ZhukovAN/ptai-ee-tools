@@ -64,5 +64,11 @@ public class Report extends BaseReport {
             model.add(Resources.captions_locale_russian_displayName(), Reports.Locale.RU.name());
             return model;
         }
+
+        public String getDefaultTemplate() {
+            return Reports.Locale.RU.name().equals(getDefaultLocale())
+                    ? "Отчет по результатам сканирования"
+                    : "Scan results report";
+        }
     }
 }

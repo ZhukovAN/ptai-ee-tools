@@ -11,10 +11,12 @@ import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.jvnet.localizer.LocaleProvider;
 import org.kohsuke.stapler.QueryParameter;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> implements Serializable, Cloneable {
     @Getter
@@ -80,6 +82,14 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
                 return Validator.doCheckFieldJsonIssuesFilter(filter, Resources.i18n_validator_reporting_issuesfilter_incorrect());
             else
                 return FormValidation.ok();
+        }
+
+        public String getDefaultLocale() {
+            Locale locale = LocaleProvider.getLocale();
+            if (locale.getLanguage().equalsIgnoreCase(Reports.Locale.RU.name()))
+                return Reports.Locale.RU.name();
+            else
+                return Reports.Locale.EN.name();
         }
     }
 

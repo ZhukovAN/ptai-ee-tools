@@ -73,8 +73,6 @@ public class ReportsIT extends BaseIT {
         report.setFileName("report.ru.xml");
         reports.getReport().add(report);
 
-        reports.fix();
-
         Exception e = assertThrows(ApiException.class, () -> reports.validate().check(utils));
         utils.severe((ApiException) e);
     }

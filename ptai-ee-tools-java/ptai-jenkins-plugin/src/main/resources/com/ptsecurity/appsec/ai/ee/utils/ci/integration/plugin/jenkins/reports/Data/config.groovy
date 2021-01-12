@@ -19,7 +19,9 @@ f.entry(
 f.entry(
         title: _('locale'),
         field: 'locale') {
-    f.select()
+    f.select(
+            default: descriptor.getDefaultLocale(),
+    )
 }
 
 f.advanced() {

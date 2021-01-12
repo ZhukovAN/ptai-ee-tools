@@ -46,8 +46,6 @@ class ReportsTest {
         report.setFileName("report.ru.xml");
         reports.getReport().add(report);
 
-        reports.fix();
-
         System.out.println(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(reports));
     }
 

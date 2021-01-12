@@ -342,7 +342,7 @@ public class AstSettingsService {
             }
             // Check reporting settings
             Reports reports = bean.convert();
-            reports.validate().fix().check(utils);
+            reports.validate().check(utils);
         } catch (ApiException e) {
             log.warn(e.getDetailedMessage(), e);
             results.add(e);

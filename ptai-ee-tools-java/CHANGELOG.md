@@ -16,3 +16,8 @@
 + [Feature] Teamcity plugin now supports report definitions (UI only, no generation yet)
 ### 20201230
 + [Feature] Teamcity plugin now supports report generation
+### 20210112
++ [Feature] CLI plugin enum parameters are made case-insensitive
++ [Feature] Extended issues filtering syntax implemented, see sample JSON in reports.5.json
++ [Feature] Jenkins plugin reporting locale uses browser locale 
++ [Feature] Jenkins plugin reporting template uses predefined browser locale based names

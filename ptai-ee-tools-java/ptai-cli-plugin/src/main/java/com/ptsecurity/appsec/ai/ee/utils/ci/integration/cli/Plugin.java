@@ -53,6 +53,7 @@ public class Plugin implements Runnable {
                 };
             }
         });
+        commandLine.setCaseInsensitiveEnumValuesAllowed(true);
         int exitCode = commandLine.execute(args);
         // that ignores order, so we need to redefine that
         AnsiConsole.systemUninstall(); // cleanup when done

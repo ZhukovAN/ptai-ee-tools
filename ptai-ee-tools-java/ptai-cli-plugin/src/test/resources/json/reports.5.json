@@ -5,9 +5,11 @@
     "format" : "HTML",
     "template" : "Отчет PCI DSS 3.2",
     "filters": {
-      "issueLevels": ["MEDIUM", "HIGH"],
+      "issueLevel": "LOW",
+      "issueLevels": ["MeDiUm", "HIGH"],
+      "scanMode": "FROMOTHER",
       "scanModes": ["FROMENTRYPOINT"],
-      "confirmationStatuses": ["UNDEFINED", "APPROVED", "AUTOAPPROVED"]
+      "confirmationStatuses": ["NONE", "APPROVED", "AUTOAPPROVED"]
     }
   } ]
 }

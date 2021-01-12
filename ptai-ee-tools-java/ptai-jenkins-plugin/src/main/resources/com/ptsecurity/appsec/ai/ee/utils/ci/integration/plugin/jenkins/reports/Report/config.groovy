@@ -13,7 +13,9 @@ f.entry(
 f.entry(
         title: _('template'),
         field: 'template') {
-    f.textbox()
+    f.textbox(
+            default: descriptor.getDefaultTemplate(),
+    )
 }
 
 f.entry(
@@ -25,7 +27,9 @@ f.entry(
 f.entry(
         title: _('locale'),
         field: 'locale') {
-    f.select()
+    f.select(
+            default: descriptor.getDefaultLocale(),
+    )
 }
 
 f.advanced() {
