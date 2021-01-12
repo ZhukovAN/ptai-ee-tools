@@ -3,13 +3,16 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.annotations.SerializedName;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.StringHelper;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
@@ -18,8 +21,6 @@ import org.apache.commons.text.similarity.CosineDistance;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.IssuesFilterExploitationCondition.ALL;
 
 @Slf4j
 @Getter
@@ -48,6 +49,34 @@ public class Reports {
 
     @Getter
     @Setter
+    public static class IssuesFilterEx extends IssuesFilter {
+        public static final String SERIALIZED_NAME_ISSUE_LEVELS = "issueLevels";
+        @SerializedName(SERIALIZED_NAME_ISSUE_LEVELS)
+        private IssuesFilterLevel[] issueLevels;
+
+        public static final String SERIALIZED_NAME_CONFIRMATION_STATUSES = "confirmationStatuses";
+        @SerializedName(SERIALIZED_NAME_CONFIRMATION_STATUSES)
+        private IssuesFilterConfirmationStatus[] confirmationStatuses;
+
+        public static final String SERIALIZED_NAME_EXPLOITATION_CONDITIONS = "exploitationConditions";
+        @SerializedName(SERIALIZED_NAME_EXPLOITATION_CONDITIONS)
+        private IssuesFilterExploitationCondition[] exploitationConditions;
+
+        public static final String SERIALIZED_NAME_SUPPRESS_STATUSES = "suppressStatuses";
+        @SerializedName(SERIALIZED_NAME_SUPPRESS_STATUSES)
+        private IssuesFilterSuppressStatus[] suppressStatuses;
+
+        public static final String SERIALIZED_NAME_SOURCE_TYPES = "sourceTypes";
+        @SerializedName(SERIALIZED_NAME_SOURCE_TYPES)
+        private IssuesFilterSourceType[] sourceTypes;
+
+        public static final String SERIALIZED_NAME_SCAN_MODES = "scanModes";
+        @SerializedName(SERIALIZED_NAME_SCAN_MODES)
+        private IssuesFilterScanMode[] scanModes;
+    }
+
+    @Getter
+    @Setter
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static abstract class AbstractReport {
         /**
@@ -68,7 +97,7 @@ public class Reports {
          * Report property that contain report generation filters
          */
         @JsonProperty
-        protected IssuesFilter filters = null;
+        protected IssuesFilterEx filters = null;
 
         /**
          * All the filters that use enum values are treated as NONE if no value
@@ -81,18 +110,92 @@ public class Reports {
         public AbstractReport fix() {
             if (null == filters) return this;
 
-            if (null == filters.getIssueLevel())
-                filters.setIssueLevel(IssuesFilterLevel.ALL);
-            if (null == filters.getExploitationCondition())
-                filters.setExploitationCondition(ALL);
-            if (null == filters.getScanMode())
-                filters.setScanMode(IssuesFilterScanMode.ALL);
-            if (null == filters.getSuppressStatus())
-                filters.setSuppressStatus(IssuesFilterSuppressStatus.ALL);
-            if (null == filters.getConfirmationStatus())
-                filters.setConfirmationStatus(IssuesFilterConfirmationStatus.ALL);
-            if (null == filters.getSourceType())
-                filters.setSourceType(IssuesFilterSourceType.ALL);
+            // No filters are defined - set ALL value
+            if (null == filters.getIssueLevel() && ArrayUtils.isEmpty(filters.getIssueLevels()))
+                filters.setIssueLevel(IssuesFilterLevel.All.getValue());
+            else {
+                int rawValue = 0;
+                if (null != filters.getIssueLevel())
+                    rawValue = filters.getIssueLevel();
+                if (ArrayUtils.isNotEmpty(filters.getIssueLevels())) {
+                    for (IssuesFilterLevel item : filters.getIssueLevels())
+                        rawValue |= item.getValue();
+                }
+                filters.setIssueLevel(rawValue);
+            }
+
+            // No exploitation conditions are defined - set ALL value
+            if (null == filters.getExploitationCondition() && ArrayUtils.isEmpty(filters.getExploitationConditions()))
+                filters.setExploitationCondition(IssuesFilterExploitationCondition.All.getValue());
+            else {
+                int rawValue = 0;
+                if (null != filters.getExploitationCondition())
+                    rawValue = filters.getExploitationCondition();
+                if (ArrayUtils.isNotEmpty(filters.getExploitationConditions())) {
+                    for (IssuesFilterExploitationCondition item : filters.getExploitationConditions())
+                        rawValue |= item.getValue();
+                }
+                filters.setExploitationCondition(rawValue);
+            }
+
+            // No scan modes are defined - set ALL value
+            if (null == filters.getScanMode() && ArrayUtils.isEmpty(filters.getScanModes()))
+                filters.setScanMode(IssuesFilterScanMode.All.getValue());
+            else {
+                int rawValue = 0;
+                if (null != filters.getScanMode())
+                    rawValue = filters.getScanMode();
+                if (ArrayUtils.isNotEmpty(filters.getScanModes())) {
+                    for (IssuesFilterScanMode item : filters.getScanModes())
+                        rawValue |= item.getValue();
+                }
+                filters.setScanMode(rawValue);
+            }
+
+            // No suppress statuses are defined - set ALL value
+            if (null == filters.getSuppressStatus() && ArrayUtils.isEmpty(filters.getSuppressStatuses()))
+                filters.setSuppressStatus(IssuesFilterSuppressStatus.All.getValue());
+            else {
+                int rawValue = 0;
+                if (null != filters.getSuppressStatus())
+                    rawValue = filters.getSuppressStatus();
+                if (ArrayUtils.isNotEmpty(filters.getSuppressStatuses())) {
+                    for (IssuesFilterSuppressStatus item : filters.getSuppressStatuses())
+                        rawValue |= item.getValue();
+                }
+                filters.setSuppressStatus(rawValue);
+            }
+
+            // No confirmation statuses are defined - set ALL value
+            if (null == filters.getConfirmationStatus() && ArrayUtils.isEmpty(filters.getConfirmationStatuses()))
+                filters.setConfirmationStatus(IssuesFilterConfirmationStatus.All.getValue());
+            else {
+                int rawValue = 0;
+                if (null != filters.getConfirmationStatus())
+                    rawValue = filters.getConfirmationStatus();
+                if (ArrayUtils.isNotEmpty(filters.getConfirmationStatuses())) {
+                    for (IssuesFilterConfirmationStatus item : filters.getConfirmationStatuses())
+                        rawValue |= item.getValue();
+                }
+                filters.setConfirmationStatus(rawValue);
+            }
+
+            // No source types are defined - set ALL value
+            if (null == filters.getSourceType() && ArrayUtils.isEmpty(filters.getSourceTypes()))
+                filters.setSourceType(IssuesFilterSourceType.All.getValue());
+            else {
+                int rawValue = 0;
+                if (null != filters.getSourceType())
+                    rawValue = filters.getSourceType();
+                if (ArrayUtils.isNotEmpty(filters.getSourceTypes())) {
+                    for (IssuesFilterSourceType item : filters.getSourceTypes())
+                        rawValue |= item.getValue();
+                }
+                filters.setSourceType(rawValue);
+            }
+
+            if (null == filters.getActualStatus())
+                filters.setActualStatus(IssuesFilterActualStatus.ALL);
 
             return this;
         }
@@ -270,11 +373,11 @@ public class Reports {
                 new IllegalArgumentException("Missing reports are " + StringHelper.joinListGrammatically(missingTemplates.stream().map(ImmutablePair::getRight).collect(Collectors.toList()))));
     }
 
-    public static IssuesFilter validateJsonFilter(String json) throws ApiException {
+    public static IssuesFilterEx validateJsonFilter(String json) throws ApiException {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-            IssuesFilter res = mapper.readValue(json, IssuesFilter.class);
+            IssuesFilterEx res = mapper.readValue(json, IssuesFilterEx.class);
             return res;
         } catch (Exception e) {
             throw ApiException.raise("JSON filter settings parse failed", e);
@@ -328,6 +431,7 @@ public class Reports {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+            mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
             Reports res = mapper.readValue(json, Reports.class);
             return res.fix();
         } catch (Exception e) {
