@@ -21,3 +21,5 @@
 + [Feature] Extended issues filtering syntax implemented, see sample JSON in reports.5.json
 + [Feature] Jenkins plugin reporting locale uses browser locale 
 + [Feature] Jenkins plugin reporting template uses predefined browser locale based names
+### 20210122
++ [Fix] "Scan enqueued" event fixed

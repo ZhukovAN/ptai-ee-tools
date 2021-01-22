@@ -122,7 +122,7 @@ public abstract class AstJob extends Project {
 
         // Start scan
         scanResultId = scan(node);
-        info("PT AI AST result ID is " + scanResultId);
+        info("Scan enqueued, PT AI AST result ID is " + scanResultId);
         astOps.scanStartedCallback(this, scanResultId);
 
         // Save result URL to artifacts

@@ -16,7 +16,7 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.updateserver.v36.VersionApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.ApiClientHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.ScanEnqueuedEvent;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.LoggingInterceptor;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.ScanProgressEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.ScanStartedEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.jwt.JwtResponse;
@@ -206,10 +206,11 @@ public class BaseClient extends Base {
         // with jwt
         Single<String> accessTokenProvider = Single.defer(() -> Single.just(jwt.getAccessToken()));
 
-        HubConnection connection = HubConnectionBuilder.create(url + "/notifyApi/notifications?clientId=" + id)
+        final HubConnection connection = HubConnectionBuilder.create(url + "/notifyApi/notifications?clientId=" + id)
                 .withAccessTokenProvider(accessTokenProvider)
                 .withHeader("connectedDate", connectedDate)
                 .build();
+        log.trace("HubConnection created with id = " + id);
 
         X509TrustManager trustManager = ApiClientHelper.createTrustManager(caCertsPem, insecure);
 
@@ -218,6 +219,7 @@ public class BaseClient extends Base {
         OkHttpClient.Builder httpBuilder = okHttpClient.newBuilder();
         httpBuilder
                 .hostnameVerifier((hostname, session) -> true)
+                .addInterceptor(new LoggingInterceptor())
                 .protocols(Arrays.asList(Protocol.HTTP_1_1));
         if (null != trustManager) {
             SSLContext sslContext = SSLContext.getInstance("TLS");
@@ -265,12 +267,6 @@ public class BaseClient extends Base {
             info(builder.toString());
             log.trace(data.toString());
         }, ScanProgressEvent.class);
-
-        connection.on("ScanEnqueued", (data) -> {
-            if (scanResultId.equals(data.getScanResult().getId()))
-                info("Scan enqueued");
-            log.trace(data.toString());
-        }, ScanEnqueuedEvent.class);
 
         return connection;
     }
