@@ -23,3 +23,5 @@
 + [Feature] Jenkins plugin reporting template uses predefined browser locale based names
 ### 20210122
 + [Fix] "Scan enqueued" event fixed
+### 20210125
++ [Feature] Jenkins version changed to 2.263.2
