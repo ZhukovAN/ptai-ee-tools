@@ -1,0 +1,49 @@
+@startuml
+class AstAdminPage <<Bean>> {
+    AstAdminPage()
+    fillModel()
+}
+
+note right of AstAdminPage::AstAdminPage
+    Initializes Admin page URL, title, name etc.
+end note
+
+note right of AstAdminPage::fillModel
+    Fills model's propertiesBean with data
+    from global plugin settings and adds
+    hexEncodedPublicKey to model to securely
+    transfer sensitive data
+end note
+
+class AstAdminPageController <<Bean>> {
+    doPost()
+}
+
+note right of AstAdminPageController::doPost
+    Processes plugin's global settings
+    test and save requests
+end note
+
+
+class AstAdminSettings <<Bean>>
+
+note right of AstAdminSettings
+    Implements plugin's global
+    settings save and load features
+end note
+
+class AstBuildStartContextProcessor <<Bean>> {
+    updateParameters()
+}
+note right of AstBuildStartContextProcessor::updateParameters
+    Adds global plugin settings to build step settings
+end note
+
+
+class AstEditRunTypeControllerExtension <<Bean>> {
+    AstBuildStartContextProcessor
+}
+
+AstAdminPageController ..> AstAdminSettings
+
+@enduml

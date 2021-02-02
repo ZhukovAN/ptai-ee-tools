@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +81,11 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
             description = "Do not wait AST to complete and exit immediately")
     protected boolean async = false;
 
+    @CommandLine.Option(
+            names = {"--full-scan"}, order = 21,
+            description = "Execute full AST instead of incremental")
+    private boolean fullScan = false;
+
     @Override
     public Integer call() throws Exception {
         CliAstJob job = CliAstJob.builder()
@@ -93,6 +99,7 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
                 .truststore(truststore)
                 .settings(jsonSettings)
                 .policy(jsonPolicy)
+                .scanType(fullScan ? ScanType.FULL : ScanType.INCREMENTAL)
                 .build();
         if (!job.init()) return BaseCommand.ExitCode.FAILED.getCode();
         return (SUCCESS == job.execute())

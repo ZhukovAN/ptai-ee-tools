@@ -244,4 +244,37 @@ class UiAstIT extends BaseIT {
                 "--token", TOKEN);
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
+
+    @Test
+    @DisplayName("Test incremental AST scan speed increase")
+    void testIncrementalScanning() {
+        long fullScan = System.currentTimeMillis();
+        Integer res = new CommandLine(new Plugin()).execute(
+                "ui-ast",
+                "--project", EXISTING_PROJECT,
+                "--input", SOURCES_FOLDER,
+                "--output", REPORT_FOLDER,
+                "--truststore", PEM_PATH,
+                "--url", PTAI_URL,
+                "--token", TOKEN,
+                "--full-scan");
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+        fullScan = System.currentTimeMillis() - fullScan;
+        System.out.println("Full scan duration " + fullScan + " ms");
+
+        long incrementalScan = System.currentTimeMillis();
+        res = new CommandLine(new Plugin()).execute(
+                "ui-ast",
+                "--project", EXISTING_PROJECT,
+                "--input", SOURCES_FOLDER,
+                "--output", REPORT_FOLDER,
+                "--truststore", PEM_PATH,
+                "--url", PTAI_URL,
+                "--token", TOKEN);
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+        incrementalScan = System.currentTimeMillis() - incrementalScan;
+        System.out.println("Incremental scan duration " + incrementalScan + " ms");
+
+        Assertions.assertTrue(fullScan > incrementalScan);
+    }
 }

@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
 import com.microsoft.signalr.HubConnection;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
@@ -58,7 +57,7 @@ public class Project extends Utils {
             throw ApiException.raise("PT AI project scan start failed", new IllegalArgumentException("PT AI project " + name + " not found"));
         startScanModel.setProjectId(id);
         // TODO: Check if there's more intelligent approach required
-        startScanModel.setScanType(ScanType.FULL);
+        startScanModel.setScanType(scanType);
         return callApi(
                 () -> scanApi.apiScanStartPost(startScanModel),
                 "PT AI project scan start failed");

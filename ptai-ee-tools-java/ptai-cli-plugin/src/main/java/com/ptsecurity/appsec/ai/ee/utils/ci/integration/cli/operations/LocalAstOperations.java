@@ -45,7 +45,7 @@ public class LocalAstOperations implements AstOperations {
     }
 
     public void scanStartedCallback(@NonNull final Project project, @NonNull UUID scanResultId) {
-        GracefulShutdown shutdown = new GracefulShutdown(owner);
+        shutdown = new GracefulShutdown(owner);
         Runtime.getRuntime().addShutdownHook(shutdown);
     }
 

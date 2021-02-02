@@ -25,3 +25,6 @@
 + [Fix] "Scan enqueued" event fixed
 ### 20210125
 + [Feature] Jenkins version changed to 2.263.2
+### 20210202
++ [Feature] CLI plugin now supports full and incremental scan modes
++ [Fix] Scan stop API call removed from CLI plugin  

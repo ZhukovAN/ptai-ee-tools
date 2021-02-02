@@ -11,6 +11,7 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.v36.StoreApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanAgentApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
 import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheckApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.updateserver.v36.VersionApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
@@ -176,6 +177,11 @@ public class BaseClient extends Base {
 
     @Builder.Default
     private boolean initialized = false;
+
+    @Getter
+    @Setter
+    @Builder.Default
+    protected ScanType scanType = ScanType.FULL;
 
     /**
      * Init all PT AI endpoints API clients
