@@ -27,4 +27,6 @@
 + [Feature] Jenkins version changed to 2.263.2
 ### 20210202
 + [Feature] CLI plugin now supports full and incremental scan modes
-+ [Fix] Scan stop API call removed from CLI plugin  
++ [Fix] Scan stop API call removed from CLI plugin
+### 20210203
++ [Fix] Redundant requestBody content types are deleted from OpenAPI descriptions

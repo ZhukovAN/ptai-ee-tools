@@ -15,16 +15,7 @@ paths:
       description: "ScanSettings is optional.\r\nAdditionalParameters is optional. Set if you need additional parameters e. g. printing a report"
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/StartScanModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/StartScanModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/StartScanModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/StartScanModel'
       responses:
@@ -144,16 +135,7 @@ paths:
       summary: Update agent status. Only for scan agents
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/UpdateAgentStatusModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateAgentStatusModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UpdateAgentStatusModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/UpdateAgentStatusModel'
       responses:
@@ -280,16 +262,7 @@ paths:
       summary: Schedule scan. Only for internal communication services
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ScheduleScanModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ScheduleScanModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ScheduleScanModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ScheduleScanModel'
       responses:

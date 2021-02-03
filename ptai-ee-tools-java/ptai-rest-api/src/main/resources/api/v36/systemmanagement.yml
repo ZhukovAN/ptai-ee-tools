@@ -103,16 +103,7 @@ paths:
         - ServerSettings
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ProxySettings'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ProxySettings'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ProxySettings'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ProxySettings'
       responses:

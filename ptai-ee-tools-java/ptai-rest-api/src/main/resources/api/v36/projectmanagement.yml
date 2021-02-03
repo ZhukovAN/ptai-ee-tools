@@ -46,32 +46,7 @@ paths:
       requestBody:
         description: all yara rules
         content:
-          application/json-patch+json:
-            schema:
-              type: string
-              description: all yara rules
-              nullable: true
           application/json:
-            schema:
-              type: string
-              description: all yara rules
-              nullable: true
-          text/json:
-            schema:
-              type: string
-              description: all yara rules
-              nullable: true
-          application/*+json:
-            schema:
-              type: string
-              description: all yara rules
-              nullable: true
-          application/x-msgpack:
-            schema:
-              type: string
-              description: all yara rules
-              nullable: true
-          application/msgpack:
             schema:
               type: string
               description: all yara rules
@@ -273,32 +248,7 @@ paths:
       requestBody:
         description: all sast rules
         content:
-          application/json-patch+json:
-            schema:
-              type: string
-              description: all sast rules
-              nullable: true
           application/json:
-            schema:
-              type: string
-              description: all sast rules
-              nullable: true
-          text/json:
-            schema:
-              type: string
-              description: all sast rules
-              nullable: true
-          application/*+json:
-            schema:
-              type: string
-              description: all sast rules
-              nullable: true
-          application/x-msgpack:
-            schema:
-              type: string
-              description: all sast rules
-              nullable: true
-          application/msgpack:
             schema:
               type: string
               description: all sast rules
@@ -448,22 +398,7 @@ paths:
       summary: Create project
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/CreateProjectModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/CreateProjectModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/CreateProjectModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/CreateProjectModel'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/CreateProjectModel'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/CreateProjectModel'
       responses:
@@ -539,22 +474,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/Project'
           application/json:
-            schema:
-              $ref: '#/components/schemas/Project'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/Project'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/Project'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/Project'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/Project'
       responses:
@@ -926,25 +846,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              type: array
-              items:
-                type: string
-              nullable: true
           application/json:
-            schema:
-              type: array
-              items:
-                type: string
-              nullable: true
-          text/json:
-            schema:
-              type: array
-              items:
-                type: string
-              nullable: true
-          application/*+json:
             schema:
               type: array
               items:
@@ -983,19 +885,7 @@ paths:
       requestBody:
         # V.3.6: Had to replace IScanSettings with manually added V36ScanSettings
         content:
-          application/json-patch+json:
-            schema:
-              # $ref: '#/components/schemas/IScanSettings'
-              $ref: '#/components/schemas/V36ScanSettings'
           application/json:
-            schema:
-              # $ref: '#/components/schemas/IScanSettings'
-              $ref: '#/components/schemas/V36ScanSettings'
-          text/json:
-            schema:
-              # $ref: '#/components/schemas/IScanSettings'
-              $ref: '#/components/schemas/V36ScanSettings'
-          application/*+json:
             schema:
               # $ref: '#/components/schemas/IScanSettings'
               $ref: '#/components/schemas/V36ScanSettings'
@@ -1070,27 +960,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              type: string
-              nullable: true
           application/json:
-            schema:
-              type: string
-              nullable: true
-          text/json:
-            schema:
-              type: string
-              nullable: true
-          application/*+json:
-            schema:
-              type: string
-              nullable: true
-          application/x-msgpack:
-            schema:
-              type: string
-              nullable: true
-          application/msgpack:
             schema:
               type: string
               nullable: true
@@ -1299,22 +1169,7 @@ paths:
       requestBody:
         description: ''
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/UpdateIssueExploitModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateIssueExploitModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UpdateIssueExploitModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/UpdateIssueExploitModel'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/UpdateIssueExploitModel'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/UpdateIssueExploitModel'
       responses:
@@ -1341,22 +1196,7 @@ paths:
       requestBody:
         description: ''
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
       responses:
@@ -1383,22 +1223,7 @@ paths:
       requestBody:
         description: ''
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
       responses:
@@ -1419,22 +1244,7 @@ paths:
       requestBody:
         description: 'IssuesStates - dictionary, key is issues id and value is new state'
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
       responses:
@@ -1460,25 +1270,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ScanError'
-              nullable: true
           application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ScanError'
-              nullable: true
-          text/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ScanError'
-              nullable: true
-          application/*+json:
             schema:
               type: array
               items:
@@ -1584,22 +1376,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
           application/json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
       responses:
@@ -1617,22 +1394,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
           application/json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
       responses:
@@ -1747,16 +1509,7 @@ paths:
             nullable: true
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
           application/json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/TicketLink'
       responses:
@@ -1786,16 +1539,7 @@ paths:
             nullable: true
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
           application/json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/TicketLink'
       responses:
@@ -1983,22 +1727,7 @@ paths:
       summary: Create report template
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/ReportTemplateUpsertModel'
       responses:
@@ -2094,22 +1823,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/ReportTemplateUpsertModel'
       responses:
@@ -2268,22 +1982,7 @@ paths:
       summary: "Generate report.\r\n <param name=\"model\">Report`s generate model (settings, templates...)</param>"
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/ReportGenerateModel'
       responses:
@@ -2330,22 +2029,7 @@ paths:
       summary: "Generate  waf patch report\r\n <param name=\"model\">Report`s generate model (settings, templates...)</param>"
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/WafPatchGenerateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/WafPatchGenerateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/WafPatchGenerateModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/WafPatchGenerateModel'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/WafPatchGenerateModel'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/WafPatchGenerateModel'
       responses:
@@ -2398,22 +2082,7 @@ paths:
             nullable: true
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/ReportTemplateModel'
       responses:
@@ -2485,22 +2154,7 @@ paths:
       summary: "Save report parametrs for current user\r\n<param name=\"model\">Report parameters model</param>"
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/UserReportParameters'
           application/json:
-            schema:
-              $ref: '#/components/schemas/UserReportParameters'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UserReportParameters'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/UserReportParameters'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/UserReportParameters'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/UserReportParameters'
       responses:
@@ -2547,22 +2201,7 @@ paths:
       summary: Get top projects with high vulnerabilities statistic
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/TopVulnerabilityProjects'
           application/json:
-            schema:
-              $ref: '#/components/schemas/TopVulnerabilityProjects'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/TopVulnerabilityProjects'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/TopVulnerabilityProjects'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/TopVulnerabilityProjects'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/TopVulnerabilityProjects'
       responses:
@@ -2609,22 +2248,7 @@ paths:
       summary: Get projects with high vulnerabilities statistic
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/TopVulnerabilityProjects'
           application/json:
-            schema:
-              $ref: '#/components/schemas/TopVulnerabilityProjects'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/TopVulnerabilityProjects'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/TopVulnerabilityProjects'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/TopVulnerabilityProjects'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/TopVulnerabilityProjects'
       responses:
@@ -2671,22 +2295,7 @@ paths:
       summary: Get vulnerabilities time distribution statistic
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/VulnTimeDistrib'
           application/json:
-            schema:
-              $ref: '#/components/schemas/VulnTimeDistrib'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/VulnTimeDistrib'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/VulnTimeDistrib'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/VulnTimeDistrib'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/VulnTimeDistrib'
       responses:
@@ -2775,22 +2384,7 @@ paths:
       summary: Get issue statistic groups
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/IssueStatisticGroup'
           application/json:
-            schema:
-              $ref: '#/components/schemas/IssueStatisticGroup'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/IssueStatisticGroup'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/IssueStatisticGroup'
-          application/x-msgpack:
-            schema:
-              $ref: '#/components/schemas/IssueStatisticGroup'
-          application/msgpack:
             schema:
               $ref: '#/components/schemas/IssueStatisticGroup'
       responses:

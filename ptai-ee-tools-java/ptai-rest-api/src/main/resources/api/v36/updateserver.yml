@@ -82,16 +82,7 @@ paths:
             type: boolean
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ServerUpdateRunParameters'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ServerUpdateRunParameters'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ServerUpdateRunParameters'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ServerUpdateRunParameters'
       responses:
@@ -103,25 +94,7 @@ paths:
         - ServerUpdate
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              type: object
-              additionalProperties:
-                type: string
-              nullable: true
           application/json:
-            schema:
-              type: object
-              additionalProperties:
-                type: string
-              nullable: true
-          text/json:
-            schema:
-              type: object
-              additionalProperties:
-                type: string
-              nullable: true
-          application/*+json:
             schema:
               type: object
               additionalProperties:

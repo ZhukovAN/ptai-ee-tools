@@ -89,16 +89,7 @@ paths:
       requestBody:
         description: Access token
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/AccessTokenCreateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/AccessTokenCreateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/AccessTokenCreateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/AccessTokenCreateModel'
       responses:
@@ -192,16 +183,7 @@ paths:
             $ref: '#/components/schemas/AuthScopeType'
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/UserLoginModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/UserLoginModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UserLoginModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/UserLoginModel'
       responses:
@@ -309,16 +291,7 @@ paths:
         - GlobalMember
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/GlobalMember'
           application/json:
-            schema:
-              $ref: '#/components/schemas/GlobalMember'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/GlobalMember'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/GlobalMember'
       responses:
@@ -342,16 +315,7 @@ paths:
         - GlobalMember
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/GlobalMember'
           application/json:
-            schema:
-              $ref: '#/components/schemas/GlobalMember'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/GlobalMember'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/GlobalMember'
       responses:
@@ -375,61 +339,7 @@ paths:
         - GlobalMember
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              type: object
-              properties:
-                Add:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/GlobalMember'
-                Remove:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/GlobalMember'
-                Update:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/GlobalMember'
-              additionalProperties: false
-              nullable: true
           application/json:
-            schema:
-              type: object
-              properties:
-                Add:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/GlobalMember'
-                Remove:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/GlobalMember'
-                Update:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/GlobalMember'
-              additionalProperties: false
-              nullable: true
-          text/json:
-            schema:
-              type: object
-              properties:
-                Add:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/GlobalMember'
-                Remove:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/GlobalMember'
-                Update:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/GlobalMember'
-              additionalProperties: false
-              nullable: true
-          application/*+json:
             schema:
               type: object
               properties:
@@ -505,16 +415,7 @@ paths:
       summary: Get members
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/UserInfo'
           application/json:
-            schema:
-              $ref: '#/components/schemas/UserInfo'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UserInfo'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/UserInfo'
       responses:
@@ -590,16 +491,7 @@ paths:
         - ProjectMember
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ProjectMember'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ProjectMember'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ProjectMember'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ProjectMember'
       responses:
@@ -623,16 +515,7 @@ paths:
         - ProjectMember
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ProjectMember'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ProjectMember'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ProjectMember'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ProjectMember'
       responses:
@@ -656,61 +539,7 @@ paths:
         - ProjectMember
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              type: object
-              properties:
-                Add:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ProjectMember'
-                Remove:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ProjectMember'
-                Update:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ProjectMember'
-              additionalProperties: false
-              nullable: true
           application/json:
-            schema:
-              type: object
-              properties:
-                Add:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ProjectMember'
-                Remove:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ProjectMember'
-                Update:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ProjectMember'
-              additionalProperties: false
-              nullable: true
-          text/json:
-            schema:
-              type: object
-              properties:
-                Add:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ProjectMember'
-                Remove:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ProjectMember'
-                Update:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/ProjectMember'
-              additionalProperties: false
-              nullable: true
-          application/*+json:
             schema:
               type: object
               properties:
@@ -818,25 +647,7 @@ paths:
       summary: Apply project permissions changes
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ProjectPermissions'
-              nullable: true
           application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ProjectPermissions'
-              nullable: true
-          text/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ProjectPermissions'
-              nullable: true
-          application/*+json:
             schema:
               type: array
               items:
@@ -890,16 +701,7 @@ paths:
         - Role
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/Role'
           application/json:
-            schema:
-              $ref: '#/components/schemas/Role'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/Role'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/Role'
       responses:
