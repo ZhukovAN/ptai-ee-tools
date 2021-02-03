@@ -30,3 +30,4 @@
 + [Fix] Scan stop API call removed from CLI plugin
 ### 20210203
 + [Fix] Redundant requestBody content types are deleted from OpenAPI descriptions
++ [Feature] Added request and response body logging for PT AI REST API calls with content type application/json
