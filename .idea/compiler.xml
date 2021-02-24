@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ptai-teamcity-plugin-server" />
+        <module name="ptai-teamcity-plugin-agent" />
+        <module name="ptai-jenkins-plugin" />
+        <module name="ptai-i18n" />
+        <module name="ptai-cli-plugin" />
+        <module name="generic-client-lib" />
+        <module name="ptai-rest-api" />
+        <module name="ptai-teamcity-plugin-common" />
+        <module name="ptai-data-structures" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="integration-rest-api" target="1.8" />
+      <module name="jce-restrictions-checker" target="1.8" />
+      <module name="jenkins-rest-api" target="1.8" />
+      <module name="ptai-integration-service" target="1.8" />
+      <module name="ptai-integration-service-installer" target="1.8" />
+      <module name="ptai-maven-plugin" target="1.8" />
+      <module name="ptai-sonar-plugin" target="1.8" />
+      <module name="rest-api" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

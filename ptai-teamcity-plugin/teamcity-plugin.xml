@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<teamcity-plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:schemas-jetbrains-com:teamcity-plugin-v1-xml">
+  <info>
+    <name>ptai-teamcity-plugin</name>
+    <display-name>PT AI vulnerability analysis</display-name>
+    <version>@Version@</version>
+    <description>Searches vulnerabilities in source code using Positive Technologies Application Inspector</description>
+    <download-url>https://github.com/PositiveTechnologies/ptaiPlugins</download-url>
+    <vendor>
+      <name>@VendorName@</name>
+      <url>@VendorURL@</url>
+    </vendor>
+  </info>
+  <deployment use-separate-classloader="true" allow-runtime-reload="true" /> <!-- load server plugin's classes in a separate classloader and reload a plugin without the server restart.-->
+</teamcity-plugin>
