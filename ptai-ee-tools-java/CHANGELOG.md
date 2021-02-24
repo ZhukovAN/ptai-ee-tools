@@ -31,3 +31,6 @@
 ### 20210203
 + [Fix] Redundant requestBody content types are deleted from OpenAPI descriptions
 + [Feature] Added request and response body logging for PT AI REST API calls with content type application/json
+### 20210224
++ [Fix] "SAST" changed to "AST" in resources
++ [Fix] Ant JAR version changed in generic-client-lib as GitHub's dependabot made pull request
