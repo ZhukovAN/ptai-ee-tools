@@ -4,12 +4,14 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import hudson.Extension;
 import lombok.Getter;
+import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.jetbrains.annotations.NotNull;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.util.ArrayList;
 
+@ToString
 public class WorkModeSync extends WorkMode {
     @Extension
     public static final WorkModeDescriptor DESCRIPTOR = new Descriptor();

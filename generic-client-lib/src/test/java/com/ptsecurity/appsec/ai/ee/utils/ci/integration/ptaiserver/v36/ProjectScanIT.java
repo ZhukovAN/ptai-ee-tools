@@ -150,7 +150,7 @@ public class ProjectScanIT extends BaseIT {
         project.setSources(zip);
         project.upload();
 
-        UUID scanResultId = project.scan("ptai-node");
+        UUID scanResultId = project.scan();
 
         Stage stage = null;
         ScanProgress previousProgress = null;
@@ -225,7 +225,7 @@ public class ProjectScanIT extends BaseIT {
 
         com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project project = createProject(EXISTING_PROJECT);
 
-        UUID scanResultId = project.scan("ptai-node");
+        UUID scanResultId = project.scan();
         project.waitForComplete(scanResultId);
 
         /*

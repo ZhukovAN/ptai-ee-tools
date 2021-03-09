@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
@@ -59,13 +60,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
     private final com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings scanSettings;
 
     @Getter
-    private final String nodeName;
-
-    @Getter
     private final WorkMode workMode;
 
     @Getter
     private final boolean verbose;
+
+    @Getter
+    private final boolean fullScanMode;
 
     @Getter
     private ArrayList<Transfer> transfers;
@@ -81,14 +82,14 @@ public class Plugin extends Builder implements SimpleBuildStep {
     public Plugin(final com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings scanSettings,
                   final ConfigBase config,
                   final WorkMode workMode,
-                  final String nodeName,
                   final boolean verbose,
+                  final boolean fullScanMode,
                   final ArrayList<Transfer> transfers) {
         this.scanSettings = scanSettings;
         this.config = config;
         this.workMode = workMode;
         this.verbose = verbose;
-        this.nodeName = nodeName;
+        this.fullScanMode = fullScanMode;
         this.transfers = transfers;
     }
 
@@ -222,9 +223,11 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .buildInfo(buildInfo)
                 .transfers(transfers)
                 .workMode(workMode)
+                .scanType(fullScanMode ? ScanType.FULL : ScanType.INCREMENTAL)
                 .build();
         if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
             job.setCaCertsPem(credentials.getServerCaCertificates());
+        job.info("JenkinsAstJob created: %s", job.toString());
         if (!job.init())
             throw new AbortException(Resources.validator_failed());
 

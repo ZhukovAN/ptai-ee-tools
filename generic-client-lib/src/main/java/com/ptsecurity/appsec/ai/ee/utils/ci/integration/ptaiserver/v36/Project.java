@@ -9,10 +9,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.Sc
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.V36ScanSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @SuperBuilder
+@ToString(callSuper = true)
 public class Project extends Utils {
     @Getter
     @Setter
@@ -44,13 +42,10 @@ public class Project extends Utils {
     }
 
     /**
-     * @param node PT AI scan agent node name where scan is to be
-     *             executed. If empty, node will be assigned using
-     *             internal load balancer
      * @return Scan identifier
      * @throws ApiException Project not found or scan start failed
      */
-    public UUID scan(final String node) throws ApiException {
+    public UUID scan() throws ApiException {
         StartScanModel startScanModel = new StartScanModel();
         UUID id = searchProject();
         if (null == id)

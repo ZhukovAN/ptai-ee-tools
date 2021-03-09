@@ -77,6 +77,11 @@ public class Defaults {
     public static final String FAIL_IF_UNSTABLE = FALSE;
 
     /**
+     * See {@link Params#FULL_SCAN_MODE}
+     */
+    public static final String FULL_SCAN_MODE = FALSE;
+
+    /**
      * See {@link Params#VERBOSE}
      */
     public static final String VERBOSE = FALSE;

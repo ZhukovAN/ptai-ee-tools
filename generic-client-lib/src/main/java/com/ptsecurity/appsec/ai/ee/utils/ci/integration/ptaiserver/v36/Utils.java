@@ -5,10 +5,7 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheck;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.UrlHelper;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +20,7 @@ import java.util.UUID;
 @Slf4j
 @SuperBuilder
 @NoArgsConstructor
+@ToString(callSuper = true)
 public class Utils extends BaseClient {
 
     public EnterpriseLicenseData getLicenseData() throws ApiException {

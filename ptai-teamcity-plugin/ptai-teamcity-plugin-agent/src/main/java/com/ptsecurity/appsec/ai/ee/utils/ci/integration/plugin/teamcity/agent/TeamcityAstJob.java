@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.ReportsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.operations.TeamcityAstOperations;
@@ -57,7 +58,8 @@ public class TeamcityAstJob extends AstJob {
 
     @Override
     public boolean unsafeInit() {
-        verbose = TRUE.equals(globals.get(Params.VERBOSE));
+        scanType = TRUE.equals(params.get(Params.FULL_SCAN_MODE)) ? ScanType.FULL : ScanType.INCREMENTAL;
+        verbose = TRUE.equals(params.get(Params.VERBOSE));
 
         if (SERVER_SETTINGS_LOCAL.equals(params.get(Params.SERVER_SETTINGS))) globals = params;
 

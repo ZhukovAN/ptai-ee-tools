@@ -171,6 +171,10 @@
 <c:set var="HINT_REPORTING_JSON_SETTINGS" value="<%=Hints.REPORTING_JSON_SETTINGS%>"/>
 
 
+<c:set var="FULL_SCAN_MODE" value="<%=Params.FULL_SCAN_MODE%>"/>
+<c:set var="LABEL_FULL_SCAN_MODE" value="<%=Labels.FULL_SCAN_MODE%>"/>
+<c:set var="HINT_FULL_SCAN_MODE" value="<%=Hints.FULL_SCAN_MODE%>"/>
+
 <c:set var="VERBOSE" value="<%=Params.VERBOSE%>"/>
 <c:set var="LABEL_VERBOSE" value="<%=Labels.VERBOSE%>"/>
 <c:set var="HINT_VERBOSE" value="<%=Hints.VERBOSE%>"/>

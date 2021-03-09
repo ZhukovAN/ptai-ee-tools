@@ -76,12 +76,16 @@ note right
     * FAILED
     * ABORTED
 end note
-if (stage is DONE or ABORTED and reports defined) then (true)
-    :generate reports>
+if (stage is not one of DONE / ABORTED / FAILED) then (true)
+    #pink:FAILED;
+    stop
 endif
 if (stage is ABORTED) then (true)
     #pink:INTERRUPTED;
     stop
+endif
+if (stage is DONE or ABORTED and reports defined) then (true)
+    :generate reports>
 endif
 if (policy REJECTED) then (true)
     if (FAIL-IF-FAILED) then(true)

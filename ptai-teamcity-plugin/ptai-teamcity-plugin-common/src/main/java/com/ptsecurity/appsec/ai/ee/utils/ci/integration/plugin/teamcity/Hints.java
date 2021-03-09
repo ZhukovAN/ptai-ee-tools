@@ -40,7 +40,9 @@ public class Hints {
 
     public static final String FAIL_IF_FAILED = "Mark build step as failed if AST policy assessment failed";
     public static final String FAIL_IF_UNSTABLE = "Mark build step as failed if AST policy assessment success but there were some minor warnings reported";
-    public static final String VERBOSE = "Show verbose log output";
+    public static final String FULL_SCAN_MODE = Resources.i18n_ast_settings_fullScanMode_hint();
+    public static final String VERBOSE = Resources.i18n_ast_settings_verbose_hint();
+
     public static final String INCLUDES =
             "Files to scan for vulnerabilities. The string is a comma separated " +
                     "list of includes for an Ant fileset eg. '**/*.jar' " +

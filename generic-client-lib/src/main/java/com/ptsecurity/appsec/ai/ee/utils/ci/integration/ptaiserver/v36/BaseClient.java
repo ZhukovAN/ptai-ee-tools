@@ -41,6 +41,7 @@ import java.util.*;
 @Slf4j
 @SuperBuilder
 @NoArgsConstructor
+@ToString(callSuper = true)
 public class BaseClient extends Base {
     @Getter
     protected final String id = UUID.randomUUID().toString();
@@ -48,33 +49,43 @@ public class BaseClient extends Base {
     protected static final int TIMEOUT = 3600 * 1000;
 
     @Getter
+    @ToString.Exclude
     protected final AuthApi authApi = new AuthApi(new com.ptsecurity.appsec.ai.ee.ptai.server.auth.ApiClient());
 
     @Getter
+    @ToString.Exclude
     protected final ProjectsApi projectsApi = new ProjectsApi(new com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiClient());
 
     @Getter
+    @ToString.Exclude
     protected final ReportsApi reportsApi = new ReportsApi(new com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiClient());
 
     @Getter
+    @ToString.Exclude
     protected final LicenseApi licenseApi = new LicenseApi(new com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiClient());
 
     @Getter
+    @ToString.Exclude
     protected final ScanApi scanApi = new ScanApi(new com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.ApiClient());
 
     @Getter
+    @ToString.Exclude
     protected final ScanAgentApi scanAgentApi = new ScanAgentApi(new com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.ApiClient());
 
     @Getter
+    @ToString.Exclude
     protected final StoreApi storeApi = new StoreApi(new com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiClient());
 
     @Getter
+    @ToString.Exclude
     protected final HealthCheckApi healthCheckApi = new HealthCheckApi(new com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.ApiClient());
 
     @Getter
+    @ToString.Exclude
     protected final VersionApi versionApi = new VersionApi(new com.ptsecurity.appsec.ai.ee.ptai.server.updateserver.ApiClient());
 
     @Getter
+    @ToString.Exclude
     protected final List<Object> apis = Arrays.asList(authApi, projectsApi, reportsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi, versionApi);
 
     /**
@@ -82,6 +93,7 @@ public class BaseClient extends Base {
      */
     @Getter
     @Builder.Default
+    @ToString.Exclude
     protected JwtResponse jwt = null;
 
     public BaseClient jwt(@NonNull final JwtResponse jwt) {
@@ -176,6 +188,7 @@ public class BaseClient extends Base {
     protected boolean insecure = false;
 
     @Builder.Default
+    @ToString.Exclude
     private boolean initialized = false;
 
     @Getter
@@ -203,6 +216,7 @@ public class BaseClient extends Base {
     }
 
     @Builder.Default
+    @ToString.Exclude
     protected String connectedDate = "";
 
     @SneakyThrows
@@ -303,9 +317,6 @@ public class BaseClient extends Base {
         SubscriptionOnNotification subscription = new SubscriptionOnNotification();
         subscription.ClientId = id;
         subscription.Ids.add(scanResultId);
-
-        subscription.NotificationTypeName = "ScanEnqueued";
-        connection.send("SubscribeOnNotification", subscription);
 
         subscription.NotificationTypeName = "ScanStarted";
         connection.send("SubscribeOnNotification", subscription);

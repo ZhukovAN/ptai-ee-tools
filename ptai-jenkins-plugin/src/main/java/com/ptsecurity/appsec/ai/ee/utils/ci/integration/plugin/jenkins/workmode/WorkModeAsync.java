@@ -2,9 +2,11 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import hudson.Extension;
+import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+@ToString
 public class WorkModeAsync extends WorkMode {
     @DataBoundConstructor
     public WorkModeAsync() {}

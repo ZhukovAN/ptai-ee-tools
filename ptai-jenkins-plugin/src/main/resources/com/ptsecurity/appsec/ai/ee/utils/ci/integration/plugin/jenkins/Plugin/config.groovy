@@ -167,13 +167,13 @@ f.entry(
 }
 
 // f.advanced() {
-f.invisibleEntry(
-        title: _("nodeName"),
-        field: "nodeName") {
-    f.textbox(
-            id: descriptor.createElementId()
-    )
+f.entry(
+        title: _('fullScanMode'),
+        field: 'fullScanMode',
+        default: 'false') {
+    f.checkbox()
 }
+
 f.entry(
         title: _('verbose'),
         field: 'verbose',

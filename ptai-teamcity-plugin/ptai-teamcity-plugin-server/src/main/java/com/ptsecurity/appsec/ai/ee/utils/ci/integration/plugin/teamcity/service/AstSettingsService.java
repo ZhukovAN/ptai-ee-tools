@@ -145,7 +145,7 @@ public class AstSettingsService {
         else if (AST_SETTINGS_UI.equals(res.get(AST_SETTINGS)))
             res.fill(PROJECT_NAME, request);
         res.fill(FAIL_IF_FAILED, request).fill(FAIL_IF_UNSTABLE, request)
-                .fill(VERBOSE, request)
+                .fill(FULL_SCAN_MODE, request).fill(VERBOSE, request)
                 .fill(INCLUDES, request).fill(REMOVE_PREFIX, request).fill(EXCLUDES, request)
                 .fill(PATTERN_SEPARATOR, request).fill(USE_DEFAULT_EXCLUDES, request).fill(FLATTEN, request);
         res.fill(REPORTING_REPORT, request)

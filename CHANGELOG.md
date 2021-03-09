@@ -35,3 +35,12 @@
 + [Fix] "SAST" changed to "AST" in resources
 + [Fix] Ant JAR version changed in generic-client-lib as GitHub's dependabot made pull request
 + [Feature] GitHub build workflow added
+### 20210309
++ [Fix] Hidden "nodeName" parameter removed from Jenkins plugin
++ [Fix] Jenkins credentials plugin version changed to 2.3.14
++ [Fix] Jenkins token-macro plugin version changed to 2.13
++ [Fix] PT AI result URL output removed as it is not supported in PT AI Viewer 
++ [Fix] ScanEnqueued event subscription removed as there's no more handler for it exist. This will fix SignalR exception when event reaches BaseClient
++ [Feature] Full / incremental scan mode option added to Jenkins plugin
++ [Feature] Added zipped sources file size log output
++ [Feature] Full / incremental scan mode option added to Teamcity plugin

@@ -13,6 +13,7 @@ import hudson.model.TaskListener;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
+@ToString(callSuper = true)
 public class JenkinsAstJob extends AstJob {
     /**
      * CI workspace folder
@@ -35,6 +37,7 @@ public class JenkinsAstJob extends AstJob {
      * archive creation and reports save to workspace
      */
     @NonNull
+    @ToString.Exclude
     protected Launcher launcher;
 
     /**
@@ -42,6 +45,7 @@ public class JenkinsAstJob extends AstJob {
      * scan agent to Jenkins server
      */
     @NonNull
+    @ToString.Exclude
     protected TaskListener listener;
 
     /**

@@ -14,6 +14,7 @@ import java.util.concurrent.Callable;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
+@ToString
 public class Base {
     public static final String DEFAULT_SAST_FOLDER = ".ptai";
     public static final String DEFAULT_PTAI_NODE_NAME = "ptai";
@@ -24,9 +25,11 @@ public class Base {
     protected boolean verbose = false;
 
     @Builder.Default
+    @ToString.Exclude
     protected PrintStream console = null;
 
     @Builder.Default
+    @ToString.Exclude
     protected String prefix = DEFAULT_PREFIX;
 
     protected void out(final String value) {

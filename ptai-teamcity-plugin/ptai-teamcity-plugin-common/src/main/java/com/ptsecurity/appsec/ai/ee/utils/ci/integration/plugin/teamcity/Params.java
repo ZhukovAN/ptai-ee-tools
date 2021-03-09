@@ -73,6 +73,10 @@ public class Params {
     public static final String FAIL_IF_UNSTABLE = PARAM("FailIfUnstable");
 
     /**
+     * Allows execute AST in full (i.e. non-incremental) mode if equals to {@link Constants#TRUE}
+     */
+    public static final String FULL_SCAN_MODE = PARAM("FullScanMode");
+    /**
      * Allows verbose logging if equals to {@link Constants#TRUE}
      */
     public static final String VERBOSE = PARAM("Verbose");

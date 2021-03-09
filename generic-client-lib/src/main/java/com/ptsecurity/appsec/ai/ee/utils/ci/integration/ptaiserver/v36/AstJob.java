@@ -12,6 +12,7 @@ import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +31,7 @@ import static com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Stag
 
 @Slf4j
 @SuperBuilder
+@ToString(callSuper = true)
 public abstract class AstJob extends Project {
     /**
      * AST job execution status. Status defined by combination of
@@ -44,10 +46,6 @@ public abstract class AstJob extends Project {
     @Nullable
     @Setter
     protected String jsonPolicy;
-
-    @Nullable
-    @Setter
-    protected String node;
 
     /**
      * Flag that defines should we wait for AST job to complete, generate
@@ -69,10 +67,13 @@ public abstract class AstJob extends Project {
      * Unique ID of scan results for job just started
      */
     @Builder.Default
+    @ToString.Exclude
     private UUID scanResultId = null;
 
+    @ToString.Exclude
     protected AstOperations astOps;
 
+    @ToString.Exclude
     protected FileOperations fileOps;
 
     /**
@@ -121,7 +122,7 @@ public abstract class AstJob extends Project {
         upload();
 
         // Start scan
-        scanResultId = scan(node);
+        scanResultId = scan();
         info("Scan enqueued, PT AI AST result ID is " + scanResultId);
         astOps.scanStartedCallback(this, scanResultId);
 
@@ -134,12 +135,6 @@ public abstract class AstJob extends Project {
                 () -> fileOps.saveArtifact("rest.url", url.getBytes()),
                 "AST result REST API URL save failed");
         info("AST result REST API URL: " + url);
-
-        final String ptaiUrl = "ptai://navigation/show?project=" + projectId.toString() + "&result=" + scanResultId.toString();
-        callApi(
-                () -> fileOps.saveArtifact("ptai.url", ptaiUrl.getBytes()),
-                "AST result PT AI URL save failed");
-        info("AST result PT AI URL: " + ptaiUrl);
 
         if (async) {
             // Asynchronous mode means that we aren't need to wait AST job

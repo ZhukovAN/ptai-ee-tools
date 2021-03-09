@@ -533,6 +533,16 @@
 
     <tr class="advancedSetting">
         <th>
+            <label for="${FULL_SCAN_MODE}">${LABEL_FULL_SCAN_MODE}</label>
+        </th>
+        <td>
+            <props:checkboxProperty name="${FULL_SCAN_MODE}"/>
+            <span class="smallNote">${HINT_FULL_SCAN_MODE}</span>
+        </td>
+    </tr>
+
+    <tr class="advancedSetting">
+        <th>
             <label for="${VERBOSE}">${LABEL_VERBOSE}</label>
         </th>
         <td>

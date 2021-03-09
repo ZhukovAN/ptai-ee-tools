@@ -93,6 +93,7 @@ public class FileCollector {
             if (fileEntries.isEmpty())
                 throw new IllegalArgumentException("No files are match defined transfer settings");
             collector.packCollectedFiles(zip, fileEntries);
+            owner.info("Zipped sources size is %s (%d bytes)", bytesToString(zip.length()), zip.length());
             return zip;
         } catch (Exception e) {
             throw ApiException.raise("File collect failed", e);
