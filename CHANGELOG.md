@@ -44,3 +44,5 @@
 + [Feature] Full / incremental scan mode option added to Jenkins plugin
 + [Feature] Added zipped sources file size log output
 + [Feature] Full / incremental scan mode option added to Teamcity plugin
+### 20210313
++ [Fix] Teamcity plugin build via Dockerfile fixed
