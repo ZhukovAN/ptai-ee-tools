@@ -18,7 +18,7 @@ COPY ptai-jenkins-plugin/pom.xml $BUILD_HOME/ptai-jenkins-plugin/
 COPY ptai-teamcity-plugin/build $BUILD_HOME/ptai-teamcity-plugin/build
 COPY ptai-teamcity-plugin/ptai-teamcity-plugin-agent $BUILD_HOME/ptai-teamcity-plugin/ptai-teamcity-plugin-agent
 COPY ptai-teamcity-plugin/ptai-teamcity-plugin-common $BUILD_HOME/ptai-teamcity-plugin/ptai-teamcity-plugin-common
-COPY ptai-teamcity-plugin/ptai-teamcity-plugin-server $BUILD_HOME/ptai-teamcity-plugin/server
+COPY ptai-teamcity-plugin/ptai-teamcity-plugin-server $BUILD_HOME/ptai-teamcity-plugin/ptai-teamcity-plugin-server
 COPY ptai-teamcity-plugin/*.xml $BUILD_HOME/ptai-teamcity-plugin/
 
 WORKDIR $BUILD_HOME
