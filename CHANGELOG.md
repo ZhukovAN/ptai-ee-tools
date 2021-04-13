@@ -33,7 +33,7 @@
 + [Feature] Added request and response body logging for PT AI REST API calls with content type application/json
 ### 20210224
 + [Fix] "SAST" changed to "AST" in resources
-+ [Fix] Ant JAR version changed in generic-client-lib as GitHub's dependabot made pull request
++ [Fix] Ant JAR version changed in generic-client-lib as GitHub's dependabot made that pull request
 + [Feature] GitHub build workflow added
 ### 20210309
 + [Fix] Hidden "nodeName" parameter removed from Jenkins plugin
@@ -46,3 +46,8 @@
 + [Feature] Full / incremental scan mode option added to Teamcity plugin
 ### 20210313
 + [Fix] Teamcity plugin build via Dockerfile fixed
+### 20210401
++ [ToDo] Investigate Jenkins plugin fail for 2.277.1: build job fails on save
+### 20210413
++ [Fix] Dockerfile fixed to allow CLI plugin execution from Gitlab CI
++ [Fix] Ant and Slf4J dependencies are removed from Jenkins's plugin pom.xml file as those JARs versions are managed by parent org.jenkins-ci.plugins artifact that maintains actual BOM of dependencies in accordance with jenkins.version variable (see details here: https://github.com/jenkinsci/plugin-pom).  

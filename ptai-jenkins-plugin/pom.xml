@@ -17,8 +17,13 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <java-version>1.8</java-version>
         <java.level>8</java.level>
+        <!-- <jenkins.version>2.150.2</jenkins.version> -->
+        <!-- <jenkins.version>2.164.3</jenkins.version> -->
         <jenkins.version>2.263.2</jenkins.version>
+        <!-- <jenkins.version>2.259</jenkins.version> -->
+        <!-- <jenkins.version>2.277.1</jenkins.version> -->
     </properties>
+
     <name>PT AI Application Inspector</name>
     <url>https://www.ptsecurity.com/ww-en/products/ai/</url>
     <description>This plugin used to implement AST using PT Application Inspector</description>
@@ -32,6 +37,16 @@
                     <!-- https://mvnrepository.com/artifact/org.jvnet.localizer/maven-localizer-plugin -->
                     <groupId>org.jvnet.localizer</groupId>
                     <artifactId>maven-localizer-plugin</artifactId>
+                </exclusion>
+                <exclusion>
+                    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
+                    <groupId>org.apache.ant</groupId>
+                    <artifactId>ant</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -58,13 +73,6 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.14</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-            <!-- <version>1.7.25</version> -->
-            <version>1.7.30</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
