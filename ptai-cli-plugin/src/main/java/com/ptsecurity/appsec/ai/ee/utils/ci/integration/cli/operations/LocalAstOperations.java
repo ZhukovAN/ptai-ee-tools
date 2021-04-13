@@ -41,6 +41,7 @@ public class LocalAstOperations implements AstOperations {
         Transfer transfer = new Transfer();
         if (StringUtils.isNotEmpty(owner.getIncludes())) transfer.setIncludes(owner.getIncludes());
         if (StringUtils.isNotEmpty(owner.getExcludes())) transfer.setExcludes(owner.getExcludes());
+        transfer.setUseDefaultExcludes(owner.isUseDefaultExcludes());
         return createLocalZip(new Transfers().addTransfer(transfer), owner.getInput());
     }
 

@@ -58,6 +58,11 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
             description = "Comma-separated list of files to exclude from scan. The syntax is the same as for includes")
     private String excludes = null;
 
+    @CommandLine.Option(
+            names = {"--use-default-excludes"}, order = 8,
+            description = "Use default excludes list")
+    private boolean useDefaultExcludes = false;
+
     @CommandLine.ArgGroup(exclusive = true)
     BaseCommand.Reporting reports;
 
@@ -91,6 +96,7 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
                 .failIfFailed(failIfFailed).failIfUnstable(failIfUnstable)
                 .input(input).output(output)
                 .includes(includes).excludes(excludes)
+                .useDefaultExcludes(useDefaultExcludes)
                 .reporting(reports)
                 .truststore(truststore)
                 .scanType(fullScan ? ScanType.FULL : ScanType.INCREMENTAL)

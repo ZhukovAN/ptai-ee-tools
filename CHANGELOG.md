@@ -51,3 +51,4 @@
 ### 20210413
 + [Fix] Dockerfile fixed to allow CLI plugin execution from Gitlab CI
 + [Fix] Ant and Slf4J dependencies are removed from Jenkins's plugin pom.xml file as those JARs versions are managed by parent org.jenkins-ci.plugins artifact that maintains actual BOM of dependencies in accordance with jenkins.version variable (see details here: https://github.com/jenkinsci/plugin-pom).  
++ [Feature] CLI plugin --use-default-excludes parameter added

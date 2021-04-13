@@ -24,6 +24,7 @@ public class CliAstJob extends AstJob {
     protected Path input;
     protected String includes;
     protected String excludes;
+    protected boolean useDefaultExcludes;
     protected Path output;
 
     protected BaseCommand.Reporting reporting;
