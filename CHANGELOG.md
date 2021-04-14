@@ -52,3 +52,5 @@
 + [Fix] Dockerfile fixed to allow CLI plugin execution from Gitlab CI
 + [Fix] Ant and Slf4J dependencies are removed from Jenkins's plugin pom.xml file as those JARs versions are managed by parent org.jenkins-ci.plugins artifact that maintains actual BOM of dependencies in accordance with jenkins.version variable (see details here: https://github.com/jenkinsci/plugin-pom).  
 + [Feature] CLI plugin --use-default-excludes parameter added
+### 20210414
++ [Fix] Transitive dependencies to Maven localizer plugin 1.26 are fixed by adding explicit repository URL to parent pom.xml
