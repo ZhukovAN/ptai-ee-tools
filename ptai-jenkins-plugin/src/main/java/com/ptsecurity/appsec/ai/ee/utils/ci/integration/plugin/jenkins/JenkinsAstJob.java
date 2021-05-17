@@ -25,6 +25,9 @@ import java.util.List;
 public class JenkinsAstJob extends AstJob {
     /**
      * CI workspace folder
+     *
+     * @param workspace New value for CI workspace folder
+     * @return The current value of CI workspace folder
      */
     @NonNull
     protected FilePath workspace;
@@ -35,6 +38,9 @@ public class JenkinsAstJob extends AstJob {
      * a remote agent, we need to take special care for
      * resource-consuming operations such as source code
      * archive creation and reports save to workspace
+     *
+     * @param launcher New value for Jenkins launcher
+     * @return The current value of Jenkins launcher
      */
     @NonNull
     @ToString.Exclude
@@ -43,6 +49,9 @@ public class JenkinsAstJob extends AstJob {
     /**
      * Listener allow us to send log messages from remote
      * scan agent to Jenkins server
+     *
+     * @param listener New value for listener
+     * @return The current value of listener
      */
     @NonNull
     @ToString.Exclude
@@ -51,6 +60,9 @@ public class JenkinsAstJob extends AstJob {
     /**
      * Build info contains environment variables that may
      * be used for macro replacement
+     *
+     * @param buildInfo New value for build info
+     * @return The current value of build info
      */
     @NonNull
     protected BuildInfo buildInfo;
@@ -58,11 +70,17 @@ public class JenkinsAstJob extends AstJob {
     /**
      * List of transfers, i.e. source files to be zipped
      * and sent to PT AI server
+     *
+     * @param transfers New value for list of transfers
+     * @return The current value of list of transfers
      */
     private List<Transfer> transfers;
 
     /**
      * Jenkins job work mode
+     *
+     * @param workMode New value for Jenkins job work mode
+     * @return The current value of Jenkins job work mode
      */
     private WorkMode workMode;
 

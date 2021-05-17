@@ -1,0 +1,44 @@
+plugins {
+    id "com.github.rodm.teamcity-server"
+    id 'com.github.rodm.teamcity-environments'
+}
+
+dependencies {
+    api project(':ptai-teamcity-plugin:ptai-teamcity-plugin-common')
+    agent project(path: ':ptai-teamcity-plugin:ptai-teamcity-plugin-agent', configuration: 'plugin')
+    // https://mvnrepository.com/artifact/commons-validator/commons-validator
+    implementation 'commons-validator:commons-validator:1.6'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    // implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+
+    // provided "org.jetbrains.teamcity:server-api:${teamcityVersion}"
+    // provided "org.jetbrains.teamcity.internal:server:${teamcityVersion}"
+}
+
+teamcity {
+    version = teamcityVersion
+    server {
+        descriptor {
+            name = 'ptai-teamcity-plugin'
+            displayName = 'PT AI vulnerability analysis'
+            archiveName = 'ptai-teamcity-plugin.zip'
+            version = "${project.version}-${buildTimestamp}"
+            vendorName = 'Positive Technologies'
+            vendorUrl = 'https://www.ptsecurity.com/'
+            description = 'Searches vulnerabilities in source code using Positive Technologies Application Inspector'
+            email = 'alexey.n.zhukov@gmail.com'
+            useSeparateClassloader = true
+            allowRuntimeReload = true
+        }
+    }
+
+    environments {
+        teamcity {
+            version = teamcityVersion
+            serverOptions '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=10111'
+            agentOptions '-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=10112'
+        }
+    }
+}

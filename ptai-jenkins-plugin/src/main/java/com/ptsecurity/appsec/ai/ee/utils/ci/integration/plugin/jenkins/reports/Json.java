@@ -9,7 +9,6 @@ import org.jenkinsci.Symbol;
 import org.jetbrains.annotations.NotNull;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-@EqualsAndHashCode
 @ToString
 public class Json extends BaseReport {
     @Getter

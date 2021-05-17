@@ -13,7 +13,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.util.Arrays;
 
-@EqualsAndHashCode
 @ToString
 public class Report extends BaseReport {
     @Getter

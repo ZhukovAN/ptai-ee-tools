@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ReportTempl
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Re
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Report.Format.HTML;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@Tag("integration")
 public class ReportsIT extends BaseIT {
     protected static final String EXISTING_PROJECT = "app01";
     protected static final UUID EXISTING_SCAN_RESULT_ID = UUID.fromString("a221c55d-038b-41ed-91e8-5c9d67cb3337");

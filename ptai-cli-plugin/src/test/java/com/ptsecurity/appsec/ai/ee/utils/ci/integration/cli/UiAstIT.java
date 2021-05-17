@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
@@ -18,6 +19,7 @@ import java.util.UUID;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Report.Format.HTML;
 
 @DisplayName("Check UI-defined AST scans")
+@Tag("integration")
 class UiAstIT extends BaseIT {
     @Test
     @DisplayName("Show usage of UI-defined AST")

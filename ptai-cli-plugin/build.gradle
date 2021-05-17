@@ -1,0 +1,46 @@
+plugins {
+    id 'application'
+    id 'com.github.johnrengelman.shadow'
+}
+
+group = "${rootGroup}.ptai-cli-plugin"
+
+mainClassName = 'com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin'
+
+dependencies {
+    api project(':generic-client-lib')
+    // https://mvnrepository.com/artifact/info.picocli/picocli
+    implementation 'info.picocli:picocli:4.2.0'
+    // https://mvnrepository.com/artifact/org.fusesource.jansi/jansi
+    implementation 'org.fusesource.jansi:jansi:1.18'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-configuration2
+    implementation 'org.apache.commons:commons-configuration2:2.7'
+    // https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils
+    implementation 'commons-beanutils:commons-beanutils:1.9.4'
+    // https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j
+    implementation 'net.lingala.zip4j:zip4j:2.7.0'
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+    implementation 'org.apache.logging.log4j:log4j-api:2.14.0'
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    implementation 'org.apache.logging.log4j:log4j-core:2.14.0'
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.0'
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'PT Application Inspector CLI plugin'
+        attributes 'Implementation-Version': findProperty('version')
+        attributes 'Implementation-Build': "${buildTimestamp}"
+        attributes 'Implementation-Vendor-Id': "${rootGroup}"
+    }
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    archiveVersion.set('')
+}

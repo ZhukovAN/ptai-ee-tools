@@ -6,7 +6,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.BaseConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.Config;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
@@ -44,6 +43,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.TreeMap;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
@@ -96,8 +96,8 @@ public class Plugin extends Builder implements SimpleBuildStep {
     private TreeMap<String, String> getEnvironmentVariables(final Run<?, ?> build, final TaskListener listener) {
         try {
             final TreeMap<String, String> env = build.getEnvironment(listener);
-            if (build instanceof AbstractBuild) {
-                AbstractBuild abstractBuild = (AbstractBuild) build;
+            if (build instanceof AbstractBuild<?,?>) {
+                AbstractBuild<?, ?> abstractBuild = (AbstractBuild<?, ?>) build;
                 env.putAll(abstractBuild.getBuildVariables());
             }
             return env;
@@ -179,8 +179,8 @@ public class Plugin extends Builder implements SimpleBuildStep {
         if (config instanceof ConfigGlobal) {
             // Settings are defined globally, job just refers them using configName
             configName = ((ConfigGlobal) config).getConfigName();
-            BaseConfig base = descriptor.getConfig(configName);
-            serverSettings = ((Config) base).getServerSettings();
+            Config base = descriptor.getConfig(configName);
+            serverSettings = base.getServerSettings();
             credentialsId = serverSettings.getServerCredentialsId();
             credentials = CredentialsImpl.getCredentialsById(item, credentialsId);
             serverUrl = serverSettings.getServerUrl();

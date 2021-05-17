@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@Tag("integration")
 public class BaseIT {
     public static final String TEAMCITY_PLUGIN_API_TOKEN = "EviL0KKic2FplOuBGz6Ox98+JWkRbio4";
     // public static final String JENKINS_PLUGIN_API_TOKEN = "k+bwoHZBrpi+2TV7Ne25cbFeTXGn+idS";
@@ -80,11 +81,11 @@ public class BaseIT {
         jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         jsonMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
 
-        Path path = Paths.get(BaseIT.class.getClassLoader().getResource("json/policy.json").toURI());
+        Path path = Paths.get(BaseIT.class.getClassLoader().getResource("json/policy/policy.json").toURI());
         String jsonData = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
         POLICY = jsonMapper.readValue(jsonData, Policy[].class);
 
-        path = Paths.get(BaseIT.class.getClassLoader().getResource("json/settings.aiproj").toURI());
+        path = Paths.get(BaseIT.class.getClassLoader().getResource("json/settings/settings.aiproj").toURI());
         jsonData = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
         SETTINGS = jsonMapper.readValue(jsonData, ScanSettings.class);
     }

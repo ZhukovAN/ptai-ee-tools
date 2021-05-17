@@ -4,10 +4,12 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
 @DisplayName("Report templates list read tests")
+@Tag("integration")
 class ListReportTemplatesIT extends BaseIT {
 
     @Test

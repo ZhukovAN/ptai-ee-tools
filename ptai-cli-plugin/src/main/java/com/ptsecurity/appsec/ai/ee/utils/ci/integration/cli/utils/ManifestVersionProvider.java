@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils;
 
 import picocli.CommandLine;
 
+import javax.naming.directory.Attribute;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -33,7 +34,7 @@ public class ManifestVersionProvider implements CommandLine.IVersionProvider {
 
     private boolean isApplicableManifest(Manifest manifest) {
         Attributes attributes = manifest.getMainAttributes();
-        return "ptai-cli-plugin".equals(get(attributes, "Implementation-Title"));
+        return "com.ptsecurity.appsec.ai.ee.utils.ci.integration".equals(get(attributes, "Implementation-Vendor-Id"));
     }
 
     private static Object get(Attributes attributes, String key) {

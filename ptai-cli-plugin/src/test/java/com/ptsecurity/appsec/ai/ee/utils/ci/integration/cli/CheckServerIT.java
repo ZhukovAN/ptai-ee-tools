@@ -3,12 +3,14 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
 import java.util.UUID;
 
 @DisplayName("Server availability check tests")
+@Tag("integration")
 class CheckServerIT extends BaseIT {
     @Test
     @DisplayName("Connect with valid token")

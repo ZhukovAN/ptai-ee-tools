@@ -21,6 +21,11 @@ import java.util.UUID;
 @Builder
 public class JenkinsAstOperations implements AstOperations {
 
+    /**
+     * Jenkins AST job that provides Jenkins tools for AST to work. These tools include event log listener, remote workspace etc.
+     *
+     * @param owner New value for owner AST job
+     */
     @NonNull
     protected final JenkinsAstJob owner;
 

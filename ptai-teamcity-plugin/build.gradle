@@ -1,0 +1,13 @@
+plugins {
+    id "com.github.rodm.teamcity-common" version "1.4-beta-2" apply false
+    id "com.github.rodm.teamcity-agent" version "1.4-beta-2" apply false
+    id "com.github.rodm.teamcity-server" version "1.4-beta-2" apply false
+    id 'com.github.rodm.teamcity-environments' version "1.4-beta-2" apply false
+}
+
+subprojects {
+    dependencies {
+        // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+        implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+    }
+}

@@ -1,0 +1,36 @@
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ master ]
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 8 ]
+    name: Build - Java ${{ matrix.java }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java }}
+      - name: Build with Gradle
+        run: |
+          ./gradlew -v
+          ./gradlew -s build
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ptai-ee-tools
+          path: |
+            ptai-jenkins-plugin/build/libs/ptai-jenkins-plugin.hpi
+            ptai-teamcity-plugin/target/ptai-teamcity-plugin.zip 
+            ptai-teamcity-plugin/ptai-teamcity-plugin-server/build/distributions/ptai-teamcity-plugin.zip
+            ptai-cli-plugin/build/libs/ptai-cli-plugin.jar

@@ -1,0 +1,15 @@
+plugins {
+    id "com.github.rodm.teamcity-common"
+}
+
+group = "${rootGroup}.ptai-teamcity-plugin-agent"
+
+dependencies {
+    api project(':generic-client-lib')
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+}
+
+teamcity {
+    version = teamcityVersion
+}

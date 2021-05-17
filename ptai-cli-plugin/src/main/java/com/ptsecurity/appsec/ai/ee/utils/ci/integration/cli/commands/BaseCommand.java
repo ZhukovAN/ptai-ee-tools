@@ -17,14 +17,13 @@ import java.nio.file.Path;
 
 @Slf4j
 public abstract class BaseCommand {
-    @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+    @AllArgsConstructor(access = AccessLevel.PACKAGE)
     public enum ExitCode {
         SUCCESS(Plugin.SUCCESS),
         FAILED(Plugin.FAILED),
         INVALID_INPUT(Plugin.INVALID_INPUT);
 
         @Getter
-        @NonNull
         @JsonProperty
         protected int code;
     }

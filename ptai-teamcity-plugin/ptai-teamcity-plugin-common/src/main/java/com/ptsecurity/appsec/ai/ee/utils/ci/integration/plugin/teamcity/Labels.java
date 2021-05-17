@@ -139,8 +139,7 @@ public class Labels {
 
     @NotNull
     public Collection<ReportFormatType> getReportFormatTypes() {
-        final Collection formats = Arrays.stream(ReportFormatType.values()).collect(Collectors.toList());
-        return formats;
+        return Arrays.stream(ReportFormatType.values()).collect(Collectors.toList());
     }
 
     public static final String REPORTING_LOCALE_ENGLISH = Resources.i18n_misc_enums_locale_english_label();

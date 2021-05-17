@@ -11,6 +11,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
@@ -30,6 +31,7 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Re
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Report.Format.HTML;
 
 @DisplayName("Report generation tests")
+@Tag("integration")
 class GenerateReportIT extends BaseIT {
     @Test
     @DisplayName("Show usage of report generator")
@@ -80,7 +82,7 @@ class GenerateReportIT extends BaseIT {
 
         for (int i = 1 ; i < 7 ; i++) {
             Path folder = Paths.get(REPORT_FOLDER).resolve(UUID.randomUUID().toString());
-            List<String> args = new ArrayList(Arrays.asList(
+            List<String> args = new ArrayList<>(Arrays.asList(
                     "generate-report",
                     "--url", PTAI_URL,
                     "--truststore", PEM_PATH,

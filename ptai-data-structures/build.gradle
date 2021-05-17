@@ -1,0 +1,13 @@
+group = "${rootGroup}.ptai-data-structures"
+
+dependencies {
+    api project(':ptai-i18n')
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    implementation 'org.jsoup:jsoup:1.12.1'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
+    api 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.9.10'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation 'commons-io:commons-io:2.6'
+}

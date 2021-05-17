@@ -2,7 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localcon
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.BaseConfig;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.Config;
 import hudson.Extension;
 import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
@@ -32,7 +32,7 @@ public class ConfigGlobal extends ConfigBase {
         public ListBoxModel doFillConfigNameItems() {
             PluginDescriptor desc = Jenkins.get().getDescriptorByType(PluginDescriptor.class);
             ListBoxModel model = new ListBoxModel();
-            for (BaseConfig globalConfig : desc.getGlobalConfigs())
+            for (Config globalConfig : desc.getGlobalConfigs())
                 model.add(globalConfig.getConfigName(), globalConfig.getConfigName());
             return model;
         }

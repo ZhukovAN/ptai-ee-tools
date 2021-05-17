@@ -54,3 +54,10 @@
 + [Feature] CLI plugin --use-default-excludes parameter added
 ### 20210414
 + [Fix] Transitive dependencies to Maven localizer plugin 1.26 are fixed by adding explicit repository URL to parent pom.xml
+### 20210517
++ [Feature] "Integration" JUnit tags are added to integration tests
++ [Feature] "Delombok" @param and @return JavaDocs are added
++ [Fixed] Investigate Jenkins plugin fail for 2.277.1: build job fails on save. Separate taglibs are implemented. See [link](https://www.jenkins.io/blog/2020/11/10/major-changes-in-weekly-releases/) for details
++ [Feature] Single Jenkins GlobalConfig class supported
++ [Feature] Gradle now used as a build tool. This allows dynamic dependency versioning to support build for different Jenkins / Teamcity versions
++ [ToDo] Add .ptai folder to default excludes list

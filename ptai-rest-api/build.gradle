@@ -1,0 +1,55 @@
+plugins {
+    id "org.openapi.generator" version "4.3.1"
+}
+
+group = "${rootGroup}.ptai-rest-api"
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
+    api 'com.squareup.okhttp3:okhttp:4.2.2'
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    api 'com.google.code.gson:gson:2.8.6'
+    // https://mvnrepository.com/artifact/io.swagger/swagger-annotations
+    implementation 'io.swagger:swagger-annotations:1.6.2'
+    // https://mvnrepository.com/artifact/io.gsonfire/gson-fire
+    implementation 'io.gsonfire:gson-fire:1.8.5'
+    // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
+    api 'com.google.code.findbugs:jsr305:3.0.2'
+}
+
+// As we do need to generate API for every YAML file let's dynamically generate tasks
+String createBuildApiTask(String apiName) {
+    String taskName = "build" + apiName + "Api";
+
+    task (taskName, type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+        it.description = "Dynamic task that generates the Java API for the ${apiName.toLowerCase()}.yml API definition"
+        it.group = BasePlugin.BUILD_GROUP
+
+        generatorName = "java"
+        configOptions = [ dateLibrary: "java8" ]
+        library = "okhttp-gson"
+
+        inputSpec = "${rootDir}/${project.name}/src/main/resources/api/v36/${apiName.toLowerCase()}.yml".toString()
+        outputDir = "$buildDir/generated"
+
+        apiPackage = "com.ptsecurity.appsec.ai.ee.ptai.server.${apiName.toLowerCase()}.v36"
+        modelPackage = "com.ptsecurity.appsec.ai.ee.ptai.server.${apiName.toLowerCase()}.v36"
+
+        generateApiTests = false
+        // invokerPackage = "org.openapitools.example.invoker"
+        generateModelTests = false
+    }
+
+    return taskName;
+}
+
+def tasks = [];
+final String[] apis = [ "Auth", "FilesStore", "Gateway", "ProjectManagement", "ScanScheduler", "SystemManagement", "UpdateServer" ];
+for (String api : apis) 
+    tasks << createBuildApiTask(api);
+
+compileJava.dependsOn tasks
+
+sourceSets.main.java.srcDirs += ["$buildDir/generated/src/main/java"]

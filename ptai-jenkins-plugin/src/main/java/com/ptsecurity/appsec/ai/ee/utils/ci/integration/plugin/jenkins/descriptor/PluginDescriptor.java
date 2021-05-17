@@ -4,7 +4,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.BaseConfig;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.Config;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
@@ -44,9 +43,9 @@ import java.util.UUID;
 @Symbol("ptaiUiSast")
 public class PluginDescriptor extends BuildStepDescriptor<Builder> {
 
-    private final CopyOnWriteList<BaseConfig> globalConfigs = new CopyOnWriteList<>();
+    private final CopyOnWriteList<Config> globalConfigs = new CopyOnWriteList<>();
 
-    public List<BaseConfig> getGlobalConfigs() {
+    public List<Config> getGlobalConfigs() {
         return globalConfigs.getView();
     }
 
@@ -71,7 +70,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         return true;
     }
 
-    public BaseConfig getConfig(final String name) {
+    public Config getConfig(final String name) {
         return globalConfigs.getView().stream()
                 .filter(cfg -> cfg.getConfigName().equals(name))
                 .findAny().orElse(null);
@@ -90,7 +89,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             if ((jsonConfigs instanceof JSONArray) && ((JSONArray) jsonConfigs).isEmpty()) break;
             if ((jsonConfigs instanceof JSONObject) && ((JSONObject) jsonConfigs).isEmpty()) break;
 
-            globalConfigs.replaceBy(request.bindJSONToList(BaseConfig.class, jsonConfigs));
+            globalConfigs.replaceBy(request.bindJSONToList(Config.class, jsonConfigs));
         } while (false);
 
         save();
@@ -107,6 +106,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
      * @param projectName PT AI project name for UI-defined AST settings mode
      * @param serverUrl PT AI server URL for task-defined private config
      * @param serverCredentialsId PT AI credentials Id for task-defined private config
+     * @param serverInsecure Skip certificate check during SSL handshake
      * @param configName Global configuration name
      * @return Validation result
      */
@@ -178,9 +178,9 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
 
             if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
                 // Settings are defined globally, job just refers them using configName
-                BaseConfig base = getConfig(configName);
+                Config base = getConfig(configName);
                 // What is the type of global config?
-                ServerSettings serverSettings = ((Config) base).getServerSettings();
+                ServerSettings serverSettings = base.getServerSettings();
                 credentials = CredentialsImpl.getCredentialsById(item, serverSettings.getServerCredentialsId());
                 realServerUrl = serverSettings.getServerUrl();
                 insecure = serverSettings.isServerInsecure();

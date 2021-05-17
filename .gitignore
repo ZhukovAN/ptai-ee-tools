@@ -1,20 +1,23 @@
-**/target/**
-**/work/**
-**/ptai-teamcity-plugin/servers/**
-**/docs/*.vpp.bak_*
-**/docs/*.vpp.lck
+.gradle
+**/build/
+!src/**/build/
+
+# Ignore Gradle GUI config
+gradle-app.setting
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Cache of project
+.gradletasknamecache
+
+**/ptai-jenkins-plugin/work/**
+**/ptai-teamcity-plugin/ptai-teamcity-plugin-server/data/**
+**/ptai-teamcity-plugin/ptai-teamcity-plugin-server/downloads/**
+**/ptai-teamcity-plugin/ptai-teamcity-plugin-server/servers/**
 **/.idea/workspace.xml
-**/Release/**
-**/Debug/**
-**/packages/**
-**/node_modules/**
-**/*.vsix
-**/*.dll
-**/.vs/**
-**/TestResults/**
-**/db/**/*.db
-**/admin
-!**/admin/
 **/.ptai/**
+
 **/*.log
 **/*.log.*
+

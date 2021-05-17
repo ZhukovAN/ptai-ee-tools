@@ -14,6 +14,11 @@ import java.nio.file.Files;
 @Builder
 @RequiredArgsConstructor
 public class JenkinsFileOperations implements FileOperations {
+    /**
+     * Jenkins AST job that provides Jenkins tools for AST to work. These tools include event log listener, remote workspace etc.
+     *
+     * @param owner New value for owner AST job
+     */
     @NonNull
     protected final JenkinsAstJob owner;
 

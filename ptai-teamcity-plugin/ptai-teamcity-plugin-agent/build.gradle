@@ -1,0 +1,24 @@
+plugins {
+    id "com.github.rodm.teamcity-agent"
+}
+
+group = "${rootGroup}.ptai-teamcity-plugin-agent"
+
+dependencies {
+    api project(':ptai-teamcity-plugin:ptai-teamcity-plugin-common')
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+}
+
+teamcity {
+    version = teamcityVersion
+    agent {
+        descriptor {
+            pluginDeployment {
+                useSeparateClassloader = true
+            }
+        }
+    }
+}

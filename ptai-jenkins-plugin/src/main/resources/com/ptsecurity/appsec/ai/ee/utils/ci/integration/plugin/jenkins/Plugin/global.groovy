@@ -10,9 +10,15 @@ f.section(
             title: _('configs'),
             help: descriptor.getHelpFile()) {
 
-        f.repeatableHeteroProperty(
+        f.repeatableProperty(
                 field: 'globalConfigs',
                 hasHeader: 'true',
-                addCaption: _('addGlobalConfigButton'))
+                addCaption: _('addGlobalConfigButton')) {
+            f.entry {
+                div(align: "right") {
+                    f.repeatableDeleteButton()
+                }
+            }
+        }
     }
 }

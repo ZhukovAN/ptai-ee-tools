@@ -14,12 +14,14 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCol
 import lombok.*;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+@Tag("integration")
 public class ProjectScanIT extends BaseIT {
     protected static final String EXISTING_PROJECT = "app01";
     protected static final UUID EXISTING_SCAN_RESULT_ID = UUID.fromString("a221c55d-038b-41ed-91e8-5c9d67cb3337");

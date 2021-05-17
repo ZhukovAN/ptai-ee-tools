@@ -5,12 +5,14 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
 import java.nio.file.Paths;
 
 @DisplayName("Check JSON-defined AST scans")
+@Tag("integration")
 class JsonAstIT extends BaseIT {
 
     @SneakyThrows

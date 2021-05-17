@@ -1,0 +1,34 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <st:documentation>
+    See
+    http://wiki.jenkins-ci.org/display/JENKINS/Jelly+form+controls
+    for the reference.
+
+    <st:attribute name="method" use="required">
+      Server-side method that handles the validation. For example, if this is 'foo', you need "doFoo" on
+      your descriptor class.
+    </st:attribute>
+    <st:attribute name="title" use="required">
+      Caption of the validate button. Should be internationalized.
+    </st:attribute>
+    <st:attribute name="progress">
+      Caption of the text shown while the AJAX call is in progress. For example, "checking..."
+    </st:attribute>
+    <st:attribute name="with">
+      ','-separated list of fields that are sent to the server.
+    </st:attribute>
+    <st:attribute name="customScript">
+      Custom JS to be executed during validation call
+    </st:attribute>
+  </st:documentation>
+  <f:entry>
+    <div style="float:right">
+      <input type="button" value="${title}" class="yui-button validate-button" onclick="${customScript}" />
+    </div>
+    <div style="display:none;">
+      <img src="${imagesURL}/spinner.gif" /> ${attrs.progress}
+    </div>
+    <div><!-- this is where the error message goes --></div>
+  </f:entry>
+</j:jelly>

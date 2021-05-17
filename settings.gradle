@@ -1,0 +1,11 @@
+rootProject.name = 'ptai-ee-tools'
+
+include ':ptai-i18n'
+include ':ptai-data-structures'
+include ':ptai-rest-api'
+include ':generic-client-lib'
+include ':ptai-cli-plugin'
+include ':ptai-jenkins-plugin'
+include ':ptai-teamcity-plugin:ptai-teamcity-plugin-common'
+include ':ptai-teamcity-plugin:ptai-teamcity-plugin-agent'
+include ':ptai-teamcity-plugin:ptai-teamcity-plugin-server'

@@ -1,0 +1,34 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url = uri('https://repo.jenkins-ci.org/releases/') }
+    }
+    dependencies {
+        classpath('org.jvnet.localizer:maven-localizer-plugin:1.26')
+    }
+}
+
+group = "${rootGroup}.ptai-i18n"
+
+dependencies {
+    implementation 'org.jvnet.localizer:maven-localizer-plugin:1.26'
+}
+
+import org.jvnet.localizer.GeneratorTask
+
+tasks.register('generate-sources') {
+    doLast {
+        def sourceDirs = sourceSets.main.resources.srcDirs
+        sourceDirs.findAll { it.exists() }.each { File sourceDirectory ->
+            GeneratorTask generator = new GeneratorTask()
+            generator.project = ant.project
+            generator.dir = sourceDirectory
+            generator.todir = project.file("$buildDir/generated")
+            generator.includes = '**/Resources.properties'
+            generator.execute()
+        }
+    }
+}
+
+compileJava.dependsOn tasks.getByPath("generate-sources")
+sourceSets.main.java.srcDirs += ["$buildDir/generated"]

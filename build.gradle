@@ -1,0 +1,47 @@
+plugins {
+    id 'io.freefair.lombok' version '6.0.0-m2' apply false
+    id 'com.github.johnrengelman.shadow' version '5.2.0' apply false
+    id 'org.jenkins-ci.jpi' version '0.43.0' apply false
+}
+
+ext {
+    buildTimestamp = "${new Date().format('yyyyMMddHHmm')}"
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'idea'
+    apply plugin: 'io.freefair.lombok'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+    compileJava.options.encoding = 'UTF-8'
+
+    repositories {
+        mavenCentral()
+        maven { url = uri('https://repo.jenkins-ci.org/releases/') }
+    }
+
+    dependencies {
+        // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+        implementation "org.slf4j:slf4j-api:$slf4jVersion"
+        // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+        // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    }
+
+    test {
+        useJUnitPlatform() {
+            excludeTags 'integration'
+        }
+    }
+
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:unchecked"
+    }
+}
+
+wrapper {
+    gradleVersion = '6.8.3'
+}
