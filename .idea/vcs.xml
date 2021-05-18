@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-server/servers/TeamCity-2018.2/buildAgent/work/302ea1eae6edd2f1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-server/servers/TeamCity-2020.1/buildAgent/work/302ea1eae6edd2f1" vcs="Git" />
   </component>
 </project>
