@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    api project(':ptai-teamcity-plugin:ptai-teamcity-plugin-common')
+    implementation project(':ptai-teamcity-plugin:ptai-teamcity-plugin-common')
     agent project(path: ':ptai-teamcity-plugin:ptai-teamcity-plugin-agent', configuration: 'plugin')
     // https://mvnrepository.com/artifact/commons-validator/commons-validator
     implementation 'commons-validator:commons-validator:1.6'

@@ -9,7 +9,7 @@ ext {
 }
 
 subprojects {
-    apply plugin: 'java-library'
+    apply plugin: 'java'
     apply plugin: 'idea'
     apply plugin: 'io.freefair.lombok'
 
@@ -23,6 +23,8 @@ subprojects {
     }
 
     dependencies {
+        // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
+        implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
         // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
         implementation "org.slf4j:slf4j-api:$slf4jVersion"
         // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api

@@ -16,7 +16,8 @@ class JsonSettingsHelperTest {
     @DisplayName("Check miscellaneous JSON policy helper")
     void parseJsonSettings() {
         Assertions.assertDoesNotThrow(() -> {
-            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\project_file.aiproj"))));
+            // JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\project_file.aiproj"))));
+            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src", "test", "resources", "json", "settings", "project_file.aiproj"))));
         });
         Assertions.assertDoesNotThrow(() -> {
             JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\settings.aiproj"))));

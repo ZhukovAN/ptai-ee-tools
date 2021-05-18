@@ -4,14 +4,19 @@ buildscript {
         maven { url = uri('https://repo.jenkins-ci.org/releases/') }
     }
     dependencies {
-        classpath('org.jvnet.localizer:maven-localizer-plugin:1.26')
+        classpath("org.jvnet.localizer:maven-localizer-plugin:${localizerVersion}")
     }
+}
+
+plugins {
+    id 'java-library'
 }
 
 group = "${rootGroup}.ptai-i18n"
 
 dependencies {
-    implementation 'org.jvnet.localizer:maven-localizer-plugin:1.26'
+    // https://mvnrepository.com/artifact/org.jvnet.localizer/localizer
+    implementation "org.jvnet.localizer:localizer:${localizerVersion}"
 }
 
 import org.jvnet.localizer.GeneratorTask

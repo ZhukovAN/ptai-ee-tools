@@ -3,32 +3,36 @@ plugins {
     id 'com.github.johnrengelman.shadow'
 }
 
+ext {
+    log4jVersion = '2.14.0'
+}
+
 group = "${rootGroup}.ptai-cli-plugin"
 
 mainClassName = 'com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin'
 
 dependencies {
-    api project(':generic-client-lib')
+    implementation project(':generic-client-lib')
+
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation 'commons-io:commons-io:2.6'
     // https://mvnrepository.com/artifact/info.picocli/picocli
     implementation 'info.picocli:picocli:4.2.0'
     // https://mvnrepository.com/artifact/org.fusesource.jansi/jansi
     implementation 'org.fusesource.jansi:jansi:1.18'
-    // https://mvnrepository.com/artifact/commons-io/commons-io
-    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-configuration2
     implementation 'org.apache.commons:commons-configuration2:2.7'
     // https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils
     implementation 'commons-beanutils:commons-beanutils:1.9.4'
-    // https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j
-    implementation 'net.lingala.zip4j:zip4j:2.7.0'
+
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
-    implementation 'org.apache.logging.log4j:log4j-api:2.14.0'
+    implementation "org.apache.logging.log4j:log4j-api:${log4jVersion}"
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-    implementation 'org.apache.logging.log4j:log4j-core:2.14.0'
+    implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
-    implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
+    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.12.0'
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
 }
 
 jar {

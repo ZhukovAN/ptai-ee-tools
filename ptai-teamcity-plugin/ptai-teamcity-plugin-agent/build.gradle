@@ -5,7 +5,7 @@ plugins {
 group = "${rootGroup}.ptai-teamcity-plugin-agent"
 
 dependencies {
-    api project(':ptai-teamcity-plugin:ptai-teamcity-plugin-common')
+    implementation project(':ptai-teamcity-plugin:ptai-teamcity-plugin-common')
     // https://mvnrepository.com/artifact/commons-io/commons-io
     implementation group: 'commons-io', name: 'commons-io', version: '2.6'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
