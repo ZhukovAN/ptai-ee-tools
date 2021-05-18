@@ -28,6 +28,6 @@ jobs:
         with:
           name: ptai-ee-tools
           path: |
-            ptai-jenkins-plugin/build/libs/*/ptai-jenkins-plugin.hpi
-            ptai-teamcity-plugin/ptai-teamcity-plugin-server/build/distributions/*/ptai-teamcity-plugin.zip
-            ptai-cli-plugin/build/libs/*/ptai-cli-plugin.jar
+            ptai-jenkins-plugin/build/libs/ptai-jenkins-plugin.hpi
+            ptai-teamcity-plugin/ptai-teamcity-plugin-server/build/distributions/ptai-teamcity-plugin.zip
+            ptai-cli-plugin/build/libs/ptai-cli-plugin.jar
