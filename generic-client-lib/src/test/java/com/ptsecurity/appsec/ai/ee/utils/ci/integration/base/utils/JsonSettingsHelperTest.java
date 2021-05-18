@@ -16,23 +16,22 @@ class JsonSettingsHelperTest {
     @DisplayName("Check miscellaneous JSON policy helper")
     void parseJsonSettings() {
         Assertions.assertDoesNotThrow(() -> {
-            // JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\project_file.aiproj"))));
             JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src", "test", "resources", "json", "settings", "project_file.aiproj"))));
         });
         Assertions.assertDoesNotThrow(() -> {
-            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\settings.aiproj"))));
+            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src", "test", "resources", "json", "settings", "settings.aiproj"))));
         });
         Assertions.assertDoesNotThrow(() -> {
-            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\settings.0.json"))));
+            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src", "test", "resources", "json", "settings", "settings.0.json"))));
         });
         Assertions.assertDoesNotThrow(() -> {
-            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\settings.1.json"))));
+            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src", "test", "resources", "json", "settings", "settings.1.json"))));
         });
         Assertions.assertThrows(ApiException.class, () -> {
-            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\settings.incomplete.json"))));
+            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src", "test", "resources", "json", "settings", "settings.incomplete.json"))));
         });
         Assertions.assertThrows(ApiException.class, () -> {
-            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src\\test\\resources\\json\\settings\\settings.incorrect.json"))));
+            JsonSettingsHelper.verify(new String(Files.readAllBytes(Paths.get("src", "test", "resources", "json", "settings", "settings.incorrect.json"))));
         });
     }
 }
