@@ -31,7 +31,7 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Re
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Report.Format.HTML;
 
 @DisplayName("Report generation tests")
-@Tag("integration")
+@Tag("integration-legacy")
 class GenerateReportIT extends BaseIT {
     @Test
     @DisplayName("Show usage of report generator")

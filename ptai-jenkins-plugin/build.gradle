@@ -84,7 +84,8 @@ jenkinsPlugin {
 
 dependencies {
     api project(':generic-client-lib')
-    
+    testImplementation(testFixtures(project(':generic-client-lib')))
+
     processJenkinsVersion()
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/token-macro
     implementation "org.jenkins-ci.plugins:token-macro:${tokenMacroVersion}"
@@ -104,8 +105,11 @@ def processJenkinsVersion() {
         versionString = '2.164.3'
     }
     def versionMatcher = versionString =~ /(\d+)\.(\d+)\.(\d+)/
-    if (!versionMatcher.matches()) throw new GradleException("Jenkins version syntax incorrect: failed to parse $versionString")
-    def version = [versionMatcher.group(1).toInteger(), versionMatcher.group(2).toInteger(), versionMatcher.group(3).toInteger()]
+    if (!versionMatcher.matches()) {
+        versionMatcher = versionString =~ /(\d+)\.(\d+)/
+        if (!versionMatcher.matches()) throw new GradleException("Jenkins version syntax incorrect: failed to parse $versionString")
+    }
+    def version = [versionMatcher.group(1).toInteger(), versionMatcher.group(2).toInteger()]
     if (2 != version[0]) throw new GradleException("Jenkins versions 2.xxx.y are supported only")
 
     boolean newUi = 277 <= version[1]

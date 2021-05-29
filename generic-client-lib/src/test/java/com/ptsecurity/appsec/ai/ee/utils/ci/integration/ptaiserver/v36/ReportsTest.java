@@ -12,7 +12,6 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Re
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Locale.RU;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Report.Format.HTML;
 
-@Tag("integration")
 class ReportsTest {
     @SneakyThrows
     @Test

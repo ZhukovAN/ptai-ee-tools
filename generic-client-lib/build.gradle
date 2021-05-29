@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'java-test-fixtures'
 }
 
 group = "${rootGroup}.generic-client-lib"
@@ -26,8 +27,18 @@ dependencies {
     implementation 'com.microsoft.signalr:signalr:1.0.0'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     implementation 'org.apache.commons:commons-text:1.9'
-    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
-    testImplementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    testFixturesApi("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testFixturesImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14
-    testImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
+    testFixturesApi "org.slf4j:slf4j-jdk14:$slf4jVersion"
+    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+    testFixturesApi 'io.jsonwebtoken:jjwt:0.9.1'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    testFixturesApi 'commons-io:commons-io:2.6'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    testFixturesApi 'org.apache.commons:commons-lang3:3.8.1'
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
+    testFixturesApi "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
 }

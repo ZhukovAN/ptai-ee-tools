@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
 @DisplayName("Report templates list read tests")
-@Tag("integration")
+@Tag("integration-legacy")
 class ListReportTemplatesIT extends BaseIT {
 
     @Test

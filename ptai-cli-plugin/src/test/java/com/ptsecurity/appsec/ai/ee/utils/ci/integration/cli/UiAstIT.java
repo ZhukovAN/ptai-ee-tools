@@ -19,7 +19,7 @@ import java.util.UUID;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Report.Format.HTML;
 
 @DisplayName("Check UI-defined AST scans")
-@Tag("integration")
+@Tag("integration-legacy")
 class UiAstIT extends BaseIT {
     @Test
     @DisplayName("Show usage of UI-defined AST")

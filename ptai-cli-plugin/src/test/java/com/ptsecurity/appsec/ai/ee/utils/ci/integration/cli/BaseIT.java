@@ -22,7 +22,7 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-@Tag("integration")
+@Tag("integration-legacy")
 class BaseIT {
     /**
      * Temporal folder where three subfolders will be created: for

@@ -20,6 +20,7 @@
         <module name="ptai-ee-tools.ptai-data-structures.test" />
         <module name="ptai-ee-tools.ptai-i18n.test" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-server.main" />
+        <module name="ptai-ee-tools.generic-client-lib.testFixtures" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.test" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-agent.test" />
         <module name="ptai-ee-tools.ptai-rest-api.test" />
@@ -40,12 +41,12 @@
         <outputRelativeToContentRoot value="true" />
         <option name="sezpoz.quiet" value="true" />
         <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/jenkins-core/2.263.2/52e7e46cc17e5e6a3145ab5ef964addf40fdc78a/jenkins-core-2.263.2.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/jenkins-core/2.259/bcc31999891fe67ff11f570eaaf5c1268084adf8/jenkins-core-2.259.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.1.0/3cd63d075497751784b2fa84be59432f4905bf7c/javax.servlet-api-3.1.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.20/18bcea7d5df4d49227b4a0743a536208ce4825bb/lombok-1.18.20.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.plugins.icon-shim/icon-set/1.0.5/dedc76ac61797dafc66f31e8507d65b98c9e57df/icon-set-1.0.5.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/remoting/4.5/b9d2f267f3c052c01576f10781a26ecd415cad77/remoting-4.5.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/cli/2.263.2/f107ced589268e9132e3a1af5a62c74d05ddfc71/cli-2.263.2.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/cli/2.259/6613873babba683db0dacaf019193a60e77f62ee/cli-2.259.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci/version-number/1.7/e2cb3f1d3e296adf74463b046bf79f498cc9b937/version-number-1.7.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci/crypto-util/1.5/432ba8058e9a653fa191cdda3ed5fe4bb4fc4e53/crypto-util-1.5.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jvnet.hudson/jtidy/4aug2000r7-dev-hudson-1/ad8553d0acfa6e741d21d5b2c2beb737972ab7c7/jtidy-4aug2000r7-dev-hudson-1.jar" />
@@ -53,16 +54,16 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.connectbot.jbcrypt/jbcrypt/1.0.0/f37bba2b8b78fcc8111bb932318b621dcc6c5194/jbcrypt-1.0.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jruby.ext.posix/jna-posix/1.0.3-jenkins-1/fb1148cc8192614ec1418d414f7b6026cc0ec71b/jna-posix-1.0.3-jenkins-1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.jnr/jnr-posix/3.0.45/1cbbb7d92ef22101f8e72c6408ccbcc3938f89bd/jnr-posix-3.0.45.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler-groovy/1.261/30d3c5db4d1589d724779a57c30cf45b4d68c4f/stapler-groovy-1.261.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler-jrebel/1.261/e0251ac1db4e8805219f9836fce663c789ac8334/stapler-jrebel-1.261.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler-groovy/1.260/e7828eedd7bab2361023a643eae684903be1f99e/stapler-groovy-1.260.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler-jrebel/1.260/781ecdbfb0e19df7bbdf81e7d247d6eec18ea66d/stapler-jrebel-1.260.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke/windows-package-checker/1.2/86b5d2f9023633808d65dbcfdfd50dc5ad3ca31f/windows-package-checker-1.2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler-adjunct-zeroclipboard/1.3.5-1/20184ea79888b55b6629e4479615b52f88b55173/stapler-adjunct-zeroclipboard-1.3.5-1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler-adjunct-timeline/1.5/3fa806cbb94679ceab9c1ecaaf5fea8207390cb7/stapler-adjunct-timeline-1.5.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler-adjunct-codemirror/1.3/fd1d45544400d2a4da6dfee9e60edd4ec3368806/stapler-adjunct-codemirror-1.3.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.jenkins.stapler/jenkins-stapler-support/1.1/95127e05b589288439684304a75474bb1261a11c/jenkins-stapler-support-1.1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.infradna.tool/bridge-method-annotation/1.13/18cdce50cde6f54ee5390d0907384f72183ff0fe/bridge-method-annotation-1.13.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler-jelly/1.261/ff2a444d9d9f45650971626ca9e9f04edb8e4f0b/stapler-jelly-1.261.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler/1.261/944324ad830072a8077068f309573dd732fec5b1/stapler-1.261.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler-jelly/1.260/b2ac9ee5312b4f745b67ad2db42370f62f4c15f5/stapler-jelly-1.260.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/stapler/1.260/8ff23981dab3b22b1b2ced0e0c84ec369c13e96c/stapler-1.260.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/json-lib/2.4-jenkins-2/7f4f9016d8c8b316ecbe68afe7c26df06d301366/json-lib-2.4-jenkins-2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-httpclient/commons-httpclient/3.1-jenkins-2/acf81ddf47f33b13ee9eda153a87517d8f5fa784/commons-httpclient-3.1-jenkins-2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/args4j/args4j/2.33/bd87a75374a6d6523de82fef51fc3cfe9baf9fc9/args4j-2.33.jar" />
@@ -78,7 +79,7 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/xpp3/xpp3/1.1.4c/9b988ea84b9e4e9f1874e390ce099b8ac12cfff5/xpp3-1.1.4c.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.sf.kxml/kxml2/2.3.0/ccbc77a5fd907ef863c29f3596c6f54ffa4e9442/kxml2-2.3.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jfree/jfreechart/1.0.19/ba9ee7dbb2e4c57a6901c79f614ed2dea9cc0e20/jfreechart-1.0.19.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.ant/ant/1.10.9/a8a0c9bc4473acdac25832d0a9da2ca9fd9cd35f/ant-1.10.9.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.ant/ant/1.10.8/ae148abb0532b685c5eeb22fdec9d124e89be5de/ant-1.10.8.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-fileupload/commons-fileupload/1.3.1-jenkins-2/297d1dc0a3cbdd3e125f4d506c2b73a105e6cd30/commons-fileupload-1.3.1-jenkins-2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-io/commons-io/2.8.0/92999e26e6534606b5678014e66948286298a35c/commons-io-2.8.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.acegisecurity/acegi-security/1.0.7/72901120d299e0c6ed2f6a23dd37f9186eeb8cc3/acegi-security-1.0.7.jar" />
@@ -107,8 +108,8 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-beans/2.5.6.SEC03/79b2c86ff12c21b2420b4c46dca51f0e58762aae/spring-beans-2.5.6.SEC03.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/2.5.6.SEC03/644a23805a7ea29903bde0ccc1cd1a8b5f0432d6/spring-core-2.5.6.SEC03.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api/1.2.7/34a035507f0270f1c6b7722d728bd7b5a9bbac4c/jakarta.servlet.jsp.jstl-api-1.2.7.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/jcl-over-slf4j/1.7.30/cd92524ea19d27e5b94ecd251e1af729cffdfe15/jcl-over-slf4j-1.7.30.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/log4j-over-slf4j/1.7.30/69af1f8a7ef3040a2881f7ec105e0a86fb158ab2/log4j-over-slf4j-1.7.30.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/jcl-over-slf4j/1.7.26/33fbc2d93de829fa5e263c5ce97f5eab8f57d53e/jcl-over-slf4j-1.7.26.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/log4j-over-slf4j/1.7.26/daeb21c5e35d77d550e721c4cf5aaa716496d31a/log4j-over-slf4j-1.7.26.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.sun.xml.txw2/txw2/20110809/46afa3f3c468680875adb8f2a26086a126c89902/txw2-20110809.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-collections/commons-collections/3.2.2/8ad72fe39fa8c91eaaf12aadb21e0c3661fe26d5/commons-collections-3.2.2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jvnet.winp/winp/1.28/8dcfcc7214e73a906786b80704784d90fb593e75/winp-1.28.jar" />
@@ -134,11 +135,11 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke/asm6/6.2/521baf33732f688612cbd0b5b45f79ea345b745f/asm6-6.2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci/constant-pool-scanner/1.2/e5e0b7c7fcb67767dbd195e0ca1f0ee9406dd423/constant-pool-scanner-1.2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jfree/jcommon/1.0.23/a316f336ca996e0c6bec4e4fbd49be8f5e1c3968/jcommon-1.0.23.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.ant/ant-launcher/1.10.9/bcc582424a533933d9960b7a4ccde12c6f257245/ant-launcher-1.10.9.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.ant/ant-launcher/1.10.8/2ca8688d2dad5694237576db782b37279989614d/ant-launcher-1.10.8.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.sun.activation/jakarta.activation/1.2.1/8013606426a73d8ba6b568370877251e91a38b89/jakarta.activation-1.2.1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/oro/oro/2.0.8/5592374f834645c4ae250f4c9fbb314c9369d698/oro-2.0.8.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/log4j/log4j/1.2.9/55856d711ab8b88f8c7b04fd85ff1643ffbfde7c/log4j-1.2.9.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.30/b5a4b6d16ab13e34a88fae84c35cd5d68cac922c/slf4j-api-1.7.30.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.26/77100a62c2e6f04b53977b9f541044d7d722693d/slf4j-api-1.7.26.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.xml.stream/stax-api/1.0-2/d6337b0de8b25e53e81b922352fbea9f9f57ba0b/stax-api-1.0-2.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.java.dev.msv/xsdlib/2013.6.1/280f7c45aaec5102cc756d1afdb416b7775f2ef4/xsdlib-2013.6.1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/relaxngDatatype/relaxngDatatype/20020414/de7952cecd05b65e0e4370cc93fc03035175eef5/relaxngDatatype-20020414.jar" />

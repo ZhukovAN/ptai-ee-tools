@@ -10,7 +10,7 @@ import picocli.CommandLine;
 import java.util.UUID;
 
 @DisplayName("Server availability check tests")
-@Tag("integration")
+@Tag("integration-legacy")
 class CheckServerIT extends BaseIT {
     @Test
     @DisplayName("Connect with valid token")

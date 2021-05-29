@@ -1,5 +1,4 @@
 # This is a projectmanagement.json file converted with https://editor.swagger.io/ and with some fixes
-# This is a projectmanagement.json file converted with https://editor.swagger.io/ and with some fixes
 #
 # TODO: Fix "Empty operationId found for path" issue to avoid bulk method names generation
 # TODO: Fix "Multiple schemas found in the OAS 'content' section, returning only the first one"
@@ -4014,7 +4013,8 @@ components:
           format: uuid
         creationDate:
           type: string
-          format: date-time
+          # V.3.6: Had to remove date-time specification as value returned doesn't conform to RFC 3339
+          # format: date-time
         settingsId:
           type: string
           format: uuid
@@ -4023,7 +4023,7 @@ components:
           nullable: true
         lastScanDate:
           type: string
-          # V.3.6: Had to remove date-time specification as value returned doesn' conform to RFC 3339
+          # V.3.6: Had to remove date-time specification as value returned doesn't conform to RFC 3339
           # format: date-time
         filePatterns:
           type: array
@@ -4343,13 +4343,20 @@ components:
           nullable: true
       additionalProperties: false
     IssueLevel:
+      # V.3.6: IssueBaseMetadata uses integer representation of IssueLevel, so we need to add x-enum-varnames
       enum:
+        - 0
+        - 10
+        - 20
+        - 30
+        - 40
+      x-enum-varnames:
         - None
         - Potential
         - Low
         - Medium
         - High
-      type: string
+      type: integer
     IssueBase:
       type: object
       properties:
@@ -4402,6 +4409,10 @@ components:
     DescriptionBaseValue:
       type: object
       properties:
+        # V.3.6: Had to explicitly add html field as it exists in issues report
+        html:
+          type: string
+          nullable: true
         header:
           type: string
           nullable: true

@@ -104,7 +104,7 @@ public class Utils extends BaseClient {
             @Nullable final Reports.IssuesFilterEx filters) throws ApiException {
         List<ReportTemplateModel> templates = getReportTemplates(locale);
         ReportTemplateModel templateModel = templates.stream().filter(t -> template.equalsIgnoreCase(t.getName())).findAny().orElse(null);
-        if (null == templateModel)
+        if (null == templateModel || null == templateModel.getId())
             throw ApiException.raise("Report generation failed", new IllegalArgumentException("PT AI template " + template + " not found"));
         return generateReport(projectId, scanResultId, templateModel.getId(), locale, type, filters);
     }

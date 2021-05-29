@@ -24,7 +24,8 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
             DescriptorExtensionList.createDescriptorList(Jenkins.get(), BaseReport.class);
 
     /**
-     * Method converts list of miscellaneous report defined for a job to Reports
+     * Method converts list of miscellaneous report defined for a job to
+     * {@link com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports}
      * instance. If there were conversion errors like JSON parse fail,
      * an ApiException will be thrown
      * @param reports List of miscellaneous reports defined for a job

@@ -35,13 +35,28 @@ subprojects {
 
     test {
         useJUnitPlatform() {
-            excludeTags 'integration'
+            excludeTags 'integration', 'integration-legacy'
         }
     }
 
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked"
     }
+
+    def integrationTest = tasks.register("integrationTest", Test) {
+        useJUnitPlatform {
+            includeTags "integration"
+        }
+        testLogging {
+            events "passed", "skipped", "failed"
+        }
+        shouldRunAfter test
+    }
+/*
+    tasks.named("check") {
+        dependsOn integrationTest
+    }
+*/
 }
 
 wrapper {

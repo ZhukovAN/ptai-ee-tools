@@ -12,7 +12,7 @@ import picocli.CommandLine;
 import java.nio.file.Paths;
 
 @DisplayName("Check JSON-defined AST scans")
-@Tag("integration")
+@Tag("integration-legacy")
 class JsonAstIT extends BaseIT {
 
     @SneakyThrows

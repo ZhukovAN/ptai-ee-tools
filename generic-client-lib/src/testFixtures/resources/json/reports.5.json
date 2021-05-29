@@ -1,0 +1,15 @@
+{
+  "report" : [ {
+    "fileName" : "report.ru.html",
+    "locale" : "RU",
+    "format" : "HTML",
+    "template" : "Отчет PCI DSS 3.2",
+    "filters": {
+      "issueLevel": "LOW",
+      "issueLevels": ["MeDiUm", "HIGH"],
+      "scanMode": "FROMOTHER",
+      "scanModes": ["FROMENTRYPOINT"],
+      "confirmationStatuses": ["NONE", "APPROVED", "AUTOAPPROVED"]
+    }
+  } ]
+}
