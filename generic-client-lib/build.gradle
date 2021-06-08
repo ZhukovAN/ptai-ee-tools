@@ -41,4 +41,8 @@ dependencies {
     testFixturesApi 'org.apache.commons:commons-lang3:3.8.1'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
     testFixturesApi "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
+    testFixturesImplementation 'org.apache.commons:commons-compress:1.20'
+    // https://mvnrepository.com/artifact/org.tukaani/xz
+    testFixturesImplementation 'org.tukaani:xz:1.9'
 }

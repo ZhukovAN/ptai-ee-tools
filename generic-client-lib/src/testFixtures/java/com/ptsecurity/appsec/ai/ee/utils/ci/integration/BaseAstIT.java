@@ -43,13 +43,6 @@ import java.util.zip.ZipInputStream;
 
 public class BaseAstIT extends BaseIT {
     /**
-     * Temporal folder where subfolders will be created: for
-     * unzipped sources, for modified JSON-defined policy / scan settings
-     * and for generated reports. These folders will be initialized during {@link #init()} method call
-     */
-    @TempDir
-    protected Path TEMP_FOLDER;
-    /**
      * Temporal folder where test sources will be unziipped to
      */
     protected Path SOURCES_FOLDER;
@@ -57,10 +50,6 @@ public class BaseAstIT extends BaseIT {
      * Temporal folder where reports will be generated to
      */
     protected Path REPORT_FOLDER;
-    /**
-     * Temporal fodler where modified JSON-defined policy / scan settings will be saved
-     */
-    protected Path JSON_FOLDER;
 
     protected String NEW_PROJECT;
 
@@ -80,7 +69,6 @@ public class BaseAstIT extends BaseIT {
     public void pre() {
         SOURCES_FOLDER = TEMP_FOLDER.resolve("src");
         REPORT_FOLDER = TEMP_FOLDER.resolve(".ptai");
-        JSON_FOLDER = TEMP_FOLDER.resolve("json");
         NEW_PROJECT = "junit-" + UUID.randomUUID().toString();
         unzipTestSources("code/app01.zip", SOURCES_FOLDER);
     }

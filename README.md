@@ -10,10 +10,19 @@ Jenkins and Teamcity plugins will be built for CI versions defined in ```gradle.
 ```
 $ ./gradlew build -P jenkinsVersion=2.150.2 -P teamcityVersion=2020.1
 ```
-### Build plugins using Docker
+### Build plugins using Docker Gradle image
+Execute ```docker run``` command in project root:
+```
+docker run --rm -u root -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:6.8.3-jdk8 gradle build --no-daemon
+```
+### Build executable Docker container with CLI plugin
 Execute ```docker build``` command in project root:
 ```
 docker build --tag ptai-ee-tools:latest .
+```
+Start container using ```docker run``` command:
+```
+docker run --rm -it ptai-ee-tools:latest
 ```
 ## Jenkins and Teamcity plugins debugging
 Both Jenkins and Teamcity Gradle plugins are support starting CI server in debug mode that allows plugin developer to connect to server using IDE tools and debug plugin code. 

@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.StringHelper;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -478,9 +479,7 @@ public class Reports {
 
     public static IssuesFilterEx validateJsonFilter(String json) throws ApiException {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-            mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
+            ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
             return mapper.readValue(json, IssuesFilterEx.class);
         } catch (Exception e) {
             throw ApiException.raise("JSON filter settings parse failed", e);
@@ -532,9 +531,7 @@ public class Reports {
      */
     public static Reports load(String json) throws ApiException {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
-            mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
+            ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
             return mapper.readValue(json, Reports.class);
         } catch (Exception e) {
             throw ApiException.raise(Resources.i18n_ast_result_reporting_json_message_file_parse_failed(), e);

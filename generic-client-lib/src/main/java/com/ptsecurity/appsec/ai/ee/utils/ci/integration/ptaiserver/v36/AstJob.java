@@ -9,10 +9,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operation
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +27,7 @@ import java.util.stream.Stream;
 import static com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Stage.*;
 
 @Slf4j
+@Getter
 @SuperBuilder
 @ToString(callSuper = true)
 public abstract class AstJob extends Project {
@@ -140,12 +138,14 @@ public abstract class AstJob extends Project {
             // Asynchronous mode means that we aren't need to wait AST job
             // completion. Just write scan result access URL and exit
             info(Resources.i18n_ast_result_status_success());
+            // TODO: Implement special AstResultAction processing for async mode
             return JobFinishedStatus.SUCCESS;
         }
 
         // Wait for AST to complete and process results
         ScanResult state = waitForComplete(scanResultId);
-        astOps.scanCompleteCallback();
+        // TODO: Move scanCompleteCallback to AstJob and its descendants
+        astOps.scanCompleteCallback(this, scanResultId, state);
 
         Stage stage = Optional.of(state)
                 .map(ScanResult::getProgress)

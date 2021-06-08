@@ -3,6 +3,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
@@ -26,10 +28,7 @@ import hudson.AbortException;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.Util;
-import hudson.model.AbstractBuild;
-import hudson.model.Item;
-import hudson.model.Run;
-import hudson.model.TaskListener;
+import hudson.model.*;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
@@ -42,9 +41,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
@@ -217,6 +214,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .async(workMode instanceof WorkModeAsync)
                 .failIfFailed(failIfFailed)
                 .failIfUnstable(failIfUnstable)
+                .run(build)
                 .workspace(workspace)
                 .launcher(launcher)
                 .listener(listener)
@@ -259,5 +257,23 @@ public class Plugin extends Builder implements SimpleBuildStep {
         } else {
             throw new IllegalArgumentException("Both null, Run and Current Item!");
         }
+    }
+
+    /*
+    @Override
+    public Action getProjectAction(AbstractProject<?, ?> project) {
+        return new AstJobMultipleResults(project);
+    }
+    */
+
+    List<Action> projectActions = null;
+
+    @Override
+    public Collection<Action> getProjectActions(AbstractProject<?, ?> project) {
+        if (null != projectActions) return projectActions;
+        projectActions = new ArrayList<>();
+        projectActions.add(new AstJobMultipleResults(project));
+        projectActions.add(new AstJobTableResults(project.getName()));
+        return projectActions;
     }
 }

@@ -9,6 +9,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
 import hudson.FilePath;
 import hudson.Launcher;
+import hudson.model.Run;
 import hudson.model.TaskListener;
 import lombok.Getter;
 import lombok.NonNull;
@@ -23,6 +24,8 @@ import java.util.List;
 @SuperBuilder
 @ToString(callSuper = true)
 public class JenkinsAstJob extends AstJob {
+    @NonNull
+    protected Run<?, ?> run;
     /**
      * CI workspace folder
      *

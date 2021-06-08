@@ -45,49 +45,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 
-public class BaseIT {
+public class BaseIT extends BaseTest {
     protected static String TOKEN = (null != System.getenv("ptai.token")) ? System.getenv("ptai.token") : "6M9Qsct5fg20/UEzN7/hvR2RlXkTWOI5";
     protected static String URL = (null != System.getenv("ptai.url")) ? System.getenv("ptai.url") : "https://ptai.domain.org:443/";
-    protected static final String PEM_RESOURCE = "keys/domain.org.pem";
-    protected static String PEM = null;
-
-    @SneakyThrows
-    static String getResourcePath(@NonNull final String name) {
-        return getResourceFile(name).toString();
-    }
-
-    /**
-     * @param name Absolute (as {@link ClassLoader#getResourceAsStream(String)} used) name of resource
-     * @return
-     */
-    @SneakyThrows
-    static InputStream getResourceStream(@NonNull final String name) {
-        return BaseIT.class.getClassLoader().getResourceAsStream(name);
-    }
-
-    @SneakyThrows
-    static File getResourceFile(@NonNull final String name) {
-        @NonNull URL url = BaseIT.class.getClassLoader().getResource(name);
-        Assertions.assertNotNull(url);
-        Assertions.assertNotNull(url.toURI());
-        return Paths.get(url.toURI()).toFile();
-    }
-
     protected BaseClient client = null;
     protected ProjectsApi projectsApi = null;
-
-    @SneakyThrows
-    @BeforeAll
-    public static void init() {
-        InputStream stream = BaseIT.class.getResourceAsStream("/logging.properties");
-        LogManager.getLogManager().readConfiguration(stream);
-
-        PEM = IOUtils.toString(getResourceStream(PEM_RESOURCE), StandardCharsets.UTF_8);
-    }
-
-    @AfterAll
-    public static void fini() {
-    }
 
     @SneakyThrows
     @BeforeEach

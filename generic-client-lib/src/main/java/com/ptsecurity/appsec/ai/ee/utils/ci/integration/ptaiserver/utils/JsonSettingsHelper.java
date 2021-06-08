@@ -8,11 +8,10 @@ import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
-public class JsonSettingsHelper {
+public class JsonSettingsHelper extends BaseJsonHelper {
     public static ScanSettings verify(String json) throws ApiException {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+            ObjectMapper mapper = createObjectMapper();
             ScanSettings res = mapper.readValue(json, ScanSettings.class);
             if (StringUtils.isEmpty(res.getProjectName())) throw new IllegalArgumentException("ProjectName field is not defined or empty");
             if (null == res.getProgrammingLanguage()) throw new IllegalArgumentException("ProgrammingLanguage field is not defined or empty");

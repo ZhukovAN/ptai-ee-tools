@@ -7,8 +7,17 @@ description = 'This plugin used to implement AST using PT Application Inspector'
 version = "${version}-${buildTimestamp}"
 
 ext {
-    tokenMacroVersion = '2.13'
-    credentialsVersion = '2.3.14'
+    // Just placeholders for dependencies / test Jenkins
+    // plugin versions. Actual versions are calculated
+    // in processJenkinsVersion function
+    tokenMacroVersion = ''
+    credentialsVersion = ''
+    structsVersion = ''
+    workflowStepApiVersion = ''
+    scmApiVersion = ''
+    trileadApiVersion = ''
+    scriptSecurityVersion = ''
+    gitVersion = ''
 }
 
 jenkinsPlugin {
@@ -82,6 +91,10 @@ jenkinsPlugin {
     }
 }
 
+configurations {
+    webjars
+}
+
 dependencies {
     api project(':generic-client-lib')
     testImplementation(testFixtures(project(':generic-client-lib')))
@@ -92,8 +105,28 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/credentials
     implementation "org.jenkins-ci.plugins:credentials:${credentialsVersion}"
 
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/token-macro
+    jenkinsServer "org.jenkins-ci.plugins:token-macro:${tokenMacroVersion}"
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/credentials
+    jenkinsServer "org.jenkins-ci.plugins:credentials:${credentialsVersion}"
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/structs
+    jenkinsServer "org.jenkins-ci.plugins:structs:${structsVersion}"
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-step-api
+    jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-step-api:${workflowStepApiVersion}"
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/scm-api
+    jenkinsServer "org.jenkins-ci.plugins:scm-api:${scmApiVersion}"
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/trilead-api
+    jenkinsServer "org.jenkins-ci.plugins:trilead-api:${trileadApiVersion}"
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/script-security
+    jenkinsServer "org.jenkins-ci.plugins:script-security:${scriptSecurityVersion}"
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
+    jenkinsServer "org.jenkins-ci.plugins:git:${gitVersion}"
+
+    // https://mvnrepository.com/artifact/org.webjars/echarts
+    webjars 'org.webjars:echarts:5.0.2'
+
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation 'org.apache.commons:commons-lang3:3.11'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
     // https://mvnrepository.com/artifact/commons-validator/commons-validator
     implementation 'commons-validator:commons-validator:1.6'
 }
@@ -111,20 +144,62 @@ def processJenkinsVersion() {
     }
     def version = [versionMatcher.group(1).toInteger(), versionMatcher.group(2).toInteger()]
     if (2 != version[0]) throw new GradleException("Jenkins versions 2.xxx.y are supported only")
+    if (150 > version[1]) throw new GradleException("Jenkins versions 2.150 and upper are supported only")
+
+    // Calculate structs-plugin version. For Jenkins 2.107.3 version 1.21 is to be used, for 2.222.4 - 1.22
+    if (222 <= version[1])
+        structsVersion = '1.22'
+    else
+        structsVersion = '1.21'
+    // workflow-step-api: 2.22 -> 2.138, 2.23 -> 2.176
+    if (176 <= version[1])
+        workflowStepApiVersion = '2.23'
+    else
+        workflowStepApiVersion = '2.22'
+    // token-macro: 2.14 -> 2.274, 2.13 -> 2.222, 2.12 -> 2.121
+    if (274 <= version[1])
+        tokenMacroVersion = '2.14'
+    else if (222 <= version[1])
+        tokenMacroVersion = '2.13'
+    else
+        tokenMacroVersion = '2.12'
+    // credentials: 2.3.12 -> 2.222.4, 2.3.11 -> 2.138
+    if (222 <= version[1])
+        credentialsVersion = '2.3.12'
+    else
+        credentialsVersion = '2.3.11'
+    // scm-api: 2.6.4 -> 2.176.4, 2.6.2 -> 2.164.3, 2.4.1 -> 2.60.3
+    if (176 <= version[1])
+        scmApiVersion = '2.6.4'
+    else if (164 <= version[1])
+        scmApiVersion = '2.6.2'
+    else
+        scmApiVersion = '2.4.1'
+    // trilead-api: 1.0.13 -> 2.204, 1.0.10 -> 2.184, 1.0.3 -> 2.150.1
+    if (204 <= version[1])
+        trileadApiVersion = '1.0.13'
+    else if (184 <= version[1])
+        trileadApiVersion = '1.0.10'
+    else
+        trileadApiVersion = '1.0.3'
+    // script-security: 1.77 -> 2.222.4, 1.76 -> 2.176.4, 1.71 -> 2.60.3
+    if (222 <= version[1])
+        scriptSecurityVersion = '1.77'
+    else if (176 <= version[1])
+        scriptSecurityVersion = '1.76'
+    else
+        scriptSecurityVersion = '1.71'
+    // git: 4.7.2 -> 2.263.1, 4.6.0 -> 2.222.4, 4.4.5 -> 2.204.1, 4.2.2 -> 2.138.4
+    if (263 <= version[1])
+        gitVersion = '4.7.2'
+    else if (222 <= version[1])
+        gitVersion = '4.6.0'
+    else if (204 <= version[1])
+        gitVersion = '4.4.5'
+    else
+        gitVersion = '4.2.2'
 
     boolean newUi = 277 <= version[1]
-    if (222 <= version[1]) {
-        // https://updates.jenkins-ci.org/download/plugins/token-macro/2.13/token-macro.hpi
-        tokenMacroVersion = '2.13'
-        // https://updates.jenkins-ci.org/download/plugins/credentials/2.3.14/credentials.hpi
-        credentialsVersion = '2.3.14'
-    } else {
-        // https://updates.jenkins-ci.org/download/plugins/token-macro/2.11/token-macro.hpi
-        // https://updates.jenkins-ci.org/download/plugins/workflow-step-api/2.14/workflow-step-api.hpi
-        tokenMacroVersion = '2.11'
-        // https://updates.jenkins-ci.org/download/plugins/credentials/2.3.11/credentials.hpi
-        credentialsVersion = '2.3.11'
-    }
     if (newUi)
         sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-277+' ]
     else
@@ -133,6 +208,7 @@ def processJenkinsVersion() {
     logger.info("Using credentials plugin v.$credentialsVersion")
 }
 
+// Set Jenkins server debug port
 tasks.named('server').configure {
     execSpec {
         debugOptions {
@@ -141,3 +217,57 @@ tasks.named('server').configure {
         }
     }
 }
+
+def unpackWebJars = tasks.register('unpack-webjars') {
+    doLast {
+        // Iterate through JARs from "webjars" configuration
+        configurations.webjars.each {jar ->
+            def config = configurations.webjars.resolvedConfiguration
+            def artifact = config.resolvedArtifacts.find {
+                it.file.toString() == jar.absolutePath
+            }
+
+            def upStreamVersion = "${artifact.moduleVersion.id.version}"
+            upStreamVersion = upStreamVersion.replaceAll(/(-[\d.-]+)/, '')
+
+            def innerJar = "${buildDir}/webjars-content/${artifact.name}"
+            logger.quiet("Extracting webjar contents from ${innerJar}")
+
+            copy {
+                from zipTree(jar)
+                into file("${innerJar}")
+            }
+
+            // As webjar contents is a 3rd party code, it's better to avoid putting it
+            // to sources / resources folders as files in those folders are pushed to repository.
+            // So the best way would be to copy webjar contents to something
+            // like $buildDir/generated-resources/webapp and setup JPI task as:
+            // tasks.getByName('jpi') {
+            //    dependsOn unpackWebJars
+            //    from "$buildDir/generated-resources/webapp"
+            // }
+            // This approach allows us to create HPI file that contains both custom code
+            // from src/main/webapp directory and webjars from generated-resources. But
+            // Gradle JPI plugin 'server' task generates HPL file that points strictly
+            // to webapp folder so Jenkins server started in debug mode using 'gradlew server'
+            // command can see only the files from webapp and lacks ones from other folders
+            // like generated-sources. So the only solution here is to unpack webjar
+            // contents (i.e. JS, CSS, etc.) to webapp/webjars folder and add that folder to .github.
+            copy {
+                from "${innerJar}/META-INF/resources/webjars/${artifact.name}/${upStreamVersion}",
+                        "${innerJar}/META-INF/resources/webjars/${artifact.name}/${artifact.moduleVersion.id.version}"
+
+                into "src/main/webapp/webjars/${artifact.name}"
+            }
+        }
+    }
+}
+
+tasks.getByName('jpi') {
+    dependsOn unpackWebJars
+}
+
+clean {
+    delete 'src/main/webapp/webjars'
+}
+

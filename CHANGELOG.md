@@ -64,3 +64,6 @@
 + [ToDo] Implement [SARIF](https://habr.com/ru/company/pvs-studio/blog/541542/) reports generation
 + [Feature] Test fixtures are implemented for generic-client-lib
 + [Fix] ptai-jenkins-plugin build.gradle now also supports X.YYY Jenkins versions
+### 20210608
++ [Feature] PT AI trend chart added to Jenkins plugin
++ [Feature] Project- and run-level actions are added to Jenkins plugin to show stats about AST

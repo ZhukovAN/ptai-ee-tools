@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
 import lombok.NonNull;
@@ -32,7 +33,7 @@ public interface AstOperations {
      * Runtime.getRuntime().addShutdownHook graceful termination hook and
      * call AST stop API to terminate job on a PT AI server
      */
-    void scanStartedCallback(@NonNull final Project project, @NonNull final UUID scanResultId);
+    void scanStartedCallback(@NonNull final Project project, @NonNull final UUID scanResultId) throws ApiException;
 
     /**
      * Callback method is being called when AST job is finished on PT AI server.
@@ -40,7 +41,7 @@ public interface AstOperations {
      * termination as there's no need to gracefully stop AST if descendant
      * is terminated using i.e. Ctrl-C
      */
-    void scanCompleteCallback();
+    void scanCompleteCallback(@NonNull final Project project, @NonNull final UUID scanResultId, @NonNull ScanResult state) throws ApiException;
 
     /**
      * Method replaces macro expressions like ${FOO} in the input text using dictionary. AstJob's

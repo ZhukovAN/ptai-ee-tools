@@ -10,12 +10,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 
-public class JsonPolicyHelper {
+public class JsonPolicyHelper extends BaseJsonHelper {
     public static Policy[] verify(final String json) throws ApiException {
         if (StringUtils.isEmpty(json)) return null;
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.enable(JsonParser.Feature.ALLOW_COMMENTS);
+            ObjectMapper mapper = createObjectMapper();
             Policy[] res = mapper.readValue(json, Policy[].class);
             return res;
         } catch (IOException e) {

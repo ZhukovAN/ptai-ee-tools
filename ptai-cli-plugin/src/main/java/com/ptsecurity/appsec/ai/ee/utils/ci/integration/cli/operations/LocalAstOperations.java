@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.operations;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils.GracefulShutdown;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
@@ -50,7 +51,7 @@ public class LocalAstOperations implements AstOperations {
         Runtime.getRuntime().addShutdownHook(shutdown);
     }
 
-    public void scanCompleteCallback()  {
+    public void scanCompleteCallback(@NonNull final Project project, @NonNull final UUID scanResultId, @NonNull ScanResult state)  {
         if (null != shutdown) shutdown.setStopped(true);
     }
 
