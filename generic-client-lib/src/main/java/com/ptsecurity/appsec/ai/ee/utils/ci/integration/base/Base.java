@@ -116,11 +116,16 @@ public class Base {
      * @throws ApiException Exception that wraps internal error and uses errorMessage
      * as error cause description
      */
-    public static <V> V callApi(Callable<V> call, String errorMessage) throws ApiException {
+    public static <V> V callApi(@NonNull Callable<V> call, @NonNull String errorMessage) throws ApiException {
+        return callApi(call, errorMessage, false);
+    }
+
+    public static <V> V callApi(@NonNull Callable<V> call, @NonNull String errorMessage, final boolean warningOnly) throws ApiException {
         try {
             return call.call();
         } catch (Exception e) {
-            throw ApiException.raise(errorMessage, e);
+            if (!warningOnly) throw ApiException.raise(errorMessage, e);
+            return null;
         }
     }
 
@@ -132,10 +137,14 @@ public class Base {
         void run() throws Exception;
     }
 
-    public static void callApi(Runnable call, String errorMessage) throws ApiException {
+    public static void callApi(@NonNull Runnable call, @NonNull String errorMessage) throws ApiException {
+        callApi(call, errorMessage, false);
+    }
+
+    public static void callApi(@NonNull Runnable call, @NonNull String errorMessage, final boolean warningOnly) throws ApiException {
         callApi(() -> {
             call.run();
             return null;
-        }, errorMessage);
+        }, errorMessage, warningOnly);
     }
 }

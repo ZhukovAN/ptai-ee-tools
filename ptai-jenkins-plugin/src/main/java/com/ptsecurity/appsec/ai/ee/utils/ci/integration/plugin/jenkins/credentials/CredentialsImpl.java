@@ -20,8 +20,8 @@ import hudson.util.FormValidation;
 import hudson.util.Secret;
 import jenkins.model.Jenkins;
 import lombok.Getter;
+import lombok.NonNull;
 import org.apache.commons.lang.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -74,12 +74,13 @@ public class CredentialsImpl extends BaseStandardCredentials implements Credenti
 
     @Extension
     public static class ServerCredentialsDescriptor extends BaseStandardCredentialsDescriptor {
-        @NotNull
         @Override
+        @NonNull
         public String getDisplayName() {
             return Resources.captions_credentials_displayName();
         }
 
+        @SuppressWarnings("unused") // Called by groovy view
         public FormValidation doTestServerCaCertificates(
                 @QueryParameter("serverCaCertificates") final String serverCaCertificates) {
             if (StringUtils.isEmpty(serverCaCertificates))

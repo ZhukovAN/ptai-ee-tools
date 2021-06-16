@@ -5,7 +5,6 @@ import jetbrains.buildServer.ExtensionHolder;
 import jetbrains.buildServer.serverSide.BuildStartContext;
 import jetbrains.buildServer.serverSide.BuildStartContextProcessor;
 import lombok.NonNull;
-import org.jetbrains.annotations.NotNull;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
 
@@ -22,7 +21,7 @@ public class AstBuildStartContextProcessor implements BuildStartContextProcessor
     @NonNull
     private AstAdminSettings settings;
 
-    public AstBuildStartContextProcessor(@NotNull final ExtensionHolder extensionHolder, @NonNull AstAdminSettings settings) {
+    public AstBuildStartContextProcessor(@NonNull final ExtensionHolder extensionHolder, @NonNull AstAdminSettings settings) {
         this.extensionHolder = extensionHolder;
         this.settings = settings;
     }
@@ -33,7 +32,7 @@ public class AstBuildStartContextProcessor implements BuildStartContextProcessor
      * @param context Agent job context
      */
     @Override
-    public void updateParameters(@NotNull BuildStartContext context) {
+    public void updateParameters(@NonNull BuildStartContext context) {
         context.addSharedParameter(URL, settings.getValue(URL));
         context.addSharedParameter(TOKEN, settings.getValue(TOKEN));
         context.addSharedParameter(CERTIFICATES, settings.getValue(CERTIFICATES));

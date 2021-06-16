@@ -12,8 +12,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.Route;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
@@ -46,9 +44,8 @@ public class JwtAuthenticator extends Base implements Authenticator {
      * @return Modified API request with jwt access token in Authorization header
      * @throws IOException
      */
-    @Nullable
     @Override
-    public Request authenticate(@Nullable Route route, @NotNull Response response) throws IOException {
+    public Request authenticate(Route route, @NonNull Response response) throws IOException {
         // Any authentication problem while getting jwt treated as a critical failure
         Request res = null;
 

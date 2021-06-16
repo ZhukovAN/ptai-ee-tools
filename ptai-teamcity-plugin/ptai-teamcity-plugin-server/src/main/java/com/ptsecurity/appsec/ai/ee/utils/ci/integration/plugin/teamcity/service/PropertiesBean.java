@@ -9,7 +9,6 @@ import jetbrains.buildServer.serverSide.crypt.RSACipher;
 import jetbrains.buildServer.util.StringUtil;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,13 +20,13 @@ public class PropertiesBean extends BasePropertiesBean {
     private final static String PROPERTY_PREFIX = "prop:";
     private final static String ENCRYPTED_PROPERTY_PREFIX = "encryptedProp:";
 
-    @NotNull
-    public static String getProperty(@NotNull HttpServletRequest request, @NotNull String name) {
+    @NonNull
+    public static String getProperty(@NonNull HttpServletRequest request, @NonNull String name) {
         return StringUtil.emptyIfNull(request.getParameter(PROPERTY_PREFIX + name));
     }
 
-    @NotNull
-    public static String getEncryptedProperty(@NotNull HttpServletRequest request, @NotNull String name) {
+    @NonNull
+    public static String getEncryptedProperty(@NonNull HttpServletRequest request, @NonNull String name) {
         return StringUtil.emptyIfNull(request.getParameter(ENCRYPTED_PROPERTY_PREFIX + name));
     }
 

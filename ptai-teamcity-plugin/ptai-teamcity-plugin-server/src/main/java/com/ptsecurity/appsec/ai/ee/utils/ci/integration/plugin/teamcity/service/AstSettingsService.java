@@ -19,7 +19,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.cert.X509Certificate;
@@ -81,12 +80,12 @@ public class AstSettingsService {
         }
     }
 
-    public static VerificationResults checkConnectionSettings(@NotNull final PropertiesBean bean, boolean parametersOnly) {
+    public static VerificationResults checkConnectionSettings(@NonNull final PropertiesBean bean, boolean parametersOnly) {
         VerificationResults results = new VerificationResults();
         return checkConnectionSettings(bean, results, parametersOnly);
     }
 
-    public static VerificationResults checkConnectionSettings(@NotNull final PropertiesBean bean, @NonNull VerificationResults results, boolean parametersOnly) {
+    public static VerificationResults checkConnectionSettings(@NonNull final PropertiesBean bean, @NonNull VerificationResults results, boolean parametersOnly) {
         validateConnectionSettings(bean, results);
         if (!parametersOnly && results.isSuccess()) checkConnectionSettings(bean, results);
         return results;
@@ -111,7 +110,7 @@ public class AstSettingsService {
      * @return Properties bean with PT AI server connection settings
      */
     public static PropertiesBean parseConnectionSettings(
-            @NotNull final HttpServletRequest request,
+            @NonNull final HttpServletRequest request,
             @NonNull final AstAdminSettings settings,
             final PropertiesBean bean) {
         PropertiesBean res = (null == bean) ? new PropertiesBean() : bean;
@@ -136,7 +135,7 @@ public class AstSettingsService {
      * @return Properties bean with PT AI AST job settings
      */
     public static BasePropertiesBean parseAstSettings(
-            @NotNull final HttpServletRequest request, final PropertiesBean bean) {
+            @NonNull final HttpServletRequest request, final PropertiesBean bean) {
         PropertiesBean res = (null == bean) ? new PropertiesBean() : bean;
         res.fill(AST_SETTINGS, request);
 
@@ -174,7 +173,7 @@ public class AstSettingsService {
      * @param results List of validation results
      */
     public static void validateConnectionSettings(
-            @NotNull final PropertiesBean bean,
+            @NonNull final PropertiesBean bean,
             @NonNull final VerificationResults results) {
         // JavaScript handlers are named as on[Error ID]Error like "onEmptyUrlError"
 
@@ -287,7 +286,7 @@ public class AstSettingsService {
         }
     }
 
-    private static Utils createUtils(@NotNull PropertiesBean bean) {
+    private static Utils createUtils(@NonNull PropertiesBean bean) {
         Utils utils = new Utils();
         utils.setUrl(bean.get(URL));
         utils.setToken(bean.get(TOKEN));
@@ -303,7 +302,7 @@ public class AstSettingsService {
      * @param results Response that contains diagnostic messages
      *            that are related to connection check results
      */
-    protected static void checkConnectionSettings(@NotNull PropertiesBean bean, @NonNull final VerificationResults results) {
+    protected static void checkConnectionSettings(@NonNull PropertiesBean bean, @NonNull final VerificationResults results) {
         // Check connection
         try {
             Utils utils = createUtils(bean);

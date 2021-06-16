@@ -69,3 +69,8 @@
 + [Feature] Project- and run-level actions are added to Jenkins plugin to show stats about AST
 ### 20210616
 + [Feature] REST API naming refactored from <service>.<version> to <version>.<service>
++ [ToDo] Check API calls that return file. Those files are created as temp so it is better to explicitly delete them
++ [ToDo] Reorganize test fixtures: place data parser tests to ptai-rest-api
++ [ToDo] Refactor data structures. Currently plugins like Jenkins one use data types defined in ptai-rest-api and those types are version-dependent. This may cause a problems with plugins update
++ [Fix] @NotNull changed to Lombok's @NonNull
++ [Fix] Smarter Jenkins plugins version number calculation implemented in build.gradle

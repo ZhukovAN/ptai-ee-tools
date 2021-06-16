@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssuesModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.BaseTest;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.TempFile;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.IssuesModelHelper;
+import lombok.SneakyThrows;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -33,25 +36,19 @@ class StackedAreaChartDataModelTest extends BaseTest {
     }
 
     @Test
+    @SneakyThrows
     public void testJsonConversion() {
-        System.out.println("!!!!!!!!!!!!!!!!!");
-        System.out.println(getClass().getClassLoader());
-        System.out.println(BaseTest.class.getClassLoader());
+        Path issuesFile = getPackedResourceFile("json/issuesModel/issuesModel.json.7z");
+        try (TempFile tempIssuesFile = new TempFile(issuesFile)) {
 
-        URLClassLoader ucl = (URLClassLoader) ClassLoader.getSystemClassLoader();
-        System.out.println(ucl);
-        URL[] urls = ucl.getURLs();
-        for (URL url : urls) System.out.println(url.toString());
+        }
 
-
-
-        InputStream is = ucl.getResourceAsStream("json/IssuesModel/issuesModelMap.json.7z");
-        Assertions.assertNotNull(is);
-        Path issuesFile = getPackedResourceFile("json/IssuesModel/issuesModelMap.json.7z");
+        /*
         TypeReference<Map<String,IssuesModel>> typeRef = new TypeReference<Map<String,IssuesModel>>() {};
         Map<String, IssuesModel> issuesModelMap = Assertions.assertDoesNotThrow(
                 () -> mapper.readValue(new FileInputStream(issuesFile.toFile()), typeRef),
                 "IssuesModel test data load failed");
+
         List<Triple<Integer, LocalDateTime, IssuesModel>> issuesModelList = new ArrayList<>();
         int counter = 0;
         for (String key : issuesModelMap.keySet())
@@ -59,5 +56,7 @@ class StackedAreaChartDataModelTest extends BaseTest {
         StackedAreaChartDataModel model = StackedAreaChartDataModel.create(issuesModelList);
         JSONObject jsonObject = BaseJsonChartDataModel.convertObject(model);
         System.out.println(jsonObject);
+
+         */
     }
 }

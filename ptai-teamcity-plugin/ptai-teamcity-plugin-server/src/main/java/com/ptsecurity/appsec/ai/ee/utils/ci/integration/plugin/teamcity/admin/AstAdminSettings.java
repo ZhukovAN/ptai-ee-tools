@@ -6,7 +6,7 @@ import jetbrains.buildServer.serverSide.crypt.EncryptUtil;
 import jetbrains.buildServer.util.PropertiesUtil;
 import jetbrains.buildServer.util.StringUtil;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class AstAdminSettings {
      *                    from that paths to load global plugin settings from file
      * @throws IOException
      */
-    public AstAdminSettings(@NotNull ServerPaths serverPaths) throws IOException {
+    public AstAdminSettings(@NonNull ServerPaths serverPaths) throws IOException {
         this.serverPaths = serverPaths;
         Path config = getConfigFile();
         if (!Files.exists(config))
@@ -58,7 +58,7 @@ public class AstAdminSettings {
      * @param path Plugin configuration file
      * @throws IOException
      */
-    private void initConfig(@NotNull final Path path) throws IOException {
+    private void initConfig(@NonNull final Path path) throws IOException {
         this.properties.put(URL, Defaults.URL);
         this.properties.put(TOKEN, scramble(Defaults.TOKEN));
         this.properties.put(CERTIFICATES, Defaults.CERTIFICATES);
@@ -72,7 +72,7 @@ public class AstAdminSettings {
         loadConfig(path);
     }
 
-    private void loadConfig(@NotNull final Path path) throws IOException {
+    private void loadConfig(@NonNull final Path path) throws IOException {
         try (FileReader reader = new FileReader(path.toFile())) {
             this.properties.load(reader);
             String pass = this.properties.getProperty(TOKEN, "");

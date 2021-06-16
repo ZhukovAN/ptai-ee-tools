@@ -5,9 +5,8 @@ import jetbrains.buildServer.serverSide.PropertiesProcessor;
 import jetbrains.buildServer.serverSide.RunType;
 import jetbrains.buildServer.serverSide.RunTypeRegistry;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
+import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -24,19 +23,19 @@ public class AstRunType extends RunType {
         runTypeRegistry.registerRunType(this);
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String getType() {
         return Constants.RUNNER_TYPE;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String getDisplayName() {
         return Labels.RUNNER;
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String getDescription() {
         return Hints.RUNNER;
@@ -45,7 +44,6 @@ public class AstRunType extends RunType {
     /**
      * @return Properties processor which will be used to validate parameters specified by user
      */
-    @Nullable
     @Override
     public PropertiesProcessor getRunnerPropertiesProcessor() {
         return new AstRunTypePropertiesProcessor();
@@ -54,7 +52,6 @@ public class AstRunType extends RunType {
     /**
      * @return Absolute path to a JSP file or controller for editing runner parameters, should not include context path
      */
-    @Nullable
     @Override
     public String getEditRunnerParamsJspFilePath() {
         return this.descriptor.getPluginResourcesPath("editRunParams.jsp");
@@ -63,7 +60,6 @@ public class AstRunType extends RunType {
     /**
      * @return Absolute path to a JSP file or controller for displaying runner parameters, should not include context path
      */
-    @Nullable
     @Override
     public String getViewRunnerParamsJspFilePath() {
         return this.descriptor.getPluginResourcesPath("viewRunParams.jsp");
@@ -74,7 +70,6 @@ public class AstRunType extends RunType {
      * with actual ones and marks fields that are differ as modified
      * @return Map of default field values
      */
-    @Nullable
     @Override
     public Map<String, String> getDefaultRunnerProperties() {
         final Map<String, String> parameters = new HashMap<>();
@@ -94,9 +89,9 @@ public class AstRunType extends RunType {
      * @param parameters PT AI AST job parameters map
      * @return PT AI AST job parameters description
      */
-    @NotNull
+    @NonNull
     @Override
-    public String describeParameters(@NotNull Map<String, String> parameters) {
+    public String describeParameters(@NonNull Map<String, String> parameters) {
         StringBuilder result = new StringBuilder();
         String includes = parameters.getOrDefault(Params.INCLUDES, "");
         if (StringUtils.isNotEmpty(includes))

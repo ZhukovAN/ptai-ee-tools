@@ -8,9 +8,9 @@ import jetbrains.buildServer.controllers.PublicKeyUtil;
 import jetbrains.buildServer.controllers.XmlResponseUtil;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class AstAdminPageController extends BaseAstController {
     private final AstAdminSettings settings;
 
     public AstAdminPageController(
-            @NotNull WebControllerManager manager,
+            @NonNull WebControllerManager manager,
             AstAdminSettings settings,
             PluginDescriptor descriptor) {
         this.settings = settings;
@@ -33,12 +33,12 @@ public class AstAdminPageController extends BaseAstController {
     }
 
     @Override
-    protected ModelAndView doGet(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
+    protected ModelAndView doGet(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
         return null;
     }
 
     @Override
-    protected void doPost(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Element xml) {
+    protected void doPost(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Element xml) {
         if (PublicKeyUtil.isPublicKeyExpired(request)) {
             PublicKeyUtil.writePublicKeyExpiredError(xml);
             return;

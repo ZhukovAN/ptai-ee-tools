@@ -6,7 +6,6 @@ import jetbrains.buildServer.controllers.BaseFormXmlController;
 import jetbrains.buildServer.controllers.XmlResponseUtil;
 import lombok.NonNull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,12 +15,12 @@ import java.util.stream.Collectors;
 
 public class BaseAstController extends BaseFormXmlController {
     @Override
-    protected ModelAndView doGet(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
+    protected ModelAndView doGet(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
         return null;
     }
 
     @Override
-    protected void doPost(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Element xmlResponse) {
+    protected void doPost(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Element xmlResponse) {
 
     }
 
@@ -42,7 +41,7 @@ public class BaseAstController extends BaseFormXmlController {
      * @param details List of diagnostic messages
      */
     private static void addDetails(
-            @NotNull final Element xml,
+            @NonNull final Element xml,
             @NonNull final List<String> details) {
         Element detailsElement = xml.getChild("testConnectionDetails");
         if (null == detailsElement) {

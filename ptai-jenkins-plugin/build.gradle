@@ -17,6 +17,7 @@ ext {
     scmApiVersion = ''
     trileadApiVersion = ''
     scriptSecurityVersion = ''
+    matrixProjectVersion = ''
     gitVersion = ''
 }
 
@@ -119,6 +120,8 @@ dependencies {
     jenkinsServer "org.jenkins-ci.plugins:trilead-api:${trileadApiVersion}"
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/script-security
     jenkinsServer "org.jenkins-ci.plugins:script-security:${scriptSecurityVersion}"
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/matrix-project
+    jenkinsServer "org.jenkins-ci.plugins:matrix-project:${matrixProjectVersion}"
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
     jenkinsServer "org.jenkins-ci.plugins:git:${gitVersion}"
 
@@ -131,81 +134,136 @@ dependencies {
     implementation 'commons-validator:commons-validator:1.6'
 }
 
+// Retuns -1 if version a is before b, 0 if those are equal and 1 if a is after b
+def compareVersion(a, b) {
+    List versionA = a.tokenize('.')
+    List versionB = b.tokenize('.')
+
+    def commonIndices = Math.min(versionA.size(), versionB.size())
+    for (int i = 0; i < commonIndices; ++i) {
+        def numberA = versionA[i].toInteger()
+        def numberB = versionB[i].toInteger()
+        if (numberA != numberB)
+            return numberA <=> numberB
+   }
+    // If we got this far then all the common indices are identical, so whichever version is longer must be more recent
+    return versionA.size() <=> versionB.size()
+}
+
 def processJenkinsVersion() {
     String versionString = findProperty('jenkinsVersion')
     if (!versionString) {
         logger.quiet("Jenkins version is not defined, using 2.164.3 as default")
         versionString = '2.164.3'
     }
+    logger.info("Using Jenkins version: $versionString")
+
     def versionMatcher = versionString =~ /(\d+)\.(\d+)\.(\d+)/
     if (!versionMatcher.matches()) {
         versionMatcher = versionString =~ /(\d+)\.(\d+)/
         if (!versionMatcher.matches()) throw new GradleException("Jenkins version syntax incorrect: failed to parse $versionString")
     }
     def version = [versionMatcher.group(1).toInteger(), versionMatcher.group(2).toInteger()]
-    if (2 != version[0]) throw new GradleException("Jenkins versions 2.xxx.y are supported only")
-    if (150 > version[1]) throw new GradleException("Jenkins versions 2.150 and upper are supported only")
+    if (-1 != compareVersion('2.150', versionString))
+        throw new GradleException("Jenkins versions 2.150 and upper are supported only")
 
     // Calculate structs-plugin version. For Jenkins 2.107.3 version 1.21 is to be used, for 2.222.4 - 1.22
-    if (222 <= version[1])
+    if (-1 == compareVersion('2.222.4', versionString))
         structsVersion = '1.22'
     else
         structsVersion = '1.21'
-    // workflow-step-api: 2.22 -> 2.138, 2.23 -> 2.176
-    if (176 <= version[1])
+    logger.info("Using Structs plugin version: $structsVersion")
+    // workflow-step-api: 2.22 -> 2.138.4, 2.23 -> 2.176.4
+    if (-1 == compareVersion('2.176.4', versionString))
         workflowStepApiVersion = '2.23'
     else
         workflowStepApiVersion = '2.22'
-    // token-macro: 2.14 -> 2.274, 2.13 -> 2.222, 2.12 -> 2.121
-    if (274 <= version[1])
+    logger.info("Using Workflow step API plugin version: $workflowStepApiVersion")
+    // token-macro:
+    // 2.12 -> 2.121.3
+    // 2.13 -> 2.222.3
+    // 2.14 -> 2.274
+    if (-1 == compareVersion('2.274', versionString))
         tokenMacroVersion = '2.14'
-    else if (222 <= version[1])
+    else if (-1 == compareVersion('2.222.3', versionString))
         tokenMacroVersion = '2.13'
     else
         tokenMacroVersion = '2.12'
-    // credentials: 2.3.12 -> 2.222.4, 2.3.11 -> 2.138
-    if (222 <= version[1])
+    logger.info("Using Token macro plugin version: $tokenMacroVersion")
+    // credentials:
+    // 2.3.11 -> 2.138.4
+    // 2.3.12 -> 2.222.4
+    if (-1 == compareVersion('2.222.4', versionString))
         credentialsVersion = '2.3.12'
     else
         credentialsVersion = '2.3.11'
-    // scm-api: 2.6.4 -> 2.176.4, 2.6.2 -> 2.164.3, 2.4.1 -> 2.60.3
-    if (176 <= version[1])
+    logger.info("Using Credentials plugin version: $credentialsVersion")
+    // scm-api:
+    // 2.4.1 -> 2.60.3
+    // 2.5.0 - 2.6.2 -> 2.164.3
+    // 2.6.3 -> 2.107.3
+    // 2.6.4 -> 2.176.4
+    if (-1 == compareVersion('2.176.4', versionString))
         scmApiVersion = '2.6.4'
-    else if (164 <= version[1])
+    else if (-1 == compareVersion('2.164.3', versionString))
         scmApiVersion = '2.6.2'
     else
-        scmApiVersion = '2.4.1'
-    // trilead-api: 1.0.13 -> 2.204, 1.0.10 -> 2.184, 1.0.3 -> 2.150.1
-    if (204 <= version[1])
+        scmApiVersion = '2.6.3'
+    logger.info("Using SCM API plugin version: $scmApiVersion")
+    // trilead-api:
+    // 1.0.3 -> 2.150.1
+    // 1.0.4 - 1.0.8 -> 2.184
+    // 1.0.9 -> 2.204
+    // 1.0.10 -> 2.184
+    // 1.0.12 - 1.0.13 -> 2.204
+    if (-1 == compareVersion('2.204', versionString))
         trileadApiVersion = '1.0.13'
-    else if (184 <= version[1])
+    else if (-1 == compareVersion('2.184', versionString))
         trileadApiVersion = '1.0.10'
     else
         trileadApiVersion = '1.0.3'
-    // script-security: 1.77 -> 2.222.4, 1.76 -> 2.176.4, 1.71 -> 2.60.3
-    if (222 <= version[1])
+    logger.info("Using Trilead API plugin version: $trileadApiVersion")
+    // script-security:
+    // 1.71 -> 2.60.3
+    // 1.72 - 1.76 -> 2.176.4
+    // 1.77 -> 2.222.4
+    if (-1 == compareVersion('2.222.4', versionString))
         scriptSecurityVersion = '1.77'
-    else if (176 <= version[1])
+    else if (-1 == compareVersion('2.176.4', versionString))
         scriptSecurityVersion = '1.76'
     else
         scriptSecurityVersion = '1.71'
-    // git: 4.7.2 -> 2.263.1, 4.6.0 -> 2.222.4, 4.4.5 -> 2.204.1, 4.2.2 -> 2.138.4
-    if (263 <= version[1])
+    logger.info("Using Script security plugin version: $scriptSecurityVersion")
+    // matrix project:
+    // 1.14 -> 2.7.3
+    // 1.15 - 1.18 -> 2.164.3
+    // 1.19 -> 2.282
+    if (-1 == compareVersion('2.282', versionString))
+        matrixProjectVersion = '1.19'
+    else if (-1 == compareVersion('2.164.3', versionString))
+        matrixProjectVersion = '1.18'
+    else
+        matrixProjectVersion = '1.14'
+    // git:
+    // 4.2.2 -> 2.138.4
+    // 4.3.0 - 4.4.5 -> 2.204.1
+    // 4.5.0 - 4.6.0 -> 2.222.4
+    // 4.7.0 - 4.7.2 -> 2.263.1
+    if (-1 == compareVersion('2.263.1', versionString))
         gitVersion = '4.7.2'
-    else if (222 <= version[1])
+    else if (-1 == compareVersion('2.222.4', versionString))
         gitVersion = '4.6.0'
-    else if (204 <= version[1])
+    else if (-1 == compareVersion('2.204.1', versionString))
         gitVersion = '4.4.5'
     else
         gitVersion = '4.2.2'
+    logger.info("Using Git plugin version: $gitVersion")
 
-    boolean newUi = 277 <= version[1]
+    boolean newUi = (-1 == compareVersion('2.277.1', versionString))
     if (newUi)
         sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-277+' ]
     else
         sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-277-' ]
-    logger.info("Using token-macro plugin v.$tokenMacroVersion")
-    logger.info("Using credentials plugin v.$credentialsVersion")
 }
 
 // Set Jenkins server debug port
@@ -270,4 +328,3 @@ tasks.getByName('jpi') {
 clean {
     delete 'src/main/webapp/webjars'
 }
-

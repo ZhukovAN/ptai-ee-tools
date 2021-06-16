@@ -6,9 +6,9 @@ import hudson.Extension;
 import hudson.util.ListBoxModel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import org.jenkinsci.Symbol;
-import org.jetbrains.annotations.NotNull;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.util.Arrays;
@@ -39,7 +39,7 @@ public class Data extends BaseReport {
     @Symbol("Data")
     @Extension
     public static class DataDescriptor extends BaseReportDescriptor {
-        @NotNull
+        @NonNull
         @Override
         public String getDisplayName() {
             return Resources.i18n_ast_result_reporting_data_label();

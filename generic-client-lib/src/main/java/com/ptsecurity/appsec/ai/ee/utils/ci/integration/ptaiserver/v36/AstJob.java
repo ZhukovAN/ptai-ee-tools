@@ -38,10 +38,9 @@ public abstract class AstJob extends Project {
         INTERRUPTED, SUCCESS, FAILED
     }
 
-    @Nullable
     @Setter
     protected String jsonSettings;
-    @Nullable
+
     @Setter
     protected String jsonPolicy;
 
@@ -304,6 +303,9 @@ public abstract class AstJob extends Project {
                 callApi(
                         () -> fileOps.saveArtifact(raw.getFileName(), json),
                         "Raw JSON result save failed");
+            callApi(
+                    () -> json.delete(),
+                    "Temporal file " + json.getPath() + " delete failed", true);
         }
     }
 }

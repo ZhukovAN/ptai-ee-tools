@@ -2,7 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ReportFormatType;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -137,7 +137,7 @@ public class Labels {
      */
     public static final String REPORTING_JSON_SETTINGS = Resources.i18n_ast_result_reporting_json_settings_label();
 
-    @NotNull
+    @NonNull
     public Collection<ReportFormatType> getReportFormatTypes() {
         return Arrays.stream(ReportFormatType.values()).collect(Collectors.toList());
     }

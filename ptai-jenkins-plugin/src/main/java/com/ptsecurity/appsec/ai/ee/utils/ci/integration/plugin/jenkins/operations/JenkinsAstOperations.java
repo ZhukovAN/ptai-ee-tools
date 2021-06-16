@@ -72,6 +72,10 @@ public class JenkinsAstOperations implements AstOperations {
         IssuesModel issuesModel = Base.callApi(
                 () -> IssuesModelHelper.parse(new FileInputStream(issuesJson)),
                 "Issues model file parse failed");
+        Base.callApi(
+                () -> issuesJson.delete(),
+                "Temporal file " + issuesJson.getPath() + " delete failed", true);
+
 
         astJobSingleResult.setIssues(issuesModel);
         astJobSingleResult.setScanResult(scanResult);

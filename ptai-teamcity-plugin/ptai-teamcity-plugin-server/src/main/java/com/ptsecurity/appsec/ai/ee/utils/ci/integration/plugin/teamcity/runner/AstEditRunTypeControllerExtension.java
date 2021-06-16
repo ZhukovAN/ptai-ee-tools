@@ -13,9 +13,8 @@ import jetbrains.buildServer.controllers.admin.projects.BuildTypeForm;
 import jetbrains.buildServer.controllers.admin.projects.EditRunTypeControllerExtension;
 import jetbrains.buildServer.serverSide.BuildTypeSettings;
 import jetbrains.buildServer.serverSide.SBuildServer;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
@@ -35,8 +34,8 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.P
 public class AstEditRunTypeControllerExtension implements EditRunTypeControllerExtension {
     private final AstAdminSettings settings;
 
-    public AstEditRunTypeControllerExtension(@NotNull final SBuildServer server,
-                                            @NotNull final AstAdminSettings settings) {
+    public AstEditRunTypeControllerExtension(@NonNull final SBuildServer server,
+                                            @NonNull final AstAdminSettings settings) {
         server.registerExtension(EditRunTypeControllerExtension.class, Constants.RUNNER_TYPE, this);
         this.settings = settings;
     }
@@ -60,7 +59,7 @@ public class AstEditRunTypeControllerExtension implements EditRunTypeControllerE
      * @param model
      */
     @Override
-    public void fillModel(@NotNull HttpServletRequest request, @NotNull BuildTypeForm form, @NotNull Map model) {
+    public void fillModel(@NonNull HttpServletRequest request, @NonNull BuildTypeForm form, @NonNull Map model) {
         BasePropertiesBean bean = form.getBuildRunnerBean().getPropertiesBean();
         final Map<String, String> properties = bean.getProperties();
         // Setup possibly missing fields: Teamcity doesn't save empty or false values to job's
@@ -102,13 +101,12 @@ public class AstEditRunTypeControllerExtension implements EditRunTypeControllerE
     }
 
     @Override
-    public void updateState(@NotNull HttpServletRequest request, @NotNull BuildTypeForm form) {
+    public void updateState(@NonNull HttpServletRequest request, @NonNull BuildTypeForm form) {
         log.trace("Update state request to %s", request.getRequestURI());
     }
 
-    @Nullable
     @Override
-    public StatefulObject getState(@NotNull HttpServletRequest request, @NotNull BuildTypeForm form) {
+    public StatefulObject getState(@NonNull HttpServletRequest request, @NonNull BuildTypeForm form) {
         return null;
     }
 
@@ -119,9 +117,9 @@ public class AstEditRunTypeControllerExtension implements EditRunTypeControllerE
      * @param form
      * @return
      */
-    @NotNull
+    @NonNull
     @Override
-    public ActionErrors validate(@NotNull HttpServletRequest request, @NotNull BuildTypeForm form) {
+    public ActionErrors validate(@NonNull HttpServletRequest request, @NonNull BuildTypeForm form) {
         PropertiesBean bean = new PropertiesBean(form.getBuildRunnerBean().getPropertiesBean());
         // As we might saving AST job with globally-defined connection settings,
         // we need to inject those settings into bean prior to verification
@@ -136,8 +134,8 @@ public class AstEditRunTypeControllerExtension implements EditRunTypeControllerE
 
     @Override
     public void updateBuildType(
-            @NotNull HttpServletRequest request, @NotNull BuildTypeForm form,
-            @NotNull BuildTypeSettings buildTypeSettings, @NotNull ActionErrors errors) {
+            @NonNull HttpServletRequest request, @NonNull BuildTypeForm form,
+            @NonNull BuildTypeSettings buildTypeSettings, @NonNull ActionErrors errors) {
         log.trace("Update build type request to %s", request.getRequestURI());
     }
 }

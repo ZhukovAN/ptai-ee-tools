@@ -4,9 +4,9 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import hudson.Extension;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import org.jenkinsci.Symbol;
-import org.jetbrains.annotations.NotNull;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class WorkModeSync extends WorkMode {
 
     @Symbol("WorkModeSync")
     public static class Descriptor extends WorkModeDescriptor {
-        @NotNull
+        @NonNull
         @Override
         public String getDisplayName() {
             return Resources.captions_workMode_sync_displayName();

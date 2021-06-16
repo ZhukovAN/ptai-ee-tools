@@ -9,10 +9,10 @@ import jetbrains.buildServer.agent.BuildFinishedStatus;
 import jetbrains.buildServer.agent.BuildProcess;
 import jetbrains.buildServer.agent.BuildRunnerContext;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.*;
@@ -103,7 +103,7 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
         future.cancel(true);
     }
 
-    @NotNull
+    @NonNull
     @Override
     public BuildFinishedStatus waitFor() throws RunBuildException {
         try {

@@ -72,32 +72,35 @@ public class BaseTest {
         // As 7zip needs random access to packed file, there's no direct way to use
         // InputStream: we are allowed to use File or SeekableByteChannel only. So we
         // need to copy resource contents to temp file
-        InputStream is = getResourceStream(name);
-        Path tempResourceFile = Files.createTempFile(TEMP_FOLDER, "", "");
-        FileUtils.copyInputStreamToFile(is, tempResourceFile.toFile());
-        SevenZFile packedFile = new SevenZFile(tempResourceFile.toFile());
-        byte[] buffer = new byte[1024];
+        try (TempFile tempResourceFile = TempFile.createFile(TEMP_FOLDER)) {
+            System.out.println("File created " + tempResourceFile.toString());
+            InputStream is = getResourceStream(name);
+            FileUtils.copyInputStreamToFile(is, tempResourceFile.getFile().toFile());
+            SevenZFile packedFile = new SevenZFile(tempResourceFile.getFile().toFile());
+            byte[] buffer = new byte[1024];
 
-        SevenZArchiveEntry entry = packedFile.getNextEntry();
-        while (null != entry) {
-            if (!entry.isDirectory()) {
-                Path out = rootOutputFolder.resolve(entry.getName());
-                if (null == res)
-                    // If this is first entry then it is to returned as a result
-                    res = out;
-                else
-                    // There are more then one entry in the archive, folder path is to be returned
-                    res = rootOutputFolder;
+            SevenZArchiveEntry entry = packedFile.getNextEntry();
+            while (null != entry) {
+                if (!entry.isDirectory()) {
+                    Path out = rootOutputFolder.resolve(entry.getName());
+                    if (null == res)
+                        // If this is first entry then it is to returned as a result
+                        res = out;
+                    else
+                        // There are more then one entry in the archive, folder path is to be returned
+                        res = rootOutputFolder;
 
-                try (FileOutputStream fos = new FileOutputStream(out.toFile())) {
-                    do {
-                        int dataRead = packedFile.read(buffer, 0, buffer.length);
-                        if (-1 == dataRead || 0 == dataRead) break;
-                        fos.write(buffer, 0, dataRead);
-                    } while (true);
+                    try (FileOutputStream fos = new FileOutputStream(out.toFile())) {
+                        do {
+                            int dataRead = packedFile.read(buffer, 0, buffer.length);
+                            if (-1 == dataRead || 0 == dataRead) break;
+                            fos.write(buffer, 0, dataRead);
+                        } while (true);
+                    }
                 }
+                entry = packedFile.getNextEntry();
             }
-            entry = packedFile.getNextEntry();
+            packedFile.close();
         }
         return res;
     }

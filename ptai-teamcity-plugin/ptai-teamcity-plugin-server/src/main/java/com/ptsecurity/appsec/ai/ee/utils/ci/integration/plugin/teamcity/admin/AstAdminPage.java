@@ -8,8 +8,8 @@ import jetbrains.buildServer.serverSide.crypt.RSACipher;
 import jetbrains.buildServer.web.openapi.PagePlaces;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import jetbrains.buildServer.web.openapi.WebControllerManager;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -20,10 +20,10 @@ public class AstAdminPage extends AdminPage {
     private final String jspHome;
 
     public AstAdminPage(
-            @NotNull PagePlaces pagePlaces,
-            @NotNull WebControllerManager controllerManager,
-            @NotNull PluginDescriptor descriptor,
-            @NotNull AstAdminSettings settings) {
+            @NonNull PagePlaces pagePlaces,
+            @NonNull WebControllerManager controllerManager,
+            @NonNull PluginDescriptor descriptor,
+            @NonNull AstAdminSettings settings) {
         super(pagePlaces);
         this.settings = settings;
         this.jspHome = descriptor.getPluginResourcesPath();
@@ -36,14 +36,14 @@ public class AstAdminPage extends AdminPage {
         log.info("PT AI configuration page registered");
     }
 
-    @NotNull
+    @NonNull
     @Override
     public String getGroup() {
         return INTEGRATIONS_GROUP;
     }
 
     @Override
-    public void fillModel(@NotNull Map<String, Object> model, @NotNull HttpServletRequest request) {
+    public void fillModel(@NonNull Map<String, Object> model, @NonNull HttpServletRequest request) {
         super.fillModel(model, request);
 
         BasePropertiesBean bean = new BasePropertiesBean(null);

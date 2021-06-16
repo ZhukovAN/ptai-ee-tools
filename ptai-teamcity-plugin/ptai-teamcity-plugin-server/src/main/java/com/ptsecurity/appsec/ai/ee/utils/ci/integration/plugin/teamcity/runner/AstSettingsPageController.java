@@ -10,7 +10,6 @@ import jetbrains.buildServer.web.openapi.WebControllerManager;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom.Element;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +25,7 @@ public class AstSettingsPageController extends BaseAstController {
     private final AstAdminSettings settings;
 
     public AstSettingsPageController(
-            @NotNull WebControllerManager manager,
+            @NonNull WebControllerManager manager,
             @NonNull AstAdminSettings settings,
             PluginDescriptor descriptor) {
         this.settings = settings;
@@ -34,7 +33,7 @@ public class AstSettingsPageController extends BaseAstController {
     }
 
     @Override
-    protected ModelAndView doGet(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response) {
+    protected ModelAndView doGet(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response) {
         log.trace("Unsupported HTTP GET request type received by AST settings test controller");
         return null;
     }
@@ -47,7 +46,7 @@ public class AstSettingsPageController extends BaseAstController {
      * @param xml Verification result represented as XML data
      */
     @Override
-    protected void doPost(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Element xml) {
+    protected void doPost(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Element xml) {
         // Check if client-side public key not expired, this may happen if server was restarted
         if (PublicKeyUtil.isPublicKeyExpired(request)) {
             PublicKeyUtil.writePublicKeyExpiredError(xml);
