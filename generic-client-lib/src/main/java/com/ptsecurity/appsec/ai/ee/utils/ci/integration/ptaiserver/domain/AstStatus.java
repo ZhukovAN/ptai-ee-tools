@@ -1,9 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.PolicyState;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanError;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanResult;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Stage;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.PolicyState;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanError;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Stage;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
 import lombok.extern.slf4j.Slf4j;

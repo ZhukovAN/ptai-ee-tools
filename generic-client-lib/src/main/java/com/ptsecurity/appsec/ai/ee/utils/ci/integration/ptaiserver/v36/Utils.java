@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
-import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheck;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.systemmanagement.model.HealthCheck;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.UrlHelper;
@@ -67,7 +67,7 @@ public class Utils extends BaseClient {
 
     public String searchProject(
             @NonNull final UUID id) throws ApiException {
-        com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Project project = callApi(
+        com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project project = callApi(
                 () -> projectsApi.apiProjectsProjectIdGet(id),
                 "PT AI project search failed");
         return (null == project) ? null : project.getName();

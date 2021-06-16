@@ -67,3 +67,5 @@
 ### 20210608
 + [Feature] PT AI trend chart added to Jenkins plugin
 + [Feature] Project- and run-level actions are added to Jenkins plugin to show stats about AST
+### 20210616
++ [Feature] REST API naming refactored from <service>.<version> to <version>.<service>

@@ -1,8 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
 import com.microsoft.signalr.HubConnection;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.StartScanModel;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.ScanCompleteEvent;
@@ -118,7 +118,7 @@ public class Project extends Utils {
             CreateProjectModel createProjectModel = new CreateProjectModel();
             createProjectModel.setName(name);
             createProjectModel.setScanSettings(scanSettings);
-            com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Project project = callApi(
+            com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project project = callApi(
                     () -> projectsApi.apiProjectsPost(createProjectModel),
                     "PT AI project create failed");
             projectId = project.getId();

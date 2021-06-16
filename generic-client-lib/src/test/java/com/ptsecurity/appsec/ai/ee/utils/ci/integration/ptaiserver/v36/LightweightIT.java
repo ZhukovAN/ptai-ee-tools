@@ -1,9 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.EnterpriseLicenseData;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.LicenseApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheck;
-import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheckApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.api.LicenseApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.EnterpriseLicenseData;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.systemmanagement.api.HealthCheckApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.systemmanagement.model.HealthCheck;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.BaseIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.jwt.JwtResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ProgrammingLanguageHelper;

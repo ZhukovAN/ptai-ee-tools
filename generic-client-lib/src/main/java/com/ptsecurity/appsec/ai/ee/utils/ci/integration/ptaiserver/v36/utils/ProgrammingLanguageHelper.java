@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ProgrammingLanguage;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ProgrammingLanguage;
 
 import java.util.HashMap;
 import java.util.Map;

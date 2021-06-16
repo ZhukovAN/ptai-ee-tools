@@ -1,8 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.AuthScopeType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.ScanResult;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Stage;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.AuthScopeType;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Stage;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
 import lombok.NonNull;

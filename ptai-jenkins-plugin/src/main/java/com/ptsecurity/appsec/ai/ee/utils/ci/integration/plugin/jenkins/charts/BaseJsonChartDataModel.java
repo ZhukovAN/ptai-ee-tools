@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.IssueLevel;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssueLevel;
 import lombok.SneakyThrows;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;

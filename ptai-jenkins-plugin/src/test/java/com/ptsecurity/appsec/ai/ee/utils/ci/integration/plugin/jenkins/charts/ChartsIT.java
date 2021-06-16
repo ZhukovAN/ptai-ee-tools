@@ -2,7 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.BaseIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.IssuesModelHelper;
 import lombok.SneakyThrows;

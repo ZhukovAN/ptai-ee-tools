@@ -1,48 +1,22 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanAgentApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.StartScanModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.CertificateHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.api.ProjectsApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.AuthScopeType;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Stage;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.BaseClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.jwt.JwtResponse;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.ProgrammingLanguageHelper;
-import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.Jwts;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 
-import java.io.*;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.KeyStore;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.logging.LogManager;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
 public class BaseIT extends BaseTest {
@@ -90,8 +64,8 @@ public class BaseIT extends BaseTest {
     @SneakyThrows
     protected ScanResult getRandomScanResult() {
         List<ScanResult> res = new ArrayList<>();
-        List<com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Project> projects = projectsApi.apiProjectsGet(true);
-        for (com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Project project : projects) {
+        List<com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project> projects = projectsApi.apiProjectsGet(true);
+        for (com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project project : projects) {
             List<ScanResult> projectScanResults = projectsApi.apiProjectsProjectIdScanResultsGet(project.getId(), AuthScopeType.ACCESSTOKEN);
             projectScanResults.stream()
                     .filter(r -> r.getProgress().getStage().equals(Stage.DONE))

@@ -4,16 +4,20 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
-import com.ptsecurity.appsec.ai.ee.ptai.server.auth.ApiResponse;
-import com.ptsecurity.appsec.ai.ee.ptai.server.auth.v36.AuthApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.auth.v36.AuthScopeType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.v36.StoreApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanAgentApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.v36.HealthCheckApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.updateserver.v36.VersionApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.auth.ApiResponse;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.auth.api.AuthApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.auth.model.AuthScopeType;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.filesstore.api.StoreApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.api.LicenseApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.api.ProjectsApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.api.ReportsApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanProgress;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Stage;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.api.ScanAgentApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.api.ScanApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.systemmanagement.api.HealthCheckApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.updateserver.api.VersionApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.ApiClientHelper;
@@ -50,39 +54,39 @@ public class BaseClient extends Base {
 
     @Getter
     @ToString.Exclude
-    protected final AuthApi authApi = new AuthApi(new com.ptsecurity.appsec.ai.ee.ptai.server.auth.ApiClient());
+    protected final AuthApi authApi = new AuthApi(new com.ptsecurity.appsec.ai.ee.ptai.server.v36.auth.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final ProjectsApi projectsApi = new ProjectsApi(new com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiClient());
+    protected final ProjectsApi projectsApi = new ProjectsApi(new com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final ReportsApi reportsApi = new ReportsApi(new com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiClient());
+    protected final ReportsApi reportsApi = new ReportsApi(new com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final LicenseApi licenseApi = new LicenseApi(new com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.ApiClient());
+    protected final LicenseApi licenseApi = new LicenseApi(new com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final ScanApi scanApi = new ScanApi(new com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.ApiClient());
+    protected final ScanApi scanApi = new ScanApi(new com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final ScanAgentApi scanAgentApi = new ScanAgentApi(new com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.ApiClient());
+    protected final ScanAgentApi scanAgentApi = new ScanAgentApi(new com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final StoreApi storeApi = new StoreApi(new com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.ApiClient());
+    protected final StoreApi storeApi = new StoreApi(new com.ptsecurity.appsec.ai.ee.ptai.server.v36.filesstore.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final HealthCheckApi healthCheckApi = new HealthCheckApi(new com.ptsecurity.appsec.ai.ee.ptai.server.systemmanagement.ApiClient());
+    protected final HealthCheckApi healthCheckApi = new HealthCheckApi(new com.ptsecurity.appsec.ai.ee.ptai.server.v36.systemmanagement.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final VersionApi versionApi = new VersionApi(new com.ptsecurity.appsec.ai.ee.ptai.server.updateserver.ApiClient());
+    protected final VersionApi versionApi = new VersionApi(new com.ptsecurity.appsec.ai.ee.ptai.server.v36.updateserver.ApiClient());
 
     @Getter
     @ToString.Exclude

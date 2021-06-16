@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.annotations.SerializedName;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.BaseJsonHelper;
@@ -23,7 +23,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.IssuesFilter.*;
+import static com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssuesFilter.*;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 @Slf4j

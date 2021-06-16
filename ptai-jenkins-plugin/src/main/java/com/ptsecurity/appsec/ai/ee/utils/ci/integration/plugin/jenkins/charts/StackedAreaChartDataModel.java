@@ -2,8 +2,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.IssueLevel;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.IssuesModel;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssueLevel;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssuesModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import lombok.*;
 import org.apache.commons.lang3.tuple.Triple;

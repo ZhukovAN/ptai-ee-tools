@@ -1,11 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.filesstore.v36.StoreApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Project;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.ScanType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.scanscheduler.v36.StartScanModel;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.filesstore.api.StoreApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.api.ProjectsApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.api.ScanApi;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
@@ -37,8 +37,8 @@ public class ProjectScanIT extends BaseAstIT {
     @SneakyThrows
     public void testAllExistingProjectSettings() {
         ProjectsApi projectsApi = client.getProjectsApi();
-        List<Project> projects = projectsApi.apiProjectsGet(true);
-        for (Project project : projects) {
+        List<com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project> projects = projectsApi.apiProjectsGet(true);
+        for (com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project project : projects) {
             ProjectLight projectInfo = projectsApi.apiProjectsLightNameGet(project.getName());
             System.out.println(projectInfo);
             try {

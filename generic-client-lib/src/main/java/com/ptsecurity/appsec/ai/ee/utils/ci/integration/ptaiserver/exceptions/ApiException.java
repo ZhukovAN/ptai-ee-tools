@@ -36,7 +36,7 @@ public class ApiException extends RuntimeException {
      * Regular expression pattern to check if root exception is an instance
      * of ApiException
      */
-    private static final String APIEXCEPTION_CLASS_REGEX = "com\\.ptsecurity\\.appsec\\.ai\\.ee\\.[\\w.]+\\.ApiException";
+    private static final String APIEXCEPTION_CLASS_REGEX = "com\\.ptsecurity\\.appsec\\.ai\\.ee\\.ptai\\.server\\.[\\w.]+\\.[\\w.]+\\.ApiException";
 
     /**
      * Method checks if exception is not an instance of ApiException

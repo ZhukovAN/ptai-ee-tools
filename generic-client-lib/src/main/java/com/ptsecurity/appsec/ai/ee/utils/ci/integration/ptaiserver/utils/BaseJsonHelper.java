@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.IssueLevel;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssueLevel;
 
 import java.io.IOException;
 

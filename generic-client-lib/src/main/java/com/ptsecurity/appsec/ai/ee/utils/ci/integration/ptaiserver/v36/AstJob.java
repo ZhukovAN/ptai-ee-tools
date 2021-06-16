@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
@@ -24,7 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
-import static com.ptsecurity.appsec.ai.ee.ptai.server.projectmanagement.v36.Stage.*;
+import static com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Stage.*;
 
 @Slf4j
 @Getter
@@ -228,6 +228,7 @@ public abstract class AstJob extends Project {
             return JobFinishedStatus.FAILED;
         } catch (Exception e) {
             if (e instanceof InterruptedException) {
+                // TODO: Check this warning
                 stop();
                 severe(Resources.i18n_ast_result_status_interrupted());
                 return JobFinishedStatus.INTERRUPTED;

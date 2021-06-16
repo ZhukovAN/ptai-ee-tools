@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.auth.JSON;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.auth.JSON;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
