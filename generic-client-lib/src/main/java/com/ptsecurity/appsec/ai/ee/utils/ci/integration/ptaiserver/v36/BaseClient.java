@@ -195,11 +195,6 @@ public class BaseClient extends Base {
     @ToString.Exclude
     private boolean initialized = false;
 
-    @Getter
-    @Setter
-    @Builder.Default
-    protected ScanType scanType = ScanType.FULL;
-
     /**
      * Init all PT AI endpoints API clients
      */

@@ -58,7 +58,8 @@ public class TeamcityAstJob extends AstJob {
 
     @Override
     public boolean unsafeInit() {
-        scanType = TRUE.equals(params.get(Params.FULL_SCAN_MODE)) ? ScanType.FULL : ScanType.INCREMENTAL;
+        fullScanMode = TRUE.equals(params.get(Params.FULL_SCAN_MODE));
+
         verbose = TRUE.equals(params.get(Params.VERBOSE));
 
         if (SERVER_SETTINGS_LOCAL.equals(params.get(Params.SERVER_SETTINGS))) globals = params;

@@ -99,7 +99,7 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
                 .useDefaultExcludes(useDefaultExcludes)
                 .reporting(reports)
                 .truststore(truststore)
-                .scanType(fullScan ? ScanType.FULL : ScanType.INCREMENTAL)
+                .fullScanMode(fullScan)
                 .build();
         if (!job.init()) return BaseCommand.ExitCode.FAILED.getCode();
         return (SUCCESS == job.execute())

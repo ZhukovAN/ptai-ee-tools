@@ -4176,7 +4176,8 @@ components:
           $ref: '#/components/schemas/ComponentVersion'
         yaraHash:
           type: string
-          format: byte
+          # V.3.6 Starting with v.3.6.4 yaraHash is a common String value
+          # format: byte
           nullable: true
         sastHashes:
           type: object
@@ -4890,33 +4891,33 @@ components:
           type: string
           nullable: true
       additionalProperties: false
-# Property types are changed to integers as issueLevel, confirmationStatus,
-# exploitationCondition, suppressStatus, sourceType, scanMode and actualStatus are support bit masks
+    # Property types are changed to integers as issueLevel, confirmationStatus,
+    # exploitationCondition, suppressStatus, sourceType, scanMode and actualStatus are support bit masks
     IssuesFilter:
       type: object
       properties:
         issueLevel:
-#           $ref: '#/components/schemas/IssuesFilterLevel'
+          #           $ref: '#/components/schemas/IssuesFilterLevel'
           type: integer
           format: int32
         confirmationStatus:
-#           $ref: '#/components/schemas/IssuesFilterConfirmationStatus'
+          #           $ref: '#/components/schemas/IssuesFilterConfirmationStatus'
           type: integer
           format: int32
         exploitationCondition:
-#           $ref: '#/components/schemas/IssuesFilterExploitationCondition'
+          #           $ref: '#/components/schemas/IssuesFilterExploitationCondition'
           type: integer
           format: int32
         suppressStatus:
-#           $ref: '#/components/schemas/IssuesFilterSuppressStatus'
+          #           $ref: '#/components/schemas/IssuesFilterSuppressStatus'
           type: integer
           format: int32
         sourceType:
-#           $ref: '#/components/schemas/IssuesFilterSourceType'
+          #           $ref: '#/components/schemas/IssuesFilterSourceType'
           type: integer
           format: int32
         scanMode:
-#           $ref: '#/components/schemas/IssuesFilterScanMode'
+          #           $ref: '#/components/schemas/IssuesFilterScanMode'
           type: integer
           format: int32
         actualStatus:

@@ -1,13 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob.JobFinishedStatus.SUCCESS;
@@ -105,11 +108,12 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
                 .truststore(truststore)
                 .settings(jsonSettings)
                 .policy(jsonPolicy)
-                .scanType(fullScan ? ScanType.FULL : ScanType.INCREMENTAL)
+                .fullScanMode(fullScan)
                 .build();
         if (!job.init()) return BaseCommand.ExitCode.FAILED.getCode();
         return (SUCCESS == job.execute())
                 ? BaseCommand.ExitCode.SUCCESS.getCode()
                 : BaseCommand.ExitCode.FAILED.getCode();
     }
+
 }

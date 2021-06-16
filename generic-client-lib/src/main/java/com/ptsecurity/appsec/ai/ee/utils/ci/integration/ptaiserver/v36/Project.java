@@ -2,9 +2,11 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
 import com.microsoft.signalr.HubConnection;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.ScanCompleteEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.V36ScanSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
@@ -12,6 +14,7 @@ import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.List;
@@ -39,23 +42,6 @@ public class Project extends Utils {
         if (null == id)
             throw ApiException.raise("PT AI project sources upload failed", new IllegalArgumentException("PT AI project " + name + " not found"));
         callApi(() -> storeApi.uploadSources(id, sources), "PT AI project sources upload failed");
-    }
-
-    /**
-     * @return Scan identifier
-     * @throws ApiException Project not found or scan start failed
-     */
-    public UUID scan() throws ApiException {
-        StartScanModel startScanModel = new StartScanModel();
-        UUID id = searchProject();
-        if (null == id)
-            throw ApiException.raise("PT AI project scan start failed", new IllegalArgumentException("PT AI project " + name + " not found"));
-        startScanModel.setProjectId(id);
-        // TODO: Check if there's more intelligent approach required
-        startScanModel.setScanType(scanType);
-        return callApi(
-                () -> scanApi.apiScanStartPost(startScanModel),
-                "PT AI project scan start failed");
     }
 
     @SneakyThrows

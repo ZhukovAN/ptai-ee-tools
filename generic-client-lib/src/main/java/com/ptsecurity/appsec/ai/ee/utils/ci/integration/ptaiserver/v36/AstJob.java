@@ -1,6 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
@@ -56,6 +58,9 @@ public abstract class AstJob extends Project {
     protected boolean failIfFailed;
     @Setter
     protected boolean failIfUnstable;
+
+    @Setter
+    protected boolean fullScanMode;
 
     @Setter
     protected Reports reports;
@@ -119,7 +124,23 @@ public abstract class AstJob extends Project {
         upload();
 
         // Start scan
-        scanResultId = scan();
+        StartScanModel startScanModel = new StartScanModel();
+        UUID id = searchProject();
+        if (null == id)
+            throw ApiException.raise("PT AI project scan start failed", new IllegalArgumentException("PT AI project " + name + " not found"));
+        startScanModel.setProjectId(id);
+        // Setup scan mode: full or incremental. Default mode is
+        // incremental but it can be overridden by JSON settings or forced from UI
+        ScanType scanType = ScanType.INCREMENTAL;
+        if (null != settings && !settings.isUseIncrementalScan())
+            scanType = ScanType.FULL;
+        if (fullScanMode)
+            scanType = ScanType.FULL;
+        startScanModel.setScanType(scanType);
+        scanResultId = callApi(
+                () -> scanApi.apiScanStartPost(startScanModel),
+                "PT AI project scan start failed");
+
         info("Scan enqueued, PT AI AST result ID is " + scanResultId);
         astOps.scanStartedCallback(this, scanResultId);
 

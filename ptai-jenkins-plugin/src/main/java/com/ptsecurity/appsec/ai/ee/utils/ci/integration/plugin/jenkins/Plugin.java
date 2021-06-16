@@ -221,7 +221,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .buildInfo(buildInfo)
                 .transfers(transfers)
                 .workMode(workMode)
-                .scanType(fullScanMode ? ScanType.FULL : ScanType.INCREMENTAL)
+                .fullScanMode(fullScanMode)
                 .build();
         if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
             job.setCaCertsPem(credentials.getServerCaCertificates());

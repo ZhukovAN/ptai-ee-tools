@@ -74,3 +74,4 @@
 + [ToDo] Refactor data structures. Currently plugins like Jenkins one use data types defined in ptai-rest-api and those types are version-dependent. This may cause a problems with plugins update
 + [Fix] @NotNull changed to Lombok's @NonNull
 + [Fix] Smarter Jenkins plugins version number calculation implemented in build.gradle
++ [Fix] Full / incremental scan mode fixed
