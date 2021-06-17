@@ -1,10 +1,11 @@
 plugins {
+    // https://github.com/jenkinsci/gradle-jpi-plugin
     id 'org.jenkins-ci.jpi'
 }
 
 group = "${rootGroup}.ptai-jenkins-plugin"
 description = 'This plugin used to implement AST using PT Application Inspector'
-version = "${version}-${buildTimestamp}"
+version = "${version}"
 
 ext {
     // Just placeholders for dependencies / test Jenkins
@@ -29,7 +30,7 @@ jenkinsPlugin {
     shortName = 'ptai-jenkins-plugin'
 
     // human-readable name of plugin
-    displayName = 'PT Application Inspector Jenkins plugin'
+    displayName = 'PT Application Inspector Plugin'
 
     // URL for plugin on Jenkins wiki or elsewhere
     url = 'https://www.ptsecurity.com/ww-en/products/ai/'

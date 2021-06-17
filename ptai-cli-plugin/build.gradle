@@ -38,9 +38,6 @@ dependencies {
 jar {
     manifest {
         attributes 'Implementation-Title': 'PT Application Inspector CLI plugin'
-        attributes 'Implementation-Version': findProperty('version')
-        attributes 'Implementation-Build': "${buildTimestamp}"
-        attributes 'Implementation-Vendor-Id': "${rootGroup}"
     }
 }
 

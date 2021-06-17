@@ -72,6 +72,13 @@
 + [ToDo] Check API calls that return file. Those files are created as temp so it is better to explicitly delete them
 + [ToDo] Reorganize test fixtures: place data parser tests to ptai-rest-api
 + [ToDo] Refactor data structures. Currently plugins like Jenkins one use data types defined in ptai-rest-api and those types are version-dependent. This may cause a problems with plugins update
-+ [Fix] @NotNull changed to Lombok's @NonNull
++ [Fix] ```@NotNull``` changed to Lombok's ```@NonNull```
 + [Fix] Smarter Jenkins plugins version number calculation implemented in build.gradle
 + [Fix] Full / incremental scan mode fixed
+### 20210617
++ [Fix] Build timestamp removed from CLI, Jenkins and Teamcity plugins version as it doesn't relate to this. Git commit hash value used instead
++ [Feature] Git hash and branch information added to CLI plugin manifest and shown when it is run with ```--version``` option
++ [Feature] Build metadata added to all jar monifests and to generic-client-lib's build.properties file(s)
++ [Feature] Version number changed to 3.6.2
++ [Feature] Build timestamp format changed to ISO 8601
+

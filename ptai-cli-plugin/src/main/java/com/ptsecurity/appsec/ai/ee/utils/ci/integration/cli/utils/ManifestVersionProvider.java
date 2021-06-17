@@ -22,8 +22,10 @@ public class ManifestVersionProvider implements CommandLine.IVersionProvider {
                             .append(get(attr, "Implementation-Title"))
                             .append(" v.")
                             .append(get(attr, "Implementation-Version"))
-                            .append(" build ")
-                            .append(get(attr, "Implementation-Build")).toString() };
+                            .append("-")
+                            .append(get(attr, "Implementation-Git-Hash"))
+                            .append(" built on ")
+                            .append(get(attr, "Build-Time")).toString() };
                 }
             } catch (IOException ex) {
                 return new String[] { "Unable to read from " + url + ": " + ex };

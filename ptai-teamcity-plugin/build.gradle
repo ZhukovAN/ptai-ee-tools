@@ -1,4 +1,5 @@
 plugins {
+    // https://github.com/rodm/gradle-teamcity-plugin
     id "com.github.rodm.teamcity-common" version "1.4-beta-2" apply false
     id "com.github.rodm.teamcity-agent" version "1.4-beta-2" apply false
     id "com.github.rodm.teamcity-server" version "1.4-beta-2" apply false

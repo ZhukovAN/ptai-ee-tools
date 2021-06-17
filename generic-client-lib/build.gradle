@@ -46,3 +46,14 @@ dependencies {
     // https://mvnrepository.com/artifact/org.tukaani/xz
     testFixturesImplementation 'org.tukaani:xz:1.9'
 }
+
+processResources {
+    def localVersionDetails = [
+            'gitHash' : versionDetails.gitHash,
+            'gitHashFull' : versionDetails.gitHashFull,
+            'branchName' : versionDetails.branchName
+    ]
+    filesMatching("**/build.properties") {
+        expand(localVersionDetails)
+    }
+}

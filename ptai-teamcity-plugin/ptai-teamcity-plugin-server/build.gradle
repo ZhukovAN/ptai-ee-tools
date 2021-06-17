@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.rodm.teamcity-server"
+    id 'com.github.rodm.teamcity-server'
     id 'com.github.rodm.teamcity-environments'
 }
 
@@ -24,13 +24,19 @@ teamcity {
             name = 'ptai-teamcity-plugin'
             displayName = 'PT AI vulnerability analysis'
             archiveName = 'ptai-teamcity-plugin.zip'
-            version = "${project.version}-${buildTimestamp}"
+            version = "${project.version}"
             vendorName = 'Positive Technologies'
             vendorUrl = 'https://www.ptsecurity.com/'
             description = 'Searches vulnerabilities in source code using Positive Technologies Application Inspector'
             email = 'alexey.n.zhukov@gmail.com'
             useSeparateClassloader = true
             allowRuntimeReload = true
+
+            parameters {
+                parameter 'git-hash', "${versionDetails.gitHash}"
+                parameter 'git-hash-full', "${versionDetails.gitHashFull}"
+                parameter 'git-branch', "${versionDetails.branchName}"
+            }
         }
     }
 

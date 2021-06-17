@@ -2,10 +2,12 @@ plugins {
     id 'io.freefair.lombok' version '6.0.0-m2' apply false
     id 'com.github.johnrengelman.shadow' version '5.2.0' apply false
     id 'org.jenkins-ci.jpi' version '0.43.0' apply false
+    id 'com.palantir.git-version' version '0.12.3'
 }
 
 ext {
-    buildTimestamp = "${new Date().format('yyyyMMddHHmm')}"
+    buildTimestamp = "${Instant.now().toString()}"
+    versionDetails = versionDetails()
 }
 
 subprojects {
@@ -42,6 +44,15 @@ subprojects {
 
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked"
+    }
+
+    jar {
+        manifest.attributes['Implementation-Version'] = version
+        manifest.attributes['Build-Time'] = buildTimestamp
+        manifest.attributes['Implementation-Vendor-Id'] = rootGroup
+        manifest.attributes['Implementation-Git-Hash'] = versionDetails.gitHash
+        manifest.attributes['Implementation-Git-Hash-Full'] = versionDetails.gitHashFull
+        manifest.attributes['Implementation-Git-Branch'] = versionDetails.branchName
     }
 
     def integrationTest = tasks.register("integrationTest", Test) {

@@ -31,12 +31,12 @@ public class AstJobTableResults implements Action {
 
     @Override
     public String getIconFileName() {
-        return "document.png";
+        return "plugin/" + Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin").getShortName() + "/24x24.png";
     }
 
     @Override
     public String getDisplayName() {
-        return "PT AI assessment (table)";
+        return "PT AI";
     }
 
     @Override

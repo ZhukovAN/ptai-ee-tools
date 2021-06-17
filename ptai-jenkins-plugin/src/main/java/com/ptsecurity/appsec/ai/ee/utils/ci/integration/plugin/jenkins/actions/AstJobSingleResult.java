@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanR
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.StackedAreaChartDataModel;
 import hudson.model.Action;
 import hudson.model.Run;
+import jenkins.model.Jenkins;
 import jenkins.model.RunAction2;
 import jenkins.tasks.SimpleBuildStep;
 import lombok.Getter;
@@ -25,12 +26,12 @@ public class AstJobSingleResult implements RunAction2 {
 
     @Override
     public String getIconFileName() {
-        return "document.png";
+        return "plugin/" + Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin").getShortName() + "/24x24.png";
     }
 
     @Override
     public String getDisplayName() {
-        return "PT AI single assessment";
+        return "PT AI";
     }
 
     @Override
