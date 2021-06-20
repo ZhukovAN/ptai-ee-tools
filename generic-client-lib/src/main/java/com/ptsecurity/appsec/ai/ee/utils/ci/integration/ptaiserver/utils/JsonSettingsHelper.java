@@ -3,7 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;

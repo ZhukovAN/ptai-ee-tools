@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions;
+package com.ptsecurity.appsec.ai.ee.ptai.server;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -44,7 +44,7 @@ public class ApiException extends RuntimeException {
      * @return True if exception is not an instance of ApiException
      */
     private static boolean isNotApi(@NonNull Exception e) {
-        Class clazz = e.getClass();
+        Class<? extends @NonNull Exception> clazz = e.getClass();
         return !clazz.getCanonicalName().matches(APIEXCEPTION_CLASS_REGEX);
     }
 
@@ -105,3 +105,4 @@ public class ApiException extends RuntimeException {
         return res;
     }
 }
+

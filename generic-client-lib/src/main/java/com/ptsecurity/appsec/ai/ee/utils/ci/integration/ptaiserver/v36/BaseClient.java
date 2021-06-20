@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiHelper;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.auth.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.auth.api.AuthApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.auth.model.AuthScopeType;
@@ -15,11 +17,9 @@ import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanP
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Stage;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.api.ScanAgentApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.api.ScanApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.systemmanagement.api.HealthCheckApi;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.updateserver.api.VersionApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.ApiClientHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.LoggingInterceptor;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.ScanProgressEvent;
@@ -115,14 +115,14 @@ public class BaseClient extends Base {
         if (null == this.jwt) {
             authApi.getApiClient().setApiKey(token);
             authApi.getApiClient().setApiKeyPrefix(null);
-            jwt = callApi(() ->
+            jwt = ApiHelper.callApi(() ->
                     authApi.apiAuthSigninGetWithHttpInfo(AuthScopeType.ACCESSTOKEN),
                     "jwt authentication call failed");
         } else {
             authApi.getApiClient().setApiKey(null);
             authApi.getApiClient().setApiKeyPrefix(null);
             try {
-                jwt = callApi(() -> {
+                jwt = ApiHelper.callApi(() -> {
                             Call call = authApi.apiAuthRefreshTokenGetCall(null);
                             Request request = call.request().newBuilder()
                                     .header("Authorization", "Bearer " + this.jwt.getRefreshToken())
@@ -135,7 +135,7 @@ public class BaseClient extends Base {
             } catch (ApiException e) {
                 authApi.getApiClient().setApiKey(token);
                 authApi.getApiClient().setApiKeyPrefix(null);
-                jwt = callApi(() ->
+                jwt = ApiHelper.callApi(() ->
                         authApi.apiAuthSigninGetWithHttpInfo(AuthScopeType.ACCESSTOKEN),
                         "jwt authentication call failed");
             }
@@ -143,7 +143,7 @@ public class BaseClient extends Base {
 
         final String jwtData = jwt.getData();
 
-        @NonNull JwtResponse res = callApi(() ->
+        @NonNull JwtResponse res = ApiHelper.callApi(() ->
                 new ObjectMapper().readValue(jwtData, JwtResponse.class),
                 "jwt parse failed");
         // JwtResponse's refreshToken field is null after refresh, let's fill it

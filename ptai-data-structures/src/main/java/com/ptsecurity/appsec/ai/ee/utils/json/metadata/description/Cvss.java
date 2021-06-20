@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.json.metadata.description;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@Deprecated
 public class Cvss {
     @JsonProperty("Base")
     protected String base;

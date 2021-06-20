@@ -1,10 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.BaseClient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -58,7 +58,7 @@ public class FileCollector {
 
     public void collect(@NonNull final File dir, @NonNull final File zip) throws ApiException {
         List<FileEntry> fileEntries = collectFiles(dir);
-        BaseClient.callApi(
+        ApiHelper.callApi(
                 () -> packCollectedFiles(zip, fileEntries),
                 "Collected files pack error");
     }
@@ -69,7 +69,7 @@ public class FileCollector {
     }
 
     public static File createTempFile() throws ApiException {
-        return Base.callApi(
+        return ApiHelper.callApi(
                 () -> File.createTempFile("ptai.", ".zip"),
                 "Temp file create error");
     }

@@ -1,7 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssuesModel;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scanresult.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.StackedAreaChartDataModel;
 import hudson.model.Action;
 import hudson.model.Run;
@@ -41,12 +40,7 @@ public class AstJobSingleResult implements RunAction2 {
 
     @Getter
     @Setter
-    protected IssuesModel issues;
-
-    @Getter
-    @Setter
     protected ScanResult scanResult;
-
 
     @Override
     public void onAttached(Run<?, ?> r) {

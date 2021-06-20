@@ -1,16 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiHelper;
+import com.ptsecurity.appsec.ai.ee.ptai.server.api.v36.Converter;
+import com.ptsecurity.appsec.ai.ee.ptai.server.api.v36.IssuesModelJsonHelper;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.BaseIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.IssuesModelHelper;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -18,8 +18,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -35,7 +33,7 @@ class ChartsIT extends BaseIT {
     @SneakyThrows
     public void test() {
         // Prepare date -> issues map
-        List<Triple<Integer, LocalDateTime, IssuesModel>> issuesModelList = new ArrayList<>();
+        List<Pair<Integer, com.ptsecurity.appsec.ai.ee.scanresult.ScanResult>> issuesModelList = new ArrayList<>();
         // Get random scan result
         ScanResult randomScanResult = getRandomScanResult();
         Assertions.assertNotNull(randomScanResult, "Randomly chosen scan result is null");
@@ -44,14 +42,19 @@ class ChartsIT extends BaseIT {
         projectScanResults.sort(Comparator.comparing(ScanResult::getScanDate));
         int counter = 0;
         for (ScanResult scanResult : projectScanResults) {
-            File json = projectsApi.apiProjectsProjectIdScanResultsScanResultIdIssuesGet(scanResult.getProjectId(), scanResult.getId(), null);
-            IssuesModel issues = IssuesModelHelper.parse(new FileInputStream(json));
-            Base.callApi(
-                    () -> json.delete(),
-                    "Temporal file " + json.getPath() + " delete failed", true);
+            ScanResult scanResultV36 = ApiHelper.callApi(
+                    () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdGet(scanResult.getProjectId(), scanResult.getId()),
+                    "Get project scan result failed");
+            V36ScanSettings scanSettingsV36 = ApiHelper.callApi(
+                    () -> projectsApi.apiProjectsProjectIdScanSettingsScanSettingsIdGet(scanResult.getProjectId(), scanResult.getSettingsId()),
+                    "Get project scan settings failed");
 
-            LocalDateTime dateTime = LocalDateTime.parse(scanResult.getScanDate(), DateTimeFormatter.ISO_DATE_TIME);
-            issuesModelList.add(new ImmutableTriple<>(counter++, dateTime, issues));
+            File json = projectsApi.apiProjectsProjectIdScanResultsScanResultIdIssuesGet(scanResult.getProjectId(), scanResult.getId(), null);
+            IssuesModel issuesModelV36 = IssuesModelJsonHelper.parse(new FileInputStream(json));
+            Base.callApi(
+                    json::delete,
+                    "Temporal file " + json.getPath() + " delete failed", true);
+            issuesModelList.add(new ImmutablePair<>(counter++, Converter.convert(scanResultV36, issuesModelV36, scanSettingsV36)));
         }
 
         StackedAreaChartDataModel model = StackedAreaChartDataModel.create(issuesModelList);

@@ -1,10 +1,14 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiHelper;
+import com.ptsecurity.appsec.ai.ee.ptai.server.api.v36.Converter;
+import com.ptsecurity.appsec.ai.ee.ptai.server.api.v36.IssuesModelJsonHelper;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations.AstOperations;
@@ -18,15 +22,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.nio.file.Files;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
-import static com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Stage.*;
+import static com.ptsecurity.appsec.ai.ee.scanresult.ScanResult.State.*;
+import static com.ptsecurity.appsec.ai.ee.utils.json.Policy.PolicyState.*;
 
 @Slf4j
 @Getter
@@ -137,7 +140,7 @@ public abstract class AstJob extends Project {
         if (fullScanMode)
             scanType = ScanType.FULL;
         startScanModel.setScanType(scanType);
-        scanResultId = callApi(
+        scanResultId = ApiHelper.callApi(
                 () -> scanApi.apiScanStartPost(startScanModel),
                 "PT AI project scan start failed");
 
@@ -146,10 +149,10 @@ public abstract class AstJob extends Project {
 
         // Save result URL to artifacts
         final UUID finalProjectId = projectId;
-        final String url = callApi(
+        final String url = ApiHelper.callApi(
                 () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdGetCall(finalProjectId, scanResultId, null).request().url().toString(),
                 "Failed to get AST result URL");
-        callApi(
+        ApiHelper.callApi(
                 () -> fileOps.saveArtifact("rest.url", url.getBytes()),
                 "AST result REST API URL save failed");
         info("AST result REST API URL: " + url);
@@ -163,34 +166,44 @@ public abstract class AstJob extends Project {
         }
 
         // Wait for AST to complete and process results
-        ScanResult state = waitForComplete(scanResultId);
+        waitForComplete(scanResultId);
+        ScanResult scanResultV36 = ApiHelper.callApi(
+                () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdGet(finalProjectId, scanResultId),
+                "Get project scan result failed");
+        File issuesModelFile = getJsonResult(finalProjectId, scanResultId);
+        IssuesModel issuesModelV36 = Base.callApi(
+                () -> IssuesModelJsonHelper.parse(new FileInputStream(issuesModelFile)),
+                "Issues model file parse failed");
+        Base.callApi(
+                issuesModelFile::delete,
+                "Temporal file " + issuesModelFile.getPath() + " delete failed", true);
+        V36ScanSettings scanSettingsV36 = ApiHelper.callApi(
+                () -> projectsApi.apiProjectsProjectIdScanSettingsScanSettingsIdGet(finalProjectId, scanResultV36.getSettingsId()),
+                "Get project scan settings failed");
+        com.ptsecurity.appsec.ai.ee.scanresult.ScanResult scanResult = Converter.convert(scanResultV36, issuesModelV36, scanSettingsV36);
+
         // TODO: Move scanCompleteCallback to AstJob and its descendants
-        astOps.scanCompleteCallback(this, scanResultId, state);
+        astOps.scanCompleteCallback(this, scanResult);
 
-        Stage stage = Optional.of(state)
-                .map(ScanResult::getProgress)
-                .map(ScanProgress::getStage)
-                .orElseThrow(() -> ApiException.raise(
-                        "PT AI server API error",
-                        new NullPointerException("Failed to get finished job scan progress")));
-        fine("Resulting stage is " + stage);
-        fine("Resulting statistics is " + state.getStatistic());
+        com.ptsecurity.appsec.ai.ee.scanresult.ScanResult.State state = scanResult.getState();
+        fine("Resulting state is " + state);
+        fine("Resulting statistics is " + scanResult.getStatistic());
 
-        if (!EnumSet.of(DONE, ABORTED, FAILED).contains(stage))
+        if (!EnumSet.of(DONE, ABORTED, FAILED).contains(state))
             throw ApiException.raise(
-                    "Unexpected finished scan result stage",
-                    new IllegalArgumentException(String.valueOf(stage)));
+                    "Unexpected finished scan result state",
+                    new IllegalArgumentException(String.valueOf(state)));
 
-        if (FAILED.equals(stage)) {
+        if (FAILED.equals(state)) {
             info(Resources.i18n_ast_result_status_failed_server());
             return JobFinishedStatus.FAILED;
         }
 
-        if (DONE.equals(stage) || ABORTED.equals(stage))
+        if (DONE.equals(state) || ABORTED.equals(state))
             // Save user defined reports if scan was started ever
             if (null != reports) generateReports(projectId, scanResultId, reports);
 
-        if (ABORTED.equals(stage)) {
+        if (ABORTED.equals(state)) {
             info(Resources.i18n_ast_result_status_interrupted());
             return JobFinishedStatus.INTERRUPTED;
         }
@@ -199,21 +212,19 @@ public abstract class AstJob extends Project {
         List<ScanError> errors = getScanErrors(projectId, scanResultId);
 
         // OK, scan complete, let's check for policy violations
-        PolicyState policyState = Optional.of(state)
-                .map(ScanResult::getStatistic)
-                .map(ScanResultStatistic::getPolicyState)
+        Policy.PolicyState policyState = Optional.of(scanResult)
+                .map(com.ptsecurity.appsec.ai.ee.scanresult.ScanResult::getPolicyState)
                 .orElseThrow(() -> ApiException.raise(
                         "PT AI server API error",
                         new NullPointerException("Failed to get finished job policy assessment state")));
 
-        // TODO: Swap REJECTED/CONFIRMED states when https://jira.ptsecurity.com/browse/AI-4866 will be fixed
-        if (PolicyState.CONFIRMED.equals(policyState)) {
+        if (REJECTED.equals(policyState)) {
             // AST policy assessment failed
             if (failIfFailed) {
                 info(Resources.i18n_ast_result_status_failed_policy());
                 return JobFinishedStatus.FAILED;
             }
-        } else if (PolicyState.REJECTED.equals(policyState)) {
+        } else if (Policy.PolicyState.CONFIRMED.equals(policyState)) {
             // AST policy assessment OK, check errors / warnings
             if (failIfUnstable && !errors.isEmpty()) {
                 info(Resources.i18n_ast_result_status_failed_unstable());
@@ -286,7 +297,7 @@ public abstract class AstJob extends Project {
 
         final Reports checkedReports = reports.validate().check(this);
 
-        UUID dummyTemplate = getDummyReportTemplate(Reports.Locale.EN).getId();
+        UUID dummyTemplate = ApiHelper.callApi(() -> Objects.requireNonNull(getDummyReportTemplate(Reports.Locale.EN).getId()), "Dummy report ID is null");
         final AtomicReference<UUID> finalProjectId = new AtomicReference<>(projectId);
 
         Stream.concat(checkedReports.getData().stream(), checkedReports.getReport().stream())
@@ -306,11 +317,11 @@ public abstract class AstJob extends Project {
                                     dummyTemplate, data.getLocale(),
                                     data.getFormat().getValue(), data.getFilters());
                         } else return;
-                        byte[] data = callApi(
+                        byte[] data = ApiHelper.callApi(
                                 () -> Files.readAllBytes(reportFile.toPath()),
                                 "Report data read failed");
                         // Method generateReport uses temporal file so we do not need to remove it manually
-                        callApi(
+                        ApiHelper.callApi(
                                 () -> fileOps.saveArtifact(r.getFileName(), data),
                                 "Report file save failed");
                     } catch (ApiException e) {
@@ -321,11 +332,11 @@ public abstract class AstJob extends Project {
             // Save raw JSON report
             File json = getJsonResult(projectId, scanResultId);
             for (Reports.RawData raw : checkedReports.getRaw())
-                callApi(
+                ApiHelper.callApi(
                         () -> fileOps.saveArtifact(raw.getFileName(), json),
                         "Raw JSON result save failed");
-            callApi(
-                    () -> json.delete(),
+            ApiHelper.callApi(
+                    json::delete,
                     "Temporal file " + json.getPath() + " delete failed", true);
         }
     }

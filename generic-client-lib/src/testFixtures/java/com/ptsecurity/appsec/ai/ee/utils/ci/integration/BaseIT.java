@@ -1,20 +1,24 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.ptai.server.api.v36.Converter;
+import com.ptsecurity.appsec.ai.ee.ptai.server.api.v36.IssuesModelJsonHelper;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.api.ProjectsApi;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.AuthScopeType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Stage;
+import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.BaseClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -76,4 +80,72 @@ public class BaseIT extends BaseTest {
         return res.get(new Random().nextInt(res.size()));
     }
 
+    @SneakyThrows
+    protected ScanResult getLastScanResult(@NonNull final String projectName) {
+        List<com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project> projects = projectsApi.apiProjectsGet(true);
+        com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project project = projects.stream().filter(p -> projectName.equalsIgnoreCase(p.getName())).findAny().orElse(null);
+        if (null == project) return null;
+        List<ScanResult> projectScanResults = projectsApi.apiProjectsProjectIdScanResultsGet(project.getId(), AuthScopeType.ACCESSTOKEN);
+        if (null == projectScanResults || projectScanResults.isEmpty()) return null;
+        projectScanResults.sort(Comparator.comparing(ScanResult::getScanDate).reversed());
+        return projectScanResults.get(0);
+    }
+
+    @SneakyThrows
+    protected IssuesModel getLastScanResultIssues(@NonNull final String projectName) {
+        ScanResult scanResult = getLastScanResult(projectName);
+        if (null == scanResult) return null;
+        File json = projectsApi.apiProjectsProjectIdScanResultsScanResultIdIssuesGet(scanResult.getProjectId(), scanResult.getId(), null);
+        IssuesModel issues = IssuesModelJsonHelper.parse(new FileInputStream(json));
+        Base.callApi(
+                json::delete,
+                "Temporal file " + json.getPath() + " delete failed", true);
+        return issues;
+    }
+
+    @SneakyThrows
+    protected V36ScanSettings getLastScanSettings(@NonNull final String projectName) {
+        ScanResult scanResult = getLastScanResult(projectName);
+        if (null == scanResult) return null;
+        V36ScanSettings scanSettings = projectsApi.apiProjectsProjectIdScanSettingsScanSettingsIdGet(scanResult.getProjectId(), scanResult.getSettingsId());
+        return scanSettings;
+    }
+
+    @SneakyThrows
+    public void saveScanResults(@NonNull final String projectName) {
+        ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+
+        ScanResult scanResult = getLastScanResult(projectName);
+        IssuesModel issuesModel = getLastScanResultIssues(projectName);
+        V36ScanSettings scanSettings = getLastScanSettings(projectName);
+
+        com.ptsecurity.appsec.ai.ee.scanresult.ScanResult result = Converter.convert(scanResult, issuesModel, scanSettings);
+
+        try (
+                TempFile outputScanResult = TempFile.createFile(TEMP_FOLDER);
+                TempFile outputIssuesModel = TempFile.createFile(TEMP_FOLDER);
+                TempFile outputScanSettings = TempFile.createFile(TEMP_FOLDER);
+                TempFile outputResult = TempFile.createFile(TEMP_FOLDER)) {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(outputScanResult.getFile().toFile(), scanResult);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(outputIssuesModel.getFile().toFile(), issuesModel);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(outputScanSettings.getFile().toFile(), scanSettings);
+            mapper.writerWithDefaultPrettyPrinter().writeValue(outputResult.getFile().toFile(), result);
+        }
+    }
+
+    @Test
+    @DisplayName("Save PHP-SMOKE project scan results to temporal file")
+    @Tag("integration")
+    @SneakyThrows
+    public void savePhpSmokeScanResults() {
+        saveScanResults("php-smoke");
+    }
+
+    @Test
+    @DisplayName("Save OWASP Bricks project scan results to temporal file")
+    @Tag("integration")
+    @SneakyThrows
+    public void saveOwaspBricksScanResults() {
+        saveScanResults("bricks");
+    }
 }

@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.json.metadata.issue;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ptsecurity.appsec.ai.ee.utils.json.metadata.description.Cvss;
 
+@Deprecated
 public class FingerprintIssueMetadata extends GenericIssueMetadata {
     @JsonProperty("Component")
     protected String component;

@@ -1,6 +1,7 @@
 # PT Application Inspector CI/CD plugins bundle
 Set of CI/CD plugins that allow to implement application security testing (AST) in build pipelines using Positive Technologies Applivation Inspector tool ([link](https://www.ptsecurity.com/ww-en/products/ai/)).
 ## Build plugins
+Starting with plugins version 3.6.2 Gradle build script use com.palantir.git-version plugin to include SCM commit hash to manifests. That means you need use ```git clone``` command to download sources.  
 ### Build plugins using Gradle
 To build plugins bundle using Gradle you need to execute ```build``` Gradle task:
 ```

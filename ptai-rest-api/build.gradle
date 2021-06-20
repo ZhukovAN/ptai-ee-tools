@@ -25,6 +25,19 @@ dependencies {
     api 'com.google.code.findbugs:jsr305:3.0.2'
     // https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    // Need this to assign metadata field values to issues. We need to use
+    // reflection as metadata type doesn't defined by issue type: taint-engine-generated
+    // issue may be marked as vulnerability, but its metadata will be weakness type
+    // https://mvnrepository.com/artifact/org.jooq/joor-java-8
+    implementation 'org.jooq:joor-java-8:0.9.13'
+    // Need this as a source for human-readable HTTP status codes descriptions
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpcore
+    implementation 'org.apache.httpcomponents:httpcore:4.4.14'
+    // Handy reflection library
+    // https://mvnrepository.com/artifact/org.jooq/joor-java-8
+    implementation 'org.jooq:joor-java-8:0.9.13'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
 }
 
 jar {

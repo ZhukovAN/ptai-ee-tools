@@ -1,14 +1,15 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.operations;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.server.api.v36.IssuesModelJsonHelper;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssuesModel;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scanresult.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobSingleResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.JenkinsAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.RemoteFileUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.IssuesModelHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
@@ -64,24 +65,13 @@ public class JenkinsAstOperations implements AstOperations {
     public void scanStartedCallback(@NonNull final Project project, @NonNull UUID scanResultId) throws ApiException {
     }
 
-    public void scanCompleteCallback(@NonNull final Project project, @NonNull final UUID scanResultId, @NonNull ScanResult scanResult) throws ApiException {
+    public void scanCompleteCallback(@NonNull final Project project, @NonNull final ScanResult scanResult) throws ApiException {
         Run<?, ?> run = owner.getRun();
         AstJobSingleResult astJobSingleResult = new AstJobSingleResult(run);
 
-        File issuesJson = project.getJsonResult(UUID.fromString(project.getId()), scanResultId);
-        IssuesModel issuesModel = Base.callApi(
-                () -> IssuesModelHelper.parse(new FileInputStream(issuesJson)),
-                "Issues model file parse failed");
-        Base.callApi(
-                () -> issuesJson.delete(),
-                "Temporal file " + issuesJson.getPath() + " delete failed", true);
-
-
-        astJobSingleResult.setIssues(issuesModel);
         astJobSingleResult.setScanResult(scanResult);
 
         run.addAction(astJobSingleResult);
-        // run.addAction(new AstJobTableResults());
     }
 
     public String replaceMacro(@NonNull String value) {

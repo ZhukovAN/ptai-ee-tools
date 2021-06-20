@@ -8,6 +8,24 @@ import lombok.Getter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Policy {
+    /**
+     * Available AST policy assessment results
+     */
+    public enum PolicyState {
+        /**
+         * No policy assessment done
+         */
+        NONE,
+        /**
+         * AST results violate policy
+         */
+        REJECTED,
+        /**
+         * AST results fit policy
+         */
+        CONFIRMED
+    }
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Scopes {
         @Getter
@@ -27,5 +45,4 @@ public class Policy {
     protected int countToActualize;
     @JsonProperty("Scopes")
     protected Scopes[] scopes;
-
 }

@@ -1,11 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.operations;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.scanresult.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils.GracefulShutdown;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations.AstOperations;
@@ -51,7 +51,7 @@ public class LocalAstOperations implements AstOperations {
         Runtime.getRuntime().addShutdownHook(shutdown);
     }
 
-    public void scanCompleteCallback(@NonNull final Project project, @NonNull final UUID scanResultId, @NonNull ScanResult state)  {
+    public void scanCompleteCallback(@NonNull final Project project, @NonNull final ScanResult scanResult)  {
         if (null != shutdown) shutdown.setStopped(true);
     }
 

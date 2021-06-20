@@ -1,11 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ReportFormatType;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ReportTemplateModel;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.BaseIT;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

@@ -1,0 +1,68 @@
+{
+  "id" : "16187e8c-a3c2-4cde-aca0-c50b2e06327e",
+  "projectId" : "0dd14fc1-dcfc-4081-989a-b6b5afd31317",
+  "settingsId" : "4fa4ecfd-4376-4142-a715-42cc20cebb58",
+  "version" : 1,
+  "scanDate" : "2021-06-17T20:21:13.916051Z",
+  "progress" : {
+    "stage" : "DONE",
+    "subStage" : null,
+    "value" : 0
+  },
+  "statistic" : {
+    "highLevelVulnerabilityCount" : 0,
+    "mediumLevelVulnerabilityCount" : 1,
+    "lowLevelVulnerabilityCount" : 0,
+    "potentialVulnerabilityCount" : 0,
+    "totalBlackBoxVulnerabilityCount" : 0,
+    "totalStaticVulnerabilityCount" : 1,
+    "totalVulnerabilityCount" : 1,
+    "totalFileCount" : 1,
+    "totalUrlCount" : 0,
+    "scannedUrlCount" : 0,
+    "scannedFileCount" : 1,
+    "scanDuration" : "00:00:05.0793006",
+    "state" : "Incremental",
+    "policyState" : "NONE"
+  },
+  "scanEnvironment" : {
+    "infrastructureVersion" : {
+      "type" : "Infrastructure",
+      "version" : "0.0.0.0"
+    },
+    "componentVersions" : [ {
+      "type" : "ApplicationInspector",
+      "version" : "3.6.4.1406"
+    }, {
+      "type" : "AI.UX",
+      "version" : "3.6.4.5302"
+    } ],
+    "installatorVersion" : {
+      "type" : "ApplicationInspector",
+      "version" : "3.6.4.1406"
+    },
+    "clientVersion" : {
+      "type" : "AI.UX",
+      "version" : "3.6.4.5302"
+    },
+    "yaraHash" : "CuvDYsgcvnRD92a77kAllAI85UzzmGYPCJqbMYrSGIY=",
+    "sastHashes" : {
+      "none" : null,
+      "binary" : null,
+      "fingerprint" : null,
+      "java" : null,
+      "csharp" : null,
+      "pmTaint" : null,
+      "blackBox" : null,
+      "javaScript" : null,
+      "dependencyCheck" : null,
+      "configuration" : null,
+      "php" : null
+    },
+    "extraOptions" : {
+      "fullRescanOnNewFilesAdded" : false
+    }
+  },
+  "previousScanResultId" : "516568fb-5938-44e1-b801-1d17ed24b5f0",
+  "isRunFromQueue" : false
+}

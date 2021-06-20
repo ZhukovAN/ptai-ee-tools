@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.scanresult.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
 import lombok.NonNull;
 
@@ -41,7 +41,7 @@ public interface AstOperations {
      * termination as there's no need to gracefully stop AST if descendant
      * is terminated using i.e. Ctrl-C
      */
-    void scanCompleteCallback(@NonNull final Project project, @NonNull final UUID scanResultId, @NonNull ScanResult state) throws ApiException;
+    void scanCompleteCallback(@NonNull final Project project, @NonNull final ScanResult scanResult) throws ApiException;
 
     /**
      * Method replaces macro expressions like ${FOO} in the input text using dictionary. AstJob's

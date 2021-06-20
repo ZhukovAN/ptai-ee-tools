@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.json.metadata.issue;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@Deprecated
 public class PatternMatchingIssueMetadata extends GenericIssueMetadata {
     @JsonProperty("OwaspId")
     protected String OwaspId;

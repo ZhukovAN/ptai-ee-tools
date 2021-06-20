@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class Metadata {
     public static Map<String, GenericIssueMetadata> ISSUES;
     public static Map<String, Description> DESCRIPTIONS;

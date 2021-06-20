@@ -2602,20 +2602,34 @@ components:
           type: integer
           format: int32
       additionalProperties: false
+    # V.3.6: Had to add x-enum-varnames as API returns repositoryType as an integer value
     RepositoryType:
       enum:
+        - 0
+        - 1
+        - 2
+      x-enum-varnames:
         - None
         - Git
         - TFS
-      type: string
+      type: integer
+      # type: string
+    # V.3.6: Had to add x-enum-varnames as API returns sourceControlCredentialsType as an integer value
     SourceControlCredentalsType:
       enum:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+      x-enum-varnames:
         - None
         - Anonymous
         - Password
         - AuthenticationToken
         - SshKeys
-      type: string
+      # type: string
+      type: integer
     SourceControlSettings:
       type: object
       properties:
@@ -4306,8 +4320,17 @@ components:
         argument:
           $ref: '#/components/schemas/IRvpExpression'
       additionalProperties: false
+    ## V.3.6 x-enum-varnames added
     IssueType:
       enum:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+      x-enum-varnames:
         - Unknown
         - Vulnerability
         - Weakness
@@ -4315,15 +4338,22 @@ components:
         - Fingerprint
         - BlackBox
         - YaraMatch
-      type: string
+      type: integer
+    # V.3.6 x-enum-varnames added
     IssueApprovalState:
       enum:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+      x-enum-varnames:
         - None
         - Approval
         - Discard
         - NotExist
         - AutoApproval
-      type: string
+      type: integer
     TrackerType:
       enum:
         - Unknown
@@ -4359,54 +4389,349 @@ components:
         - High
       type: integer
     IssueBase:
+      # V.3.6 Discriminator added to allow parsing of specific vulnerabilities like fingerprint, configuration etc.
+      discriminator:
+        mapping:
+          Vulnerability: '#/components/schemas/V36VulnerabilityIssue'
+          Weakness: '#/components/schemas/V36WeaknessIssue'
+          Fingerprint: '#/components/schemas/V36FingerprintIssue'
+          Unknown: '#/components/schemas/V36UnknownIssue'
+          Configuration: '#/components/schemas/V36ConfigurationIssue'
+          BlackBox: '#/components/schemas/V36BlackBoxIssue'
+          YaraMatch: '#/components/schemas/V36YaraMatchIssue'
+        propertyName: Class
+      required:
+        - Class
       type: object
+      # V.3.6 All property names first letter made uppercase (except Class)
       properties:
-        rvpPvo:
+        RvpPvo:
           $ref: '#/components/schemas/RvpPvo'
         Class:
-          $ref: '#/components/schemas/IssueType'
-        internalId:
+          # OpenAPI generator doesn't support enum discriminator type so we
+          # need to replace this with string
+          # $ref: '#/components/schemas/IssueType'
+          type: string
+          nullable: false
+        InternalId:
           type: string
           format: uuid
-        id:
+        Id:
           type: string
           nullable: true
-        isOldInScanResultId:
+        IsOldInScanResultId:
           type: string
           format: uuid
           nullable: true
-        isFavorite:
+        IsFavorite:
           type: boolean
-        groupId:
+        GroupId:
           type: string
           nullable: true
-        approvalState:
+        ApprovalState:
           $ref: '#/components/schemas/IssueApprovalState'
-        isNewInScanResultId:
+        IsNewInScanResultId:
           type: string
           format: uuid
           nullable: true
-        scanResultId:
+        ScanResultId:
           type: string
           format: uuid
-        isSuspected:
+          nullable: false
+        IsSuspected:
           type: boolean
-        isSuppressed:
+        IsSuppressed:
           type: boolean
-        type:
+        Type:
           type: string
           nullable: true
-        linkedTickets:
+        LinkedTickets:
           type: array
           items:
             $ref: '#/components/schemas/TicketLink'
           nullable: true
-        counter:
+        Counter:
           type: integer
           format: int64
-        level:
+        Level:
           $ref: '#/components/schemas/IssueLevel'
       additionalProperties: false
+    # V.3.6: Had to add V36BestPlaceToFix class that is used in vulnerabilities like fingerprint, abstract interpretation, etc
+    V36BestPlaceToFix:
+      type: object
+      properties:
+        Type:
+          type: object
+          nullable: true
+        Place:
+          $ref: '#/components/schemas/V36Place'
+          nullable: false
+    # V.3.6: Had to add V36Place class that is used as taint data entry attribute, BPF etc
+    V36Place:
+      type: object
+      properties:
+        File:
+          type: string
+          nullable: false
+        Value:
+          type: string
+          nullable: true
+        EndLine:
+          type: integer
+          nullable: false
+        BeginLine:
+          type: integer
+          nullable: false
+        EndColumn:
+          type: integer
+          nullable: false
+        BeginColumn:
+          type: integer
+          nullable: false
+    V36ExploitParameter:
+      type: object
+      properties:
+        Name:
+          type: string
+          nullable: false
+        Value:
+          type: string
+          nullable: false
+        Source:
+          type: string
+          nullable: false
+        Payload:
+          type: string
+          nullable: true
+        Dependency:
+          type: string
+          nullable: false
+        Vulnerable:
+          type: boolean
+          nullable: false
+    V36Exploit:
+      type: object
+      properties:
+        Url:
+          type: string
+          nullable: false
+        Text:
+          type: string
+          nullable: true
+        Type:
+          type: string
+          nullable: false
+        Parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/V36ExploitParameter'
+          nullable: true
+    # V.3.6: Had to add IssueBase descendant classes to support specific fields like taint data entries etc.
+    V36FingerprintIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            ComponentVersion:
+              type: string
+              nullable: false
+            ComponentName:
+              type: string
+              nullable: false
+            BestPlaceToFix:
+              $ref: '#/components/schemas/V36BestPlaceToFix'
+            FingerprintIds:
+              type: array
+              items:
+                type: string
+              nullable: false
+            RelativeFilePath:
+              type: string
+              nullable: true
+            VulnerableCode:
+              type: string
+              nullable: true
+            VulnerableExpression:
+              $ref: '#/components/schemas/V36Place'
+    V36VulnerabilityIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            BestPlaceToFix:
+              $ref: '#/components/schemas/V36BestPlaceToFix'
+            # V.3.6 Always null
+            RelativeFilePath:
+              type: string
+              nullable: true
+            # V.3.6 Always null
+            VisualizationInfo:
+              type: object
+              nullable: true
+            # V.3.6 Always null
+            PrimordialExploit:
+              type: object
+              nullable: true
+            AdditionalConditions:
+              type: string
+              nullable: true
+            # V.3.6 Always null
+            VulnerableCode:
+              type: string
+              nullable: true
+            AutocheckExploit:
+              $ref: '#/components/schemas/V36Exploit'
+            Exploit:
+              $ref: '#/components/schemas/V36Exploit'
+            # V.3.6 Always null
+            AfXml:
+              type: object
+              nullable: true
+            # V.3.6 Always null
+            GraphId:
+              type: object
+              nullable: true
+            Function:
+              type: string
+              nullable: true
+            # V.3.6 Always null
+            StackTrace:
+              type: object
+              nullable: true
+            IsSecondOrder:
+              type: boolean
+              nullable: false
+            EntryPoint:
+              $ref: '#/components/schemas/V36Place'
+            VulnerableExpression:
+              $ref: '#/components/schemas/V36Place'
+            TaintDataEntries:
+              type: array
+              items:
+                $ref: '#/components/schemas/V36Place'
+            DataTrace:
+              type: array
+              items:
+                $ref: '#/components/schemas/V36Place'
+            ScanMode:
+              $ref: '#/components/schemas/V36VulnerabilityIssueScanMode'
+    V36WeaknessIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            VulnerableExpression:
+              $ref: '#/components/schemas/V36Place'
+            # V.3.6 Always null
+            BestPlaceToFix:
+              $ref: '#/components/schemas/V36BestPlaceToFix'
+            # V.3.6 Always null
+            VulnerableCode:
+              type: object
+              nullable: true
+            # V.3.6 Always null
+            RelativeFilePath:
+              type: object
+              nullable: true
+    V36UnknownIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+    V36ConfigurationIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            VulnerableExpression:
+              $ref: '#/components/schemas/V36Place'
+            RecommendedValue:
+              type: string
+              nullable: false
+            ExistingValue:
+              type: string
+              nullable: false
+            Function:
+              description: 'Setting name'
+              type: string
+              nullable: true
+            # V.3.6 Always null
+            BestPlaceToFix:
+              $ref: '#/components/schemas/V36BestPlaceToFix'
+            # V.3.6 Always null
+            VulnerableCode:
+              type: object
+              nullable: true
+            # V.3.6 Always null
+            RelativeFilePath:
+              type: object
+              nullable: true
+    V36BlackBoxIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            Items:
+              type: array
+              items:
+                $ref: '#/components/schemas/V36BlackBoxItem'
+            Request:
+              $ref: '#/components/schemas/V36Exploit'
+            Response:
+              $ref: '#/components/schemas/V36Exploit'
+            PrimordialRequest:
+              $ref: '#/components/schemas/V36Exploit'
+            HttpResponse:
+              type: string
+              nullable: true
+            SandId:
+              type: string
+              nullable: false
+            CustomId:
+              type: string
+              nullable: false
+            Line:
+              type: integer
+              nullable: false
+            OriginalCompressedMessage:
+              type: string
+              nullable: false
+            ScannedUrl:
+              type: string
+              nullable: false
+            SignificantString:
+              type: string
+              nullable: true
+            Source:
+              type: string
+              nullable: true
+            # V.3.6 Always null
+            Title:
+              type: object
+              nullable: true
+            # V.3.6 Always null
+            MarkerPosition:
+              type: object
+              nullable: true
+    V36YaraMatchIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+    V36BlackBoxItem:
+      type: object
+      properties:
+        Key:
+          type: string
+          nullable: false
+        IsUrl:
+          type: boolean
+          nullable: false
+        Value:
+          type: string
+          nullable: false
+        LocalizeValue:
+          type: boolean
+          nullable: false
+        UseLocalization:
+          type: boolean
+          nullable: false
     DescriptionBaseValue:
       type: object
       properties:
@@ -4433,30 +4758,170 @@ components:
           $ref: '#/components/schemas/DescriptionBaseValue'
       additionalProperties: false
     IssueBaseMetadata:
+      # V.3.6 Discriminator added to allow parsing of specific metadatas like fingerprint, configuration etc.
+      discriminator:
+        mapping:
+          1: '#/components/schemas/V36VulnerabilityIssueMetadata'
+          2: '#/components/schemas/V36WeaknessIssueMetadata'
+          4: '#/components/schemas/V36FingerprintIssueMetadata'
+          0: '#/components/schemas/V36UnknownIssueMetadata'
+          3: '#/components/schemas/V36ConfigurationIssueMetadata'
+          5: '#/components/schemas/V36BlackBoxIssueMetadata'
+          6: '#/components/schemas/V36YaraMatchIssueMetadata'
+        propertyName: IssueType
+      required:
+        - IssueType
       type: object
       properties:
-        key:
+        # V.3.6 First letter made uppercase
+        Key:
           type: string
           nullable: true
-        issueType:
-          $ref: '#/components/schemas/IssueType'
-        level:
+        # V.3.6 First letter made uppercase
+        IssueType:
+          # OpenAPI generator doesn't support enum discriminator type so we
+          # need to replace this with string
+          # $ref: '#/components/schemas/IssueType'
+          type: string
+          nullable: false
+        # V.3.6 First letter made uppercase
+        Level:
           $ref: '#/components/schemas/IssueLevel'
       additionalProperties: false
+    # V.3.6: Need missing CVSS type for SCA analysis metadata
+    V36CvssMetadata:
+      type: object
+      properties:
+        Base:
+          type: string
+          nullable: true
+        BaseScore:
+          type: string
+          nullable: true
+        Temp:
+          type: string
+          nullable: true
+        TempScore:
+          type: string
+          nullable: true
+      additionalProperties: false
+    # V.3.6: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V36FingerprintIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+        - type: object
+          properties:
+            ComponentName:
+              type: string
+              nullable: false
+            CveId:
+              type: string
+              nullable: true
+            CweId:
+              type: string
+              nullable: true
+            Cvss:
+              $ref: '#/components/schemas/V36CvssMetadata'
+    # V.3.6: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V36ConfigurationIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+        - type: object
+          properties:
+            CweId:
+              type: string
+              nullable: true
+            OwaspId:
+              type: string
+              nullable: true
+            PciId:
+              type: string
+              nullable: true
+            Nist:
+              type: string
+              nullable: true
+    # V.3.6: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V36YaraMatchIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+    # V.3.6: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V36WeaknessIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+        - type: object
+          properties:
+            CweId:
+              type: string
+              nullable: true
+            OwaspId:
+              type: string
+              nullable: true
+            PciId:
+              type: string
+              nullable: true
+            Nist:
+              type: string
+              nullable: true
+    # V.3.6: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V36BlackBoxIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+        - type: object
+          properties:
+            CweId:
+              type: string
+              nullable: true
+            OwaspId:
+              type: string
+              nullable: true
+            PciId:
+              type: string
+              nullable: true
+            Nist:
+              type: string
+              nullable: true
+    # V.3.6: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V36VulnerabilityIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+        - type: object
+          properties:
+            CweId:
+              type: string
+              nullable: true
+            OwaspId:
+              type: string
+              nullable: true
+            PciId:
+              type: string
+              nullable: true
+            Nist:
+              type: string
+              nullable: true
+    # V.3.6: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V36UnknownIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
     IssuesModel:
       type: object
       properties:
-        issues:
+        # V.3.6 First letter made uppercase
+        # issues:
+        Issues:
           type: array
           items:
             $ref: '#/components/schemas/IssueBase'
           nullable: true
-        descriptions:
+        # V.3.6 First letter made uppercase
+        # descriptions:
+        Descriptions:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/IssueDescriptionModel'
           nullable: true
-        metadatas:
+        # V.3.6 First letter made uppercase
+        # metadatas:
+        Metadatas:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/IssueBaseMetadata'
@@ -4850,6 +5315,16 @@ components:
         - BlackBox
         - All
       type: integer
+    # V.3.6 Can't use IssuesFilterScanMode as a ScanMode field value. The reason is that
+    # IssueBase of vulnerability type uses 0 as "from entry point" and 1 as "from public and protected"
+    V36VulnerabilityIssueScanMode:
+      enum:
+        - 0
+        - 1
+      x-enum-varnames:
+        - FromEntryPoint
+        - FromPublicProtected
+      type: integer
     # Enum values are defined as integer numbers as now we do support bit masks
     IssuesFilterScanMode:
       enum:
@@ -4897,27 +5372,27 @@ components:
       type: object
       properties:
         issueLevel:
-          #           $ref: '#/components/schemas/IssuesFilterLevel'
+          # $ref: '#/components/schemas/IssuesFilterLevel'
           type: integer
           format: int32
         confirmationStatus:
-          #           $ref: '#/components/schemas/IssuesFilterConfirmationStatus'
+          # $ref: '#/components/schemas/IssuesFilterConfirmationStatus'
           type: integer
           format: int32
         exploitationCondition:
-          #           $ref: '#/components/schemas/IssuesFilterExploitationCondition'
+          # $ref: '#/components/schemas/IssuesFilterExploitationCondition'
           type: integer
           format: int32
         suppressStatus:
-          #           $ref: '#/components/schemas/IssuesFilterSuppressStatus'
+          # $ref: '#/components/schemas/IssuesFilterSuppressStatus'
           type: integer
           format: int32
         sourceType:
-          #           $ref: '#/components/schemas/IssuesFilterSourceType'
+          # $ref: '#/components/schemas/IssuesFilterSourceType'
           type: integer
           format: int32
         scanMode:
-          #           $ref: '#/components/schemas/IssuesFilterScanMode'
+          # $ref: '#/components/schemas/IssuesFilterScanMode'
           type: integer
           format: int32
         actualStatus:

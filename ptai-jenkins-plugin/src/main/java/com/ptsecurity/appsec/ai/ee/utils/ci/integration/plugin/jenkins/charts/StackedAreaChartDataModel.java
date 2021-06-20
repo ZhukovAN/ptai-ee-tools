@@ -2,13 +2,14 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssueLevel;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssuesModel;
+import com.ptsecurity.appsec.ai.ee.scanresult.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scanresult.issue.types.BaseIssue;
+import com.ptsecurity.appsec.ai.ee.scanresult.issue.types.BaseIssue.IssueLevel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import lombok.*;
-import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -251,7 +252,7 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
     @Builder.Default
     protected List<Series> series = new ArrayList<>();
 
-    public static StackedAreaChartDataModel create(@NonNull final List<Triple<Integer, LocalDateTime, IssuesModel>> issuesModelList) {
+    public static StackedAreaChartDataModel create(@NonNull final List<Pair<Integer, ScanResult>> scanResultList) {
         // Prepare X-axis
         StackedAreaChartDataModel.XAxis xAxis = StackedAreaChartDataModel.XAxis.builder()
                 .type("category")
@@ -264,11 +265,13 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
         // Prepare series to fill with data
         Map<IssueLevel, Series> vulnerabilityTypeSeries = new HashMap<>();
         for (IssueLevel level : IssueLevel.values()) {
-            if (IssueLevel.None.equals(level)) continue;
+            if (IssueLevel.NONE.equals(level)) continue;
+            String levelName = WordUtils.capitalize(level.name().toLowerCase());
 
-            legend.data.add(level.name());
+
+            legend.data.add(levelName);
             StackedAreaChartDataModel.Series series = StackedAreaChartDataModel.Series.builder()
-                    .name(level.name())
+                    .name(levelName)
                     .type("line")
                     .stack("0")
                     .itemStyle(ITEM_STYLE_MAP.get(level))
@@ -278,20 +281,23 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
             vulnerabilityTypeSeries.put(level, series);
         }
 
-        issuesModelList.sort((u1, u2) -> u1.getLeft().compareTo(u2.getLeft()));
+        scanResultList.sort((u1, u2) -> u1.getLeft().compareTo(u2.getLeft()));
 
-        for (Triple<Integer, LocalDateTime, IssuesModel> item : issuesModelList) {
+        for (Pair<Integer, ScanResult> item : scanResultList) {
             // As Jenkins itself prefixes build numbers with "#" sign, let's do the same for chart
             xAxis.data.add("#" + item.getLeft().toString());
-            IssuesModel issues = item.getRight();
+            ScanResult issues = item.getRight();
             for (IssueLevel level : IssueLevel.values()) {
-                if (IssueLevel.None.equals(level)) continue;
+                if (IssueLevel.NONE.equals(level)) continue;
                 if (null == issues.getIssues()) continue;
-                long count = issues.getIssues().stream().filter(issueBase -> level.equals(issueBase.getLevel())).count();
+                long count = issues.getIssues().stream()
+                        .filter(baseIssue -> level.equals(baseIssue.getLevel()))
+                        .filter(baseIssue -> BaseIssue.ApprovalState.DISCARD != baseIssue.getApprovalState())
+                        .count();
                 vulnerabilityTypeSeries.get(level).data.add(count);
             }
         }
-        StackedAreaChartDataModel model = StackedAreaChartDataModel.builder()
+        return StackedAreaChartDataModel.builder()
                 .title(Title.builder()
                         .text(Resources.i18n_ast_result_charts_trend_caption())
                         .show(false)
@@ -322,6 +328,5 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
                 .yaxis(Collections.singletonList(yAxis))
                 .series(new ArrayList<>(vulnerabilityTypeSeries.values()))
                 .build();
-        return model;
     }
 }

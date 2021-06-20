@@ -81,4 +81,8 @@
 + [Feature] Build metadata added to all jar monifests and to generic-client-lib's build.properties file(s)
 + [Feature] Version number changed to 3.6.2
 + [Feature] Build timestamp format changed to ISO 8601
++ [ToDo] Fix stacked area chart area order
+### 20210620
++ [Feature] Scan results data structures refactoring started. Previously plugins like Jenkins used data types defined in ptai-rest-api and those types are version-dependent. This could cause a problems with plugins update as that data stored as an XML representation of Actions
+
 

@@ -1,12 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36;
 
 import com.microsoft.signalr.HubConnection;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiHelper;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.*;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.StartScanModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.events.ScanCompleteEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.utils.V36ScanSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
@@ -14,7 +12,6 @@ import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.List;
@@ -45,7 +42,7 @@ public class Project extends Utils {
     }
 
     @SneakyThrows
-    public ScanResult waitForComplete(@NonNull final UUID scanResultId) throws ApiException {
+    public void waitForComplete(@NonNull final UUID scanResultId) throws ApiException {
         // Need this container to save data from lambda
         AtomicReference<ScanResult> res = new AtomicReference<>();
 
@@ -63,8 +60,6 @@ public class Project extends Utils {
 
         semaphore.acquire();
         connection.stop();
-
-        return res.get();
     }
 
     public ScanResult poll(@NonNull final UUID scanResultId) throws ApiException {
@@ -87,7 +82,7 @@ public class Project extends Utils {
     }
 
     public List<ScanError> getScanErrors(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws ApiException {
-        return callApi(
+        return ApiHelper.callApi(
                 () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdErrorsGet(projectId, scanResultId),
                 "PT AI project scan errors read failed");
     }
@@ -97,14 +92,14 @@ public class Project extends Utils {
         new V36ScanSettingsHelper().fillV36ScanSettings(scanSettings, settings);
 
         final UUID projectId;
-        ProjectLight projectInfo = callApi(
+        ProjectLight projectInfo = ApiHelper.callApi(
                 () -> projectsApi.apiProjectsLightNameGet(name),
                 "PT AI project search failed");
         if (null == projectInfo) {
             CreateProjectModel createProjectModel = new CreateProjectModel();
             createProjectModel.setName(name);
             createProjectModel.setScanSettings(scanSettings);
-            com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project project = callApi(
+            com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Project project = ApiHelper.callApi(
                     () -> projectsApi.apiProjectsPost(createProjectModel),
                     "PT AI project create failed");
             projectId = project.getId();

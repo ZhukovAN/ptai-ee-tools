@@ -1,13 +1,14 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
 import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssuesModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.exceptions.ApiException;
 import lombok.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+@Deprecated
 public class IssuesModelHelper extends BaseJsonHelper {
     public static IssuesModel parse(@NonNull final InputStream data) throws ApiException {
         // Create IssuesModel deserializer

@@ -1,7 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssueLevel;
+import com.ptsecurity.appsec.ai.ee.scanresult.issue.types.BaseIssue;
+import com.ptsecurity.appsec.ai.ee.scanresult.issue.types.BaseIssue.IssueLevel;
 import lombok.SneakyThrows;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -24,10 +25,10 @@ public class BaseJsonChartDataModel {
     protected static final Map<IssueLevel, StackedAreaChartDataModel.Series.ItemStyle> AREA_STYLE_MAP = new HashMap<>();
 
     static {
-        ITEM_STYLE_MAP.put(IssueLevel.High, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_HIGH)).build());
-        ITEM_STYLE_MAP.put(IssueLevel.Medium, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_MEDIUM)).build());
-        ITEM_STYLE_MAP.put(IssueLevel.Low, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_LOW)).build());
-        ITEM_STYLE_MAP.put(IssueLevel.Potential, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_POTENTIAL)).build());
+        ITEM_STYLE_MAP.put(IssueLevel.HIGH, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_HIGH)).build());
+        ITEM_STYLE_MAP.put(IssueLevel.MEDIUM, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_MEDIUM)).build());
+        ITEM_STYLE_MAP.put(IssueLevel.LOW, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_LOW)).build());
+        ITEM_STYLE_MAP.put(IssueLevel.POTENTIAL, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_POTENTIAL)).build());
     }
 
     @SneakyThrows

@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.operations;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scanresult.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.TeamcityAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
@@ -39,7 +39,7 @@ public class TeamcityAstOperations implements AstOperations {
     public void scanStartedCallback(@NonNull final Project project, @NonNull UUID scanResultId) {
     }
 
-    public void scanCompleteCallback(@NonNull final Project project, @NonNull final UUID scanResultId, @NonNull ScanResult state)  {
+    public void scanCompleteCallback(@NonNull final Project project, @NonNull final ScanResult scanResult)  {
     }
 
     public String replaceMacro(@NonNull String value, Map<String, String> replacements) {

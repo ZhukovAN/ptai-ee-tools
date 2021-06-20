@@ -1,23 +1,20 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssuesModel;
+import com.ptsecurity.appsec.ai.ee.scanresult.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.StackedAreaChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.StackedAreaChartDataModel;
 import hudson.model.Action;
 import hudson.model.Job;
 import hudson.model.Run;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -45,29 +42,27 @@ public class AstJobMultipleResults implements Action {
     }
 
     @NonNull
-    public List<Triple<Integer, LocalDateTime, IssuesModel>> getLatestAstResults(final int number) {
+    public List<Pair<Integer, ScanResult>> getLatestAstResults(final int number) {
         final List<? extends Run<?, ?>> builds = project.getBuilds();
-        final List<Triple<Integer, LocalDateTime, IssuesModel>> issuesModelList = new ArrayList<>();
+        final List<Pair<Integer, ScanResult>> scanResults = new ArrayList<>();
 
         int count = 0;
         for (Run<?, ?> build : builds) {
             final AstJobSingleResult action = build.getAction(AstJobSingleResult.class);
             if (null == action) continue;
             if (null == action.getScanResult()) continue;
-            if (null == action.getIssues()) continue;
 
-            LocalDateTime dateTime = LocalDateTime.parse(action.getScanResult().getScanDate(), DateTimeFormatter.ISO_DATE_TIME);
-            issuesModelList.add(new ImmutableTriple<>(build.getNumber(), dateTime, action.getIssues()));
+            scanResults.add(new ImmutablePair<>(build.getNumber(), action.getScanResult()));
             // Only chart the last N builds (max)
             count++;
             if (count == number) break;
         }
-        return issuesModelList;
+        return scanResults;
     }
 
     @SuppressWarnings("unused") // Called by jelly view
     public boolean resultsAvailable() {
-        final List<Triple<Integer, LocalDateTime, IssuesModel>> issuesModelList = getLatestAstResults(1);
+        final List<Pair<Integer, ScanResult>> issuesModelList = getLatestAstResults(1);
         return !issuesModelList.isEmpty();
     }
 
@@ -78,7 +73,7 @@ public class AstJobMultipleResults implements Action {
     @JavaScriptMethod
     @SuppressWarnings("unused") // Called by jelly view
     public JSONObject getSeverityDistributionTrend() {
-        final List<Triple<Integer, LocalDateTime, IssuesModel>> issuesModelList = getLatestAstResults(10);
+        final List<Pair<Integer, ScanResult>> issuesModelList = getLatestAstResults(10);
         StackedAreaChartDataModel model = StackedAreaChartDataModel.create(issuesModelList);
         return BaseJsonChartDataModel.convertObject(model);
     }
