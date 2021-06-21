@@ -2,14 +2,14 @@
   "issues" : [ {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
-    "internalId" : "fd3708e0-8376-4a7f-9bdb-accc54d23c69",
+    "internalId" : "e4476345-7ab3-41b5-a7a3-89d862e457d4",
     "id" : "hNl70Z0FKGMLQzA7NJe6NU8RZR0=",
     "isOldInScanResultId" : null,
     "isFavorite" : false,
-    "groupId" : "11376682068251087927",
-    "approvalState" : "None",
+    "groupId" : "11900176157183666992",
+    "approvalState" : "Approval",
     "isNewInScanResultId" : null,
-    "scanResultId" : "16187e8c-a3c2-4cde-aca0-c50b2e06327e",
+    "scanResultId" : "de8ef3bf-9b60-4146-9ee6-04d5d9e4311d",
     "isSuspected" : false,
     "isSuppressed" : false,
     "type" : "Cross-site Scripting",
@@ -76,7 +76,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   } ],
   "descriptions" : {
     "vulnerability-Cross-site Scripting" : {

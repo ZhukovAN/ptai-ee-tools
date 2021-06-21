@@ -17,6 +17,9 @@ import org.kohsuke.stapler.bind.JavaScriptMethod;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class implements project-scope basic chart generation that is shown at project page
+ */
 @RequiredArgsConstructor
 public class AstJobMultipleResults implements Action {
     @NonNull

@@ -84,5 +84,5 @@
 + [ToDo] Fix stacked area chart area order
 ### 20210620
 + [Feature] Scan results data structures refactoring started. Previously plugins like Jenkins used data types defined in ptai-rest-api and those types are version-dependent. This could cause a problems with plugins update as that data stored as an XML representation of Actions
-
-
+### 20210621
++ [Feature] Project- and build-scope actions are temporarily disabled

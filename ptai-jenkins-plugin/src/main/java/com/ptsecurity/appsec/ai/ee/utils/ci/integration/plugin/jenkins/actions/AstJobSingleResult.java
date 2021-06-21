@@ -25,7 +25,9 @@ public class AstJobSingleResult implements RunAction2 {
 
     @Override
     public String getIconFileName() {
-        return "plugin/" + Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin").getShortName() + "/24x24.png";
+        // TODO: Implement project actions and uncomment this
+        // return "plugin/" + Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin").getShortName() + "/24x24.png";
+        return null;
     }
 
     @Override

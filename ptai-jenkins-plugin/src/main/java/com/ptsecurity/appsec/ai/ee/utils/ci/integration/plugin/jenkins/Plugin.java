@@ -273,7 +273,8 @@ public class Plugin extends Builder implements SimpleBuildStep {
         if (null != projectActions) return projectActions;
         projectActions = new ArrayList<>();
         projectActions.add(new AstJobMultipleResults(project));
-        projectActions.add(new AstJobTableResults(project.getName()));
+        // TODO: Implement project actions and uncomment this
+        // projectActions.add(new AstJobTableResults(project.getName()));
         return projectActions;
     }
 }

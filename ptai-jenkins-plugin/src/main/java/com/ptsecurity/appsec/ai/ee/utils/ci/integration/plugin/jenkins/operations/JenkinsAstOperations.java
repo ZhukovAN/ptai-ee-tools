@@ -68,9 +68,7 @@ public class JenkinsAstOperations implements AstOperations {
     public void scanCompleteCallback(@NonNull final Project project, @NonNull final ScanResult scanResult) throws ApiException {
         Run<?, ?> run = owner.getRun();
         AstJobSingleResult astJobSingleResult = new AstJobSingleResult(run);
-
         astJobSingleResult.setScanResult(scanResult);
-
         run.addAction(astJobSingleResult);
     }
 

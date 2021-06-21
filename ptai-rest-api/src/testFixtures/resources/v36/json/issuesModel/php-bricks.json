@@ -107,7 +107,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -185,7 +185,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -305,7 +305,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -425,7 +425,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -580,7 +580,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -700,7 +700,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -818,7 +818,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -938,7 +938,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -1093,7 +1093,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -1192,7 +1192,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -1291,7 +1291,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -1544,7 +1544,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -1923,7 +1923,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -2246,7 +2246,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -2410,7 +2410,7 @@
       "endColumn" : 59,
       "beginColumn" : 38
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -2466,7 +2466,7 @@
       "endColumn" : 35,
       "beginColumn" : 28
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -2565,7 +2565,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -2720,7 +2720,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Fingerprint",
@@ -2850,7 +2850,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -2949,7 +2949,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -3048,7 +3048,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -3147,7 +3147,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -3266,7 +3266,7 @@
       "endColumn" : 61,
       "beginColumn" : 54
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -3392,7 +3392,7 @@
       "endColumn" : 73,
       "beginColumn" : 70
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -3504,7 +3504,7 @@
       "endColumn" : 73,
       "beginColumn" : 70
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -3603,7 +3603,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -3702,7 +3702,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -3842,7 +3842,7 @@
       "endColumn" : 1695,
       "beginColumn" : 1684
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -3898,7 +3898,7 @@
       "endColumn" : 1778,
       "beginColumn" : 1767
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -3954,7 +3954,7 @@
       "endColumn" : 26,
       "beginColumn" : 19
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4010,7 +4010,7 @@
       "endColumn" : 32,
       "beginColumn" : 25
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4080,7 +4080,7 @@
       "endColumn" : 2862,
       "beginColumn" : 2839
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4171,7 +4171,7 @@
       "endColumn" : 48,
       "beginColumn" : 19
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4275,7 +4275,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4379,7 +4379,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4435,7 +4435,7 @@
       "endColumn" : 28,
       "beginColumn" : 23
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4491,7 +4491,7 @@
       "endColumn" : 24,
       "beginColumn" : 21
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4595,7 +4595,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4707,7 +4707,7 @@
       "endColumn" : 31,
       "beginColumn" : 28
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4763,7 +4763,7 @@
       "endColumn" : 25,
       "beginColumn" : 22
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4853,7 +4853,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -4993,7 +4993,7 @@
       "endColumn" : 113,
       "beginColumn" : 49
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -5112,7 +5112,7 @@
       "endColumn" : 35,
       "beginColumn" : 29
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -5231,7 +5231,7 @@
       "endColumn" : 24,
       "beginColumn" : 18
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -5287,7 +5287,7 @@
       "endColumn" : 5048,
       "beginColumn" : 5037
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -5386,7 +5386,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -5485,7 +5485,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -5584,7 +5584,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -5683,7 +5683,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -5773,7 +5773,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -5877,7 +5877,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -6009,7 +6009,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -6141,7 +6141,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -6231,7 +6231,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -6371,7 +6371,7 @@
       "endColumn" : 42,
       "beginColumn" : 28
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -6427,7 +6427,7 @@
       "endColumn" : 34,
       "beginColumn" : 21
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -6512,7 +6512,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -6568,7 +6568,7 @@
       "endColumn" : 42,
       "beginColumn" : 28
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -6653,7 +6653,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -6738,7 +6738,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -6823,7 +6823,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -6900,7 +6900,7 @@
       "endColumn" : 38,
       "beginColumn" : 17
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -7040,7 +7040,7 @@
       "endColumn" : 81,
       "beginColumn" : 19
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -7173,7 +7173,7 @@
       "endColumn" : 155,
       "beginColumn" : 16
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -7299,7 +7299,7 @@
       "endColumn" : 81,
       "beginColumn" : 19
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -7446,7 +7446,7 @@
       "endColumn" : 155,
       "beginColumn" : 16
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -7656,7 +7656,7 @@
       "endColumn" : 4343,
       "beginColumn" : 4342
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -7761,7 +7761,7 @@
       "endColumn" : 116,
       "beginColumn" : 22
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -7859,7 +7859,7 @@
       "endColumn" : 116,
       "beginColumn" : 22
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -8090,7 +8090,7 @@
       "endColumn" : 3144,
       "beginColumn" : 3143
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -8167,7 +8167,7 @@
       "endColumn" : 107,
       "beginColumn" : 86
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -8356,7 +8356,7 @@
       "endColumn" : 1584,
       "beginColumn" : 1583
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -8419,7 +8419,7 @@
       "endColumn" : 107,
       "beginColumn" : 86
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -8510,7 +8510,7 @@
       "endColumn" : 116,
       "beginColumn" : 22
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -8741,7 +8741,7 @@
       "endColumn" : 3129,
       "beginColumn" : 3128
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -8867,7 +8867,7 @@
       "endColumn" : 81,
       "beginColumn" : 19
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -9077,7 +9077,7 @@
       "endColumn" : 1451,
       "beginColumn" : 1405
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -9266,7 +9266,7 @@
       "endColumn" : 1391,
       "beginColumn" : 1390
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -9427,7 +9427,7 @@
       "endColumn" : 792,
       "beginColumn" : 791
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -9581,7 +9581,7 @@
       "endColumn" : 790,
       "beginColumn" : 782
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -9749,7 +9749,7 @@
       "endColumn" : 27,
       "beginColumn" : 19
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -9896,7 +9896,7 @@
       "endColumn" : 3142,
       "beginColumn" : 3131
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -10057,7 +10057,7 @@
       "endColumn" : 1451,
       "beginColumn" : 1405
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -10204,7 +10204,7 @@
       "endColumn" : 3127,
       "beginColumn" : 3116
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -10344,7 +10344,7 @@
       "endColumn" : 1391,
       "beginColumn" : 1390
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -10484,7 +10484,7 @@
       "endColumn" : 1584,
       "beginColumn" : 1583
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -10590,7 +10590,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -10765,7 +10765,7 @@
       "endColumn" : 4343,
       "beginColumn" : 4342
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -10821,7 +10821,7 @@
       "endColumn" : 792,
       "beginColumn" : 791
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -10919,7 +10919,7 @@
       "endColumn" : 50,
       "beginColumn" : 46
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -10996,7 +10996,7 @@
       "endColumn" : 2753,
       "beginColumn" : 2752
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -11052,7 +11052,7 @@
       "endColumn" : 23,
       "beginColumn" : 19
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -11143,7 +11143,7 @@
       "endColumn" : 3144,
       "beginColumn" : 3143
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -11255,7 +11255,7 @@
       "endColumn" : 50,
       "beginColumn" : 46
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -11318,7 +11318,7 @@
       "endColumn" : 1316,
       "beginColumn" : 1301
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -11409,7 +11409,7 @@
       "endColumn" : 3129,
       "beginColumn" : 3128
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -11515,7 +11515,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -11621,7 +11621,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -11733,7 +11733,7 @@
       "endColumn" : 8350,
       "beginColumn" : 8349
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -11831,7 +11831,7 @@
       "endColumn" : 50,
       "beginColumn" : 46
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -11908,7 +11908,7 @@
       "endColumn" : 1316,
       "beginColumn" : 1301
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -12020,7 +12020,7 @@
       "endColumn" : 2753,
       "beginColumn" : 2752
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -12160,7 +12160,7 @@
       "endColumn" : 48,
       "beginColumn" : 44
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -12258,7 +12258,7 @@
       "endColumn" : 2753,
       "beginColumn" : 2752
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -12364,7 +12364,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -12483,7 +12483,7 @@
       "endColumn" : 2146,
       "beginColumn" : 2145
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -12574,7 +12574,7 @@
       "endColumn" : 4343,
       "beginColumn" : 4342
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -12658,7 +12658,7 @@
       "endColumn" : 2399,
       "beginColumn" : 2398
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -12742,7 +12742,7 @@
       "endColumn" : 41,
       "beginColumn" : 21
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -12840,7 +12840,7 @@
       "endColumn" : 2399,
       "beginColumn" : 2398
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -12966,7 +12966,7 @@
       "endColumn" : 4343,
       "beginColumn" : 4342
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13022,7 +13022,7 @@
       "endColumn" : 27,
       "beginColumn" : 19
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13078,7 +13078,7 @@
       "endColumn" : 48,
       "beginColumn" : 44
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13134,7 +13134,7 @@
       "endColumn" : 26,
       "beginColumn" : 21
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13232,7 +13232,7 @@
       "endColumn" : 41,
       "beginColumn" : 21
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13288,7 +13288,7 @@
       "endColumn" : 50,
       "beginColumn" : 46
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13421,7 +13421,7 @@
       "endColumn" : 30,
       "beginColumn" : 15
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13477,7 +13477,7 @@
       "endColumn" : 17,
       "beginColumn" : 13
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13659,7 +13659,7 @@
       "endColumn" : 2992,
       "beginColumn" : 2976
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13751,7 +13751,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13856,7 +13856,7 @@
       "endColumn" : 32,
       "beginColumn" : 27
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -13919,7 +13919,7 @@
       "endColumn" : 2992,
       "beginColumn" : 2976
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14018,7 +14018,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14117,7 +14117,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14216,7 +14216,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14308,7 +14308,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14371,7 +14371,7 @@
       "endColumn" : 372,
       "beginColumn" : 358
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14476,7 +14476,7 @@
       "endColumn" : 34,
       "beginColumn" : 29
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14637,7 +14637,7 @@
       "endColumn" : 780,
       "beginColumn" : 779
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14693,7 +14693,7 @@
       "endColumn" : 780,
       "beginColumn" : 779
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14749,7 +14749,7 @@
       "endColumn" : 27,
       "beginColumn" : 23
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14812,7 +14812,7 @@
       "endColumn" : 706,
       "beginColumn" : 692
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14889,7 +14889,7 @@
       "endColumn" : 372,
       "beginColumn" : 358
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -14952,7 +14952,7 @@
       "endColumn" : 47,
       "beginColumn" : 29
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15029,7 +15029,7 @@
       "endColumn" : 45,
       "beginColumn" : 27
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15121,7 +15121,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15213,7 +15213,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15303,7 +15303,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15400,7 +15400,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15490,7 +15490,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15582,7 +15582,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15674,7 +15674,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15766,7 +15766,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15858,7 +15858,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -15950,7 +15950,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16042,7 +16042,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16134,7 +16134,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16226,7 +16226,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16318,7 +16318,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16410,7 +16410,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16502,7 +16502,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16594,7 +16594,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16692,7 +16692,7 @@
       "endColumn" : 17,
       "beginColumn" : 8
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16777,7 +16777,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16876,7 +16876,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -16975,7 +16975,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -17074,7 +17074,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -17159,7 +17159,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -17278,7 +17278,7 @@
       "endColumn" : 43,
       "beginColumn" : 27
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -17348,7 +17348,7 @@
       "endColumn" : 16545,
       "beginColumn" : 16544
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -17404,7 +17404,7 @@
       "endColumn" : 26079,
       "beginColumn" : 26078
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -17516,7 +17516,7 @@
       "endColumn" : 18118,
       "beginColumn" : 18109
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -17635,7 +17635,7 @@
       "endColumn" : 13620,
       "beginColumn" : 13609
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -17782,7 +17782,7 @@
       "endColumn" : 13620,
       "beginColumn" : 13609
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -17866,7 +17866,7 @@
       "endColumn" : 13620,
       "beginColumn" : 13609
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -17929,7 +17929,7 @@
       "endColumn" : 40,
       "beginColumn" : 18
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -18048,7 +18048,7 @@
       "endColumn" : 40,
       "beginColumn" : 17
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -18104,7 +18104,7 @@
       "endColumn" : 27,
       "beginColumn" : 19
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -18188,7 +18188,7 @@
       "endColumn" : 26,
       "beginColumn" : 18
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -18244,7 +18244,7 @@
       "endColumn" : 26,
       "beginColumn" : 18
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -18321,7 +18321,7 @@
       "endColumn" : 19,
       "beginColumn" : 11
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -18398,7 +18398,7 @@
       "endColumn" : 24,
       "beginColumn" : 20
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -18454,7 +18454,7 @@
       "endColumn" : 29,
       "beginColumn" : 22
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -18510,7 +18510,7 @@
       "endColumn" : 29,
       "beginColumn" : 22
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -18608,7 +18608,7 @@
       "endColumn" : 2863,
       "beginColumn" : 2840
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "BlackBox",
@@ -18954,7 +18954,7 @@
       "endColumn" : 28423,
       "beginColumn" : 28422
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "BlackBox",
@@ -19164,7 +19164,7 @@
       "endColumn" : 5657,
       "beginColumn" : 5599
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "BlackBox",
@@ -19319,7 +19319,7 @@
       "beginColumn" : 1
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "BlackBox",
@@ -22413,7 +22413,7 @@
       "beginColumn" : 16
     } ],
     "dataTrace" : [ ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -22502,7 +22502,7 @@
       "endColumn" : 1,
       "beginColumn" : 1
     } ],
-    "scanMode" : "None"
+    "scanMode" : "FromEntryPoint"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -22733,7 +22733,7 @@
       "endColumn" : 40,
       "beginColumn" : 17
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -22817,7 +22817,7 @@
       "endColumn" : 40,
       "beginColumn" : 17
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -22873,7 +22873,7 @@
       "endColumn" : 28,
       "beginColumn" : 20
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -22936,7 +22936,7 @@
       "endColumn" : 51,
       "beginColumn" : 20
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -22992,7 +22992,7 @@
       "endColumn" : 19,
       "beginColumn" : 11
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23048,7 +23048,7 @@
       "endColumn" : 34,
       "beginColumn" : 21
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23111,7 +23111,7 @@
       "endColumn" : 50,
       "beginColumn" : 24
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23181,7 +23181,7 @@
       "endColumn" : 37,
       "beginColumn" : 33
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23265,7 +23265,7 @@
       "endColumn" : 29,
       "beginColumn" : 23
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23335,7 +23335,7 @@
       "endColumn" : 37,
       "beginColumn" : 21
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23391,7 +23391,7 @@
       "endColumn" : 16,
       "beginColumn" : 12
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23447,7 +23447,7 @@
       "endColumn" : 56,
       "beginColumn" : 52
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23503,7 +23503,7 @@
       "endColumn" : 32,
       "beginColumn" : 12
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23573,7 +23573,7 @@
       "endColumn" : 32,
       "beginColumn" : 12
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23727,7 +23727,7 @@
       "endColumn" : 27,
       "beginColumn" : 19
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23797,7 +23797,7 @@
       "endColumn" : 98,
       "beginColumn" : 95
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23881,7 +23881,7 @@
       "endColumn" : 98,
       "beginColumn" : 95
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -23951,7 +23951,7 @@
       "endColumn" : 41,
       "beginColumn" : 21
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24021,7 +24021,7 @@
       "endColumn" : 50,
       "beginColumn" : 46
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24105,7 +24105,7 @@
       "endColumn" : 50,
       "beginColumn" : 46
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24224,7 +24224,7 @@
       "endColumn" : 30,
       "beginColumn" : 15
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24280,7 +24280,7 @@
       "endColumn" : 16,
       "beginColumn" : 12
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24336,7 +24336,7 @@
       "endColumn" : 29,
       "beginColumn" : 25
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24392,7 +24392,7 @@
       "endColumn" : 22,
       "beginColumn" : 18
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24469,7 +24469,7 @@
       "endColumn" : 31,
       "beginColumn" : 26
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24532,7 +24532,7 @@
       "endColumn" : 45,
       "beginColumn" : 27
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24616,7 +24616,7 @@
       "endColumn" : 43,
       "beginColumn" : 27
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24763,7 +24763,7 @@
       "endColumn" : 43,
       "beginColumn" : 27
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24819,7 +24819,7 @@
       "endColumn" : 34,
       "beginColumn" : 30
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -24931,7 +24931,7 @@
       "endColumn" : 17,
       "beginColumn" : 8
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
@@ -25274,7 +25274,7 @@
       "endColumn" : 13651,
       "beginColumn" : 13633
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -25421,7 +25421,7 @@
       "endColumn" : 13651,
       "beginColumn" : 13633
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -25505,7 +25505,7 @@
       "endColumn" : 13651,
       "beginColumn" : 13633
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -25568,7 +25568,7 @@
       "endColumn" : 13976,
       "beginColumn" : 13959
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -25624,7 +25624,7 @@
       "endColumn" : 22062,
       "beginColumn" : 22058
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -25722,7 +25722,7 @@
       "endColumn" : 28421,
       "beginColumn" : 28419
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -25897,7 +25897,7 @@
       "endColumn" : 28423,
       "beginColumn" : 28422
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -25953,7 +25953,7 @@
       "endColumn" : 22176,
       "beginColumn" : 22172
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26009,7 +26009,7 @@
       "endColumn" : 14270,
       "beginColumn" : 14269
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26184,7 +26184,7 @@
       "endColumn" : 28423,
       "beginColumn" : 28422
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26359,7 +26359,7 @@
       "endColumn" : 28423,
       "beginColumn" : 28422
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26422,7 +26422,7 @@
       "endColumn" : 23823,
       "beginColumn" : 23799
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26499,7 +26499,7 @@
       "endColumn" : 28423,
       "beginColumn" : 28422
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26632,7 +26632,7 @@
       "endColumn" : 28423,
       "beginColumn" : 28422
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26716,7 +26716,7 @@
       "endColumn" : 14270,
       "beginColumn" : 14269
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26786,7 +26786,7 @@
       "endColumn" : 833,
       "beginColumn" : 775
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26856,7 +26856,7 @@
       "endColumn" : 3528,
       "beginColumn" : 3470
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26926,7 +26926,7 @@
       "endColumn" : 2579,
       "beginColumn" : 2523
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Vulnerability",
@@ -26996,7 +26996,7 @@
       "endColumn" : 8769,
       "beginColumn" : 8722
     } ],
-    "scanMode" : "FromEntryPoint"
+    "scanMode" : "FromPublicProtected"
   }, {
     "rvpPvo" : null,
     "propertyClass" : "Weakness",
