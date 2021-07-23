@@ -4,8 +4,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
+import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import hudson.Extension;
 import hudson.model.Item;
 import hudson.util.FormValidation;
@@ -57,7 +57,7 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
                 if (!Validator.doCheckFieldNotEmpty(jsonSettings))
                     return Validator.error(Messages.validator_check_jsonSettings_empty());
 
-                ScanSettings settings = JsonSettingsHelper.verify(jsonSettings);
+                AiProjScanSettings settings = JsonSettingsHelper.verify(jsonSettings);
                 return FormValidation.ok(Messages.validator_check_jsonSettings_success(settings.getProjectName(), settings.getProgrammingLanguage()));
             } catch (Exception e) {
                 return Validator.error(e);

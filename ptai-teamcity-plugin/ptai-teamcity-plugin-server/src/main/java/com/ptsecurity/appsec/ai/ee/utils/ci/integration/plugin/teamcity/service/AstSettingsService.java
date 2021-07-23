@@ -1,16 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
+import com.ptsecurity.appsec.ai.ee.server.api.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.AstAdminSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.CertificateHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CertificateHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
-import com.ptsecurity.appsec.ai.ee.utils.json.Policy;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
+import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import jetbrains.buildServer.controllers.ActionErrors;
 import jetbrains.buildServer.controllers.BasePropertiesBean;
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
@@ -334,7 +334,7 @@ public class AstSettingsService {
                     results.failure();
                 }
             } else {
-                ScanSettings settingsJson = JsonSettingsHelper.verify(bean.getProperties().get(JSON_SETTINGS));
+                AiProjScanSettings settingsJson = JsonSettingsHelper.verify(bean.getProperties().get(JSON_SETTINGS));
                 results.add("JSON settings are verified, project name is " + settingsJson.getProjectName());
                 Policy[] policyJson = JsonPolicyHelper.verify(bean.getProperties().get(JSON_POLICY));
                 results.add("JSON policy is verified, number of rule sets is " + policyJson.length);

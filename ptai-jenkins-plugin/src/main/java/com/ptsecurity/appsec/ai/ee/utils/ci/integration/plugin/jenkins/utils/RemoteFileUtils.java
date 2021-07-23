@@ -1,9 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
+import com.ptsecurity.appsec.ai.ee.server.api.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.TaskListener;
@@ -32,7 +32,7 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
         collector.setConsole(listener.getLogger());
         collector.setVerbose(verbose);
 
-        return Base.callApi(
+        return AbstractTool.call(
                 () -> launcher.getChannel().call(new RemoteFileUtils(collector)),
                 "Remote file collect call failed");
     }
@@ -41,7 +41,7 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
         BinaryReportSaver saver = new BinaryReportSaver(dir, artifact, data);
         saver.setConsole(listener.getLogger());
         saver.setVerbose(verbose);
-        return Base.callApi(
+        return AbstractTool.call(
                 () -> launcher.getChannel().call(new RemoteFileUtils(saver)),
                 "Remote save report call failed");
     }
@@ -56,7 +56,7 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
     }
 
     @RequiredArgsConstructor
-    protected static class Collector extends Base implements Executor, Serializable {
+    protected static class Collector extends AbstractTool implements Executor, Serializable {
         protected final Transfers transfers;
         protected final String dir;
 
@@ -66,14 +66,14 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
     }
 
     @RequiredArgsConstructor
-    protected static class ReportSaver extends Base implements Executor, Serializable {
+    protected static class ReportSaver extends AbstractTool implements Executor, Serializable {
         protected final String dir;
         protected final String artifact;
         protected final String data;
 
         public File execute() throws ApiException {
             try {
-                Path destination = Paths.get(dir).resolve(Base.DEFAULT_SAST_FOLDER).resolve(artifact);
+                Path destination = Paths.get(dir).resolve(AbstractTool.DEFAULT_SAST_FOLDER).resolve(artifact);
                 if (!destination.toFile().getParentFile().exists()) {
                     if (!destination.toFile().getParentFile().mkdirs())
                         throw new IOException("Failed to create folder structure for " + destination.toFile().toString());
@@ -88,7 +88,7 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
         }
     }
 
-    protected static class BinaryReportSaver extends Base implements Executor, Serializable {
+    protected static class BinaryReportSaver extends AbstractTool implements Executor, Serializable {
 
         public BinaryReportSaver(@NonNull final String dir, @NonNull final String artifact, final byte[] data) {
             this.dir = dir;
@@ -102,8 +102,8 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
 
         public File execute() throws ApiException {
             try {
-                Path destination = Paths.get(dir).resolve(Base.DEFAULT_SAST_FOLDER).resolve(artifact);
-                String fileName = Base.callApi(
+                Path destination = Paths.get(dir).resolve(AbstractTool.DEFAULT_SAST_FOLDER).resolve(artifact);
+                String fileName = AbstractTool.call(
                         () -> destination.getFileName().toString(),
                         "Empty destination file name");
                 if (!destination.toFile().getParentFile().exists()) {

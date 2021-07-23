@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ReportFormatType;
+import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ReportFormatType;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import lombok.NonNull;
 

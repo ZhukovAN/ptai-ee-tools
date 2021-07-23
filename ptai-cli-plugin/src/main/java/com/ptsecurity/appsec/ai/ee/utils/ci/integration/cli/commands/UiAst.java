@@ -1,8 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliUiAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
@@ -10,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob.JobFinishedStatus.SUCCESS;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob.JobExecutionResult.SUCCESS;
 
 @Slf4j
 @CommandLine.Command(
@@ -35,7 +36,7 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
             names = {"--output"}, order = 4,
             paramLabel = "<path>",
             description = "Folder where AST reports are to be stored. By default .ptai folder is used")
-    protected Path output = Paths.get(System.getProperty("user.dir")).resolve(Base.DEFAULT_SAST_FOLDER);
+    protected Path output = Paths.get(System.getProperty("user.dir")).resolve(AbstractJob.DEFAULT_OUTPUT_FOLDER);
 
     @CommandLine.Option(
             names = {"-p", "--project"}, order = 5,
@@ -49,18 +50,18 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
             paramLabel = "<pattern>",
             description = "Comma-separated list of files to include to scan. The string is a comma separated list of includes for an Ant fileset eg. '**/*.jar'" +
                     "(see http://ant.apache.org/manual/dirtasks.html#patterns). The base directory for this fileset is the sources folder")
-    private String includes = null;
+    protected String includes = null;
 
     @CommandLine.Option(
             names = {"-e", "--excludes"}, order = 7,
             paramLabel = "<pattern>",
             description = "Comma-separated list of files to exclude from scan. The syntax is the same as for includes")
-    private String excludes = null;
+    protected String excludes = null;
 
     @CommandLine.Option(
             names = {"--use-default-excludes"}, order = 8,
             description = "Use default excludes list")
-    private boolean useDefaultExcludes = false;
+    protected boolean useDefaultExcludes = false;
 
     @CommandLine.ArgGroup(exclusive = true)
     BaseCommand.Reporting reports;
@@ -68,29 +69,31 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--fail-if-failed"}, order = 10,
             description = "Return code failed if AST failed")
-    private boolean failIfFailed = false;
+    protected boolean failIfFailed = false;
 
     @CommandLine.Option(
             names = {"--fail-if-unstable"}, order = 11,
             description = "Return code failed if AST unstable")
-    private boolean failIfUnstable = false;
+    protected boolean failIfUnstable = false;
 
     @CommandLine.Option(
             names = {"--async"}, order = 20,
             description = "Do not wait AST to complete and exit immediately")
-    private boolean async = false;
+    protected boolean async = false;
 
     @CommandLine.Option(
             names = {"--full-scan"}, order = 21,
             description = "Execute full AST instead of incremental")
-    private boolean fullScan = false;
+    protected boolean fullScan = false;
 
     @Override
-    public Integer call() throws Exception {
-        CliAstJob job = CliAstJob.builder()
+    public Integer call() {
+        CliUiAstJob job = CliUiAstJob.builder()
                 .console(System.out).prefix("").verbose(verbose)
-                .url(url.toString()).token(token).insecure(insecure)
-                .name(project)
+                .connectionSettings(ConnectionSettings.builder()
+                        .url(url.toString()).token(token).insecure(insecure)
+                        .build())
+                .projectName(project)
                 .async(async)
                 .failIfFailed(failIfFailed).failIfUnstable(failIfUnstable)
                 .input(input).output(output)
@@ -100,7 +103,6 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
                 .truststore(truststore)
                 .fullScanMode(fullScan)
                 .build();
-        if (!job.init()) return BaseCommand.ExitCode.FAILED.getCode();
         return (SUCCESS == job.execute())
                 ? BaseCommand.ExitCode.SUCCESS.getCode()
                 : BaseCommand.ExitCode.FAILED.getCode();

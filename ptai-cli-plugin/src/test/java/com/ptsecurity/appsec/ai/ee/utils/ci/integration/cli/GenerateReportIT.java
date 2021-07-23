@@ -1,21 +1,22 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.AuthScopeType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ScanResult;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.Stage;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import picocli.CommandLine;
 
-import java.nio.charset.StandardCharsets;
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,16 +24,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Data.Format.JSON;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Data.Format.XML;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Locale.EN;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Locale.RU;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Report.Format.HTML;
+import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Data.Format.JSON;
+import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Data.Format.XML;
+import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
+import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
+import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report.Format.HTML;
 
 @DisplayName("Report generation tests")
 @Tag("integration-legacy")
-class GenerateReportIT extends BaseIT {
+class GenerateReportIT extends BaseCliIT {
+    protected Path destination;
+
+    @SneakyThrows
+    @BeforeEach
+    @Override
+    public void pre() {
+        super.pre();
+        destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
+    }
+
     @Test
     @DisplayName("Show usage of report generator")
     public void testShowUsage() {
@@ -50,7 +62,7 @@ class GenerateReportIT extends BaseIT {
     @Test
     @DisplayName("Generate specific app01 scan results report using all possible configurations")
     public void testSpecificScanResultsReport() {
-        UUID scanResultId = getLatestCompleteScanResults(EXISTING_PROJECT);
+        UUID scanResultId = getLatestCompleteScanResults(EXISTING_PHP_SMOKE_MEDIUM_PROJECT);
         testScanResultsReport(scanResultId);
     }
 
@@ -81,14 +93,14 @@ class GenerateReportIT extends BaseIT {
         cases.add(pair);
 
         for (int i = 1 ; i < 7 ; i++) {
-            Path folder = Paths.get(REPORT_FOLDER).resolve(UUID.randomUUID().toString());
+            Path folder = Paths.get(destination.toString()).resolve(UUID.randomUUID().toString());
             List<String> args = new ArrayList<>(Arrays.asList(
                     "generate-report",
-                    "--url", PTAI_URL,
-                    "--truststore", PEM_PATH,
+                    "--url", URL,
+                    "--truststore", PEM.toString(),
                     "--token", TOKEN,
                     "--output", folder.toString(),
-                    "--project-name", EXISTING_PROJECT));
+                    "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT));
             if (null != scanResultId) {
                 args.add("--scan-result-id");
                 args.add(scanResultId.toString());
@@ -106,21 +118,15 @@ class GenerateReportIT extends BaseIT {
 
     @SneakyThrows
     public UUID getLatestCompleteScanResults(@NonNull final String project) {
-        Utils utils = Utils.builder()
-                .console(System.out)
-                .url(PTAI_URL)
+        AbstractApiClient client = Factory.client(ConnectionSettings.builder()
+                .url(URL)
                 .token(TOKEN)
-                .build();
-        String pem = new String(Files.readAllBytes(Paths.get(PEM_PATH)), StandardCharsets.UTF_8);
-        utils.setCaCertsPem(pem);
-        utils.init();
-
-        UUID projectId = utils.searchProject(project);
-        List<ScanResult> results = utils.getProjectsApi().apiProjectsProjectIdScanResultsGet(projectId, AuthScopeType.VIEWER);
-        ScanResult result = results.stream()
-                .filter(r -> r.getProgress().getStage().equals(Stage.DONE))
-                .findAny().orElseThrow(() -> new IllegalArgumentException("project"));
-        return result.getId();
+                .insecure(true)
+                .build());
+        ProjectTasks tasks = new Factory().projectTasks(client);
+        UUID projectId = tasks.searchProject(project);
+        Assertions.assertNotNull(projectId);
+        return tasks.getLatestCompleteAstResult(projectId);
     }
 
     @Test
@@ -128,11 +134,11 @@ class GenerateReportIT extends BaseIT {
     public void testDuplicateFileNamesProcessing() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH.toString(),
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
-                "--output", REPORT_FOLDER,
-                "--project-name", EXISTING_PROJECT,
+                "--output", destination.toString(),
+                "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
                 "--report-template", "Отчет OWASP Top 10 2017",
                 "--report-file", "owasp.ru.html",
                 "--report-locale", EN.name(),
@@ -149,11 +155,11 @@ class GenerateReportIT extends BaseIT {
     public void testMissingTemplateNamesProcessing() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH.toString(),
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
-                "--output", REPORT_FOLDER,
-                "--project-name", EXISTING_PROJECT,
+                "--output", destination.toString(),
+                "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
                 "--report-template", "Отчет OWASP Top 10 2017 ",
                 "--report-file", "owasp.ru.html",
                 "--report-locale", EN.name(),
@@ -161,49 +167,77 @@ class GenerateReportIT extends BaseIT {
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
+    @SneakyThrows
     @Test
     @DisplayName("Generate multiple JSON-defined reports for specific app01 scan results")
     public void testLatestJsonDefinedReportsGeneration() {
+        Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
+        FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.1.json"), reportsJson.toFile());
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH,
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
-                "--output", REPORT_FOLDER,
-                "--project-name", EXISTING_PROJECT,
-                "--scan-result-id", getLatestCompleteScanResults(EXISTING_PROJECT).toString(),
-                "--report-json", getResourcePath("json/reports.1.json"));
+                "--output", destination.toString(),
+                "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--scan-result-id", getLatestCompleteScanResults(EXISTING_PHP_SMOKE_MEDIUM_PROJECT).toString(),
+                "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+        checkReports(reportsJson, destination);
     }
 
+    @SneakyThrows
     @Test
-    @DisplayName("Generate invalid JSON-defined reports for specific app01 scan results")
+    @DisplayName("Fail generate invalid JSON-defined reports for specific app01 scan results")
     public void testLatestInvalidJsonDefinedReportsGeneration() {
+        Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
+        FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.4.json"), reportsJson.toFile());
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH,
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
-                "--output", REPORT_FOLDER,
-                "--project-name", EXISTING_PROJECT,
-                "--scan-result-id", getLatestCompleteScanResults(EXISTING_PROJECT).toString(),
-                "--report-json", getResourcePath("json/reports.4.json"));
+                "--output", destination.toString(),
+                "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--scan-result-id", getLatestCompleteScanResults(EXISTING_PHP_SMOKE_MEDIUM_PROJECT).toString(),
+                "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
+    @SneakyThrows
     @Test
     @DisplayName("Generate JSON-defined reports for specific app01 scan results using extended filters")
     public void testLatestExtendedJsonDefinedReportsGeneration() {
+        Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
+        FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.5.json"), reportsJson.toFile());
+        
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH,
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
-                "--output", REPORT_FOLDER,
-                "--project-name", EXISTING_PROJECT,
-                "--scan-result-id", getLatestCompleteScanResults(EXISTING_PROJECT).toString(),
-                "--report-json", getResourcePath("json/reports.5.json"));
+                "--output", destination.toString(),
+                "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--scan-result-id", getLatestCompleteScanResults(EXISTING_PHP_SMOKE_MEDIUM_PROJECT).toString(),
+                "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+        checkReports(reportsJson, destination);
+    }
+
+    @SneakyThrows
+    protected static void checkReports(@NonNull final Path reportsJson, @NonNull final Path destination) {
+        ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+        Reports reports = mapper.readValue(reportsJson.toFile(), Reports.class);
+        Stream.concat(reports.getReport().stream(), reports.getData().stream()).forEach((r) -> {
+            File report = destination.resolve(r.getFileName()).toFile();
+            Assertions.assertTrue(report.exists());
+        });
+        reports.getRaw().forEach((r) -> {
+            File report = destination.resolve(r.getFileName()).toFile();
+            Assertions.assertTrue(report.exists());
+        });
     }
 
 }

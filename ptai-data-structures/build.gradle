@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'java-test-fixtures'
 }
 
 group = "${rootGroup}.ptai-data-structures"
@@ -12,7 +13,16 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.8.1'
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    implementation 'commons-io:commons-io:2.6'
+    implementation "commons-io:commons-io:$commonsIoVersion"
+    // Need this to write tests that use data stored in 7zip-packed resource files
+    // like issues model, scan settings etc.
+    testFixturesApi(testFixtures(project(":ptai-test-tools")))
+    testImplementation(testFixtures(project(":ptai-test-tools")))
+
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    testImplementation 'org.apache.httpcomponents:httpclient:4.5.10'
+    // https://mvnrepository.com/artifact/org.jooq/joor-java-8
+    testImplementation 'org.jooq:joor-java-8:0.9.13'
 }
 
 jar {

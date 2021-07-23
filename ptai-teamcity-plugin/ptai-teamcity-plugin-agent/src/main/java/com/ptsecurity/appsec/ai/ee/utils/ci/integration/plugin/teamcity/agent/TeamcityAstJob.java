@@ -1,7 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
+import com.ptsecurity.appsec.ai.ee.server.api.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.ReportsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.operations.TeamcityAstOperations;
@@ -12,7 +11,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPol
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
 import lombok.Getter;
@@ -70,7 +69,7 @@ public class TeamcityAstJob extends AstJob {
         caCertsPem = globals.get(Params.CERTIFICATES);
 
         if (AST_SETTINGS_JSON.equals(params.get(Params.AST_SETTINGS))) {
-            ScanSettings scanSettings = JsonSettingsHelper.verify(params.get(Params.JSON_SETTINGS));
+            AiProjScanSettings scanSettings = JsonSettingsHelper.verify(params.get(Params.JSON_SETTINGS));
             name = scanSettings.getProjectName();
             jsonSettings = JsonSettingsHelper.minimize(params.get(Params.JSON_SETTINGS));
             jsonPolicy = JsonPolicyHelper.minimize(params.get(Params.JSON_POLICY));

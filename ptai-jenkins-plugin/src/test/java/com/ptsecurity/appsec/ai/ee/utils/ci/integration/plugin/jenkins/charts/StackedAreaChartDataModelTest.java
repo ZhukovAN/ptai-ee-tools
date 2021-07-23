@@ -1,32 +1,17 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssuesModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.BaseTest;
+import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.IssuesModel;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractToolTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.TempFile;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.IssuesModelHelper;
 import lombok.SneakyThrows;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
-class StackedAreaChartDataModelTest extends BaseTest {
+class StackedAreaChartDataModelTest extends AbstractToolTest {
     ObjectMapper mapper;
     protected IssuesModel[] issuesModels;
 

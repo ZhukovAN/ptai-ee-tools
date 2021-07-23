@@ -2,9 +2,9 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.scanresult.ScanResult;
-import com.ptsecurity.appsec.ai.ee.scanresult.issue.types.BaseIssue;
-import com.ptsecurity.appsec.ai.ee.scanresult.issue.types.BaseIssue.IssueLevel;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import lombok.*;
 import org.apache.commons.lang.WordUtils;
@@ -263,9 +263,9 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
                 .build();
         StackedAreaChartDataModel.Legend legend = StackedAreaChartDataModel.Legend.builder().build();
         // Prepare series to fill with data
-        Map<IssueLevel, Series> vulnerabilityTypeSeries = new HashMap<>();
-        for (IssueLevel level : IssueLevel.values()) {
-            if (IssueLevel.NONE.equals(level)) continue;
+        Map<Level, Series> vulnerabilityTypeSeries = new HashMap<>();
+        for (Level level : Level.values()) {
+            if (Level.NONE.equals(level)) continue;
             String levelName = WordUtils.capitalize(level.name().toLowerCase());
 
 
@@ -287,8 +287,8 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
             // As Jenkins itself prefixes build numbers with "#" sign, let's do the same for chart
             xAxis.data.add("#" + item.getLeft().toString());
             ScanResult issues = item.getRight();
-            for (IssueLevel level : IssueLevel.values()) {
-                if (IssueLevel.NONE.equals(level)) continue;
+            for (Level level : Level.values()) {
+                if (Level.NONE.equals(level)) continue;
                 if (null == issues.getIssues()) continue;
                 long count = issues.getIssues().stream()
                         .filter(baseIssue -> level.equals(baseIssue.getLevel()))

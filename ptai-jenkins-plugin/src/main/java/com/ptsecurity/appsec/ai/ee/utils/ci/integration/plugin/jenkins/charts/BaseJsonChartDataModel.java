@@ -1,8 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.scanresult.issue.types.BaseIssue;
-import com.ptsecurity.appsec.ai.ee.scanresult.issue.types.BaseIssue.IssueLevel;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level;
 import lombok.SneakyThrows;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -20,15 +19,15 @@ public class BaseJsonChartDataModel {
     public static int COLOR_LOW = 0x66cc99;
     public static int COLOR_POTENTIAL = 0x8cb5e1;
 
-    protected static final Map<IssueLevel, StackedAreaChartDataModel.Series.ItemStyle> ITEM_STYLE_MAP = new HashMap<>();
+    protected static final Map<Level, StackedAreaChartDataModel.Series.ItemStyle> ITEM_STYLE_MAP = new HashMap<>();
 
-    protected static final Map<IssueLevel, StackedAreaChartDataModel.Series.ItemStyle> AREA_STYLE_MAP = new HashMap<>();
+    protected static final Map<Level, StackedAreaChartDataModel.Series.ItemStyle> AREA_STYLE_MAP = new HashMap<>();
 
     static {
-        ITEM_STYLE_MAP.put(IssueLevel.HIGH, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_HIGH)).build());
-        ITEM_STYLE_MAP.put(IssueLevel.MEDIUM, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_MEDIUM)).build());
-        ITEM_STYLE_MAP.put(IssueLevel.LOW, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_LOW)).build());
-        ITEM_STYLE_MAP.put(IssueLevel.POTENTIAL, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_POTENTIAL)).build());
+        ITEM_STYLE_MAP.put(Level.HIGH, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_HIGH)).build());
+        ITEM_STYLE_MAP.put(Level.MEDIUM, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_MEDIUM)).build());
+        ITEM_STYLE_MAP.put(Level.LOW, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_LOW)).build());
+        ITEM_STYLE_MAP.put(Level.POTENTIAL, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_POTENTIAL)).build());
     }
 
     @SneakyThrows

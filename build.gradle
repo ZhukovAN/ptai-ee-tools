@@ -46,6 +46,10 @@ subprojects {
         options.compilerArgs << "-Xlint:unchecked"
     }
 
+    tasks.withType(Javadoc) {
+        options.encoding = 'UTF-8'
+    }
+
     jar {
         manifest.attributes['Implementation-Version'] = version
         manifest.attributes['Build-Time'] = buildTimestamp

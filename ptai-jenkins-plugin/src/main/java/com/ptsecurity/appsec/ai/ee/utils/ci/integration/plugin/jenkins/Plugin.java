@@ -1,10 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
@@ -23,7 +21,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import hudson.AbortException;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -48,7 +46,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @Slf4j
 @ToString
 public class Plugin extends Builder implements SimpleBuildStep {
-    private static final String CONSOLE_PREFIX = Base.DEFAULT_PREFIX;
+    private static final String CONSOLE_PREFIX = AbstractTool.DEFAULT_LOG_PREFIX;
 
     @Getter
     private final ConfigBase config;
@@ -153,7 +151,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
             check = scanSettingsManualDescriptor.doTestJsonPolicy(item, jsonPolicy);
             if (FormValidation.Kind.OK != check.kind)
                 throw new AbortException(check.getMessage());
-            ScanSettings scanSettings = JsonSettingsHelper.verify(jsonSettings);
+            AiProjScanSettings scanSettings = JsonSettingsHelper.verify(jsonSettings);
             projectName = scanSettings.getProjectName();
             String changedProjectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
             if (!projectName.equals(changedProjectName))

@@ -1,17 +1,25 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.operations.LocalFileOperations;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenerateReportsJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob.JobExecutionResult.SUCCESS;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 @CommandLine.Command(
@@ -40,65 +48,70 @@ public class GenerateReport extends BaseCommand implements Callable<Integer> {
     }
 
     @CommandLine.ArgGroup(multiplicity = "1")
-    private ProjectInfo projectInfo;
+    protected ProjectInfo projectInfo = null;
 
     @CommandLine.Option(
             names = {"--scan-result-id"}, order = 5,
             paramLabel = "<UUID>",
             description = "PT AI project scan result ID. If no value is defined latest scan result will be used for report generation")
-    private UUID scanResultId;
+    protected UUID scanResultId = null;
 
     /**
      * Reports to be generated. As multiplicity equals 1 this parameter is required,
      * so at least one report is to be defined
      */
     @CommandLine.ArgGroup(multiplicity = "1", order = 6, exclusive = true)
-    private BaseCommand.Reporting reports;
+    protected BaseCommand.Reporting reports = null;
 
     @CommandLine.Option(
             names = {"--output"}, order = 6,
             paramLabel = "<path>",
             description = "Folder where AST report is to be stored. By default .ptai folder is used")
-    protected Path output = Paths.get(System.getProperty("user.dir")).resolve(Base.DEFAULT_SAST_FOLDER);
+    protected Path output = Paths.get(System.getProperty("user.dir")).resolve(AbstractJob.DEFAULT_OUTPUT_FOLDER);
+
+    @Slf4j
+    @SuperBuilder
+    public static class CliGenerateReportsJob extends GenerateReportsJob {
+        protected Path truststore;
+        @Override
+        protected void init() throws GenericException {
+            String caCertsPem = (null == truststore)
+                    ? null
+                    : CallHelper.call(
+                    () -> {
+                        log.debug("Loading trusted certificates from {}", truststore.toString());
+                        return new String(Files.readAllBytes(truststore), UTF_8);
+                    },
+                    Resources.i18n_ast_settings_server_ca_pem_message_file_read_failed());
+            connectionSettings.setCaCertsPem(caCertsPem);
+            fileOps = LocalFileOperations.builder()
+                    .console(this)
+                    .saver(this)
+                    .build();
+            super.init();
+        }
+    }
 
     /**
-     * Generate reports defined by CLI parameters. As report generation
-     * does not start AST process, this method creates dummy AST job with
-     * random name and cals its
-     * {@link com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob#generateReports(UUID, UUID, Reports)}
-     * report generation method
+     * Generate reports defined by CLI parameters
      * @return Reports generation exit code
-     * @throws Exception
      */
     @Override
-    public Integer call() throws Exception {
-        // Create dummy AST job that will be used for reports generation
-        CliAstJob job = CliAstJob.builder()
+    public Integer call() {
+        CliGenerateReportsJob job = CliGenerateReportsJob.builder()
                 .console(System.out).prefix("").verbose(verbose)
-                .url(url.toString()).token(token).insecure(insecure)
+                .connectionSettings(ConnectionSettings.builder()
+                        .url(url.toString()).token(token).insecure(insecure)
+                        .build())
+                .projectId(projectInfo.id)
+                .projectName(projectInfo.name)
+                .scanResultId(scanResultId)
                 .output(output)
+                .reports(reports.convert())
                 .truststore(truststore)
                 .build();
-
-        try {
-            if (!job.init())
-                return ExitCode.FAILED.getCode();
-
-            if (null == projectInfo.id)
-                projectInfo.id = job.searchProject(projectInfo.name);
-            if (null == projectInfo.id)
-                throw ApiException.raise("Project " + projectInfo.name + " not found", new IllegalArgumentException(projectInfo.name));
-
-            if (null == scanResultId)
-                scanResultId = job.latestScanResult(projectInfo.id);
-            if (null == scanResultId)
-                throw ApiException.raise("Latest scan result not found", new IllegalArgumentException(projectInfo.name));
-
-            job.generateReports(projectInfo.id, scanResultId, reports.convert());
-            return ExitCode.SUCCESS.getCode();
-        } catch (ApiException e) {
-            job.severe(e);
-            return ExitCode.FAILED.getCode();
-        }
+        return (SUCCESS == job.execute())
+                ? BaseCommand.ExitCode.SUCCESS.getCode()
+                : BaseCommand.ExitCode.FAILED.getCode();
     }
 }

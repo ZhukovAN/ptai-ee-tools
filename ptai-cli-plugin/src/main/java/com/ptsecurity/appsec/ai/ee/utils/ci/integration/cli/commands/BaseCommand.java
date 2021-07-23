@@ -1,11 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -14,6 +13,8 @@ import picocli.CommandLine;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
 @Slf4j
 public abstract class BaseCommand {
@@ -58,9 +59,9 @@ public abstract class BaseCommand {
         /**
          * Method converts CLI reporting parameters to {@link Reports} instance.
          * @return {@link Reports} instance that is made of CLI parameters
-         * @throws ApiException EXception that contains error details if CLI-to-Reports conversion failed
+         * @throws GenericException EXception that contains error details if CLI-to-Reports conversion failed
          */
-        public Reports convert() throws ApiException {
+        public Reports convert() throws GenericException {
             if (null != reporting) {
                 Reports reports = new Reports();
                 // Convert CLI-defined report / export data to generic Reports instance
@@ -87,7 +88,7 @@ public abstract class BaseCommand {
                 return reports;
             } else {
                 // Load Reports instance from JSON file
-                String json = Base.callApi(
+                String json = call(
                         () -> FileUtils.readFileToString(reportingJson.toFile(), StandardCharsets.UTF_8),
                         Resources.i18n_ast_result_reporting_json_message_file_read_failed());
                 return Reports.validateJsonReports(json);

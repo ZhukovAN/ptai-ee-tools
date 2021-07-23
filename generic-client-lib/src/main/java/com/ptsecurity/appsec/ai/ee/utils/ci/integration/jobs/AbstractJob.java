@@ -1,0 +1,57 @@
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs;
+
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
+
+@Getter
+@Slf4j
+@RequiredArgsConstructor
+@SuperBuilder
+public abstract class AbstractJob extends AbstractTool {
+    public static final String DEFAULT_OUTPUT_FOLDER = ".ptai";
+    @NonNull
+    protected final ConnectionSettings connectionSettings;
+
+    public enum JobExecutionResult {
+        FAILED, INTERRUPTED, SUCCESS
+    }
+
+    @Getter
+    @Builder.Default
+    protected AbstractApiClient client = null;
+
+    public JobExecutionResult execute() {
+        try {
+            init();
+            validate();
+            client = Factory.client(connectionSettings);
+            client.setConsole(this);
+
+            unsafeExecute();
+            return JobExecutionResult.SUCCESS;
+        } catch (GenericException e) {
+            severe(e.getDetailedMessage());
+            log.error(e.getDetailedMessage(), e.getCause());
+            if (null != e.getCause() && e.getCause() instanceof InterruptedException)
+                return JobExecutionResult.INTERRUPTED;
+            return JobExecutionResult.FAILED;
+        }
+    }
+
+    protected abstract void init() throws GenericException;
+
+    protected void validate() throws GenericException {
+        connectionSettings.validate();
+    }
+
+    protected abstract void unsafeExecute() throws GenericException;
+}
