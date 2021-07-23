@@ -6,8 +6,7 @@ import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.ConfigurationIssue;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.*;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
@@ -244,10 +243,107 @@ public class JsonAstJobIT extends BaseAstIT {
             settings.setIsUseEntryAnalysisPoint(true);
         });
         Assertions.assertNotNull(scanResult);
+        Assertions.assertNotEquals(0, scanResult.getIssues().size());
         long lowLevelCount = scanResult.getIssues().stream()
                 .filter(i -> i instanceof ConfigurationIssue)
                 .map(i -> (ConfigurationIssue) i)
                 .filter(c -> BaseIssue.Level.LOW == c.getLevel()).count();
         Assertions.assertEquals(scanResult.getIssues().size(), lowLevelCount);
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Check PHP smoke miscellaneous project scan results contain SCA high level vulnerabilities only")
+    public void checkScaVulnerabilitiesOnly() {
+        ScanResult scanResult = analyseMiscScanResults((settings) -> {
+            settings.setScanAppType("Fingerprint");
+            settings.setIsUseEntryAnalysisPoint(true);
+        });
+        Assertions.assertNotNull(scanResult);
+        Assertions.assertNotEquals(0, scanResult.getIssues().size());
+        long highLevelCount = scanResult.getIssues().stream()
+                .filter(i -> i instanceof ScaIssue)
+                .map(i -> (ScaIssue) i)
+                .filter(c -> BaseIssue.Level.HIGH == c.getLevel()).count();
+        Assertions.assertEquals(scanResult.getIssues().size(), highLevelCount);
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Check PHP smoke miscellaneous project scan results contain PM potential level vulnerabilities only")
+    public void checkPmVulnerabilitiesOnly() {
+        ScanResult scanResult = analyseMiscScanResults((settings) -> {
+            settings.setScanAppType("PmTaint");
+            settings.setUseTaintAnalysis(false);
+            settings.setUsePmAnalysis(true);
+            settings.setIsUseEntryAnalysisPoint(true);
+        });
+        Assertions.assertNotNull(scanResult);
+        Assertions.assertNotEquals(0, scanResult.getIssues().size());
+        long potentialLevelCount = scanResult.getIssues().stream()
+                .filter(i -> i instanceof WeaknessIssue)
+                .map(i -> (WeaknessIssue) i)
+                .filter(c -> BaseIssue.Level.POTENTIAL == c.getLevel()).count();
+        Assertions.assertEquals(scanResult.getIssues().size(), potentialLevelCount);
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Check PHP smoke miscellaneous project scan results contain public / protected vulnerabilities only")
+    public void checkPublicProtectedVulnerabilitiesOnly() {
+        ScanResult scanResult = analyseMiscScanResults((settings) -> {
+            settings.setScanAppType("PHP");
+            settings.setUseTaintAnalysis(false);
+            settings.setUsePmAnalysis(true);
+            settings.setIsUseEntryAnalysisPoint(false);
+            settings.setIsUsePublicAnalysisMethod(true);
+        });
+        Assertions.assertNotNull(scanResult);
+        Assertions.assertNotEquals(0, scanResult.getIssues().size());
+        long publicProtectedCount = scanResult.getIssues().stream()
+                .filter(i -> i instanceof VulnerabilityIssue)
+                .map(i -> (VulnerabilityIssue) i)
+                .filter(c -> VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED == c.getScanMode()).count();
+        Assertions.assertEquals(scanResult.getIssues().size(), publicProtectedCount);
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Check PHP smoke miscellaneous project scan results contain different vulnerabilities")
+    public void checkAllVulnerabilities() {
+        ScanResult scanResult = analyseMiscScanResults((settings) -> {
+            settings.setScanAppType("PHP, PmTaint, Configuration, Fingerprint");
+            settings.setUseTaintAnalysis(false);
+            settings.setUsePmAnalysis(true);
+            settings.setIsUseEntryAnalysisPoint(true);
+            settings.setIsUsePublicAnalysisMethod(true);
+        });
+        Assertions.assertNotNull(scanResult);
+        Assertions.assertNotEquals(0, scanResult.getIssues().size());
+        Assertions.assertNotEquals(0, scanResult.getIssues().stream()
+                .filter(i -> BaseIssue.Level.HIGH == i.getLevel())
+                .count());
+        Assertions.assertNotEquals(0, scanResult.getIssues().stream()
+                .filter(i -> BaseIssue.Level.MEDIUM == i.getLevel())
+                .count());
+        Assertions.assertNotEquals(0, scanResult.getIssues().stream()
+                .filter(i -> BaseIssue.Level.LOW == i.getLevel())
+                .count());
+        Assertions.assertNotEquals(0, scanResult.getIssues().stream()
+                .filter(i -> BaseIssue.Level.POTENTIAL == i.getLevel())
+                .count());
+        Assertions.assertNotEquals(0, scanResult.getIssues().stream()
+                .filter(i -> BaseIssue.Level.HIGH == i.getLevel() || BaseIssue.Level.MEDIUM == i.getLevel())
+                .filter(i -> i instanceof VulnerabilityIssue)
+                .count());
+        Assertions.assertNotEquals(0, scanResult.getIssues().stream()
+                .filter(i -> BaseIssue.Level.HIGH == i.getLevel() || BaseIssue.Level.MEDIUM == i.getLevel())
+                .filter(i -> i instanceof ScaIssue)
+                .count());
+        Assertions.assertNotEquals(0, scanResult.getIssues().stream()
+                .filter(i -> i instanceof VulnerabilityIssue)
+                .map(i -> (VulnerabilityIssue) i)
+                .filter(c -> VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED == c.getScanMode())
+                .count());
     }
 }
