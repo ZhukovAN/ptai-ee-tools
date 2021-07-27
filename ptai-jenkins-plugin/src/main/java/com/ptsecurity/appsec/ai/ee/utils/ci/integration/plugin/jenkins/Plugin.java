@@ -2,6 +2,9 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
@@ -10,6 +13,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalcon
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigGlobal;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsManual;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
@@ -18,10 +22,9 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Bui
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeAsync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.AbortException;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -198,17 +201,26 @@ public class Plugin extends Builder implements SimpleBuildStep {
             throw new AbortException(check.getMessage());
         // TODO: Implement scan node support when PT AI will be able to
         // String node = StringUtils.isEmpty(nodeName) ? Base.DEFAULT_PTAI_NODE_NAME : nodeName;
+        Reports reports = null;
+        if (workMode instanceof WorkModeSync) {
+            WorkModeSync workModeSync = (WorkModeSync) workMode;
+            if (null != workModeSync.getReports())
+                reports = BaseReport.convert(workModeSync.getReports());
+        }
 
         JenkinsAstJob job = JenkinsAstJob.builder()
-                .name(projectName)
-                .jsonSettings(jsonSettings)
-                .jsonPolicy(jsonPolicy)
+                .projectName(selectedScanSettingsUi ? projectName : null)
+                .settings(selectedScanSettingsUi ? null : jsonSettings)
+                .policy(selectedScanSettingsUi ?  null : jsonPolicy)
                 .console(listener.getLogger())
                 .verbose(verbose)
                 .prefix(CONSOLE_PREFIX)
-                .url(serverUrl)
-                .token(credentials.getToken().getPlainText())
-                .insecure(serverInsecure)
+                .connectionSettings(ConnectionSettings.builder()
+                        .url(serverUrl)
+                        .token(credentials.getToken().getPlainText())
+                        .caCertsPem(credentials.getServerCaCertificates())
+                        .insecure(serverInsecure)
+                        .build())
                 .async(workMode instanceof WorkModeAsync)
                 .failIfFailed(failIfFailed)
                 .failIfUnstable(failIfUnstable)
@@ -218,16 +230,11 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .listener(listener)
                 .buildInfo(buildInfo)
                 .transfers(transfers)
-                .workMode(workMode)
+                .reports(reports)
                 .fullScanMode(fullScanMode)
                 .build();
-        if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
-            job.setCaCertsPem(credentials.getServerCaCertificates());
         job.info("JenkinsAstJob created: %s", job.toString());
-        if (!job.init())
-            throw new AbortException(Resources.validator_failed());
-
-        if (!AstJob.JobFinishedStatus.SUCCESS.equals(job.execute()))
+        if (!AbstractJob.JobExecutionResult.SUCCESS.equals(job.execute()))
             throw new AbortException(Resources.validator_failed());
     }
 

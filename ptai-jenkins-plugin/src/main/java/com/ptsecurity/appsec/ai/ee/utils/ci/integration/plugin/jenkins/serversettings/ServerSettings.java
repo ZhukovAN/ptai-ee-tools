@@ -17,11 +17,11 @@ import java.io.Serializable;
 @Symbol("ServerSettings")
 public class ServerSettings implements Describable<ServerSettings>, Serializable {
     @Getter
-    private String serverUrl;
+    private final String serverUrl;
     @Getter
-    private String serverCredentialsId;
+    private final String serverCredentialsId;
     @Getter
-    private boolean serverInsecure;
+    private final boolean serverInsecure;
 
     @DataBoundConstructor
     public ServerSettings(

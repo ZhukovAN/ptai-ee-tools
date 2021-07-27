@@ -1,16 +1,17 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.defaults;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import hudson.Extension;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 import jenkins.model.Jenkins;
+import lombok.NonNull;
 
 public class TransferDefaults implements Describable<TransferDefaults> {
     public String getIncludes() {
         return Transfer.DEFAULT_INCLUDES;
     }
-    public String getRemovePrefix() { return null; }
+    public String getRemovePrefix() { return Transfer.DEFAULT_REMOVE_PREFIX; }
     public String getExcludes() {
         return Transfer.DEFAULT_EXCLUDES;
     }
@@ -30,6 +31,7 @@ public class TransferDefaults implements Describable<TransferDefaults> {
     @Extension
     public static final class TransferDefaultsDescriptor extends Descriptor<TransferDefaults> {
         @Override
+        @NonNull
         public String getDisplayName() {
             return "";
         }

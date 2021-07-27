@@ -1,12 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.TextOutput;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.JsonAstJobSetupOperationsImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.UiAstJobSetupOperationsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.operations.JenkinsAstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.operations.JenkinsFileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildInfo;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
 import hudson.FilePath;
 import hudson.Launcher;
 import hudson.model.Run;
@@ -16,14 +20,16 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 @Getter
 @Setter
 @SuperBuilder
 @ToString(callSuper = true)
-public class JenkinsAstJob extends AstJob {
+public class JenkinsAstJob extends GenericAstJob implements TextOutput {
     @NonNull
     protected Run<?, ?> run;
     /**
@@ -79,27 +85,28 @@ public class JenkinsAstJob extends AstJob {
      */
     private List<Transfer> transfers;
 
-    /**
-     * Jenkins job work mode
-     *
-     * @param workMode New value for Jenkins job work mode
-     * @return The current value of Jenkins job work mode
-     */
-    private WorkMode workMode;
+    protected String settings;
+
+    protected String policy;
 
     @Override
-    public boolean unsafeInit() {
-        if (workMode instanceof WorkModeSync) {
-            WorkModeSync workModeSync = (WorkModeSync) workMode;
-            List<BaseReport> reports = workModeSync.getReports();
-            if (null != reports) setReports(BaseReport.convert(reports));
-        }
+    protected void init() throws GenericException {
         astOps = JenkinsAstOperations.builder()
                 .owner(this)
                 .build();
         fileOps = JenkinsFileOperations.builder()
                 .owner(this)
                 .build();
-        return super.unsafeInit();
+
+        if (null != settings)
+            setupOps = JsonAstJobSetupOperationsImpl.builder()
+                .jsonSettings(settings)
+                .jsonPolicy(policy)
+                .owner(this)
+                .build();
+        else
+            setupOps = UiAstJobSetupOperationsImpl.builder()
+                    .owner(this)
+                    .build();
     }
 }

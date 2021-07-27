@@ -11,17 +11,18 @@ f.entry(
 }
 
 f.entry(
-        title: _('removePrefix'),
-        field: 'removePrefix') {
-    f.textbox()
+        title: _('excludes'),
+        field: 'excludes') {
+    f.textbox(default: descriptor.transferDefaults.excludes)
 }
-f.advanced() {
-    f.entry(
-            title: _('excludes'),
-            field: 'excludes') {
-        f.textbox(default: descriptor.transferDefaults.excludes)
-    }
 
+f.entry(
+        title: _('useDefaultExcludes'),
+        field: 'useDefaultExcludes') {
+    f.checkbox(default: descriptor.transferDefaults.useDefaultExcludes)
+}
+
+f.advanced() {
     f.entry(
             title: _('patternSeparator'),
             field: 'patternSeparator') {
@@ -29,9 +30,9 @@ f.advanced() {
     }
 
     f.entry(
-            title: _('useDefaultExcludes'),
-            field: 'useDefaultExcludes') {
-        f.checkbox(default: descriptor.transferDefaults.useDefaultExcludes)
+            title: _('removePrefix'),
+            field: 'removePrefix') {
+        f.textbox(default: descriptor.transferDefaults.removePrefix)
     }
 
     f.entry(

@@ -1,9 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports;
 
-import com.ptsecurity.appsec.ai.ee.server.api.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import hudson.DescriptorExtensionList;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
@@ -25,14 +25,14 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
 
     /**
      * Method converts list of miscellaneous report defined for a job to
-     * {@link com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports}
+     * {@link com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports}
      * instance. If there were conversion errors like JSON parse fail,
      * an ApiException will be thrown
      * @param reports List of miscellaneous reports defined for a job
      * @return Reports instance that containt all the reports defined for a job
-     * @throws ApiException Exception that contains error details
+     * @throws GenericException Exception that contains error details
      */
-    public static Reports convert(final List<BaseReport> reports) throws ApiException {
+    public static Reports convert(final List<BaseReport> reports) throws GenericException {
         if (null == reports || reports.isEmpty()) return null;
         Reports res = new Reports();
         for (BaseReport r : reports) {

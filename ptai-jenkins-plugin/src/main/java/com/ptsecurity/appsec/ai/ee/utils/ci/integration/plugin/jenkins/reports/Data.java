@@ -1,10 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import hudson.Extension;
 import hudson.util.ListBoxModel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
@@ -48,7 +47,7 @@ public class Data extends BaseReport {
         public ListBoxModel doFillFormatItems() {
             ListBoxModel model = new ListBoxModel();
             Arrays.stream(Reports.Data.Format.values())
-                    .forEach(f -> model.add(f.getValue().getValue(), f.name()));
+                    .forEach(f -> model.add(f.name(), f.name()));
             return model;
         }
 

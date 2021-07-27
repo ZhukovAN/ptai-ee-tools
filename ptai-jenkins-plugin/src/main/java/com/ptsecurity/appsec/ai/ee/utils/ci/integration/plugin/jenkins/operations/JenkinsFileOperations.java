@@ -1,8 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.operations;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.JenkinsAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.RemoteFileUtils;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations.FileOperations;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +15,8 @@ import java.nio.file.Files;
 @RequiredArgsConstructor
 public class JenkinsFileOperations implements FileOperations {
     /**
-     * Jenkins AST job that provides Jenkins tools for AST to work. These tools include event log listener, remote workspace etc.
-     *
-     * @param owner New value for owner AST job
+     * Jenkins AST job that provides Jenkins tools for AST to work. These
+     * tools include event log listener, remote workspace etc.
      */
     @NonNull
     protected final JenkinsAstJob owner;

@@ -63,7 +63,7 @@ public class AstJobMultipleResults implements Action {
         return scanResults;
     }
 
-    @SuppressWarnings("unused") // Called by jelly view
+    @SuppressWarnings("unused") // Called by groovy view
     public boolean resultsAvailable() {
         final List<Pair<Integer, ScanResult>> issuesModelList = getLatestAstResults(1);
         return !issuesModelList.isEmpty();
@@ -74,7 +74,7 @@ public class AstJobMultipleResults implements Action {
      * @return the UI model as JSON
      */
     @JavaScriptMethod
-    @SuppressWarnings("unused") // Called by jelly view
+    @SuppressWarnings("unused") // Called by groovy view
     public JSONObject getSeverityDistributionTrend() {
         final List<Pair<Integer, ScanResult>> issuesModelList = getLatestAstResults(10);
         StackedAreaChartDataModel model = StackedAreaChartDataModel.create(issuesModelList);

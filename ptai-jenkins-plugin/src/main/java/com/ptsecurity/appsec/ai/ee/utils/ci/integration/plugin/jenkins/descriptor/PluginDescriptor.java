@@ -1,6 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor;
 
-import com.ptsecurity.appsec.ai.ee.server.api.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
@@ -16,8 +20,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serverset
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Item;
@@ -34,6 +37,7 @@ import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
+import sun.net.www.content.text.Generic;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -199,25 +203,25 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
                 // For manual defined (JSON) scan settings lack of project isn't a crime itself, just show warning
                 // instead of error
                 return selectedScanSettingsUi
-                        ? FormValidation.error(Messages.validator_test_ptaiProject_notfound())
-                        : FormValidation.warning(Messages.validator_test_ptaiProject_notfound());
+                        ? FormValidation.error(Resources.i18n_ast_settings_project_message_not_found(realProjectName))
+                        : FormValidation.warning(Resources.i18n_ast_settings_project_message_not_found(realProjectName));
             } else
-                return FormValidation.ok(Messages.validator_test_ptaiProject_success(projectId.toString().substring(0, 4)));
-        } catch (ApiException e) {
+                return FormValidation.ok(Resources.i18n_ast_settings_project_message_found_id(projectId.toString().substring(0, 4)));
+        } catch (GenericException e) {
             return Validator.error(e);
         }
     }
 
     private UUID searchProject(
             @NonNull final String name, @NonNull final String url,
-            @NonNull final Credentials credentials, final boolean insecure) throws ApiException {
-        Utils utils = Utils.builder()
+            @NonNull final Credentials credentials, final boolean insecure) throws GenericException {
+        AbstractApiClient client = Factory.client(ConnectionSettings.builder()
                 .url(url)
                 .token(credentials.getToken().getPlainText())
                 .insecure(insecure)
-                .caCertsPem(credentials.getServerCaCertificates()).build();
-        utils.init();
-        return utils.searchProject(name);
+                .caCertsPem(credentials.getServerCaCertificates())
+                .build());
+        return new Factory().projectTasks(client).searchProject(name);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs;
 
 import com.ptsecurity.appsec.ai.ee.scan.errors.Error;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
@@ -138,9 +139,8 @@ public abstract class GenericAstJob extends AbstractJob {
         // Wait for AST to complete and process results
         genericAstTasks.waitForComplete(scanResultId);
         scanBrief = genericAstTasks.getScanBrief(projectId, scanResultId);
-
-        // TODO: Move scanCompleteCallback to AstJob and its descendants
         astOps.scanCompleteCallback(scanBrief);
+
 
         ScanBrief.State state = scanBrief.getState();
         fine("Resulting state is " + state);

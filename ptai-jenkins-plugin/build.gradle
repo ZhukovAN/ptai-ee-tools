@@ -133,6 +133,10 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.8.1'
     // https://mvnrepository.com/artifact/commons-validator/commons-validator
     implementation 'commons-validator:commons-validator:1.6'
+
+    testImplementation(testFixtures(project(":ptai-data-structures")))
+    testImplementation(testFixtures(project(":ptai-rest-api")))
+    testImplementation(testFixtures(project(":generic-client-lib")))
 }
 
 // Retuns -1 if version a is before b, 0 if those are equal and 1 if a is after b

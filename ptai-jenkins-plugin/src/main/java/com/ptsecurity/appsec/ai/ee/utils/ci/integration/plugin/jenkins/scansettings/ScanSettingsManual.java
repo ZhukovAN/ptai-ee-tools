@@ -2,14 +2,15 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansett
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.Extension;
 import hudson.model.Item;
 import hudson.util.FormValidation;
 import lombok.Getter;
+import lombok.NonNull;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -33,6 +34,7 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
     @Extension
     public static class Descriptor extends ScanSettingsDescriptor {
         @Override
+        @NonNull
         public String getDisplayName() {
             return Messages.captions_scanSettingsManual_displayName();
         }
@@ -71,7 +73,7 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
                 if (!Validator.doCheckFieldNotEmpty(jsonPolicy))
                     return FormValidation.ok(Messages.validator_check_jsonPolicy_empty());
 
-                Policy policy[] = JsonPolicyHelper.verify(jsonPolicy);
+                Policy[] policy = JsonPolicyHelper.verify(jsonPolicy);
                 if (0 == policy.length)
                     return FormValidation.ok(Messages.validator_check_jsonPolicy_empty());
                 else

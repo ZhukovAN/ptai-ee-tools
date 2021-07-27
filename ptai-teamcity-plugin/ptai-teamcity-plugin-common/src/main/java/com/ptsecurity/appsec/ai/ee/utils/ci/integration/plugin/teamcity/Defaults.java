@@ -1,8 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 
@@ -18,7 +18,7 @@ public class Defaults {
     /**
      * See {@link Params#URL}
      */
-    public static final String URL = AbstractTool.DEFAULT_PTAI_URL;
+    public static final String URL = AbstractJob.DEFAULT_PTAI_URL;
 
     /**
      * See {@link Params#TOKEN}

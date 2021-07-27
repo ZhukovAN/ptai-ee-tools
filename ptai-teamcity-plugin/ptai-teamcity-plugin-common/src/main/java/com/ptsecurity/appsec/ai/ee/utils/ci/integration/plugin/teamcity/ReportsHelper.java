@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
-import com.ptsecurity.appsec.ai.ee.server.api.exceptions.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,11 +11,11 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.C
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
 
 public class ReportsHelper {
-    public static Reports convert(@NonNull final Map<String, String> data) throws ApiException {
+    public static Reports convert(@NonNull final Map<String, String> data) throws GenericException {
         Reports res = new Reports();
         if (TRUE.equals(data.getOrDefault(REPORTING_REPORT, Defaults.REPORTING_REPORT))) {
             Reports.Report report = new Reports.Report();
-            report.setFormat(Reports.Report.Format.from(
+            report.setFormat(Reports.Report.Format.valueOf(
                     data.getOrDefault(REPORTING_REPORT_FORMAT, Defaults.REPORTING_REPORT_FORMAT)));
             report.setLocale(Reports.Locale.from(
                     data.getOrDefault(REPORTING_REPORT_LOCALE, Defaults.REPORTING_REPORT_LOCALE)));
@@ -27,7 +27,7 @@ public class ReportsHelper {
         }
         if (TRUE.equals(data.getOrDefault(REPORTING_DATA, Defaults.REPORTING_DATA))) {
             Reports.Data report = new Reports.Data();
-            report.setFormat(Reports.Data.Format.from(
+            report.setFormat(Reports.Data.Format.valueOf(
                     data.getOrDefault(REPORTING_DATA_FORMAT, Defaults.REPORTING_DATA_FORMAT)));
             report.setLocale(Reports.Locale.from(
                     data.getOrDefault(REPORTING_DATA_LOCALE, Defaults.REPORTING_DATA_LOCALE)));

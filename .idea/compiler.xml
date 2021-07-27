@@ -31,6 +31,7 @@
         <module name="ptai-ee-tools.ptai-rest-api.test" />
         <module name="ptai-ee-tools.generic-client-lib.test" />
         <module name="ptai-ee-tools.ptai-cli-plugin.main" />
+        <module name="ptai-ee-tools.generic-client-lib.main" />
       </profile>
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
@@ -175,14 +176,6 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.ccil.cowan.tagsoup/tagsoup/0.9.7/dd2e509b92833f7440bed4dab6dfc0ff5b86ac25/tagsoup-0.9.7.jar" />
         </processorPath>
         <module name="ptai-ee-tools.ptai-jenkins-plugin.main" />
-      </profile>
-      <profile name="Gradle Imported" enabled="true">
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.atteo.classindex/classindex/3.11/d7eb12a6e6e00fbe54ef22e1f31c52b93d4dce76/classindex-3.11.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.20/18bcea7d5df4d49227b4a0743a536208ce4825bb/lombok-1.18.20.jar" />
-        </processorPath>
-        <module name="ptai-ee-tools.generic-client-lib.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8" />

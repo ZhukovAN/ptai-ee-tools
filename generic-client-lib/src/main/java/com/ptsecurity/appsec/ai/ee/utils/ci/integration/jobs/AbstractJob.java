@@ -18,8 +18,16 @@ import lombok.extern.slf4j.Slf4j;
 @SuperBuilder
 public abstract class AbstractJob extends AbstractTool {
     public static final String DEFAULT_OUTPUT_FOLDER = ".ptai";
+    public static final String DEFAULT_PTAI_URL = "https://ptai.domain.org:443";
+    public static final boolean DEFAULT_INSECURE = true;
+    public static final String DEFAULT_TOKEN = "";
     @NonNull
-    protected final ConnectionSettings connectionSettings;
+    @Builder.Default
+    protected ConnectionSettings connectionSettings = ConnectionSettings.builder()
+            .url(DEFAULT_PTAI_URL)
+            .token(DEFAULT_TOKEN)
+            .insecure(DEFAULT_INSECURE)
+            .build();
 
     public enum JobExecutionResult {
         FAILED, INTERRUPTED, SUCCESS

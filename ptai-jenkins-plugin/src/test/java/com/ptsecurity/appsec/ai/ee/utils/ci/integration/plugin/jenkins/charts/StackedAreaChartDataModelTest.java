@@ -1,33 +1,24 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.IssuesModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractToolTest;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.TempFile;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.IssuesModelHelper;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Path;
+import java.io.InputStream;
 
-class StackedAreaChartDataModelTest extends AbstractToolTest {
-    ObjectMapper mapper;
-    protected IssuesModel[] issuesModels;
-
-    @BeforeEach
-    public void pre() {
-        mapper = IssuesModelHelper.createObjectMapper();
-    }
-
+class StackedAreaChartDataModelTest extends BaseTest {
     @Test
     @SneakyThrows
     public void testJsonConversion() {
-        Path issuesFile = getPackedResourceFile("json/issuesModel/issuesModel.json.7z");
-        try (TempFile tempIssuesFile = new TempFile(issuesFile)) {
-
-        }
-
+        ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+        InputStream inputStream = getResourceStream("json/scan/result/php-bricks.json");
+        Assertions.assertNotNull(inputStream);
+        ScanResult scanResult = mapper.readValue(inputStream, ScanResult.class);
+        // StackedAreaChartDataModel model = StackedAreaChartDataModel.create(issuesModelList);
         /*
         TypeReference<Map<String,IssuesModel>> typeRef = new TypeReference<Map<String,IssuesModel>>() {};
         Map<String, IssuesModel> issuesModelMap = Assertions.assertDoesNotThrow(

@@ -1,13 +1,17 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.operations;
 
-import com.ptsecurity.appsec.ai.ee.server.api.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobSingleResult;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.JenkinsAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobSingleResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.RemoteFileUtils;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations.AstOperations;
 import hudson.FilePath;
 import hudson.Util;
 import hudson.model.Run;
@@ -37,7 +41,7 @@ public class JenkinsAstOperations implements AstOperations {
         Transfers transfers = new Transfers();
 
         for (com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Transfer transfer : owner.getTransfers())
-            transfers.addTransfer(com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer.builder()
+            transfers.addTransfer(Transfer.builder()
                     .excludes(replaceMacro(transfer.getExcludes()))
                     .flatten(transfer.isFlatten())
                     .useDefaultExcludes(transfer.isUseDefaultExcludes())
@@ -55,12 +59,18 @@ public class JenkinsAstOperations implements AstOperations {
         return zip;
     }
 
-    public void scanStartedCallback(@NonNull final UUID projectId, @NonNull UUID scanResultId) throws ApiException {
+    @Override
+    public void scanStartedCallback(@NonNull UUID projectId, @NonNull UUID scanResultId) throws GenericException {
+
     }
 
-    public void scanCompleteCallback(@NonNull final ScanResult scanResult) throws ApiException {
+    @Override
+    public void scanCompleteCallback(@NonNull ScanBrief scanBrief) throws GenericException {
         Run<?, ?> run = owner.getRun();
         AstJobSingleResult astJobSingleResult = new AstJobSingleResult(run);
+
+        GenericAstTasks genericAstTasks = new Factory().genericAstTasks(owner.getClient());
+        ScanResult scanResult = genericAstTasks.getScanResult(scanBrief.getProjectId(), scanBrief.getId());
         astJobSingleResult.setScanResult(scanResult);
         run.addAction(astJobSingleResult);
     }

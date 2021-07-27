@@ -3,12 +3,15 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descript
 import com.cloudbees.plugins.credentials.CredentialsMatchers;
 import com.cloudbees.plugins.credentials.common.StandardListBoxModel;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
+import com.ptsecurity.appsec.ai.ee.ServerCheckResult;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
 import hudson.Extension;
 import hudson.model.*;
 import hudson.model.queue.Tasks;
@@ -23,8 +26,6 @@ import org.kohsuke.stapler.QueryParameter;
 
 import java.util.Collections;
 import java.util.UUID;
-
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils.TestResult.State;
 
 @Extension
 public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
@@ -58,19 +59,16 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
 
             Credentials credentials = CredentialsImpl.getCredentialsById(item, serverCredentialsId);
 
-            Utils client = new Utils();
-            client.setUrl(serverUrl);
-            client.setToken(credentials.getToken().getPlainText());
-            if (!StringUtils.isEmpty(credentials.getServerCaCertificates()))
-                client.setCaCertsPem(credentials.getServerCaCertificates());
-            client.setInsecure(serverInsecure);
-            client.init();
-
-            Utils.TestResult res = client.testConnection();
-
-            return State.ERROR.equals(res.state())
+            AbstractApiClient client = Factory.client(ConnectionSettings.builder()
+                    .url(serverUrl)
+                    .token(credentials.getToken().getPlainText())
+                    .insecure(serverInsecure)
+                    .caCertsPem(credentials.getServerCaCertificates())
+                    .build());
+            ServerCheckResult res = new Factory().checkServerTasks(client).check();
+            return ServerCheckResult.State.ERROR.equals(res.getState())
                     ? FormValidation.error(res.text())
-                    : State.WARNING.equals(res.state())
+                    : ServerCheckResult.State.WARNING.equals(res.getState())
                     ? FormValidation.warning(res.text())
                     : FormValidation.ok(res.text());
         } catch (Exception e) {

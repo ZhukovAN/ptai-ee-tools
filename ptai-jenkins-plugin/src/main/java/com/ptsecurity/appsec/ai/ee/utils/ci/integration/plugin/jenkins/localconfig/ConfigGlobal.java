@@ -7,6 +7,7 @@ import hudson.Extension;
 import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 import lombok.Getter;
+import lombok.NonNull;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -25,6 +26,7 @@ public class ConfigGlobal extends ConfigBase {
     @Symbol("ConfigGlobal")
     public static class Descriptor extends ConfigBaseDescriptor {
         @Override
+        @NonNull
         public String getDisplayName() {
             return Messages.captions_config_configGlobal();
         }

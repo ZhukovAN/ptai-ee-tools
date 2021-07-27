@@ -1,9 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service;
 
-import com.ptsecurity.appsec.ai.ee.server.api.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.ReportsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.AstAdminSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import jetbrains.buildServer.controllers.BasePropertiesBean;
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
 import jetbrains.buildServer.util.StringUtil;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.SERVER_SETTINGS_GLOBAL;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.TRUE;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.SERVER_SETTINGS;
 
 public class PropertiesBean extends BasePropertiesBean {
     private final static String PROPERTY_PREFIX = "prop:";
@@ -57,23 +57,23 @@ public class PropertiesBean extends BasePropertiesBean {
 
     public String get(@NonNull final String name) {
         return getProperties().getOrDefault(name, "");
-    };
+    }
 
     public boolean empty(@NonNull final String name) {
         return (StringUtils.isEmpty(get(name)));
-    };
+    }
 
     public boolean none(@NonNull final String name) {
         return !getProperties().containsKey(name);
-    };
+    }
 
     public boolean eq(@NonNull final String name, @NonNull final String value) {
         return value.equals(get(name));
-    };
+    }
 
     public boolean isTrue(@NonNull final String name) {
         return TRUE.equals(get(name));
-    };
+    }
 
     public boolean injectGlobalSettings(@NonNull final AstAdminSettings settings) {
         if (!eq(SERVER_SETTINGS, SERVER_SETTINGS_GLOBAL)) return false;
@@ -82,7 +82,7 @@ public class PropertiesBean extends BasePropertiesBean {
         return true;
     }
 
-    public Reports convert() throws ApiException {
+    public Reports convert() throws GenericException {
         return ReportsHelper.convert(getProperties());
     }
 }

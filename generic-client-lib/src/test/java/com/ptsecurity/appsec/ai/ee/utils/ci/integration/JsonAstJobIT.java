@@ -337,13 +337,23 @@ public class JsonAstJobIT extends BaseAstIT {
                 .filter(i -> i instanceof VulnerabilityIssue)
                 .count());
         Assertions.assertNotEquals(0, scanResult.getIssues().stream()
-                .filter(i -> BaseIssue.Level.HIGH == i.getLevel() || BaseIssue.Level.MEDIUM == i.getLevel())
+                .filter(i -> BaseIssue.Level.HIGH == i.getLevel())
                 .filter(i -> i instanceof ScaIssue)
+                .count());
+        Assertions.assertNotEquals(0, scanResult.getIssues().stream()
+                .filter(i -> BaseIssue.Level.HIGH == i.getLevel())
+                .filter(i -> i instanceof ScaIssue)
+                .filter(s -> ((ScaIssue) s).getCveId().contains("CVE-2016-10033"))
                 .count());
         Assertions.assertNotEquals(0, scanResult.getIssues().stream()
                 .filter(i -> i instanceof VulnerabilityIssue)
                 .map(i -> (VulnerabilityIssue) i)
                 .filter(c -> VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED == c.getScanMode())
+                .count());
+        Assertions.assertNotEquals(0, scanResult.getIssues().stream()
+                .filter(i -> i instanceof VulnerabilityIssue)
+                .map(i -> (VulnerabilityIssue) i)
+                .filter(VulnerabilityIssue::getSecondOrder)
                 .count());
     }
 }

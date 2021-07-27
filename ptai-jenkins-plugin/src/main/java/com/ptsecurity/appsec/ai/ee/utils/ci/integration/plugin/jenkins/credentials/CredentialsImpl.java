@@ -4,8 +4,8 @@ import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.CredentialsScope;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
 import com.cloudbees.plugins.credentials.impl.BaseStandardCredentials;
-import com.ptsecurity.appsec.ai.ee.server.api.exceptions.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CertificateHelper;
 import hudson.Extension;
@@ -33,9 +33,9 @@ import java.util.UUID;
 
 public class CredentialsImpl extends BaseStandardCredentials implements Credentials, Cloneable {
     @Getter
-    Secret token;
+    protected Secret token;
     @Getter
-    String serverCaCertificates;
+    protected String serverCaCertificates;
 
     @DataBoundConstructor
     public CredentialsImpl(CredentialsScope scope, String id, String description,
@@ -54,10 +54,10 @@ public class CredentialsImpl extends BaseStandardCredentials implements Credenti
         }
     }
 
-    public static CredentialsImpl getCredentialsById(Item item, String id) throws ApiException {
+    public static CredentialsImpl getCredentialsById(Item item, String id) throws GenericException {
         if (item == null)
             // Construct a fake project
-            item = new FreeStyleProject((ItemGroup) Jenkins.get(), "fake-" + UUID.randomUUID().toString());
+            item = new FreeStyleProject((ItemGroup) Jenkins.get(), "fake-" + UUID.randomUUID());
         List<CredentialsImpl> credentials = CredentialsProvider.lookupCredentials(
                 CredentialsImpl.class,
                 item,
@@ -69,7 +69,7 @@ public class CredentialsImpl extends BaseStandardCredentials implements Credenti
         return credentials.stream()
                 .filter(c -> c.getId().equals(id))
                 .findAny()
-                .orElseThrow(() -> ApiException.raise("Credentials retrieval failed", new IllegalArgumentException("No credentials found with ID " + id)));
+                .orElseThrow(() -> GenericException.raise("Credentials retrieval failed", new IllegalArgumentException("No credentials found with ID " + id)));
     }
 
     @Extension
@@ -91,13 +91,14 @@ public class CredentialsImpl extends BaseStandardCredentials implements Credenti
                 for (X509Certificate cert : certs)
                     dn.append("{").append(cert.getSubjectDN().getName()).append("}, ");
                 return FormValidation.ok(Resources.validator_check_serverCaCertificates_success("[" + StringUtils.removeEnd(dn.toString().trim(), ",") + "]"));
-            } catch (ApiException e) {
+            } catch (GenericException e) {
                 return Validator.error(e);
             } catch (Exception e) {
                 return Validator.error(Resources.validator_check_serverCaCertificates_failed(), e);
             }
         }
 
+        @SuppressWarnings("unused") // Called by groovy view
         public FormValidation doCheckToken(@QueryParameter("token") String token) {
             return Validator.doCheckFieldNotEmpty(token, Resources.validator_check_token_empty());
         }

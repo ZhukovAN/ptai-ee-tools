@@ -4,12 +4,13 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
 import hudson.Extension;
 import lombok.Getter;
+import lombok.NonNull;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 public class ConfigCustom extends ConfigBase {
     @Getter
-    private ServerSettings serverSettings;
+    private final ServerSettings serverSettings;
 
     @DataBoundConstructor
     public ConfigCustom(
@@ -21,6 +22,7 @@ public class ConfigCustom extends ConfigBase {
     @Extension
     public static class Descriptor extends ConfigBaseDescriptor {
         @Override
+        @NonNull
         public String getDisplayName() {
             return Messages.captions_config_configCustom();
         }

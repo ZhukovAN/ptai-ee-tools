@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import hudson.Extension;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;

@@ -1,16 +1,19 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service;
 
-import com.ptsecurity.appsec.ai.ee.server.api.exceptions.ApiException;
+import com.ptsecurity.appsec.ai.ee.ServerCheckResult;
+import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.AstAdminSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CertificateHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.Validator;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
-import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import jetbrains.buildServer.controllers.ActionErrors;
 import jetbrains.buildServer.controllers.BasePropertiesBean;
 import jetbrains.buildServer.serverSide.crypt.RSACipher;
@@ -28,10 +31,10 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import static com.ptsecurity.appsec.ai.ee.ServerCheckResult.State.ERROR;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Messages.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params.*;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils.TestResult.State.ERROR;
 import static jetbrains.buildServer.util.StringUtil.emptyIfNull;
 
 /**
@@ -49,7 +52,7 @@ public class AstSettingsService {
     public static class VerificationResults extends ArrayList<Pair<String, String>> {
         protected String result = SUCCESS;
 
-        public void add(@NonNull final ApiException e) {
+        public void add(@NonNull final GenericException e) {
             add(Pair.of(null, e.getDetailedMessage()));
             failure();
         }
@@ -193,7 +196,7 @@ public class AstSettingsService {
                 List<X509Certificate> certs = CertificateHelper.readPem(emptyIfNull(bean.getProperties().get(CERTIFICATES)));
                 if (certs.isEmpty())
                     temp.addError(CERTIFICATES, Resources.i18n_ast_settings_server_ca_pem_message_parse_empty());
-            } catch (ApiException e) {
+            } catch (GenericException e) {
                 temp.addError(CERTIFICATES, Resources.i18n_ast_result_reporting_json_message_file_parse_failed_details(e.getDetailedMessage()));
                 log.warn(e.getDetailedMessage(), e);
             }
@@ -224,7 +227,7 @@ public class AstSettingsService {
             else {
                 try {
                     JsonSettingsHelper.verify(bean.get(JSON_SETTINGS));
-                } catch (ApiException e) {
+                } catch (GenericException e) {
                     results.add(JSON_SETTINGS, e.getDetailedMessage());
                     log.warn(e.getDetailedMessage(), e);
                 }
@@ -232,7 +235,7 @@ public class AstSettingsService {
 
             try {
                 JsonPolicyHelper.verify(bean.get(JSON_POLICY));
-            } catch (ApiException e) {
+            } catch (GenericException e) {
                 results.add(JSON_POLICY, e.getDetailedMessage());
                 log.warn(e.getDetailedMessage(), e);
             }
@@ -286,15 +289,13 @@ public class AstSettingsService {
         }
     }
 
-    private static Utils createUtils(@NonNull PropertiesBean bean) {
-        Utils utils = new Utils();
-        utils.setUrl(bean.get(URL));
-        utils.setToken(bean.get(TOKEN));
-        if (!bean.empty(CERTIFICATES))
-            utils.setCaCertsPem(bean.get(CERTIFICATES));
-        utils.setInsecure(bean.isTrue(INSECURE));
-        utils.init();
-        return utils;
+    private static AbstractApiClient createApiClient(@NonNull PropertiesBean bean) {
+        return Factory.client(ConnectionSettings.builder()
+                .url(bean.get(URL))
+                .token(bean.get(TOKEN))
+                .caCertsPem(bean.get(CERTIFICATES))
+                .insecure(bean.isTrue(INSECURE))
+                .build());
     }
 
     /**
@@ -305,12 +306,12 @@ public class AstSettingsService {
     protected static void checkConnectionSettings(@NonNull PropertiesBean bean, @NonNull final VerificationResults results) {
         // Check connection
         try {
-            Utils utils = createUtils(bean);
-            Utils.TestResult result = utils.testConnection();
-            result.stream().forEach(r -> results.add(r));
-            log.info(result.text());
-            results.setResult(result.state().equals(ERROR) ? FAILURE : SUCCESS);
-        } catch (ApiException e) {
+            AbstractApiClient client = createApiClient(bean);
+            ServerCheckResult res = new Factory().checkServerTasks(client).check();
+            res.stream().forEach(r -> results.add(r));
+            log.info(res.text());
+            results.setResult(res.getState().equals(ERROR) ? FAILURE : SUCCESS);
+        } catch (GenericException e) {
             log.warn(e.getDetailedMessage(), e);
             results.add(e);
         }
@@ -323,10 +324,10 @@ public class AstSettingsService {
      */
     protected static void checkAstSettings(@NonNull final PropertiesBean bean, @NonNull final VerificationResults results) {
         try {
-            Utils utils = createUtils(bean);
+            AbstractApiClient client = createApiClient(bean);
             // Check if project exists
             if (bean.eq(AST_SETTINGS, AST_SETTINGS_UI)) {
-                UUID projectId = utils.searchProject(bean.get(PROJECT_NAME));
+                UUID projectId = new Factory().projectTasks(client).searchProject(bean.get(PROJECT_NAME));
                 if (null != projectId)
                     results.add("Project " + bean.get(PROJECT_NAME) + " found, ID = " + projectId.toString());
                 else {
@@ -341,8 +342,9 @@ public class AstSettingsService {
             }
             // Check reporting settings
             Reports reports = bean.convert();
-            reports.validate().check(utils);
-        } catch (ApiException e) {
+            reports = reports.validate();
+            new Factory().reportsTasks(client).check(reports);
+        } catch (GenericException e) {
             log.warn(e.getDetailedMessage(), e);
             results.add(e);
         }

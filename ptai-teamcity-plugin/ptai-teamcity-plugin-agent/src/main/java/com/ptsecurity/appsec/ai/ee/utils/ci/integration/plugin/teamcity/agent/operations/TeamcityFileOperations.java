@@ -1,8 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.operations;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.TeamcityAstJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations.FileOperations;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,6 @@ public class TeamcityFileOperations implements FileOperations {
             }
         }
         FileUtils.writeByteArrayToFile(out.toFile(), data);
-        owner.getArtifactsWatcher().addNewArtifactsPath(out.toString() + "=>" + AbstractTool.DEFAULT_SAST_FOLDER);
+        owner.getArtifactsWatcher().addNewArtifactsPath(out.toString() + "=>" + AbstractJob.DEFAULT_OUTPUT_FOLDER);
     }
 }

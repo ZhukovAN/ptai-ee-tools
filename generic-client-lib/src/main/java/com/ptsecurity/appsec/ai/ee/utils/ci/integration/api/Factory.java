@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.VersionUnsupportedException;
@@ -9,13 +8,17 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.VersionHelper;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.atteo.classindex.ClassIndex;
 
 import java.lang.reflect.Modifier;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,31 +50,25 @@ public class Factory {
         return onClass(className).create(client).get();
     }
 
-    @NonNull
-    public static AbstractApiClient client(
-            @NonNull final ConnectionSettings connectionSettings,
-            @NonNull final int[] version) throws GenericException {
+    public static List<Class<?>> getAllClientImplementations() {
         // Search for available VersionRange-annotated non-abstract descendants of AbstractApiClient
-        Iterable<Class<?>> versionRangeAnnotatedClasses = ClassIndex.getAnnotated(VersionRange.class);
-        List<Class<? extends AbstractApiClient>> clientClasses = new ArrayList<>();
-        for (Class<?> clazz : versionRangeAnnotatedClasses) {
-            log.debug("Checking {} class", clazz.getCanonicalName());
-            if (!AbstractApiClient.class.isAssignableFrom(clazz)) continue;
-            if (Modifier.isAbstract(clazz.getModifiers())) continue;
-
-            AbstractApiClient client = onClass(clazz).create(connectionSettings).get();
-            log.debug("Class {} instance created", clazz.getCanonicalName());
-            return client;
-        }
-        throw GenericException.raise("PT AI server API client create failed", new VersionUnsupportedException());
+        log.debug("Scan PT AI server API client implementations");
+        Instant start = Instant.now();
+        ScanResult scanResult = new ClassGraph()
+                .enableClassInfo()
+                .enableAnnotationInfo()
+                .acceptPackages("com.ptsecurity.appsec")
+                .scan();
+        ClassInfoList classInfoList = scanResult.getClassesWithAnnotation(VersionRange.class.getName());
+        Duration classScanDuration = Duration.between(start, Instant.now());
+        log.debug("Scan took {} ns, {} client implementations found", classScanDuration.toNanos(), classInfoList.size());
+        return new ArrayList<>(classInfoList.loadClasses());
     }
 
     @NonNull
     public static AbstractApiClient client(@NonNull final ConnectionSettings connectionSettings) throws GenericException {
-        // Search for available VersionRange-annotated non-abstract descendants of AbstractApiClient
-        Iterable<Class<?>> versionRangeAnnotatedClasses = ClassIndex.getAnnotated(VersionRange.class);
-        List<Class<? extends AbstractApiClient>> clientClasses = new ArrayList<>();
-        for (Class<?> clazz : versionRangeAnnotatedClasses) {
+        List<Class<?>> clients = getAllClientImplementations();
+        for (Class<?> clazz : clients) {
             log.debug("Checking {} class", clazz.getCanonicalName());
             if (!AbstractApiClient.class.isAssignableFrom(clazz)) continue;
             if (Modifier.isAbstract(clazz.getModifiers())) continue;
@@ -81,9 +78,9 @@ public class Factory {
             client.init();
             log.debug("Class {} instance created", clazz.getCanonicalName());
             try {
-                call(() -> client.authenticate(), "Authentication failed");
+                call(client::authenticate, "Authentication failed");
                 log.debug("Client authenticated");
-                String versionString = call(() -> client.getCurrentApiVersion(), "PT AI API version read failed");
+                String versionString = call(client::getCurrentApiVersion, "PT AI API version read failed");
                 if (StringUtils.isEmpty(versionString)) {
                     log.debug("Empty PT AI API version");
                     continue;

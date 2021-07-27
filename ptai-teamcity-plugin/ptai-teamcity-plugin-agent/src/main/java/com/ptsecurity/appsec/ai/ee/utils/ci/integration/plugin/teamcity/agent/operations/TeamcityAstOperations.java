@@ -1,11 +1,12 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.operations;
 
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.TeamcityAstJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations.AstOperations;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -38,7 +39,9 @@ public class TeamcityAstOperations implements AstOperations {
     public void scanStartedCallback(@NonNull final UUID projectId, @NonNull UUID scanResultId) {
     }
 
-    public void scanCompleteCallback(@NonNull final ScanResult scanResult)  {
+    @Override
+    public void scanCompleteCallback(@NonNull ScanBrief scanBrief) throws GenericException {
+
     }
 
     public String replaceMacro(@NonNull String value, Map<String, String> replacements) {
