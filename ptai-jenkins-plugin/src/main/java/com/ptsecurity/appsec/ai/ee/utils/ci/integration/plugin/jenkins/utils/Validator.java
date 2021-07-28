@@ -1,8 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.UrlHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
@@ -95,11 +95,11 @@ public class Validator {
         // log.log(Level.FINEST, "FormValidation error", e);
         String caption = e.getMessage();
         if (StringUtils.isEmpty(caption))
-            return FormValidation.error(e, Messages.validator_test_failed());
+            return FormValidation.error(e, Resources.i18n_ast_settings_test_message_failed());
         else {
             Throwable cause = e;
             if (e instanceof GenericException) cause = e.getCause();
-            return FormValidation.error(cause, Messages.validator_test_failed_details(caption));
+            return FormValidation.error(cause, Resources.i18n_ast_settings_test_message_failed_details(caption));
         }
     }
 
@@ -107,7 +107,7 @@ public class Validator {
         // log.log(Level.FINEST, "FormValidation error", e);
         Throwable cause = e;
         if (e instanceof GenericException) cause = e.getCause();
-        return FormValidation.error(cause, Messages.validator_test_failed_details(message));
+        return FormValidation.error(cause, Resources.i18n_ast_settings_test_message_failed_details(message));
     }
 
     public static FormValidation error(String message) {

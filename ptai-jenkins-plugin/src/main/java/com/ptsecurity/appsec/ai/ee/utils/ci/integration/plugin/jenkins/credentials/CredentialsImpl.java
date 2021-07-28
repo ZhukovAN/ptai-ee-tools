@@ -77,30 +77,30 @@ public class CredentialsImpl extends BaseStandardCredentials implements Credenti
         @Override
         @NonNull
         public String getDisplayName() {
-            return Resources.captions_credentials_displayName();
+            return Resources.i18n_ast_settings_server_credentials_label();
         }
 
         @SuppressWarnings("unused") // Called by groovy view
         public FormValidation doTestServerCaCertificates(
                 @QueryParameter("serverCaCertificates") final String serverCaCertificates) {
             if (StringUtils.isEmpty(serverCaCertificates))
-                return FormValidation.warning(Resources.validator_check_serverCaCertificates_empty());
+                return FormValidation.warning(Resources.i18n_ast_settings_server_ca_pem_message_parse_empty());
             try {
                 List<X509Certificate> certs = CertificateHelper.readPem(serverCaCertificates);
                 StringBuilder dn = new StringBuilder();
                 for (X509Certificate cert : certs)
                     dn.append("{").append(cert.getSubjectDN().getName()).append("}, ");
-                return FormValidation.ok(Resources.validator_check_serverCaCertificates_success("[" + StringUtils.removeEnd(dn.toString().trim(), ",") + "]"));
+                return FormValidation.ok(Resources.i18n_ast_settings_server_ca_pem_message_parse_success("[" + StringUtils.removeEnd(dn.toString().trim(), ",") + "]"));
             } catch (GenericException e) {
                 return Validator.error(e);
             } catch (Exception e) {
-                return Validator.error(Resources.validator_check_serverCaCertificates_failed(), e);
+                return Validator.error(Resources.i18n_ast_settings_server_ca_pem_message_parse_failed_details(), e);
             }
         }
 
         @SuppressWarnings("unused") // Called by groovy view
         public FormValidation doCheckToken(@QueryParameter("token") String token) {
-            return Validator.doCheckFieldNotEmpty(token, Resources.validator_check_token_empty());
+            return Validator.doCheckFieldNotEmpty(token, Resources.i18n_ast_settings_server_token_message_empty());
         }
     }
 }

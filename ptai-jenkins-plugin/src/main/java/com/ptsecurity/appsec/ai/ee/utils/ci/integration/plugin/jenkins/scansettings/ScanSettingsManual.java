@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
@@ -36,18 +36,18 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
         @Override
         @NonNull
         public String getDisplayName() {
-            return Messages.captions_scanSettingsManual_displayName();
+            return Resources.i18n_ast_settings_type_manual_label();
         }
 
         public FormValidation doCheckJsonSettings(@QueryParameter("jsonSettings") String jsonSettings) {
-            FormValidation res = Validator.doCheckFieldNotEmpty(jsonSettings, Messages.validator_check_field_empty());
+            FormValidation res = Validator.doCheckFieldNotEmpty(jsonSettings, Resources.i18n_ast_settings_type_manual_json_settings_message_empty());
             if (FormValidation.Kind.OK != res.kind) return res;
-            return Validator.doCheckFieldJsonSettings(jsonSettings, Messages.validator_check_jsonSettings_invalid());
+            return Validator.doCheckFieldJsonSettings(jsonSettings, Resources.i18n_ast_settings_type_manual_json_settings_message_invalid());
         }
 
         public FormValidation doCheckJsonPolicy(@QueryParameter("jsonPolicy") String jsonPolicy) {
             if (Validator.doCheckFieldNotEmpty(jsonPolicy))
-                return Validator.doCheckFieldJsonPolicy(jsonPolicy, Messages.validator_check_jsonPolicy_invalid());
+                return Validator.doCheckFieldJsonPolicy(jsonPolicy, Resources.i18n_ast_settings_type_manual_json_policy_message_invalid());
             else
                 return FormValidation.ok();
         }
@@ -57,10 +57,10 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
                 @QueryParameter("jsonSettings") final String jsonSettings) {
             try {
                 if (!Validator.doCheckFieldNotEmpty(jsonSettings))
-                    return Validator.error(Messages.validator_check_jsonSettings_empty());
+                    return Validator.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty());
 
                 AiProjScanSettings settings = JsonSettingsHelper.verify(jsonSettings);
-                return FormValidation.ok(Messages.validator_check_jsonSettings_success(settings.getProjectName(), settings.getProgrammingLanguage()));
+                return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_settings_message_success(settings.getProjectName(), settings.getProgrammingLanguage()));
             } catch (Exception e) {
                 return Validator.error(e);
             }
@@ -71,13 +71,13 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
                 @QueryParameter("jsonPolicy") final String jsonPolicy) {
             try {
                 if (!Validator.doCheckFieldNotEmpty(jsonPolicy))
-                    return FormValidation.ok(Messages.validator_check_jsonPolicy_empty());
+                    return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_empty());
 
                 Policy[] policy = JsonPolicyHelper.verify(jsonPolicy);
                 if (0 == policy.length)
-                    return FormValidation.ok(Messages.validator_check_jsonPolicy_empty());
+                    return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_empty());
                 else
-                    return FormValidation.ok(Messages.validator_check_jsonPolicy_success(policy.length));
+                    return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_success(policy.length));
             } catch (Exception e) {
                 return Validator.error(e);
             }

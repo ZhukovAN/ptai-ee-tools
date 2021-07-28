@@ -4,10 +4,10 @@ import com.cloudbees.plugins.credentials.CredentialsMatchers;
 import com.cloudbees.plugins.credentials.common.StandardListBoxModel;
 import com.cloudbees.plugins.credentials.domains.DomainRequirement;
 import com.ptsecurity.appsec.ai.ee.ServerCheckResult;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
@@ -34,9 +34,9 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
     }
 
     public FormValidation doCheckServerUrl(@QueryParameter("serverUrl") String serverUrl) {
-        FormValidation res = Validator.doCheckFieldNotEmpty(serverUrl, Messages.validator_check_field_empty());
+        FormValidation res = Validator.doCheckFieldNotEmpty(serverUrl, Resources.i18n_ast_settings_server_url_message_empty());
         if (FormValidation.Kind.OK != res.kind) return res;
-        return Validator.doCheckFieldUrl(serverUrl, Messages.validator_check_url_invalid());
+        return Validator.doCheckFieldUrl(serverUrl, Resources.i18n_ast_settings_server_url_message_invalid());
     }
 
     public static String lowerFirstLetter(@NonNull final String text) {
@@ -52,10 +52,10 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
             @QueryParameter("serverInsecure") final boolean serverInsecure) {
         try {
             if (!Validator.doCheckFieldNotEmpty(serverUrl))
-                throw new RuntimeException(Messages.validator_check_serverUrl_empty());
+                throw new RuntimeException(Resources.i18n_ast_settings_server_url_message_empty());
             boolean urlInvalid = !Validator.doCheckFieldUrl(serverUrl);
             if (!Validator.doCheckFieldNotEmpty(serverCredentialsId))
-                throw new RuntimeException(Messages.validator_check_serverCredentialsId_empty());
+                throw new RuntimeException(Resources.i18n_ast_settings_server_credentials_message_empty());
 
             Credentials credentials = CredentialsImpl.getCredentialsById(item, serverCredentialsId);
 

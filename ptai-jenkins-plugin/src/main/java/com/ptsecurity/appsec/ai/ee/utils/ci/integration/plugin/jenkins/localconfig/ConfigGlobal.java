@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.Config;
 import hudson.Extension;
@@ -28,7 +28,7 @@ public class ConfigGlobal extends ConfigBase {
         @Override
         @NonNull
         public String getDisplayName() {
-            return Messages.captions_config_configGlobal();
+            return Resources.i18n_ast_settings_config_global_label();
         }
 
         public ListBoxModel doFillConfigNameItems() {

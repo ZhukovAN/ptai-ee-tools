@@ -100,7 +100,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
             }
             return env;
         } catch (Exception e) {
-            throw new RuntimeException(Resources.exception_failedToGetEnvVars(), e);
+            throw new RuntimeException(Resources.i18n_ast_result_status_failed_environment(), e);
         }
     }
 
@@ -172,8 +172,6 @@ public class Plugin extends Builder implements SimpleBuildStep {
         String serverUrl;
         boolean serverInsecure;
 
-        //TODO Move all settings processing to JenkinsAstJob.unsafeInit method
-
         if (config instanceof ConfigGlobal) {
             // Settings are defined globally, job just refers them using configName
             configName = ((ConfigGlobal) config).getConfigName();
@@ -235,7 +233,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .build();
         job.info("JenkinsAstJob created: %s", job.toString());
         if (!AbstractJob.JobExecutionResult.SUCCESS.equals(job.execute()))
-            throw new AbortException(Resources.validator_failed());
+            throw new AbortException(Resources.i18n_ast_result_status_failed());
     }
 
     @Override

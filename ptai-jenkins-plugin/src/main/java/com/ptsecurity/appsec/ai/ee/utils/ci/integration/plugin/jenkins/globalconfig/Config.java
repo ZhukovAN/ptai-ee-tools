@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import hudson.Extension;
@@ -48,11 +48,11 @@ public class Config extends AbstractDescribableImpl<Config> implements Cloneable
         @Override
         @NonNull
         public String getDisplayName() {
-            return Messages.captions_config_displayName();
+            return Resources.i18n_ast_settings_config_global_label();
         }
 
         public FormValidation doCheckConfigName(@QueryParameter("configName") String configName) {
-            return Validator.doCheckFieldNotEmpty(configName, Messages.validator_check_field_empty());
+            return Validator.doCheckFieldNotEmpty(configName, Resources.i18n_ast_settings_config_global_name_message_empty());
         }
     }
 }

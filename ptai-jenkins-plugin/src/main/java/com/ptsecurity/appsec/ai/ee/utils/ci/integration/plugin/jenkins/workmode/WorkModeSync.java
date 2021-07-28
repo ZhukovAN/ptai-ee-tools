@@ -45,7 +45,7 @@ public class WorkModeSync extends WorkMode {
         @NonNull
         @Override
         public String getDisplayName() {
-            return Resources.captions_workMode_sync_displayName();
+            return Resources.i18n_ast_settings_mode_synchronous_label();
         }
     }
 

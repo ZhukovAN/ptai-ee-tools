@@ -71,16 +71,16 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
     public static abstract class BaseReportDescriptor extends Descriptor<BaseReport> {
 
         public FormValidation doCheckFileName(@QueryParameter("fileName") String fileName) {
-            return Validator.doCheckFieldNotEmpty(fileName, Resources.validator_check_field_empty());
+            return Validator.doCheckFieldNotEmpty(fileName, Resources.i18n_ast_result_reporting_report_file_message_empty());
         }
 
         public FormValidation doCheckTemplate(@QueryParameter("template") String template) {
-            return Validator.doCheckFieldNotEmpty(template, Resources.validator_check_field_empty());
+            return Validator.doCheckFieldNotEmpty(template, Resources.i18n_ast_result_reporting_report_template_message_empty());
         }
 
         public FormValidation doCheckFilter(@QueryParameter("filter") String filter) {
             if (Validator.doCheckFieldNotEmpty(filter))
-                return Validator.doCheckFieldJsonIssuesFilter(filter, Resources.i18n_validator_reporting_issuesfilter_incorrect());
+                return Validator.doCheckFieldJsonIssuesFilter(filter, Resources.i18n_ast_result_reporting_report_filter_message_invalid());
             else
                 return FormValidation.ok();
         }

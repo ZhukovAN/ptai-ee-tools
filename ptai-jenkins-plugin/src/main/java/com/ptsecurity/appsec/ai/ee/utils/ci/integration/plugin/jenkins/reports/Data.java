@@ -53,8 +53,8 @@ public class Data extends BaseReport {
 
         public ListBoxModel doFillLocaleItems() {
             ListBoxModel model = new ListBoxModel();
-            model.add(Resources.captions_locale_english_displayName(), Reports.Locale.EN.name());
-            model.add(Resources.captions_locale_russian_displayName(), Reports.Locale.RU.name());
+            model.add(Resources.i18n_misc_enums_locale_english_label(), Reports.Locale.EN.name());
+            model.add(Resources.i18n_misc_enums_locale_russian_label(), Reports.Locale.RU.name());
             return model;
         }
     }

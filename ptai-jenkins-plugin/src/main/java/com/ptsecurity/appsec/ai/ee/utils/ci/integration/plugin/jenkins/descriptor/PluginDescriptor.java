@@ -5,7 +5,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
@@ -37,7 +36,6 @@ import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
-import sun.net.www.content.text.Generic;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -139,7 +137,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             }
             if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
                 if (!Validator.doCheckFieldNotEmpty(configName)) {
-                    res = Validator.error(Messages.validator_check_configName_empty());
+                    res = Validator.error(Resources.i18n_ast_settings_config_global_name_message_empty());
                     break;
                 }
             } else if (configLocalDescriptor.getDisplayName().equals(selectedConfig)) {
@@ -147,7 +145,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
                 res = serverSettingsDescriptor.doCheckServerUrl(serverUrl);
                 if (FormValidation.Kind.OK != res.kind) break;
                 if (!Validator.doCheckFieldNotEmpty(serverCredentialsId)) {
-                    res = Validator.error(Messages.validator_check_serverCredentialsId_empty());
+                    res = Validator.error(Resources.i18n_ast_settings_server_credentials_message_empty());
                     break;
                 }
             }
@@ -203,10 +201,10 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
                 // For manual defined (JSON) scan settings lack of project isn't a crime itself, just show warning
                 // instead of error
                 return selectedScanSettingsUi
-                        ? FormValidation.error(Resources.i18n_ast_settings_project_message_not_found(realProjectName))
-                        : FormValidation.warning(Resources.i18n_ast_settings_project_message_not_found(realProjectName));
+                        ? FormValidation.error(Resources.i18n_ast_settings_type_ui_project_message_not_found(realProjectName))
+                        : FormValidation.warning(Resources.i18n_ast_settings_type_ui_project_message_not_found(realProjectName));
             } else
-                return FormValidation.ok(Resources.i18n_ast_settings_project_message_found_id(projectId.toString().substring(0, 4)));
+                return FormValidation.ok(Resources.i18n_ast_settings_type_ui_project_message_found_id(projectId.toString().substring(0, 4)));
         } catch (GenericException e) {
             return Validator.error(e);
         }
@@ -227,7 +225,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
     @Override
     @Nonnull
     public String getDisplayName() {
-        return Messages.captions_plugin_displayName();
+        return Resources.i18n_ast_plugin_label();
     }
 
     public static List<ConfigBase.ConfigBaseDescriptor> getConfigDescriptors() {

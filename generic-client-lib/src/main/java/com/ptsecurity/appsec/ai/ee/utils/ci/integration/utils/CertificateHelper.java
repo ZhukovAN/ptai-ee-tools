@@ -67,9 +67,8 @@ public class CertificateHelper {
                 builder.append(ENCODER.encodeToString(encoded)).append(SEPARATOR);
                 builder.append("-----END CERTIFICATE-----").append(SEPARATOR);
             } catch (CertificateEncodingException e) {
-                // TODO: Implement logging
-                // log.error("Failed to encode certificate: {}", certificate.getSubjectDN().getName());
-                // log.trace("Exception details:", e);
+                log.debug("Failed to encode certificate: {}", certificate.getSubjectDN().getName());
+                log.debug("Exception details", e);
             }
         }
         return (0 == builder.length())

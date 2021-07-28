@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
 import hudson.Extension;
 import lombok.Getter;
@@ -24,7 +24,7 @@ public class ConfigCustom extends ConfigBase {
         @Override
         @NonNull
         public String getDisplayName() {
-            return Messages.captions_config_configCustom();
+            return Resources.i18n_ast_settings_config_custom_label();
         }
     }
 }

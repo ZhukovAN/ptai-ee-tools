@@ -66,17 +66,6 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
             return BuildFinishedStatus.FINISHED_FAILED;
     }
 
-    protected String validateNotEmpty(final String value) {
-        if (StringUtils.isNotEmpty(value)) return value;
-        throw new IllegalArgumentException(Resources.validator_check_field_empty());
-    }
-
-    protected String validateUrl(final String value) {
-        String url = validateNotEmpty(value);
-        if (UrlHelper.checkUrl(url)) return url;
-        throw new IllegalArgumentException(Resources.validator_check_url_invalid());
-    }
-
     private AbstractJob.JobExecutionResult ast() {
         Map<String, String> params = buildRunnerContext.getRunnerParameters();
         Map<String, String> globals = agentRunningBuild.getSharedConfigParameters();
