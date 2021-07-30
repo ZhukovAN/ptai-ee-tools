@@ -3,10 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.VersionUnsupportedException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.CheckServerTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.VersionHelper;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
@@ -22,6 +19,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
@@ -80,7 +78,8 @@ public class Factory {
             try {
                 call(client::authenticate, "Authentication failed");
                 log.debug("Client authenticated");
-                String versionString = call(client::getCurrentApiVersion, "PT AI API version read failed");
+                String versionString = call(client::getCurrentApiVersion, "PT AI API version read failed")
+                        .get(ServerVersionTasks.Component.AIE);
                 if (StringUtils.isEmpty(versionString)) {
                     log.debug("Empty PT AI API version");
                     continue;

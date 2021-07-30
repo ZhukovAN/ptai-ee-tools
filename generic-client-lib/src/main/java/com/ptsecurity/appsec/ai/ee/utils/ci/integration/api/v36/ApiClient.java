@@ -26,6 +26,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.tasks.ServerVers
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.JwtResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ApiClientHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.LoggingInterceptor;
 import io.reactivex.Single;
@@ -157,7 +158,7 @@ public class ApiClient extends AbstractApiClient {
     }
 
     @Override
-    public String getCurrentApiVersion() throws GenericException {
+    public Map<ServerVersionTasks.Component, String> getCurrentApiVersion() throws GenericException {
         return new ServerVersionTasksImpl(this).current();
     }
 

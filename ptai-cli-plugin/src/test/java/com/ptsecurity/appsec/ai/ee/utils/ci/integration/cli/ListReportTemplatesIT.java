@@ -11,7 +11,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
 
 @DisplayName("Report templates list read tests")
-@Tag("integration-legacy")
+@Tag("integration")
 class ListReportTemplatesIT extends BaseCliIT {
 
     @Test

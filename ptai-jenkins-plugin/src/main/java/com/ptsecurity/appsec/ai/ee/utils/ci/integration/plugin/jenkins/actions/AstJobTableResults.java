@@ -32,8 +32,7 @@ public class AstJobTableResults implements Action {
     @Override
     public String getIconFileName() {
         // TODO: Implement project actions and uncomment this
-        // return "plugin/" + Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin").getShortName() + "/24x24.png";
-        return null;
+        return "plugin/" + Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin").getShortName() + "/24x24.png";
     }
 
     @Override

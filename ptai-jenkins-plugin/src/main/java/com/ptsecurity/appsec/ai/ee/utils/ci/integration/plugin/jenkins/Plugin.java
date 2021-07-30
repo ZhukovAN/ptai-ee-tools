@@ -6,6 +6,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSetting
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
@@ -277,7 +278,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
         projectActions = new ArrayList<>();
         projectActions.add(new AstJobMultipleResults(project));
         // TODO: Implement project actions and uncomment this
-        // projectActions.add(new AstJobTableResults(project.getName()));
+        projectActions.add(new AstJobTableResults(project.getName()));
         return projectActions;
     }
 }

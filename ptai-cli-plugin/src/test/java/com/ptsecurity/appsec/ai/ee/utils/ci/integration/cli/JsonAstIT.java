@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 @DisplayName("Check JSON-defined AST scans")
-@Tag("integration-legacy")
+@Tag("integration")
 class JsonAstIT extends BaseCliAstIT {
     protected String newProjectName;
 

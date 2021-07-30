@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.ClassUtils;
+import org.joor.Reflect;
 import org.parboiled.common.StringUtils;
 
 import java.lang.reflect.Field;
@@ -43,7 +44,7 @@ public class BaseJsonChartDataModel {
                 JsonProperty jsonProperty = field.getAnnotation(JsonProperty.class);
                 String jsonFieldName = StringUtils.isEmpty(jsonProperty.value())
                         ? field.getName() : jsonProperty.value();
-                Object value = field.get(object);
+                Object value = Reflect.on(object).field(field.getName()).get();
                 if (null == value) continue;
 
                 Object jsonValue = convertValue(value);

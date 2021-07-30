@@ -15,6 +15,9 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-io/commons-io
     // Need this to load data from resource streams, including ones provided by fixturesApi
     testImplementation "commons-io:commons-io:$commonsIoVersion"
+
+    testImplementation(testFixtures(project(":ptai-test-tools")))
+
     // Need this to work with streams and files inside dependent tests
     testFixturesApi "commons-io:commons-io:$commonsIoVersion"
     // Need this to work with streams and files inside test fixtures methods

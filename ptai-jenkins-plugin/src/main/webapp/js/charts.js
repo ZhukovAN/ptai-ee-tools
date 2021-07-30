@@ -13,3 +13,23 @@ function renderTrendChart(chartDivId, chartModel) {
         chart.resize();
     };
 }
+
+function textWidth(text, font) {
+    let canvas = document.getElementById('computedTextWidth');
+    if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvas.id = 'computedTextWidth';
+        canvas.style.cssText = 'visibility: hidden; position: absolute; left: -999em; top:-999em;';
+        document.body.appendChild(canvas);
+    }
+    const context = canvas.getContext('2d');
+    context.font = font;
+    context.fillText(text, 0, 0);
+    return context.measureText(text).width;
+}
+
+function maxTextWidth(strings, font) {
+    var widths = strings.map(title => textWidth(title, font))
+    return widths.reduce(function(a, b) { return Math.max(a, b); }, 0)
+}
+

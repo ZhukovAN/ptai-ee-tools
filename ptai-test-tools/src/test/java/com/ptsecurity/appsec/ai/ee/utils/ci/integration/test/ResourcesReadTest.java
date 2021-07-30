@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
@@ -17,14 +18,17 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.logging.LogManager;
 
+@Slf4j
 @DisplayName("Test base resources data read and parse test tools")
 public class ResourcesReadTest extends BaseTest {
     @SneakyThrows
     @Test
     @DisplayName("Read data from plain text resource file")
     public void readTextResource() {
+        log.debug("Trying to get test resource stream");
         InputStream inputStream = getResourceStream("data/test.txt");
         Assertions.assertNotNull(inputStream);
+        log.debug("Test resource stream successfully loaded");
         String data = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         Assertions.assertTrue("TEST".equalsIgnoreCase(data));
     }
@@ -79,12 +83,5 @@ public class ResourcesReadTest extends BaseTest {
             TestJson json = mapper.readValue(jsonFile.toFile(), TestJson.class);
             Assertions.assertTrue("TEST".equalsIgnoreCase(json.value));
         }
-    }
-
-    @SneakyThrows
-    @BeforeAll
-    public static void init() {
-        InputStream stream = BaseTest.class.getResourceAsStream("/logging.properties");
-        LogManager.getLogManager().readConfiguration(stream);
     }
 }

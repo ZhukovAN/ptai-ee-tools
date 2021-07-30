@@ -14,12 +14,15 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.ScanE
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanCompleteEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
@@ -90,6 +93,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
 
     @Override
     public ScanBrief getScanBrief(@NonNull UUID projectId, @NonNull UUID scanResultId) throws GenericException {
+        String projectName = new ProjectTasksImpl(client).searchProject(projectId);
         com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult = call(
                 () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
                 "Get project scan result failed");
@@ -100,8 +104,11 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                 "Get project scan settings failed");
         log.debug("Project {} scan result {} settings loaded", projectId, scanResultId);
 
+        ServerVersionTasks serverVersionTasks = new ServerVersionTasksImpl(client);
+        Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
+
         com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief res = call(
-                () -> IssuesConverter.convert(scanResult, scanSettings), "Project scan brief convert failed");
+                () -> IssuesConverter.convert(projectName, scanResult, scanSettings, versions), "Project scan brief convert failed");
         log.debug("Project scan result conversion complete");
         return res;
     }
@@ -123,8 +130,12 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                 "Get project scan settings failed");
         log.debug("Project {} scan result {} settings loaded", projectId, scanResultId);
 
+        String projectName = call(() -> Objects.requireNonNull(new ProjectTasksImpl(client).searchProject(projectId)), "Project not found");
+        ServerVersionTasks serverVersionTasks = new ServerVersionTasksImpl(client);
+        Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
+
         com.ptsecurity.appsec.ai.ee.scan.result.ScanResult res = call(
-                () -> IssuesConverter.convert(scanResult, new FileInputStream(issuesModelFile), scanSettings), "Project scan result convert failed");
+                () -> IssuesConverter.convert(projectName, scanResult, new FileInputStream(issuesModelFile), scanSettings, versions), "Project scan result convert failed");
         log.debug("Project scan result conversion complete");
         call(
                 issuesModelFile::delete,

@@ -26,6 +26,7 @@ import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.logging.LogManager;
 
 public class BaseTest {
     /**
@@ -180,10 +181,6 @@ public class BaseTest {
         FileUtils.deleteDirectory(path.toFile());
     }
 
-    @BeforeAll
-    public static void init() {
-    }
-
     @AfterAll
     public static void fini() {
     }
@@ -192,4 +189,12 @@ public class BaseTest {
     public void pre() {
 
     }
+
+    @SneakyThrows
+    @BeforeAll
+    public static void init() {
+        InputStream stream = getResourceStream("logging.properties");
+        LogManager.getLogManager().readConfiguration(stream);
+    }
+
 }

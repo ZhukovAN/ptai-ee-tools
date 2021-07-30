@@ -15,11 +15,4 @@ public class BaseClientIT extends BaseIT {
             .caCertsPem("")
             .insecure(true)
             .build();
-
-    @SneakyThrows
-    @BeforeAll
-    public static void init() {
-        InputStream stream = getResourceStream("logging.properties");
-        LogManager.getLogManager().readConfiguration(stream);
-    }
 }

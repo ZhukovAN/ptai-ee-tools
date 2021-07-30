@@ -33,7 +33,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report.Format.HTML;
 
 @DisplayName("Report generation tests")
-@Tag("integration-legacy")
+@Tag("integration")
 class GenerateReportIT extends BaseCliIT {
     protected Path destination;
 

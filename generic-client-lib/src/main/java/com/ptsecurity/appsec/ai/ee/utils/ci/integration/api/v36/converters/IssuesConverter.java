@@ -1,11 +1,12 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.JSON;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.*;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
+import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.JSON;
+import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -17,9 +18,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -190,11 +191,13 @@ public class IssuesConverter {
      * @return PT AI API version independent scan results instance
      */
     public static ScanResult convert(
+            @NonNull final String projectName,
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
             @NonNull final IssuesModel model,
-            @NonNull final V36ScanSettings scanSettings) {
+            @NonNull final V36ScanSettings scanSettings,
+            @NonNull final Map<ServerVersionTasks.Component, String> versions) {
         ScanResult res = new ScanResult();
-        convertInto(scanResult, scanSettings, res);
+        convertInto(projectName, scanResult, scanSettings, versions, res);
 
         Map<String, IssueBaseMetadata> metadataMap = new HashMap<>();
         if (null != model.getMetadatas())
@@ -585,8 +588,12 @@ public class IssuesConverter {
         JSON parser = new JSON();
         MemoryUsage usage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
         try {
-            log.debug("JVM heap memory use {} / {}", FileCollector.bytesToString(usage.getUsed()), FileCollector.bytesToString(usage.getMax()));
-            return parser.getGson().fromJson(new InputStreamReader(data), IssuesModel.class);
+            log.debug("JVM heap memory use before parse {} / {}", FileCollector.bytesToString(usage.getUsed()), FileCollector.bytesToString(usage.getMax()));
+            log.debug("Parse started at {}", Instant.now());
+            IssuesModel res = parser.getGson().fromJson(new InputStreamReader(data), IssuesModel.class);
+            log.debug("Parse finished at {}", Instant.now());
+            log.debug("JVM heap memory use after parse {} / {}", FileCollector.bytesToString(usage.getUsed()), FileCollector.bytesToString(usage.getMax()));
+            return res;
         } catch (OutOfMemoryError e) {
             log.error("IssuesModel file parse failed due to lack of heap memory", e);
             return EMPTY_ISSUES_MODEL;
@@ -602,19 +609,25 @@ public class IssuesConverter {
      */
     @SneakyThrows
     public static ScanResult convert(
+            @NonNull final String projectName,
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
             @NonNull final InputStream model,
-            @NonNull final V36ScanSettings scanSettings) {
-        return convert(scanResult, parseIssuesModelStream(model), scanSettings);
+            @NonNull final V36ScanSettings scanSettings,
+            @NonNull final Map<ServerVersionTasks.Component, String> versions) {
+        return convert(projectName, scanResult, parseIssuesModelStream(model), scanSettings, versions);
     }
 
     public static void convertInto(
+            @NonNull final String projectName,
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
             @NonNull final V36ScanSettings scanSettings,
+            @NonNull final Map<ServerVersionTasks.Component, String> versions,
             @NonNull final ScanBrief destination) {
-        destination.setPtaiApiVersion(PTAI_API_VERSION);
+        destination.setPtaiServerVersion(versions.get(ServerVersionTasks.Component.AIE));
+        destination.setPtaiAgentVersion(versions.get(ServerVersionTasks.Component.AIC));
         destination.setId(Objects.requireNonNull(scanResult.getId(), "Scan result ID is null"));
         destination.setProjectId(Objects.requireNonNull(scanResult.getProjectId(), "Scan result project ID is null"));
+        destination.setProjectName(projectName);
         destination.setScanSettings(convert(scanSettings));
 
         ScanResultStatistic statistic = Objects.requireNonNull(scanResult.getStatistic(), "Scan result statistics is null");
@@ -627,10 +640,12 @@ public class IssuesConverter {
     }
 
     public static ScanBrief convert(
+            @NonNull final String projectName,
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
-            @NonNull final V36ScanSettings scanSettings) {
+            @NonNull final V36ScanSettings scanSettings,
+            @NonNull final Map<ServerVersionTasks.Component, String> versions) {
         ScanBrief res = new ScanBrief();
-        convertInto(scanResult, scanSettings, res);
+        convertInto(projectName, scanResult, scanSettings, versions, res);
         return res;
     }
 }

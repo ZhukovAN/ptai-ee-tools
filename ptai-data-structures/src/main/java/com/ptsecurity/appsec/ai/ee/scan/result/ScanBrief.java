@@ -11,7 +11,12 @@ public class ScanBrief {
     @NonNull
     @Getter
     @Setter
-    protected String ptaiApiVersion;
+    protected String ptaiServerVersion;
+
+    @NonNull
+    @Getter
+    @Setter
+    protected String ptaiAgentVersion;
 
     @NonNull
     @Getter
@@ -22,6 +27,11 @@ public class ScanBrief {
     @Getter
     @Setter
     protected UUID projectId;
+
+    @NonNull
+    @Getter
+    @Setter
+    protected String projectName;
 
     @Getter
     @Setter

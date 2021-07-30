@@ -1,7 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults
 
-f = namespace(lib.FormTagLib)
-l = namespace(lib.LayoutTagLib)
+import lib.FormTagLib
+import lib.LayoutTagLib
+
+f = namespace(FormTagLib)
+l = namespace(LayoutTagLib)
 t = namespace('/lib/hudson')
 st = namespace('jelly:stapler')
 

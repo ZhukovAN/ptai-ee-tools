@@ -128,18 +128,32 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
 
     public UUID searchProject(
             @NonNull final String name) throws GenericException {
+        log.debug("Looking for project with name {}", name);
         ProjectLight projectLight = call(
                 () -> client.getProjectsApi().apiProjectsLightNameGet(name),
                 "PT AI project search failed");
-        return (null == projectLight) ? null : projectLight.getId();
+        if (null == projectLight) {
+            log.debug("Project not found");
+            return null;
+        } else {
+            log.debug("Project found, id is {}", projectLight.getId());
+            return projectLight.getId();
+        }
     }
 
     public String searchProject(
             @NonNull final UUID id) throws GenericException {
+        log.debug("Looking for project with id {}", id);
         Project project = call(
                 () -> client.getProjectsApi().apiProjectsProjectIdGet(id),
                 "PT AI project search failed");
-        return (null == project) ? null : project.getName();
+        if (null == project) {
+            log.debug("Project not found");
+            return null;
+        } else {
+            log.debug("Project found, name is {}", project.getName());
+            return project.getName();
+        }
     }
 
     @Override

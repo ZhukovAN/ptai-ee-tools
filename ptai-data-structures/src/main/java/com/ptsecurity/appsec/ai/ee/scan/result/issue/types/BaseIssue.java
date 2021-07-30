@@ -64,8 +64,17 @@ public abstract class BaseIssue {
     @JsonProperty("title")
     protected String title;
 
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Level {
-        NONE, POTENTIAL, LOW, MEDIUM, HIGH
+        NONE(0),
+        POTENTIAL(1),
+        LOW(2),
+        MEDIUM(3),
+        HIGH(4);
+
+        @Getter
+        @NonNull
+        private final int value;
     }
 
     /**

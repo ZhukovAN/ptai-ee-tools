@@ -99,6 +99,7 @@ configurations {
 
 dependencies {
     api project(':generic-client-lib')
+    api project(':ptai-report-tools')
     testImplementation(testFixtures(project(':generic-client-lib')))
 
     processJenkinsVersion()
@@ -133,6 +134,8 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.8.1'
     // https://mvnrepository.com/artifact/commons-validator/commons-validator
     implementation 'commons-validator:commons-validator:1.6'
+    // https://mvnrepository.com/artifact/org.jooq/joor-java-8
+    implementation 'org.jooq:joor-java-8:0.9.13'
 
     testImplementation(testFixtures(project(":ptai-data-structures")))
     testImplementation(testFixtures(project(":ptai-rest-api")))
