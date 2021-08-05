@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.JSON;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.IssuesModel;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36VulnerabilityIssue;
@@ -12,7 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileReader;
-import java.io.InputStream;
 import java.nio.file.Path;
 
 @DisplayName("Test issues model data read and parse")

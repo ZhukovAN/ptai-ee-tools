@@ -1,7 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level;
 import lombok.SneakyThrows;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -11,26 +10,9 @@ import org.parboiled.common.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.UUID;
 
 public class BaseJsonChartDataModel {
-    public static int COLOR_HIGH = 0xf57962;
-    public static int COLOR_MEDIUM = 0xf9ad37;
-    public static int COLOR_LOW = 0x66cc99;
-    public static int COLOR_POTENTIAL = 0x8cb5e1;
-
-    protected static final Map<Level, StackedAreaChartDataModel.Series.ItemStyle> ITEM_STYLE_MAP = new HashMap<>();
-
-    protected static final Map<Level, StackedAreaChartDataModel.Series.ItemStyle> AREA_STYLE_MAP = new HashMap<>();
-
-    static {
-        ITEM_STYLE_MAP.put(Level.HIGH, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_HIGH)).build());
-        ITEM_STYLE_MAP.put(Level.MEDIUM, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_MEDIUM)).build());
-        ITEM_STYLE_MAP.put(Level.LOW, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_LOW)).build());
-        ITEM_STYLE_MAP.put(Level.POTENTIAL, StackedAreaChartDataModel.Series.ItemStyle.builder().color("#" + Integer.toHexString(COLOR_POTENTIAL)).build());
-    }
-
     @SneakyThrows
     public static JSONObject convertObject(final Object object) {
         if (null == object) return null;
@@ -64,6 +46,8 @@ public class BaseJsonChartDataModel {
             return convertCollection(value);
         else if (c.equals(String.class))
             return value;
+        else if (c.equals(UUID.class))
+            return value.toString();
         else if (ClassUtils.isPrimitiveOrWrapper(c))
             return value;
         else if (c.isEnum())
@@ -72,7 +56,7 @@ public class BaseJsonChartDataModel {
             return convertObject(value);
     }
 
-    protected static JSONArray convertCollection(final Object collection) {
+    public static JSONArray convertCollection(final Object collection) {
         if (null == collection) return null;
 
         JSONArray res = new JSONArray();

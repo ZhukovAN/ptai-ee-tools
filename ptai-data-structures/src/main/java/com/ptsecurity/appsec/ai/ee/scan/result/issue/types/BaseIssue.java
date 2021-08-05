@@ -73,7 +73,6 @@ public abstract class BaseIssue {
         HIGH(4);
 
         @Getter
-        @NonNull
         private final int value;
     }
 

@@ -1,7 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.test;
 
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.JSON;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ProgrammingLanguage;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;

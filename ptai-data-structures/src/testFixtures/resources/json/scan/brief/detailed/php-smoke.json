@@ -1,0 +1,55 @@
+{
+  "ptaiServerVersion" : "3.6.4.2843",
+  "ptaiAgentVersion" : "3.6.4.1437",
+  "id" : "b0efd5be-2ff2-40e5-a36f-351b94579ffb",
+  "projectId" : "0dd14fc1-dcfc-4081-989a-b6b5afd31317",
+  "projectName" : "php-smoke",
+  "scanSettings" : {
+    "id" : "c85c50a0-448d-486d-9ca5-d5346f09e051",
+    "engines" : [ "AI", "PM" ],
+    "unpackUserPackages" : false,
+    "downloadDependencies" : false,
+    "usePublicAnalysisMethod" : false,
+    "useEntryAnalysisPoint" : true,
+    "language" : "PHP",
+    "url" : "http://localhost",
+    "useIncrementalScan" : false,
+    "autocheckAfterScan" : false,
+    "customParameters" : null,
+    "javaParameters" : null
+  },
+  "policyState" : "NONE",
+  "statistic" : {
+    "scanDateIso8601" : "2021-06-20T18:04:26.590929Z",
+    "scanDurationIso8601" : "PT4.760208S",
+    "totalFileCount" : 1,
+    "totalUrlCount" : 0,
+    "scannedFileCount" : 1,
+    "scannedUrlCount" : 0
+  },
+  "state" : "DONE",
+  "details" : {
+    "chartData" : {
+      "baseIssueDistributionData" : [ {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null
+      } ],
+      "severityDistributionData" : [ {
+        "level" : "MEDIUM",
+        "count" : 1
+      } ],
+      "severityTypeDistributionData" : [ {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1
+      } ]
+    }
+  }
+}

@@ -2,11 +2,15 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import lombok.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import org.apache.commons.lang.WordUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -21,79 +25,7 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
     @Setter
     @Builder
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Title {
-        @NonNull
-        @JsonProperty
-        protected String text;
-
-        @JsonProperty
-        @Builder.Default
-        protected String left = "center";
-
-        @JsonProperty
-        @Builder.Default
-        protected Boolean show = true;
-    }
-
-    @NonNull
-    @JsonProperty
-    protected Title title;
-
-    @Getter
-    @Setter
-    @Builder
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Tooltip {
-        @NonNull
-        @JsonProperty
-        protected String trigger;
-
-        @Getter
-        @Setter
-        @Builder
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class AxisPointer {
-            @NonNull
-            @JsonProperty
-            protected String type;
-
-            @Getter
-            @Setter
-            @Builder
-            @JsonInclude(JsonInclude.Include.NON_NULL)
-            public static class Label {
-                @NonNull
-                @JsonProperty
-                protected String backgroundColor;
-            }
-
-            @NonNull
-            @JsonProperty
-            protected Label label;
-        }
-
-        @NonNull
-        @JsonProperty
-        protected AxisPointer axisPointer;
-    }
-
-    @NonNull
-    @JsonProperty
-    protected Tooltip tooltip;
-
-    @Getter
-    @Setter
-    @Builder
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Legend {
-        @JsonProperty
-        @Builder.Default
-        protected String top = "bottom";
-
-        @JsonProperty
-        @Builder.Default
-        protected String left = "center";
-
         @NonNull
         @JsonProperty
         @Builder.Default
@@ -108,69 +40,7 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
     @Setter
     @Builder
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Toolbox {
-        @Getter
-        @Setter
-        @Builder
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class Feature {
-            @Getter
-            @Setter
-            @Builder
-            @JsonInclude(JsonInclude.Include.NON_NULL)
-            public static class SaveAsImage {
-                @NonNull
-                @JsonProperty
-                @Builder.Default
-                protected Boolean show = false;
-            }
-
-            @NonNull
-            @JsonProperty
-            protected SaveAsImage saveAsImage;
-        }
-
-        @NonNull
-        @JsonProperty
-        protected Feature feature;
-    }
-
-    @NonNull
-    @JsonProperty
-    protected Toolbox toolbox;
-
-    @Getter
-    @Setter
-    @Builder
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class Grid {
-        @JsonProperty
-        protected String left;
-        @JsonProperty
-        protected String right;
-        @JsonProperty
-        protected String top;
-        @JsonProperty
-        protected String bottom;
-        @JsonProperty
-        @Builder.Default
-        protected Boolean containLabel = true;
-    }
-
-    @NonNull
-    @JsonProperty
-    protected Grid grid;
-
-    @Getter
-    @Setter
-    @Builder
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class XAxis {
-        @JsonProperty
-        protected String type;
-        @JsonProperty
-        @Builder.Default
-        protected Boolean boundaryGap = false;
+    public static class Axis {
         @JsonProperty
         @Builder.Default
         protected List<String> data = new ArrayList<>();
@@ -185,20 +55,11 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
     // xplicitly set JSON property name and use neutral field name
     @Builder.Default
     @JsonProperty("xAxis")
-    protected List<XAxis> xaxis = new ArrayList<>();
-
-    @Getter
-    @Setter
-    @Builder
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class YAxis {
-        @JsonProperty
-        protected String type;
-    }
+    protected List<Axis> xaxis = new ArrayList<>();
 
     @Builder.Default
     @JsonProperty("yAxis")
-    protected List<YAxis> yaxis = new ArrayList<>();
+    protected List<Axis> yaxis = new ArrayList<>();
 
     @Getter
     @Setter
@@ -207,41 +68,6 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
     public static class Series {
         @JsonProperty
         protected String name;
-        @JsonProperty
-        protected String type;
-        @JsonProperty
-        protected String stack;
-
-        @Getter
-        @Setter
-        @Builder
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class ItemStyle {
-            @JsonProperty
-            protected String color;
-        }
-        @JsonProperty
-        protected ItemStyle itemStyle;
-
-        @Getter
-        @Setter
-        @Builder
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class AreaStyle {
-        }
-        @JsonProperty
-        protected AreaStyle areaStyle;
-
-        @Getter
-        @Setter
-        @Builder
-        @JsonInclude(JsonInclude.Include.NON_NULL)
-        public static class Emphasis {
-            @JsonProperty
-            protected String focus;
-        }
-        @JsonProperty
-        protected Emphasis emphasis;
 
         @JsonProperty
         @Builder.Default
@@ -252,81 +78,50 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
     @Builder.Default
     protected List<Series> series = new ArrayList<>();
 
-    public static StackedAreaChartDataModel create(@NonNull final List<Pair<Integer, ScanResult>> scanResultList) {
+    public static StackedAreaChartDataModel create(@NonNull final List<AstJobMultipleResults.BuildScanBriefDetailed> scanResultList) {
         // Prepare X-axis
-        StackedAreaChartDataModel.XAxis xAxis = StackedAreaChartDataModel.XAxis.builder()
-                .type("category")
-                .boundaryGap(false)
-                .build();
-        StackedAreaChartDataModel.YAxis yAxis = StackedAreaChartDataModel.YAxis.builder()
-                .type("value")
-                .build();
+        StackedAreaChartDataModel.Axis xAxis = StackedAreaChartDataModel.Axis.builder().build();
+        StackedAreaChartDataModel.Axis yAxis = StackedAreaChartDataModel.Axis.builder().build();
         StackedAreaChartDataModel.Legend legend = StackedAreaChartDataModel.Legend.builder().build();
+        // Sort scan results by build number
+        scanResultList.sort(Comparator.comparing(AstJobMultipleResults.BuildScanBriefDetailed::getBuildNumber));
         // Prepare series to fill with data
-        Map<Level, Series> vulnerabilityTypeSeries = new HashMap<>();
+        List<Series> vulnerabilityTypeSeries = new ArrayList<>();
         for (Level level : Level.values()) {
             if (Level.NONE.equals(level)) continue;
-            String levelName = WordUtils.capitalize(level.name().toLowerCase());
-
-
-            legend.data.add(levelName);
+            legend.data.add(level.name());
             StackedAreaChartDataModel.Series series = StackedAreaChartDataModel.Series.builder()
-                    .name(levelName)
-                    .type("line")
-                    .stack("0")
-                    .itemStyle(ITEM_STYLE_MAP.get(level))
-                    .areaStyle(new StackedAreaChartDataModel.Series.AreaStyle())
-                    .emphasis(new StackedAreaChartDataModel.Series.Emphasis("series"))
+                    .name(level.name())
                     .build();
-            vulnerabilityTypeSeries.put(level, series);
-        }
-
-        scanResultList.sort((u1, u2) -> u1.getLeft().compareTo(u2.getLeft()));
-
-        for (Pair<Integer, ScanResult> item : scanResultList) {
-            // As Jenkins itself prefixes build numbers with "#" sign, let's do the same for chart
-            xAxis.data.add("#" + item.getLeft().toString());
-            ScanResult issues = item.getRight();
-            for (Level level : Level.values()) {
-                if (Level.NONE.equals(level)) continue;
-                if (null == issues.getIssues()) continue;
-                long count = issues.getIssues().stream()
-                        .filter(baseIssue -> level.equals(baseIssue.getLevel()))
-                        .filter(baseIssue -> BaseIssue.ApprovalState.DISCARD != baseIssue.getApprovalState())
-                        .count();
-                vulnerabilityTypeSeries.get(level).data.add(count);
+            // Pre-fill series with zeroes
+            for (int i = 0 ; i < scanResultList.size() ; i++) {
+                long count = 0;
+                do {
+                    ScanBriefDetailed issues = scanResultList.get(i).getScanBriefDetailed();
+                    if (null == issues) break;
+                    if (!Optional.of(issues)
+                            .map(ScanBriefDetailed::getDetails)
+                            .map(ScanBriefDetailed.Details::getChartData)
+                            .map(ScanBriefDetailed.Details.ChartData::getBaseIssueDistributionData).isPresent()) break;
+                    // Count non-discarded vulnerabilities of a givel level
+                    count = issues.getDetails().getChartData().getBaseIssueDistributionData().stream()
+                            .filter(baseIssue -> level.equals(baseIssue.getLevel()))
+                            .filter(baseIssue -> BaseIssue.ApprovalState.DISCARD != baseIssue.getApprovalState())
+                            .count();
+                } while (false);
+                series.data.add(count);
             }
+            vulnerabilityTypeSeries.add(series);
         }
+
+        for (AstJobMultipleResults.BuildScanBriefDetailed item : scanResultList)
+            // As Jenkins itself prefixes build numbers with "#" sign, let's do the same for chart
+            xAxis.data.add(item.getBuildNumber().toString());
         return StackedAreaChartDataModel.builder()
-                .title(Title.builder()
-                        .text(Resources.i18n_ast_result_charts_trend_caption())
-                        .show(false)
-                        .build())
-                .tooltip(StackedAreaChartDataModel.Tooltip.builder()
-                        .trigger("axis")
-                        .axisPointer(StackedAreaChartDataModel.Tooltip.AxisPointer.builder()
-                                .type("cross")
-                                .label(StackedAreaChartDataModel.Tooltip.AxisPointer.Label.builder()
-                                        .backgroundColor("#6a7985")
-                                        .build())
-                                .build())
-                        .build())
                 .legend(legend)
-                .toolbox(StackedAreaChartDataModel.Toolbox.builder()
-                        .feature(StackedAreaChartDataModel.Toolbox.Feature.builder()
-                                .saveAsImage(Toolbox.Feature.SaveAsImage.builder().build())
-                                .build())
-                        .build())
-                .grid(StackedAreaChartDataModel.Grid.builder()
-                        .bottom("25")
-                        .top("10")
-                        .left("20")
-                        .right("10")
-                        .containLabel(true)
-                        .build())
                 .xaxis(Collections.singletonList(xAxis))
                 .yaxis(Collections.singletonList(yAxis))
-                .series(new ArrayList<>(vulnerabilityTypeSeries.values()))
+                .series(vulnerabilityTypeSeries)
                 .build();
     }
 }

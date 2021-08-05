@@ -7,6 +7,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.*;
 
+@SuperBuilder
+@NoArgsConstructor
 public class ScanResult extends ScanBrief {
     /**
      * As AST result issues list may be big (for example, OWASP Benchmark
@@ -17,6 +19,7 @@ public class ScanResult extends ScanBrief {
      */
     @Getter
     @Setter
+    @Builder.Default
     protected boolean issuesParseState = false;
 
     @Getter

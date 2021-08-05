@@ -1,0 +1,4328 @@
+{
+  "ptaiServerVersion" : "3.6.4.2843",
+  "ptaiAgentVersion" : "3.6.4.1437",
+  "id" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
+  "projectId" : "53950e41-404b-4801-b2fb-78dfa85ef3ff",
+  "projectName" : "php-bricks",
+  "scanSettings" : {
+    "id" : "4cea75e1-3997-45a0-9da6-01c90a7935c7",
+    "engines" : [ "BLACKBOX", "AI", "PM", "CONFIGURATION", "FINGERPRINT", "TAINT" ],
+    "unpackUserPackages" : false,
+    "downloadDependencies" : false,
+    "usePublicAnalysisMethod" : true,
+    "useEntryAnalysisPoint" : true,
+    "language" : "PHP",
+    "url" : "http://test.domain.org/",
+    "useIncrementalScan" : false,
+    "autocheckAfterScan" : true,
+    "customParameters" : null,
+    "javaParameters" : null
+  },
+  "policyState" : "REJECTED",
+  "statistic" : {
+    "scanDateIso8601" : "2021-06-10T08:47:15.195613Z",
+    "scanDurationIso8601" : "PT5M6.2269294S",
+    "totalFileCount" : 66,
+    "totalUrlCount" : 0,
+    "scannedFileCount" : 66,
+    "scannedUrlCount" : 0
+  },
+  "state" : "DONE",
+  "details" : {
+    "chartData" : {
+      "baseIssueDistributionData" : [ {
+        "level" : "HIGH",
+        "title" : "Arbitrary File Creation",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Arbitrary File Creation",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Arbitrary File Creation",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Arbitrary File Creation",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Arbitrary File Modification",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Arbitrary File Modification",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Arbitrary File Modification",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Arbitrary File Modification",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "JQuery library used",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94"
+      }, {
+        "level" : "HIGH",
+        "title" : "JQuery library used",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94"
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Server-Side Request Forgery",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Server-Side Request Forgery",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94"
+      }, {
+        "level" : "HIGH",
+        "title" : "Unrestricted File Upload",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Unrestricted File Upload",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Unrestricted File Upload",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Unrestricted File Upload",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Unrestricted File Upload",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Unrestricted File Upload",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "HIGH",
+        "title" : "Unrestricted File Upload",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94"
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "LOW",
+        "title" : "Server Fingerprinting",
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "DOM Modification HTML Tag",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "DOM Modification HTML Tag",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "DOM Modification HTML Tag",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "DOM Modification HTML Tag",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "DOM Modification HTML Tag",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "DOM Modification HTML Tag",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "DOM Modification HTML Tag",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "DOM Modification HTML Tag",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Hardcoded Password",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Hardcoded Password",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Hardcoded Password",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Hardcoded Password",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Hardcoded Password",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Hardcoded Password",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Insecure Transport",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Insecure Transport",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Insecure Transport",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Wrap Element to HTML",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Wrap Element to HTML",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Wrap Element to HTML",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Wrap Element to HTML",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Wrap Element to HTML",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Wrap Element to HTML",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Wrap Element to HTML",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Wrap Element to HTML",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Wrap Element to HTML",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery function that replaces element",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery function that replaces element",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery function that replaces element",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Sensitive Cookie in HTTPS Session Without ‘Httponly’ Attribute",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Sensitive Cookie in HTTPS Session Without ‘Httponly’ Attribute",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Sensitive Cookie in HTTPS Session Without ‘Secure’ Attribute",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - new Function()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - new Function()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - new Function()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - new Function()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - new Function()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - new Function()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - setTimeout()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - setTimeout()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - setTimeout()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - setTimeout()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - setTimeout()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - setTimeout()",
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Use of Uninitialized Variable",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Weak Cryptographic Hash",
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null
+      } ],
+      "severityDistributionData" : [ {
+        "level" : "HIGH",
+        "count" : 50
+      }, {
+        "level" : "MEDIUM",
+        "count" : 171
+      }, {
+        "level" : "LOW",
+        "count" : 1
+      }, {
+        "level" : "POTENTIAL",
+        "count" : 195
+      } ],
+      "severityTypeDistributionData" : [ {
+        "level" : "HIGH",
+        "title" : "SQL Injection",
+        "count" : 31
+      }, {
+        "level" : "HIGH",
+        "title" : "Unrestricted File Upload",
+        "count" : 7
+      }, {
+        "level" : "HIGH",
+        "title" : "Arbitrary File Creation",
+        "count" : 4
+      }, {
+        "level" : "HIGH",
+        "title" : "Arbitrary File Modification",
+        "count" : 4
+      }, {
+        "level" : "HIGH",
+        "title" : "JQuery library used",
+        "count" : 2
+      }, {
+        "level" : "HIGH",
+        "title" : "Server-Side Request Forgery",
+        "count" : 2
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Information Exposure",
+        "count" : 75
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Cross-Site Scripting",
+        "count" : 53
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Log Forging",
+        "count" : 33
+      }, {
+        "level" : "MEDIUM",
+        "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+        "count" : 10
+      }, {
+        "level" : "LOW",
+        "title" : "Server Fingerprinting",
+        "count" : 1
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery HTML Inside DOM",
+        "count" : 50
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Unsafe functions for DOM",
+        "count" : 41
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Empty Default Exception Handler",
+        "count" : 26
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "System Information Leak",
+        "count" : 17
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Information Exposure Through Static Content Or String Literals",
+        "count" : 15
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery Wrap Element to HTML",
+        "count" : 9
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "DOM Modification HTML Tag",
+        "count" : 8
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Hardcoded Password",
+        "count" : 6
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - new Function()",
+        "count" : 6
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Server Side Injection - setTimeout()",
+        "count" : 6
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Insecure Transport",
+        "count" : 3
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "JQuery function that replaces element",
+        "count" : 3
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Sensitive Cookie in HTTPS Session Without ‘Httponly’ Attribute",
+        "count" : 2
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Sensitive Cookie in HTTPS Session Without ‘Secure’ Attribute",
+        "count" : 1
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Use of Uninitialized Variable",
+        "count" : 1
+      }, {
+        "level" : "POTENTIAL",
+        "title" : "Weak Cryptographic Hash",
+        "count" : 1
+      } ]
+    }
+  }
+}

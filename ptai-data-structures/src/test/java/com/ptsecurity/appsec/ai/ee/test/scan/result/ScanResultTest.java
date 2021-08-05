@@ -34,7 +34,7 @@ public class ScanResultTest extends BaseTest {
 
     @SneakyThrows
     @Test
-    @DisplayName("Read and parse data from PT AI version-independent OWASP Bricks scan results JSON resource file")
+    @DisplayName("Read and parse data from PT AI version-independent PHP Smoke scan results JSON resource file")
     public void parsePhpSmokeScanResults() {
         ObjectMapper mapper = createFaultTolerantObjectMapper();
         InputStream inputStream = getResourceStream("json/scan/result/php-smoke.json");

@@ -10,7 +10,11 @@ dependencies {
     api project(':ptai-rest-api')
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
-    implementation 'org.apache.commons:commons-compress:1.19'
+    implementation 'org.apache.commons:commons-compress:1.21'
+    // Need this to work with 7zip compression
+    // https://mvnrepository.com/artifact/org.tukaani/xz
+    implementation 'org.tukaani:xz:1.9'
+
     // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
     implementation 'org.apache.httpcomponents:httpclient:4.5.10'
     // https://mvnrepository.com/artifact/commons-io/commons-io
@@ -57,5 +61,12 @@ processResources {
     ]
     filesMatching("**/build.properties") {
         expand(localVersionDetails)
+    }
+}
+
+jar {
+    // See https://www.jenkins.io/blog/2018/01/13/jep-200/
+    manifest {
+        attributes 'Jenkins-ClassFilter-Whitelisted': 'true'
     }
 }

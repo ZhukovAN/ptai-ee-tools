@@ -1,13 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.tasks;
 
 import com.microsoft.signalr.HubConnection;
+import com.ptsecurity.appsec.ai.ee.scan.errors.Error;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanError;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v36.scanscheduler.model.ScanType;
 import com.ptsecurity.appsec.ai.ee.server.v36.scanscheduler.model.StartScanModel;
-import com.ptsecurity.appsec.ai.ee.scan.errors.Error;
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.ScanErrorsConverter;

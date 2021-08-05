@@ -2,16 +2,11 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions;
 
 import hudson.model.Action;
 import hudson.model.Job;
-import hudson.model.Run;
 import jenkins.model.Jenkins;
-import jenkins.model.RunAction2;
-import jenkins.tasks.SimpleBuildStep;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @RequiredArgsConstructor

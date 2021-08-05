@@ -224,4 +224,52 @@ class Cvss {
 }
 
 ScaIssue -down-> Cvss : cvss
+
+class ScanBriefDetailed {
+}
+ScanBriefDetailed -down-|> ScanBrief
+ScanBriefDetailed -right[hidden]-|> ScanResult
+ScanBriefDetailed -left-> Details
+Details -left-> ChartData
+
+class Details
+class ChartData {
+    BaseIssueCount[] baseIssueDistributionData
+    SeverityCount[] severityDistributionData
+    SeverityTypeCount[] severityTypeDistributionData
+}
+
+class SeverityCount {
+    BaseIssue.Level level
+    Long count
+}
+
+class SeverityTypeCount {
+    BaseIssue.Level level
+    String type
+    Long count
+}
+SeverityCount -left[hidden]-|> SeverityTypeCount
+
+ChartData .up.> BaseIssueCount
+ChartData .up.> SeverityCount
+ChartData .up.> SeverityTypeCount
+BaseIssueCount -left[hidden]-|> SeverityCount
+
+class BaseIssueCountFields {
+    BaseIssue.Level level
+    BaseIssue.Type clazz
+    String title
+    Boolean favorite
+    Boolean suspected
+    Boolean suppressed
+    BaseIssue.ApprovalState approvalState
+    UUID newInScanResultId
+}
+
+class BaseIssueCount {
+    Long count
+}
+BaseIssueCount -right-|> BaseIssueCountFields
+
 @enduml

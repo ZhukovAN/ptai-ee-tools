@@ -1,8 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters;
 
+import com.ptsecurity.appsec.ai.ee.scan.errors.Error;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ErrorLevel;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanError;
-import com.ptsecurity.appsec.ai.ee.scan.errors.Error;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 

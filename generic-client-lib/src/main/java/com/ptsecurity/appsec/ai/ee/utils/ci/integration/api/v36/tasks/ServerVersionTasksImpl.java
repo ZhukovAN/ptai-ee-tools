@@ -25,7 +25,7 @@ public class ServerVersionTasksImpl extends AbstractTaskImpl implements ServerVe
             String version = call(
                     () -> client.getVersionApi().apiVersionGetCurrentGet(component.getValue()),
                     "PT AI server component API current version get failed");
-            log.debug("{} current version: ", version);
+            log.debug("Current version: {}", version);
             res.put(component, version);
         }
         return res;
@@ -39,7 +39,7 @@ public class ServerVersionTasksImpl extends AbstractTaskImpl implements ServerVe
             String version = call(
                     () -> client.getVersionApi().apiVersionGetLatestGet(component.getValue()),
                     "PT AI server component API current version get failed");
-            log.debug("{} latest version: ", version);
+            log.debug("Latest version: {}", version);
             res.put(component, version);
         }
         return res;

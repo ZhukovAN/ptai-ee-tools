@@ -4,7 +4,7 @@
  * @param {String} chartDivId - the ID of the div where the chart should be shown in
  * @param {JSON} chartModel - the stacked line chart model
  */
-function renderTrendChart(chartDivId, chartModel) {
+function renderChart(chartDivId, chartModel) {
     var chart = echarts.init(document.getElementById(chartDivId));
 
     chart.setOption(chartModel);
@@ -31,5 +31,8 @@ function textWidth(text, font) {
 function maxTextWidth(strings, font) {
     var widths = strings.map(title => textWidth(title, font))
     return widths.reduce(function(a, b) { return Math.max(a, b); }, 0)
+}
+
+function generateSeverityDistributionTrendChart() {
 }
 

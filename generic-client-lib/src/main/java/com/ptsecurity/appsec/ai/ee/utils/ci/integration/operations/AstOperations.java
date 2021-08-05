@@ -1,7 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.NonNull;
 

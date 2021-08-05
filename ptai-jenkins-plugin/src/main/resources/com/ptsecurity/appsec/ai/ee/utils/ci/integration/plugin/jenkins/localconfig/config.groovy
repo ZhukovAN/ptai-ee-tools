@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.PtaiConfig
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig
 
 def f = namespace(lib.FormTagLib);
 def c = namespace(lib.CredentialsTagLib)
