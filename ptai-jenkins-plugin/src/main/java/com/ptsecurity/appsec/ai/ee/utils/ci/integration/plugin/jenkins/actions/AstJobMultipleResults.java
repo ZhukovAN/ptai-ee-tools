@@ -4,21 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.StackedAreaChartDataModel;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import hudson.model.Action;
 import hudson.model.Job;
 import hudson.model.Run;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.ptsecurity.appsec.ai.ee.scan.ScanDataPacked.Type.SCAN_BRIEF_DETAILED;
@@ -97,6 +93,6 @@ public class AstJobMultipleResults implements Action {
     @SuppressWarnings("unused") // Called by groovy view
     public JSONObject getVulnerabilityLevelDistributionChart(final int resultsNumber) {
         final List<BuildScanBriefDetailed> issuesModelList = getLatestAstResults(resultsNumber);
-        return BaseJsonChartDataModel.convertObject(StackedAreaChartDataModel.create(issuesModelList));
+        return BaseJsonChartDataModel.convertObject(ChartDataModel.create(issuesModelList));
     }
 }

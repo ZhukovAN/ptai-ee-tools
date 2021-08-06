@@ -413,7 +413,7 @@ public class IssuesConverter {
             V36CvssMetadata value = on(metadata).call("getCvss").get();
             on(issue).call("setCvss", convert(value));
         }
-        if (haveAccessor(metadata, "getLevel") && haveAccessor(issue, "setLevel", IssueLevel.class)) {
+        if (haveAccessor(metadata, "getLevel") && haveAccessor(issue, "setLevel", BaseIssue.Level.class)) {
             IssueLevel value = on(metadata).call("getLevel").get();
             on(issue).call("setLevel", ISSUE_LEVEL_MAP.get(value));
         }
@@ -499,7 +499,18 @@ public class IssuesConverter {
                 // SCA issues details are located in
                 ScaIssue res = new ScaIssue();
                 setBaseFields(issue, res, description);
+                // As single V36FingerprintIssue may have multiple fingerprint IDs
+                // PT AI looks these IDs for maximum severity level and assigns it
+                // to issue. But as we decide to create individual ScaIssue for
+                // each fingerprintId, we need to fix level by applying actual level
+                // value from metadata linked to this fingerprint Id
                 applyMetadata(baseMetadata, res);
+                // setBaseFields sets ScaIssue title to description header. This works
+                // well for other vulnerability types (header values are "SQL injection"
+                // etc.), but for SCA vulnerabilities these headers are CVE IDs. So we
+                // need to fix that and use component name / version pair as vulnerability title
+                // TODO: Implement i18n of issue titles
+                res.setTitle("Vulnerable component " + issue.getComponentName() + " " + issue.getComponentVersion());
                 res.setFingerprintId(fingerprintId);
                 res.setComponentName(issue.getComponentName());
                 res.setComponentVersion(issue.getComponentVersion());

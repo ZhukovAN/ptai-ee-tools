@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
@@ -77,7 +78,8 @@ public class ScanDataPacked extends com.ptsecurity.appsec.ai.ee.scan.ScanDataPac
                 byte[] jsonData = new byte[(int) entry.getSize()];
                 log.debug("Reading packed data");
                 call(() -> IOUtils.read(inputStream, jsonData), "Packed data read failed");
-                return call(() -> (T) new ObjectMapper().readValue(jsonData, clazz), "Packed object deserialization failed");
+                ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+                return call(() -> (T) mapper.readValue(jsonData, clazz), "Packed object deserialization failed");
             } while (true);
             throw GenericException.raise("No packed data found", new IllegalArgumentException(data));
         } catch (IOException e) {

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 
-class StackedAreaChartDataModelTest extends BaseTest {
+class ChartDataModelTest extends BaseTest {
     @Test
     @SneakyThrows
     public void testJsonConversion() {

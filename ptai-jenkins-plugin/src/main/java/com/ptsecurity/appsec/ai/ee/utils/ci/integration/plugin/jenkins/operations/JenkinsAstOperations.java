@@ -72,9 +72,6 @@ public class JenkinsAstOperations implements AstOperations {
 
     @Override
     public void scanCompleteCallback(@NonNull ScanBrief scanBrief) throws GenericException {
-        Run<?, ?> run = owner.getRun();
-        AstJobSingleResult astJobSingleResult = new AstJobSingleResult(run);
-
         GenericAstTasks genericAstTasks = new Factory().genericAstTasks(owner.getClient());
         log.debug("Getting full scan results for project:scan {}: {}", scanBrief.getProjectId(), scanBrief.getId());
         ScanResult scanResult = genericAstTasks.getScanResult(scanBrief.getProjectId(), scanBrief.getId());
@@ -83,8 +80,9 @@ public class JenkinsAstOperations implements AstOperations {
                 .type(SCAN_BRIEF_DETAILED)
                 .data(ScanDataPacked.packData(ScanBriefDetailed.create(scanResult)))
                 .build();
-        astJobSingleResult.setScanDataPacked(scanDataPacked);
-        run.addAction(astJobSingleResult);
+        AstJobSingleResult action = new AstJobSingleResult(owner.getRun());
+        action.setScanDataPacked(scanDataPacked);
+        owner.getRun().addAction(action);
     }
 
     public String replaceMacro(@NonNull String value) {

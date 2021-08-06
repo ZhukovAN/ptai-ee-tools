@@ -5,14 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.apache.commons.lang.WordUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
@@ -20,7 +17,7 @@ import java.util.*;
 @Setter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
+public class ChartDataModel extends BaseJsonChartDataModel {
     @Getter
     @Setter
     @Builder
@@ -34,7 +31,8 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
 
     @NonNull
     @JsonProperty
-    protected Legend legend;
+    @Builder.Default
+    protected Legend legend = Legend.builder().build();
 
     @Getter
     @Setter
@@ -69,29 +67,57 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
         @JsonProperty
         protected String name;
 
+        @Getter
+        @Setter
+        @Builder
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        public static class DataItem {
+            @JsonProperty
+            protected Long value;
+
+            @Getter
+            @Setter
+            @Builder
+            @JsonInclude(JsonInclude.Include.NON_NULL)
+            public static class ItemStyle {
+                @JsonProperty
+                protected String color;
+            }
+
+            @JsonProperty
+            protected ItemStyle itemStyle;
+        }
+
         @JsonProperty
         @Builder.Default
-        protected List<Long> data = new ArrayList<>();
+        protected List<DataItem> data = new ArrayList<>();
+
+        @JsonProperty
+        protected DataItem.ItemStyle itemStyle;
     }
 
     @JsonProperty
     @Builder.Default
     protected List<Series> series = new ArrayList<>();
 
-    public static StackedAreaChartDataModel create(@NonNull final List<AstJobMultipleResults.BuildScanBriefDetailed> scanResultList) {
+    public static ChartDataModel create(@NonNull final List<AstJobMultipleResults.BuildScanBriefDetailed> scanResultList) {
         // Prepare X-axis
-        StackedAreaChartDataModel.Axis xAxis = StackedAreaChartDataModel.Axis.builder().build();
-        StackedAreaChartDataModel.Axis yAxis = StackedAreaChartDataModel.Axis.builder().build();
-        StackedAreaChartDataModel.Legend legend = StackedAreaChartDataModel.Legend.builder().build();
+        ChartDataModel.Axis xAxis = ChartDataModel.Axis.builder().build();
+        ChartDataModel.Axis yAxis = ChartDataModel.Axis.builder().build();
+        ChartDataModel.Legend legend = ChartDataModel.Legend.builder().build();
         // Sort scan results by build number
         scanResultList.sort(Comparator.comparing(AstJobMultipleResults.BuildScanBriefDetailed::getBuildNumber));
         // Prepare series to fill with data
         List<Series> vulnerabilityTypeSeries = new ArrayList<>();
         for (Level level : Level.values()) {
-            if (Level.NONE.equals(level)) continue;
+            // SCA isues may have NONE vulnerability level so we can't ignore them
+            // if (Level.NONE.equals(level)) continue;
             legend.data.add(level.name());
-            StackedAreaChartDataModel.Series series = StackedAreaChartDataModel.Series.builder()
+            ChartDataModel.Series series = Series.builder()
                     .name(level.name())
+                    .itemStyle(Series.DataItem.ItemStyle.builder()
+                            .color("#" + Integer.toHexString(LEVEL_COLORS.get(level)))
+                            .build())
                     .build();
             // Pre-fill series with zeroes
             for (int i = 0 ; i < scanResultList.size() ; i++) {
@@ -109,7 +135,7 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
                             .filter(baseIssue -> BaseIssue.ApprovalState.DISCARD != baseIssue.getApprovalState())
                             .count();
                 } while (false);
-                series.data.add(count);
+                series.data.add(Series.DataItem.builder().value(count).build());
             }
             vulnerabilityTypeSeries.add(series);
         }
@@ -117,7 +143,7 @@ public class StackedAreaChartDataModel extends BaseJsonChartDataModel {
         for (AstJobMultipleResults.BuildScanBriefDetailed item : scanResultList)
             // As Jenkins itself prefixes build numbers with "#" sign, let's do the same for chart
             xAxis.data.add(item.getBuildNumber().toString());
-        return StackedAreaChartDataModel.builder()
+        return ChartDataModel.builder()
                 .legend(legend)
                 .xaxis(Collections.singletonList(xAxis))
                 .yaxis(Collections.singletonList(yAxis))

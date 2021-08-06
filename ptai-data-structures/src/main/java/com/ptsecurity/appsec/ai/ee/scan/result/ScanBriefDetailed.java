@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.scan.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -78,6 +79,13 @@ public class ScanBriefDetailed extends ScanBrief {
                  */
                 @JsonProperty("newInScanResultId")
                 protected UUID newInScanResultId;
+
+                /**
+                 * See {@link VulnerabilityIssue#getScanMode()} description
+                 */
+                @Builder.Default
+                @JsonProperty("scanMode")
+                protected VulnerabilityIssue.ScanMode scanMode = VulnerabilityIssue.ScanMode.NONE;
             }
 
             @Getter
@@ -89,42 +97,10 @@ public class ScanBriefDetailed extends ScanBrief {
                 protected Long count;
             }
 
-            @Getter
-            @Setter
-            @SuperBuilder
-            @NoArgsConstructor
-            public static class SeverityCount {
-                @JsonProperty
-                protected BaseIssue.Level level;
-
-                @JsonProperty
-                protected Long count;
-            }
-
-            @Getter
-            @Setter
-            @SuperBuilder
-            @NoArgsConstructor
-            public static class SeverityTypeCount {
-                @JsonProperty
-                protected BaseIssue.Level level;
-                @JsonProperty
-                protected String title;
-                @JsonProperty
-                protected Long count;
-            }
-
             @JsonProperty
             @Builder.Default
             protected List<BaseIssueCount> baseIssueDistributionData = new ArrayList<>();
 
-            @JsonProperty
-            @Builder.Default
-            protected List<SeverityCount> severityDistributionData = new ArrayList<>();
-
-            @JsonProperty
-            @Builder.Default
-            protected List<SeverityTypeCount> severityTypeDistributionData = new ArrayList<>();
         }
 
         @JsonProperty
@@ -151,8 +127,6 @@ public class ScanBriefDetailed extends ScanBrief {
                 .details(Details.builder()
                         .chartData(Details.ChartData.builder()
                                 .baseIssueDistributionData(createBaseIssueDistributionData(scanResult))
-                                .severityDistributionData(createSeverityDistributionData(scanResult))
-                                .severityTypeDistributionData(createSeverityTypeDistributionData(scanResult))
                                 .build())
                         .build())
                 .build();
@@ -172,6 +146,9 @@ public class ScanBriefDetailed extends ScanBrief {
                                 .suppressed(issue.getSuppressed())
                                 .suspected(issue.getSuspected())
                                 .suppressed(issue.getSuppressed())
+                                .scanMode(issue instanceof VulnerabilityIssue
+                                        ? ((VulnerabilityIssue) issue).getScanMode()
+                                        : VulnerabilityIssue.ScanMode.FROM_OTHER)
                                 .build(),
                         Collectors.counting()));
         Comparator<Details.ChartData.BaseIssueCount> compareLevelTypeAndCount = Comparator
@@ -191,44 +168,7 @@ public class ScanBriefDetailed extends ScanBrief {
                     .suspected(key.getSuspected())
                     .suppressed(key.getSuppressed())
                     .count(distribution.get(key))
-                    .build());
-        return res.stream().sorted(compareLevelTypeAndCount).collect(Collectors.toList());
-    }
-
-    public static List<Details.ChartData.SeverityCount> createSeverityDistributionData(@NonNull final ScanResult scanResult) {
-        Map<BaseIssue.Level, Long> distribution = scanResult.getIssues().stream()
-                .collect(Collectors.groupingBy(
-                        BaseIssue::getLevel,
-                        Collectors.counting()));
-        List<Details.ChartData.SeverityCount> res = new ArrayList<>();
-
-        Comparator<Details.ChartData.SeverityCount> compareLevelAndCount = Comparator
-                .comparing(Details.ChartData.SeverityCount::getLevel, Comparator.comparingInt(BaseIssue.Level::getValue).reversed())
-                .thenComparing(Details.ChartData.SeverityCount::getCount, Comparator.reverseOrder());
-
-        for (BaseIssue.Level key : distribution.keySet())
-            res.add(Details.ChartData.SeverityCount.builder()
-                    .level(key)
-                    .count(distribution.get(key)).build());
-        return res.stream().sorted(compareLevelAndCount).collect(Collectors.toList());
-    }
-
-    public static List<Details.ChartData.SeverityTypeCount> createSeverityTypeDistributionData(@NonNull final ScanResult scanResult) {
-        Map<Pair<BaseIssue.Level, String>, Long> distribution = scanResult.getIssues().stream()
-                .collect(Collectors.groupingBy(
-                        issue -> new ImmutablePair<>(issue.getLevel(), issue.getTitle()),
-                        Collectors.counting()));
-        Comparator<Details.ChartData.SeverityTypeCount> compareLevelTypeAndCount = Comparator
-                .comparing(Details.ChartData.SeverityTypeCount::getLevel, Comparator.comparingInt(BaseIssue.Level::getValue).reversed())
-                .thenComparing(Details.ChartData.SeverityTypeCount::getCount, Comparator.reverseOrder())
-                .thenComparing(Details.ChartData.SeverityTypeCount::getTitle);
-        List<Details.ChartData.SeverityTypeCount> res = new ArrayList<>();
-
-        for (Pair<BaseIssue.Level, String> key : distribution.keySet())
-            res.add(Details.ChartData.SeverityTypeCount.builder()
-                    .level(key.getLeft())
-                    .title( key.getRight())
-                    .count(distribution.get(key))
+                    .scanMode(key.getScanMode())
                     .build());
         return res.stream().sorted(compareLevelTypeAndCount).collect(Collectors.toList());
     }

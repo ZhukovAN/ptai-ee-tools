@@ -31,24 +31,19 @@ script """
         // Map vulnerability level to its localized title, absolute value and color
         var levelAttrs = {
             ${BaseIssue.Level.HIGH.name()}: {
-                title: '${Resources.i18n_misc_enums_vulnerability_severity_high()}',
-                itemColor: '#f57962', 
-                value: ${BaseIssue.Level.HIGH.value}
+                title: '${Resources.i18n_misc_enums_vulnerability_severity_high()}'
             },
             ${BaseIssue.Level.MEDIUM.name()}: {
-                title: '${Resources.i18n_misc_enums_vulnerability_severity_medium()}',
-                itemColor: '#f9ad37', 
-                value: ${BaseIssue.Level.MEDIUM.value}
+                title: '${Resources.i18n_misc_enums_vulnerability_severity_medium()}'
             },
             ${BaseIssue.Level.LOW.name()}: {
-                title: '${Resources.i18n_misc_enums_vulnerability_severity_low()}', 
-                itemColor: '#66cc99', 
-                value: ${BaseIssue.Level.LOW.value}
+                title: '${Resources.i18n_misc_enums_vulnerability_severity_low()}' 
             },
             ${BaseIssue.Level.POTENTIAL.name()}: {
-                title: '${Resources.i18n_misc_enums_vulnerability_severity_potential()}', 
-                itemColor: '#8cb5e1', 
-                value: ${BaseIssue.Level.POTENTIAL.value}
+                title: '${Resources.i18n_misc_enums_vulnerability_severity_potential()}' 
+            },
+            ${BaseIssue.Level.NONE.name()}: {
+                title: '${Resources.i18n_misc_enums_vulnerability_severity_none()}' 
             }
         }
 
@@ -83,7 +78,6 @@ script """
         option.series.forEach(function (item) {
             item.type = 'line';
             item.stack = '0';
-            item.itemStyle = { color: levelAttrs[item.name].itemColor };
             item.areaStyle = {  };
             item.emphasis = { focus: 'series' };
         });

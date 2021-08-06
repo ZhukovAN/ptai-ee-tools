@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
 import lib.FormTagLib
 import lib.LayoutTagLib
@@ -26,17 +27,17 @@ l.layout(title: "PT AI AST report") {
     l.main_panel() {
         def scanBriefDetailed = my.getScanBriefDetailed()
 
-        h2("List of PT AI issues for this build")
-        h3("Scan settings")
+        h1(_("result.title"))
+        h2(_("scan.settings.title"))
         table(id: "${my.urlName}-settings",
                 style: "width: 95%; margin: 0 auto; min-width: 200px", bgcolor: "#ECECEC") {
             colgroup() {
-                col(width: "250px")
+                col(width: "300px")
             }
             tbody() {
                 tr() {
                     td(align: "left", style: "padding-left: 20px; padding-top: 8px") {
-                        text("Project")
+                        text(_("scan.settings.project"))
                     }
                     td(align: "left", style: "font-weight:bold; padding-top: 8px") {
                         text("${scanBriefDetailed.projectName}")
@@ -44,7 +45,7 @@ l.layout(title: "PT AI AST report") {
                 }
                 tr() {
                     td(align: "left", style: "padding-left: 20px") {
-                        text("Website address")
+                        text(_("scan.settings.url"))
                     }
                     td(align: "left", style: "font-weight:bold") {
                         text("${scanBriefDetailed.scanSettings.url}")
@@ -52,7 +53,7 @@ l.layout(title: "PT AI AST report") {
                 }
                 tr() {
                     td(align: "left", style: "padding-left: 20px") {
-                        text("Programming language")
+                        text(_("scan.settings.language"))
                     }
                     td(align: "left", style: "font-weight:bold") {
                         text("${scanBriefDetailed.scanSettings.language}")
@@ -60,7 +61,7 @@ l.layout(title: "PT AI AST report") {
                 }
                 tr() {
                     td(align: "left", style: "padding-left: 20px; padding-top: 8px") {
-                        text("Scan date / time")
+                        text(_("scan.timestamp"))
                     }
                     ZonedDateTime scanDate = ZonedDateTime.parse(scanBriefDetailed.statistic.scanDateIso8601)
                     scanDate = scanDate.withZoneSameInstant(ZoneId.systemDefault())
@@ -71,7 +72,7 @@ l.layout(title: "PT AI AST report") {
                 }
                 tr() {
                     td(align: "left", style: "padding-left: 20px") {
-                        text("Scan duration")
+                        text(_("scan.duration"))
                     }
                     durationMs = Duration.parse(scanBriefDetailed.statistic.scanDurationIso8601).toMillis()
                     td(align: "left", style: "font-weight:bold") {
@@ -80,7 +81,7 @@ l.layout(title: "PT AI AST report") {
                 }
                 tr() {
                     td(align: "left", style: "padding-left: 20px; padding-top: 8px") {
-                        text("Server version")
+                        text(_("environment.server.version"))
                     }
                     td(align: "left", style: "font-weight:bold; padding-top: 8px") {
                         text("${scanBriefDetailed.ptaiServerVersion}")
@@ -88,7 +89,7 @@ l.layout(title: "PT AI AST report") {
                 }
                 tr() {
                     td(align: "left", style: "padding-left: 20px") {
-                        text("Agent version")
+                        text(_("environment.agent.version"))
                     }
                     td(align: "left", style: "font-weight:bold") {
                         text("${scanBriefDetailed.ptaiAgentVersion}")
@@ -96,128 +97,306 @@ l.layout(title: "PT AI AST report") {
                 }
             }
         }
-        if (ScanBrief.State.DONE == scanBriefDetailed.state || ScanBrief.State.ABORTED == scanBriefDetailed.state) {
-            h3("Breakdown of vulnerabilities")
-            h4("By severity")
+        if (!my.isEmpty()) {
+            h2(_("result.breakdown.title"))
+            h3(_("result.breakdown.level.title"))
             div(
                     id: "${my.urlName}-level-chart",
-                    class: 'graph-cursor-pointer',
-                    style: "width: 70%; margin: 0 auto; min-height: 200px; min-width: 200px; height: 645px;") {}
-            h4("By type")
+                    class: 'graph-cursor-pointer') {}
+            table(style: "width: 95%; margin: 0 auto; min-width: 200px", bgcolor: "#FFFFFF") {
+                colgroup() {
+                    col(width: "50%")
+                    col(width: "50%")
+                }
+                tbody() {
+                    tr() {
+                        td() {
+                            h3(_("result.breakdown.class.title"))
+                            div(
+                                    id: "${my.urlName}-class-pie-chart",
+                                    class: 'graph-cursor-pointer') {}
+                        }
+                        td() {
+                            h3(_("result.breakdown.approvalstate.title"))
+                            div(
+                                    id: "${my.urlName}-approval-state-pie-chart",
+                                    class: 'graph-cursor-pointer') {}
+                        }
+                    }
+                    tr() {
+                        td() {
+                            h3(_("result.breakdown.suspected.title"))
+                            div(
+                                    id: "${my.urlName}-suspected-state-pie-chart",
+                                    class: 'graph-cursor-pointer') {}                        }
+                        td() {
+                            h3(_("result.breakdown.scanmode.title"))
+                            div(
+                                    id: "${my.urlName}-scan-mode-pie-chart",
+                                    class: 'graph-cursor-pointer') {}                        }
+                    }
+                }
+            }
+            h3(_("result.breakdown.type.title"))
             div(
                     id: "${my.urlName}-type-chart",
-                    class: 'graph-cursor-pointer',
-                    style: "width: 70%; margin: 0 auto; min-height: 200px; min-width: 200px; height: 645px;") {}
+                    class: 'graph-cursor-pointer') {}
 
-            script(src: "${rootURL}/plugin/ptai-jenkins-plugin/webjars/echarts/echarts.common.min.js")
+            script(src: "${rootURL}/plugin/ptai-jenkins-plugin/webjars/echarts/echarts.min.js")
             script(src: "${rootURL}/plugin/ptai-jenkins-plugin/js/charts.js")
 
             st.bind(var: "action", value: my)
             script """
-                var ${my.urlName}Action = action
+                var ${my.urlName}Action = action;
     
-                // Map vulnerability level to its localized title, absolute value and color
+                // Map vulnerability level to its localized title
                 var levelAttrs = {
                     ${BaseIssue.Level.HIGH.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_severity_high()}',
-                        itemColor: '#f57962', 
-                        value: ${BaseIssue.Level.HIGH.value}
+                        title: '${Resources.i18n_misc_enums_vulnerability_severity_high()}'
                     },
                     ${BaseIssue.Level.MEDIUM.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_severity_medium()}',
-                        itemColor: '#f9ad37', 
-                        value: ${BaseIssue.Level.MEDIUM.value}
+                        title: '${Resources.i18n_misc_enums_vulnerability_severity_medium()}'
                     },
                     ${BaseIssue.Level.LOW.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_severity_low()}', 
-                        itemColor: '#66cc99', 
-                        value: ${BaseIssue.Level.LOW.value}
+                        title: '${Resources.i18n_misc_enums_vulnerability_severity_low()}' 
                     },
                     ${BaseIssue.Level.POTENTIAL.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_severity_potential()}', 
-                        itemColor: '#8cb5e1', 
-                        value: ${BaseIssue.Level.POTENTIAL.value}
+                        title: '${Resources.i18n_misc_enums_vulnerability_severity_potential()}' 
+                    },
+                    ${BaseIssue.Level.NONE.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_severity_none()}' 
                     }
-                }
+                };
+    
+                // Map vulnerability class to its localized title
+                var classAttrs = {
+                    ${BaseIssue.Type.BLACKBOX.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_blackbox()}'
+                    },
+                    ${BaseIssue.Type.CONFIGURATION.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_configuration()}'
+                    },
+                    ${BaseIssue.Type.SCA.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_sca()}'
+                    },
+                    ${BaseIssue.Type.UNKNOWN.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_unknown()}'
+                    },
+                    ${BaseIssue.Type.VULNERABILITY.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_vulnerability()}'
+                    },
+                    ${BaseIssue.Type.WEAKNESS.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_weakness()}'
+                    },
+                    ${BaseIssue.Type.YARAMATCH.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_yaramatch()}'
+                    }
+                };
+    
+                // Map vulnerability class to its localized title
+                var approvalStateAttrs = {
+                    ${BaseIssue.ApprovalState.NONE.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_approval_none()}'
+                    },
+                    ${BaseIssue.ApprovalState.APPROVAL.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_approval_confirmed()}'
+                    },
+                    ${BaseIssue.ApprovalState.AUTO_APPROVAL.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_approval_auto()}'
+                    },
+                    ${BaseIssue.ApprovalState.DISCARD.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_approval_rejected()}'
+                    },
+                    ${BaseIssue.ApprovalState.NOT_EXIST.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_approval_missing()}'
+                    }
+                };
+    
+                // Map vulnerability suspected state to its localized title
+                var suspectedStateAttrs = {
+                    ${true.toString()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_suspected_true()}'
+                    },
+                    ${false.toString()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_suspected_false()}'
+                    }
+                };
+    
+                // Map scan mode to its localized title
+                var scanModeAttrs = {
+                    ${VulnerabilityIssue.ScanMode.NONE.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_scanmode_none()}'
+                    },
+                    ${VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_scanmode_entrypoint()}'
+                    },
+                    ${VulnerabilityIssue.ScanMode.FROM_OTHER.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_scanmode_other()}'
+                    },
+                    ${VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED.name()}: {
+                        title: '${Resources.i18n_misc_enums_vulnerability_scanmode_publicprotected()}'
+                    }
+                };
     
                 var maxTypeWidth = 20
-                const barHeight = 28
+                const barHeight = 25
                 const bottomMargin = 20
                 const axisLabelMargin = 8
                 const axisFontFamily = "verdana"
                 const axisFontSize = "12px"
                 const style = "width: 95%; margin: 0 auto; min-width: 200px; "
-    
-                ${my.urlName}Action.getScanBriefDetailedJson(function (response) {
-                    var data = response.responseJSON
+
+                ${my.urlName}Action.getVulnerabilityTypeDistribution(function (response) {
+                    var option = response.responseJSON;
                     var dataSet = [];
-                    data.details.chartData.baseIssueDistributionData
-                        .filter(function(value) {
-                            return value.approvalState != 'DISCARD'
-                        })
-                        .reduce(function(res, value) {
-                            if (!res[value.title]) {
-                                res[value.title] = { title: value.title, level: value.level, count: 0 };
-                                dataSet.push(res[value.title])
-                            }
-                            res[value.title].count += value.count;
-                            return res;
-                        }, {});
-                    dataSet.sort(function(a, b) {
-                        if (levelAttrs[a.level].value == levelAttrs[b.level].value)
-                            return a.count - b.count;
-                        return levelAttrs[a.level].value - levelAttrs[b.level].value;
-                    });
-                    var option = {
-                        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-                        xAxis: { type: 'value', minInterval: 1 },
-                        yAxis: { type: 'category', data: [] },
-                        series: [{ type: 'bar', name: 'Quantity', data: [] }]
-                    };
-                    dataSet.forEach(function(item) {
-                        option.yAxis.data.push(item.title)
-                        var dataItem = {
-                            value: item.count,
-                            itemStyle: { color: levelAttrs[item.level].itemColor }
+                    option.tooltip = { trigger: 'axis', axisPointer: { type: 'shadow' } };
+                    option.xAxis[0].type = 'value';
+                    option.xAxis[0].minInterval = 1;
+                    option.yAxis[0].type = 'category';
+                    option.series[0].type = 'bar';
+                    option.series[0].name = '${_("result.misc.quantity.title")}';
+                    // TODO: Use level chart label widths also
+                    maxTypeWidth = maxTextWidth(option.yAxis[0].data, axisFontSize + " " + axisFontFamily) + axisLabelMargin;
+                    option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
+                    divHeight = option.yAxis[0].data.length * barHeight + bottomMargin;
+                    \$("${my.urlName}-type-chart").setAttribute("style", style + "height: " + divHeight + "px");                    
+                    renderChart("${my.urlName}-type-chart", option);
+                     
+                    ${my.urlName}Action.getVulnerabilityLevelDistribution(function (response) {
+                        var option = response.responseJSON;
+                        option.tooltip = { trigger: 'axis', axisPointer: { type: 'shadow' } };
+                        option.xAxis[0].type = 'value';
+                        option.xAxis[0].minInterval = 1;
+                        option.yAxis[0].type = 'category';
+                        option.yAxis[0].inverse = false;
+                        // replace vulnerability level title values with localized captions
+                        option.yAxis[0].data.forEach(function (item, index) {
+                            option.yAxis[0].data[index] = levelAttrs[item].title
+                        }, option.yAxis[0].data);
+
+                        option.series[0].type = 'bar';
+                        option.series[0].name = '${_("result.misc.quantity.title")}';
+                        option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
+                        divHeight = option.yAxis[0].data.length * barHeight + bottomMargin;
+                        \$("${my.urlName}-level-chart").setAttribute("style", style + "height: " + divHeight + "px");
+                        renderChart("${my.urlName}-level-chart", option);
+                    });  
+                    
+                    /*
+                    ${my.urlName}Action.getVulnerabilitySunBurstB(function (response) {
+                        var option = response.responseJSON;
+                        option.series[0].type = 'sunburst';
+                        option.series[0].radius = [0, '90%'];
+                        option.series[0].label = { rotate: 'radial' }
+                        // option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
+                        divHeight = 200;
+                        \$("${my.urlName}-misc-chart").setAttribute("style", style + "height: " + divHeight + "px");
+                        renderChart("${my.urlName}-misc-chart", option);
+                    });  
+                    */
+                    
+                    ${my.urlName}Action.getVulnerabilityClassPie(function (response) {
+                        var option = response.responseJSON;
+                        option.tooltip = { trigger: 'item' };
+                        option.series[0].itemStyle = {
+                            borderRadius: 3,
+                            borderColor: '#fff',
+                            borderWidth: 2
                         };
-                        option.series[0].data.push(dataItem);
-                    });
-                    maxTypeWidth = maxTextWidth(option.yAxis.data, axisFontSize + " " + axisFontFamily) + axisLabelMargin
-                    option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" }
-                    divHeight = option.yAxis.data.length * barHeight + bottomMargin
-                    \$("${my.urlName}-type-chart").setAttribute("style",style + "height: " + divHeight + "px");                    
-                    renderChart("${my.urlName}-type-chart", option)
-                       
-                    hashSet = data.details.chartData.baseIssueDistributionData
-                        .filter(function(value) {
-                            return value.approvalState != 'DISCARD'
-                        })
-                        .reduce(function(res, value) {
-                            if (!res[value.level]) {
-                                res[value.level] = { level: value.level, count: 0 };
-                            }
-                            res[value.level].count += value.count;
-                            return res;
-                        }, {});
-                    option = {
-                        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-                        xAxis: { type: 'value', minInterval: 1 },
-                        yAxis: { type: 'category', inverse: true, data: [] },
-                        series: [{ type: 'bar', name: 'Quantity', data: [] }]
-                    };
-                    for (var level in levelAttrs) {
-                        if (undefined === hashSet[level] || 0 == hashSet[level].count) continue;
-                        option.yAxis.data.push(levelAttrs[level].title)
-                        var item = {
-                            value: hashSet[level].count,
-                            itemStyle: { color: levelAttrs[level].itemColor }
+                        option.series[0].type = 'pie';
+                        option.series[0].radius = ['40%', '70%'];
+                        option.series[0].label = { show: false };
+                        option.series[0].avoidLabelOverlap = true;
+                        
+                        option.series[0].data.forEach(function (item, index) {
+                            option.series[0].data[index].name = classAttrs[item.name].title
+                        }, option.series[0].data);
+                        // option.series[0].label = { rotate: 'radial' };
+                        option.legend = {
+                            orient: 'vertical',
+                            left: 'left',
                         };
-                        option.series[0].data.push(item);
-                    }
-                    option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" }
-                    divHeight = option.yAxis.data.length * barHeight + bottomMargin
-                    \$("${my.urlName}-level-chart").setAttribute("style",style + "height: " + divHeight + "px");
-                    renderChart("${my.urlName}-level-chart", option)
+                        // option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
+                        divHeight = 200;
+                        \$("${my.urlName}-class-pie-chart").setAttribute("style", style + "height: " + divHeight + "px");
+                        renderChart("${my.urlName}-class-pie-chart", option);
+                    });  
+                    
+                    ${my.urlName}Action.getVulnerabilityApprovalStatePie(function (response) {
+                        var option = response.responseJSON;
+                        option.tooltip = { trigger: 'item' };
+                        option.series[0].itemStyle = {
+                            borderRadius: 3,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        };
+                        option.series[0].type = 'pie';
+                        option.series[0].radius = ['40%', '70%'];
+                        option.series[0].label = { show: false };
+                        option.series[0].data.forEach(function (item, index) {
+                            option.series[0].data[index].name = approvalStateAttrs[item.name].title
+                        }, option.series[0].data);
+                        // option.series[0].label = { rotate: 'radial' };
+                        option.legend = {
+                            orient: 'vertical',
+                            left: 'left',
+                        };
+                        // option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
+                        divHeight = 200;
+                        \$("${my.urlName}-approval-state-pie-chart").setAttribute("style", style + "height: " + divHeight + "px");
+                        renderChart("${my.urlName}-approval-state-pie-chart", option);
+                    });  
+                    
+                    ${my.urlName}Action.getVulnerabilitySuspectedPie(function (response) {
+                        var option = response.responseJSON;
+                        option.tooltip = { trigger: 'item' };
+                        option.series[0].itemStyle = {
+                            borderRadius: 3,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        };
+                        option.series[0].type = 'pie';
+                        option.series[0].radius = ['40%', '70%'];
+                        option.series[0].label = { show: false };
+                        option.series[0].data.forEach(function (item, index) {
+                            option.series[0].data[index].name = suspectedStateAttrs[item.name].title
+                        }, option.series[0].data);
+                        // option.series[0].label = { rotate: 'radial' };
+                        option.legend = {
+                            orient: 'vertical',
+                            left: 'left',
+                        };
+                        // option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
+                        divHeight = 200;
+                        \$("${my.urlName}-suspected-state-pie-chart").setAttribute("style", style + "height: " + divHeight + "px");
+                        renderChart("${my.urlName}-suspected-state-pie-chart", option);
+                    });  
+
+                    ${my.urlName}Action.getVulnerabilityScanModePie(function (response) {
+                        var option = response.responseJSON;
+                        option.tooltip = { trigger: 'item' };
+                        option.series[0].itemStyle = {
+                            borderRadius: 3,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        };
+                        option.series[0].type = 'pie';
+                        option.series[0].radius = ['40%', '70%'];
+                        option.series[0].label = { show: false };
+                        option.series[0].data.forEach(function (item, index) {
+                            option.series[0].data[index].name = scanModeAttrs[item.name].title
+                        }, option.series[0].data);
+                        // option.series[0].label = { rotate: 'radial' };
+                        option.legend = {
+                            orient: 'vertical',
+                            left: 'left',
+                        };
+                        // option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
+                        divHeight = 200;
+                        \$("${my.urlName}-scan-mode-pie-chart").setAttribute("style", style + "height: " + divHeight + "px");
+                        renderChart("${my.urlName}-scan-mode-pie-chart", option);
+                    });  
+
                 });
             """
         } else {

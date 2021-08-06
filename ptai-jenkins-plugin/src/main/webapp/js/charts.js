@@ -1,3 +1,4 @@
+var ptaiCharts = []
 /**
  * Renders a trend chart in the specified div using ECharts.
  *
@@ -6,11 +7,16 @@
  */
 function renderChart(chartDivId, chartModel) {
     var chart = echarts.init(document.getElementById(chartDivId));
+    const self = this;
+    self.ptaiCharts.push(chart);
 
     chart.setOption(chartModel);
     chart.resize();
+
     window.onresize = function() {
-        chart.resize();
+        self.ptaiCharts.forEach((obj) => {
+            obj.resize();
+        });
     };
 }
 

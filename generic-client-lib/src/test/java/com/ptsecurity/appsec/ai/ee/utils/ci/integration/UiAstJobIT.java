@@ -92,6 +92,35 @@ public class UiAstJobIT extends BaseAstIT {
     }
     @SneakyThrows
     @Test
+    @DisplayName("Scan PHP smoke project with miscellaneous level vulnerabilities")
+    public void scanPhpSmokeMisc() {
+        Path sources = getPackedResourceFile("code/php-smoke-misc.7z");
+        Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
+
+        Reports reports = new Reports();
+
+        RawData rawData = new RawData();
+        rawData.setFileName(UUID.randomUUID() + ".json");
+        reports.getRaw().add(rawData);
+
+        GenericAstJob astJob = UiAstJobImpl.builder()
+                .async(false)
+                .fullScanMode(true)
+                .failIfFailed(true)
+                .failIfUnstable(false)
+                .projectName(EXISTING_PHP_SMOKE_MISC_PROJECT)
+                .connectionSettings(CONNECTION_SETTINGS)
+                .console(System.out)
+                .sources(sources)
+                .destination(destination)
+                .reports(reports)
+                .build();
+        AbstractJob.JobExecutionResult res = astJob.execute();
+        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+    }
+
+    @SneakyThrows
+    @Test
     @DisplayName("Test async scan duration")
     public void scanPhpSmokeAsync() {
         Path sources = getPackedResourceFile("code/php-smoke-medium.7z");
