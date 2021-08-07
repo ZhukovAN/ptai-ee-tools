@@ -32,6 +32,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
+import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level.*;
 
 @DisplayName("Test JSON-based AST")
 @Tag("integration")
@@ -243,13 +244,13 @@ public class JsonAstJobIT extends BaseAstIT {
         long lowLevelCount = scanResult.getIssues().stream()
                 .filter(i -> i instanceof ConfigurationIssue)
                 .map(i -> (ConfigurationIssue) i)
-                .filter(c -> BaseIssue.Level.LOW == c.getLevel()).count();
+                .filter(c -> LOW == c.getLevel()).count();
         Assertions.assertEquals(scanResult.getIssues().size(), lowLevelCount);
     }
 
     @SneakyThrows
     @Test
-    @DisplayName("Check PHP smoke miscellaneous project scan results contain SCA high level vulnerabilities only")
+    @DisplayName("Check PHP smoke miscellaneous project scan results contain SCA high, medium, low and none level vulnerabilities")
     public void checkScaVulnerabilitiesOnly() {
         ScanResult scanResult = analyseMiscScanResults((settings) -> {
             settings.setScanAppType("Fingerprint");
@@ -257,11 +258,12 @@ public class JsonAstJobIT extends BaseAstIT {
         });
         Assertions.assertNotNull(scanResult);
         Assertions.assertNotEquals(0, scanResult.getIssues().size());
-        long highLevelCount = scanResult.getIssues().stream()
+        long count = scanResult.getIssues().stream()
                 .filter(i -> i instanceof ScaIssue)
                 .map(i -> (ScaIssue) i)
-                .filter(c -> BaseIssue.Level.HIGH == c.getLevel()).count();
-        Assertions.assertEquals(scanResult.getIssues().size(), highLevelCount);
+                .filter(c -> HIGH == c.getLevel() || MEDIUM == c.getLevel() || LOW == c.getLevel() || NONE == c.getLevel())
+                .count();
+        Assertions.assertEquals(scanResult.getIssues().size(), count);
     }
 
     @SneakyThrows
@@ -317,27 +319,27 @@ public class JsonAstJobIT extends BaseAstIT {
         Assertions.assertNotNull(scanResult);
         Assertions.assertNotEquals(0, scanResult.getIssues().size());
         Assertions.assertNotEquals(0, scanResult.getIssues().stream()
-                .filter(i -> BaseIssue.Level.HIGH == i.getLevel())
+                .filter(i -> HIGH == i.getLevel())
                 .count());
         Assertions.assertNotEquals(0, scanResult.getIssues().stream()
-                .filter(i -> BaseIssue.Level.MEDIUM == i.getLevel())
+                .filter(i -> MEDIUM == i.getLevel())
                 .count());
         Assertions.assertNotEquals(0, scanResult.getIssues().stream()
-                .filter(i -> BaseIssue.Level.LOW == i.getLevel())
+                .filter(i -> LOW == i.getLevel())
                 .count());
         Assertions.assertNotEquals(0, scanResult.getIssues().stream()
                 .filter(i -> BaseIssue.Level.POTENTIAL == i.getLevel())
                 .count());
         Assertions.assertNotEquals(0, scanResult.getIssues().stream()
-                .filter(i -> BaseIssue.Level.HIGH == i.getLevel() || BaseIssue.Level.MEDIUM == i.getLevel())
+                .filter(i -> HIGH == i.getLevel() || MEDIUM == i.getLevel())
                 .filter(i -> i instanceof VulnerabilityIssue)
                 .count());
         Assertions.assertNotEquals(0, scanResult.getIssues().stream()
-                .filter(i -> BaseIssue.Level.HIGH == i.getLevel())
+                .filter(i -> HIGH == i.getLevel())
                 .filter(i -> i instanceof ScaIssue)
                 .count());
         Assertions.assertNotEquals(0, scanResult.getIssues().stream()
-                .filter(i -> BaseIssue.Level.HIGH == i.getLevel())
+                .filter(i -> HIGH == i.getLevel())
                 .filter(i -> i instanceof ScaIssue)
                 .filter(s -> ((ScaIssue) s).getCveId().contains("CVE-2016-10033"))
                 .count());
