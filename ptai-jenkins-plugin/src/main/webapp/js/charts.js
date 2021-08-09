@@ -39,6 +39,22 @@ function maxTextWidth(strings, font) {
     return widths.reduce(function(a, b) { return Math.max(a, b); }, 0)
 }
 
-function generateSeverityDistributionTrendChart() {
+function setupDivFrame(innerHeight, divId, initialStyle) {
+    const chartDivPadding = { top: 16, bottom: 16, left: 12, right: 12 };
+    const chartDivBorder = { top: 1, bottom: 1, left: 4, right: 1 };
+    const chartDivColor = {
+        top: 'rgb(230, 230, 230)', bottom: 'rgb(230, 230, 230)',
+        left: 'rgb(116, 116, 116)', right: 'rgb(230, 230, 230)'
+    };
+    var divHeight = innerHeight + chartDivPadding.top + chartDivBorder.top + chartDivPadding.bottom + chartDivBorder.bottom;
+    var divStyle = initialStyle + "height: " + divHeight + "px; "
+    for (var side in chartDivPadding)
+        divStyle += 'padding-' + side + ": " + chartDivPadding[side] + "px; ";
+    for (var side in chartDivBorder) {
+        divStyle += 'border-' + side + "-width: " + chartDivBorder[side] + "px; ";
+        divStyle += 'border-' + side + "-style: solid; ";
+    }
+    for (var side in chartDivColor)
+        divStyle += 'border-' + side + "-color: " + chartDivColor[side] + "; ";
+    $(divId).setAttribute("style", divStyle);
 }
-

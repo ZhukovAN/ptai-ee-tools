@@ -19,6 +19,8 @@ def l = namespace(LayoutTagLib)
 def t = namespace('/lib/hudson')
 def st = namespace("jelly:stapler")
 
+def tdStyle = ""
+
 l.layout(title: "PT AI AST report") {
     l.side_panel() {
         st.include(page: "sidepanel.jelly", from: my.run, it: my.run, optional: true)
@@ -37,7 +39,10 @@ l.layout(title: "PT AI AST report") {
             tbody() {
                 tr() {
                     td(align: "left", style: "padding-left: 20px; padding-top: 8px") {
-                        text(_("scan.settings.project"))
+                        div() {
+                            text(_("scan.settings.project"))
+                        }
+
                     }
                     td(align: "left", style: "font-weight:bold; padding-top: 8px") {
                         text("${scanBriefDetailed.projectName}")
@@ -99,48 +104,58 @@ l.layout(title: "PT AI AST report") {
         }
         if (!my.isEmpty()) {
             h2(_("result.breakdown.title"))
-            h3(_("result.breakdown.level.title"))
-            div(
-                    id: "${my.urlName}-level-chart",
-                    class: 'graph-cursor-pointer') {}
-            table(style: "width: 95%; margin: 0 auto; min-width: 200px", bgcolor: "#FFFFFF") {
+            table(style: "width: 95%; margin: 0 auto; min-width: 200px; ", bgcolor: "#FFFFFF") {
                 colgroup() {
                     col(width: "50%")
                     col(width: "50%")
                 }
                 tbody() {
                     tr() {
-                        td() {
-                            h3(_("result.breakdown.class.title"))
+                        td(style: "margin-left: 0px; margin-right: 0px; ", colspan: "2") {
+                            h3(_("result.breakdown.level.title"))
                             div(
-                                    id: "${my.urlName}-class-pie-chart",
-                                    class: 'graph-cursor-pointer') {}
-                        }
-                        td() {
-                            h3(_("result.breakdown.approvalstate.title"))
-                            div(
-                                    id: "${my.urlName}-approval-state-pie-chart",
+                                    id: "${my.urlName}-level-chart",
                                     class: 'graph-cursor-pointer') {}
                         }
                     }
                     tr() {
-                        td() {
+                        td(style: "margin-left: 0px; margin-right: 16px; ") {
+                            h3(_("result.breakdown.class.title"))
+                            div(
+                                    id: "${my.urlName}-class-pie-chart",
+                                    class: 'graph-cursor-pointer; ') {}
+                        }
+                        td(style: "margin-left: 0px; margin-right: 0px; ") {
+                            h3(_("result.breakdown.approvalstate.title"))
+                            div(
+                                    id: "${my.urlName}-approval-state-pie-chart",
+                                    class: 'graph-cursor-pointer; ') {}
+                        }
+                    }
+                    tr() {
+                        td(style: "margin-left: 0px; margin-right: 16px; ") {
                             h3(_("result.breakdown.suspected.title"))
                             div(
                                     id: "${my.urlName}-suspected-state-pie-chart",
-                                    class: 'graph-cursor-pointer') {}                        }
-                        td() {
+                                    class: 'graph-cursor-pointer; ') {}
+                        }
+                        td(style: "margin-left: 0px; margin-right: 0px; ") {
                             h3(_("result.breakdown.scanmode.title"))
                             div(
                                     id: "${my.urlName}-scan-mode-pie-chart",
-                                    class: 'graph-cursor-pointer') {}                        }
+                                    class: 'graph-cursor-pointer; ') {}
+                        }
+                    }
+                    tr() {
+                        td(style: "margin-left: 0px; margin-right: 0px; ", colspan: "2") {
+                            h3(_("result.breakdown.type.title"))
+                            div(
+                                    id: "${my.urlName}-type-chart",
+                                    class: 'graph-cursor-pointer') {}
+                        }
                     }
                 }
             }
-            h3(_("result.breakdown.type.title"))
-            div(
-                    id: "${my.urlName}-type-chart",
-                    class: 'graph-cursor-pointer') {}
 
             script(src: "${rootURL}/plugin/ptai-jenkins-plugin/webjars/echarts/echarts.min.js")
             script(src: "${rootURL}/plugin/ptai-jenkins-plugin/js/charts.js")
@@ -238,13 +253,14 @@ l.layout(title: "PT AI AST report") {
                     }
                 };
     
-                var maxTypeWidth = 20
-                const barHeight = 25
-                const bottomMargin = 20
-                const axisLabelMargin = 8
-                const axisFontFamily = "verdana"
-                const axisFontSize = "12px"
-                const style = "width: 95%; margin: 0 auto; min-width: 200px; "
+                const barHeight = 25;
+                const bottomMargin = 20;
+                const axisLabelMargin = 8;
+                const axisFontFamily = 'verdana';
+                const axisFontSize = '12px';
+                const smallChartHeight = 200;
+                // const style = "width: 95%; margin: 0 auto; min-width: 200px; box-shadow: 2px 2px 1px grey; "
+                const style = "min-width: 200px; background-color: #f8f8f8; "
 
                 ${my.urlName}Action.getVulnerabilityTypeDistribution(function (response) {
                     var option = response.responseJSON;
@@ -256,11 +272,14 @@ l.layout(title: "PT AI AST report") {
                     option.series[0].type = 'bar';
                     option.series[0].name = '${_("result.misc.quantity.title")}';
                     // TODO: Use level chart label widths also
-                    maxTypeWidth = maxTextWidth(option.yAxis[0].data, axisFontSize + " " + axisFontFamily) + axisLabelMargin;
+                    var maxTypeWidth = maxTextWidth(option.yAxis[0].data, axisFontSize + " " + axisFontFamily) + axisLabelMargin;
                     option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
-                    divHeight = option.yAxis[0].data.length * barHeight + bottomMargin;
-                    \$("${my.urlName}-type-chart").setAttribute("style", style + "height: " + divHeight + "px");                    
-                    renderChart("${my.urlName}-type-chart", option);
+                    var innerHeight = 
+                        option.yAxis[0].data.length * barHeight + 
+                        bottomMargin; 
+                    var chartDivId = "${my.urlName}-type-chart";
+                    setupDivFrame(innerHeight, chartDivId, 'width: 100%; ' + style);                  
+                    renderChart(chartDivId, option);
                      
                     ${my.urlName}Action.getVulnerabilityLevelDistribution(function (response) {
                         var option = response.responseJSON;
@@ -277,23 +296,11 @@ l.layout(title: "PT AI AST report") {
                         option.series[0].type = 'bar';
                         option.series[0].name = '${_("result.misc.quantity.title")}';
                         option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
-                        divHeight = option.yAxis[0].data.length * barHeight + bottomMargin;
-                        \$("${my.urlName}-level-chart").setAttribute("style", style + "height: " + divHeight + "px");
-                        renderChart("${my.urlName}-level-chart", option);
+                        var innerHeight = option.yAxis[0].data.length * barHeight + bottomMargin;
+                        var chartDivId = "${my.urlName}-level-chart";
+                        setupDivFrame(innerHeight, chartDivId, 'width: 100%; ' + style);                  
+                        renderChart(chartDivId, option);
                     });  
-                    
-                    /*
-                    ${my.urlName}Action.getVulnerabilitySunBurstB(function (response) {
-                        var option = response.responseJSON;
-                        option.series[0].type = 'sunburst';
-                        option.series[0].radius = [0, '90%'];
-                        option.series[0].label = { rotate: 'radial' }
-                        // option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
-                        divHeight = 200;
-                        \$("${my.urlName}-misc-chart").setAttribute("style", style + "height: " + divHeight + "px");
-                        renderChart("${my.urlName}-misc-chart", option);
-                    });  
-                    */
                     
                     ${my.urlName}Action.getVulnerabilityClassPie(function (response) {
                         var option = response.responseJSON;
@@ -304,22 +311,28 @@ l.layout(title: "PT AI AST report") {
                             borderWidth: 2
                         };
                         option.series[0].type = 'pie';
-                        option.series[0].radius = ['40%', '70%'];
-                        option.series[0].label = { show: false };
+                        option.series[0].radius = ['35%', '70%'];
+                        
+                        option.series[0].label = {
+                            normal: {
+                                formatter: '{c}',
+                                position: 'inside'
+                            }, 
+                            show: true
+                        };
                         option.series[0].avoidLabelOverlap = true;
                         
                         option.series[0].data.forEach(function (item, index) {
                             option.series[0].data[index].name = classAttrs[item.name].title
                         }, option.series[0].data);
-                        // option.series[0].label = { rotate: 'radial' };
                         option.legend = {
                             orient: 'vertical',
                             left: 'left',
                         };
-                        // option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
-                        divHeight = 200;
-                        \$("${my.urlName}-class-pie-chart").setAttribute("style", style + "height: " + divHeight + "px");
-                        renderChart("${my.urlName}-class-pie-chart", option);
+                        var innerHeight = smallChartHeight;
+                        var chartDivId = "${my.urlName}-class-pie-chart";
+                        setupDivFrame(innerHeight, chartDivId, "margin-right: 16px; " + style);                  
+                        renderChart(chartDivId, option);
                     });  
                     
                     ${my.urlName}Action.getVulnerabilityApprovalStatePie(function (response) {
@@ -331,8 +344,14 @@ l.layout(title: "PT AI AST report") {
                             borderWidth: 2
                         };
                         option.series[0].type = 'pie';
-                        option.series[0].radius = ['40%', '70%'];
-                        option.series[0].label = { show: false };
+                        option.series[0].radius = ['35%', '70%'];
+                        option.series[0].label = {
+                            normal: {
+                                formatter: '{c}',
+                                position: 'inside'
+                            }, 
+                            show: true
+                        };
                         option.series[0].data.forEach(function (item, index) {
                             option.series[0].data[index].name = approvalStateAttrs[item.name].title
                         }, option.series[0].data);
@@ -341,10 +360,10 @@ l.layout(title: "PT AI AST report") {
                             orient: 'vertical',
                             left: 'left',
                         };
-                        // option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
-                        divHeight = 200;
-                        \$("${my.urlName}-approval-state-pie-chart").setAttribute("style", style + "height: " + divHeight + "px");
-                        renderChart("${my.urlName}-approval-state-pie-chart", option);
+                        var innerHeight = smallChartHeight;
+                        var chartDivId = "${my.urlName}-approval-state-pie-chart";
+                        setupDivFrame(innerHeight, chartDivId, style);                  
+                        renderChart(chartDivId, option);
                     });  
                     
                     ${my.urlName}Action.getVulnerabilitySuspectedPie(function (response) {
@@ -356,8 +375,14 @@ l.layout(title: "PT AI AST report") {
                             borderWidth: 2
                         };
                         option.series[0].type = 'pie';
-                        option.series[0].radius = ['40%', '70%'];
-                        option.series[0].label = { show: false };
+                        option.series[0].radius = ['35%', '70%'];
+                        option.series[0].label = {
+                            normal: {
+                                formatter: '{c}',
+                                position: 'inside'
+                            }, 
+                            show: true
+                        };
                         option.series[0].data.forEach(function (item, index) {
                             option.series[0].data[index].name = suspectedStateAttrs[item.name].title
                         }, option.series[0].data);
@@ -366,10 +391,10 @@ l.layout(title: "PT AI AST report") {
                             orient: 'vertical',
                             left: 'left',
                         };
-                        // option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
-                        divHeight = 200;
-                        \$("${my.urlName}-suspected-state-pie-chart").setAttribute("style", style + "height: " + divHeight + "px");
-                        renderChart("${my.urlName}-suspected-state-pie-chart", option);
+                        var innerHeight = smallChartHeight;
+                        var chartDivId = "${my.urlName}-suspected-state-pie-chart";
+                        setupDivFrame(innerHeight, chartDivId, "margin-right: 16px; " + style);                 
+                        renderChart(chartDivId, option);
                     });  
 
                     ${my.urlName}Action.getVulnerabilityScanModePie(function (response) {
@@ -381,8 +406,14 @@ l.layout(title: "PT AI AST report") {
                             borderWidth: 2
                         };
                         option.series[0].type = 'pie';
-                        option.series[0].radius = ['40%', '70%'];
-                        option.series[0].label = { show: false };
+                        option.series[0].radius = ['35%', '70%'];
+                        option.series[0].label = {
+                            normal: {
+                                formatter: '{c}',
+                                position: 'inside'
+                            }, 
+                            show: true
+                        };
                         option.series[0].data.forEach(function (item, index) {
                             option.series[0].data[index].name = scanModeAttrs[item.name].title
                         }, option.series[0].data);
@@ -391,12 +422,11 @@ l.layout(title: "PT AI AST report") {
                             orient: 'vertical',
                             left: 'left',
                         };
-                        // option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
-                        divHeight = 200;
-                        \$("${my.urlName}-scan-mode-pie-chart").setAttribute("style", style + "height: " + divHeight + "px");
-                        renderChart("${my.urlName}-scan-mode-pie-chart", option);
-                    });  
-
+                        var innerHeight = smallChartHeight;
+                        var chartDivId = "${my.urlName}-scan-mode-pie-chart";
+                        setupDivFrame(innerHeight, chartDivId, style);                  
+                        renderChart(chartDivId, option);
+                    });
                 });
             """
         } else {
