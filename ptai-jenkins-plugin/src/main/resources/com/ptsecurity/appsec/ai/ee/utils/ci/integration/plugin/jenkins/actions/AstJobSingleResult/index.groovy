@@ -19,8 +19,6 @@ def l = namespace(LayoutTagLib)
 def t = namespace('/lib/hudson')
 def st = namespace("jelly:stapler")
 
-def tdStyle = ""
-
 l.layout(title: "PT AI AST report") {
     l.side_panel() {
         st.include(page: "sidepanel.jelly", from: my.run, it: my.run, optional: true)
@@ -29,89 +27,132 @@ l.layout(title: "PT AI AST report") {
     l.main_panel() {
         def scanBriefDetailed = my.getScanBriefDetailed()
 
+        def styleFirstTd = 'padding-top: 0px; padding-bottom: 0px; padding-right: 0px; '
+        def styleSecondTd = 'padding-top: 0px; padding-bottom: 0px; padding-left: 0px; padding-right: 0px; font-weight:bold; background-color: #f8f8f8; '
+        def styleFirstDiv = 'border-left-width: 4px; border-left-style: solid; border-color: rgb(116, 116, 116); padding-left: 20px; margin-left: 2px; background-color: #f8f8f8; '
+        def styleSecondDiv = 'border-right-width: 1px; border-right-style: solid; border-color: rgb(230, 230, 230); background-color: #f8f8f8; '
+
         h1(_("result.title"))
         h2(_("scan.settings.title"))
-        table(id: "${my.urlName}-settings",
-                style: "width: 95%; margin: 0 auto; min-width: 200px", bgcolor: "#ECECEC") {
+        table(style: "width: 95%; margin: 0 auto; min-width: 200px; border-collapse: collapse; margin-top: 10px; ") {
             colgroup() {
                 col(width: "300px")
             }
             tbody() {
                 tr() {
-                    td(align: "left", style: "padding-left: 20px; padding-top: 8px") {
-                        div() {
+                    td(align: "left", style: "${styleFirstTd}") {
+                        div(style: "${styleFirstDiv}padding-top: 8px; border-top-width: 1px; border-top-style: solid; border-top-color: rgb(230, 230, 230); ") {
                             text(_("scan.settings.project"))
                         }
-
                     }
-                    td(align: "left", style: "font-weight:bold; padding-top: 8px") {
-                        text("${scanBriefDetailed.projectName}")
-                    }
-                }
-                tr() {
-                    td(align: "left", style: "padding-left: 20px") {
-                        text(_("scan.settings.url"))
-                    }
-                    td(align: "left", style: "font-weight:bold") {
-                        text("${scanBriefDetailed.scanSettings.url}")
+                    td(align: "left", style: "${styleSecondTd}") {
+                        div(style: "${styleSecondDiv}padding-top: 8px; border-top-width: 1px; border-top-style: solid; border-top-color: rgb(230, 230, 230); ") {
+                            text("${scanBriefDetailed.projectName}")
+                        }
                     }
                 }
                 tr() {
-                    td(align: "left", style: "padding-left: 20px") {
-                        text(_("scan.settings.language"))
+                    td(align: "left", style: "${styleFirstTd}") {
+                        div(style: "${styleFirstDiv}") {
+                            text(_("scan.settings.url"))
+                        }
                     }
-                    td(align: "left", style: "font-weight:bold") {
-                        text("${scanBriefDetailed.scanSettings.language}")
+                    td(align: "left", style: "${styleSecondTd}") {
+                        div(style: "${styleSecondDiv}") {
+                            text("${scanBriefDetailed.scanSettings.url}")
+                        }
                     }
                 }
                 tr() {
-                    td(align: "left", style: "padding-left: 20px; padding-top: 8px") {
-                        text(_("scan.timestamp"))
+                    td(align: "left", style: "${styleFirstTd}") {
+                        div(style: "${styleFirstDiv}padding-bottom: 8px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(230, 230, 230); ") {
+                            text(_("scan.settings.language"))
+                        }
+                    }
+                    td(align: "left", style: "${styleSecondTd}") {
+                        div(style: "${styleSecondDiv}padding-bottom: 8px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(230, 230, 230); ") {
+                            text("${scanBriefDetailed.scanSettings.language}")
+                        }
+                    }
+                }
+            }
+        }
+        table(style: "width: 95%; margin: 0 auto; min-width: 200px; border-collapse: collapse; margin-top: 10px; ") {
+            colgroup() {
+                col(width: "300px")
+            }
+            tbody() {
+                tr() {
+                    td(align: "left", style: "${styleFirstTd}") {
+                        div(style: "${styleFirstDiv}padding-top: 8px; border-top-width: 1px; border-top-style: solid; border-top-color: rgb(230, 230, 230); ") {
+                            text(_("scan.timestamp"))
+                        }
                     }
                     ZonedDateTime scanDate = ZonedDateTime.parse(scanBriefDetailed.statistic.scanDateIso8601)
                     scanDate = scanDate.withZoneSameInstant(ZoneId.systemDefault())
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss");
-                    td(align: "left", style: "font-weight:bold; padding-top: 8px") {
-                        text("${scanDate.format(formatter)}")
+                    td(align: "left", style: "${styleSecondTd}") {
+                        div(style: "${styleSecondDiv}padding-top: 8px; border-top-width: 1px; border-top-style: solid; border-top-color: rgb(230, 230, 230); ") {
+                            text("${scanDate.format(formatter)}")
+                        }
                     }
                 }
                 tr() {
-                    td(align: "left", style: "padding-left: 20px") {
-                        text(_("scan.duration"))
+                    td(align: "left", style: "${styleFirstTd}") {
+                        div(style: "${styleFirstDiv}padding-bottom: 8px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(230, 230, 230); ") {
+                            text(_("scan.duration"))
+                        }
                     }
                     durationMs = Duration.parse(scanBriefDetailed.statistic.scanDurationIso8601).toMillis()
-                    td(align: "left", style: "font-weight:bold") {
-                        text("${DurationFormatUtils.formatDuration(durationMs, "H:mm:ss", true);}")
+                    td(align: "left", style: "${styleSecondTd}") {
+                        div(style: "${styleSecondDiv}padding-bottom: 8px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(230, 230, 230); ") {
+                            text("${DurationFormatUtils.formatDuration(durationMs, "H:mm:ss", true);}")
+                        }
+                    }
+                }
+            }
+        }
+        table(style: "width: 95%; margin: 0 auto; min-width: 200px; border-collapse: collapse; margin-top: 10px; ") {
+            colgroup() {
+                col(width: "300px")
+            }
+            tbody() {
+                tr() {
+                    td(align: "left", style: "${styleFirstTd}") {
+                        div(style: "${styleFirstDiv}padding-top: 8px; border-top-width: 1px; border-top-style: solid; border-top-color: rgb(230, 230, 230); ") {
+                            text(_("environment.server.version"))
+                        }
+                    }
+                    td(align: "left", style: "${styleSecondTd}") {
+                        div(style: "${styleSecondDiv}padding-top: 8px; border-top-width: 1px; border-top-style: solid; border-top-color: rgb(230, 230, 230); ") {
+                            text("${scanBriefDetailed.ptaiServerVersion}")
+                        }
                     }
                 }
                 tr() {
-                    td(align: "left", style: "padding-left: 20px; padding-top: 8px") {
-                        text(_("environment.server.version"))
+                    td(align: "left", style: "${styleFirstTd}") {
+                        div(style: "${styleFirstDiv}padding-bottom: 8px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(230, 230, 230); ") {
+                            text(_("environment.agent.version"))
+                        }
                     }
-                    td(align: "left", style: "font-weight:bold; padding-top: 8px") {
-                        text("${scanBriefDetailed.ptaiServerVersion}")
-                    }
-                }
-                tr() {
-                    td(align: "left", style: "padding-left: 20px") {
-                        text(_("environment.agent.version"))
-                    }
-                    td(align: "left", style: "font-weight:bold") {
-                        text("${scanBriefDetailed.ptaiAgentVersion}")
+                    td(align: "left", style: "${styleSecondTd}") {
+                        div(style: "${styleSecondDiv}padding-bottom: 8px; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(230, 230, 230); ") {
+                            text("${scanBriefDetailed.ptaiAgentVersion}")
+                        }
                     }
                 }
             }
         }
         if (!my.isEmpty()) {
             h2(_("result.breakdown.title"))
-            table(style: "width: 95%; margin: 0 auto; min-width: 200px; ", bgcolor: "#FFFFFF") {
+            table(style: "width: 95%; margin: 0 auto; min-width: 200px; border-collapse: collapse; ") {
                 colgroup() {
                     col(width: "50%")
                     col(width: "50%")
                 }
                 tbody() {
                     tr() {
-                        td(style: "margin-left: 0px; margin-right: 0px; ", colspan: "2") {
+                        td(style: "margin-left: 0px; margin-right: 0px; padding-right: 0px; ", colspan: "2") {
                             h3(_("result.breakdown.level.title"))
                             div(
                                     id: "${my.urlName}-level-chart",
@@ -260,7 +301,7 @@ l.layout(title: "PT AI AST report") {
                 const axisFontSize = '12px';
                 const smallChartHeight = 200;
                 // const style = "width: 95%; margin: 0 auto; min-width: 200px; box-shadow: 2px 2px 1px grey; "
-                const style = "min-width: 200px; background-color: #f8f8f8; "
+                const style = "min-width: 200px; background-color: #f8f8f8f8; "
 
                 ${my.urlName}Action.getVulnerabilityTypeDistribution(function (response) {
                     var option = response.responseJSON;
@@ -316,7 +357,7 @@ l.layout(title: "PT AI AST report") {
                         option.series[0].label = {
                             normal: {
                                 formatter: '{c}',
-                                position: 'inside'
+                                position: 'outside'
                             }, 
                             show: true
                         };
@@ -348,7 +389,7 @@ l.layout(title: "PT AI AST report") {
                         option.series[0].label = {
                             normal: {
                                 formatter: '{c}',
-                                position: 'inside'
+                                position: 'outside'
                             }, 
                             show: true
                         };
@@ -379,7 +420,7 @@ l.layout(title: "PT AI AST report") {
                         option.series[0].label = {
                             normal: {
                                 formatter: '{c}',
-                                position: 'inside'
+                                position: 'outside'
                             }, 
                             show: true
                         };
@@ -410,7 +451,7 @@ l.layout(title: "PT AI AST report") {
                         option.series[0].label = {
                             normal: {
                                 formatter: '{c}',
-                                position: 'inside'
+                                position: 'outside'
                             }, 
                             show: true
                         };
