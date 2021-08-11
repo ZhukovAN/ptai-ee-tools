@@ -58,3 +58,131 @@ function setupDivFrame(innerHeight, divId, initialStyle) {
         divStyle += 'border-' + side + "-color: " + chartDivColor[side] + "; ";
     $(divId).setAttribute("style", divStyle);
 }
+
+const smallChartHeight = 200;
+const chartStyle = 'min-width: 200px; background-color: #f8f8f8f8; ';
+
+function createDistributionPieChart(chartDivId, option, i18map) {
+    option.tooltip = { trigger: 'item' };
+    option.series[0].itemStyle = {
+        borderRadius: 3,
+        borderColor: '#fff',
+        borderWidth: 2
+    };
+    option.series[0].type = 'pie';
+    option.series[0].radius = ['35%', '70%'];
+
+    option.series[0].label = {
+        normal: {
+            formatter: '{c}',
+            position: 'outside'
+        },
+        show: true
+    };
+    option.series[0].avoidLabelOverlap = true;
+
+    option.series[0].data.forEach(function (item, index) {
+        option.series[0].data[index].name = i18map[item.name].title
+    }, option.series[0].data);
+
+    option.legend = {
+        orient: 'vertical',
+        left: 'left',
+    };
+    var innerHeight = smallChartHeight;
+    // setupDivFrame(innerHeight, chartDivId, "margin-right: 16px; " + chartStyle);
+    setupDivFrame(innerHeight, chartDivId, chartStyle);
+    renderChart(chartDivId, option);
+}
+
+function createBuildHistoryChart(chartDivId, option, i18map) {
+    option.title = { show: false };
+
+    option.legend.top = 'top';
+    option.legend.left = 'center';
+
+    option.tooltip = {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        }
+    };
+
+    option.grid = { bottom: 5, top: 35, left: 20, right: 10, containLabel: true };
+
+    option.xAxis[0].type = 'category';
+    option.xAxis[0].boundaryGap = true;
+    option.xAxis[0].data.forEach(function (item, index) {
+        this[index] = '#' + item;
+    }, option.xAxis[0].data);
+    option.xAxis[0].axisTick = { alignWithLabel: false }
+
+    option.yAxis[0].type = 'value';
+    option.yAxis[0].minInterval = 1;
+
+    option.series.forEach(function (item, index) {
+        item.type = 'bar';
+        if (0 != index) {
+            item.stack = '1';
+            item.barWidth = '15%';
+        } else {
+            item.barWidth = '30%';
+        }
+        item.itemStyle.borderColor = '#ffffff';
+        item.itemStyle.borderWidth = 1;
+        item.emphasis = { focus: 'series' };
+        // Replace vulnerability level title values with localized captions
+        item.name = i18map[item.name].title;
+    });
+
+    option.legend.data.forEach(function (item, index) {
+        option.legend.data[index] = i18map[item].title;
+    }, option.legend.data);
+
+    var innerHeight = 250;
+    // setupDivFrame(innerHeight, chartDivId, "margin-right: 16px; " + chartStyle);
+    setupDivFrame(innerHeight, chartDivId, chartStyle);
+    renderChart(chartDivId, option);
+}
+
+function createDurationHistoryChart(chartDivId, option) {
+    option.title = { show: false };
+
+    option.legend.top = 'top';
+    option.legend.left = 'center';
+
+    option.tooltip = {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        }
+    };
+
+    option.grid = { bottom: 5, top: 35, left: 20, right: 10, containLabel: true };
+
+    option.xAxis[0].type = 'category';
+    option.xAxis[0].boundaryGap = true;
+    option.xAxis[0].data.forEach(function (item, index) {
+        this[index] = '#' + item;
+    }, option.xAxis[0].data);
+    option.xAxis[0].axisTick = { alignWithLabel: false }
+
+    option.yAxis[0].type = 'value';
+    option.yAxis[0].minInterval = 1;
+
+    option.series.forEach(function (item, index) {
+        item.type = 'line';
+        item.step = 'middle';
+    });
+
+    var innerHeight = 250;
+    // setupDivFrame(innerHeight, chartDivId, "margin-right: 16px; " + chartStyle);
+    setupDivFrame(innerHeight, chartDivId, chartStyle);
+    renderChart(chartDivId, option);
+}

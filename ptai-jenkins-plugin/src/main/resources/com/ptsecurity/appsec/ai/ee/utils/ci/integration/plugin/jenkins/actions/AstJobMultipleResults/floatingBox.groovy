@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.
 
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel
 import lib.FormTagLib
 import lib.LayoutTagLib
 
@@ -23,7 +22,7 @@ div(
 script(src: "${rootURL}/plugin/ptai-jenkins-plugin/webjars/echarts/echarts.common.min.js")
 script(src: "${rootURL}/plugin/ptai-jenkins-plugin/js/charts.js")
 
-st.bind(var:"action", value:from)
+st.bind(var: "action", value: from)
 
 script """
     var ${from.urlName}Action = action;
@@ -83,7 +82,8 @@ script """
         });
         // replace vulnerability level title values with localized captions
         option.series.forEach(function (item) {
-            item.name = levelAttrs[item.name].title
+            item.name = levelAttrs[item.name].title;
+            item.smooth = true;
         });
          
         option.legend.data.forEach(function (item, index) {

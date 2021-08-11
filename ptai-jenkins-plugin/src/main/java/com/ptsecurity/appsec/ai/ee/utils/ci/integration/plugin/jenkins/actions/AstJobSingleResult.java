@@ -274,7 +274,7 @@ public class AstJobSingleResult implements RunAction2 {
 
     @JavaScriptMethod
     @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilityClassPie() {
+    public JSONObject getVulnerabilityTypePie() {
         // if (null != vulnerabilitySunBurst)
         //     return vulnerabilitySunBurst;
         if (isEmpty()) return null;
