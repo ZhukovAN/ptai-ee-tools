@@ -139,13 +139,14 @@ public abstract class GenericAstJob extends AbstractJob {
         }
 
         // Wait for AST to complete and process results
-        genericAstTasks.waitForComplete(scanResultId);
+        ScanBrief.State state = genericAstTasks.waitForComplete(projectId, scanResultId);
+        fine("Resulting state is " + state);
+        // Scan may be stopped from PT AI Viewer. In this case no scan results will be
+        // available even if scan is aborted at the very latest scan stages and some
+        // vulnerabilities are found already
+        // So we need to check if scan results are exist
         scanBrief = genericAstTasks.getScanBrief(projectId, scanResultId);
         astOps.scanCompleteCallback(scanBrief);
-
-
-        ScanBrief.State state = scanBrief.getState();
-        fine("Resulting state is " + state);
         fine("Resulting statistics is " + scanBrief.getStatistic());
 
         if (!EnumSet.of(DONE, ABORTED, FAILED).contains(state))

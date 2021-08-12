@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.errors.Error;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanError;
+import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.Stage;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v36.scanscheduler.model.ScanType;
 import com.ptsecurity.appsec.ai.ee.server.v36.scanscheduler.model.StartScanModel;
@@ -24,7 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -61,25 +63,34 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
     }
 
     @Override
-    public void waitForComplete(@NonNull UUID scanResultId) throws GenericException {
+    public ScanBrief.State waitForComplete(@NonNull UUID projectId, @NonNull UUID scanResultId) throws GenericException {
         try {
             // Need this container to save data from lambda
             AtomicReference<com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult> res = new AtomicReference<>();
 
-            Semaphore semaphore = new Semaphore(1);
-            semaphore.acquire();
+            // Semaphore-based implementation was replaced by queue-based as
+            // waitForComplete unblocking may be done on several events like
+            // ScanCompleted and ScanProgress with aborted and failed stage values
+            BlockingQueue<Stage> queue = new LinkedBlockingDeque<>();
 
-            HubConnection connection = client.createSignalrConnection(scanResultId, semaphore);
+            HubConnection connection = client.createSignalrConnection(projectId, scanResultId, queue);
 
             connection.on("ScanCompleted", (data) -> {
                 res.set(data.getResult());
-                semaphore.release();
+                queue.add(Stage.DONE);
             }, ScanCompleteEvent.class);
 
             connection.start().blockingAwait();
-
-            semaphore.acquire();
+            Stage stage = queue.take();
             connection.stop();
+
+            return Stage.FAILED == stage
+                    ? ScanBrief.State.FAILED
+                    : Stage.ABORTED == stage
+                    ? ScanBrief.State.ABORTED
+                    : Stage.DONE == stage
+                    ? ScanBrief.State.DONE
+                    : ScanBrief.State.UNKNOWN;
         } catch (InterruptedException e) {
             throw GenericException.raise("Job interrupted", e);
         }

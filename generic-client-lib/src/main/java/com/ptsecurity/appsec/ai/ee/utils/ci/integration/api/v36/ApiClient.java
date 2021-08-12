@@ -21,6 +21,7 @@ import com.ptsecurity.appsec.ai.ee.server.v36.updateserver.api.VersionApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.VersionRange;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanProgressEvent;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanResultRemovedEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanStartedEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.tasks.ServerVersionTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
@@ -45,7 +46,7 @@ import javax.net.ssl.X509TrustManager;
 import java.lang.reflect.Type;
 import java.security.SecureRandom;
 import java.util.*;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.BlockingQueue;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
@@ -166,7 +167,7 @@ public class ApiClient extends AbstractApiClient {
     @ToString.Exclude
     protected String connectedDate = "";
 
-    public HubConnection createSignalrConnection(@NonNull final UUID scanResultId, final Semaphore semaphore) throws GenericException {
+    public HubConnection createSignalrConnection(@NonNull UUID projectId, @NonNull final UUID scanResultId, final BlockingQueue<Stage> queue) throws GenericException {
         // Create accessTokenProvider to provide SignalR connection
         // with jwt
         Single<String> accessTokenProvider = Single.defer(() -> Single.just(apiJwt.getAccessToken()));
@@ -206,13 +207,24 @@ public class ApiClient extends AbstractApiClient {
 
         connection.on("NeedSyncClientState", () -> {
             log.trace("Event:NeedSyncClientState");
-            subscribe(connection, scanResultId);
+            subscribe(connection, projectId, scanResultId);
         });
 
         connection.on("ScanStarted", (data) -> {
             if (null != console) console.info("Scan started");
             log.trace(data.toString());
         }, ScanStartedEvent.class);
+
+        // Currently PT AI viewer have no stop scan feature but deletes scan result
+        connection.on("ScanResultRemoved", (data) -> {
+            if (!scanResultId.equals(data.getScanResultId())) return;
+            if (null != console) console.info("Scan result removed");
+            log.trace(data.toString());
+            if (null != queue) {
+                log.debug("Scan result {} removed", scanResultId);
+                queue.add(Stage.ABORTED);
+            }
+        }, ScanResultRemovedEvent.class);
 
         connection.on("ScanProgress", (data) -> {
             StringBuilder builder = new StringBuilder();
@@ -233,9 +245,9 @@ public class ApiClient extends AbstractApiClient {
             // Failed or aborted scans do not generate ScanCompleted event but
             // send ScanProgress with stage failed or aborted
             Optional<Stage> stage = Optional.of(data).map(ScanProgressEvent::getProgress).map(ScanProgress::getStage);
-            if (stage.isPresent() && null != semaphore && (Stage.ABORTED == stage.get() || Stage.FAILED == stage.get()) ) {
-                log.debug("AST job semaphore released due to ScanProgressEvent stage {}", stage.get());
-                semaphore.release();
+            if (stage.isPresent() && null != queue && (Stage.ABORTED == stage.get() || Stage.FAILED == stage.get())) {
+                log.debug("ScanProgressEvent stage {} is to be put to AST task queue", stage.get());
+                queue.add(stage.get());
             }
             log.trace(data.toString());
         }, ScanProgressEvent.class);
@@ -262,6 +274,7 @@ public class ApiClient extends AbstractApiClient {
 
     protected void subscribe(
             @NonNull final HubConnection connection,
+            @NonNull UUID projectId,
             @NonNull final UUID scanResultId) {
         SubscriptionOnNotification subscription = new SubscriptionOnNotification();
         subscription.ClientId = id;
@@ -274,6 +287,12 @@ public class ApiClient extends AbstractApiClient {
         connection.send("SubscribeOnNotification", subscription);
 
         subscription.NotificationTypeName = "ScanCompleted";
+        connection.send("SubscribeOnNotification", subscription);
+
+        // ScanResultRemoved event subscription uses projectId-based filtering
+        subscription.Ids.clear();
+        subscription.Ids.add(projectId);
+        subscription.NotificationTypeName = "ScanResultRemoved";
         connection.send("SubscribeOnNotification", subscription);
     }
 }

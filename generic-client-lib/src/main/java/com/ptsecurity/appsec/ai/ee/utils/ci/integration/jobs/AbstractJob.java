@@ -47,14 +47,14 @@ public abstract class AbstractJob extends AbstractTool {
             unsafeExecute();
             return JobExecutionResult.SUCCESS;
         } catch (GenericException e) {
-            severe(e.getDetailedMessage());
-            log.error(e.getDetailedMessage(), e.getCause());
             if (null != e.getCause() && e.getCause() instanceof InterruptedException) {
                 // TODO: check if job was interrupted in the middle of scan process,
                 //  i.e. we still may get some incomplete results from there
                 log.debug("Job execution interrupted");
                 return JobExecutionResult.INTERRUPTED;
             }
+            severe(e.getDetailedMessage());
+            log.error(e.getDetailedMessage(), e.getCause());
             return JobExecutionResult.FAILED;
         }
     }

@@ -86,3 +86,9 @@
 + [Feature] Scan results data structures refactoring started. Previously plugins like Jenkins used data types defined in ptai-rest-api and those types are version-dependent. This could cause a problems with plugins update as that data stored as an XML representation of Actions
 ### 20210621
 + [Feature] Project- and build-scope actions are temporarily disabled
+### 20210812
++ [Fix] Major code refactoring complete
++ [Feature] Jenkins plugin now supports charts
++ [Fix] Scans stopped from PT AI viewer are terminated in plugins
++ [ToDo] Implement syslog data send. Syslog connection settings are to be taken from PT AI server settings
++ [ToDo] Fix "internal server error" when trying to get scan results for scans deleted / stopped from PT AI viewer
