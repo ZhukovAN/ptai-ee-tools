@@ -83,7 +83,7 @@ public class AstJobTableResults implements Action {
             long count = 0;
             do {
                 ScanBriefDetailed brief = buildScanBriefDetailed.getScanBriefDetailed();
-                if (!Optional.of(brief).map(ScanBriefDetailed::getStatistic).isPresent()) break;
+                if (!Optional.ofNullable(brief).map(ScanBriefDetailed::getStatistic).isPresent()) break;
                 try {
                     Duration durationFull = Duration.parse(brief.getStatistic().getScanDurationIso8601());
                     count = durationFull.getSeconds();

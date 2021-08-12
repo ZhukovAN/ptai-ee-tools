@@ -69,7 +69,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
             Semaphore semaphore = new Semaphore(1);
             semaphore.acquire();
 
-            HubConnection connection = client.createSignalrConnection(scanResultId);
+            HubConnection connection = client.createSignalrConnection(scanResultId, semaphore);
 
             connection.on("ScanCompleted", (data) -> {
                 res.set(data.getResult());
@@ -81,11 +81,12 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
             semaphore.acquire();
             connection.stop();
         } catch (InterruptedException e) {
-            throw GenericException.raise("Job interruted", e);
+            throw GenericException.raise("Job interrupted", e);
         }
     }
 
     public void stop(@NonNull UUID scanResultId) throws GenericException {
+        log.debug("Calling scan stop for scan result ID {}", scanResultId);
         call(
                 () -> client.getScanApi().apiScanStopPost(scanResultId),
                 "PT AI project scan stop failed");

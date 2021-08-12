@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.util.EnumSet;
@@ -29,6 +30,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.State.*;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.Policy.PolicyState.REJECTED;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
+@Slf4j
 @SuperBuilder
 public abstract class GenericAstJob extends AbstractJob {
     /**
@@ -123,6 +125,7 @@ public abstract class GenericAstJob extends AbstractJob {
 
         // Save result URL to artifacts
         final String url = genericAstTasks.getScanResultUrl(projectId, scanResultId);
+        log.debug("Save AST result REST API URL {} to file", url);
         call(
                 () -> fileOps.saveArtifact("rest.url", url.getBytes()),
                 "AST result REST API URL save failed");

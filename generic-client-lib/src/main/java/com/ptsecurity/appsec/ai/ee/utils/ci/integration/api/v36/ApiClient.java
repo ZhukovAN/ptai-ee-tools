@@ -45,6 +45,7 @@ import javax.net.ssl.X509TrustManager;
 import java.lang.reflect.Type;
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
@@ -165,7 +166,7 @@ public class ApiClient extends AbstractApiClient {
     @ToString.Exclude
     protected String connectedDate = "";
 
-    public HubConnection createSignalrConnection(@NonNull final UUID scanResultId) throws GenericException {
+    public HubConnection createSignalrConnection(@NonNull final UUID scanResultId, final Semaphore semaphore) throws GenericException {
         // Create accessTokenProvider to provide SignalR connection
         // with jwt
         Single<String> accessTokenProvider = Single.defer(() -> Single.just(apiJwt.getAccessToken()));
@@ -229,6 +230,13 @@ public class ApiClient extends AbstractApiClient {
                     .map(ScanProgress::getValue)
                     .ifPresent(s -> builder.append(" ").append(s).append("%"));
             if (null != console) console.info(builder.toString());
+            // Failed or aborted scans do not generate ScanCompleted event but
+            // send ScanProgress with stage failed or aborted
+            Optional<Stage> stage = Optional.of(data).map(ScanProgressEvent::getProgress).map(ScanProgress::getStage);
+            if (stage.isPresent() && null != semaphore && (Stage.ABORTED == stage.get() || Stage.FAILED == stage.get()) ) {
+                log.debug("AST job semaphore released due to ScanProgressEvent stage {}", stage.get());
+                semaphore.release();
+            }
             log.trace(data.toString());
         }, ScanProgressEvent.class);
 
