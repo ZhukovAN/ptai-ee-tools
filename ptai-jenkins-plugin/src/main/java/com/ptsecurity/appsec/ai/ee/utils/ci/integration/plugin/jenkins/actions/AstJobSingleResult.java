@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed.Details.ChartData.BaseIssueCount;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
@@ -9,6 +10,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.Ch
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.PieChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.TreeChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import hudson.model.Run;
 import jenkins.model.Jenkins;
 import jenkins.model.RunAction2;
@@ -63,11 +65,11 @@ public class AstJobSingleResult implements RunAction2 {
         return scanBriefDetailed;
     }
 
-    protected transient JSONObject scanBriefDetailedJson = null;
+    protected transient String scanBriefDetailedJson = null;
 
-    protected transient JSONObject vulnerabilityTypeDistribution = null;
-    protected transient JSONObject vulnerabilityLevelDistribution = null;
-    protected transient JSONObject vulnerabilitySunBurst = null;
+    protected transient String vulnerabilityTypeDistribution = null;
+    protected transient String vulnerabilityLevelDistribution = null;
+    protected transient String vulnerabilitySunBurst = null;
 
     @Override
     public void onAttached(Run<?, ?> r) {
@@ -100,9 +102,9 @@ public class AstJobSingleResult implements RunAction2 {
         return (null == scanBriefDetailed) || scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().isEmpty();
     }
 
-    @JavaScriptMethod
+    @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilityLevelDistribution() {
+    public String getVulnerabilityLevelDistribution() {
         if (null != vulnerabilityLevelDistribution)
             return vulnerabilityLevelDistribution;
         if (isEmpty()) return null;
@@ -130,13 +132,13 @@ public class AstJobSingleResult implements RunAction2 {
                             .build())
                     .build());
         });
-        vulnerabilityLevelDistribution = BaseJsonChartDataModel.convertObject(dataModel);
+        vulnerabilityLevelDistribution = BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
         return vulnerabilityLevelDistribution;
     }
 
-    @JavaScriptMethod
+    @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilityTypeDistribution() {
+    public String getVulnerabilityTypeDistribution() {
         if (null != vulnerabilityTypeDistribution)
             return vulnerabilityTypeDistribution;
         if (isEmpty()) return null;
@@ -170,13 +172,13 @@ public class AstJobSingleResult implements RunAction2 {
                             .build())
                     .build());
         });
-        vulnerabilityTypeDistribution = BaseJsonChartDataModel.convertObject(dataModel);
+        vulnerabilityTypeDistribution = BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
         return vulnerabilityTypeDistribution;
     }
 
-    @JavaScriptMethod
+    @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilitySunBurst() {
+    public String getVulnerabilitySunBurst() {
         if (null != vulnerabilitySunBurst)
             return vulnerabilitySunBurst;
         if (isEmpty()) return null;
@@ -202,79 +204,12 @@ public class AstJobSingleResult implements RunAction2 {
                             .build())
                     .build());
         });
-        vulnerabilitySunBurst = BaseJsonChartDataModel.convertObject(dataModel);
+        vulnerabilitySunBurst = BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
         return vulnerabilitySunBurst;
     }
 
-    @JavaScriptMethod
     @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilitySunBurstA() {
-        // if (null != vulnerabilitySunBurst)
-        //     return vulnerabilitySunBurst;
-        if (isEmpty()) return null;
-        TreeChartDataModel dataModel = TreeChartDataModel.builder()
-                .series(Collections.singletonList(TreeChartDataModel.Series.builder().build()))
-                .build();
-        List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
-        for (BaseIssue.ApprovalState approvalState : BaseIssue.ApprovalState.values()) {
-            TreeChartDataModel.Series.DataItem approvalStateItem = TreeChartDataModel.Series.DataItem.builder()
-                    .name(approvalState.name())
-                    .build();
-            dataModel.getSeries().get(0).getData().add(approvalStateItem);
-            for (BaseIssue.Level level : BaseIssue.Level.values()) {
-                long count = baseIssues.stream()
-                        .filter(issue -> approvalState == issue.getApprovalState())
-                        .filter(issue -> level == issue.getLevel()).count();
-                TreeChartDataModel.Series.DataItem levelItem = TreeChartDataModel.Series.DataItem.builder()
-                        .name(level.name())
-                        .value(count)
-                        .itemStyle(TreeChartDataModel.Series.DataItem.ItemStyle.builder()
-                                .color("#" + Integer.toHexString(LEVEL_COLORS.get(level)))
-                                .build())
-                        .build();
-                approvalStateItem.getChildren().add(levelItem);
-            }
-        }
-        /* vulnerabilitySunBurst = */ return BaseJsonChartDataModel.convertObject(dataModel);
-        // return vulnerabilitySunBurst;
-    }
-
-    @JavaScriptMethod
-    @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilitySunBurstB() {
-        // if (null != vulnerabilitySunBurst)
-        //     return vulnerabilitySunBurst;
-        if (isEmpty()) return null;
-        TreeChartDataModel dataModel = TreeChartDataModel.builder()
-                .series(Collections.singletonList(TreeChartDataModel.Series.builder().build()))
-                .build();
-        List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
-        for (BaseIssue.Type type : BaseIssue.Type.values()) {
-            TreeChartDataModel.Series.DataItem typeItem = TreeChartDataModel.Series.DataItem.builder()
-                    .name(type.name())
-                    .build();
-            dataModel.getSeries().get(0).getData().add(typeItem);
-            for (Boolean suspected : new HashSet<Boolean>(Arrays.asList(true, false))) {
-                long count = baseIssues.stream()
-                        .filter(issue -> suspected == issue.getSuspected())
-                        .filter(issue -> type == issue.getClazz()).count();
-                TreeChartDataModel.Series.DataItem suspectedItem = TreeChartDataModel.Series.DataItem.builder()
-                        .name(suspected.toString())
-                        .value(count)
-                        .itemStyle(TreeChartDataModel.Series.DataItem.ItemStyle.builder()
-                                // .color("#" + Integer.toHexString(COLORS.get(level)))
-                                .build())
-                        .build();
-                typeItem.getChildren().add(suspectedItem);
-            }
-        }
-        /* vulnerabilitySunBurst = */ return BaseJsonChartDataModel.convertObject(dataModel);
-        // return vulnerabilitySunBurst;
-    }
-
-    @JavaScriptMethod
-    @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilityTypePie() {
+    public String getVulnerabilityTypePie() throws JsonProcessingException {
         // if (null != vulnerabilitySunBurst)
         //     return vulnerabilitySunBurst;
         if (isEmpty()) return null;
@@ -296,13 +231,13 @@ public class AstJobSingleResult implements RunAction2 {
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        /* vulnerabilitySunBurst = */ return BaseJsonChartDataModel.convertObject(dataModel);
+        /* vulnerabilitySunBurst = */ return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
         // return vulnerabilitySunBurst;
     }
 
-    @JavaScriptMethod
+    @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilityApprovalStatePie() {
+    public String getVulnerabilityApprovalStatePie() {
         // if (null != vulnerabilitySunBurst)
         //     return vulnerabilitySunBurst;
         if (isEmpty()) return null;
@@ -324,13 +259,13 @@ public class AstJobSingleResult implements RunAction2 {
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        /* vulnerabilitySunBurst = */ return BaseJsonChartDataModel.convertObject(dataModel);
+        /* vulnerabilitySunBurst = */ return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
         // return vulnerabilitySunBurst;
     }
 
-    @JavaScriptMethod
+    @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilitySuspectedPie() {
+    public String getVulnerabilitySuspectedPie() {
         // if (null != vulnerabilitySunBurst)
         //     return vulnerabilitySunBurst;
         if (isEmpty()) return null;
@@ -352,13 +287,13 @@ public class AstJobSingleResult implements RunAction2 {
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        /* vulnerabilitySunBurst = */ return BaseJsonChartDataModel.convertObject(dataModel);
+        /* vulnerabilitySunBurst = */ return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
         // return vulnerabilitySunBurst;
     }
 
-    @JavaScriptMethod
+    @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilityScanModePie() {
+    public String getVulnerabilityScanModePie() {
         // if (null != vulnerabilitySunBurst)
         //     return vulnerabilitySunBurst;
         if (isEmpty()) return null;
@@ -380,15 +315,7 @@ public class AstJobSingleResult implements RunAction2 {
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        /* vulnerabilitySunBurst = */ return BaseJsonChartDataModel.convertObject(dataModel);
+        /* vulnerabilitySunBurst = */ return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
         // return vulnerabilitySunBurst;
-    }
-
-    @JavaScriptMethod
-    @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getScanBriefDetailedJson() {
-        if (null == scanBriefDetailedJson)
-            scanBriefDetailedJson = BaseJsonChartDataModel.convertObject(getScanBriefDetailed());
-        return scanBriefDetailedJson;
     }
 }

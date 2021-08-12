@@ -307,63 +307,58 @@ l.layout(title: "PT AI AST report") {
                 const axisLabelMargin = 8;
                 const axisFontFamily = 'verdana';
                 const axisFontSize = '12px';
-
-                ${my.urlName}Action.getVulnerabilityTypeDistribution(function (response) {
-                    var option = response.responseJSON;
-                    var dataSet = [];
-                    option.tooltip = { trigger: 'axis', axisPointer: { type: 'shadow' } };
-                    option.xAxis[0].type = 'value';
-                    option.xAxis[0].minInterval = 1;
-                    option.yAxis[0].type = 'category';
-                    option.series[0].type = 'bar';
-                    option.series[0].name = '${_("result.misc.quantity.title")}';
-                    // TODO: Use level chart label widths also
-                    var maxTypeWidth = maxTextWidth(option.yAxis[0].data, axisFontSize + " " + axisFontFamily) + axisLabelMargin;
-                    option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
-                    var innerHeight = 
-                        option.yAxis[0].data.length * barHeight + 
-                        bottomMargin; 
-                    var chartDivId = "${my.urlName}-type-chart";
-                    setupDivFrame(innerHeight, chartDivId, bigChartStyle);                  
-                    renderChart(chartDivId, option);
+                
+                var option = ${my.getVulnerabilityTypeDistribution()};
+                option.tooltip = { trigger: 'axis', axisPointer: { type: 'shadow' } };
+                option.xAxis[0].type = 'value';
+                option.xAxis[0].minInterval = 1;
+                option.yAxis[0].type = 'category';
+                option.series[0].type = 'bar';
+                option.series[0].name = '${_("result.misc.quantity.title")}';
+                // TODO: Use level chart label widths also
+                var maxTypeWidth = maxTextWidth(option.yAxis[0].data, axisFontSize + " " + axisFontFamily) + axisLabelMargin;
+                option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
+                var innerHeight = 
+                    option.yAxis[0].data.length * barHeight + 
+                    bottomMargin; 
+                var chartDivId = "${my.urlName}-type-chart";
+                setupDivFrame(innerHeight, chartDivId, bigChartStyle);                  
+                renderChart(chartDivId, option);
                      
-                    ${my.urlName}Action.getVulnerabilityLevelDistribution(function (response) {
-                        var option = response.responseJSON;
-                        option.tooltip = { trigger: 'axis', axisPointer: { type: 'shadow' } };
-                        option.xAxis[0].type = 'value';
-                        option.xAxis[0].minInterval = 1;
-                        option.yAxis[0].type = 'category';
-                        option.yAxis[0].inverse = false;
-                        // replace vulnerability level title values with localized captions
-                        option.yAxis[0].data.forEach(function (item, index) {
-                            option.yAxis[0].data[index] = levelAttrs[item].title
-                        }, option.yAxis[0].data);
+                var option = ${my.getVulnerabilityLevelDistribution()};
+                option.tooltip = { trigger: 'axis', axisPointer: { type: 'shadow' } };
+                option.xAxis[0].type = 'value';
+                option.xAxis[0].minInterval = 1;
+                option.yAxis[0].type = 'category';
+                option.yAxis[0].inverse = false;
+                // replace vulnerability level title values with localized captions
+                option.yAxis[0].data.forEach(function (item, index) {
+                    option.yAxis[0].data[index] = levelAttrs[item].title
+                }, option.yAxis[0].data);
 
-                        option.series[0].type = 'bar';
-                        option.series[0].name = '${_("result.misc.quantity.title")}';
-                        option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
-                        var innerHeight = option.yAxis[0].data.length * barHeight + bottomMargin;
-                        var chartDivId = "${my.urlName}-level-chart";
-                        setupDivFrame(innerHeight, chartDivId, bigChartStyle);                  
-                        renderChart(chartDivId, option);
-                    });  
-                    
-                    ${my.urlName}Action.getVulnerabilityTypePie(function (response) {
-                        createDistributionPieChart("${my.urlName}-type-pie-chart", response.responseJSON, typeAttrs);
-                    });  
-                    
-                    ${my.urlName}Action.getVulnerabilityApprovalStatePie(function (response) {
-                        createDistributionPieChart("${my.urlName}-approval-state-pie-chart", response.responseJSON, approvalStateAttrs);
-                    });  
-                    
-                    ${my.urlName}Action.getVulnerabilitySuspectedPie(function (response) {
-                        createDistributionPieChart("${my.urlName}-suspected-state-pie-chart", response.responseJSON, suspectedStateAttrs);
-                    });  
+                option.series[0].type = 'bar';
+                option.series[0].name = '${_("result.misc.quantity.title")}';
+                option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
+                var innerHeight = option.yAxis[0].data.length * barHeight + bottomMargin;
+                var chartDivId = "${my.urlName}-level-chart";
+                setupDivFrame(innerHeight, chartDivId, bigChartStyle);                  
+                renderChart(chartDivId, option);
 
-                    ${my.urlName}Action.getVulnerabilityScanModePie(function (response) {
-                        createDistributionPieChart("${my.urlName}-scan-mode-pie-chart", response.responseJSON, scanModeAttrs);
-                    });
-                });
+                createDistributionPieChart(
+                    "${my.urlName}-type-pie-chart",
+                    ${my.getVulnerabilityTypePie()}, typeAttrs);
+
+                createDistributionPieChart(
+                    "${my.urlName}-approval-state-pie-chart", 
+                    ${my.getVulnerabilityApprovalStatePie()}, approvalStateAttrs);
+                
+                createDistributionPieChart(
+                    "${my.urlName}-suspected-state-pie-chart", 
+                    ${my.getVulnerabilitySuspectedPie()}, suspectedStateAttrs);
+
+                createDistributionPieChart(
+                    "${my.urlName}-scan-mode-pie-chart", 
+                    ${my.getVulnerabilityScanModePie()}, scanModeAttrs);
             """
         } else {
 

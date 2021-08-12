@@ -19,7 +19,7 @@ def bigChartStyle = "min-width: " + bigChartMinWidth + "px; background-color: #f
 def bigDivStyle = "width: ${widthOffset}%; margin: 0 auto; min-width: " + bigChartMinWidth + "px; display: grid; grid-template-columns: 50% 50%; ";
 def tableStyle = "width: ${widthOffset}%; margin: 0 auto; min-width: ${bigChartMinWidth}px; border-collapse: collapse; margin-top: 10px; "
 
-def historyLength = 15;
+def historyLength = 10;
 
 // Make groovy values available for JavaScript
 script """
