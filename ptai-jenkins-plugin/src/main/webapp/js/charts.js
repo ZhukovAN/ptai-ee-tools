@@ -59,9 +59,6 @@ function setupDivFrame(innerHeight, divId, initialStyle) {
     $(divId).setAttribute("style", divStyle);
 }
 
-const smallChartHeight = 200;
-const chartStyle = 'min-width: 200px; background-color: #f8f8f8f8; ';
-
 function createDistributionPieChart(chartDivId, option, i18map) {
     option.tooltip = { trigger: 'item' };
     option.series[0].itemStyle = {
@@ -90,12 +87,11 @@ function createDistributionPieChart(chartDivId, option, i18map) {
         left: 'left',
     };
     var innerHeight = smallChartHeight;
-    // setupDivFrame(innerHeight, chartDivId, "margin-right: 16px; " + chartStyle);
-    setupDivFrame(innerHeight, chartDivId, chartStyle);
+    setupDivFrame(innerHeight, chartDivId, smallChartStyle);
     renderChart(chartDivId, option);
 }
 
-function createBuildHistoryChart(chartDivId, option, i18map) {
+function createBuildHistoryChart(chartDivId, option, i18map, small = true) {
     option.title = { show: false };
 
     option.legend.top = 'top';
@@ -127,9 +123,9 @@ function createBuildHistoryChart(chartDivId, option, i18map) {
         item.type = 'bar';
         if (0 != index) {
             item.stack = '1';
-            item.barWidth = '15%';
+            item.barWidth = small ? '20%': '15%';
         } else {
-            item.barWidth = '30%';
+            item.barWidth = small ? '40%' : '30%';
         }
         item.itemStyle.borderColor = '#ffffff';
         item.itemStyle.borderWidth = 1;
@@ -143,8 +139,7 @@ function createBuildHistoryChart(chartDivId, option, i18map) {
     }, option.legend.data);
 
     var innerHeight = 250;
-    // setupDivFrame(innerHeight, chartDivId, "margin-right: 16px; " + chartStyle);
-    setupDivFrame(innerHeight, chartDivId, chartStyle);
+    setupDivFrame(innerHeight, chartDivId, small ? smallChartStyle : bigChartStyle);
     renderChart(chartDivId, option);
 }
 
@@ -182,7 +177,6 @@ function createDurationHistoryChart(chartDivId, option) {
     });
 
     var innerHeight = 250;
-    // setupDivFrame(innerHeight, chartDivId, "margin-right: 16px; " + chartStyle);
-    setupDivFrame(innerHeight, chartDivId, chartStyle);
+    setupDivFrame(innerHeight, chartDivId, bigChartStyle);
     renderChart(chartDivId, option);
 }

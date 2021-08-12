@@ -19,6 +19,29 @@ def l = namespace(LayoutTagLib)
 def t = namespace('/lib/hudson')
 def st = namespace("jelly:stapler")
 
+def widthOffset = 100;
+def smallChartHeight = 200;
+def smallChartMinWidth = 450;
+def smallChartGap = 16;
+def bigChartMinWidth = smallChartMinWidth * 2 + smallChartGap;
+def smallChartStyle = "min-width: ${smallChartMinWidth}px; background-color: #f8f8f8f8; ";
+def bigChartStyle = "min-width: " + bigChartMinWidth + "px; background-color: #f8f8f8f8; ";
+def bigDivStyle = "width: ${widthOffset}%; margin: 0 auto; min-width: " + bigChartMinWidth + "px; display: grid; grid-template-columns: 50% 50%; ";
+def tableStyle = "width: ${widthOffset}%; margin: 0 auto; min-width: ${bigChartMinWidth}px; border-collapse: collapse; margin-top: 10px; "
+
+// Make groovy values available for JavaScript
+script """
+    const smallChartHeight = ${smallChartHeight};
+    const smallChartMinWidth = ${smallChartMinWidth};
+    const smallChartGap = ${smallChartGap};
+    const bigChartMinWidth = ${bigChartMinWidth};
+    const smallChartStyle = '${smallChartStyle}';
+    const bigChartStyle = '${bigChartStyle}';
+"""
+
+script(src: "${rootURL}/plugin/ptai-jenkins-plugin/webjars/echarts/echarts.min.js")
+script(src: "${rootURL}/plugin/ptai-jenkins-plugin/js/charts.js")
+
 l.layout(title: "PT AI AST report") {
     l.side_panel() {
         st.include(page: "sidepanel.jelly", from: my.run, it: my.run, optional: true)
@@ -34,7 +57,7 @@ l.layout(title: "PT AI AST report") {
 
         h1(_("result.title"))
         h2(_("scan.settings.title"))
-        table(style: "width: 100%; margin: 0 auto; min-width: 200px; border-collapse: collapse; margin-top: 10px; ") {
+        table(style: "${tableStyle}") {
             colgroup() {
                 col(width: "300px")
             }
@@ -77,7 +100,7 @@ l.layout(title: "PT AI AST report") {
                 }
             }
         }
-        table(style: "width: 100%; margin: 0 auto; min-width: 200px; border-collapse: collapse; margin-top: 10px; ") {
+        table(style: "${tableStyle}") {
             colgroup() {
                 col(width: "300px")
             }
@@ -112,7 +135,7 @@ l.layout(title: "PT AI AST report") {
                 }
             }
         }
-        table(style: "width: 100%; margin: 0 auto; min-width: 200px; border-collapse: collapse; margin-top: 10px; ") {
+        table(style: "${tableStyle}") {
             colgroup() {
                 col(width: "300px")
             }
@@ -143,63 +166,48 @@ l.layout(title: "PT AI AST report") {
                 }
             }
         }
+
         if (!my.isEmpty()) {
             h2(_("result.breakdown.title"))
-            table(style: "width: 100%; margin: 0 auto; min-width: 200px; border-collapse: collapse; ") {
-                colgroup() {
-                    col(width: "50%")
-                    col(width: "50%")
+
+            div(style: "${bigDivStyle}") {
+                div(style: "grid-area: 1 / 1 / 2 / 3; ") {
+                    h3(_("result.breakdown.level.title"))
+                    div(
+                            id: "${my.urlName}-level-chart",
+                            class: 'graph-cursor-pointer') {}
                 }
-                tbody() {
-                    tr() {
-                        td(style: "margin-left: 0px; margin-right: 0px; padding-right: 0px; padding-left: 0px; ", colspan: "2") {
-                            h3(_("result.breakdown.level.title"))
-                            div(
-                                    id: "${my.urlName}-level-chart",
-                                    class: 'graph-cursor-pointer') {}
-                        }
-                    }
-                    tr() {
-                        td(style: "padding-right: 8px; padding-left: 0px; ") {
-                            h3(_("result.breakdown.class.title"))
-                            div(
-                                    id: "${my.urlName}-type-pie-chart",
-                                    class: 'graph-cursor-pointer; ') {}
-                        }
-                        td(style: "padding-left: 8px; padding-right: 0px; ") {
-                            h3(_("result.breakdown.approvalstate.title"))
-                            div(
-                                    id: "${my.urlName}-approval-state-pie-chart",
-                                    class: 'graph-cursor-pointer; ') {}
-                        }
-                    }
-                    tr() {
-                        td(style: "padding-right: 8px; padding-left: 0px; ") {
-                            h3(_("result.breakdown.suspected.title"))
-                            div(
-                                    id: "${my.urlName}-suspected-state-pie-chart",
-                                    class: 'graph-cursor-pointer; ') {}
-                        }
-                        td(style: "padding-left: 8px; padding-right: 0px; ") {
-                            h3(_("result.breakdown.scanmode.title"))
-                            div(
-                                    id: "${my.urlName}-scan-mode-pie-chart",
-                                    class: 'graph-cursor-pointer; ') {}
-                        }
-                    }
-                    tr() {
-                        td(style: "margin-left: 0px; margin-right: 0px; ", colspan: "2") {
-                            h3(_("result.breakdown.type.title"))
-                            div(
-                                    id: "${my.urlName}-type-chart",
-                                    class: 'graph-cursor-pointer') {}
-                        }
-                    }
+                div(style: "grid-area: 2 / 1 / 3 / 2; padding-right: 8px; ") {
+                    h3(_("result.breakdown.class.title"))
+                    div(
+                            id: "${my.urlName}-type-pie-chart",
+                            class: 'graph-cursor-pointer; ') {}
+                }
+                div(style: "grid-area: 2 / 2 / 3 / 3; padding-left: 8px; ") {
+                    h3(_("result.breakdown.approvalstate.title"))
+                    div(
+                            id: "${my.urlName}-approval-state-pie-chart",
+                            class: 'graph-cursor-pointer; ') {}
+                }
+                div(style: "grid-area: 3 / 1 / 4 / 2; padding-right: 8px; ") {
+                    h3(_("result.breakdown.suspected.title"))
+                    div(
+                            id: "${my.urlName}-suspected-state-pie-chart",
+                            class: 'graph-cursor-pointer; ') {}
+                }
+                div(style: "grid-area: 3 / 2 / 4 / 3; padding-left: 8px; ") {
+                    h3(_("result.breakdown.scanmode.title"))
+                    div(
+                            id: "${my.urlName}-scan-mode-pie-chart",
+                            class: 'graph-cursor-pointer; ') {}
+                }
+                div(style: "grid-area: 4 / 1 / 5 / 3; ") {
+                    h3(_("result.breakdown.type.title"))
+                    div(
+                            id: "${my.urlName}-type-chart",
+                            class: 'graph-cursor-pointer') {}
                 }
             }
-
-            script(src: "${rootURL}/plugin/ptai-jenkins-plugin/webjars/echarts/echarts.min.js")
-            script(src: "${rootURL}/plugin/ptai-jenkins-plugin/js/charts.js")
 
             st.bind(var: "action", value: my)
             script """
@@ -316,7 +324,7 @@ l.layout(title: "PT AI AST report") {
                         option.yAxis[0].data.length * barHeight + 
                         bottomMargin; 
                     var chartDivId = "${my.urlName}-type-chart";
-                    setupDivFrame(innerHeight, chartDivId, 'width: 100%; ' + chartStyle);                  
+                    setupDivFrame(innerHeight, chartDivId, bigChartStyle);                  
                     renderChart(chartDivId, option);
                      
                     ${my.urlName}Action.getVulnerabilityLevelDistribution(function (response) {
@@ -336,7 +344,7 @@ l.layout(title: "PT AI AST report") {
                         option.grid = { left: maxTypeWidth + "px", top: "0px", bottom: bottomMargin + "px" };
                         var innerHeight = option.yAxis[0].data.length * barHeight + bottomMargin;
                         var chartDivId = "${my.urlName}-level-chart";
-                        setupDivFrame(innerHeight, chartDivId, 'width: 100%; ' + chartStyle);                  
+                        setupDivFrame(innerHeight, chartDivId, bigChartStyle);                  
                         renderChart(chartDivId, option);
                     });  
                     

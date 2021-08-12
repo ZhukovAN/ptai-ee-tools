@@ -9,7 +9,29 @@ def f = namespace(FormTagLib)
 def l = namespace(LayoutTagLib)
 def st = namespace("jelly:stapler")
 
-script(src: "${rootURL}/plugin/ptai-jenkins-plugin/webjars/echarts/echarts.common.min.js")
+def widthOffset = 100;
+def smallChartHeight = 200;
+def smallChartMinWidth = 450;
+def smallChartGap = 16;
+def bigChartMinWidth = smallChartMinWidth * 2 + smallChartGap;
+def smallChartStyle = "min-width: ${smallChartMinWidth}px; background-color: #f8f8f8f8; ";
+def bigChartStyle = "min-width: " + bigChartMinWidth + "px; background-color: #f8f8f8f8; ";
+def bigDivStyle = "width: ${widthOffset}%; margin: 0 auto; min-width: " + bigChartMinWidth + "px; display: grid; grid-template-columns: 50% 50%; ";
+def tableStyle = "width: ${widthOffset}%; margin: 0 auto; min-width: ${bigChartMinWidth}px; border-collapse: collapse; margin-top: 10px; "
+
+def historyLength = 10;
+
+// Make groovy values available for JavaScript
+script """
+    const smallChartHeight = ${smallChartHeight};
+    const smallChartMinWidth = ${smallChartMinWidth};
+    const smallChartGap = ${smallChartGap};
+    const bigChartMinWidth = ${bigChartMinWidth};
+    const smallChartStyle = '${smallChartStyle}';
+    const bigChartStyle = '${bigChartStyle}';
+"""
+
+script(src: "${rootURL}/plugin/ptai-jenkins-plugin/webjars/echarts/echarts.min.js")
 script(src: "${rootURL}/plugin/ptai-jenkins-plugin/js/charts.js")
 
 l.layout(title: "PT AI AST report") {
@@ -19,51 +41,34 @@ l.layout(title: "PT AI AST report") {
     l.main_panel() {
         h1(_("statistics.label"))
         h2(_("statistics.breakdown.label"))
-        table(style: "width: 95%; margin: 0 auto; min-width: 200px; border-collapse: collapse; ") {
-            colgroup() {
-                col(width: "50%")
-                col(width: "50%")
+        div(style: "${bigDivStyle}") {
+            div(style: "grid-area: 1 / 1 / 2 / 2; padding-right: 8px; ") {
+                h3(_("statistics.by.level.label"))
+                div(
+                        id: "${my.urlName}-level-history-chart",
+                        class: 'graph-cursor-pointer') {}
             }
-            tbody() {
-                tr() {
-                    td(style: "margin-left: 0px; margin-right: 0px; padding-right: 0px; padding-left: 0px; ", colspan: "2") {
-                        h3(_("result.breakdown.level.title"))
-                    }
+            div(style: "grid-area: 1 / 2 / 2 / 3; padding-left: 8px; ") {
+                h3(_("statistics.by.approval.label"))
+                div(
+                        id: "${my.urlName}-approval-history-chart",
+                        class: 'graph-cursor-pointer') {}
+            }
+            div(style: "grid-area: 2 / 1 / 3 / 3; ") {
+                td(style: "padding-right: 8px; padding-left: 0px; ") {
+                    h3(_("statistics.by.type.label"))
+                    div(
+                            id: "${my.urlName}-type-history-chart",
+                            class: 'graph-cursor-pointer') {}
                 }
-                tr() {
-                    td(style: "padding-right: 8px; padding-left: 0px; ") {
-                        h3(_("statistics.by.level.label"))
-                        div(
-                                id: "${my.urlName}-level-history-chart",
-                                class: 'graph-cursor-pointer') {}
-                    }
-                    td(style: "padding-left: 8px; padding-right: 0px; ") {
-                        h3(_("statistics.by.approval.label"))
-                        div(
-                                id: "${my.urlName}-approval-history-chart",
-                                class: 'graph-cursor-pointer') {}
-                    }
-                }
-                tr() {
-                    td(style: "padding-right: 8px; padding-left: 0px; ") {
-                        h3(_("statistics.by.type.label"))
-                        div(
-                                id: "${my.urlName}-type-history-chart",
-                                class: 'graph-cursor-pointer') {}
-                    }
-                }
-                tr() {
-                    td(style: "padding-right: 8px; padding-left: 0px; ") {
-                        h3("${Resources.i18n_ast_result_statistics_duration()}")
-                        div(
-                                id: "${my.urlName}-scan-duration-history-chart",
-                                class: 'graph-cursor-pointer') {}
-                    }
-                }
+            }
+            div(style: "grid-area: 3 / 1 / 4 / 3; ") {
+                h3("${Resources.i18n_ast_result_statistics_duration()}")
+                div(
+                        id: "${my.urlName}-scan-duration-history-chart",
+                        class: 'graph-cursor-pointer') {}
             }
         }
-
-        def historyLength = 10;
 
         script """
             // Map vulnerability level to its localized title
@@ -148,7 +153,7 @@ l.layout(title: "PT AI AST report") {
             
             createBuildHistoryChart(
                 "${my.urlName}-type-history-chart", 
-                ${my.getTypeHistoryChart(historyLength)}, typeAttrs);
+                ${my.getTypeHistoryChart(historyLength)}, typeAttrs, false);
 
             var option = ${my.getScanDurationHistoryChart(historyLength)};
             option.legend.data[0] = "${Resources.i18n_ast_result_statistics_duration_sec()}"
