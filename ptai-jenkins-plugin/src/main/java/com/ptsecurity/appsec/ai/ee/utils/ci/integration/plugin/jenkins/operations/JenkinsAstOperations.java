@@ -71,7 +71,8 @@ public class JenkinsAstOperations implements AstOperations {
     }
 
     @Override
-    public void scanCompleteCallback(@NonNull ScanBrief scanBrief) throws GenericException {
+    public void scanCompleteCallback(ScanBrief scanBrief) throws GenericException {
+        if (null == scanBrief) return;
         GenericAstTasks genericAstTasks = new Factory().genericAstTasks(owner.getClient());
         log.debug("Getting full scan results for project:scan {}: {}", scanBrief.getProjectId(), scanBrief.getId());
         ScanResult scanResult = genericAstTasks.getScanResult(scanBrief.getProjectId(), scanBrief.getId());

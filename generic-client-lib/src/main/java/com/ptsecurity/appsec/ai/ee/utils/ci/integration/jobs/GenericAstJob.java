@@ -9,6 +9,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.AstPolicyViolationException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.MinorAstErrorsException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.EventConsumer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.SetupOperations;
@@ -16,6 +17,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +34,7 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.
 
 @Slf4j
 @SuperBuilder
-public abstract class GenericAstJob extends AbstractJob {
+public abstract class GenericAstJob extends AbstractJob implements EventConsumer {
     /**
      * Flag that defines should we wait for AST job to complete, generate
      * reports, make policy assessment etc. or just send files to PT AI
@@ -74,6 +76,9 @@ public abstract class GenericAstJob extends AbstractJob {
     protected String projectName;
 
     @Builder.Default
+    protected UUID projectId = null;
+
+    @Builder.Default
     protected UUID scanResultId = null;
 
     @Builder.Default
@@ -87,7 +92,11 @@ public abstract class GenericAstJob extends AbstractJob {
 
     @Getter
     @Builder.Default
-    ScanBrief scanBrief = null;
+    protected ScanBrief scanBrief = null;
+
+    @Getter
+    @Builder.Default
+    protected boolean reportsGenerated = false;
 
     /**
      * Method sets up AST job and executes it. Method returns FAILED if:
@@ -102,14 +111,14 @@ public abstract class GenericAstJob extends AbstractJob {
      * @throws GenericException Error details
      */
     protected void unsafeExecute() throws GenericException {
-        // Check if all the reports are exist. Throw an exception if there are problems
+        // Check if all the reports exist. Throw an exception if there are problems
         ReportsTasks reportsTasks = new Factory().reportsTasks(client);
         if (null != reports) {
             reports = reports.validate();
             reportsTasks.check(reports);
         }
 
-        UUID projectId = setupOps.setupProject();
+        projectId = setupOps.setupProject();
         info("PT AI project ID is " + projectId);
 
         // Zip sources and upload to server. Throw an exception if there are problems
@@ -139,17 +148,28 @@ public abstract class GenericAstJob extends AbstractJob {
         }
 
         // Wait for AST to complete and process results
+        // On this line execution we may get:
+        // DONE / FAILED if AST job finished
+        // ABORTED_FROM_PTAI - AST job was terminated by PT AI viewer
+        // InterruptedException - job was terminated from JVM side, i.e. from CI. This case is to be processed individually: we not only need
         ScanBrief.State state = genericAstTasks.waitForComplete(projectId, scanResultId);
         fine("Resulting state is " + state);
         // Scan may be stopped from PT AI Viewer. In this case no scan results will be
         // available even if scan is aborted at the very latest scan stages and some
         // vulnerabilities are found already
-        // So we need to check if scan results are exist
-        scanBrief = genericAstTasks.getScanBrief(projectId, scanResultId);
+        // So we need to check if scan results exist
+        try {
+            scanBrief = genericAstTasks.getScanBrief(projectId, scanResultId);
+            log.debug("Scan brief for project / scan ID {} / {} loaded successfully", projectId, scanResultId);
+            fine("Resulting statistics is " + scanBrief.getStatistic());
+        } catch (GenericException e) {
+            scanBrief = null;
+            log.debug("No scan brief exists for project / scan ID {} / {}", projectId, scanResultId);
+        }
         astOps.scanCompleteCallback(scanBrief);
-        fine("Resulting statistics is " + scanBrief.getStatistic());
 
-        if (!EnumSet.of(DONE, ABORTED, FAILED).contains(state))
+
+        if (!EnumSet.of(DONE, ABORTED_FROM_CI, ABORTED_FROM_PTAI, FAILED).contains(state))
             throw GenericException.raise(
                     "Unexpected finished scan result state",
                     new IllegalArgumentException(String.valueOf(state)));
@@ -161,16 +181,28 @@ public abstract class GenericAstJob extends AbstractJob {
                     new IllegalArgumentException(String.valueOf(state)));
         }
 
-        if (DONE.equals(state) || ABORTED.equals(state))
-            // Save user defined reports if scan was started ever
-            if (null != reports) reportsTasks.generate(projectId, scanResultId, reports, fileOps);
+        if (ABORTED_FROM_CI.equals(state)) stop();
 
-        if (ABORTED.equals(state)) {
-            info(Resources.i18n_ast_result_status_interrupted());
+        if (DONE.equals(state) || ABORTED_FROM_CI.equals(state) || ABORTED_FROM_PTAI.equals(state)) {
+            // Save user defined reports if scan was started ever and scan results exist
+            if (null != scanBrief && null != reports) reportsTasks.generate(projectId, scanResultId, reports, fileOps);
+            reportsGenerated = true;
+        }
+
+        if (ABORTED_FROM_PTAI.equals(state) || ABORTED_FROM_CI.equals(state)) {
+            info(ABORTED_FROM_CI == state
+                    ? Resources.i18n_ast_result_status_interrupted_ci()
+                    : Resources.i18n_ast_result_status_interrupted_ptai());
             throw GenericException.raise(
                     "AST job was terminated",
                     new InterruptedException());
         }
+
+        if (null == scanBrief)
+            // As the only valid state here is DONE, the scan results are to exist
+            throw GenericException.raise(
+                    "AST job was done, but brief scan results are not exist",
+                    new IllegalArgumentException());
 
         // Let's process DONE stage warnings / errors and AST policy assessment result
         List<Error> errors = genericAstTasks.getScanErrors(projectId, scanResultId);
@@ -213,5 +245,30 @@ public abstract class GenericAstJob extends AbstractJob {
     public void stop() throws GenericException {
         GenericAstTasks projectTasks = new Factory().genericAstTasks(client);
         call(() -> projectTasks.stop(scanResultId), "PT AI project scan stop failed");
+        // If stop was called because of job interruption from CI side then try to generate reports
+        if (null == reports) return;
+        // If reports are generated already - just exit
+        if (reportsGenerated) return;
+        // Try to get terminated job results
+        try {
+            log.debug("Trying to get incomplete AST job brief scan result");
+            scanBrief = projectTasks.getScanBrief(projectId, scanResultId);
+            if (null == scanBrief) {
+                log.debug("Empty scan results for project / results {} / {}, no reports will be generated", projectId, scanResultId);
+                return;
+            }
+            log.debug("Incomplete scan AST job brief scan result loaded");
+            ReportsTasks reportsTasks = new Factory().reportsTasks(client);
+            reportsTasks.generate(projectId, scanResultId, reports, fileOps);
+            log.debug("AST job brief scan result reports generated");
+            reportsGenerated = true;
+        } catch (GenericException e) {
+            log.debug("Failed to get scan results for project / results {} / {}, no reports will be generated", projectId, scanResultId);
+            log.trace("Exception details", e);
+        }
+    }
+
+    public void process(@NonNull final Object event) {
+
     }
 }

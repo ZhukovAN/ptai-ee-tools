@@ -87,12 +87,12 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
             return Stage.FAILED == stage
                     ? ScanBrief.State.FAILED
                     : Stage.ABORTED == stage
-                    ? ScanBrief.State.ABORTED
+                    ? ScanBrief.State.ABORTED_FROM_PTAI
                     : Stage.DONE == stage
                     ? ScanBrief.State.DONE
                     : ScanBrief.State.UNKNOWN;
         } catch (InterruptedException e) {
-            throw GenericException.raise("Job interrupted", e);
+            return ScanBrief.State.ABORTED_FROM_CI;
         }
     }
 

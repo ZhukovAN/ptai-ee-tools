@@ -38,10 +38,11 @@ public interface AstOperations {
      * Callback method is being called when AST job is finished on PT AI server. AstJob descendants may use
      * this callback to relax for safe build termination as there's no need to gracefully stop AST if
      * descendant is terminated using i.e. Ctrl-C
-     * @param scanBrief
+     * @param scanBrief Nullable brief scan results. This value is null when scan job was terminated in
+     *                  the PT AI viewer by removing ongoing scan result
      * @throws GenericException
      */
-    void scanCompleteCallback(@NonNull final ScanBrief scanBrief) throws GenericException;
+    void scanCompleteCallback(final ScanBrief scanBrief) throws GenericException;
 
     /**
      * Method replaces macro expressions like ${FOO} in the input text using dictionary. AstJob's

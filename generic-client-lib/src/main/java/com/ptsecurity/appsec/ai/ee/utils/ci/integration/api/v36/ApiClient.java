@@ -212,13 +212,15 @@ public class ApiClient extends AbstractApiClient {
 
         connection.on("ScanStarted", (data) -> {
             if (null != console) console.info("Scan started");
+            if (null != eventConsumer) eventConsumer.process(data);
             log.trace(data.toString());
         }, ScanStartedEvent.class);
 
         // Currently PT AI viewer have no stop scan feature but deletes scan result
         connection.on("ScanResultRemoved", (data) -> {
             if (!scanResultId.equals(data.getScanResultId())) return;
-            if (null != console) console.info("Scan result removed");
+            if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI viewer");
+            if (null != eventConsumer) eventConsumer.process(data);
             log.trace(data.toString());
             if (null != queue) {
                 log.debug("Scan result {} removed", scanResultId);
@@ -242,10 +244,12 @@ public class ApiClient extends AbstractApiClient {
                     .map(ScanProgress::getValue)
                     .ifPresent(s -> builder.append(" ").append(s).append("%"));
             if (null != console) console.info(builder.toString());
+            if (null != eventConsumer) eventConsumer.process(data);
             // Failed or aborted scans do not generate ScanCompleted event but
             // send ScanProgress with stage failed or aborted
             Optional<Stage> stage = Optional.of(data).map(ScanProgressEvent::getProgress).map(ScanProgress::getStage);
             if (stage.isPresent() && null != queue && (Stage.ABORTED == stage.get() || Stage.FAILED == stage.get())) {
+                if (null != console) console.info("Scan job was terminated with state " + stage.get());
                 log.debug("ScanProgressEvent stage {} is to be put to AST task queue", stage.get());
                 queue.add(stage.get());
             }

@@ -3,15 +3,11 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.ReportsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.UrlHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import jetbrains.buildServer.RunBuildException;
@@ -29,7 +25,6 @@ import java.util.Map;
 import java.util.concurrent.*;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.*;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Constants.AST_MODE_ASYNC;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,7 +39,7 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
     private final BuildRunnerContext buildRunnerContext;
     /**
      * Used to get globally defined settings like PT AI
-     * server conection info and for logging
+     * server connection info and for logging
      */
     private final AgentRunningBuild agentRunningBuild;
     /**
@@ -56,7 +51,7 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
     private TeamcityAstJob job = null;
 
     @Override
-    public BuildFinishedStatus call() throws Exception {
+    public BuildFinishedStatus call() {
         AbstractJob.JobExecutionResult status = ast();
         if (AbstractJob.JobExecutionResult.INTERRUPTED.equals(status))
             return BuildFinishedStatus.INTERRUPTED;

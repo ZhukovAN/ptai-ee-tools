@@ -40,7 +40,7 @@ public class TeamcityAstOperations implements AstOperations {
     }
 
     @Override
-    public void scanCompleteCallback(@NonNull ScanBrief scanBrief) throws GenericException {
+    public void scanCompleteCallback(ScanBrief scanBrief) throws GenericException {
 
     }
 

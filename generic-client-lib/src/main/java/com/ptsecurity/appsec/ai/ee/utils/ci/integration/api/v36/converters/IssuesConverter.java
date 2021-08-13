@@ -89,7 +89,7 @@ public class IssuesConverter {
         for (V36ProgrammingLanguage language : LANGUAGE_MAP.keySet())
             REVERSE_LANGUAGE_MAP.put(LANGUAGE_MAP.get(language), language);
 
-        STATE_MAP.put(Stage.ABORTED, ScanResult.State.ABORTED);
+        STATE_MAP.put(Stage.ABORTED, ScanResult.State.ABORTED_FROM_PTAI);
         STATE_MAP.put(Stage.FAILED, ScanResult.State.FAILED);
         STATE_MAP.put(Stage.DONE, ScanResult.State.DONE);
         STATE_MAP.put(Stage.UNKNOWN, ScanResult.State.UNKNOWN);

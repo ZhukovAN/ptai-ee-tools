@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.tasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.ApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.EventConsumer;
 import lombok.NonNull;
 
 public abstract class AbstractTaskImpl extends AbstractTool {

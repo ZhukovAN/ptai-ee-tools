@@ -50,7 +50,7 @@ public class LocalAstOperations implements AstOperations {
         Runtime.getRuntime().addShutdownHook(shutdown);
     }
 
-    public void scanCompleteCallback(@NonNull final ScanBrief scanBrief)  {
+    public void scanCompleteCallback(final ScanBrief scanBrief)  {
         if (null != shutdown) shutdown.setStopped(true);
     }
 

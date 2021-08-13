@@ -92,3 +92,7 @@
 + [Fix] Scans stopped from PT AI viewer are terminated in plugins
 + [ToDo] Implement syslog data send. Syslog connection settings are to be taken from PT AI server settings
 + [ToDo] Fix "internal server error" when trying to get scan results for scans deleted / stopped from PT AI viewer
+### 20210813
++ [Fix] Scans stopped from CI are terminated in PT AI server
++ [ToDo] Implement enqueued project scan stop from plugin. This requires current scan stage monitoring and if scan isn't started yet, need to delete scan result instead of scan stop
++ [ToDo] Implement UI for terminated / incomplete scans

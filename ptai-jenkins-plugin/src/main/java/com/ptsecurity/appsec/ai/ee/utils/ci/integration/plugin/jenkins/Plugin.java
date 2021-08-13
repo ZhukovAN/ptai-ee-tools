@@ -235,8 +235,6 @@ public class Plugin extends Builder implements SimpleBuildStep {
         job.info("JenkinsAstJob created: %s", job.toString());
 
         AbstractJob.JobExecutionResult jobExecutionResult = job.execute();
-        if (AbstractJob.JobExecutionResult.INTERRUPTED == jobExecutionResult)
-            job.stop();
         if (!AbstractJob.JobExecutionResult.SUCCESS.equals(jobExecutionResult))
             throw new AbortException(Resources.i18n_ast_result_status_failed());
     }

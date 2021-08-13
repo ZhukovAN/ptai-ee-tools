@@ -143,7 +143,7 @@ public class ScanBrief {
     protected Statistic statistic;
 
     public enum State {
-        UNKNOWN, DONE, FAILED, ABORTED
+        UNKNOWN, DONE, FAILED, ABORTED_FROM_PTAI, ABORTED_FROM_CI
     }
 
     @Getter
