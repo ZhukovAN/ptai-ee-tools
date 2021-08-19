@@ -167,7 +167,7 @@ public class JsonAstJobIT extends BaseAstIT {
                 .build();
         AbstractJob.JobExecutionResult res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
-        Duration durationFull = Duration.parse(astJob.getScanBrief().getStatistic().getScanDurationIso8601());
+        Duration durationFull = Duration.parse(astJob.getScanBrief().getStatistics().getScanDurationIso8601());
 
         Path destinationIncremental = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
         settings.setUseIncrementalScan(true);
@@ -186,7 +186,7 @@ public class JsonAstJobIT extends BaseAstIT {
                 .build();
         res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
-        Duration durationIncremental = Duration.parse(astJob.getScanBrief().getStatistic().getScanDurationIso8601());
+        Duration durationIncremental = Duration.parse(astJob.getScanBrief().getStatistics().getScanDurationIso8601());
 
         Assertions.assertTrue(0 < durationFull.compareTo(durationIncremental));
     }

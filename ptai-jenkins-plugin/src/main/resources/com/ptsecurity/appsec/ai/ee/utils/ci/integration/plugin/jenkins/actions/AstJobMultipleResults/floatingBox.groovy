@@ -83,7 +83,7 @@ script """
         // replace vulnerability level title values with localized captions
         option.series.forEach(function (item) {
             item.name = levelAttrs[item.name].title;
-            item.smooth = true;
+            item.smooth = false;
         });
          
         option.legend.data.forEach(function (item, index) {

@@ -20,6 +20,7 @@ import com.ptsecurity.appsec.ai.ee.server.v36.systemmanagement.api.HealthCheckAp
 import com.ptsecurity.appsec.ai.ee.server.v36.updateserver.api.VersionApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.VersionRange;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.EnumsConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanProgressEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanResultRemovedEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanStartedEvent;
@@ -220,7 +221,7 @@ public class ApiClient extends AbstractApiClient {
         connection.on("ScanResultRemoved", (data) -> {
             if (!scanResultId.equals(data.getScanResultId())) return;
             if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI viewer");
-            if (null != eventConsumer) eventConsumer.process(data);
+            if (null != eventConsumer) eventConsumer.process(com.ptsecurity.appsec.ai.ee.scan.progress.Stage.ABORTED);
             log.trace(data.toString());
             if (null != queue) {
                 log.debug("Scan result {} removed", scanResultId);
@@ -244,14 +245,16 @@ public class ApiClient extends AbstractApiClient {
                     .map(ScanProgress::getValue)
                     .ifPresent(s -> builder.append(" ").append(s).append("%"));
             if (null != console) console.info(builder.toString());
-            if (null != eventConsumer) eventConsumer.process(data);
             // Failed or aborted scans do not generate ScanCompleted event but
-            // send ScanProgress with stage failed or aborted
+            // send ScanProgress event with stage failed or aborted
             Optional<Stage> stage = Optional.of(data).map(ScanProgressEvent::getProgress).map(ScanProgress::getStage);
-            if (stage.isPresent() && null != queue && (Stage.ABORTED == stage.get() || Stage.FAILED == stage.get())) {
-                if (null != console) console.info("Scan job was terminated with state " + stage.get());
-                log.debug("ScanProgressEvent stage {} is to be put to AST task queue", stage.get());
-                queue.add(stage.get());
+            if (stage.isPresent()) {
+                if (null != eventConsumer) eventConsumer.process(EnumsConverter.convert(stage.get()));
+                if (null != queue && (Stage.ABORTED == stage.get() || Stage.FAILED == stage.get())) {
+                    if (null != console) console.info("Scan job was terminated with state " + stage.get());
+                    log.debug("ScanProgressEvent stage {} is to be put to AST task queue", stage.get());
+                    queue.add(stage.get());
+                }
             }
             log.trace(data.toString());
         }, ScanProgressEvent.class);

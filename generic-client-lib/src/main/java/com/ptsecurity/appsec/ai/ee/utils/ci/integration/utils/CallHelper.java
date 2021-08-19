@@ -7,8 +7,6 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.Callable;
-
 @Slf4j
 @SuperBuilder
 @NoArgsConstructor
@@ -30,7 +28,7 @@ public class CallHelper {
     public static <V> V call(@NonNull Callable<V> call, @NonNull String errorMessage, final boolean warningOnly) throws GenericException {
         try {
             return call.call();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (!warningOnly) throw GenericException.raise(errorMessage, e);
             return null;
         }
@@ -41,7 +39,15 @@ public class CallHelper {
      */
     @FunctionalInterface
     public interface Runnable {
-        void run() throws Exception;
+        void run() throws Throwable;
+    }
+
+    /**
+     * Need to implement our own Runnable that throws checked Exception
+     */
+    @FunctionalInterface
+    public interface Callable<V> {
+        V call() throws Throwable;
     }
 
     public static void call(@NonNull Runnable call, @NonNull String errorMessage) throws GenericException {

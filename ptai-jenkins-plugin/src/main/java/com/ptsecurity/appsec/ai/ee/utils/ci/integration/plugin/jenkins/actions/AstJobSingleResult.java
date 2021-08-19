@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed.Details.ChartData.BaseIssueCount;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.PieChartDataModel;
@@ -37,12 +38,12 @@ public class AstJobSingleResult implements RunAction2 {
     @Override
     public String getIconFileName() {
         // TODO: Implement project actions and uncomment this
-        return "plugin/" + Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin").getShortName() + "/24x24.png";
+        return "plugin/" + Objects.requireNonNull(Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin")).getShortName() + "/logo.svg";
     }
 
     @Override
     public String getDisplayName() {
-        return "PT AI";
+        return Resources.i18n_ast_result_charts_scan_label();
     }
 
     @Override
@@ -64,12 +65,6 @@ public class AstJobSingleResult implements RunAction2 {
         scanBriefDetailed = scanDataPacked.unpackData(ScanBriefDetailed.class);
         return scanBriefDetailed;
     }
-
-    protected transient String scanBriefDetailedJson = null;
-
-    protected transient String vulnerabilityTypeDistribution = null;
-    protected transient String vulnerabilityLevelDistribution = null;
-    protected transient String vulnerabilitySunBurst = null;
 
     @Override
     public void onAttached(Run<?, ?> r) {
@@ -99,14 +94,16 @@ public class AstJobSingleResult implements RunAction2 {
     }
 
     public boolean isEmpty() {
-        return (null == scanBriefDetailed) || scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().isEmpty();
+        return Optional.ofNullable(scanBriefDetailed)
+                .map(ScanBriefDetailed::getDetails)
+                .map(ScanBriefDetailed.Details::getChartData)
+                .map(ScanBriefDetailed.Details.ChartData::getBaseIssueDistributionData)
+                .map(List::isEmpty).orElse(true);
     }
 
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityLevelDistribution() {
-        if (null != vulnerabilityLevelDistribution)
-            return vulnerabilityLevelDistribution;
         if (isEmpty()) return null;
         List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
         Map<BaseIssue.Level, Long> levelCountMap = baseIssues.stream()
@@ -132,15 +129,12 @@ public class AstJobSingleResult implements RunAction2 {
                             .build())
                     .build());
         });
-        vulnerabilityLevelDistribution = BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
-        return vulnerabilityLevelDistribution;
+        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
     }
 
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityTypeDistribution() {
-        if (null != vulnerabilityTypeDistribution)
-            return vulnerabilityTypeDistribution;
         if (isEmpty()) return null;
         List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
         Map<Pair<BaseIssue.Level, String>, Long> levelTitleCountMap = baseIssues.stream()
@@ -172,46 +166,11 @@ public class AstJobSingleResult implements RunAction2 {
                             .build())
                     .build());
         });
-        vulnerabilityTypeDistribution = BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
-        return vulnerabilityTypeDistribution;
-    }
-
-    @SneakyThrows
-    @SuppressWarnings("unused") // Called by groovy view
-    public String getVulnerabilitySunBurst() {
-        if (null != vulnerabilitySunBurst)
-            return vulnerabilitySunBurst;
-        if (isEmpty()) return null;
-        List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
-        Map<BaseIssue.Level, Long> levelCountMap = baseIssues.stream()
-                .filter(issue -> BaseIssue.ApprovalState.DISCARD != issue.getApprovalState())
-                .collect(Collectors.groupingBy(
-                        BaseIssueCount::getLevel,
-                        Collectors.counting()));
-        TreeChartDataModel dataModel = TreeChartDataModel.builder()
-                .series(Collections.singletonList(TreeChartDataModel.Series.builder().build()))
-                .build();
-        List<Couple> levelCount = new ArrayList<>();
-        levelCountMap.forEach((k, v) -> levelCount.add(Couple.builder().level(k).count(v).build()));
-        Comparator<Couple> c = Comparator
-                .comparing(Couple::getLevel, Comparator.comparingInt(BaseIssue.Level::getValue));
-        levelCount.stream().sorted(c).forEach(t -> {
-            dataModel.getSeries().get(0).getData().add(TreeChartDataModel.Series.DataItem.builder()
-                    .value(levelCountMap.get(t.level))
-                    .name(t.level.name())
-                    .itemStyle(TreeChartDataModel.Series.DataItem.ItemStyle.builder()
-                            .color("#" + Integer.toHexString(LEVEL_COLORS.get(t.level)))
-                            .build())
-                    .build());
-        });
-        vulnerabilitySunBurst = BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
-        return vulnerabilitySunBurst;
+        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
     }
 
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityTypePie() throws JsonProcessingException {
-        // if (null != vulnerabilitySunBurst)
-        //     return vulnerabilitySunBurst;
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
@@ -231,15 +190,12 @@ public class AstJobSingleResult implements RunAction2 {
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        /* vulnerabilitySunBurst = */ return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
-        // return vulnerabilitySunBurst;
+        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
     }
 
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityApprovalStatePie() {
-        // if (null != vulnerabilitySunBurst)
-        //     return vulnerabilitySunBurst;
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
@@ -259,15 +215,12 @@ public class AstJobSingleResult implements RunAction2 {
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        /* vulnerabilitySunBurst = */ return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
-        // return vulnerabilitySunBurst;
+        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
     }
 
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilitySuspectedPie() {
-        // if (null != vulnerabilitySunBurst)
-        //     return vulnerabilitySunBurst;
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
@@ -287,15 +240,12 @@ public class AstJobSingleResult implements RunAction2 {
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        /* vulnerabilitySunBurst = */ return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
-        // return vulnerabilitySunBurst;
+        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
     }
 
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityScanModePie() {
-        // if (null != vulnerabilitySunBurst)
-        //     return vulnerabilitySunBurst;
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
@@ -315,7 +265,6 @@ public class AstJobSingleResult implements RunAction2 {
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        /* vulnerabilitySunBurst = */ return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
-        // return vulnerabilitySunBurst;
+        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
     }
 }

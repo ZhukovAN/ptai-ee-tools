@@ -13,7 +13,7 @@ public class Policy {
     /**
      * Available AST policy assessment results
      */
-    public enum PolicyState {
+    public enum State {
         /**
          * No policy assessment done
          */

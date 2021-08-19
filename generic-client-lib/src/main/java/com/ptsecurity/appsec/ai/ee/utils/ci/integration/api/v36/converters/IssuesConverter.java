@@ -33,13 +33,11 @@ import static org.joor.Reflect.on;
 
 @Slf4j
 public class IssuesConverter {
-    private static final String PTAI_API_VERSION = "3.6";
-
     private static final Map<IssueApprovalState, BaseIssue.ApprovalState> ISSUE_APPROVAL_STATE_MAP = new HashMap<>();
     private static final Map<String, BaseIssue.Type> ISSUE_TYPE_MAP = new HashMap<>();
     private static final Map<IssueLevel, BaseIssue.Level> ISSUE_LEVEL_MAP = new HashMap<>();
     private static final Map<V36VulnerabilityIssueScanMode, VulnerabilityIssue.ScanMode> SCAN_MODE_MAP = new HashMap<>();
-    private static final Map<PolicyState, Policy.PolicyState> POLICY_STATE_MAP = new HashMap<>();
+    private static final Map<PolicyState, Policy.State> POLICY_STATE_MAP = new HashMap<>();
     private static final Map<V36ProgrammingLanguage, ScanResult.ScanSettings.Language> LANGUAGE_MAP = new HashMap<>();
     private static final Map<Stage, ScanResult.State> STATE_MAP = new HashMap<>();
     private static final Map<ScanResult.ScanSettings.Language, V36ProgrammingLanguage> REVERSE_LANGUAGE_MAP = new HashMap<>();
@@ -70,9 +68,9 @@ public class IssuesConverter {
 
         // Bug https://jira.ptsecurity.com/browse/AI-4866 with swapped
         // confirmed / rejected states fixed and will be included in 3.7
-        POLICY_STATE_MAP.put(PolicyState.NONE, Policy.PolicyState.NONE);
-        POLICY_STATE_MAP.put(PolicyState.CONFIRMED, Policy.PolicyState.REJECTED);
-        POLICY_STATE_MAP.put(PolicyState.REJECTED, Policy.PolicyState.CONFIRMED);
+        POLICY_STATE_MAP.put(PolicyState.NONE, Policy.State.NONE);
+        POLICY_STATE_MAP.put(PolicyState.CONFIRMED, Policy.State.REJECTED);
+        POLICY_STATE_MAP.put(PolicyState.REJECTED, Policy.State.CONFIRMED);
 
         LANGUAGE_MAP.put(V36ProgrammingLanguage.JAVA, ScanResult.ScanSettings.Language.JAVA);
         LANGUAGE_MAP.put(V36ProgrammingLanguage.PHP, ScanResult.ScanSettings.Language.PHP);
@@ -89,7 +87,7 @@ public class IssuesConverter {
         for (V36ProgrammingLanguage language : LANGUAGE_MAP.keySet())
             REVERSE_LANGUAGE_MAP.put(LANGUAGE_MAP.get(language), language);
 
-        STATE_MAP.put(Stage.ABORTED, ScanResult.State.ABORTED_FROM_PTAI);
+        STATE_MAP.put(Stage.ABORTED, ScanResult.State.ABORTED);
         STATE_MAP.put(Stage.FAILED, ScanResult.State.FAILED);
         STATE_MAP.put(Stage.DONE, ScanResult.State.DONE);
         STATE_MAP.put(Stage.UNKNOWN, ScanResult.State.UNKNOWN);
@@ -220,7 +218,7 @@ public class IssuesConverter {
         return res;
     }
 
-    public static ScanResult.Statistic convert(
+    public static ScanBrief.Statistics convert(
             final ScanResultStatistic statistic,
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult) {
         if (null == statistic) return null;
@@ -233,7 +231,7 @@ public class IssuesConverter {
         String scanDurationString = Objects.requireNonNull(statistic.getScanDuration(), "Scan duration is null");
         Duration scanDuration = parseDuration(scanDurationString);
 
-        return ScanResult.Statistic.builder()
+        return ScanBrief.Statistics.builder()
                 .scanDateIso8601(zonedScanDate.format(DateTimeFormatter.ISO_DATE_TIME))
                 .scanDurationIso8601(scanDuration.toString())
                 .scannedFileCount(Objects.requireNonNull(statistic.getScannedFileCount(), "Get scanned file count statistic is null"))
@@ -642,7 +640,7 @@ public class IssuesConverter {
         destination.setScanSettings(convert(scanSettings));
 
         ScanResultStatistic statistic = Objects.requireNonNull(scanResult.getStatistic(), "Scan result statistics is null");
-        destination.setStatistic(convert(statistic, scanResult));
+        destination.setStatistics(convert(statistic, scanResult));
 
         ScanProgress progress = Objects.requireNonNull(scanResult.getProgress(), "Scan result progress is null");
         destination.setState(STATE_MAP.get(progress.getStage()));
@@ -658,5 +656,9 @@ public class IssuesConverter {
         ScanBrief res = new ScanBrief();
         convertInto(projectName, scanResult, scanSettings, versions, res);
         return res;
+    }
+
+    public static Policy.State convert(@NonNull final PolicyState policyState) {
+        return POLICY_STATE_MAP.get(policyState);
     }
 }

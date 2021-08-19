@@ -1,12 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.scan.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -113,7 +112,23 @@ public class ScanBriefDetailed extends ScanBrief {
     @JsonProperty
     protected Details details;
 
-    public static ScanBriefDetailed create(@NonNull final ScanResult scanResult) {
+    @Getter
+    @Setter
+    @SuperBuilder
+    @NoArgsConstructor
+    public static class Performance {
+        @JsonProperty
+        @Builder.Default
+        protected Map<Stage, String> stages = new HashMap<>();
+    }
+
+    @Getter
+    @Setter
+    @JsonProperty
+    @Builder.Default
+    protected Performance performance = new Performance();
+
+    public static ScanBriefDetailed create(@NonNull final ScanBrief scanResult, @NonNull final Performance performance) {
         return ScanBriefDetailed.builder()
                 .id(scanResult.id)
                 .projectId(scanResult.projectId)
@@ -122,8 +137,24 @@ public class ScanBriefDetailed extends ScanBrief {
                 .policyState(scanResult.policyState)
                 .ptaiAgentVersion(scanResult.ptaiAgentVersion)
                 .ptaiServerVersion(scanResult.ptaiServerVersion)
-                .statistic(scanResult.statistic)
+                .statistics(scanResult.statistics)
                 .state(scanResult.state)
+                .performance(performance)
+                .build();
+    }
+
+    public static ScanBriefDetailed create(@NonNull final ScanResult scanResult, @NonNull final Performance performance) {
+        return ScanBriefDetailed.builder()
+                .id(scanResult.id)
+                .projectId(scanResult.projectId)
+                .projectName(scanResult.projectName)
+                .scanSettings(scanResult.scanSettings)
+                .policyState(scanResult.policyState)
+                .ptaiAgentVersion(scanResult.ptaiAgentVersion)
+                .ptaiServerVersion(scanResult.ptaiServerVersion)
+                .statistics(scanResult.statistics)
+                .state(scanResult.state)
+                .performance(performance)
                 .details(Details.builder()
                         .chartData(Details.ChartData.builder()
                                 .baseIssueDistributionData(createBaseIssueDistributionData(scanResult))

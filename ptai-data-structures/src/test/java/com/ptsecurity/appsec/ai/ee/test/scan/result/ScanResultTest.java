@@ -22,8 +22,8 @@ public class ScanResultTest extends BaseTest {
         InputStream inputStream = getResourceStream("json/scan/result/php-bricks.json");
         Assertions.assertNotNull(inputStream);
         ScanResult scanResult = mapper.readValue(inputStream, ScanResult.class);
-        Assertions.assertNotNull(scanResult.getStatistic());
-        Assertions.assertNotEquals(0, scanResult.getStatistic().getScannedFileCount());
+        Assertions.assertNotNull(scanResult.getStatistics());
+        Assertions.assertNotEquals(0, scanResult.getStatistics().getScannedFileCount());
         long sqliCount = scanResult.getIssues().stream()
                 .filter(baseIssue -> baseIssue instanceof VulnerabilityIssue)
                 .filter(baseIssue -> BaseIssue.Level.HIGH == baseIssue.getLevel())
@@ -40,8 +40,8 @@ public class ScanResultTest extends BaseTest {
         InputStream inputStream = getResourceStream("json/scan/result/php-smoke.json");
         Assertions.assertNotNull(inputStream);
         ScanResult scanResult = mapper.readValue(inputStream, ScanResult.class);
-        Assertions.assertNotNull(scanResult.getStatistic());
-        Assertions.assertNotEquals(0, scanResult.getStatistic().getScannedFileCount());
+        Assertions.assertNotNull(scanResult.getStatistics());
+        Assertions.assertNotEquals(0, scanResult.getStatistics().getScannedFileCount());
         long sqliCount = scanResult.getIssues().stream()
                 .filter(baseIssue -> baseIssue instanceof VulnerabilityIssue)
                 .filter(baseIssue -> BaseIssue.Level.MEDIUM == baseIssue.getLevel())

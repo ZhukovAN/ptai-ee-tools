@@ -39,7 +39,11 @@ function maxTextWidth(strings, font) {
     return widths.reduce(function(a, b) { return Math.max(a, b); }, 0)
 }
 
-function setupDivFrame(innerHeight, divId, initialStyle) {
+function camelize(str){
+    return str.split('-').map((item, index) => index ? item.charAt(0).toUpperCase() + item.slice(1).toLowerCase() : item.toLowerCase()).join("");
+}
+
+function setupDivFrame(innerHeight, divId, small = true) {
     const chartDivPadding = { top: 16, bottom: 16, left: 12, right: 12 };
     const chartDivBorder = { top: 1, bottom: 1, left: 4, right: 1 };
     const chartDivColor = {
@@ -47,6 +51,7 @@ function setupDivFrame(innerHeight, divId, initialStyle) {
         left: 'rgb(116, 116, 116)', right: 'rgb(230, 230, 230)'
     };
     var divHeight = innerHeight + chartDivPadding.top + chartDivBorder.top + chartDivPadding.bottom + chartDivBorder.bottom;
+    /*
     var divStyle = initialStyle + "height: " + divHeight + "px; "
     for (var side in chartDivPadding)
         divStyle += 'padding-' + side + ": " + chartDivPadding[side] + "px; ";
@@ -57,6 +62,21 @@ function setupDivFrame(innerHeight, divId, initialStyle) {
     for (var side in chartDivColor)
         divStyle += 'border-' + side + "-color: " + chartDivColor[side] + "; ";
     $(divId).setAttribute("style", divStyle);
+    */
+    var divStyle = { };
+    divStyle[camelize('height')] = divHeight + "px";
+    divStyle[camelize('background-color')] = '#f8f8f8f8';
+    divStyle[camelize("min-width")] = small ? smallChartMinWidth + 'px' : bigChartMinWidth + 'px';
+
+    for (var side in chartDivPadding)
+        divStyle[camelize('padding-' + side)] = chartDivPadding[side] + "px";
+    for (var side in chartDivBorder) {
+        divStyle[camelize('border-' + side + "-width")] = chartDivBorder[side] + "px";
+        divStyle[camelize('border-' + side + "-style")] = "solid";
+    }
+    for (var side in chartDivColor)
+        divStyle[camelize('border-' + side + "-color")] = chartDivColor[side] + "";
+    $(divId).setStyle(divStyle);
 }
 
 function createDistributionPieChart(chartDivId, option, i18map) {
@@ -87,7 +107,7 @@ function createDistributionPieChart(chartDivId, option, i18map) {
         left: 'left',
     };
     var innerHeight = smallChartHeight;
-    setupDivFrame(innerHeight, chartDivId, smallChartStyle);
+    setupDivFrame(innerHeight, chartDivId);
     renderChart(chartDivId, option);
 }
 
@@ -139,7 +159,7 @@ function createBuildHistoryChart(chartDivId, option, i18map, small = true) {
     }, option.legend.data);
 
     var innerHeight = 250;
-    setupDivFrame(innerHeight, chartDivId, small ? smallChartStyle : bigChartStyle);
+    setupDivFrame(innerHeight, chartDivId, small);
     renderChart(chartDivId, option);
 }
 
@@ -177,6 +197,6 @@ function createDurationHistoryChart(chartDivId, option) {
     });
 
     var innerHeight = 250;
-    setupDivFrame(innerHeight, chartDivId, bigChartStyle);
+    setupDivFrame(innerHeight, chartDivId, false);
     renderChart(chartDivId, option);
 }

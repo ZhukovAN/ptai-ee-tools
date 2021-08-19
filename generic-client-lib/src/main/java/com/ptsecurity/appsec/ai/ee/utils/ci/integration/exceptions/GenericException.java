@@ -36,13 +36,13 @@ public class GenericException extends RuntimeException {
      * @param e Exception to be checked
      * @return True if exception is not an instance of ApiException
      */
-    private static boolean isNotApi(@NonNull Exception e) {
-        Class<? extends @NonNull Exception> clazz = e.getClass();
+    private static boolean isNotApi(@NonNull Throwable e) {
+        Class<? extends @NonNull Throwable> clazz = e.getClass();
         return !clazz.getCanonicalName().matches(APIEXCEPTION_CLASS_REGEX);
     }
 
     @NonNull
-    public static GenericException raise(@NonNull final String caption, @NonNull final Exception cause) {
+    public static GenericException raise(@NonNull final String caption, @NonNull final Throwable cause) {
         // If inner exception is ApiException or its descendants itself, than there's no need
         // to encapsulate it one more time, just return it
         if (cause instanceof GenericException)
@@ -50,14 +50,14 @@ public class GenericException extends RuntimeException {
         return new GenericException(caption, extractDetails(cause), cause);
     }
 
-    protected GenericException(@NonNull final String message, final String details, @NonNull final Exception inner) {
+    protected GenericException(@NonNull final String message, final String details, @NonNull final Throwable inner) {
         // Let's check if inner is an instance of BaseException itself
         super(message);
         this.details = details;
         this.initCause(inner);
     }
 
-    protected static String getCode(@NonNull final Exception e) {
+    protected static String getCode(@NonNull final Throwable e) {
         if (isNotApi(e)) return null;
         int code = on(e).call("getCode").get();
         if (0 != code) {
@@ -67,7 +67,7 @@ public class GenericException extends RuntimeException {
             return null;
     }
 
-    private static String extractDetails(@NonNull Exception e) {
+    private static String extractDetails(@NonNull Throwable e) {
         if (isNotApi(e)) return null;
         // As API exception may be thrown due to client-side issues like
         // lack of certificate in local trust store or JSON parse error,

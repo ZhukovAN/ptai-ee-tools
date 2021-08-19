@@ -101,7 +101,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
             }
             return env;
         } catch (Exception e) {
-            throw new RuntimeException(Resources.i18n_ast_result_status_failed_environment(), e);
+            throw new RuntimeException(Resources.i18n_ast_result_status_failed_environment_label(), e);
         }
     }
 
@@ -236,7 +236,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
 
         AbstractJob.JobExecutionResult jobExecutionResult = job.execute();
         if (!AbstractJob.JobExecutionResult.SUCCESS.equals(jobExecutionResult))
-            throw new AbortException(Resources.i18n_ast_result_status_failed());
+            throw new AbortException(Resources.i18n_ast_result_status_failed_label());
     }
 
     @Override

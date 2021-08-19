@@ -272,4 +272,25 @@ class BaseIssueCount {
 }
 BaseIssueCount -right-|> BaseIssueCountFields
 
+enum Stage #EEEEEE {
+    UNKNOWN
+    ZIP
+    UPLOAD
+    VFSSETUP
+    INITIALIZE
+    PRECHECK
+    SCAN
+    FINALIZE
+    DONE
+    FAILED
+    ABORTED
+    ENQUEUED
+    AUTOCHECK
+}
+
+class Performance {
+    Map<Stage, DateTime> stages
+}
+Performance .up.|> Stage
+ScanBriefDetailed .up.> Performance : performance
 @enduml

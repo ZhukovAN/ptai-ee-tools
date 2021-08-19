@@ -24,7 +24,7 @@ public class ScanBriefDetailedTest extends BaseTest {
         InputStream inputStream = getResourceStream("json/scan/result/" + fileName);
         Assertions.assertNotNull(inputStream);
         ScanResult scanResult = mapper.readValue(inputStream, ScanResult.class);
-        return ScanBriefDetailed.create(scanResult);
+        return ScanBriefDetailed.create(scanResult, ScanBriefDetailed.Performance.builder().build());
     }
 
     @SneakyThrows
@@ -62,7 +62,7 @@ public class ScanBriefDetailedTest extends BaseTest {
         try (TempFile jsonFile = new TempFile(packedFileContents)) {
             Assertions.assertTrue(jsonFile.toFile().isFile());
             ScanResult scanResult = createFaultTolerantObjectMapper().readValue(jsonFile.toFile(), ScanResult.class);
-            ScanBriefDetailed scanBriefDetailed = ScanBriefDetailed.create(scanResult);
+            ScanBriefDetailed scanBriefDetailed = ScanBriefDetailed.create(scanResult, ScanBriefDetailed.Performance.builder().build());
             Assertions.assertNotNull(scanBriefDetailed.getDetails());
             long sqliCount = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().stream()
                     .filter(i -> BaseIssue.Level.HIGH == i.getLevel())

@@ -16,7 +16,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import hudson.FilePath;
 import hudson.Util;
-import hudson.model.Run;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -71,15 +70,24 @@ public class JenkinsAstOperations implements AstOperations {
     }
 
     @Override
-    public void scanCompleteCallback(ScanBrief scanBrief) throws GenericException {
-        if (null == scanBrief) return;
-        GenericAstTasks genericAstTasks = new Factory().genericAstTasks(owner.getClient());
-        log.debug("Getting full scan results for project:scan {}: {}", scanBrief.getProjectId(), scanBrief.getId());
-        ScanResult scanResult = genericAstTasks.getScanResult(scanBrief.getProjectId(), scanBrief.getId());
-        log.debug("Converting full scan results to detailed scan brief and storing it as job result");
+    public void scanCompleteCallback(@NonNull ScanBrief scanBrief, @NonNull final ScanBriefDetailed.Performance performance) throws GenericException {
+        ScanBriefDetailed scanBriefDetailed;
+        if (scanBrief.getUseAsyncScan())
+            scanBriefDetailed = ScanBriefDetailed.create(scanBrief, performance);
+        else {
+            GenericAstTasks genericAstTasks = new Factory().genericAstTasks(owner.getClient());
+            log.debug("Getting full scan results for project:scan {}: {}", scanBrief.getProjectId(), scanBrief.getId());
+            try {
+                ScanResult scanResult = genericAstTasks.getScanResult(scanBrief);
+                log.debug("Converting full scan results to detailed scan brief and storing it as job result");
+                scanBriefDetailed = ScanBriefDetailed.create(scanResult, performance);
+            } catch (GenericException e) {
+                scanBriefDetailed = ScanBriefDetailed.create(scanBrief, performance);
+            }
+        }
         ScanDataPacked scanDataPacked = ScanDataPacked.builder()
                 .type(SCAN_BRIEF_DETAILED)
-                .data(ScanDataPacked.packData(ScanBriefDetailed.create(scanResult)))
+                .data(ScanDataPacked.packData(scanBriefDetailed))
                 .build();
         AstJobSingleResult action = new AstJobSingleResult(owner.getRun());
         action.setScanDataPacked(scanDataPacked);

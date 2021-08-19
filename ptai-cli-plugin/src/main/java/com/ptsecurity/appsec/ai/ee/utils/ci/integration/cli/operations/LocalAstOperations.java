@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.operations;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.GenericCliAstJob;
@@ -50,7 +51,7 @@ public class LocalAstOperations implements AstOperations {
         Runtime.getRuntime().addShutdownHook(shutdown);
     }
 
-    public void scanCompleteCallback(final ScanBrief scanBrief)  {
+    public void scanCompleteCallback(@NonNull final ScanBrief scanBrief, @NonNull final ScanBriefDetailed.Performance performance)  {
         if (null != shutdown) shutdown.setStopped(true);
     }
 

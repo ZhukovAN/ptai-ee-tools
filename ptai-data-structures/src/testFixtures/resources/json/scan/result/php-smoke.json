@@ -19,7 +19,7 @@
     "javaParameters" : null
   },
   "policyState" : "NONE",
-  "statistic" : {
+  "statistics" : {
     "scanDateIso8601" : "2021-06-20T18:04:26.590929Z",
     "scanDurationIso8601" : "PT4.760208S",
     "totalFileCount" : 1,

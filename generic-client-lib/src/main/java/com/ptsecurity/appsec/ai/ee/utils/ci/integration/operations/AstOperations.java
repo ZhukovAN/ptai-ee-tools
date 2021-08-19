@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.NonNull;
 
@@ -38,11 +39,12 @@ public interface AstOperations {
      * Callback method is being called when AST job is finished on PT AI server. AstJob descendants may use
      * this callback to relax for safe build termination as there's no need to gracefully stop AST if
      * descendant is terminated using i.e. Ctrl-C
-     * @param scanBrief Nullable brief scan results. This value is null when scan job was terminated in
-     *                  the PT AI viewer by removing ongoing scan result
+     * @param scanBrief Brief scan results. As this callback may be used by AstOperations
+     *                  implementations to get scan results there's need to check if
+     *                  scan brief state isn't ABORTED_FROM_PTAI as PT AI viewer removes scan
      * @throws GenericException
      */
-    void scanCompleteCallback(final ScanBrief scanBrief) throws GenericException;
+    void scanCompleteCallback(@NonNull final ScanBrief scanBrief, @NonNull final ScanBriefDetailed.Performance performance) throws GenericException;
 
     /**
      * Method replaces macro expressions like ${FOO} in the input text using dictionary. AstJob's

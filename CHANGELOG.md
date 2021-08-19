@@ -96,3 +96,9 @@
 + [Fix] Scans stopped from CI are terminated in PT AI server
 + [ToDo] Implement enqueued project scan stop from plugin. This requires current scan stage monitoring and if scan isn't started yet, need to delete scan result instead of scan stop
 + [ToDo] Implement UI for terminated / incomplete scans
+### 20210817
++ [Fix] Jenkins VirtualChannel throws exception that is inherited from Throwable instead of Exception. But CallHelper processes ava.util.concurrent.Callable lambdas that throw Exception. That means that CallHelper can't process VirtualChannel exceptions and some JDK's like OpenJDK 8 raises build error here. So I had to implement own Callable inside CallHelper that throws Throwable
++ [Feature] Jenkins plugin logo changed. Now it uses icon from PT AI IDE plugins
+### 20210819 
++ [Fix] Fixed scan settings change for second and following scans
++ [Feature] UI for terminated / incomplete scans implemented for Jenkins plugin

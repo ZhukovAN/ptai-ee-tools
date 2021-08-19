@@ -1,12 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.scan.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
+import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.*;
 
@@ -49,6 +47,12 @@ public class ScanBrief {
     @Setter
     @JsonProperty
     protected String projectName;
+
+    @Getter
+    @Setter
+    @JsonProperty
+    @Builder.Default
+    protected Boolean useAsyncScan = false;
 
     @Getter
     @Setter
@@ -111,14 +115,15 @@ public class ScanBrief {
     @Getter
     @Setter
     @NonNull
+    @Builder.Default
     @JsonProperty
-    Policy.PolicyState policyState;
+    Policy.State policyState = Policy.State.NONE;
 
     @Getter
     @Setter
     @SuperBuilder
     @NoArgsConstructor
-    public static class Statistic {
+    public static class Statistics {
         /**
          * Scan execution date / time. Can't use Java 8 ZonedDateTime, Instant etc. as Jenkins
          * complaints "Refusing to marshal java.time.Instant for security reasons;
@@ -140,15 +145,15 @@ public class ScanBrief {
 
     @Getter
     @Setter
-    protected Statistic statistic;
+    protected Statistics statistics;
 
     public enum State {
-        UNKNOWN, DONE, FAILED, ABORTED_FROM_PTAI, ABORTED_FROM_CI
+        UNKNOWN, DONE, FAILED, ABORTED
     }
 
     @Getter
     @Setter
     @NonNull
     @Builder.Default
-    protected State state = State.UNKNOWN;
+    protected ScanBrief.State state = ScanBrief.State.UNKNOWN;
 }

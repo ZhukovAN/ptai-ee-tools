@@ -10,6 +10,9 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ *
+ */
 public interface GenericAstTasks {
     void upload(@NonNull final UUID projectId, @NonNull final File sources) throws GenericException;
 
@@ -17,11 +20,33 @@ public interface GenericAstTasks {
 
     String getScanResultUrl(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws GenericException;
 
-    ScanBrief.State waitForComplete(@NonNull UUID projectId, @NonNull final UUID scanResultId) throws GenericException;
+    ScanBrief.State waitForComplete(@NonNull UUID projectId, @NonNull final UUID scanResultId) throws InterruptedException;
     void stop(@NonNull UUID scanResultId) throws GenericException;
 
+
+    /**
+     * Create scan brief skeleton that contains scan setings only. Statistic, state and policyState
+     * are to be defined after scan is complete
+     * @param projectId
+     * @param scanResultId
+     * @return
+     * @throws GenericException
+     */
+    @NonNull
+    ScanBrief createScanBrief(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws GenericException;
+
+    /**
+     * Append scan statistic, state and policy state to scan brief
+     * @param scanBrief
+     * @throws GenericException
+     */
+    void appendStatistics(@NonNull final ScanBrief scanBrief) throws GenericException;
+
     ScanBrief getScanBrief(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws GenericException;
+
     ScanResult getScanResult(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws GenericException;
+
+    ScanResult getScanResult(@NonNull final ScanBrief scanBrief) throws GenericException;
 
     List<Error> getScanErrors(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws GenericException;
 }

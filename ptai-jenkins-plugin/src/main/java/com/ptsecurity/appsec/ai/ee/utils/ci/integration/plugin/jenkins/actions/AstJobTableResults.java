@@ -2,7 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
@@ -15,8 +15,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.json.JSONObject;
-import org.kohsuke.stapler.bind.JavaScriptMethod;
 
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
@@ -83,12 +81,12 @@ public class AstJobTableResults implements Action {
             long count = 0;
             do {
                 ScanBriefDetailed brief = buildScanBriefDetailed.getScanBriefDetailed();
-                if (!Optional.ofNullable(brief).map(ScanBriefDetailed::getStatistic).isPresent()) break;
+                if (!Optional.ofNullable(brief).map(ScanBriefDetailed::getStatistics).isPresent()) break;
                 try {
-                    Duration durationFull = Duration.parse(brief.getStatistic().getScanDurationIso8601());
+                    Duration durationFull = Duration.parse(brief.getStatistics().getScanDurationIso8601());
                     count = durationFull.getSeconds();
                 } catch (DateTimeParseException e) {
-                    log.error("Failed to parse scan duration: {}", brief.getStatistic().getScanDurationIso8601());
+                    log.error("Failed to parse scan duration: {}", brief.getStatistics().getScanDurationIso8601());
                 }
             } while (false);
             valueSeries.getData().add(ChartDataModel.Series.DataItem.builder().value(count).build());
@@ -312,13 +310,12 @@ public class AstJobTableResults implements Action {
 
     @Override
     public String getIconFileName() {
-        // TODO: Implement project actions and uncomment this
-        return "plugin/" + Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin").getShortName() + "/24x24.png";
+        return "plugin/" + Objects.requireNonNull(Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin")).getShortName() + "/logo.svg";
     }
 
     @Override
     public String getDisplayName() {
-        return "PT AI scan statistic";
+        return Resources.i18n_ast_result_charts_statistics_label();
     }
 
     @Override

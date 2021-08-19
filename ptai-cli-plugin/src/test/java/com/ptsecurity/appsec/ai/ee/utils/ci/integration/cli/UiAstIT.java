@@ -281,7 +281,7 @@ class UiAstIT extends BaseCliAstIT {
         File rawData = destination.resolve(rawDataFile).toFile();
         Assertions.assertTrue(rawData.exists());
         ScanResult scanResult = BaseJsonHelper.createObjectMapper().readValue(rawData, ScanResult.class);
-        Duration durationFull = Duration.parse(scanResult.getStatistic().getScanDurationIso8601());
+        Duration durationFull = Duration.parse(scanResult.getStatistics().getScanDurationIso8601());
         System.out.println("Full scan duration " + durationFull);
 
         res = new CommandLine(new Plugin()).execute(
@@ -297,7 +297,7 @@ class UiAstIT extends BaseCliAstIT {
         rawData = destination.resolve(rawDataFile).toFile();
         Assertions.assertTrue(rawData.exists());
         scanResult = BaseJsonHelper.createObjectMapper().readValue(rawData, ScanResult.class);
-        Duration durationIncremental = Duration.parse(scanResult.getStatistic().getScanDurationIso8601());
+        Duration durationIncremental = Duration.parse(scanResult.getStatistics().getScanDurationIso8601());
         System.out.println("Incremental scan duration " + durationIncremental);
         Assertions.assertTrue(0 < durationFull.compareTo(durationIncremental));
     }

@@ -43,7 +43,7 @@ public class AstJobMultipleResults implements Action {
     }
 
     public String getChartCaption() {
-        return Resources.i18n_ast_result_charts_trend_caption();
+        return Resources.i18n_ast_result_charts_trend_label();
     }
 
     @Getter

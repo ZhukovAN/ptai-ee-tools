@@ -222,6 +222,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
             log.debug("Project {} created, ID = {}", settings.getProjectName(), projectId);
         } else {
             projectId = projectInfo.getId();
+            scanSettings.setId(projectInfo.getSettingsId());
             call(
                     () -> client.getProjectsApi().apiProjectsProjectIdScanSettingsPut(projectId, scanSettings),
                     "PT AI project settings update failed");

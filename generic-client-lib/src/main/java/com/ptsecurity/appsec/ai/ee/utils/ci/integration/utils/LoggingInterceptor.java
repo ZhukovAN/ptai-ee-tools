@@ -18,7 +18,7 @@ public class LoggingInterceptor implements Interceptor {
         Request request = chain.request();
 
         long requestTime = System.nanoTime();
-        log.trace("Sending request to {}", request.url());
+        log.trace("Sending {} request to {}", request.method(), request.url());
         log.trace("Request headers: {}", request.headers());
         if (null != request.body())
             traceBody(request.headers(), request.body());
