@@ -102,3 +102,5 @@
 ### 20210819 
 + [Fix] Fixed scan settings change for second and following scans
 + [Feature] UI for terminated / incomplete scans implemented for Jenkins plugin
+### 20210820 
++ [Feature] Integration test for project scan settings change using JSON added

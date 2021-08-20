@@ -354,4 +354,29 @@ public class JsonAstJobIT extends BaseAstIT {
                 .filter(VulnerabilityIssue::getSecondOrder)
                 .count());
     }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Check PHP smoke miscellaneous project scan settings change")
+    public void checkScanSettingsChange() {
+        ScanResult firstScanResult = analyseMiscScanResults((settings) -> {
+            settings.setScanAppType("PHP, PmTaint, Configuration, Fingerprint");
+            settings.setUseTaintAnalysis(true);
+            settings.setUsePmAnalysis(true);
+            settings.setIsUseEntryAnalysisPoint(true);
+            settings.setIsUsePublicAnalysisMethod(true);
+            settings.setCustomParameters("-l php");
+        });
+        Assertions.assertNotNull(firstScanResult);
+        // As analyseMiscScanResults generates random project name, let's store it
+        String projectName = firstScanResult.getProjectName();
+        ScanResult secondScanResult = analyseMiscScanResults((settings) -> {
+            settings.setScanAppType("PHP");
+            settings.setIsUseEntryAnalysisPoint(true);
+            settings.setIsUsePublicAnalysisMethod(false);
+            settings.setProjectName(projectName);
+        });
+        Assertions.assertNotNull(secondScanResult);
+        Assertions.assertTrue(firstScanResult.getIssues().size() > secondScanResult.getIssues().size());
+    }
 }
