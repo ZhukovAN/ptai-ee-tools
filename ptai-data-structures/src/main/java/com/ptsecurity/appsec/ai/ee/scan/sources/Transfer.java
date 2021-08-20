@@ -9,6 +9,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Transfer implements Serializable {
     public static final String DEFAULT_INCLUDES = "**/*";
     public static final String DEFAULT_EXCLUDES = "**/.ptai/**";

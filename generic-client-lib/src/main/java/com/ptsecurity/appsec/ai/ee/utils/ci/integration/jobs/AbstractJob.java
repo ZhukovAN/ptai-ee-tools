@@ -4,7 +4,9 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.AstPolicyViolationException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.MinorAstErrorsException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -47,11 +49,14 @@ public abstract class AbstractJob extends AbstractTool {
             unsafeExecute();
             return JobExecutionResult.SUCCESS;
         } catch (GenericException e) {
-            if (null != e.getCause() && e.getCause() instanceof InterruptedException) {
-                // TODO: check if job was interrupted in the middle of scan process,
-                //  i.e. we still may get some incomplete results from there
-                log.debug("Job execution interrupted");
-                return JobExecutionResult.INTERRUPTED;
+            if (null != e.getCause()) {
+                if (e.getCause() instanceof InterruptedException) {
+                    log.debug("Job execution interrupted");
+                    return JobExecutionResult.INTERRUPTED;
+                } else if (e.getCause() instanceof AstPolicyViolationException || e.getCause() instanceof MinorAstErrorsException) {
+                    log.debug(e.getDetailedMessage(), e.getCause());
+                    return JobExecutionResult.FAILED;
+                }
             }
             severe(e.getDetailedMessage());
             log.error(e.getDetailedMessage(), e.getCause());

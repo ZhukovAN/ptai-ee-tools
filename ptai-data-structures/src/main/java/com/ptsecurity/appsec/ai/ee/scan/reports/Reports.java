@@ -18,8 +18,10 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@ToString
 public class Reports {
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    @ToString
     public enum Locale {
         EN("en-US"), RU("ru-RU");
 
@@ -64,6 +66,7 @@ public class Reports {
      */
     @Getter
     @Setter
+    @ToString
     public static class IssuesFilter {
         /**
          * The same set of vulnerability levels as defined in
@@ -153,6 +156,7 @@ public class Reports {
         @Getter
         @Setter
         @NoArgsConstructor
+        @ToString
         public static class PathInfo {
             @JsonProperty("path")
             private String path;
@@ -189,6 +193,7 @@ public class Reports {
     @Getter
     @Setter
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @ToString
     public static abstract class AbstractReport {
         /**
          * File name where report should be saved to
@@ -217,6 +222,7 @@ public class Reports {
      */
     @Getter
     @Setter
+    @ToString(callSuper = true)
     public static class Data extends AbstractReport {
         /**
          * Default report locale to be used for new data exports
@@ -240,6 +246,7 @@ public class Reports {
 
     @Getter
     @Setter
+    @ToString(callSuper = true)
     public static class Report extends AbstractReport {
 
         /**
@@ -274,6 +281,7 @@ public class Reports {
 
     @Getter
     @Setter
+    @ToString(callSuper = true)
     public static class RawData {
         /**
          * File name where report should be saved to

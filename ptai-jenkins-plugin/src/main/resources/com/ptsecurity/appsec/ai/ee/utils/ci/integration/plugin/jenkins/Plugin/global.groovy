@@ -21,4 +21,8 @@ f.section(
             }
         }
     }
+    String version = descriptor.getVersion()
+    div(style: "text-align: right; color: lightgray; ") {
+        text(version)
+    }
 }

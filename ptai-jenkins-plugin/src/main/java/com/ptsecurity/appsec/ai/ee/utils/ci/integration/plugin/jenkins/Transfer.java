@@ -11,7 +11,7 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = false)
-@ToString
+@ToString(callSuper = true)
 public class Transfer extends com.ptsecurity.appsec.ai.ee.scan.sources.Transfer implements Describable<Transfer>, Serializable {
     @DataBoundConstructor
     public Transfer(final String includes, final String excludes, final String removePrefix,

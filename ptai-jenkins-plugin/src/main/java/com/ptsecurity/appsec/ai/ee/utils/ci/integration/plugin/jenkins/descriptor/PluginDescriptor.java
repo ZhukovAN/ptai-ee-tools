@@ -32,6 +32,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
@@ -258,6 +259,18 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
     }
 
     protected static Map<String, String> versionInfo = null;
+
+    public String getVersion() {
+        Map<String, String> version = getVersionInfo();
+        StringBuilder builder = new StringBuilder();
+        if (StringUtils.isNotEmpty(version.get("Implementation-Version")))
+            builder.append(" v.").append(version.get("Implementation-Version"));
+        if (StringUtils.isNotEmpty(version.get("Implementation-Git-Hash")))
+            builder.append("-").append(version.get("Implementation-Git-Hash"));
+        if (StringUtils.isNotEmpty(version.get("Build-Time")))
+            builder.append(" built on ").append(version.get("Build-Time"));
+        return builder.toString();
+    }
 
     public Map<String, String> getVersionInfo() {
         if (null != versionInfo) return versionInfo;

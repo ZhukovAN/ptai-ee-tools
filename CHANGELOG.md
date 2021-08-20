@@ -107,4 +107,5 @@
 + [Feature] UI for scan stage duration statistic added
 + [Fix] JSON-defined BlackBox engine level processing fixed
 + [Fix] JSON-defined BlackBox engine programming language settings fixed
-+ 
++ [Feature] Jenkins plugin shows its version on global configuration page (light gray colored text at plugin global settings bottom right corner)
++ [Fix] Ugly headers removed from transfers and reports settings in Jenkins plugin

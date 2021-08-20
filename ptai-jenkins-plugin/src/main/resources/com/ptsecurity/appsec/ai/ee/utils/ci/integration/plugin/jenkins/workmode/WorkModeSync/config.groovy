@@ -27,7 +27,6 @@ f.entry(
 
     f.repeatableHeteroProperty(
             field: 'reports',
-            hasHeader: 'true',
             addCaption: _('reportAdd'))
 }
 

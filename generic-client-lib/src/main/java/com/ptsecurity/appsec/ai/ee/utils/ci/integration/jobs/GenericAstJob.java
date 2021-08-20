@@ -17,10 +17,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperation
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.SetupOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -37,6 +34,7 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.
 
 @Slf4j
 @SuperBuilder
+@ToString
 public abstract class GenericAstJob extends AbstractJob implements EventConsumer {
     /**
      * Flag that defines should we wait for AST job to complete, generate

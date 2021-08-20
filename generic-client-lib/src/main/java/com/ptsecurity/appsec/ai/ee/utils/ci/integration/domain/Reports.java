@@ -4,6 +4,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.StringHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.stream.Stream;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
+@ToString(callSuper = true)
 public class Reports extends com.ptsecurity.appsec.ai.ee.scan.reports.Reports {
     /**
      * Method performs report settings validation."Validation" means that no PT AI server
