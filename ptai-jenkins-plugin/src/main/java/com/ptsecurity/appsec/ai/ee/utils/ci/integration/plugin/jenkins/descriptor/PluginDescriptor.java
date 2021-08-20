@@ -29,6 +29,7 @@ import hudson.util.CopyOnWriteList;
 import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.jenkinsci.Symbol;
@@ -38,9 +39,13 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.UUID;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
+@Slf4j
 @Extension
 @Symbol("ptaiUiSast")
 public class PluginDescriptor extends BuildStepDescriptor<Builder> {
@@ -252,4 +257,37 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         return WorkModeSync.DESCRIPTOR;
     }
 
+    protected static Map<String, String> versionInfo = null;
+
+    public Map<String, String> getVersionInfo() {
+        if (null != versionInfo) return versionInfo;
+        versionInfo = new HashMap<>();
+        try {
+            Enumeration<URL> res = PluginDescriptor.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
+            while (res.hasMoreElements()) {
+                URL url = res.nextElement();
+                Manifest manifest = new Manifest(url.openStream());
+
+                if (!isApplicableManifest(manifest)) continue;
+                Attributes attr = manifest.getMainAttributes();
+                versionInfo.put("Implementation-Version", get(attr, "Implementation-Version").toString());
+                versionInfo.put("Implementation-Git-Hash", get(attr, "Implementation-Git-Hash").toString());
+                versionInfo.put("Build-Time", get(attr, "Build-Time").toString());
+                break;
+            }
+        } catch (IOException e) {
+            log.warn("Failed to get build info from plugin metadata");
+            log.debug("Exception details", e);
+        }
+        return versionInfo;
+    }
+
+    private boolean isApplicableManifest(Manifest manifest) {
+        Attributes attributes = manifest.getMainAttributes();
+        return "com.ptsecurity.appsec.ai.ee.utils.ci.integration".equals(get(attributes, "Implementation-Vendor-Id"));
+    }
+
+    private static Object get(Attributes attributes, String key) {
+        return attributes.get(new Attributes.Name(key));
+    }
 }

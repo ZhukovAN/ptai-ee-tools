@@ -5,7 +5,10 @@ import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobSingleResult
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper
+import jenkins.model.Jenkins
 import lib.FormTagLib
 import lib.LayoutTagLib
 import org.apache.commons.lang3.time.DurationFormatUtils
@@ -15,6 +18,8 @@ import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.util.jar.Attributes
+import java.util.jar.Manifest
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel.LEVEL_COLORS
 
@@ -176,8 +181,6 @@ l.layout(title: "PT AI AST report") {
 
         h1(_("result.title"))
         h2(_("scan.settings.title"))
-        // text(BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(scanBriefDetailed))
-
         def scanSettings = [:]
         scanSettings[_("scan.settings.project")] = "${scanBriefDetailed.projectName}"
         scanSettings[_("scan.settings.url")] = "${scanBriefDetailed.scanSettings.url}"

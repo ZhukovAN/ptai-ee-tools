@@ -200,6 +200,7 @@ public class AiProjConverter {
         }
 
         if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.BLACKBOX)) {
+            fillCommonFields(res, settings);
             res
                     .level(BLACKBOX_SCAN_LEVEL_MAP.get(settings.getBlackBoxScanLevel()))
                     .autocheckSite(settings.getAutocheckSite())

@@ -104,3 +104,7 @@
 + [Feature] UI for terminated / incomplete scans implemented for Jenkins plugin
 ### 20210820 
 + [Feature] Integration test for project scan settings change using JSON added
++ [Feature] UI for scan stage duration statistic added
++ [Fix] JSON-defined BlackBox engine level processing fixed
++ [Fix] JSON-defined BlackBox engine programming language settings fixed
++ 
