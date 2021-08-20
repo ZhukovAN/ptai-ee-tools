@@ -20,7 +20,7 @@ public class ScanResult extends ScanBrief {
     @Getter
     @Setter
     @Builder.Default
-    protected boolean issuesParseState = false;
+    protected boolean issuesParseOk = false;
 
     @Getter
     protected final List<BaseIssue> issues = new ArrayList<>();

@@ -214,7 +214,7 @@ public class IssuesConverter {
                     System.out.println(issue);
             }
         }
-        res.setIssuesParseState(model != EMPTY_ISSUES_MODEL);
+        res.setIssuesParseOk(model != EMPTY_ISSUES_MODEL);
         return res;
     }
 

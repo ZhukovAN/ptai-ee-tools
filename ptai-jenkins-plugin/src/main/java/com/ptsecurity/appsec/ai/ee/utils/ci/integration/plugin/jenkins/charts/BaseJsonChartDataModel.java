@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
 import lombok.SneakyThrows;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.ClassUtils;
 import org.joor.Reflect;
 import org.parboiled.common.StringUtils;
 
+import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.HashMap;
@@ -22,7 +24,7 @@ public class BaseJsonChartDataModel {
     public static final Map<BaseIssue.ApprovalState, Integer> APPROVAL_COLORS = new HashMap<>();
     public static final Map<Boolean, Integer> SUSPECTED_COLORS = new HashMap<>();
     public static final Map<VulnerabilityIssue.ScanMode, Integer> SCANMODE_COLORS = new HashMap<>();
-
+    public static final Map<Stage, Integer> SCANSTAGE_COLORS = new HashMap<>();
 
     static {
         LEVEL_COLORS.put(BaseIssue.Level.HIGH, 0xf57962);
@@ -52,6 +54,53 @@ public class BaseJsonChartDataModel {
         SCANMODE_COLORS.put(VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT, LEVEL_COLORS.get(BaseIssue.Level.HIGH));
         SCANMODE_COLORS.put(VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED, LEVEL_COLORS.get(BaseIssue.Level.MEDIUM));
         SCANMODE_COLORS.put(VulnerabilityIssue.ScanMode.NONE, LEVEL_COLORS.get(BaseIssue.Level.NONE));
+
+        /*
+        SCANSTAGE_COLORS.put(Stage.SETUP, LEVEL_COLORS.get(BaseIssue.Level.LOW));
+        SCANSTAGE_COLORS.put(Stage.ZIP, changeColorShade(LEVEL_COLORS.get(BaseIssue.Level.LOW), 0.8f, 0.8f));
+        SCANSTAGE_COLORS.put(Stage.UPLOAD, changeColorShade(LEVEL_COLORS.get(BaseIssue.Level.LOW), 0.8f, 0.9f));
+        SCANSTAGE_COLORS.put(Stage.ENQUEUED, LEVEL_COLORS.get(BaseIssue.Level.POTENTIAL));
+        SCANSTAGE_COLORS.put(Stage.INITIALIZE, changeColorShade(LEVEL_COLORS.get(BaseIssue.Level.HIGH), 0.8f, 0.8f));
+        SCANSTAGE_COLORS.put(Stage.VFSSETUP, changeColorShade(LEVEL_COLORS.get(BaseIssue.Level.HIGH), 0.8f, 0.9f));
+        SCANSTAGE_COLORS.put(Stage.PRECHECK, changeColorShade(LEVEL_COLORS.get(BaseIssue.Level.HIGH), 0.8f, 1.0f));
+        SCANSTAGE_COLORS.put(Stage.SCAN, LEVEL_COLORS.get(BaseIssue.Level.HIGH));
+        SCANSTAGE_COLORS.put(Stage.FINALIZE, LEVEL_COLORS.get(BaseIssue.Level.MEDIUM));
+        SCANSTAGE_COLORS.put(Stage.AUTOCHECK, changeColorShade(LEVEL_COLORS.get(BaseIssue.Level.MEDIUM), 0.8f, 0.9f));
+        */
+        SCANSTAGE_COLORS.put(Stage.SETUP, createShade(0, 10));
+        SCANSTAGE_COLORS.put(Stage.ZIP, createShade(4, 10));
+        SCANSTAGE_COLORS.put(Stage.UPLOAD, createShade(7, 10));
+        SCANSTAGE_COLORS.put(Stage.ENQUEUED, createShade(1, 10));
+        SCANSTAGE_COLORS.put(Stage.INITIALIZE, createShade(5, 10));
+        SCANSTAGE_COLORS.put(Stage.VFSSETUP, createShade(8, 10));
+        SCANSTAGE_COLORS.put(Stage.PRECHECK, createShade(2, 10));
+        SCANSTAGE_COLORS.put(Stage.SCAN, createShade(6, 10));
+        SCANSTAGE_COLORS.put(Stage.FINALIZE, createShade(9, 10));
+        SCANSTAGE_COLORS.put(Stage.AUTOCHECK, createShade(3, 10));
+        // These colors aren't supposed to appear, so keep them white
+        SCANSTAGE_COLORS.put(Stage.DONE, 0xffffff);
+        SCANSTAGE_COLORS.put(Stage.FAILED, 0xffffff);
+        SCANSTAGE_COLORS.put(Stage.ABORTED, 0xffffff);
+        SCANSTAGE_COLORS.put(Stage.UNKNOWN, 0xffffff);
+    }
+
+    public static int createShade(final float index, final float total) {
+        float[] hsb = new float[3];
+        hsb[0] = index / total; // * 255f;
+        hsb[1] = 0.55f;
+        hsb[2] = 0.8f;
+        return Color.getHSBColor(hsb[0], hsb[1], hsb[2]).getRGB() & 0xFFFFFF;
+    }
+
+    public static int changeColorShade(final int c, final float s, final float b) {
+        Color color = Color.decode("#" + Integer.toHexString(c));
+        float[] hsb = new float[3];
+        Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
+        hsb[1] *= s;
+        if (1 < hsb[1]) hsb[1] = 1;
+        hsb[2] *= b;
+        if (1 < hsb[2]) hsb[2] = 1;
+        return Color.getHSBColor(hsb[0], hsb[1], hsb[2]).getRGB() & 0xFFFFFF;
     }
 
     @SneakyThrows

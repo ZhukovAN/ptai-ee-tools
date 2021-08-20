@@ -1,5 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions;
 
+import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
@@ -15,6 +17,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 
 import java.time.Duration;
 import java.time.format.DateTimeParseException;
@@ -60,6 +63,11 @@ public class AstJobTableResults implements Action {
 
     @SneakyThrows
     public String getScanDurationHistoryChart(final int resultsNumber) {
+        return BaseJsonHelper.createObjectMapper().writeValueAsString(getScanDurationHistoryChartDataModel(resultsNumber));
+    }
+
+    @SneakyThrows
+    protected ChartDataModel getScanDurationHistoryChartDataModel(final int resultsNumber) {
         final List<AstJobMultipleResults.BuildScanBriefDetailed> issuesModelList = getLatestAstResults(resultsNumber);
         // Prepare X-axis
         ChartDataModel.Axis xAxis = ChartDataModel.Axis.builder().build();
@@ -73,7 +81,7 @@ public class AstJobTableResults implements Action {
         ChartDataModel.Series valueSeries = ChartDataModel.Series.builder()
                 .name(scanDurationItemCaption)
                 .itemStyle(ChartDataModel.Series.DataItem.ItemStyle.builder()
-                        .color("#" + Integer.toHexString(LEVEL_COLORS.get(BaseIssue.Level.MEDIUM)))
+                        .color("#d0d0d0")
                         .build())
                 .build();
         // Pre-fill series with zeroes
@@ -86,7 +94,7 @@ public class AstJobTableResults implements Action {
                     Duration durationFull = Duration.parse(brief.getStatistics().getScanDurationIso8601());
                     count = durationFull.getSeconds();
                 } catch (DateTimeParseException e) {
-                    log.error("Failed to parse scan duration: {}", brief.getStatistics().getScanDurationIso8601());
+                    log.warn("Failed to parse scan duration: {}", brief.getStatistics().getScanDurationIso8601());
                 }
             } while (false);
             valueSeries.getData().add(ChartDataModel.Series.DataItem.builder().value(count).build());
@@ -96,13 +104,12 @@ public class AstJobTableResults implements Action {
         for (AstJobMultipleResults.BuildScanBriefDetailed item : issuesModelList)
             // As Jenkins itself prefixes build numbers with "#" sign, let's do the same for chart
             xAxis.getData().add(item.getBuildNumber().toString());
-        ChartDataModel chartDataModel = ChartDataModel.builder()
+        return ChartDataModel.builder()
                 .legend(legend)
                 .xaxis(Collections.singletonList(xAxis))
                 .yaxis(Collections.singletonList(yAxis))
                 .series(chartSeries)
                 .build();
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(chartDataModel);
     }
 
     protected ChartDataModel.Series createTotalIssuesCountSeries(@NonNull final List<AstJobMultipleResults.BuildScanBriefDetailed> issuesModelList) {
@@ -305,6 +312,51 @@ public class AstJobTableResults implements Action {
                 .yaxis(Collections.singletonList(yAxis))
                 .series(chartSeries)
                 .build();
+        return BaseJsonHelper.createObjectMapper().writeValueAsString(chartDataModel);
+    }
+
+    @SneakyThrows
+    public String getScanStageDurationHistoryChart(final int resultsNumber) {
+        ChartDataModel chartDataModel = getScanDurationHistoryChartDataModel(resultsNumber);
+        // Add stages durations
+        final List<AstJobMultipleResults.BuildScanBriefDetailed> issuesModelList = getLatestAstResults(resultsNumber);
+        // Sort scan results by build number
+        issuesModelList.sort(Comparator.comparing(AstJobMultipleResults.BuildScanBriefDetailed::getBuildNumber));
+
+        for (Stage value : Stage.values()) {
+            ChartDataModel.Series valueSeries
+                    = ChartDataModel.Series.builder()
+                    .name(value.name())
+                    .itemStyle(ChartDataModel.Series.DataItem.ItemStyle.builder()
+                            .color("#" + Integer.toHexString(SCANSTAGE_COLORS.get(value)))
+                            .build())
+                    .build();
+            // Prepare series to fill with data
+            for (AstJobMultipleResults.BuildScanBriefDetailed buildScanBriefDetailed : issuesModelList) {
+                long count = 0;
+                do {
+                    ScanBriefDetailed issues = buildScanBriefDetailed.getScanBriefDetailed();
+                    Optional<String> durationIso8601 = Optional.ofNullable(issues)
+                            .map(ScanBriefDetailed::getPerformance)
+                            .map(ScanBriefDetailed.Performance::getStages)
+                            .map(stages -> stages.getOrDefault(value, null))
+                            .filter(StringUtils::isNotEmpty);
+                    if (!durationIso8601.isPresent()) break;
+                    try {
+                        Duration durationFull = Duration.parse(durationIso8601.get());
+                        count = durationFull.getSeconds();
+                        log.trace("Build #{} scan stage {} duration {} parsed to seconds: {}", buildScanBriefDetailed.buildNumber, value, durationIso8601.get(), count);
+                    } catch (DateTimeParseException e) {
+                        log.warn("Failed to parse build #{} scan stage {} duration: {}", buildScanBriefDetailed.buildNumber, value, durationIso8601.get());
+                    }
+                } while (false);
+                valueSeries.getData().add(ChartDataModel.Series.DataItem.builder().value(count).build());
+            }
+            // Skip series with no data
+            if (valueSeries.getData().stream().noneMatch(i -> i.getValue() != 0)) continue;
+            chartDataModel.getSeries().add(valueSeries);
+            chartDataModel.getLegend().data.add(value.name());
+        }
         return BaseJsonHelper.createObjectMapper().writeValueAsString(chartDataModel);
     }
 

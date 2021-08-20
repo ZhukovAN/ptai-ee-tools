@@ -1,7 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults
 
+import com.ptsecurity.appsec.ai.ee.scan.progress.Stage
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper
 import lib.FormTagLib
 import lib.LayoutTagLib
 
@@ -41,6 +43,7 @@ l.layout(title: "PT AI AST report") {
     l.main_panel() {
         h1(_("statistics.label"))
         h2(_("statistics.breakdown.label"))
+        // text(BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(my.getScanStageDurationHistoryChart(historyLength)))
         div(style: "${bigDivStyle}") {
             div(style: "grid-area: 1 / 1 / 2 / 2; padding-right: 8px; ") {
                 h3(_("statistics.by.level.label"))
@@ -65,7 +68,7 @@ l.layout(title: "PT AI AST report") {
             div(style: "grid-area: 3 / 1 / 4 / 3; ") {
                 h3("${Resources.i18n_ast_result_statistics_duration()}")
                 div(
-                        id: "${my.urlName}-scan-duration-history-chart",
+                        id: "${my.urlName}-scan-stage-duration-history-chart",
                         class: 'graph-cursor-pointer') {}
             }
         }
@@ -143,6 +146,55 @@ l.layout(title: "PT AI AST report") {
                 }
             };
             
+            // Map vulnerability class to its localized title
+            var scanStageAttrs = {
+                DURATION: {
+                    title: '${Resources.i18n_ast_result_statistics_duration_sec()}'
+                },
+                ${Stage.ABORTED.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_aborted()}'
+                },
+                ${Stage.AUTOCHECK.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_autocheck()}'
+                },
+                ${Stage.DONE.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_done()}'
+                },
+                ${Stage.ENQUEUED.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_enqueued()}'
+                },
+                ${Stage.FAILED.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_failed()}'
+                },
+                ${Stage.FINALIZE.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_finalize()}'
+                },
+                ${Stage.INITIALIZE.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_initialize()}'
+                },
+                ${Stage.PRECHECK.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_precheck()}'
+                },
+                ${Stage.SCAN.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_scan()}'
+                },
+                ${Stage.SETUP.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_setup()}'
+                },
+                ${Stage.UNKNOWN.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_unknown()}'
+                },
+                ${Stage.UPLOAD.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_upload()}'
+                },
+                ${Stage.VFSSETUP.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_vfssetup()}'
+                },
+                ${Stage.ZIP.name()}: {
+                    title: '${Resources.i18n_misc_enums_progress_stage_zip()}'
+                }
+            };
+            
             createBuildHistoryChart(
                 "${my.urlName}-level-history-chart", 
                 ${my.getLevelHistoryChart(historyLength)}, levelAttrs);
@@ -155,12 +207,12 @@ l.layout(title: "PT AI AST report") {
                 "${my.urlName}-type-history-chart", 
                 ${my.getTypeHistoryChart(historyLength)}, typeAttrs, false);
 
-            var option = ${my.getScanDurationHistoryChart(historyLength)};
-            option.legend.data[0] = "${Resources.i18n_ast_result_statistics_duration_sec()}"
-            option.series[0].name = "${Resources.i18n_ast_result_statistics_duration_sec()}"
-            createDurationHistoryChart(
-                "${my.urlName}-scan-duration-history-chart", 
-                option);
+            var option = ${my.getScanStageDurationHistoryChart(historyLength)};
+            // option.legend.data[0] = "${Resources.i18n_ast_result_statistics_duration_sec()}"
+            // option.series[0].name = "${Resources.i18n_ast_result_statistics_duration_sec()}"
+            createBuildHistoryChart(
+                "${my.urlName}-scan-stage-duration-history-chart", 
+                option, scanStageAttrs, false);
         """
     }
 }

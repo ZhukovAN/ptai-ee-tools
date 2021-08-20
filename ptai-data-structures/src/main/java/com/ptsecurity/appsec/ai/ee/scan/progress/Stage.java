@@ -1,17 +1,18 @@
 package com.ptsecurity.appsec.ai.ee.scan.progress;
 
 public enum Stage {
-    UNKNOWN,
+    SETUP,
     ZIP,
     UPLOAD,
-    VFSSETUP,
+    ENQUEUED,
     INITIALIZE,
+    VFSSETUP,
     PRECHECK,
     SCAN,
     FINALIZE,
+    AUTOCHECK,
     DONE,
     FAILED,
     ABORTED,
-    ENQUEUED,
-    AUTOCHECK;
+    UNKNOWN
 }

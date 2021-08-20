@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters;
 
 import com.google.gson.annotations.SerializedName;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
 import lombok.NonNull;
@@ -9,16 +10,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ClassUtils;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.joor.Reflect.on;
 
 @Slf4j
 public class AiProjConverter {
+    private static final Map<AiProjScanSettings.BlackBoxScanLevel, BlackBoxScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
+
+    static {
+        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NONE, BlackBoxScanLevel.None);
+        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FAST, BlackBoxScanLevel.Fast);
+        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NORMAL, BlackBoxScanLevel.Normal);
+        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FULL, BlackBoxScanLevel.Full);
+    }
+
     protected static BlackBoxAuthentication fillAuthentication(@NonNull final BlackBoxAuthentication auth, @NonNull final AiProjScanSettings.Authentication jsonAuth) {
         AiProjScanSettings.AuthItem jsonAuthItem = jsonAuth.getAuthItem();
         if (null == jsonAuthItem) return auth;
@@ -194,7 +201,7 @@ public class AiProjConverter {
 
         if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.BLACKBOX)) {
             res
-                    .level(BlackBoxScanLevel.valueOf(settings.getBlackBoxScanLevel().toString()))
+                    .level(BLACKBOX_SCAN_LEVEL_MAP.get(settings.getBlackBoxScanLevel()))
                     .autocheckSite(settings.getAutocheckSite())
                     .customHeaders(settings.getCustomHeaders())
                     .autocheckCustomHeaders(settings.getAutocheckCustomHeaders());

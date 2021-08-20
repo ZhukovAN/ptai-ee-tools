@@ -107,6 +107,7 @@ public class Factory {
                 return client;
             } catch (GenericException e) {
                 log.debug("PT AI server API check failed", e);
+                throw e;
             }
         }
         throw GenericException.raise("PT AI server API client create failed", new VersionUnsupportedException());

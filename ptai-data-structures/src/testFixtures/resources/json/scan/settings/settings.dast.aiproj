@@ -1,0 +1,7 @@
+{
+    "ProjectName": "Test project",
+    "ProgrammingLanguage": "Java",
+    "ScanAppType": "BlackBox",
+    "Site": "http://localhost:8080/",
+    "Level": "Normal"
+}

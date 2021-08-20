@@ -50,4 +50,16 @@ public class AiProjScanSettingsTest extends BaseTest {
         Assertions.assertTrue("JSON-based Maven project".equalsIgnoreCase(settings.getProjectName()));
         Assertions.assertEquals(ScanResult.ScanSettings.Language.JAVA, settings.getProgrammingLanguage());
     }
+
+    @Test
+    @SneakyThrows
+    @DisplayName("Load DAST-only settings")
+    public void loadDastOnlyAiProj() {
+        InputStream inputStream = getResourceStream("json/scan/settings/settings.dast.aiproj");
+        Assertions.assertNotNull(inputStream);
+        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        AiProjScanSettings settings = mapper.readValue(inputStream, AiProjScanSettings.class);
+        Assertions.assertNotNull(settings);
+        Assertions.assertTrue("Test project".equalsIgnoreCase(settings.getProjectName()));
+    }
 }

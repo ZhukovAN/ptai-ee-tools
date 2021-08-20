@@ -377,7 +377,7 @@ public class AiProjScanSettings {
     protected Boolean useCustomYaraRules;
 
     // BlackBox Settings
-    @JsonProperty("BlackBoxScanLevel")
+    @JsonProperty("Level")
     protected BlackBoxScanLevel blackBoxScanLevel;
     @JsonProperty("CustomHeaders")
     protected List<List<String>> customHeaders;

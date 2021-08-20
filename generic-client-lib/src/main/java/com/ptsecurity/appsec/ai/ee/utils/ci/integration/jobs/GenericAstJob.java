@@ -23,10 +23,12 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
+import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.State.*;
@@ -109,6 +111,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
      */
     protected void unsafeExecute() throws GenericException {
         client.setEventConsumer(this);
+        process(Stage.SETUP);
         // Check if all the reports exist. Throw an exception if there are problems
         ReportsTasks reportsTasks = new Factory().reportsTasks(client);
         if (null != reports) {
@@ -122,11 +125,13 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         // Zip sources and upload to server. Throw an exception if there are problems
         process(Stage.ZIP);
         File sources = astOps.createZip();
+
         process(Stage.UPLOAD);
         GenericAstTasks genericAstTasks = new Factory().genericAstTasks(client);
         genericAstTasks.upload(projectId, sources);
 
         // Start scan
+        process(Stage.ENQUEUED);
         scanResultId = genericAstTasks.startScan(projectId, fullScanMode);
         info("Scan enqueued, PT AI AST result ID is " + scanResultId);
         // Now we know scan result ID, so create initial scan brief with ID's and scan settings
@@ -148,7 +153,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             // Asynchronous mode means that we aren't need to wait AST job
             // completion. Just notify descendant and exit
             info(Resources.i18n_ast_result_status_success_label());
-            astOps.scanCompleteCallback(scanBrief, performance);
+            astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(performance()).build());
             return;
         }
 
@@ -185,7 +190,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             log.debug("Scan brief for project / scan ID {} / {} load failed", projectId, scanResultId);
             log.debug("Exception details", e);
         }
-        astOps.scanCompleteCallback(scanBrief, performance);
+        astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(performance()).build());
 
         // TODO: Check if partial scan results may be retrieved for failed scans
         if (FAILED == scanBrief.getState())
@@ -247,16 +252,40 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         call(() -> projectTasks.stop(scanResultId), "PT AI project scan stop failed");
     }
 
+    /**
+     * List of stage:timestamp pairs that stores scan stage change times. Some stages
+     * like initialization may appear multiple times in this list so we need to call
+     * {@link GenericAstJob#performance()} to convert timestamps to stage durations
+     * and aggregate by stage
+     */
     @Builder.Default
-    protected ScanBriefDetailed.Performance performance = ScanBriefDetailed.Performance.builder().build();
+    protected transient List<Pair<Stage, ZonedDateTime>> stages = new ArrayList<>();
 
     public void process(@NonNull final Object event) {
         log.debug("Processing event: {}", event);
         if (event instanceof com.ptsecurity.appsec.ai.ee.scan.progress.Stage) {
             Stage stage = (Stage) event;
-            if (null == scanBrief) return;
-            if (!performance.getStages().containsKey(stage))
-                performance.getStages().put(stage, ZonedDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+            if (stages.isEmpty() || stages.get(stages.size() - 1).getKey() != stage)
+                stages.add(new ImmutablePair<>(stage, ZonedDateTime.now()));
         }
+    }
+
+    Map<Stage, String> performance() {
+        // Need to use LinkedHashMap to preserve stages order
+        Map<Stage, Duration> durations = new LinkedHashMap<>();
+        // Iterate through scan stage timestamps skipping very first
+        for (int i = 0 ; i < stages.size() - 1 ; i++) {
+            Duration duration = Duration.between(stages.get(i).getValue(), stages.get(i + 1).getValue());
+            if (!durations.containsKey(stages.get(i).getKey()))
+                durations.put(stages.get(i).getKey(), duration);
+            else {
+                duration = duration.plus(durations.get(stages.get(i).getKey()));
+                durations.put(stages.get(i).getKey(), duration);
+            }
+        }
+        Map<Stage, String> performance = new LinkedHashMap<>();
+        for (Map.Entry<Stage, Duration> entry : durations.entrySet())
+            performance.put(entry.getKey(), entry.getValue().toString());
+        return performance;
     }
 }
