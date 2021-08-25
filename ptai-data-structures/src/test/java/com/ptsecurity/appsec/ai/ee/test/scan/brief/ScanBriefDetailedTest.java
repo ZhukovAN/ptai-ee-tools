@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.test.scan.brief;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
@@ -8,11 +9,14 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 @DisplayName("Read and convert data from PT AI version-independent scan results JSON resource files")
@@ -36,7 +40,7 @@ public class ScanBriefDetailedTest extends BaseTest {
         Assertions.assertNotNull(scanBriefDetailed.getDetails());
         long sqliCount = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().stream()
                 .filter(i -> BaseIssue.Level.HIGH == i.getLevel())
-                .filter(i -> "SQL Injection".equalsIgnoreCase(i.getTitle())).count();
+                .filter(i -> "SQL Injection".equalsIgnoreCase(i.getTitle().get(Reports.Locale.EN))).count();
         Assertions.assertNotEquals(0, sqliCount);
     }
 
@@ -49,7 +53,7 @@ public class ScanBriefDetailedTest extends BaseTest {
         Assertions.assertNotNull(scanBriefDetailed.getDetails());
         long xssCount = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().stream()
                 .filter(i -> BaseIssue.Level.MEDIUM == i.getLevel())
-                .filter(i -> "Cross-Site Scripting".equalsIgnoreCase(i.getTitle())).count();
+                .filter(i -> "Cross-Site Scripting".equalsIgnoreCase(i.getTitle().get(Reports.Locale.EN))).count();
         Assertions.assertNotEquals(0, xssCount);
     }
 
@@ -57,7 +61,7 @@ public class ScanBriefDetailedTest extends BaseTest {
     @Test
     @DisplayName("Read and convert data from PT AI version-independent OWASP Benchmark scan results JSON resource file")
     public void parseOwaspBenchmarkScanResults() {
-        Path packedFileContents = getPackedResourceFile("json/scan/result/java-owasp-benchmark.raw.json.7z");
+        Path packedFileContents = getPackedResourceFile("json/scan/result/java-owasp-benchmark.json.7z");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile jsonFile = new TempFile(packedFileContents)) {
             Assertions.assertTrue(jsonFile.toFile().isFile());
@@ -66,7 +70,7 @@ public class ScanBriefDetailedTest extends BaseTest {
             Assertions.assertNotNull(scanBriefDetailed.getDetails());
             long sqliCount = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().stream()
                     .filter(i -> BaseIssue.Level.HIGH == i.getLevel())
-                    .filter(i -> "SQL Injection".equalsIgnoreCase(i.getTitle())).count();
+                    .filter(i -> "SQL Injection".equalsIgnoreCase(i.getTitle().get(Reports.Locale.EN))).count();
             Assertions.assertNotEquals(0, sqliCount);
         }
     }

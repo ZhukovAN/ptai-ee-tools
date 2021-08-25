@@ -64,7 +64,7 @@ public class Report extends BaseReport {
         }
 
         public String getDefaultTemplate() {
-            return Reports.Locale.RU.name().equals(getDefaultLocale())
+            return Reports.Locale.RU == getDefaultLocale()
                     ? "Отчет по результатам сканирования"
                     : "Scan results report";
         }

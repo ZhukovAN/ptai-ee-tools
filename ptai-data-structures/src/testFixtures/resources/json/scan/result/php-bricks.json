@@ -4,9 +4,10 @@
   "id" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
   "projectId" : "53950e41-404b-4801-b2fb-78dfa85ef3ff",
   "projectName" : "php-bricks",
+  "useAsyncScan" : false,
   "scanSettings" : {
     "id" : "4cea75e1-3997-45a0-9da6-01c90a7935c7",
-    "engines" : [ "PM", "CONFIGURATION", "FINGERPRINT", "TAINT", "AI", "BLACKBOX" ],
+    "engines" : [ "CONFIGURATION", "BLACKBOX", "AI", "PM", "TAINT", "FINGERPRINT" ],
     "unpackUserPackages" : false,
     "downloadDependencies" : false,
     "usePublicAnalysisMethod" : true,
@@ -28,13 +29,16 @@
     "scannedUrlCount" : 0
   },
   "state" : "DONE",
-  "issuesParseState" : true,
+  "issuesParseOk" : true,
   "issues" : [ {
     "Class" : "SCA",
     "id" : "N7xXrgxjpSHP+l3i0lRL9VxNrmY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "JQuery library used",
+    "title" : {
+      "EN" : "Vulnerable component Any JQuery version 1.0.0",
+      "RU" : "Уязвимый компонент Any JQuery version 1.0.0"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -54,7 +58,10 @@
     "id" : "qkA++bpRH0AHbMQS0JrknOOPq0o=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server-Side Request Forgery",
+    "title" : {
+      "EN" : "Server-Side Request Forgery",
+      "RU" : "Подделка запроса сервера"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -124,7 +131,10 @@
     "id" : "B3Apdq+89U/2yPVkan+ZIUiIbIs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -194,7 +204,10 @@
     "id" : "j6+8u1EmgfL0O7bztMqpWR3E788=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -306,7 +319,10 @@
     "id" : "W8164Nrp3teTEj45M72uJwVSMvI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -418,7 +434,10 @@
     "id" : "jRgbVTw1+LEaDOVlFqsAsViiGn8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Hardcoded Password",
+    "title" : {
+      "EN" : "Hardcoded Password",
+      "RU" : "Жестко заданный пароль"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -443,7 +462,10 @@
     "id" : "fAeNgtzxprz8iIhVcGdJEJGS6iI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -562,7 +584,10 @@
     "id" : "RbkpIcwvILXJJAsN4qarZ+KJfYs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -674,7 +699,10 @@
     "id" : "0M3JNdYCb/aJuLyjXm61bebnkaA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Sensitive Cookie in HTTPS Session Without ‘Httponly’ Attribute",
+    "title" : {
+      "EN" : "Sensitive Cookie in HTTPS Session Without ‘Httponly’ Attribute",
+      "RU" : "Передача Cookie через HTTPS сессию без атрибута 'Httponly'"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -699,7 +727,10 @@
     "id" : "SfxEvg0OxEpiKyHCUsFgqoEJl+M=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -781,7 +812,10 @@
     "id" : "BUL+bfUnYcm52r2wTxg3mfcclY4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -893,7 +927,10 @@
     "id" : "2lOiF+bI+Vy3O1ezZz0k7/lWnl0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Hardcoded Password",
+    "title" : {
+      "EN" : "Hardcoded Password",
+      "RU" : "Жестко заданный пароль"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -918,7 +955,10 @@
     "id" : "yNHs25nC5kB1VFKJcOTkgplgYU0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Hardcoded Password",
+    "title" : {
+      "EN" : "Hardcoded Password",
+      "RU" : "Жестко заданный пароль"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -943,7 +983,10 @@
     "id" : "niwnNXObi7mlrRP42f4TKviaqk4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1034,7 +1077,10 @@
     "id" : "62JTO3YBnQ9K3IpxnzREW9oFHJQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1125,7 +1171,10 @@
     "id" : "2Vs1RHZ81t0PIAiENyo62bXBOvs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1216,7 +1265,10 @@
     "id" : "zF638Jx9Di14gFBsSAyqX0rvfNc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1241,7 +1293,10 @@
     "id" : "r8Ho1kCa76wJ0zIWeREL+tWEs50=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1266,7 +1321,10 @@
     "id" : "PmdKOx2wakiG8VtPTnFbfr4YKb0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1291,7 +1349,10 @@
     "id" : "zH+3Ms1gTx3RVNEA8rfmKx4I1kM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1316,7 +1377,10 @@
     "id" : "YxqVo+11+EfN2dRvrVCzEqqxdBI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1341,7 +1405,10 @@
     "id" : "1BXL/rWug4H3n5QlsWgwE7o3Znk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Insecure Transport",
+    "title" : {
+      "EN" : "Insecure Transport",
+      "RU" : "Незащищенная передача данных"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1366,7 +1433,10 @@
     "id" : "zFbRlTFFBnPJC0/N53f39RNifgM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1443,7 +1513,10 @@
     "id" : "23ynKtYe4EoE8k7VvGdbI/mEgSs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Hardcoded Password",
+    "title" : {
+      "EN" : "Hardcoded Password",
+      "RU" : "Жестко заданный пароль"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1468,7 +1541,10 @@
     "id" : "0Zm+7QKXoTRnhKA/qNBBIhaUV/4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1493,7 +1569,10 @@
     "id" : "pMeccBJchq+dTUgDOt2WNdVvmnc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Sensitive Cookie in HTTPS Session Without ‘Secure’ Attribute",
+    "title" : {
+      "EN" : "Sensitive Cookie in HTTPS Session Without ‘Secure’ Attribute",
+      "RU" : "Передача Cookie через HTTPS сессию без атрибута 'Secure'"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1518,7 +1597,10 @@
     "id" : "wXibabewUgoz6spSbiXNKvGCSI4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1543,7 +1625,10 @@
     "id" : "E11gFSy1bswIr8fJe4rctA7OU+U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1568,7 +1653,10 @@
     "id" : "Ma+/ctlFeyoLKmjEqq1lsVh3jxc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1593,7 +1681,10 @@
     "id" : "/9X8F3MHVZ2ID9pu9gL4dLU2w1o=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1618,7 +1709,10 @@
     "id" : "aiYJnzooxVHFd6KfE+uOhpdeZP4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Sensitive Cookie in HTTPS Session Without ‘Httponly’ Attribute",
+    "title" : {
+      "EN" : "Sensitive Cookie in HTTPS Session Without ‘Httponly’ Attribute",
+      "RU" : "Передача Cookie через HTTPS сессию без атрибута 'Httponly'"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1643,7 +1737,10 @@
     "id" : "XtjUael92q5bfElOYMWgfzO0L68=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1668,7 +1765,10 @@
     "id" : "m8o3/Jp9Ce/nf50PS2IJD2gHLgE=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1693,7 +1793,10 @@
     "id" : "ijfYx/S/Co8Rs7VInwHyw0ltsZc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1784,7 +1887,10 @@
     "id" : "fHnB0vHxbiCDX9yypTylu1tFa0s=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1809,7 +1915,10 @@
     "id" : "PPMgs3mA7Drrp88y9bbv3mQ/H6Q=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1834,7 +1943,10 @@
     "id" : "rCXaja69A6kHhUuM6pmfoLlGX8o=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1859,7 +1971,10 @@
     "id" : "rrluCFe9IjRf5BR16/10HXqHEs4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1884,7 +1999,10 @@
     "id" : "7S9dNGfTADNtR6pNv60Mv4c7nuM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1909,7 +2027,10 @@
     "id" : "AmB6PFwQ4Vpj+Pn9tSDjUQHbMjs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1934,7 +2055,10 @@
     "id" : "u3VwBHYJGJQ7JVuH1PuO3U+2Rxw=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Weak Cryptographic Hash",
+    "title" : {
+      "EN" : "Weak Cryptographic Hash",
+      "RU" : "Уязвимые функции хэширования"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1959,7 +2083,10 @@
     "id" : "Y32XoKvu1AHVtHyxCympKPP3kWk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -1984,7 +2111,10 @@
     "id" : "tt23HPot7JJmQ8dv2HLDoTEy0A0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2075,7 +2205,10 @@
     "id" : "fh0J5UJRTGW+085zkiN29ItamGk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2100,7 +2233,10 @@
     "id" : "C5pQHzNHm9NZgGZmFomAcRQD69U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+    "title" : {
+      "EN" : "Vulnerable component jquery 1.8.2 (CVE-2015-9251)",
+      "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2015-9251)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2125,7 +2261,10 @@
     "id" : "C5pQHzNHm9NZgGZmFomAcRQD69U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+    "title" : {
+      "EN" : "Vulnerable component jquery 1.8.2 (CVE-2012-6708)",
+      "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2012-6708)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2150,7 +2289,10 @@
     "id" : "C5pQHzNHm9NZgGZmFomAcRQD69U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+    "title" : {
+      "EN" : "Vulnerable component jquery 1.8.2 (CVE-2019-11358)",
+      "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2019-11358)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2175,7 +2317,10 @@
     "id" : "C5pQHzNHm9NZgGZmFomAcRQD69U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+    "title" : {
+      "EN" : "Vulnerable component jquery 1.8.2 (CVE-2020-11023)",
+      "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2020-11023)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2200,7 +2345,10 @@
     "id" : "C5pQHzNHm9NZgGZmFomAcRQD69U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+    "title" : {
+      "EN" : "Vulnerable component jquery 1.8.2 (CVE-2020-11022)",
+      "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2020-11022)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2225,7 +2373,10 @@
     "id" : "nXcXPH9ATba+Kv30PAEugdOsVFY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2250,7 +2401,10 @@
     "id" : "WD+4ylMqfCGns8OyI3lFzmKcvJo=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -2320,7 +2474,10 @@
     "id" : "BbLn/Gf46cLL0MrsFVrZ+Kw9o18=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -2369,7 +2526,10 @@
     "id" : "fd+NLSWh+oKVDcXFUHtJv7lJstk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2460,7 +2620,10 @@
     "id" : "YAsMNLxELjgkSGZjHaXOh+CTgtk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2485,7 +2648,10 @@
     "id" : "GK/R/KOEGWaKecKo2leobTzQyFQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "System Information Leak",
+    "title" : {
+      "EN" : "System Information Leak",
+      "RU" : "Утечка отладочной информации"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2510,7 +2676,10 @@
     "id" : "ouqm/D35//g2q2vIVHOSLzpOilo=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2601,7 +2770,10 @@
     "id" : "zv+1+2hXKQqDe61ZpE7nFY+tzqA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+    "title" : {
+      "EN" : "Vulnerable component jquery 1.8.2 (CVE-2015-9251)",
+      "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2015-9251)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2626,7 +2798,10 @@
     "id" : "zv+1+2hXKQqDe61ZpE7nFY+tzqA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+    "title" : {
+      "EN" : "Vulnerable component jquery 1.8.2 (CVE-2012-6708)",
+      "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2012-6708)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2651,7 +2826,10 @@
     "id" : "zv+1+2hXKQqDe61ZpE7nFY+tzqA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+    "title" : {
+      "EN" : "Vulnerable component jquery 1.8.2 (CVE-2019-11358)",
+      "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2019-11358)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2676,7 +2854,10 @@
     "id" : "zv+1+2hXKQqDe61ZpE7nFY+tzqA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+    "title" : {
+      "EN" : "Vulnerable component jquery 1.8.2 (CVE-2020-11023)",
+      "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2020-11023)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2701,7 +2882,10 @@
     "id" : "zv+1+2hXKQqDe61ZpE7nFY+tzqA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+    "title" : {
+      "EN" : "Vulnerable component jquery 1.8.2 (CVE-2020-11022)",
+      "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2020-11022)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2726,7 +2910,10 @@
     "id" : "keUOpCd4/R8fjF3B+2a1WrLqcx4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2817,7 +3004,10 @@
     "id" : "e9Dmk/eS79FK90gP3Oq0OYDIZ7Y=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2908,7 +3098,10 @@
     "id" : "1FSVLoF4ctO5PFshcs4y8E7I9C8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -2999,7 +3192,10 @@
     "id" : "0eF8qB60JDFlWv2aUSUxlKj9ZCg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -3090,7 +3286,10 @@
     "id" : "nzPWG5clpOwOnSUsX5nrwR2kaWk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -3202,7 +3401,10 @@
     "id" : "Er8rimYlHrygSNohZYJxD09onI0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Insecure Transport",
+    "title" : {
+      "EN" : "Insecure Transport",
+      "RU" : "Незащищенная передача данных"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -3227,7 +3429,10 @@
     "id" : "2MvPLD5eAhkzBu9nKW+bd6ElySU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -3318,7 +3523,10 @@
     "id" : "aR93ALnfMjRKqc5+ezkfotscSgY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -3343,7 +3551,10 @@
     "id" : "jmEtwwlmBc+fW80JuCXiv01/7NI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -3420,7 +3631,10 @@
     "id" : "isvY/MiVkc+KOdFPF1YEFe9yttM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -3511,7 +3725,10 @@
     "id" : "+b40PtQBF3kzk4oojNedIBEaolU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -3602,7 +3819,10 @@
     "id" : "YDk9F0gC76sFRAG/WKgd39QrtZY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -3627,7 +3847,10 @@
     "id" : "dfSNvzl8vuoyOleoXE6DMn3uwHU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -3652,7 +3875,10 @@
     "id" : "UCD/bRPSsrt1boBAqyYTll1nsjc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -3677,7 +3903,10 @@
     "id" : "iXZlcG4HWtHM/9O3UGFkuXOKliI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "DOM Modification HTML Tag",
+    "title" : {
+      "EN" : "DOM Modification HTML Tag",
+      "RU" : "DOM модификация HTML тега"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -3726,7 +3955,10 @@
     "id" : "UqaVxeCRTPI7FJtUjHnAlqXHtpI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "DOM Modification HTML Tag",
+    "title" : {
+      "EN" : "DOM Modification HTML Tag",
+      "RU" : "DOM модификация HTML тега"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -3775,7 +4007,10 @@
     "id" : "GzPrg3d7obejEQXiQ2i0xF58PYk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -3824,7 +4059,10 @@
     "id" : "8IbnBao8ISZzyDCChINLiwvadbI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -3873,7 +4111,10 @@
     "id" : "mG2Hsq+GXYKtpAfNvVXMWlU1psU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "DOM Modification HTML Tag",
+    "title" : {
+      "EN" : "DOM Modification HTML Tag",
+      "RU" : "DOM модификация HTML тега"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -3936,7 +4177,10 @@
     "id" : "EeE8FTPLaYjbdSqZd/0w5yhOSuQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -4020,7 +4264,10 @@
     "id" : "uMpOHguHQcAxwrwgkrpE/eulfJQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -4116,7 +4363,10 @@
     "id" : "ZcSD0Mh/5PlCbjSNZ3fo2mWj39M=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -4212,7 +4462,10 @@
     "id" : "pYRUEB1I0+1WK77CNXlU17P2NSU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -4261,7 +4514,10 @@
     "id" : "4S2AA0BnpeAlE0ZOVfUSdY6tgIs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -4310,7 +4566,10 @@
     "id" : "Lk+WRatu5J5T0oM3uwvYs5mpJfM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -4406,7 +4665,10 @@
     "id" : "2ZUK2B2siYiEQxY2nvCNGQSMU+8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -4511,7 +4773,10 @@
     "id" : "+W0GeD+vSFsRTg2iDgqXH4OFGlQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -4560,7 +4825,10 @@
     "id" : "w0OF6Lstn+nGxxC2c6nUANtLnzs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -4642,7 +4910,10 @@
     "id" : "eMmbDrC3PjJh0naw1+bPxLCmSy4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -4775,7 +5046,10 @@
     "id" : "1VE8tcWA26S3fMFuJq0ghgnyCM4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -4887,7 +5161,10 @@
     "id" : "4MGQ1kuLdReG3meSE3Do74RXENk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -4999,7 +5276,10 @@
     "id" : "F6uvdiGSA2d/WxlzFubgEiNc7CE=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "DOM Modification HTML Tag",
+    "title" : {
+      "EN" : "DOM Modification HTML Tag",
+      "RU" : "DOM модификация HTML тега"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -5048,7 +5328,10 @@
     "id" : "0Tf7eT8SxPZ8EP6U2t0z2OflyN8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5139,7 +5422,10 @@
     "id" : "JZMz5p5ngQSySKu4hpsl7l4P6LM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5230,7 +5516,10 @@
     "id" : "++R5/AZIlla9AYGpu4lpaxIvCl8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5321,7 +5610,10 @@
     "id" : "lj1jWPf7YkcByMr3/agk615dt+Q=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5412,7 +5704,10 @@
     "id" : "oKq31Sh9xbghR+WjNtrRA3LN5kk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5494,7 +5789,10 @@
     "id" : "C0uQgbInK6R45niGi/Z0VSQh4DA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5590,7 +5888,10 @@
     "id" : "w9XdWFWjgQfgAryKbYqnOlqXPGU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5615,7 +5916,10 @@
     "id" : "BYlGtCv0dYdiRnh3K6JQWUBcDDs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5711,7 +6015,10 @@
     "id" : "wKRmtit6RioOcTSYXWe4DcVSiyQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5736,7 +6043,10 @@
     "id" : "xzSXLhmkkpeUtHfY3M3EKQo4qgM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5832,7 +6142,10 @@
     "id" : "moE50skXrft6IjwOUE63DKQlDgk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5914,7 +6227,10 @@
     "id" : "mp/HioRpaxtxJneCIiVkg+P1Knc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5939,7 +6255,10 @@
     "id" : "wQXGsnXkvQ9L+cBYAGbXKUpeUBs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -5964,7 +6283,10 @@
     "id" : "SZB2UD9FhaKKy4CrNJc44BhbCM8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -6041,7 +6363,10 @@
     "id" : "x4oxb6Z41bHlPx0wdSSCyAP5EQk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "DOM Modification HTML Tag",
+    "title" : {
+      "EN" : "DOM Modification HTML Tag",
+      "RU" : "DOM модификация HTML тега"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -6090,7 +6415,10 @@
     "id" : "H8sXOFWRFxI8rairdYS+6rZJv1I=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Unrestricted File Upload",
+    "title" : {
+      "EN" : "Unrestricted File Upload",
+      "RU" : "Загрузка произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -6167,7 +6495,10 @@
     "id" : "1m9qWs2cyDN1wqZmG2TEs7iy5FU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "DOM Modification HTML Tag",
+    "title" : {
+      "EN" : "DOM Modification HTML Tag",
+      "RU" : "DOM модификация HTML тега"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -6216,7 +6547,10 @@
     "id" : "J4d4TBG8VV1wvIpQCHVxyV0Bx1s=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Arbitrary File Creation",
+    "title" : {
+      "EN" : "Arbitrary File Creation",
+      "RU" : "Создание произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -6293,7 +6627,10 @@
     "id" : "PiS0HACdBeaGdvET+6KbZDdN+ww=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Arbitrary File Modification",
+    "title" : {
+      "EN" : "Arbitrary File Modification",
+      "RU" : "Изменение произвольных файлов"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -6370,7 +6707,10 @@
     "id" : "3irxuAZftukXWP2a+V5Q9D/elRQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -6447,7 +6787,10 @@
     "id" : "zlw0iPt04edZkA0dSBbskxYAYuE=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -6517,7 +6860,10 @@
     "id" : "2Y0IT/r19Q3wiXr2u6+zm67GGxA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -6650,7 +6996,10 @@
     "id" : "p6v90MYrtwqERlSDiCtBN2SolK4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -6776,7 +7125,10 @@
     "id" : "Ts+vc8J/Y4cycBFA3Gt75q8Z/9c=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -6895,7 +7247,10 @@
     "id" : "pGAls/ojQfLpG6gd4sEnPzc35RE=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -7035,7 +7390,10 @@
     "id" : "Gva8L1mBz/HPN7x1L39PjkJw+bY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -7238,7 +7596,10 @@
     "id" : "TnL36QqesiV0gMTog+m7zctxr3c=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -7336,7 +7697,10 @@
     "id" : "7ldJ3EbsffOZJnAf48L9TEAmbNs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -7427,7 +7791,10 @@
     "id" : "vLMv4f3jLk/MgH+fqocKhp4x+9w=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -7651,7 +8018,10 @@
     "id" : "5opX9BKUy3bQu55uew5wFS4r4zE=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -7721,7 +8091,10 @@
     "id" : "3N0wn9cRlDTIAXm5kI1aGGktFA8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -7903,7 +8276,10 @@
     "id" : "UAx+JVM6zc5ThWfla5myyBXOsD0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -7959,7 +8335,10 @@
     "id" : "uVgJjSkGn9RE7phjoS3mLKFco90=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -8043,7 +8422,10 @@
     "id" : "+PwQWXzAyanEOXA/ZOsGAJjYsPM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -8267,7 +8649,10 @@
     "id" : "sR5bpfKZA11J7BYLtAoHsBYhfMk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -8386,7 +8771,10 @@
     "id" : "z8/uaKTE1/Y4vU+K4J31jmwdou4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -8589,7 +8977,10 @@
     "id" : "rnYVDyNAqDWcE+W1SAf5EJgLoWw=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -8771,7 +9162,10 @@
     "id" : "ua/zve0pt0YkSG49Ezbxpp9JCx4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -8925,7 +9319,10 @@
     "id" : "k3EwDmzvLXD073wkkGNrYfV0IHg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -9072,7 +9469,10 @@
     "id" : "mZe/3zUcE6NJk/zUq/qqlO7my58=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -9233,7 +9633,10 @@
     "id" : "8itkeDn3KAH0L0i2EvVohW4XgDI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -9373,7 +9776,10 @@
     "id" : "IqBUvQcqYnIzmrZRI/0XULI68n0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -9527,7 +9933,10 @@
     "id" : "hN/x24ExVF3uNdm9L2KRmBefmwA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -9667,7 +10076,10 @@
     "id" : "cVOlQrmmy2H6aVZ0BIishid12FI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -9800,7 +10212,10 @@
     "id" : "bAmIOb2xLSNxli+KIwF3/77opg4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -9933,7 +10348,10 @@
     "id" : "z7x+LrovL69680BwBURl4uLAIFI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -10031,7 +10449,10 @@
     "id" : "H13247uQrTgWO/HNuNzHEZ6vMAY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -10199,7 +10620,10 @@
     "id" : "y5fnNirVKUFVn60cqpVyPbOUZ0U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -10248,7 +10672,10 @@
     "id" : "eZ2jQ0+Huvw9QCCfFTZC1Y514v4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -10339,7 +10766,10 @@
     "id" : "32tMe1D8K66SJ/nspUS73Ph2fHs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -10409,7 +10839,10 @@
     "id" : "F3eJDVmDhYFvd1qiFr2lGl5ueM4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -10458,7 +10891,10 @@
     "id" : "m4r3uALAVXP6D8HVS2dGziAukZM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -10542,7 +10978,10 @@
     "id" : "rMBaCGorTcmt1j3luAngip6HcEQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -10647,7 +11086,10 @@
     "id" : "ux+HWf05EDmniiGffs7U4KQkZGc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -10703,7 +11145,10 @@
     "id" : "x9EwFv1vVFr7awU2lEB4KmwBScc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -10787,7 +11232,10 @@
     "id" : "VLarkS6b7rWO62VPI/22zTDVdPk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -10885,7 +11333,10 @@
     "id" : "ItCgcm4BsSv9kUylU5AW4sVnNJY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -10983,7 +11434,10 @@
     "id" : "eFNC0vC3HyEAVaH+ppEbfGa5Chw=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -11088,7 +11542,10 @@
     "id" : "pYwFPGUjkinNbruw5X4yprMawpc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -11179,7 +11636,10 @@
     "id" : "EJ07kjFu5EzXf9DjasgOoeyuF4U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -11249,7 +11709,10 @@
     "id" : "fizV+wBYnCndBYs0hX7jBj/lC68=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -11354,7 +11817,10 @@
     "id" : "fFPs0B2r9UEjFjNlHTTtyn6QmHA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -11487,7 +11953,10 @@
     "id" : "OBffhwtoiynC4MIa8uFLfJaX7yU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -11578,7 +12047,10 @@
     "id" : "u3DSRH8gFrF7ZJuydE936xSH3JU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -11676,7 +12148,10 @@
     "id" : "4avcpW38mU0FYC2ZghEDZJ4xOiQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -11788,7 +12263,10 @@
     "id" : "pet4ARazQMhdirQMHIKTKGDJqQw=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -11872,7 +12350,10 @@
     "id" : "QoV5jTkUTlIDs/0N+ZFDge6PkO4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -11949,7 +12430,10 @@
     "id" : "gxwS8bCakau21Ra4D7Q0E4NzfKs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12026,7 +12510,10 @@
     "id" : "+NkwFAIKzsuoAfc5Az5DhPaM95U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12117,7 +12604,10 @@
     "id" : "Ra2YOh3GN/LR20r0+esnSe6vgDU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12236,7 +12726,10 @@
     "id" : "xJWpDqtLs+010b8F2fCgh4goGQU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12285,7 +12778,10 @@
     "id" : "5YUoQwVBR/DWB+7MxmFUZ1p5m50=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12334,7 +12830,10 @@
     "id" : "DlfwiEICoA2tJfhdCuTcvcD85yI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12383,7 +12882,10 @@
     "id" : "2WGgi2+RpwrNOd+CZUCSuJUwvr0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12474,7 +12976,10 @@
     "id" : "oOUOYFEozXtBblcnTtGu4TMPIo4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12523,7 +13028,10 @@
     "id" : "4sFWJVi3nReifWyVIVDl+PgulwQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12649,7 +13157,10 @@
     "id" : "+BGNnhqvNoHIJ5JLr+vkAVkui30=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12698,7 +13209,10 @@
     "id" : "pbFi8SJrzbgm1CfAVHsASdMF7UM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery function that replaces element",
+    "title" : {
+      "EN" : "JQuery function that replaces element",
+      "RU" : "JQuery функция заменяющая элемент"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -12873,7 +13387,10 @@
     "id" : "MVtPt9M34j6iBnTEfHfsHks/S+c=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -12957,7 +13474,10 @@
     "id" : "lsyScTLUixOSrtoJIKNXa2diRfE=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -13055,7 +13575,10 @@
     "id" : "+Hst7M5AwsODu0vMvAzmunBs5lk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery function that replaces element",
+    "title" : {
+      "EN" : "JQuery function that replaces element",
+      "RU" : "JQuery функция заменяющая элемент"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -13111,7 +13634,10 @@
     "id" : "cVKR3oJShPhcg2oBTiYn3OHrcnU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -13202,7 +13728,10 @@
     "id" : "Rr3mclX5l5fbK/wwQEolWdtzWq8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -13293,7 +13822,10 @@
     "id" : "u3dcizDGpfJI02LBGcJOPs/cQEM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -13384,7 +13916,10 @@
     "id" : "HBanzG87z37oZDeTYPuzcT6B/8w=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -13468,7 +14003,10 @@
     "id" : "cZstifGPpThE5fRznicxuiMs1fw=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Wrap Element to HTML",
+    "title" : {
+      "EN" : "JQuery Wrap Element to HTML",
+      "RU" : "JQuery заключение элемента в код HTML"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -13524,7 +14062,10 @@
     "id" : "QfXvxoK/VYjlegBtwDUUxu+lII4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -13622,7 +14163,10 @@
     "id" : "IqXXTM435vfDZv1fkXq1clYmORQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Wrap Element to HTML",
+    "title" : {
+      "EN" : "JQuery Wrap Element to HTML",
+      "RU" : "JQuery заключение элемента в код HTML"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -13776,7 +14320,10 @@
     "id" : "Ia01EXJFFi0+6qL9WSjvMtbCrsk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Wrap Element to HTML",
+    "title" : {
+      "EN" : "JQuery Wrap Element to HTML",
+      "RU" : "JQuery заключение элемента в код HTML"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -13825,7 +14372,10 @@
     "id" : "DqzaOizeHX3sCZO91+ZA1ZbmHJo=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Wrap Element to HTML",
+    "title" : {
+      "EN" : "JQuery Wrap Element to HTML",
+      "RU" : "JQuery заключение элемента в код HTML"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -13874,7 +14424,10 @@
     "id" : "NegLhy6HvspOpF64ebrpJLRAIl4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Wrap Element to HTML",
+    "title" : {
+      "EN" : "JQuery Wrap Element to HTML",
+      "RU" : "JQuery заключение элемента в код HTML"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -13930,7 +14483,10 @@
     "id" : "/uOeyS572Pb2riCG6gyQxAZNdKA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Wrap Element to HTML",
+    "title" : {
+      "EN" : "JQuery Wrap Element to HTML",
+      "RU" : "JQuery заключение элемента в код HTML"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -14000,7 +14556,10 @@
     "id" : "ISAwPS8aWatFGveHzzyIcfrgliA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Wrap Element to HTML",
+    "title" : {
+      "EN" : "JQuery Wrap Element to HTML",
+      "RU" : "JQuery заключение элемента в код HTML"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -14056,7 +14615,10 @@
     "id" : "cACOyFYpSkWZt5qwRo8jp13N9AY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Wrap Element to HTML",
+    "title" : {
+      "EN" : "JQuery Wrap Element to HTML",
+      "RU" : "JQuery заключение элемента в код HTML"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -14126,7 +14688,10 @@
     "id" : "erKHHNW1d8rrO88Ob2LNSDQg8XI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -14210,7 +14775,10 @@
     "id" : "oS5zECKTmdwdgQYOj+Y3Tcy29aA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -14294,7 +14862,10 @@
     "id" : "YAjsvCslPLltIpYI95jjKJcyQh0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -14376,7 +14947,10 @@
     "id" : "CEH65BhOF4RUyaP8I1K24tBA7wM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -14465,7 +15039,10 @@
     "id" : "VviYDXjYbKo6Bg3vmmGL1lYQU8I=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -14547,7 +15124,10 @@
     "id" : "07PLZUPwSAytj7UM0UVZ05k53s0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Arbitrary File Creation",
+    "title" : {
+      "EN" : "Arbitrary File Creation",
+      "RU" : "Создание произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -14631,7 +15211,10 @@
     "id" : "bt9hfpak7Ga6ztxoALh6s86B9UA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Unrestricted File Upload",
+    "title" : {
+      "EN" : "Unrestricted File Upload",
+      "RU" : "Загрузка произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -14715,7 +15298,10 @@
     "id" : "2IzaVSk4YyglbbCVcE45ZgWEC2I=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Arbitrary File Modification",
+    "title" : {
+      "EN" : "Arbitrary File Modification",
+      "RU" : "Изменение произвольных файлов"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -14799,7 +15385,10 @@
     "id" : "8dR5Ph5rTAE9f+WRNP7NgVH9E4I=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -14883,7 +15472,10 @@
     "id" : "lJ2r9uRWo9U86G3TNehKNzu1spI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Arbitrary File Creation",
+    "title" : {
+      "EN" : "Arbitrary File Creation",
+      "RU" : "Создание произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -14967,7 +15559,10 @@
     "id" : "I7j/va0enOwTR70aZGfhgcLJDYo=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Arbitrary File Creation",
+    "title" : {
+      "EN" : "Arbitrary File Creation",
+      "RU" : "Создание произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15051,7 +15646,10 @@
     "id" : "LzbCbN9huafHUEjWK582yVhqv2w=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Unrestricted File Upload",
+    "title" : {
+      "EN" : "Unrestricted File Upload",
+      "RU" : "Загрузка произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15135,7 +15733,10 @@
     "id" : "p86iprth74dZa/7LL3ZHRWM53yM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Unrestricted File Upload",
+    "title" : {
+      "EN" : "Unrestricted File Upload",
+      "RU" : "Загрузка произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15219,7 +15820,10 @@
     "id" : "uHUf84tYY2EJpPEYap/IR37j4bY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Arbitrary File Modification",
+    "title" : {
+      "EN" : "Arbitrary File Modification",
+      "RU" : "Изменение произвольных файлов"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15303,7 +15907,10 @@
     "id" : "k1yep4md+pZ4KvWbyymxNxKHJXM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Arbitrary File Modification",
+    "title" : {
+      "EN" : "Arbitrary File Modification",
+      "RU" : "Изменение произвольных файлов"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15387,7 +15994,10 @@
     "id" : "ajo5XY0V2c0L4QAYh0yyUevrUlQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15471,7 +16081,10 @@
     "id" : "NY88ShC9ZK1BORnNtSeEV7koxrg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15555,7 +16168,10 @@
     "id" : "uGecRZkzKi3M8+zXCS7fS9zCAyg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - setTimeout()",
+    "title" : {
+      "EN" : "Server Side Injection - setTimeout()",
+      "RU" : "Инъекция на стороне сервера - setTimeout()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -15646,7 +16262,10 @@
     "id" : "/AnPWlhUM9ju2OFkMDR7VjJ7Uno=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15723,7 +16342,10 @@
     "id" : "7Tn5NGIqAW3xm3fSXX4oQNbrWj0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15814,7 +16436,10 @@
     "id" : "TqETM5DRRzJBp4fGs88R3IMePUU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15905,7 +16530,10 @@
     "id" : "IZtHAZVXh+g2112+5hzS4UcQIG0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -15996,7 +16624,10 @@
     "id" : "2V0RVLBbpLjb5tENQWKuBDH5qPE=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -16073,7 +16704,10 @@
     "id" : "yqtHH2nEYCgaHptbtEaF0qTrqRA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - new Function()",
+    "title" : {
+      "EN" : "Server Side Injection - new Function()",
+      "RU" : "Инъекция на стороне сервера - new Function()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -16185,7 +16819,10 @@
     "id" : "VSjzjOW0uaGuMLOCESkLWaBQvHE=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - setTimeout()",
+    "title" : {
+      "EN" : "Server Side Injection - setTimeout()",
+      "RU" : "Инъекция на стороне сервера - setTimeout()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -16248,7 +16885,10 @@
     "id" : "dacUdX3+HZo+ldpmHPP9p25rdrg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - setTimeout()",
+    "title" : {
+      "EN" : "Server Side Injection - setTimeout()",
+      "RU" : "Инъекция на стороне сервера - setTimeout()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -16297,7 +16937,10 @@
     "id" : "3bIWS4yfF96xeUqffP6FGivWXIc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - setTimeout()",
+    "title" : {
+      "EN" : "Server Side Injection - setTimeout()",
+      "RU" : "Инъекция на стороне сервера - setTimeout()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -16402,7 +17045,10 @@
     "id" : "Q8WgV1Ux59b04VFKkMXrFGtf9q8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - new Function()",
+    "title" : {
+      "EN" : "Server Side Injection - new Function()",
+      "RU" : "Инъекция на стороне сервера - new Function()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -16514,7 +17160,10 @@
     "id" : "5hIYp+9oZMkX2c3kIQggSDjsdUA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - new Function()",
+    "title" : {
+      "EN" : "Server Side Injection - new Function()",
+      "RU" : "Инъекция на стороне сервера - new Function()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -16654,7 +17303,10 @@
     "id" : "e8vvHY0DA2Lsgc1ESWYZtaK+DfE=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - new Function()",
+    "title" : {
+      "EN" : "Server Side Injection - new Function()",
+      "RU" : "Инъекция на стороне сервера - new Function()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -16731,7 +17383,10 @@
     "id" : "RH/0Dysnizsl1p/0/nEPTZ7rJ2A=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -16787,7 +17442,10 @@
     "id" : "aN+tYYhfkM89PjGBdH6r9q0ST3g=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -16899,7 +17557,10 @@
     "id" : "E1gj5WtxCQaTgL0WbAch3l93eJY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -16948,7 +17609,10 @@
     "id" : "5za1OhP1KyMTt5BcwMdQx9qJxIo=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17025,7 +17689,10 @@
     "id" : "pV7y71vhzx/vrrQMCTl4hvuCH/w=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17074,7 +17741,10 @@
     "id" : "Ppy/Lq7UI4Om7Qz/Yq0am6/n7mc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17144,7 +17814,10 @@
     "id" : "uD9g7bG2TCtxC1JW86bDZ7MbOzA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17214,7 +17887,10 @@
     "id" : "lwJJK99Ly4FfH6r5o2NUv9e118M=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17263,7 +17939,10 @@
     "id" : "0lGKpgzy62mH4yQxhFdKd+zCfuM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17312,7 +17991,10 @@
     "id" : "Yn7rswdOUcTqeBIkLuUpWaR1fgM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Insecure Transport",
+    "title" : {
+      "EN" : "Insecure Transport",
+      "RU" : "Незащищенная передача данных"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17337,7 +18019,10 @@
     "id" : "RCE3UlbQ7FOBl1m0GBFQGmwaejU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "DOM Modification HTML Tag",
+    "title" : {
+      "EN" : "DOM Modification HTML Tag",
+      "RU" : "DOM модификация HTML тега"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17400,7 +18085,10 @@
     "id" : "b4ea74742c3bdb47a16d53333ac184b768c81bacdc26f91c321fbbd6ecfdc668",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17417,7 +18105,10 @@
     "id" : "acdebb880af067acba0c7493d4bd5b282e0e99817b10b0dcf9f9f2f56c3b4673",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17434,7 +18125,10 @@
     "id" : "15fp6lCZoRkT8qNhuOkwLeFoSa4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Server Fingerprinting",
+    "title" : {
+      "EN" : "Server Fingerprinting",
+      "RU" : "Идентификация приложений"
+    },
     "level" : "LOW",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17451,7 +18145,10 @@
     "id" : "lUv4LuYeuEYHOZiBWslQeDjO3j4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Use of Uninitialized Variable",
+    "title" : {
+      "EN" : "Use of Uninitialized Variable",
+      "RU" : "Неинициализированная переменная"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17476,7 +18173,10 @@
     "id" : "XYUX5iALmTEzTOEnEEVAbRRhXng=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17581,7 +18281,10 @@
     "id" : "8d284ae1491e073253ee724a7ac5091a0aaf05f5266bc7977bfb7cfcfcacacba",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17598,7 +18301,10 @@
     "id" : "fd06c53528aa4cf2dcade3708be5fe421dc9f461be2c63bf771f3f1351d86638",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17615,7 +18321,10 @@
     "id" : "PSegyWHvM/cKfzsUP1wdQCzavLw=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17678,7 +18387,10 @@
     "id" : "3f04686a6766567e32713b25a6fd5fc27f3227cf09a6754a85add49230e78a0b",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17695,7 +18407,10 @@
     "id" : "+redjRvPS10obni/JrRzY5nnRiQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server-Side Request Forgery",
+    "title" : {
+      "EN" : "Server-Side Request Forgery",
+      "RU" : "Подделка запроса сервера"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17772,7 +18487,10 @@
     "id" : "5b7147b48681ab772bb03b863420ed8233d0a27f3cb5cd7c9647a0d0ccddc4e3",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Unrestricted File Upload",
+    "title" : {
+      "EN" : "Unrestricted File Upload",
+      "RU" : "Загрузка произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17789,7 +18507,10 @@
     "id" : "fb5badb97c8edfc42dd3bcd49f048ecb82a1789f55e55bf4cfc2376570d2c28f",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Unrestricted File Upload",
+    "title" : {
+      "EN" : "Unrestricted File Upload",
+      "RU" : "Загрузка произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17806,7 +18527,10 @@
     "id" : "9cdb6f450735ac59a377da3c71cdc8848d76cd44d344624439d902a1d0be2f4d",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Unrestricted File Upload",
+    "title" : {
+      "EN" : "Unrestricted File Upload",
+      "RU" : "Загрузка произвольного файла"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -17823,7 +18547,10 @@
     "id" : "27ae72d8600708ac510b808bbc00cceeea2b53551aac4a01b8b54563ab104dc9",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17840,7 +18567,10 @@
     "id" : "813d75cda14e3814373582e794e963fc6108f0ba28b2e4802000da49f851b26c",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17857,7 +18587,10 @@
     "id" : "322dd9f2e057aab27405507c10fb23cec5532b5c99a085cffeed0379ccb404d2",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17874,7 +18607,10 @@
     "id" : "a77b8b4eff65551068ccd4a39d7340da566f8d223a1876d5e57a729e0cd6e290",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17891,7 +18627,10 @@
     "id" : "1d1bf8d0da2dd8943829b0ee398419e69e260c570405af90fc79188b7b4f3914",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17908,7 +18647,10 @@
     "id" : "51432e6ebd47c00c03253bf39bb6ade1c19ba1be9536c467155ae1362335355d",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17925,7 +18667,10 @@
     "id" : "027d6285c1de2f3b5eb64719e9c5dd17c2f10d55e593b0e647bd2333676ea7fa",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17942,7 +18687,10 @@
     "id" : "82c567db08919d3882d731519806ee4415bc784b67df817cb130c3943ea0060c",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17959,7 +18707,10 @@
     "id" : "31b295d07a7de809da4d0cf636f601e567d7b292b5c130ab12feb9d4e907c8fb",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17976,7 +18727,10 @@
     "id" : "d128bb6a1fba5819d95a8cfa44602a5f6181fdaba03904ef727888dbbaa8be2e",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -17993,7 +18747,10 @@
     "id" : "a1b130da5717ef3b12b65fd7c49ba35e47dd8827b7489ad9f390073230912384",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18010,7 +18767,10 @@
     "id" : "22917085d36ca59d3b524455df5c25bafb0a765b8d39858e88e7cd61aa5a9371",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18027,7 +18787,10 @@
     "id" : "7ad098979e350fd5af29c875ecdf58370fa71abeff4b88a69cc5e40719c1228e",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18044,7 +18807,10 @@
     "id" : "9596cdf6b1715f1424c53253c9cd86496e36cae7be3a73ff71cb2e39319696e0",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18061,7 +18827,10 @@
     "id" : "462d31ca14430de7b6ad85816da35cc6d7b7adcececb3e52dbe56366ca257cd9",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18078,7 +18847,10 @@
     "id" : "b4115a3c28faf4fc0edf4ab5596b33f56e0c5e8a55040aa3add6df2b50744058",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18095,7 +18867,10 @@
     "id" : "d4350de0b55e8bd2b97ca3dca5ea5ec90b3e676d6cd57e51bdf93fc6dfd37815",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18112,7 +18887,10 @@
     "id" : "a7d36a207d495ba7874f9ebba5b65f1574cd1f0ac27357beb116255b90429a7d",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18129,7 +18907,10 @@
     "id" : "f20a4bc0543beac968968bef479b2ace9a062b284700f6104c84bf7ab4c21f25",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18146,7 +18927,10 @@
     "id" : "4118d0a96a0fe047cd45dca0b10588ec7beb4a8a24b0b5feeb58c2df3687d744",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18163,7 +18947,10 @@
     "id" : "56afec1f2e2301bf453d97a67eebf3a7b5872c9a35ba06b4896e6c4d5d74d1d2",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18180,7 +18967,10 @@
     "id" : "b91f0426b3e3ba7b543074227d8d198382db3962d802705048fd1181a8974a52",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18197,7 +18987,10 @@
     "id" : "0b03f79395cda7e5760491ef5fac85bbd0a9b6428a3b6ced7c3b677eaaad69d0",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18214,7 +19007,10 @@
     "id" : "cab8a376a1ca7c6d8d005477c7e522d5d62ae2f57eb967dee4d315fac6de0d6f",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18231,7 +19027,10 @@
     "id" : "1ab09fde5e446e30f4dfb60be703533a9d19101a3a160f1cf38c4468b9f93959",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18248,7 +19047,10 @@
     "id" : "2ec6a25007f04260a3dee4bd1e698408e8f0c28012d5dce7b5503f10fedfa2a2",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18265,7 +19067,10 @@
     "id" : "ddc1684ed3fcdc7b43ca2618ab09a487dabc6f90389856529433aa1f0df9a397",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Cross-Site Scripting",
+    "title" : {
+      "EN" : "Cross-Site Scripting",
+      "RU" : "Межсайтовое выполнение сценариев"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18282,7 +19087,10 @@
     "id" : "3c12a9bb4fb06e2c6f463ccf2e72b59fd2577a23f04945429c3039036d78c8f5",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18299,7 +19107,10 @@
     "id" : "fadca5156662e2362d996ac2a736806d39f4c0d2abe5c4b4582792a84f2f42b3",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18316,7 +19127,10 @@
     "id" : "8187fa13e60ad031623126850ca21ed60bf36a1369ef6336b0424bb48a4d7f8b",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18333,7 +19147,10 @@
     "id" : "18OAjfy1KQIyGIraIabq/OR8y3E=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Hardcoded Password",
+    "title" : {
+      "EN" : "Hardcoded Password",
+      "RU" : "Жестко заданный пароль"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18375,7 +19192,10 @@
     "id" : "53/WZAnaU5qRLlIuZRX2emhnoAg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "SQL Injection",
+    "title" : {
+      "EN" : "SQL Injection",
+      "RU" : "Внедрение SQL-кода"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18452,7 +19272,10 @@
     "id" : "j9sv3oVK2f6EOWuvBLv48W83Dto=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18477,7 +19300,10 @@
     "id" : "y13kM0lMgLq8pgpYQ6HVwbNgFrs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18502,7 +19328,10 @@
     "id" : "IKDFZxEuFCVTLu2P1wKXRxTZ+wU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Hardcoded Password",
+    "title" : {
+      "EN" : "Hardcoded Password",
+      "RU" : "Жестко заданный пароль"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -18527,7 +19356,10 @@
     "id" : "ZGHk7p5qQBYQN4E74nHgV2WskbE=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -18667,7 +19499,10 @@
     "id" : "yBTrB/w1409WDWx7FSkRmc+D3EM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -18744,7 +19579,10 @@
     "id" : "YYi+tNgg6gmTvOqkMDWclCkXd0o=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -18793,7 +19631,10 @@
     "id" : "GFDPfT2QmMQ7Z5dIUIxHXrsPQRk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -18849,7 +19690,10 @@
     "id" : "35agsONmAMW5dXyJVvQ4KpB2+oU=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -18898,7 +19742,10 @@
     "id" : "mf2s0vJEnsnOctjqL3yScuyX7lI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "DOM Modification HTML Tag",
+    "title" : {
+      "EN" : "DOM Modification HTML Tag",
+      "RU" : "DOM модификация HTML тега"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -18947,7 +19794,10 @@
     "id" : "86CFzy1H+TK7B1RJUUJX/E85fBc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery function that replaces element",
+    "title" : {
+      "EN" : "JQuery function that replaces element",
+      "RU" : "JQuery функция заменяющая элемент"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19003,7 +19853,10 @@
     "id" : "zsaiI2hcY9li1anV1ycrw50IYqI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19066,7 +19919,10 @@
     "id" : "Xyg98lH8YBSjqQg07wZKEmJB5rw=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19143,7 +19999,10 @@
     "id" : "WJrkaAvQuxkQn76TjwyZDdTnZmQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19206,7 +20065,10 @@
     "id" : "V9HFioe3qjNMvhYMbhUoLOEfmB8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19255,7 +20117,10 @@
     "id" : "yNTRyD1rthkrQRGlwJKcKO+dtss=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19304,7 +20169,10 @@
     "id" : "7H05mftYj6Dnj8dquoTs74iJsnk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19353,7 +20221,10 @@
     "id" : "7LuyJRGIaw9HcT1tj2qwzLngRdA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19416,7 +20287,10 @@
     "id" : "bZaCN0QC/fxip37ocaKUOBnU+ng=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19563,7 +20437,10 @@
     "id" : "jwFoaHA4So7fjMnsLwrw63lNNkM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19626,7 +20503,10 @@
     "id" : "OULZUqsCi/5M1npnprZuyZv04sY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19703,7 +20583,10 @@
     "id" : "PCaWRmWX5xH0AM21mhwXhm/7+ZQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19766,7 +20649,10 @@
     "id" : "7277FWDTJDU0ENTiBuBs6axuUQo=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19829,7 +20715,10 @@
     "id" : "osw/2+DrWGR26NL9rx98cxEizJo=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -19906,7 +20795,10 @@
     "id" : "+3cpW2W0BGlZDgT7Nn1I76hfK2Y=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20018,7 +20910,10 @@
     "id" : "pqyuUOp4u6ac7uyCBhU8XsVLIYQ=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20067,7 +20962,10 @@
     "id" : "w4RTYels8qGw0RakqAAxs9FsjDo=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery HTML Inside DOM",
+    "title" : {
+      "EN" : "JQuery HTML Inside DOM",
+      "RU" : "JQuery добавление HTML кода в DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20116,7 +21014,10 @@
     "id" : "9o/GqhCYgMtDhcwpqfONUkpk7SM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20165,7 +21066,10 @@
     "id" : "a67cR4zT1r4ETnm+kTopNDTN0Do=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Unsafe functions for DOM",
+    "title" : {
+      "EN" : "JQuery Unsafe functions for DOM",
+      "RU" : "JQuery небезопасная функция для DOM"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20235,7 +21139,10 @@
     "id" : "y7Tp9B0DrltQNxAMtMbO+C/M0Hk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "JQuery Wrap Element to HTML",
+    "title" : {
+      "EN" : "JQuery Wrap Element to HTML",
+      "RU" : "JQuery заключение элемента в код HTML"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20291,7 +21198,10 @@
     "id" : "Wk3f5Qk0qWIcN5P/2TCwqi0hyY0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - new Function()",
+    "title" : {
+      "EN" : "Server Side Injection - new Function()",
+      "RU" : "Инъекция на стороне сервера - new Function()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20368,7 +21278,10 @@
     "id" : "nFxJrkqUoQrv25lwL+fhiHBZV1U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - new Function()",
+    "title" : {
+      "EN" : "Server Side Injection - new Function()",
+      "RU" : "Инъекция на стороне сервера - new Function()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20508,7 +21421,10 @@
     "id" : "fXdEzMeH34UTUJ1MSnskenBrgdc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - setTimeout()",
+    "title" : {
+      "EN" : "Server Side Injection - setTimeout()",
+      "RU" : "Инъекция на стороне сервера - setTimeout()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20557,7 +21473,10 @@
     "id" : "T2aGjS3VQLzXYnsJipkxoJDFgG8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Server Side Injection - setTimeout()",
+    "title" : {
+      "EN" : "Server Side Injection - setTimeout()",
+      "RU" : "Инъекция на стороне сервера - setTimeout()"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20662,7 +21581,10 @@
     "id" : "YNRLnly0LjDT4sFoYuugB3SZ3wA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -20687,7 +21609,10 @@
     "id" : "MDXUusV9QcNMaOt9vHmAYt0fu7M=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -20712,7 +21637,10 @@
     "id" : "8TNTTcZcb2VcQdn8akwUUJ0ZQ2Q=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -20737,7 +21665,10 @@
     "id" : "qQSjTOke3079a68fb2QnrPUnZYY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -20762,7 +21693,10 @@
     "id" : "1bsLsElOwPdhsfZaluflcBzKvaI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -20787,7 +21721,10 @@
     "id" : "4/7a9LTi6ICsdtUkKo7IM09gfJo=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -20812,7 +21749,10 @@
     "id" : "f3ZJez7JQQiahEi3pZFbiflBNgg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -20837,7 +21777,10 @@
     "id" : "57EgGAhtBjulj6rqS4XxcpPgyjg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -20862,7 +21805,10 @@
     "id" : "NfMBU7l/mCDxMc5oE13N7n8kAxo=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -20974,7 +21920,10 @@
     "id" : "q6cxRjY1cwup0KzV1CFMva5zcLg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -21114,7 +22063,10 @@
     "id" : "cYcAxlWAP+ritYj619VvazvI/rw=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -21191,7 +22143,10 @@
     "id" : "r06kUJkjgi8iaGyS1Z3/FKrD7aM=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -21247,7 +22202,10 @@
     "id" : "Tvf8CKPKBTDK1/j8JiClcGm8Mmg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -21296,7 +22254,10 @@
     "id" : "oqL2G7hpfNP5GPGQbmEWCk07tLI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -21387,7 +22348,10 @@
     "id" : "wBTplYK2ibpWjf/77x/aZdFACY0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -21555,7 +22519,10 @@
     "id" : "gm7PdQdvSCPA1cLkZjkgOryMZ7A=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -21604,7 +22571,10 @@
     "id" : "SmBDzzwk+Qtdk9AdBwWrugJMBbs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -21653,7 +22623,10 @@
     "id" : "0yiVX5ouPswuD+Mm5HkidXICBjc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -21821,7 +22794,10 @@
     "id" : "xyF1wUdg6Yhz9J7UoYjzo4j0Bmg=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -21989,7 +22965,10 @@
     "id" : "7gYuF8ddAlFvObVRMr7xW/TcO9Y=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -22045,7 +23024,10 @@
     "id" : "scbP7W2320VyAf0zL8tWC7AysBk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -22115,7 +23097,10 @@
     "id" : "xPYgFF9BBWM/C4+vm7WQgkG9qo8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -22241,7 +23226,10 @@
     "id" : "vQl7+T44ZHZ8hFGa5SvUXTeo0+A=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -22318,7 +23306,10 @@
     "id" : "LW1yA9P3uBSKKd2Bg1fSUYm71II=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -22381,7 +23372,10 @@
     "id" : "bJ3Qmswxb0pG57D8NtEseTk7vjA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -22444,7 +23438,10 @@
     "id" : "whd20xGS+0FUPerbez4aBPNeKl8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -22507,7 +23504,10 @@
     "id" : "a3f/LjJLGrOJ3kreSH9+EtbqC3Q=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "VULNERABILITY",
-    "title" : "Log Forging",
+    "title" : {
+      "EN" : "Log Forging",
+      "RU" : "Подделка записи файла журнала"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : true,
@@ -22570,7 +23570,10 @@
     "id" : "LXF3CRLO2IpCsEl6RDAgloe1T5E=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22595,7 +23598,10 @@
     "id" : "Y2VjzbTnlynOEkTMRv7sSoqnIbc=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22620,7 +23626,10 @@
     "id" : "2lACF89FeT6toTAgryk0mdRwXGY=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22645,7 +23654,10 @@
     "id" : "TbJ1nD5aVGYjprFrzN9cU7vQCvs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22670,7 +23682,10 @@
     "id" : "OUL4ipSBpztlyiaXeTwZQG155bs=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22695,7 +23710,10 @@
     "id" : "9vnqJDOr+gdpvmt/VSgfk0TAa6o=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22720,7 +23738,10 @@
     "id" : "0ecVFN41ohh+XYZEBqKnw/lxJ1Y=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22745,7 +23766,10 @@
     "id" : "7quS7LEpHYoEAXn2Xewuj1PUWSI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22770,7 +23794,10 @@
     "id" : "rhygh0QmSqS5z+1wQtQ/wx4g8tk=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22795,7 +23822,10 @@
     "id" : "uCSX6EhHnEzlnEB9uDHNCRSOgM0=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Empty Default Exception Handler",
+    "title" : {
+      "EN" : "Empty Default Exception Handler",
+      "RU" : "Пустой блок обработки исключений"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22820,7 +23850,10 @@
     "id" : "GnjUGQTcmtdrNbFB8DA2uWowwQ8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22845,7 +23878,10 @@
     "id" : "1dsjAoSQd1SDm9762nTNaO3tHnA=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22870,7 +23906,10 @@
     "id" : "OkcvkRqSCzNkR7ZvbKexcXd9oog=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22895,7 +23934,10 @@
     "id" : "XIsldDXoyb+YhAExydRche3sbX8=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22920,7 +23962,10 @@
     "id" : "tM5VcHnJh+bsxMjPjLaacly35+U=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22945,7 +23990,10 @@
     "id" : "HeBwMwYLFURm/Vo2s6ESXWoflr4=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22970,7 +24018,10 @@
     "id" : "ixHjjxRYtNnlBoQug1NztWsA9Co=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "WEAKNESS",
-    "title" : "Information Exposure Through Static Content Or String Literals",
+    "title" : {
+      "EN" : "Information Exposure Through Static Content Or String Literals",
+      "RU" : "Раскрытие информации в статических файлах или константах"
+    },
     "level" : "POTENTIAL",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -22995,7 +24046,10 @@
     "id" : "b67cf6d312bc415431fb0be78f6196b3c73389fe4739064b47f98124aa95427c",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23012,7 +24066,10 @@
     "id" : "7047b7771bf2ff0ad43d5233a7717009b87932d1813bfef5bc269ec1b8566004",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23029,7 +24086,10 @@
     "id" : "cd3d6d5767db83a31785bc34345debc2dbf0d0a933947e5c2dc32d3d2fcec580",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23046,7 +24106,10 @@
     "id" : "c620595097c716d2839c5613199c537b478e78dfa3d49346ed20f72da73369fa",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23063,7 +24126,10 @@
     "id" : "91a980e472d9130a55933411168868bfdfa3885dac7da5d7a4394ed1777641f9",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23080,7 +24146,10 @@
     "id" : "ac28375907173836011e46a71d9f56bf0267e18a80297a551c1e6c619c3b01f8",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23097,7 +24166,10 @@
     "id" : "a2db3f77e073ca69b409e692069e35b13832bd0e4b51cdfb10f85e40d2ab2f66",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23114,7 +24186,10 @@
     "id" : "b580541b4c52093645f2bb9375194413e962d04cbc1956aa819cb8c78e2dadb8",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23131,7 +24206,10 @@
     "id" : "a5dd3f7e83798b275c324a1111f5c3d6337765131b967878aafb979dc7986fef",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23148,7 +24226,10 @@
     "id" : "56491164622ec8537a2f5bd2298d1a01a06af773d8724d2bb3826c2bcf5d51e8",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23165,7 +24246,10 @@
     "id" : "1b5730301b620d93056b3f86a524937288f23097919cda8786f1af471259c541",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23182,7 +24266,10 @@
     "id" : "b42d954ad75aa2b631b4bc5a6e3f495e82e1260a2eecf86cec3d946ab936e95f",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23199,7 +24286,10 @@
     "id" : "5e319d066c234e2e0d50c2406da57527d9fd899497e15dce0b1e8c3890ff8267",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23216,7 +24306,10 @@
     "id" : "6e82d62b2c6c9c17e5addceb4bbdfb023d1d505088d3c98c7e6dd664031f7593",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23233,7 +24326,10 @@
     "id" : "eb8be825c18e69bc5bb66b7afd8a2e0452972bdc02cfde647f28461c73695aeb",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23250,7 +24346,10 @@
     "id" : "db9bcf83492c1aaa0c8805ab95d93106a9ff0e3ecbca9cd441179fa0e483235b",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23267,7 +24366,10 @@
     "id" : "e6b2542033194ad39205a7515bb42c7748265743f8a20d21f0f706d96a793346",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23284,7 +24386,10 @@
     "id" : "984b462b9f4d2139a4c27b8618320a76e5876f19e9376601c738ad73635016aa",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23301,7 +24406,10 @@
     "id" : "81a161212389638007de1edd43a5b8e7fb086b7247d3e264f5f068aacdb61fa8",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23318,7 +24426,10 @@
     "id" : "4c1d1de15bb097b605b779cb39cd8632e5e7e0c87ea69a54a30d2a33d3d84cc8",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23335,7 +24446,10 @@
     "id" : "c0b7588744ac95a4f53e43539e98976f2a3994e392881b93709bb56e5337910b",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23352,7 +24466,10 @@
     "id" : "849629bdc487233bdc5a49b150d5dd96e6b437c2727394ea89cdab42aa7f79f2",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23369,7 +24486,10 @@
     "id" : "163e7b9e4d640e3d0bdc3eca3265b800217d2f0405212ba71de1ef5c4d15789b",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23386,7 +24506,10 @@
     "id" : "112650e189e031037bdc22662eaef1c11ce84e0402900aeb91beab6c55931f54",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23403,7 +24526,10 @@
     "id" : "dc4f82afb41ba1d1655dcf739f6005d138fbb8c856b78423c47c04676f161b50",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23420,7 +24546,10 @@
     "id" : "5798eaa24ed7600290c7f97aab1ff0bf331cfac98a86485efa2e50c753de748b",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23437,7 +24566,10 @@
     "id" : "10b52bb28cff65bcd7da022f245a168eefdde21ef080089d9f5be36032eee7d7",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23454,7 +24586,10 @@
     "id" : "56b774f57fd612c8bbfb4202f8ceab169e76331ee366f9bcf5e044854b954de2",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23471,7 +24606,10 @@
     "id" : "77cbaa074d4b6462e5b1f8b73453e4e3da68152967a17d315bb8a7ff211fa879",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23488,7 +24626,10 @@
     "id" : "0cd5d9a68fe8a1e809221e86548975c559c2db5acab1e02d56fa7eddbe43b1d2",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23505,7 +24646,10 @@
     "id" : "e4e84a0bfcea8f4692ef8bff99a1bc1584aa0b9e19637cba543bd5f85a9aec67",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23522,7 +24666,10 @@
     "id" : "aa138926619636ed08c9399fe4da8962ddd62a5e436dc4bc458255b4ac4e11f2",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23539,7 +24686,10 @@
     "id" : "b6bc11f22b362ce00e5b34b432dba3941c161b2a42bfc1afb342fae0a60353de",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23556,7 +24706,10 @@
     "id" : "710ec99c402b9b1c5ceac6b2340bd46bab9cd5d5dde67bb5d1c5d61f3d4b7ebd",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23573,7 +24726,10 @@
     "id" : "1e72f56624024e2a714b03751643bb85e32cb0c7f9e468893d887bf23dad0649",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23590,7 +24746,10 @@
     "id" : "0e0e14656a28952590b10fb0585c78d175653ff2f6be2f72e15b9b18d2d868fb",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23607,7 +24766,10 @@
     "id" : "1440280dbd1a07a99aba58ad021e4183a3e57cd8279d0ecdae1d97d36c77bd8b",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23624,7 +24786,10 @@
     "id" : "5e7d9281a2cec0b4e0050e3de81d7e859b8fdc4477ae08b5e06602439bba4fdc",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23641,7 +24806,10 @@
     "id" : "ea35a9bf9ef45ae1a2e7571a230a095b0fb32b416590214bdfca6319cd3f5d9f",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23658,7 +24826,10 @@
     "id" : "1038164c57be1b5ef401aa7e8b0a50eb02aa5a3d2d159ea07a44684514a9a1f1",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23675,7 +24846,10 @@
     "id" : "eed338a45ac89b6be8ce4ecb4054b5c47a126ed9cc5ff5368552d2d47e71760b",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23692,7 +24866,10 @@
     "id" : "2f41cf79b023ef8847b336992423d8e509ca9b923dc0021671c21b3d931cb9fc",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23709,7 +24886,10 @@
     "id" : "c85218acbc62736031eb7dde3342e9db06adeb65ff1d10ad786d1436fae7fe71",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23726,7 +24906,10 @@
     "id" : "e5330271cee432c01bb034cf18f15d09b3fb01c2263a6311f8e92fbb796cd41f",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23743,7 +24926,10 @@
     "id" : "12dd7ca3b2ab8ef9bea6ded53f3330560bee60a640f16b5eb7a94c96bc692ccb",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23760,7 +24946,10 @@
     "id" : "2b40565fb8cea1c59b696bc0414e9fae3fa44e57a235f0f08f90b705e3babf63",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23777,7 +24966,10 @@
     "id" : "cebf3cf38df0d6c5adb960e437c1cb2f98eccd7c91bfe9f698b369de31193e2a",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23794,7 +24986,10 @@
     "id" : "bec0940eadc7470c0ac5981353b7e1d05fd3f98f99852689af7a4c6acd2bef88",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23811,7 +25006,10 @@
     "id" : "2c6ab878b3022bdb15ce0608de2594ec86619af5a6dcd8093e1bd776593ae43f",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23828,7 +25026,10 @@
     "id" : "c928977ba2a1496456f1be6158980d4bd3a537f3c4879a8aeb8accec78bcf568",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23845,7 +25046,10 @@
     "id" : "62c64f2221ec15ea434c25b6d723b47c2bd3015913c5f1af231a91e4098ead5d",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23862,7 +25066,10 @@
     "id" : "750d3f83f97fc29afe87f603c49cbe4cf77e1940a7ab8fdfa8f5a5a3984e4307",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23879,7 +25086,10 @@
     "id" : "5e0abe78b90f231495b2b291d77042777630b76d43eff8e51c76993602cdcc88",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23896,7 +25106,10 @@
     "id" : "a464e5cf74967d9458fa04d86913915619758cc86362f5c835e96fcfd0397f2b",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23913,7 +25126,10 @@
     "id" : "f7198ccf87fb79c2eb1696e44e867fd7f0d9b664c58cb76a86c142e4148706d7",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23930,7 +25146,10 @@
     "id" : "cc5e58eae1fe668445544f0813c629ac3939faf37658dfcac4150c6b28d92418",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23947,7 +25166,10 @@
     "id" : "484460e8a10b08d30558fb15e7f88f640095aa6a6e29de85e4a82d1368c7be98",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23964,7 +25186,10 @@
     "id" : "a4a49ca917a77525a32b2d521df7a1edf95a57f533bfb03765331f33117f675a",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23981,7 +25206,10 @@
     "id" : "181ecb56f611a21b2c5556c2af5b31ee2b83850433a15cd81c1088d4d14cac27",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -23998,7 +25226,10 @@
     "id" : "b13177f8c68e690f88284a2331bb9fc60e17de0fd8d9b9aa9ebfa2e75a2d7689",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -24015,7 +25246,10 @@
     "id" : "7bed3922e89d43a7273f3f3c6091aaaba715b036b9f46101f225acdcdddcf511",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -24032,7 +25266,10 @@
     "id" : "fdfd672d1fed46d1a9f2fd9d085d2f54864d2cf020d37b12fa65aeb33928befd",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -24049,7 +25286,10 @@
     "id" : "f0883b5c74ecff35eb66e03898135468b2106396ddb6a41d6c8f680430c77d21",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -24066,7 +25306,10 @@
     "id" : "c780e642e4f3cad4cbd123f33703a57a2093b00d8d521421d39902e3be93877a",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -24083,7 +25326,10 @@
     "id" : "7cfaaf8482d50be01b7e131d733bb8c924049ab09602b1aced217a1978842dfd",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -24100,7 +25346,10 @@
     "id" : "d37fa95d42080515894abcf84b0d1074f1408ff25d87d9054d4a6f46a3aed5ca",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "BLACKBOX",
-    "title" : "Information Exposure",
+    "title" : {
+      "EN" : "Information Exposure",
+      "RU" : "Разглашение информации"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
@@ -24117,7 +25366,10 @@
     "id" : "gqEPzpZgZynTj6Z2JeIdeu/0tuI=",
     "scanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
     "class" : "SCA",
-    "title" : "JQuery library used",
+    "title" : {
+      "EN" : "Vulnerable component Any JQuery version 1.0.0",
+      "RU" : "Уязвимый компонент Any JQuery version 1.0.0"
+    },
     "level" : "HIGH",
     "isFavorite" : false,
     "isSuspected" : false,

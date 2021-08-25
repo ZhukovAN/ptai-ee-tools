@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.test.scan.result;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
@@ -27,7 +28,7 @@ public class ScanResultTest extends BaseTest {
         long sqliCount = scanResult.getIssues().stream()
                 .filter(baseIssue -> baseIssue instanceof VulnerabilityIssue)
                 .filter(baseIssue -> BaseIssue.Level.HIGH == baseIssue.getLevel())
-                .filter(baseIssue -> "SQL Injection".equalsIgnoreCase(baseIssue.getTitle()))
+                .filter(baseIssue -> "SQL Injection".equalsIgnoreCase(baseIssue.getTitle().get(Reports.Locale.EN)))
                 .count();
         Assertions.assertNotEquals(0, sqliCount);
     }
@@ -42,12 +43,12 @@ public class ScanResultTest extends BaseTest {
         ScanResult scanResult = mapper.readValue(inputStream, ScanResult.class);
         Assertions.assertNotNull(scanResult.getStatistics());
         Assertions.assertNotEquals(0, scanResult.getStatistics().getScannedFileCount());
-        long sqliCount = scanResult.getIssues().stream()
+        long xssCount = scanResult.getIssues().stream()
                 .filter(baseIssue -> baseIssue instanceof VulnerabilityIssue)
                 .filter(baseIssue -> BaseIssue.Level.MEDIUM == baseIssue.getLevel())
-                .filter(baseIssue -> "Cross-Site Scripting".equalsIgnoreCase(baseIssue.getTitle()))
+                .filter(baseIssue -> "Cross-Site Scripting".equalsIgnoreCase(baseIssue.getTitle().get(Reports.Locale.EN)))
                 .count();
-        Assertions.assertEquals(1, sqliCount);
+        Assertions.assertNotEquals(0, xssCount);
     }
 
 }

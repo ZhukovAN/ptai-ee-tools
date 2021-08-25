@@ -6,7 +6,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSetting
 public class BaseClientIT extends BaseIT {
     protected static ConnectionSettings CONNECTION_SETTINGS = ConnectionSettings.builder()
             .url(BaseIT.URL)
-            .token(BaseClientIT.TOKEN)
+            .token(BaseIT.TOKEN)
             .caCertsPem("")
             .insecure(true)
             .build();

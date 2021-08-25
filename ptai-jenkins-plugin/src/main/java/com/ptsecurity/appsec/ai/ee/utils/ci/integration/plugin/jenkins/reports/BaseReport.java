@@ -85,12 +85,12 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
                 return FormValidation.ok();
         }
 
-        public String getDefaultLocale() {
+        public static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale getDefaultLocale() {
             Locale locale = LocaleProvider.getLocale();
             if (locale.getLanguage().equalsIgnoreCase(Reports.Locale.RU.name()))
-                return Reports.Locale.RU.name();
+                return Reports.Locale.RU;
             else
-                return Reports.Locale.EN.name();
+                return Reports.Locale.EN;
         }
     }
 

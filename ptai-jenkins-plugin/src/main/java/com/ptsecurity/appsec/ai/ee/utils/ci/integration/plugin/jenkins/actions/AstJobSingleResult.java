@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed.Details.ChartData.BaseIssueCount;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
@@ -10,6 +11,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.Ba
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.PieChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.TreeChartDataModel;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import hudson.model.Run;
@@ -63,6 +65,12 @@ public class AstJobSingleResult implements RunAction2 {
         if (null == scanDataPacked) return null;
         if (SCAN_BRIEF_DETAILED != scanDataPacked.getType()) return null;
         scanBriefDetailed = scanDataPacked.unpackData(ScanBriefDetailed.class);
+
+        Reports.Locale locale = BaseReport.BaseReportDescriptor.getDefaultLocale();
+        Comparator<ScanBriefDetailed.Details.ChartData.BaseIssueCount> compareLevelTypeAndCount = Comparator
+                .comparing(ScanBriefDetailed.Details.ChartData.BaseIssueCount::getLevel, Comparator.comparingInt(BaseIssue.Level::getValue).reversed())
+                .thenComparing(ScanBriefDetailed.Details.ChartData.BaseIssueCount::getCount, Comparator.reverseOrder())
+                .thenComparing(brief -> brief.getTitle().get(locale), Comparator.reverseOrder());
         return scanBriefDetailed;
     }
 
@@ -104,7 +112,9 @@ public class AstJobSingleResult implements RunAction2 {
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityLevelDistribution() {
+        getScanBriefDetailed();
         if (isEmpty()) return null;
+
         List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
         Map<BaseIssue.Level, Long> levelCountMap = baseIssues.stream()
                 .filter(issue -> BaseIssue.ApprovalState.DISCARD != issue.getApprovalState())
@@ -135,12 +145,14 @@ public class AstJobSingleResult implements RunAction2 {
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityTypeDistribution() {
+        getScanBriefDetailed();
         if (isEmpty()) return null;
+        Reports.Locale locale = BaseReport.BaseReportDescriptor.getDefaultLocale();
         List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
         Map<Pair<BaseIssue.Level, String>, Long> levelTitleCountMap = baseIssues.stream()
                 .filter(issue -> BaseIssue.ApprovalState.DISCARD != issue.getApprovalState())
                 .collect(Collectors.groupingBy(
-                        issue -> new ImmutablePair<>(issue.getLevel(), issue.getTitle()),
+                        issue -> new ImmutablePair<>(issue.getLevel(), issue.getTitle().get(locale)),
                         Collectors.counting()));
         List<Triple> levelTitleCount = new ArrayList<>();
         levelTitleCountMap.forEach((k, v) -> levelTitleCount.add(Triple.builder()
@@ -150,7 +162,8 @@ public class AstJobSingleResult implements RunAction2 {
                 .build()));
         Comparator<Triple> c = Comparator
                 .comparing(Triple::getLevel, Comparator.comparingInt(BaseIssue.Level::getValue))
-                .thenComparing(Triple::getCount);
+                .thenComparing(Triple::getCount)
+                .thenComparing(Triple::getTitle, Comparator.reverseOrder());
 
         ChartDataModel dataModel = ChartDataModel.builder()
                 .xaxis(Collections.singletonList(ChartDataModel.Axis.builder().build()))
@@ -171,6 +184,7 @@ public class AstJobSingleResult implements RunAction2 {
 
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityTypePie() throws JsonProcessingException {
+        getScanBriefDetailed();
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
@@ -196,6 +210,7 @@ public class AstJobSingleResult implements RunAction2 {
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityApprovalStatePie() {
+        getScanBriefDetailed();
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
@@ -221,13 +236,14 @@ public class AstJobSingleResult implements RunAction2 {
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilitySuspectedPie() {
+        getScanBriefDetailed();
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
                 .build();
         List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
 
-        for (Boolean suspected : new HashSet<Boolean>(Arrays.asList(true, false))) {
+        for (Boolean suspected : new HashSet<>(Arrays.asList(true, false))) {
             long count = baseIssues.stream()
                     .filter(issue -> suspected == issue.getSuspected()).count();
             if (0 == count) continue;
@@ -246,6 +262,7 @@ public class AstJobSingleResult implements RunAction2 {
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityScanModePie() {
+        getScanBriefDetailed();
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))

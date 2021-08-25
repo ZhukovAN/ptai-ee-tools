@@ -260,7 +260,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
 
     protected static Map<String, String> versionInfo = null;
 
-    public String getVersion() {
+    public static String getVersion() {
         Map<String, String> version = getVersionInfo();
         StringBuilder builder = new StringBuilder();
         if (StringUtils.isNotEmpty(version.get("Implementation-Version")))
@@ -272,7 +272,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         return builder.toString();
     }
 
-    public Map<String, String> getVersionInfo() {
+    public static Map<String, String> getVersionInfo() {
         if (null != versionInfo) return versionInfo;
         versionInfo = new HashMap<>();
         try {
@@ -295,7 +295,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         return versionInfo;
     }
 
-    private boolean isApplicableManifest(Manifest manifest) {
+    private static boolean isApplicableManifest(Manifest manifest) {
         Attributes attributes = manifest.getMainAttributes();
         return "com.ptsecurity.appsec.ai.ee.utils.ci.integration".equals(get(attributes, "Implementation-Vendor-Id"));
     }

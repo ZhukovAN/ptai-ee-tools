@@ -4,9 +4,10 @@
   "id" : "b0efd5be-2ff2-40e5-a36f-351b94579ffb",
   "projectId" : "0dd14fc1-dcfc-4081-989a-b6b5afd31317",
   "projectName" : "php-smoke",
+  "useAsyncScan" : false,
   "scanSettings" : {
     "id" : "c85c50a0-448d-486d-9ca5-d5346f09e051",
-    "engines" : [ "PM", "AI" ],
+    "engines" : [ "AI", "PM" ],
     "unpackUserPackages" : false,
     "downloadDependencies" : false,
     "usePublicAnalysisMethod" : false,
@@ -28,18 +29,610 @@
     "scannedUrlCount" : 0
   },
   "state" : "DONE",
-  "issuesParseState" : true,
+  "issuesParseOk" : true,
   "issues" : [ {
-    "Class" : "VULNERABILITY",
-    "id" : "hNl70Z0FKGMLQzA7NJe6NU8RZR0=",
-    "scanResultId" : "de8ef3bf-9b60-4146-9ee6-04d5d9e4311d",
-    "class" : "VULNERABILITY",
-    "title" : "Cross-Site Scripting",
+    "Class" : "SCA",
+    "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "SCA",
+    "title" : {
+      "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2020-13625)",
+      "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2020-13625)"
+    },
     "level" : "MEDIUM",
     "isFavorite" : false,
     "isSuspected" : false,
     "isSuppressed" : false,
-    "approvalState" : "APPROVAL",
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "116" ],
+    "file" : ".\\composer.lock",
+    "componentName" : "phpmailer",
+    "componentVersion" : "5.2.17",
+    "fingerprintId" : "DC-FP-CVE-2020-13625",
+    "cveId" : "CVE-2020-13625",
+    "cvss" : {
+      "base" : "AV:N/AC:L/Au:N/C:N/I:P/A:N",
+      "baseScore" : "5",
+      "temp" : "",
+      "tempScore" : ""
+    }
+  }, {
+    "Class" : "SCA",
+    "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "SCA",
+    "title" : {
+      "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2016-10045)",
+      "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2016-10045)"
+    },
+    "level" : "HIGH",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "77" ],
+    "file" : ".\\composer.lock",
+    "componentName" : "phpmailer",
+    "componentVersion" : "5.2.17",
+    "fingerprintId" : "DC-FP-CVE-2016-10045",
+    "cveId" : "CVE-2016-10045",
+    "cvss" : {
+      "base" : "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+      "baseScore" : "7.5",
+      "temp" : "",
+      "tempScore" : ""
+    }
+  }, {
+    "Class" : "SCA",
+    "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "SCA",
+    "title" : {
+      "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2016-10033)",
+      "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2016-10033)"
+    },
+    "level" : "HIGH",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "77" ],
+    "file" : ".\\composer.lock",
+    "componentName" : "phpmailer",
+    "componentVersion" : "5.2.17",
+    "fingerprintId" : "DC-FP-CVE-2016-10033",
+    "cveId" : "CVE-2016-10033",
+    "cvss" : {
+      "base" : "AV:N/AC:L/Au:N/C:P/I:P/A:P",
+      "baseScore" : "7.5",
+      "temp" : "",
+      "tempScore" : ""
+    }
+  }, {
+    "Class" : "SCA",
+    "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "SCA",
+    "title" : {
+      "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2021-3603)",
+      "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2021-3603)"
+    },
+    "level" : "MEDIUM",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "829" ],
+    "file" : ".\\composer.lock",
+    "componentName" : "phpmailer",
+    "componentVersion" : "5.2.17",
+    "fingerprintId" : "DC-FP-CVE-2021-3603",
+    "cveId" : "CVE-2021-3603",
+    "cvss" : {
+      "base" : "AV:N/AC:M/Au:N/C:P/I:P/A:P",
+      "baseScore" : "6.8",
+      "temp" : "",
+      "tempScore" : ""
+    }
+  }, {
+    "Class" : "SCA",
+    "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "SCA",
+    "title" : {
+      "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2021-34551)",
+      "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2021-34551)"
+    },
+    "level" : "NONE",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : null,
+    "file" : ".\\composer.lock",
+    "componentName" : "phpmailer",
+    "componentVersion" : "5.2.17",
+    "fingerprintId" : "DC-FP-CVE-2021-34551",
+    "cveId" : "CVE-2021-34551",
+    "cvss" : {
+      "base" : "",
+      "baseScore" : "",
+      "temp" : "",
+      "tempScore" : ""
+    }
+  }, {
+    "Class" : "SCA",
+    "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "SCA",
+    "title" : {
+      "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2018-19296)",
+      "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2018-19296)"
+    },
+    "level" : "MEDIUM",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "502" ],
+    "file" : ".\\composer.lock",
+    "componentName" : "phpmailer",
+    "componentVersion" : "5.2.17",
+    "fingerprintId" : "DC-FP-CVE-2018-19296",
+    "cveId" : "CVE-2018-19296",
+    "cvss" : {
+      "base" : "AV:N/AC:M/Au:N/C:P/I:P/A:P",
+      "baseScore" : "6.8",
+      "temp" : "",
+      "tempScore" : ""
+    }
+  }, {
+    "Class" : "SCA",
+    "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "SCA",
+    "title" : {
+      "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2017-5223)",
+      "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2017-5223)"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "200" ],
+    "file" : ".\\composer.lock",
+    "componentName" : "phpmailer",
+    "componentVersion" : "5.2.17",
+    "fingerprintId" : "DC-FP-CVE-2017-5223",
+    "cveId" : "CVE-2017-5223",
+    "cvss" : {
+      "base" : "AV:L/AC:L/Au:N/C:P/I:N/A:N",
+      "baseScore" : "2.1",
+      "temp" : "",
+      "tempScore" : ""
+    }
+  }, {
+    "Class" : "VULNERABILITY",
+    "id" : "obS7TVnAIT/RWGxW0CJInvKFV9k=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "VULNERABILITY",
+    "title" : {
+      "RU" : "Десериализация произвольных данных",
+      "EN" : "Deserialization of Untrusted Data"
+    },
+    "level" : "HIGH",
+    "isFavorite" : false,
+    "isSuspected" : true,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "502" ],
+    "owaspId" : [ "8" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "scanMode" : "FROM_PUBLICPROTECTED",
+    "bpf" : {
+      "place" : {
+        "beginLine" : 9,
+        "beginColumn" : 1,
+        "endLine" : 9,
+        "endColumn" : 1,
+        "file" : ".\\misc.php",
+        "value" : "unlink($file);"
+      }
+    },
+    "conditions" : "\n$file == 'phar://./deser.jpg'\n\n(file_get_contents($file) == 'O:9:\"Exception\":0:{}')\n",
+    "exploit" : {
+      "url" : null,
+      "text" : "\nGET /misc.php HTTP/1.1\nHost: localhost\nAccept-Encoding: identity\nConnection: close\n\n",
+      "type" : "HTTP",
+      "parameters" : [ {
+        "name" : "file",
+        "value" : "phar://./deser.jpg",
+        "source" : "",
+        "payload" : null,
+        "dependency" : "[%2F%3A]",
+        "vulnerable" : false
+      } ]
+    },
+    "autocheckExploit" : null,
+    "entryPoint" : {
+      "beginLine" : 8,
+      "beginColumn" : 1,
+      "endLine" : 8,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "function AFD( $file ){"
+    },
+    "taintDataEntries" : [ {
+      "beginLine" : 9,
+      "beginColumn" : 1,
+      "endLine" : 9,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "unlink($file);"
+    } ],
+    "dataTrace" : null,
+    "pvf" : "unlink",
+    "vulnerableExpression" : {
+      "beginLine" : 9,
+      "beginColumn" : 1,
+      "endLine" : 9,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "unlink($file);"
+    },
+    "secondOrder" : true
+  }, {
+    "Class" : "VULNERABILITY",
+    "id" : "ai3WJyhnGNnDMV7ud9oJVXEeSQM=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "VULNERABILITY",
+    "title" : {
+      "RU" : "Удаление произвольного файла",
+      "EN" : "Arbitrary File Deletion"
+    },
+    "level" : "HIGH",
+    "isFavorite" : false,
+    "isSuspected" : true,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "73" ],
+    "owaspId" : [ "1" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "scanMode" : "FROM_PUBLICPROTECTED",
+    "bpf" : {
+      "place" : {
+        "beginLine" : 9,
+        "beginColumn" : 1,
+        "endLine" : 9,
+        "endColumn" : 1,
+        "file" : ".\\misc.php",
+        "value" : "unlink($file);"
+      }
+    },
+    "conditions" : "\n$file == '/../../../../../../../../../../tmp/1.txt'\n",
+    "exploit" : {
+      "url" : null,
+      "text" : "\nGET /misc.php HTTP/1.1\nHost: localhost\nAccept-Encoding: identity\nConnection: close\n\n",
+      "type" : "HTTP",
+      "parameters" : [ {
+        "name" : "file",
+        "value" : "{PAYLOAD}",
+        "source" : "",
+        "payload" : "/../../../../../../../../../../tmp/1.txt",
+        "dependency" : "[%2F]",
+        "vulnerable" : true
+      } ]
+    },
+    "autocheckExploit" : null,
+    "entryPoint" : {
+      "beginLine" : 8,
+      "beginColumn" : 1,
+      "endLine" : 8,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "function AFD( $file ){"
+    },
+    "taintDataEntries" : [ {
+      "beginLine" : 9,
+      "beginColumn" : 1,
+      "endLine" : 9,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "unlink($file);"
+    } ],
+    "dataTrace" : null,
+    "pvf" : "unlink",
+    "vulnerableExpression" : {
+      "beginLine" : 9,
+      "beginColumn" : 1,
+      "endLine" : 9,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "unlink($file);"
+    },
+    "secondOrder" : false
+  }, {
+    "Class" : "VULNERABILITY",
+    "id" : "evUFytpvnyvJW8htKNnnlWVzSIs=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "VULNERABILITY",
+    "title" : {
+      "RU" : "Межсайтовое выполнение сценариев",
+      "EN" : "Cross-Site Scripting"
+    },
+    "level" : "MEDIUM",
+    "isFavorite" : false,
+    "isSuspected" : true,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "79" ],
+    "owaspId" : [ "7" ],
+    "pciDssId" : [ "6.5.7" ],
+    "nistId" : [ "SI-10" ],
+    "scanMode" : "FROM_PUBLICPROTECTED",
+    "bpf" : {
+      "place" : {
+        "beginLine" : 5,
+        "beginColumn" : 1,
+        "endLine" : 5,
+        "endColumn" : 1,
+        "file" : ".\\misc.php",
+        "value" : "echo $text;"
+      }
+    },
+    "conditions" : "\n$text == '<script>alert(1)</script>'\n",
+    "exploit" : {
+      "url" : null,
+      "text" : "\nGET /misc.php HTTP/1.1\nHost: localhost\nAccept-Encoding: identity\nConnection: close\n\n",
+      "type" : "HTTP",
+      "parameters" : [ {
+        "name" : "text",
+        "value" : "{PAYLOAD}",
+        "source" : "",
+        "payload" : "<script>alert(1)</script>",
+        "dependency" : "[%3C%3E%2F%28%29]",
+        "vulnerable" : true
+      } ]
+    },
+    "autocheckExploit" : null,
+    "entryPoint" : {
+      "beginLine" : 4,
+      "beginColumn" : 1,
+      "endLine" : 4,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "function XSS( $text ){"
+    },
+    "taintDataEntries" : [ {
+      "beginLine" : 5,
+      "beginColumn" : 1,
+      "endLine" : 5,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "echo $text;"
+    } ],
+    "dataTrace" : null,
+    "pvf" : "echo",
+    "vulnerableExpression" : {
+      "beginLine" : 5,
+      "beginColumn" : 1,
+      "endLine" : 5,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "echo $text;"
+    },
+    "secondOrder" : false
+  }, {
+    "Class" : "WEAKNESS",
+    "id" : "Jqo3KEAU6bhOqgyz0DPjwd7WcIU=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "WEAKNESS",
+    "title" : {
+      "RU" : "Жестко заданный пароль",
+      "EN" : "Hardcoded Password"
+    },
+    "level" : "POTENTIAL",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "259" ],
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.4.4" ],
+    "nistId" : [ "AC-2", "IA-5" ],
+    "vulnerableExpression" : {
+      "beginLine" : 2,
+      "beginColumn" : 5,
+      "endLine" : 2,
+      "endColumn" : 27,
+      "file" : ".\\misc.php",
+      "value" : "$password = 'P@ssw0rd'"
+    }
+  }, {
+    "Class" : "VULNERABILITY",
+    "id" : "cKOGICGUmGbN3za/HH4Tysyg1Ek=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "VULNERABILITY",
+    "title" : {
+      "RU" : "Десериализация произвольных данных",
+      "EN" : "Deserialization of Untrusted Data"
+    },
+    "level" : "HIGH",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "502" ],
+    "owaspId" : [ "8" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "scanMode" : "FROM_ENTRYPOINT",
+    "bpf" : {
+      "place" : {
+        "beginLine" : 14,
+        "beginColumn" : 1,
+        "endLine" : 14,
+        "endColumn" : 1,
+        "file" : ".\\misc.php",
+        "value" : "AFD($_GET['file']);"
+      }
+    },
+    "conditions" : "\n(file_get_contents($_GET['file']) == 'O:9:\"Exception\":0:{}')\n",
+    "exploit" : {
+      "url" : null,
+      "text" : "\nGET /misc.php?file=phar%3A%2F%2F.%2Fdeser.jpg HTTP/1.1\nHost: localhost\nAccept-Encoding: identity\nConnection: close\n\n",
+      "type" : "HTTP",
+      "parameters" : [ {
+        "name" : "file",
+        "value" : "phar://./deser.jpg",
+        "source" : "REQUEST_GET_ARGS",
+        "payload" : null,
+        "dependency" : "[%2F%3A]",
+        "vulnerable" : false
+      } ]
+    },
+    "autocheckExploit" : null,
+    "entryPoint" : {
+      "beginLine" : 1,
+      "beginColumn" : 1,
+      "endLine" : 1,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "<?php"
+    },
+    "taintDataEntries" : [ {
+      "beginLine" : 14,
+      "beginColumn" : 1,
+      "endLine" : 14,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "AFD($_GET['file']);"
+    } ],
+    "dataTrace" : null,
+    "pvf" : "unlink",
+    "vulnerableExpression" : {
+      "beginLine" : 9,
+      "beginColumn" : 1,
+      "endLine" : 9,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "unlink($file);"
+    },
+    "secondOrder" : true
+  }, {
+    "Class" : "VULNERABILITY",
+    "id" : "P1AT0Wbs5RzuVAfN+PJbufPhzFU=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "VULNERABILITY",
+    "title" : {
+      "RU" : "Удаление произвольного файла",
+      "EN" : "Arbitrary File Deletion"
+    },
+    "level" : "HIGH",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "73" ],
+    "owaspId" : [ "1" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "scanMode" : "FROM_ENTRYPOINT",
+    "bpf" : {
+      "place" : {
+        "beginLine" : 14,
+        "beginColumn" : 1,
+        "endLine" : 14,
+        "endColumn" : 1,
+        "file" : ".\\misc.php",
+        "value" : "AFD($_GET['file']);"
+      }
+    },
+    "conditions" : "",
+    "exploit" : {
+      "url" : null,
+      "text" : "\nGET /misc.php?file=%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2F..%2Ftmp%2F1.txt HTTP/1.1\nHost: localhost\nAccept-Encoding: identity\nConnection: close\n\n",
+      "type" : "HTTP",
+      "parameters" : [ {
+        "name" : "file",
+        "value" : "{PAYLOAD}",
+        "source" : "REQUEST_GET_ARGS",
+        "payload" : "/../../../../../../../../../../tmp/1.txt",
+        "dependency" : "[%2F]",
+        "vulnerable" : true
+      } ]
+    },
+    "autocheckExploit" : null,
+    "entryPoint" : {
+      "beginLine" : 1,
+      "beginColumn" : 1,
+      "endLine" : 1,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "<?php"
+    },
+    "taintDataEntries" : [ {
+      "beginLine" : 14,
+      "beginColumn" : 1,
+      "endLine" : 14,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "AFD($_GET['file']);"
+    } ],
+    "dataTrace" : null,
+    "pvf" : "unlink",
+    "vulnerableExpression" : {
+      "beginLine" : 9,
+      "beginColumn" : 1,
+      "endLine" : 9,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "unlink($file);"
+    },
+    "secondOrder" : false
+  }, {
+    "Class" : "VULNERABILITY",
+    "id" : "pimXMw337aEedAbLRYk/g3v2k14=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "VULNERABILITY",
+    "title" : {
+      "RU" : "Межсайтовое выполнение сценариев",
+      "EN" : "Cross-Site Scripting"
+    },
+    "level" : "MEDIUM",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
     "newInScanResultId" : null,
     "oldInScanResultId" : null,
     "cweId" : [ "79" ],
@@ -49,18 +642,18 @@
     "scanMode" : "FROM_ENTRYPOINT",
     "bpf" : {
       "place" : {
-        "beginLine" : 2,
+        "beginLine" : 12,
         "beginColumn" : 1,
-        "endLine" : 2,
+        "endLine" : 12,
         "endColumn" : 1,
-        "file" : ".\\xss.php",
+        "file" : ".\\misc.php",
         "value" : "echo $_GET['a'];"
       }
     },
     "conditions" : "",
     "exploit" : {
       "url" : null,
-      "text" : "\nGET /.?a=%3Cscript%3Ealert%281%29%3C%2Fscript%3E HTTP/1.1\nHost: localhost\nAccept-Encoding: identity\nConnection: close\n\n",
+      "text" : "\nGET /misc.php?a=%3Cscript%3Ealert%281%29%3C%2Fscript%3E HTTP/1.1\nHost: localhost\nAccept-Encoding: identity\nConnection: close\n\n",
       "type" : "HTTP",
       "parameters" : [ {
         "name" : "a",
@@ -77,27 +670,505 @@
       "beginColumn" : 1,
       "endLine" : 1,
       "endColumn" : 1,
-      "file" : ".\\xss.php",
+      "file" : ".\\misc.php",
       "value" : "<?php"
     },
     "taintDataEntries" : [ {
-      "beginLine" : 2,
+      "beginLine" : 12,
       "beginColumn" : 1,
-      "endLine" : 2,
+      "endLine" : 12,
       "endColumn" : 1,
-      "file" : ".\\xss.php",
+      "file" : ".\\misc.php",
       "value" : "echo $_GET['a'];"
     } ],
     "dataTrace" : null,
     "pvf" : "echo",
     "vulnerableExpression" : {
+      "beginLine" : 12,
+      "beginColumn" : 1,
+      "endLine" : 12,
+      "endColumn" : 1,
+      "file" : ".\\misc.php",
+      "value" : "echo $_GET['a'];"
+    },
+    "secondOrder" : false
+  }, {
+    "Class" : "WEAKNESS",
+    "id" : "tcocZlzKZZg8QPy80CyHQA5mUMk=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "WEAKNESS",
+    "title" : {
+      "RU" : "Жестко заданный пароль",
+      "EN" : "Hardcoded Password"
+    },
+    "level" : "POTENTIAL",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "259" ],
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.4.4" ],
+    "nistId" : [ "AC-2", "IA-5" ],
+    "vulnerableExpression" : {
       "beginLine" : 2,
       "beginColumn" : 1,
       "endLine" : 2,
       "endColumn" : 1,
-      "file" : ".\\xss.php",
-      "value" : "echo $_GET['a'];"
+      "file" : ".\\misc.php",
+      "value" : "$password = 'P@ssw0rd';"
+    }
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "KuXSIa++lO+Ln6vZ/6x3+2gvLL8=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр disable_functions",
+      "EN" : "Disable_functions parameter"
     },
-    "secondOrder" : false
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : null,
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "disable_functions = popen, exec, system, passthru, proc_open, shell_exec, apache_setenv, putenv, dl, expect_popen, pcntl_exec"
+    },
+    "recommendedValue" : "popen, exec, system, passthru, proc_open, shell_exec, apache_setenv, putenv, dl, expect_popen, pcntl_exec",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "KDfJFcjDHUG9u7d2wroHZV3SYDw=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Директива session.cookie_secure",
+      "EN" : "Session.cookie_secure directive"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "614" ],
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.10" ],
+    "nistId" : [ "AC-12" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "session.cookie_secure = 1"
+    },
+    "recommendedValue" : "1",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "Gpp+xDTQfGQoYQ6JxcPU8MrVN8k=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Директива session.use_strict_mode",
+      "EN" : "Session.use_strict_mode directive"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : null,
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.10" ],
+    "nistId" : [ "AC-12" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "session.use_strict_mode = 1"
+    },
+    "recommendedValue" : "1",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "JA2TxSxhvfs9OQclnFV0T8DQhU4=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр session.save_path",
+      "EN" : "Session.save_path parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : null,
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.10" ],
+    "nistId" : [ "AC-12" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "session.save_path = some/path"
+    },
+    "recommendedValue" : "some/path",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "GmbO3yZqEoH+6bD7akcDwI5x7NQ=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр session.cookie_httponly",
+      "EN" : "Session.cookie_httponly parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : null,
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.7" ],
+    "nistId" : [ "SI-10" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "session.cookie_httponly = 1"
+    },
+    "recommendedValue" : "1",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "Mr4TpuBr38MPpgRBQF1kpPms/G8=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр open_basedir",
+      "EN" : "Open_basedir parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "284" ],
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "open_basedir = some/path"
+    },
+    "recommendedValue" : "some/path",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "5XN+r9ehOXmJArpM1SF0t5OI0N4=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Директива max_input_time",
+      "EN" : "Max_input_time directive"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : null,
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "2.2.3" ],
+    "nistId" : [ "CM-6" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "max_input_time = 30"
+    },
+    "recommendedValue" : "30",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "2bOoxCjXXmk2xWKKmiWZsMMQrJU=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр assert.active",
+      "EN" : "Assert.active parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : null,
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "assert.active = 0"
+    },
+    "recommendedValue" : "0",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "+aERWQX+EH8dmH1FDJnIk3yc+FM=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр log_errors",
+      "EN" : "Log_errors parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : null,
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.4" ],
+    "nistId" : [ "SC-8" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "log_errors = 1"
+    },
+    "recommendedValue" : "1",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "wJ6bCtvytq6hpKhzZbufNfjUHaY=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр magic_quotes_gpc",
+      "EN" : "Magic_quotes_gpc parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "20" ],
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "magic_quotes_gpc = 0"
+    },
+    "recommendedValue" : "0",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "EHZ4idUUrYA/COu7TZ921ZF1hLI=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр expose_php",
+      "EN" : "Expose_php parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "497" ],
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.5" ],
+    "nistId" : [ "SI-11", "IA-6" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "expose_php = 0"
+    },
+    "recommendedValue" : "0",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "V/ma7Ndtjgv2TrfJlIicuH9gT2E=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр enable_dl",
+      "EN" : "Enable_dl parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "284" ],
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "enable_dl = 0"
+    },
+    "recommendedValue" : "0",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "lLDIeSh4Rcnnodla0p42otBDhEA=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр display_errors",
+      "EN" : "Display_errors parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "209" ],
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.5" ],
+    "nistId" : [ "SI-11", "IA-6" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "display_errors = 0"
+    },
+    "recommendedValue" : "0",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "TJYELKDK6/WVS7/v7bMHQPL3VUg=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр cgi.fix_pathinfo",
+      "EN" : "Cgi.fix_pathinfo parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : null,
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "cgi.fix_pathinfo = 0"
+    },
+    "recommendedValue" : "0",
+    "currentValue" : "not set"
+  }, {
+    "Class" : "CONFIGURATION",
+    "id" : "FyOepBU+0H9+51Rpa7Dkxescvmk=",
+    "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
+    "class" : "CONFIGURATION",
+    "title" : {
+      "RU" : "Параметр allow_url_fopen",
+      "EN" : "Allow_url_fopen parameter"
+    },
+    "level" : "LOW",
+    "isFavorite" : false,
+    "isSuspected" : false,
+    "isSuppressed" : false,
+    "approvalState" : "NONE",
+    "newInScanResultId" : null,
+    "oldInScanResultId" : null,
+    "cweId" : [ "94" ],
+    "owaspId" : [ "6" ],
+    "pciDssId" : [ "6.5.1" ],
+    "nistId" : [ "SI-10" ],
+    "vulnerableExpression" : {
+      "beginLine" : -1,
+      "beginColumn" : -1,
+      "endLine" : -1,
+      "endColumn" : -1,
+      "file" : ".\\php.ini",
+      "value" : "allow_url_fopen = 0"
+    },
+    "recommendedValue" : "0",
+    "currentValue" : "not set"
   } ]
 }

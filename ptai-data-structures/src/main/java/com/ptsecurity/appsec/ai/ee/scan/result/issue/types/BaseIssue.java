@@ -3,10 +3,12 @@ package com.ptsecurity.appsec.ai.ee.scan.result.issue.types;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -62,7 +64,7 @@ public abstract class BaseIssue {
      */
     @NonNull
     @JsonProperty("title")
-    protected String title;
+    protected Map<Reports.Locale, String> title;
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Level {

@@ -109,3 +109,6 @@
 + [Fix] JSON-defined BlackBox engine programming language settings fixed
 + [Feature] Jenkins plugin shows its version on global configuration page (light gray colored text at plugin global settings bottom right corner)
 + [Fix] Ugly headers removed from transfers and reports settings in Jenkins plugin
+## v.3.6.4
++ [Fix] Jenkins plugin version fixed (old Jenkins versions show that data at the very top of screen)
++ [Feature] Multilanguage (EN and RU) scan brief implemented

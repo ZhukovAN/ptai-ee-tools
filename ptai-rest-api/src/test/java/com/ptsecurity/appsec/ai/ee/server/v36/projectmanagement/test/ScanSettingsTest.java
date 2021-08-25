@@ -18,7 +18,7 @@ public class ScanSettingsTest extends BaseTest {
     @Test
     @DisplayName("Read and parse data from base OWASP Bricks scan settings JSON resource file")
     public void parseRawBricksScanSettings() {
-        InputStream inputStream = getResourceStream("v36/json/scanSettings/php-bricks.raw.json");
+        InputStream inputStream = getResourceStream("v36/json/scanSettings/php-bricks.json");
         Assertions.assertNotNull(inputStream);
         try (InputStreamReader reader = new InputStreamReader(inputStream)) {
             V36ScanSettings scanResult = new JSON().getGson().fromJson(reader, V36ScanSettings.class);
@@ -32,7 +32,7 @@ public class ScanSettingsTest extends BaseTest {
     @Test
     @DisplayName("Read and parse data from base PHP Smoke scan settings JSON resource file")
     public void parseRawPhpSmokeScanSettings() {
-        InputStream inputStream = getResourceStream("v36/json/scanSettings/php-smoke.raw.json");
+        InputStream inputStream = getResourceStream("v36/json/scanSettings/php-smoke.json");
         Assertions.assertNotNull(inputStream);
         try (InputStreamReader reader = new InputStreamReader(inputStream)) {
             V36ScanSettings scanResult = new JSON().getGson().fromJson(reader, V36ScanSettings.class);

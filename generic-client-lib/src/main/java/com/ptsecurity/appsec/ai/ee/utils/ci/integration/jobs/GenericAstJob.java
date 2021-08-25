@@ -194,7 +194,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         if (FAILED == scanBrief.getState())
             throw GenericException.raise(
                     Resources.i18n_ast_result_status_failed_server_label(),
-                    new IllegalArgumentException("AST job state " + scanBrief.getState().toString()));
+                    new IllegalArgumentException("AST job state " + scanBrief.getState()));
 
         if (resultsAvailable && null != reports) reportsTasks.generate(projectId, scanResultId, reports, fileOps);
 
@@ -268,18 +268,15 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         }
     }
 
-    Map<Stage, String> performance() {
+    protected Map<Stage, String> performance() {
         // Need to use LinkedHashMap to preserve stages order
         Map<Stage, Duration> durations = new LinkedHashMap<>();
         // Iterate through scan stage timestamps skipping very first
         for (int i = 0 ; i < stages.size() - 1 ; i++) {
             Duration duration = Duration.between(stages.get(i).getValue(), stages.get(i + 1).getValue());
-            if (!durations.containsKey(stages.get(i).getKey()))
-                durations.put(stages.get(i).getKey(), duration);
-            else {
+            if (durations.containsKey(stages.get(i).getKey()))
                 duration = duration.plus(durations.get(stages.get(i).getKey()));
-                durations.put(stages.get(i).getKey(), duration);
-            }
+            durations.put(stages.get(i).getKey(), duration);
         }
         Map<Stage, String> performance = new LinkedHashMap<>();
         for (Map.Entry<Stage, Duration> entry : durations.entrySet())

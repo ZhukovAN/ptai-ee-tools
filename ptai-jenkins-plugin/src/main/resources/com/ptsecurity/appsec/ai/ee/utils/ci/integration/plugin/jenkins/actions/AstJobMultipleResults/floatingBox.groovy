@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.
 
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper
 import lib.FormTagLib
 import lib.LayoutTagLib
 
@@ -9,6 +10,10 @@ f = namespace(FormTagLib)
 l = namespace(LayoutTagLib)
 t = namespace('/lib/hudson')
 st = namespace('jelly:stapler')
+
+def latestResults = from.getLatestAstResults(10)
+
+if (null == latestResults || latestResults.isEmpty()) return;
 
 div(class: 'test-trend-caption') {
     text(from.chartCaption)

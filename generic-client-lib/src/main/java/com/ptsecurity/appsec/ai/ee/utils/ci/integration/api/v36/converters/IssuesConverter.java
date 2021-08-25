@@ -1,11 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters;
 
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.*;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.JSON;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
 import lombok.NonNull;
@@ -15,10 +17,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
@@ -29,6 +34,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 import static org.joor.Reflect.on;
 
 @Slf4j
@@ -184,36 +190,59 @@ public class IssuesConverter {
     /**
      * Method converts PT AI v.3.6 API scan result and issues model pair to API version independent scan result
      * @param scanResult PT AI v.3.6 API scan result that contains scan statistic
-     * @param model PT AI v.3.6 API scan issues list with detailed information about vulnerabilities found
+     * @param modelStreams PT AI v.3.6 API scan issues list with detailed information about vulnerabilities found
      * @param scanSettings PT AI v.3.6 API scan settings
      * @return PT AI API version independent scan results instance
      */
     public static ScanResult convert(
             @NonNull final String projectName,
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
-            @NonNull final IssuesModel model,
+            @NonNull final Map<Reports.Locale, InputStream> modelStreams,
             @NonNull final V36ScanSettings scanSettings,
             @NonNull final Map<ServerVersionTasks.Component, String> versions) {
         ScanResult res = new ScanResult();
         convertInto(projectName, scanResult, scanSettings, versions, res);
 
+        // As there's no localization in metadatas, use english model as source
+        IssuesModel model = null;
+        // Parse localizedModels and extract text from them
+        Map<String, Map<Reports.Locale, String>> dictionary = new HashMap<>();
+        // At this point we have ScanResult that is initialized with vulnerability list. But these
+        // vulnerabilities have titleId field that points nowhere. So we need to create localized
+        // descriptions for all of them
+        for (Reports.Locale locale : modelStreams.keySet()) {
+            IssuesModel localizedModel = parseIssuesModelStream(modelStreams.get(locale));
+            // Save first model as a metadata source. As metadata is not i18n-ed, there's
+            // no difference what locale will be used
+            if (null == model) model = localizedModel;
+            if (null == localizedModel.getDescriptions() || localizedModel.getDescriptions().isEmpty()) continue;
+            Map<String, IssueDescriptionModel> descriptions = localizedModel.getDescriptions();
+            for (IssueDescriptionModel idm : descriptions.values()) {
+                if (null == idm.getDescriptionValue() || StringUtils.isEmpty(idm.getDescriptionValue().getHeader())) continue;
+                Map<Reports.Locale, String> values = dictionary.computeIfAbsent(idm.getIdentity(), l -> new HashMap<>());
+                values.put(locale, idm.getDescriptionValue().getHeader());
+            }
+        }
+
+        if (null == model) {
+            log.warn("Issues model not found");
+            return null;
+        }
+
         Map<String, IssueBaseMetadata> metadataMap = new HashMap<>();
         if (null != model.getMetadatas())
             for (IssueBaseMetadata metadata : model.getMetadatas().values())
                 metadataMap.put(metadata.getKey(), metadata);
-        Map<String, IssueDescriptionModel> descriptionsMap = new HashMap<>();
-        if (null != model.getDescriptions())
-            for (IssueDescriptionModel metadata : model.getDescriptions().values())
-                descriptionsMap.put(metadata.getIdentity(), metadata);
         if (null != model.getIssues()) {
             for (IssueBase issue : model.getIssues()) {
-                List<BaseIssue> issues = convert(issue, metadataMap, descriptionsMap);
+                List<BaseIssue> issues = convert(issue, metadataMap, dictionary);
                 if (null != issues && !issues.isEmpty())
                     res.getIssues().addAll(issues);
                 else
                     System.out.println(issue);
             }
         }
+
         res.setIssuesParseOk(model != EMPTY_ISSUES_MODEL);
         return res;
     }
@@ -303,17 +332,16 @@ public class IssuesConverter {
      * Method copies generic fields data from PT AI v.3.6 issue to version-independent issue
      * @param source PT AI v.3.6 base issue where fields data is copied from
      * @param destination PT AI API version independent base issue
-     * @param description Vulnerability type description from PT AI v.3.6
      */
     protected static void setBaseFields(
             @NonNull final IssueBase source,
             @NonNull final BaseIssue destination,
-            @NonNull final DescriptionBaseValue description) {
+            @NonNull final Map<String, Map<Reports.Locale, String>> dictionary) {
         destination.setId(source.getId());
         destination.setScanResultId(Objects.requireNonNull(source.getScanResultId()));
         destination.setClazz(ISSUE_TYPE_MAP.get(source.getPropertyClass()));
         destination.setLevel(ISSUE_LEVEL_MAP.get(source.getLevel()));
-        destination.setTitle(Objects.requireNonNull(description.getHeader()));
+        destination.setTitle(dictionary.get(source.getType()));
 
         destination.setApprovalState(ISSUE_APPROVAL_STATE_MAP.get(source.getApprovalState()));
         destination.setFavorite(source.getIsFavorite());
@@ -422,43 +450,41 @@ public class IssuesConverter {
      * @param issueBase Base information about vulnerability. Exact descendant iccue class type dependes
      *                  on a propertyClass field value
      * @param metadataMap Map of all issues metadatas. Used to enrich result issue with OWASP, CWE, NIST etc. IDs
-     * @param descriptionsMap Map of all issues descriptions. Used to enrich result issue with title
+     * @param dictionary Localized map of all issues descriptions. Used to enrich result issue with title
      * @return PT AI API version independent vulnerability instance
      */
     protected static List<BaseIssue> convert(
             @NonNull final IssueBase issueBase,
             @NonNull final Map<String, IssueBaseMetadata> metadataMap,
-            @NonNull final Map<String, IssueDescriptionModel> descriptionsMap) {
+            @NonNull final Map<String, Map<Reports.Locale, String>> dictionary) {
+        // Issue description linked to issue via IssueBase:type - IssueDescriptionModel:identity
+        // association. So let's create single localized dictionary of vulnerability titles
+
         // PT AI API uses string representation for issue class field
         IssueType issueType = IssueType.valueOf(issueBase.getPropertyClass());
         // All issues except SCA ones are linked to metadata and descriptions using type field.
         // SCA uses array of fingerprint IDs and those are to be processed separately
         IssueBaseMetadata baseMetadata = null;
-        // The same approach applied to descriptions: type field for all except SCA issues that use array of fingerprint IDs
-        DescriptionBaseValue description = null;
 
         if (IssueType.Fingerprint != issueType) {
             baseMetadata = metadataMap.get(issueBase.getType());
             if (null == baseMetadata) {
-                log.warn("Skipping issue " + issueBase.getId() + " as there were no metadata found");
+                log.warn("Skipping issue {} as there were no metadata found", issueBase.getId());
                 log.trace(issueBase.toString());
                 return null;
             }
-            // The same approach applied to descriptions
-            IssueDescriptionModel idm = descriptionsMap.get(issueBase.getType());
-            if (null == idm || null == idm.getDescriptionValue() || StringUtils.isEmpty(idm.getDescriptionValue().getHeader())) {
-                log.warn("Skipping issue " + issueBase.getId() + " as there were no description found");
+            if (!dictionary.containsKey(issueBase.getType())) {
+                log.warn("Skipping issue {} as there were no description found", issueBase.getId());
                 log.trace(issueBase.toString());
                 return null;
             }
-            description = idm.getDescriptionValue();
         }
 
         if (IssueType.BlackBox == issueType && issueBase instanceof V36BlackBoxIssue) {
                 V36BlackBoxIssue issue = (V36BlackBoxIssue) issueBase;
 
                 BlackBoxIssue res = new BlackBoxIssue();
-                setBaseFields(issue, res, description);
+                setBaseFields(issue, res, dictionary);
                 applyMetadata(baseMetadata, res);
 
                 return Collections.singletonList(res);
@@ -466,7 +492,7 @@ public class IssuesConverter {
             V36ConfigurationIssue issue = (V36ConfigurationIssue) issueBase;
 
             ConfigurationIssue res = new ConfigurationIssue();
-            setBaseFields(issue, res, description);
+            setBaseFields(issue, res, dictionary);
             applyMetadata(baseMetadata, res);
 
             res.setVulnerableExpression(convert(issue.getVulnerableExpression()));
@@ -483,37 +509,42 @@ public class IssuesConverter {
             for (String fingerprintId : fingerprintIds) {
                 baseMetadata = metadataMap.get(fingerprintId);
                 if (null == baseMetadata) {
-                    log.warn("Skipping issue " + issueBase.getId() + " as there were no metadata found");
+                    log.warn("Skipping issue {} as there were no metadata found", issueBase.getId());
                     log.trace(issueBase.toString());
                     continue;
                 }
-                IssueDescriptionModel idm = descriptionsMap.get(fingerprintId);
-                if (null == idm || null == idm.getDescriptionValue() || StringUtils.isEmpty(idm.getDescriptionValue().getHeader())) {
-                    log.warn("Skipping issue " + issueBase.getId() + " as there were no description found");
+                if (!dictionary.containsKey(fingerprintId)) {
+                    log.warn("Skipping issue {} as there were no description found", issueBase.getId());
                     log.trace(issueBase.toString());
-                    return null;
+                    continue;
                 }
-                description = idm.getDescriptionValue();
-                // SCA issues details are located in
                 ScaIssue res = new ScaIssue();
-                setBaseFields(issue, res, description);
+                // All vulnerabilities except fingerprint ones are linked to their descriptions
+                // using vulnerability.type. Fingerprint vulnerabilities have null value in
+                // type field and linked using fingerprintId instead. Let's init it with fingerprintId
+                // to avoid setBaseFields change
+                issue.setType(fingerprintId);
+                setBaseFields(issue, res, dictionary);
                 // As single V36FingerprintIssue may have multiple fingerprint IDs
                 // PT AI looks these IDs for maximum severity level and assigns it
                 // to issue. But as we decide to create individual ScaIssue for
                 // each fingerprintId, we need to fix level by applying actual level
                 // value from metadata linked to this fingerprint Id
                 applyMetadata(baseMetadata, res);
-                // setBaseFields sets ScaIssue title to description header. This works
-                // well for other vulnerability types (header values are "SQL injection"
-                // etc.), but for SCA vulnerabilities these headers are CVE IDs. So we
-                // need to fix that and use component name / version pair as vulnerability title
-                // TODO: Implement i18n of issue titles
-                res.setTitle("Vulnerable component " + issue.getComponentName() + " " + issue.getComponentVersion());
                 res.setFingerprintId(fingerprintId);
                 res.setComponentName(issue.getComponentName());
                 res.setComponentVersion(issue.getComponentVersion());
                 if (null != issue.getVulnerableExpression())
                     res.setFile(issue.getVulnerableExpression().getFile());
+                // SCA-related descriptions are ugly: sometimes they do contain CVE ID only. Let's replace it with more descriptive data
+                for (Reports.Locale locale : res.getTitle().keySet()) {
+                    String title = Reports.Locale.RU == locale
+                            ? "Уязвимый компонент" : "Vulnerable component";
+                    title += " " + issue.getComponentName() + " " + issue.getComponentVersion();
+                    if (StringUtils.isNotEmpty(res.getCveId()))
+                        title += " (" + res.getCveId() + ")";
+                    res.getTitle().put(locale, title);
+                }
                 // As single file may be subject to a multiple vulnerabilities, we need to
                 // create separate issue for each fingerprint and use metadata values
                 scaIssues.add(res);
@@ -523,13 +554,13 @@ public class IssuesConverter {
             V36UnknownIssue issue = (V36UnknownIssue) issueBase;
 
             UnknownIssue res = new UnknownIssue();
-            setBaseFields(issue, res, description);
+            setBaseFields(issue, res, dictionary);
             return Collections.singletonList(res);
         } else if (IssueType.Vulnerability == issueType) {
             V36VulnerabilityIssue issue = (V36VulnerabilityIssue) issueBase;
 
             VulnerabilityIssue res = new VulnerabilityIssue();
-            setBaseFields(issue, res, description);
+            setBaseFields(issue, res, dictionary);
             applyMetadata(baseMetadata, res);
 
             res.setSecondOrder(issue.getIsSecondOrder());
@@ -559,7 +590,7 @@ public class IssuesConverter {
             V36WeaknessIssue issue = (V36WeaknessIssue) issueBase;
 
             WeaknessIssue res = new WeaknessIssue();
-            setBaseFields(issue, res, description);
+            setBaseFields(issue, res, dictionary);
             applyMetadata(baseMetadata, res);
             res.setVulnerableExpression(convert(issue.getVulnerableExpression()));
 
@@ -568,7 +599,7 @@ public class IssuesConverter {
             V36YaraMatchIssue issue = (V36YaraMatchIssue) issueBase;
 
             YaraMatchIssue res = new YaraMatchIssue();
-            setBaseFields(issue, res, description);
+            setBaseFields(issue, res, dictionary);
             return Collections.singletonList(res);
         } else
             return null;
@@ -599,7 +630,7 @@ public class IssuesConverter {
         try {
             log.debug("JVM heap memory use before parse {} / {}", FileCollector.bytesToString(usage.getUsed()), FileCollector.bytesToString(usage.getMax()));
             log.debug("Parse started at {}", Instant.now());
-            IssuesModel res = parser.getGson().fromJson(new InputStreamReader(data), IssuesModel.class);
+            IssuesModel res = parser.getGson().fromJson(new InputStreamReader(data, StandardCharsets.UTF_8), IssuesModel.class);
             log.debug("Parse finished at {}", Instant.now());
             log.debug("JVM heap memory use after parse {} / {}", FileCollector.bytesToString(usage.getUsed()), FileCollector.bytesToString(usage.getMax()));
             return res;
@@ -610,22 +641,13 @@ public class IssuesConverter {
     }
 
     /**
-     * Method converts PT AI v.3.6 API scan result and issues model pair to API version independent scan result
-     * @param scanResult PT AI v.3.6 API scan result that contains scan statistic
-     * @param model Serialized stream of PT AI v.3.6 API scan issues list with detailed information about vulnerabilities found
-     * @param scanSettings PT AI v.3.6 API scan settings
-     * @return PT AI API version independent scan results instance
+     * Method collects
+     * @param projectName
+     * @param scanResult
+     * @param scanSettings
+     * @param versions
+     * @param destination
      */
-    @SneakyThrows
-    public static ScanResult convert(
-            @NonNull final String projectName,
-            @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
-            @NonNull final InputStream model,
-            @NonNull final V36ScanSettings scanSettings,
-            @NonNull final Map<ServerVersionTasks.Component, String> versions) {
-        return convert(projectName, scanResult, parseIssuesModelStream(model), scanSettings, versions);
-    }
-
     public static void convertInto(
             @NonNull final String projectName,
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,

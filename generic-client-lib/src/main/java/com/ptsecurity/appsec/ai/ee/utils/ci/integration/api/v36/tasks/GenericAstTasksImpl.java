@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.tasks;
 
 import com.microsoft.signalr.HubConnection;
 import com.ptsecurity.appsec.ai.ee.scan.errors.Error;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanError;
@@ -22,10 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.io.InputStream;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
@@ -124,19 +123,28 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                 .build();
     }
 
+    /**
+     * Adds finished scan execution statistics to scan brief
+     * @param scanBrief Scan brief where statistics is to be added to
+     * @throws GenericException
+     */
     @Override
     public void appendStatistics(@NonNull final ScanBrief scanBrief) throws GenericException {
+        log.trace("Getting project {} scan results {}", scanBrief.getProjectId(), scanBrief.getId());
         com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult = call(
                 () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(scanBrief.getProjectId(), scanBrief.getId()),
                 "Get project scan result failed");
         log.debug("Project {} scan result {} load complete", scanBrief.getProjectId(), scanBrief.getId());
+
+        log.trace("Getting scan result statistics");
         ScanResultStatistic statistic = call(
                 () -> Objects.requireNonNull(scanResult.getStatistic(), "Scan result statistics is null"),
                 "Get scan result statistics failed");
+        log.trace("Converting v.3.6 scan result statistics to version-independent data");
         call(
                 () -> scanBrief.setStatistics(convert(statistic, scanResult)),
                 "Scan result statistics conversion failed");
-
+        log.trace("Setting scan brief policy assessment state");
         call(
                 () -> scanBrief.setPolicyState(IssuesConverter.convert(Objects.requireNonNull(statistic.getPolicyState(), "Scan result policy state is null"))),
                 "Scan result policy state stage conversion failed");
@@ -171,11 +179,23 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                 "Get project scan result failed");
         log.debug("Project {} scan result {} load complete", projectId, scanResultId);
 
-        File issuesModelFile = call(
-                () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdIssuesGet(projectId, scanResultId, null),
-                "PT AI project scan status JSON read failed");
-        log.debug("Issues stored to temp file {}", issuesModelFile.getAbsolutePath());
+        log.trace("Loading issues into temporal files");
+        Map<Reports.Locale, File> issuesModelFiles = new HashMap<>();
+        Map<Reports.Locale, InputStream> issuesModelStreams = new HashMap<>();
+        for (Reports.Locale locale : Reports.Locale.values()) {
+            log.trace("Getting issues data using {} locale", locale);
+            File issuesModelFile = call(
+                    () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdIssuesGet(projectId, scanResultId, locale.getCode()),
+                    "PT AI project localized scan status JSON read failed");
+            log.debug("Localized ({}) issues stored to temp file {}", locale, issuesModelFile.getAbsolutePath());
+            issuesModelFiles.put(locale, issuesModelFile);
+            InputStream localizedIssuesModelFileStream = call(
+                    () -> new FileInputStream(issuesModelFile),
+                    "PT AI project localized scan status temporal file read failed");
+            issuesModelStreams.put(locale, localizedIssuesModelFileStream);
+        }
 
+        log.trace("Loading project {} scan settings {}", projectId, scanResult.getSettingsId());
         V36ScanSettings scanSettings = call(
                 () -> client.getProjectsApi().apiProjectsProjectIdScanSettingsScanSettingsIdGet(projectId, scanResult.getSettingsId()),
                 "Get project scan settings failed");
@@ -186,11 +206,16 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
 
         com.ptsecurity.appsec.ai.ee.scan.result.ScanResult res = call(
-                () -> convert(projectName, scanResult, new FileInputStream(issuesModelFile), scanSettings, versions), "Project scan result convert failed");
+                () -> convert(projectName, scanResult, issuesModelStreams, scanSettings, versions), "Project scan result convert failed");
         log.debug("Project scan result conversion complete");
-        call(
-                issuesModelFile::delete,
-                "Temporal file " + issuesModelFile.getPath() + " delete failed", true);
+
+        log.debug("Starting temporal files deletion");
+        for (File issuesModelFile : issuesModelFiles.values()) {
+            log.debug("Deleting {}", issuesModelFile.getPath());
+            call(
+                    issuesModelFile::delete,
+                    "Temporal file " + issuesModelFile.getPath() + " delete failed", true);
+        }
         return res;
     }
 

@@ -1,12 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.scan.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Class that stores top-level information about completed AST job. That
@@ -63,7 +64,7 @@ public class ScanBrief {
         @JsonProperty
         protected UUID id;
 
-        public static enum Engine {
+        public enum Engine {
             AI, PM, TAINT, DC, FINGERPRINT, CONFIGURATION, BLACKBOX
         }
 

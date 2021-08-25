@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.scan.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
 import lombok.*;
@@ -47,7 +48,7 @@ public class ScanBriefDetailed extends ScanBrief {
                  * See {@link BaseIssue#getTitle()} description
                  */
                 @JsonProperty
-                protected String title;
+                protected Map<Reports.Locale, String> title;
 
                 /**
                  * See {@link BaseIssue#getFavorite()} description
@@ -184,8 +185,7 @@ public class ScanBriefDetailed extends ScanBrief {
                         Collectors.counting()));
         Comparator<Details.ChartData.BaseIssueCount> compareLevelTypeAndCount = Comparator
                 .comparing(Details.ChartData.BaseIssueCount::getLevel, Comparator.comparingInt(BaseIssue.Level::getValue).reversed())
-                .thenComparing(Details.ChartData.BaseIssueCount::getCount, Comparator.reverseOrder())
-                .thenComparing(Details.ChartData.BaseIssueCount::getTitle);
+                .thenComparing(Details.ChartData.BaseIssueCount::getCount, Comparator.reverseOrder());
         List<Details.ChartData.BaseIssueCount> res = new ArrayList<>();
 
         for (Details.ChartData.BaseIssueCountFields key : distribution.keySet())

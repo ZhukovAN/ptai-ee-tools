@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Set of reports to be generated after AST job is complete
@@ -23,7 +20,9 @@ public class Reports {
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     @ToString
     public enum Locale {
-        EN("en-US"), RU("ru-RU");
+        EN("en-US", 1033, java.util.Locale.US),
+
+        RU("ru-RU", 1049, new java.util.Locale("ru", "RU"));
 
         private static final Map<String, Locale> VALUES = new HashMap<>();
 
@@ -38,6 +37,13 @@ public class Reports {
         @Getter
         @NonNull
         private final String value;
+
+        @Getter
+        private final int code;
+
+        @Getter
+        @NonNull
+        private final java.util.Locale locale;
     }
 
     /**

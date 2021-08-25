@@ -26,17 +26,15 @@ enum Language #EEEEEE {
 
 
 class ScanBrief {
-    String ptaiApiVersion
+    String ptaiServerVersion
+    String ptaiAgentVersion
     UUID id
     UUID projectId
     Policy.PolicyState policyState
 }
 
 class ScanResult {
-    String ptaiApiVersion
-    UUID id
-    UUID projectId
-    Policy.PolicyState policyState
+    boolean issuesParseOk
 }
 ScanResult --|> ScanBrief
 
@@ -81,7 +79,7 @@ ScanBrief -left-> State : state
 class BaseIssue {
     String id
     UUID ScanBriefId
-    String title
+    Map<Reports.Locale, String> title
     Boolean favorite
     Boolean suspected
     Boolean suppressed
