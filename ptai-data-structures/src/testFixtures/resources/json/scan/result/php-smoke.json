@@ -1,13 +1,14 @@
 {
   "ptaiServerVersion" : "3.6.4.2843",
   "ptaiAgentVersion" : "3.6.4.1437",
+  "ptaiServerUrl" : "https://ptai.domain.org:443/",
   "id" : "b0efd5be-2ff2-40e5-a36f-351b94579ffb",
   "projectId" : "0dd14fc1-dcfc-4081-989a-b6b5afd31317",
   "projectName" : "php-smoke",
   "useAsyncScan" : false,
   "scanSettings" : {
     "id" : "c85c50a0-448d-486d-9ca5-d5346f09e051",
-    "engines" : [ "AI", "PM" ],
+    "engines" : [ "PM", "AI" ],
     "unpackUserPackages" : false,
     "downloadDependencies" : false,
     "usePublicAnalysisMethod" : false,
@@ -33,6 +34,7 @@
   "issues" : [ {
     "Class" : "SCA",
     "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "typeId" : "8508F016C4913BBF6114E8A69AC27A25",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "SCA",
     "title" : {
@@ -61,6 +63,7 @@
   }, {
     "Class" : "SCA",
     "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "typeId" : "1C6FBE343492F673AD5CEF4B37BBF07E",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "SCA",
     "title" : {
@@ -89,6 +92,7 @@
   }, {
     "Class" : "SCA",
     "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "typeId" : "70171907FCA8091CC65AACA6DF4D08E7",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "SCA",
     "title" : {
@@ -117,6 +121,7 @@
   }, {
     "Class" : "SCA",
     "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "typeId" : "829489A6F061914ED1C01372D78212F9",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "SCA",
     "title" : {
@@ -145,6 +150,7 @@
   }, {
     "Class" : "SCA",
     "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "typeId" : "0BA49B7B2C2C476B3257C4955887225F",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "SCA",
     "title" : {
@@ -173,6 +179,7 @@
   }, {
     "Class" : "SCA",
     "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "typeId" : "7B0EAF8A33146A624CC73C635C327C76",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "SCA",
     "title" : {
@@ -201,6 +208,7 @@
   }, {
     "Class" : "SCA",
     "id" : "/wHacXeBT0qtIrXVwPDmLlh3y/g=",
+    "typeId" : "9A611E16DBF2BF6DFF9713B6EF72C61B",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "SCA",
     "title" : {
@@ -229,6 +237,7 @@
   }, {
     "Class" : "VULNERABILITY",
     "id" : "obS7TVnAIT/RWGxW0CJInvKFV9k=",
+    "typeId" : "FC545B5FA2F56151565A37B9A2C53CBF",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "VULNERABILITY",
     "title" : {
@@ -302,6 +311,7 @@
   }, {
     "Class" : "VULNERABILITY",
     "id" : "ai3WJyhnGNnDMV7ud9oJVXEeSQM=",
+    "typeId" : "BD1D4B3D200A76033685033C07A5B0C0",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "VULNERABILITY",
     "title" : {
@@ -375,6 +385,7 @@
   }, {
     "Class" : "VULNERABILITY",
     "id" : "evUFytpvnyvJW8htKNnnlWVzSIs=",
+    "typeId" : "FD7C9BDC93C1284DA6A20F3186AF1042",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "VULNERABILITY",
     "title" : {
@@ -448,6 +459,7 @@
   }, {
     "Class" : "WEAKNESS",
     "id" : "Jqo3KEAU6bhOqgyz0DPjwd7WcIU=",
+    "typeId" : "26657D5FF9020D2ABEFE558796B99584",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "WEAKNESS",
     "title" : {
@@ -476,6 +488,7 @@
   }, {
     "Class" : "VULNERABILITY",
     "id" : "cKOGICGUmGbN3za/HH4Tysyg1Ek=",
+    "typeId" : "FC545B5FA2F56151565A37B9A2C53CBF",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "VULNERABILITY",
     "title" : {
@@ -549,6 +562,7 @@
   }, {
     "Class" : "VULNERABILITY",
     "id" : "P1AT0Wbs5RzuVAfN+PJbufPhzFU=",
+    "typeId" : "BD1D4B3D200A76033685033C07A5B0C0",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "VULNERABILITY",
     "title" : {
@@ -622,6 +636,7 @@
   }, {
     "Class" : "VULNERABILITY",
     "id" : "pimXMw337aEedAbLRYk/g3v2k14=",
+    "typeId" : "FD7C9BDC93C1284DA6A20F3186AF1042",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "VULNERABILITY",
     "title" : {
@@ -695,6 +710,7 @@
   }, {
     "Class" : "WEAKNESS",
     "id" : "tcocZlzKZZg8QPy80CyHQA5mUMk=",
+    "typeId" : "26657D5FF9020D2ABEFE558796B99584",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "WEAKNESS",
     "title" : {
@@ -723,6 +739,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "KuXSIa++lO+Ln6vZ/6x3+2gvLL8=",
+    "typeId" : "A141F3672EA675A8CEF4D7B36CE056D9",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -753,6 +770,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "KDfJFcjDHUG9u7d2wroHZV3SYDw=",
+    "typeId" : "5AAF7DFCEFF6398C8F40E674EC2638BC",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -783,6 +801,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "Gpp+xDTQfGQoYQ6JxcPU8MrVN8k=",
+    "typeId" : "EED83299060C2CF34667DECD4FE6644B",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -813,6 +832,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "JA2TxSxhvfs9OQclnFV0T8DQhU4=",
+    "typeId" : "8B014D466D06083DCD7B26D4711DACC9",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -843,6 +863,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "GmbO3yZqEoH+6bD7akcDwI5x7NQ=",
+    "typeId" : "886593A8F40A9336068AD043B9195A90",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -873,6 +894,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "Mr4TpuBr38MPpgRBQF1kpPms/G8=",
+    "typeId" : "565514DAE2C2016995E230BEFF2988B8",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -903,6 +925,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "5XN+r9ehOXmJArpM1SF0t5OI0N4=",
+    "typeId" : "39A4765338FC8A0C3B3F152E022F92E6",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -933,6 +956,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "2bOoxCjXXmk2xWKKmiWZsMMQrJU=",
+    "typeId" : "5FEB689C739C7F8A531D8112BD252A44",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -963,6 +987,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "+aERWQX+EH8dmH1FDJnIk3yc+FM=",
+    "typeId" : "99706401908D0A2303E6E337F3613466",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -993,6 +1018,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "wJ6bCtvytq6hpKhzZbufNfjUHaY=",
+    "typeId" : "0BA6EF8965D060E8D5683A465E65C032",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -1023,6 +1049,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "EHZ4idUUrYA/COu7TZ921ZF1hLI=",
+    "typeId" : "092F72DE6E6C71D52D8AA5DC2344D560",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -1053,6 +1080,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "V/ma7Ndtjgv2TrfJlIicuH9gT2E=",
+    "typeId" : "3B3BE5486578576FD2FBF5EF0129F6A9",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -1083,6 +1111,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "lLDIeSh4Rcnnodla0p42otBDhEA=",
+    "typeId" : "970AFF83FD9D5662201BC2CB38438200",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -1113,6 +1142,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "TJYELKDK6/WVS7/v7bMHQPL3VUg=",
+    "typeId" : "7168C4D0111603C8D73477818DD9076B",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -1143,6 +1173,7 @@
   }, {
     "Class" : "CONFIGURATION",
     "id" : "FyOepBU+0H9+51Rpa7Dkxescvmk=",
+    "typeId" : "A7C2AD366491BB4E559DC452A4408D37",
     "scanResultId" : "0329496e-d087-47e1-8c19-c34a974c2271",
     "class" : "CONFIGURATION",
     "title" : {
@@ -1170,5 +1201,111 @@
     },
     "recommendedValue" : "0",
     "currentValue" : "not set"
-  } ]
+  } ],
+  "description" : {
+    "8508F016C4913BBF6114E8A69AC27A25" : {
+      "RU" : "PHPMailer before 6.1.6 contains an output escaping bug when the name of a file attachment contains a double quote character. This can result in the file type being misinterpreted by the receiver or any mail relay processing the message.",
+      "EN" : "PHPMailer before 6.1.6 contains an output escaping bug when the name of a file attachment contains a double quote character. This can result in the file type being misinterpreted by the receiver or any mail relay processing the message."
+    },
+    "FC545B5FA2F56151565A37B9A2C53CBF" : {
+      "RU" : "Приложение может сериализовывать данные для их хранения и будущей обработки. Если при десериализации используются потенциально опасные данные, то существует возможность создавать объекты произвольных классов, тем самым изменив логику работы веб-приложения.",
+      "EN" : "An application can serialize data for storage and processing. If untrusted data is unserialized, an attacker can create objects of arbitrary classes and modify application logic."
+    },
+    "7B0EAF8A33146A624CC73C635C327C76" : {
+      "RU" : "PHPMailer before 5.2.27 and 6.x before 6.0.6 is vulnerable to an object injection attack.",
+      "EN" : "PHPMailer before 5.2.27 and 6.x before 6.0.6 is vulnerable to an object injection attack."
+    },
+    "0BA6EF8965D060E8D5683A465E65C032" : {
+      "RU" : "Параметр задает режим magic_quotes для операций GET, POST, COOKIE. Если magic_quotes включен, то все одинарные кавычки, двойные кавычки, обратные слэши и символы NUL автоматически экранируются обратным слэшем.",
+      "EN" : "The parameter defines magic_quotes mode for operations Get, Post, Cookie. If magic_quotes is enabled, all single and double quotes, backslash and NUL are automatically escaped by backslash."
+    },
+    "1C6FBE343492F673AD5CEF4B37BBF07E" : {
+      "RU" : "The isMail transport in PHPMailer before 5.2.20 might allow remote attackers to pass extra parameters to the mail command and consequently execute arbitrary code by leveraging improper interaction between the escapeshellarg function and internal escaping performed in the mail function in PHP. NOTE: this vulnerability exists because of an incorrect fix for CVE-2016-10033.",
+      "EN" : "The isMail transport in PHPMailer before 5.2.20 might allow remote attackers to pass extra parameters to the mail command and consequently execute arbitrary code by leveraging improper interaction between the escapeshellarg function and internal escaping performed in the mail function in PHP. NOTE: this vulnerability exists because of an incorrect fix for CVE-2016-10033."
+    },
+    "39A4765338FC8A0C3B3F152E022F92E6" : {
+      "RU" : "Эта директива задает максимальное время в секундах, в течение которого сценарий должен обработать все входные данные, переданные запросами вроде POST или GET. Это время измеряется от момента, когда сервером получены все данные, до момента, когда сценарий начинает выполняться.",
+      "EN" : "The directive defines the maximum time (in seconds) given for a script to process input data sent in requests like POST or GET. This time starts as a server receives all the data and ends as a script is run."
+    },
+    "092F72DE6E6C71D52D8AA5DC2344D560" : {
+      "RU" : "Выдает факт присутствия PHP на сервере, включая передачу версии PHP в HTTP-заголовке (например, X-Powered-By: PHP/5.3.7). До версии PHP 5.5.0 также показывались идентификаторы логотипов, таким образом, при добавлении их к ссылке на сайте с PHP показывался соответствующий логотип.",
+      "EN" : "The parameter defines if it is possible to detect PHP on a server, including PHP version sent in HTTP header (for example, X-Powered-By: PHP/5.3.7). Up to PHP 5.5.0 it also includes logo IDs, so if added to a link on a PHP site, logo is displayed (for example, http://www.php.net/?=PHPE9568F34-D428-11d2-A769-00AA001ACF42)."
+    },
+    "886593A8F40A9336068AD043B9195A90" : {
+      "RU" : "Параметр, согласно которому доступ к cookies может быть получен только через HTTP-протокол. Это означает, что cookies не будут доступны через скриптовые языки, например JavaScript.",
+      "EN" : "The setting defines if cookies is accessible via HTTP only. This means that cookies is unavailable for script languages like JavaScript."
+    },
+    "7168C4D0111603C8D73477818DD9076B" : {
+      "RU" : "Обеспечивает поддержку правильных путей PATH_INFO/PATH_TRANSLATED в CGI. Установка этого значения в 1 заставит PHP CGI исправлять свой путь в соответствии со спецификацией, вследствие чего возникает возможность исполнения произвольного кода.",
+      "EN" : "This option provides PATH_INFO/PATH_TRANSLATED correct path support in CGI. If the value is 1, PHP CGI modifies its path according to the specification, that leads to possible code execution."
+    },
+    "FD7C9BDC93C1284DA6A20F3186AF1042" : {
+      "RU" : "В приложении осуществляется недостаточная обработка потенциально опасных данных, что позволяет выполнить произвольный код в браузере пользователя в обход политики единого источника (SOP).",
+      "EN" : "The application does not sufficiently validate user input that allows attackers to to execute arbitrary code in the context of victim's browser bypassing the Same Origin Policy (SOP)."
+    },
+    "A7C2AD366491BB4E559DC452A4408D37" : {
+      "RU" : "Параметр отвечает за поддержку оберток URL (URL wrappers), которые позволяют работать с объектами URL как с обычными файлами. Обертки, доступные по умолчанию, служат для работы с удаленными файлами по протоколу FTP или HTTP.",
+      "EN" : "The parameter is responsible for URL wrappers support that allow you to operate with URL objects as common files. Default wrappers make it possible to operate with remote files via FTP or HTTP."
+    },
+    "565514DAE2C2016995E230BEFF2988B8" : {
+      "RU" : "Параметр ограничивает указанным деревом каталогов файлы, которые могут быть открыты с помощью PHP. Когда сценарий пытается открыть файл, например, с помощью функции fopen() или gzopen(), проверяется расположение файла. Если файл находится вне указанного дерева каталогов, то PHP откажется его открывать.",
+      "EN" : "The parameter defines a list of folders which files can be opened by PHP. In case a script tries to open a file, for example via fopen () or gzopen (), the system checks file location. If the file is located outside the specified folder, PHP rejects file open."
+    },
+    "0BA49B7B2C2C476B3257C4955887225F" : {
+      "RU" : "PHPMailer before 6.5.0 on Windows allows remote code execution if lang_path is untrusted data and has a UNC pathname.",
+      "EN" : "PHPMailer before 6.5.0 on Windows allows remote code execution if lang_path is untrusted data and has a UNC pathname."
+    },
+    "5FEB689C739C7F8A531D8112BD252A44" : {
+      "RU" : "Функция assert позволяет исполнять произвольный код. Рекомендуется запретить исполнение через assert во избежание несанкционированного доступа к системе.",
+      "EN" : "Assert function allows you to execute arbitrary code. We recommend you to disable code execution via assert to prevent an unauthorized access."
+    },
+    "970AFF83FD9D5662201BC2CB38438200" : {
+      "RU" : "Параметр определяет, требуется ли выводить ошибки на экран вместе с остальным выводом или ошибки должны быть скрыты от пользователя.",
+      "EN" : "The parameter defines if errors are displayed together with common output, or hidden."
+    },
+    "3B3BE5486578576FD2FBF5EF0129F6A9" : {
+      "RU" : "Параметр отвечает за возможность динамической подгрузки расширений посредством функции dl(). Динамическая загрузка может быть включена или отключена для каждого виртуального сервера или каталога.",
+      "EN" : "The parameter defines if it is possible to dynamically load extensions via dl() function. You can enable or disable dynamic loading for every virtual server or folder."
+    },
+    "9A611E16DBF2BF6DFF9713B6EF72C61B" : {
+      "RU" : "An issue was discovered in PHPMailer before 5.2.22. PHPMailer's msgHTML method applies transformations to an HTML document to make it usable as an email message body. One of the transformations is to convert relative image URLs into attachments using a script-provided base directory. If no base directory is provided, it resolves to /, meaning that relative image URLs get treated as absolute local file paths and added as attachments. To form a remote vulnerability, the msgHTML method must be called, passed an unfiltered, user-supplied HTML document, and must not set a base directory.",
+      "EN" : "An issue was discovered in PHPMailer before 5.2.22. PHPMailer's msgHTML method applies transformations to an HTML document to make it usable as an email message body. One of the transformations is to convert relative image URLs into attachments using a script-provided base directory. If no base directory is provided, it resolves to /, meaning that relative image URLs get treated as absolute local file paths and added as attachments. To form a remote vulnerability, the msgHTML method must be called, passed an unfiltered, user-supplied HTML document, and must not set a base directory."
+    },
+    "EED83299060C2CF34667DECD4FE6644B" : {
+      "RU" : "Директива определяет, будет ли использоваться строгий режим при работе с идентификаторами сессии. Если этот режим включен, модуль не принимает идентификаторы неинициализированных сессий.",
+      "EN" : "The directive defines if a strong mode is used for session IDs. If this mode is enabled, the module does not allow not-initialized sessions IDs."
+    },
+    "829489A6F061914ED1C01372D78212F9" : {
+      "RU" : "PHPMailer 6.4.1 and earlier contain a vulnerability that can result in untrusted code being called (if such code is injected into the host project's scope by other means). If the $patternselect parameter to validateAddress() is set to 'php' (the default, defined by PHPMailer::$validator), and the global namespace contains a function called php, it will be called in preference to the built-in validator of the same name. Mitigated in PHPMailer 6.5.0 by denying the use of simple strings as validator function names.",
+      "EN" : "PHPMailer 6.4.1 and earlier contain a vulnerability that can result in untrusted code being called (if such code is injected into the host project's scope by other means). If the $patternselect parameter to validateAddress() is set to 'php' (the default, defined by PHPMailer::$validator), and the global namespace contains a function called php, it will be called in preference to the built-in validator of the same name. Mitigated in PHPMailer 6.5.0 by denying the use of simple strings as validator function names."
+    },
+    "99706401908D0A2303E6E337F3613466" : {
+      "RU" : "Отвечает за выбор журнала, в котором будут сохраняться сообщения об ошибках.",
+      "EN" : "Defines a log to store error messages."
+    },
+    "A141F3672EA675A8CEF4D7B36CE056D9" : {
+      "RU" : "Параметр позволяет отключить некоторые функции по причинам безопасности. Рекомендуется указать в качестве значения параметра следующие функции: popen, exec, system, passthru, proc_open, shell_exec, apache_setenv, putenv, dl, expect_popen, pcntl_exec.",
+      "EN" : "The parameter allows you to disable certain functions because of security reasons. We recommend you to specify the following functions as the parameter value: popen, exec, system, passthru, proc_open, shell_exec, apache_setenv, putenv, dl, expect_popen, pcntl_exec."
+    },
+    "5AAF7DFCEFF6398C8F40E674EC2638BC" : {
+      "RU" : "Директива указывает, должны ли cookies передаваться только через защищенное соединение.",
+      "EN" : "The directive defines if cookies are sent via secure connections only."
+    },
+    "8B014D466D06083DCD7B26D4711DACC9" : {
+      "RU" : "Параметр определяет аргумент, который передается в обработчик сохранения. При использовании стандартного обработчика files аргумент содержит путь к каталогу, в котором будут создаваться файлы сессий.",
+      "EN" : "The parameter defines an argument that is sent to saving process. In case default files is used, the argument includes a folder path aimed to create session files."
+    },
+    "BD1D4B3D200A76033685033C07A5B0C0" : {
+      "RU" : "Веб-приложение может использовать данные, переданные пользователем, при формировании пути удаляемого файла. Злоумышленник, используя эту уязвимость, может удалить файлы на сервере, например, исходный код сценария или конфигурационного файла.",
+      "EN" : "A web application can use user input to generate a path to a deleting file. Exploiting the vulnerability, an attacker can delete specific files, for example script source code or configuration file."
+    },
+    "70171907FCA8091CC65AACA6DF4D08E7" : {
+      "RU" : "The mailSend function in the isMail transport in PHPMailer before 5.2.18 might allow remote attackers to pass extra parameters to the mail command and consequently execute arbitrary code via a \\\" (backslash double quote) in a crafted Sender property.",
+      "EN" : "The mailSend function in the isMail transport in PHPMailer before 5.2.18 might allow remote attackers to pass extra parameters to the mail command and consequently execute arbitrary code via a \\\" (backslash double quote) in a crafted Sender property."
+    },
+    "26657D5FF9020D2ABEFE558796B99584" : {
+      "RU" : "Использование жестко заданных или пустых паролей может привести к компрометации системы, последствия которой тяжело устранить.",
+      "EN" : "Hardcoded or empty passwords could lead to system compromising that is hard to eliminate."
+    }
+  }
 }

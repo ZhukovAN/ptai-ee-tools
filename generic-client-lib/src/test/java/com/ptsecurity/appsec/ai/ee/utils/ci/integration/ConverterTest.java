@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.server.integration.rest.test.BaseIT;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
@@ -45,7 +46,7 @@ public class ConverterTest extends BaseTest {
 
         String projectName = StringUtils.substringBefore(fileName, ".");
 
-        ScanResult genericScanResult = IssuesConverter.convert(projectName, scanResult, issuesModel, scanSettings, versions);
+        ScanResult genericScanResult = IssuesConverter.convert(projectName, scanResult, issuesModel, scanSettings, BaseIT.URL, versions);
         for (InputStream issuesModelStream : issuesModel.values())
             issuesModelStream.close();
         return genericScanResult;

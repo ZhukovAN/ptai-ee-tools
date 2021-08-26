@@ -36,6 +36,7 @@ import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -239,6 +240,11 @@ public class Plugin extends Builder implements SimpleBuildStep {
             throw new AbortException(Resources.i18n_ast_result_status_failed_label());
     }
 
+    @NonNull
+    public static String getPluginUrl() {
+        return "/plugin/" + Objects.requireNonNull(Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin")).getShortName();
+    }
+
     @Override
     public PluginDescriptor getDescriptor() {
         return Jenkins.get().getDescriptorByType(PluginDescriptor.class);
@@ -279,7 +285,6 @@ public class Plugin extends Builder implements SimpleBuildStep {
         if (null != projectActions) return projectActions;
         projectActions = new ArrayList<>();
         projectActions.add(new AstJobMultipleResults(project));
-        // TODO: Implement project actions and uncomment this
         projectActions.add(new AstJobTableResults(project));
         return projectActions;
     }

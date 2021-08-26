@@ -114,6 +114,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
 
         return ScanBrief.builder()
+                .ptaiServerUrl(client.getConnectionSettings().getUrl())
                 .ptaiServerVersion(versions.get(ServerVersionTasks.Component.AIE))
                 .ptaiAgentVersion(versions.get(ServerVersionTasks.Component.AIC))
                 .id(scanResultId)
@@ -167,7 +168,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
 
         com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief res = call(
-                () -> convert(projectName, scanResult, scanSettings, versions), "Project scan brief convert failed");
+                () -> convert(projectName, scanResult, scanSettings, client.getConnectionSettings().getUrl(), versions), "Project scan brief convert failed");
         log.debug("Project scan result conversion complete");
         return res;
     }
@@ -206,7 +207,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
 
         com.ptsecurity.appsec.ai.ee.scan.result.ScanResult res = call(
-                () -> convert(projectName, scanResult, issuesModelStreams, scanSettings, versions), "Project scan result convert failed");
+                () -> convert(projectName, scanResult, issuesModelStreams, scanSettings, client.getConnectionSettings().getUrl(), versions), "Project scan result convert failed");
         log.debug("Project scan result conversion complete");
 
         log.debug("Starting temporal files deletion");

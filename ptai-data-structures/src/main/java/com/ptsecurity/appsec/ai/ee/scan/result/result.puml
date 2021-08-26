@@ -26,6 +26,7 @@ enum Language #EEEEEE {
 
 
 class ScanBrief {
+    String ptaiServerUrl
     String ptaiServerVersion
     String ptaiAgentVersion
     UUID id
@@ -35,6 +36,7 @@ class ScanBrief {
 
 class ScanResult {
     boolean issuesParseOk
+    Map<String, Map<Reports.Locale, String>> description
 }
 ScanResult --|> ScanBrief
 
@@ -78,6 +80,7 @@ ScanBrief -left-> State : state
 
 class BaseIssue {
     String id
+    String typeId
     UUID ScanBriefId
     Map<Reports.Locale, String> title
     Boolean favorite
@@ -87,6 +90,9 @@ class BaseIssue {
     UUID oldInScanBriefId
     List<String> cweId
 }
+note right of BaseIssue::typeId
+    Key for ScanResult::description
+end note
 
 enum Type #EEEEEE {
     VULNERABILITY

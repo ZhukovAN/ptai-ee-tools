@@ -23,6 +23,12 @@ public class ScanBrief {
     @Getter
     @Setter
     @JsonProperty
+    protected String ptaiServerUrl;
+
+    @NonNull
+    @Getter
+    @Setter
+    @JsonProperty
     protected String ptaiServerVersion;
 
     @NonNull

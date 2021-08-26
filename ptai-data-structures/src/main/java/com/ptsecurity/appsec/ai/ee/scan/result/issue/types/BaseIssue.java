@@ -40,6 +40,12 @@ public abstract class BaseIssue {
     protected String id;
 
     /**
+     * Unique issue type identifier
+     */
+    @JsonProperty("typeId")
+    protected String typeId;
+
+    /**
      * Scan result this issue belongs to
      */
     @NonNull

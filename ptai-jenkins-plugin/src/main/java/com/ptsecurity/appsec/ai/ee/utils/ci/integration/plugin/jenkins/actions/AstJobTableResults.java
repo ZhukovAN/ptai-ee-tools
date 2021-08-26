@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
@@ -362,7 +363,7 @@ public class AstJobTableResults implements Action {
 
     @Override
     public String getIconFileName() {
-        return "plugin/" + Objects.requireNonNull(Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin")).getShortName() + "/logo.svg";
+        return Plugin.getPluginUrl() + "/icons/logo.svg";
     }
 
     @Override

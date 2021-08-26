@@ -12,13 +12,13 @@ public class BaseIT extends BaseTest {
     public static final String EXISTING_PHP_SMOKE_MEDIUM_PROJECT = "junit-it-php-smoke-medium";
     public static final String EXISTING_PHP_SMOKE_HIGH_PROJECT = "junit-it-php-smoke-high";
 
-    protected static final String TOKEN = (null != System.getenv("ptai.token"))
+    public static final String TOKEN = (null != System.getenv("ptai.token"))
             ? System.getenv("ptai.token")
             : "6M9Qsct5fg20/UEzN7/hvR2RlXkTWOI5";
-    protected static final String URL = (null != System.getenv("ptai.url"))
+    public static final String URL = (null != System.getenv("ptai.url"))
             ? System.getenv("ptai.url")
             : "https://ptai.domain.org:443/";
-    protected static final String CA = CA();
+    public static final String CA = CA();
 
     @SneakyThrows
     protected static String CA() {

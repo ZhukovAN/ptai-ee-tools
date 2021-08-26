@@ -7,6 +7,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed.Details.ChartDa
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.PieChartDataModel;
@@ -39,8 +40,11 @@ public class AstJobSingleResult implements RunAction2 {
 
     @Override
     public String getIconFileName() {
-        // TODO: Implement project actions and uncomment this
-        return "plugin/" + Objects.requireNonNull(Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin")).getShortName() + "/logo.svg";
+        return Plugin.getPluginUrl() + "/icons/logo.svg";
+    }
+
+    public String getLogo48() {
+        return Plugin.getPluginUrl() + "/icons/logo.48x48.svg";
     }
 
     @Override
@@ -102,6 +106,7 @@ public class AstJobSingleResult implements RunAction2 {
     }
 
     public boolean isEmpty() {
+        getScanBriefDetailed();
         return Optional.ofNullable(scanBriefDetailed)
                 .map(ScanBriefDetailed::getDetails)
                 .map(ScanBriefDetailed.Details::getChartData)

@@ -28,7 +28,7 @@ f.entry(
         title: _('locale'),
         field: 'locale') {
     f.select(
-            default: descriptor.getDefaultLocale(),
+            default: descriptor.getDefaultLocale().name(),
     )
 }
 

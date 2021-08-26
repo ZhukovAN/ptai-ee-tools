@@ -11,6 +11,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelpe
 import jenkins.model.Jenkins
 import lib.FormTagLib
 import lib.LayoutTagLib
+import org.apache.commons.lang.StringUtils
 import org.apache.commons.lang3.time.DurationFormatUtils
 
 import java.awt.Color
@@ -237,8 +238,10 @@ l.layout(title: "PT AI AST report") {
         }
 
         def versions = [:]
-        versions[_("environment.server.version")] = "${scanBriefDetailed.ptaiServerVersion}"
-        versions[_("environment.agent.version")] = "${scanBriefDetailed.ptaiAgentVersion}"
+        if (StringUtils.isNotEmpty(scanBriefDetailed.ptaiServerUrl))
+            versions[Resources.i18n_ast_settings_server_url_label()] = scanBriefDetailed.ptaiServerUrl
+        versions[_("environment.server.version")] = scanBriefDetailed.ptaiServerVersion
+        versions[_("environment.agent.version")] = scanBriefDetailed.ptaiAgentVersion
         showTable(versions)
 
         if (!my.isEmpty()) {

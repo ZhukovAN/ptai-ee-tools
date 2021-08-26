@@ -1,5 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.scan.result;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import lombok.*;
@@ -24,4 +26,10 @@ public class ScanResult extends ScanBrief {
 
     @Getter
     protected final List<BaseIssue> issues = new ArrayList<>();
+
+    @NonNull
+    @Getter
+    @JsonProperty("description")
+    protected Map<String, Map<Reports.Locale, String>> description = new HashMap<>();
+
 }

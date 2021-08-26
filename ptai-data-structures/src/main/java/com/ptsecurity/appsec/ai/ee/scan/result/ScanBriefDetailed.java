@@ -132,9 +132,11 @@ public class ScanBriefDetailed extends ScanBrief {
     public static ScanBriefDetailed create(@NonNull final ScanBrief scanResult, @NonNull final Performance performance) {
         return ScanBriefDetailed.builder()
                 .id(scanResult.id)
+                .ptaiServerUrl(scanResult.ptaiServerUrl)
                 .projectId(scanResult.projectId)
                 .projectName(scanResult.projectName)
                 .scanSettings(scanResult.scanSettings)
+                .useAsyncScan(scanResult.useAsyncScan)
                 .policyState(scanResult.policyState)
                 .ptaiAgentVersion(scanResult.ptaiAgentVersion)
                 .ptaiServerVersion(scanResult.ptaiServerVersion)
@@ -147,9 +149,11 @@ public class ScanBriefDetailed extends ScanBrief {
     public static ScanBriefDetailed create(@NonNull final ScanResult scanResult, @NonNull final Performance performance) {
         return ScanBriefDetailed.builder()
                 .id(scanResult.id)
+                .ptaiServerUrl(scanResult.ptaiServerUrl)
                 .projectId(scanResult.projectId)
                 .projectName(scanResult.projectName)
                 .scanSettings(scanResult.scanSettings)
+                .useAsyncScan(scanResult.useAsyncScan)
                 .policyState(scanResult.policyState)
                 .ptaiAgentVersion(scanResult.ptaiAgentVersion)
                 .ptaiServerVersion(scanResult.ptaiServerVersion)

@@ -110,5 +110,10 @@
 + [Feature] Jenkins plugin shows its version on global configuration page (light gray colored text at plugin global settings bottom right corner)
 + [Fix] Ugly headers removed from transfers and reports settings in Jenkins plugin
 ## v.3.6.4
+### 20210825
 + [Fix] Jenkins plugin version fixed (old Jenkins versions show that data at the very top of screen)
 + [Feature] Multilanguage (EN and RU) scan brief implemented
+### 20210826
++ [Feature] Raw scan result now contains localized description
++ [Feature] PT AI server URL added to scan results
++ [Feature] PT AI scan info added to Jenkins build's "summary" section

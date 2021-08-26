@@ -39,6 +39,8 @@ import static org.joor.Reflect.on;
 
 @Slf4j
 public class IssuesConverter {
+    private static final String UNIQUE_PREFIX = UUID.randomUUID().toString();
+
     private static final Map<IssueApprovalState, BaseIssue.ApprovalState> ISSUE_APPROVAL_STATE_MAP = new HashMap<>();
     private static final Map<String, BaseIssue.Type> ISSUE_TYPE_MAP = new HashMap<>();
     private static final Map<IssueLevel, BaseIssue.Level> ISSUE_LEVEL_MAP = new HashMap<>();
@@ -199,13 +201,15 @@ public class IssuesConverter {
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
             @NonNull final Map<Reports.Locale, InputStream> modelStreams,
             @NonNull final V36ScanSettings scanSettings,
+            @NonNull final String ptaiUrl,
             @NonNull final Map<ServerVersionTasks.Component, String> versions) {
         ScanResult res = new ScanResult();
         convertInto(projectName, scanResult, scanSettings, versions, res);
+        res.setPtaiServerUrl(ptaiUrl);
 
         // As there's no localization in metadatas, use english model as source
         IssuesModel model = null;
-        // Parse localizedModels and extract text from them
+        // Parse localizedModels and extract titles and descriptions from them
         Map<String, Map<Reports.Locale, String>> dictionary = new HashMap<>();
         // At this point we have ScanResult that is initialized with vulnerability list. But these
         // vulnerabilities have titleId field that points nowhere. So we need to create localized
@@ -219,8 +223,16 @@ public class IssuesConverter {
             Map<String, IssueDescriptionModel> descriptions = localizedModel.getDescriptions();
             for (IssueDescriptionModel idm : descriptions.values()) {
                 if (null == idm.getDescriptionValue() || StringUtils.isEmpty(idm.getDescriptionValue().getHeader())) continue;
+                // Store localized title to dictionary
                 Map<Reports.Locale, String> values = dictionary.computeIfAbsent(idm.getIdentity(), l -> new HashMap<>());
                 values.put(locale, idm.getDescriptionValue().getHeader());
+                // Store localized description to the same dictionary, but use different key
+                if (StringUtils.isEmpty(idm.getDescriptionValue().getDescription())) {
+                    log.warn("Vulnerability {} have no description", idm.getDescriptionValue().getHeader());
+                    continue;
+                }
+                values = dictionary.computeIfAbsent(UNIQUE_PREFIX + idm.getIdentity(), l -> new HashMap<>());
+                values.put(locale, idm.getDescriptionValue().getDescription());
             }
         }
 
@@ -239,10 +251,15 @@ public class IssuesConverter {
                 if (null != issues && !issues.isEmpty())
                     res.getIssues().addAll(issues);
                 else
-                    System.out.println(issue);
+                    log.warn("Issue {} format conversion failed", issue);
             }
         }
-
+        // Issue format conversion sets type field to value that can be safely mapped to localized description
+        for (BaseIssue issue : res.getIssues()) {
+            String key = UNIQUE_PREFIX + issue.getTypeId();
+            issue.setTypeId(md5(issue.getTypeId()));
+            res.getDescription().put(issue.getTypeId(), dictionary.get(key));
+        }
         res.setIssuesParseOk(model != EMPTY_ISSUES_MODEL);
         return res;
     }
@@ -328,6 +345,12 @@ public class IssuesConverter {
                 .build();
     }
 
+    protected static String md5(@NonNull final String value) throws GenericException {
+        MessageDigest md5 = call(() -> MessageDigest.getInstance("MD5"), "MD5 hash algorithm not available");
+        md5.update(value.getBytes());
+        return DatatypeConverter.printHexBinary(md5.digest()).toUpperCase();
+    }
+
     /**
      * Method copies generic fields data from PT AI v.3.6 issue to version-independent issue
      * @param source PT AI v.3.6 base issue where fields data is copied from
@@ -349,6 +372,8 @@ public class IssuesConverter {
         destination.setSuspected(source.getIsSuspected());
         destination.setNewInScanResultId(source.getIsNewInScanResultId());
         destination.setOldInScanResultId(source.getIsOldInScanResultId());
+
+        destination.setTypeId(source.getType());
     }
 
     /**
@@ -674,9 +699,11 @@ public class IssuesConverter {
             @NonNull final String projectName,
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
             @NonNull final V36ScanSettings scanSettings,
+            @NonNull final String ptaiUrl,
             @NonNull final Map<ServerVersionTasks.Component, String> versions) {
         ScanBrief res = new ScanBrief();
         convertInto(projectName, scanResult, scanSettings, versions, res);
+        res.setPtaiServerUrl(ptaiUrl);
         return res;
     }
 
