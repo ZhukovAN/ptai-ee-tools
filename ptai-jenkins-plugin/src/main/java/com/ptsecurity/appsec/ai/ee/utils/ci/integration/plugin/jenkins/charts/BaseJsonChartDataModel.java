@@ -155,7 +155,7 @@ public class BaseJsonChartDataModel {
             Object[] items = (Object[]) collection;
             for (Object item : items) res.add(convertValue(item));
         } else if (Collection.class.isAssignableFrom(c)) {
-            Collection<Object> items = (Collection<Object>) collection;
+            Collection<?> items = (Collection<?>) collection;
             for (Object item : items) res.add(convertValue(item));
         }
         return res;

@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.ReportsHelper;
@@ -113,7 +114,7 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                 .connectionSettings(ConnectionSettings.builder()
                         .url(activeConnectionParams.get(Params.URL))
                         .insecure(TRUE.equals(activeConnectionParams.get(Params.INSECURE)))
-                        .token(activeConnectionParams.get(Params.TOKEN))
+                        .credentials(TokenCredentials.builder().token(activeConnectionParams.get(Params.TOKEN)).build())
                         .caCertsPem(activeConnectionParams.get(Params.CERTIFICATES))
                         .build())
                 .fullScanMode(TRUE.equals(params.get(Params.FULL_SCAN_MODE)))

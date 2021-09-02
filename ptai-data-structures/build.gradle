@@ -3,7 +3,7 @@ plugins {
     id 'java-test-fixtures'
 }
 
-group = "${rootGroup}.ptai-data-structures"
+group = "${rootGroup}"
 
 dependencies {
     api project(':ptai-i18n')

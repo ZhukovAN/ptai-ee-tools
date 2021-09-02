@@ -23,17 +23,11 @@ public class ConnectionSettings {
     /**
      * PT AI server URL
      */
-    @Getter
     @NonNull
     protected String url;
 
-    /**
-     * PT AI server API token
-     */
-    @Setter
-    @Getter
     @NonNull
-    protected String token;
+    protected BaseCredentials credentials;
 
     /**
      * PT AI API client timeout
@@ -64,8 +58,7 @@ public class ConnectionSettings {
             throw GenericException.raise(Resources.i18n_ast_settings_server_url_message_empty(), new IllegalArgumentException(url));
         if (Validator.validateUrl(url).fail())
             throw GenericException.raise(Resources.i18n_ast_settings_server_url_message_invalid(), new IllegalArgumentException(url));
-        if (StringUtils.isEmpty(token))
-            throw GenericException.raise(Resources.i18n_ast_settings_server_token_message_empty(), new IllegalArgumentException(token));
+        credentials.validate();
         if (!insecure && StringUtils.isNotEmpty(caCertsPem))
             CertificateHelper.readPem(caCertsPem);
         return this;

@@ -63,8 +63,9 @@ public class ScanBrief {
 
     @Getter
     @Setter
-    @SuperBuilder
+    @Builder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class ScanSettings {
         @NonNull
         @JsonProperty

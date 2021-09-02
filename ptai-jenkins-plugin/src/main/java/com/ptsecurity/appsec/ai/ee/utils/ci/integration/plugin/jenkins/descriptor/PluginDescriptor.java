@@ -4,6 +4,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
@@ -221,7 +222,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             @NonNull final Credentials credentials, final boolean insecure) throws GenericException {
         AbstractApiClient client = Factory.client(ConnectionSettings.builder()
                 .url(url)
-                .token(credentials.getToken().getPlainText())
+                .credentials(TokenCredentials.builder().token(credentials.getToken().getPlainText()).build())
                 .insecure(insecure)
                 .caCertsPem(credentials.getServerCaCertificates())
                 .build());

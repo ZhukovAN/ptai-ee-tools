@@ -227,7 +227,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             }
         } else if (Policy.State.CONFIRMED.equals(policyState)) {
             // AST policy assessment OK, check errors / warnings
-            if (failIfUnstable && !errors.isEmpty()) {
+            if (failIfUnstable && null != errors && !errors.isEmpty()) {
                 info(Resources.i18n_ast_result_status_failed_unstable_label());
                 throw GenericException.raise(
                         "AST failed due to minor errors / warnings during scan",
@@ -235,7 +235,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             }
         } else {
             // No AST policy defined. AST success depends on minor errors / warnings
-            if (failIfUnstable && !errors.isEmpty()) {
+            if (failIfUnstable && null != errors && !errors.isEmpty()) {
                 info(Resources.i18n_ast_result_status_failed_unstable_label());
                 throw GenericException.raise(
                         "AST failed due to minor errors / warnings during scan",

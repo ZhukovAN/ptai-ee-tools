@@ -7,6 +7,7 @@ import com.microsoft.signalr.HubConnectionBuilder;
 import com.ptsecurity.appsec.ai.ee.server.v36.auth.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.server.v36.auth.api.AuthApi;
 import com.ptsecurity.appsec.ai.ee.server.v36.auth.model.AuthScopeType;
+import com.ptsecurity.appsec.ai.ee.server.v36.auth.model.UserLoginModel;
 import com.ptsecurity.appsec.ai.ee.server.v36.filesstore.api.StoreApi;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.api.ConfigsApi;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.api.LicenseApi;
@@ -25,8 +26,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanProgr
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanResultRemovedEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanStartedEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.tasks.ServerVersionTasksImpl;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.JwtResponse;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ApiClientHelper;
@@ -104,18 +104,36 @@ public class ApiClient extends AbstractApiClient {
         apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
     }
 
+    public ApiResponse<String> initialAuthentication() throws GenericException {
+        // We have no JWT yet, so need to get it using token-based authentication
+        BaseCredentials baseCredentials = connectionSettings.getCredentials();
+        if (baseCredentials instanceof TokenCredentials) {
+            TokenCredentials tokenCredentials = (TokenCredentials) baseCredentials;
+            authApi.getApiClient().setApiKey(tokenCredentials.getToken());
+            authApi.getApiClient().setApiKeyPrefix(null);
+            return call(
+                    () -> authApi.apiAuthSigninGetWithHttpInfo(AuthScopeType.ACCESSTOKEN),
+                    "Get initial JWT call failed");
+        } else {
+            PasswordCredentials passwordCredentials = (PasswordCredentials) baseCredentials;
+
+            UserLoginModel model = new UserLoginModel();
+            model.setUser(passwordCredentials.getUser());
+            model.setPassword(passwordCredentials.getPassword());
+            return call(
+                    () -> authApi.apiAuthUserLoginPostWithHttpInfo(AuthScopeType.WEB, model),
+                    "Get initial JWT call failed");
+        }
+    }
+
     public JwtResponse authenticate() throws GenericException {
         @NonNull
         ApiResponse<String> jwtResponse;
 
-        if (null == this.apiJwt) {
+        if (null == this.apiJwt)
             // We have no JWT yet, so need to get it using token-based authentication
-            authApi.getApiClient().setApiKey(connectionSettings.getToken());
-            authApi.getApiClient().setApiKeyPrefix(null);
-            jwtResponse = call(
-                    () -> authApi.apiAuthSigninGetWithHttpInfo(AuthScopeType.ACCESSTOKEN),
-                    "Get initial JWT call failed");
-        } else {
+            jwtResponse = initialAuthentication();
+        else {
             // We already have JWT, but it might be expired. Try to refresh it
             authApi.getApiClient().setApiKey(null);
             authApi.getApiClient().setApiKeyPrefix(null);
@@ -135,11 +153,7 @@ public class ApiClient extends AbstractApiClient {
                         "Refresh JWT call failed");
             } catch (GenericException e) {
                 // Exception thrown while trying to refresh JWT. Let's re-authenticate using API token
-                authApi.getApiClient().setApiKey(connectionSettings.getToken());
-                authApi.getApiClient().setApiKeyPrefix(null);
-                jwtResponse = call(() ->
-                        authApi.apiAuthSigninGetWithHttpInfo(AuthScopeType.ACCESSTOKEN),
-                        "Get new JWT call failed");
+                jwtResponse = initialAuthentication();
             }
         }
 

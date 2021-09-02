@@ -17,7 +17,7 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.UUID;
 
-public class BaseAstIT extends BaseClientIT {
+public abstract class BaseAstIT extends BaseClientIT {
     @SuperBuilder
     public static class TestAstOperations implements AstOperations {
         protected GenericAstJob owner;

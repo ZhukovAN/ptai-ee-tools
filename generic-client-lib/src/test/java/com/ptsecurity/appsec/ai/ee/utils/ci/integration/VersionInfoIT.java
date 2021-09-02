@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseClientIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.CheckServerTasks;
 import lombok.SneakyThrows;
@@ -19,11 +20,12 @@ public class VersionInfoIT extends BaseClientIT {
     public void pre() {
         connectionSettings = ConnectionSettings.builder()
                 .url(CONNECTION_SETTINGS.getUrl())
-                .token(CONNECTION_SETTINGS.getToken())
+                .credentials(CONNECTION_SETTINGS.getCredentials())
                 .insecure(CONNECTION_SETTINGS.isInsecure())
                 .caCertsPem(CONNECTION_SETTINGS.getCaCertsPem())
                 .build();
     }
+
     @SneakyThrows
     @Test
     @DisplayName("Check PT AI server status using insecure connection")

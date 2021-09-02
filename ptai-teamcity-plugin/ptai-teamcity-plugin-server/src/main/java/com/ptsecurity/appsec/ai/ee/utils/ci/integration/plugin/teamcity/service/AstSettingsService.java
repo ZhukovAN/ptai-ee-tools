@@ -8,7 +8,9 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.AstAdminSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CertificateHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
@@ -292,7 +294,7 @@ public class AstSettingsService {
     private static AbstractApiClient createApiClient(@NonNull PropertiesBean bean) {
         return Factory.client(ConnectionSettings.builder()
                 .url(bean.get(URL))
-                .token(bean.get(TOKEN))
+                .credentials(TokenCredentials.builder().token(bean.get(TOKEN)).build())
                 .caCertsPem(bean.get(CERTIFICATES))
                 .insecure(bean.isTrue(INSECURE))
                 .build());

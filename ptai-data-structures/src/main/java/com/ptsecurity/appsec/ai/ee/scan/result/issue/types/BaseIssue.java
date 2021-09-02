@@ -135,7 +135,7 @@ public abstract class BaseIssue {
     }
 
     /**
-     * Issue approval state {@see IssueApprovalState}
+     * Issue approval state @see IssueApprovalState
      */
     @JsonProperty("approvalState")
     protected ApprovalState approvalState;

@@ -4,6 +4,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.AstPolicyViolationException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.MinorAstErrorsException;
@@ -23,11 +24,12 @@ public abstract class AbstractJob extends AbstractTool {
     public static final String DEFAULT_PTAI_URL = "https://ptai.domain.org:443";
     public static final boolean DEFAULT_INSECURE = true;
     public static final String DEFAULT_TOKEN = "";
+    
     @NonNull
     @Builder.Default
     protected ConnectionSettings connectionSettings = ConnectionSettings.builder()
             .url(DEFAULT_PTAI_URL)
-            .token(DEFAULT_TOKEN)
+            .credentials(TokenCredentials.builder().token(DEFAULT_TOKEN).build())
             .insecure(DEFAULT_INSECURE)
             .build();
 

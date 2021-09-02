@@ -1,0 +1,106 @@
+@startuml
+package ptai-test-tools <<Frame>> {
+    abstract class BaseTest <<Fixture>> {
+        ..Resource tools..
+        +{static} InputStream getResourceStream(name)
+        +{static} String getResourceString(name)
+        +Path getPackedResourceFile(name)
+        +Path getPackedResourceFile(name, tempFolder)
+        +Path getSevenZippedResourceFile(name, tempFolder)
+        ..JSON tools..
+        +{static} ObjectMapper createFaultTolerantObjectMapper()
+        ..Temp folder tools..
+        +{static} Path TEMP_FOLDER
+        +{static} void deleteFolder()
+    }
+}
+
+package ptai-rest-api <<Frame>> {
+    abstract class BaseIT <<Fixture>> {
+        +{static} String TOKEN
+        +{static} String USER
+        +{static} String PASSWORD
+        +{static} String URL
+        +{static} String CA
+    }
+    BaseIT -left-|> BaseTest
+}
+
+package generic-client-lib <<Frame>> {
+    abstract class BaseAstIT <<Fixture>> {
+    }
+
+    abstract class BaseClientIT <<Fixture>> {
+        #{static} ConnectionSettings CONNECTION_SETTINGS
+    }
+
+    BaseClientIT -left-|> BaseIT
+    BaseAstIT -up-|> BaseClientIT
+
+    class VersionInfoIT #white
+    class JsonAstJobIT #white
+    class UiAstJobIT #white
+    JsonAstJobIT -up-|> BaseAstIT
+    UiAstJobIT -up-|> BaseAstIT
+    VersionInfoIT -up-|> BaseClientIT
+}
+
+package ptai-cli-plugin <<Frame>> {
+    abstract class BaseCliIT #white {
+        #Path PEM
+        ..
+        Save PEM-encoded CA
+        certificates to temporal file
+        +void pre()
+    }
+    BaseCliIT -left-|> BaseClientIT
+    abstract class BaseCliAstIT #white {
+        #Path sourcesPhpMedium
+        #Path sourcesPhpHigh
+        #Path sourcesJavaMisc
+        #Path destination
+        ..
+        Extract PHP smoke
+        high / medium and
+        Java app01 sources
+        to temp folder and
+        create report destination
+        folder
+        +void pre()
+    }
+    BaseCliAstIT -up-|> BaseCliIT
+
+    abstract class BaseJsonIT #white {
+        #String newProjectName;
+        #AiProjScanSettings scanPhpSettings
+        #Policy[] scanPolicy
+        ..
+        Generate unique project name, load
+        minimal scan settings from resource
+        file, set language to PHP and load
+        policy from file
+        +void pre()
+    }
+
+    BaseJsonIT -up-|> BaseCliAstIT
+
+    class CheckServerIT #white
+    CheckServerIT -up-|> BaseCliIT
+
+    class DeleteProjectIT #white
+    DeleteProjectIT -up-|> BaseJsonIT
+
+    class GenerateReportIT #white
+    GenerateReportIT -up-|> BaseCliIT
+
+    class JsonAstIT #white
+    JsonAstIT -up-|> BaseJsonIT
+
+    class ListReportTemplatesIT #white
+    ListReportTemplatesIT -up-|> BaseCliIT
+
+    class UiAstIT #white
+    UiAstIT -up-|> BaseCliAstIT
+}
+
+@enduml

@@ -3,7 +3,7 @@ plugins {
     id 'java-test-fixtures'
 }
 
-group = "${rootGroup}.generic-client-lib"
+group = "${rootGroup}"
 
 dependencies {
     api project(':ptai-data-structures')

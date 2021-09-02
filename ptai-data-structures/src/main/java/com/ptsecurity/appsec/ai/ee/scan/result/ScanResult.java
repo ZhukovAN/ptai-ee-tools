@@ -29,6 +29,7 @@ public class ScanResult extends ScanBrief {
 
     @NonNull
     @Getter
+    @Builder.Default
     @JsonProperty("description")
     protected Map<String, Map<Reports.Locale, String>> description = new HashMap<>();
 

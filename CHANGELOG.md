@@ -109,7 +109,7 @@
 + [Fix] JSON-defined BlackBox engine programming language settings fixed
 + [Feature] Jenkins plugin shows its version on global configuration page (light gray colored text at plugin global settings bottom right corner)
 + [Fix] Ugly headers removed from transfers and reports settings in Jenkins plugin
-## v.3.6.4
+## v.3.6.4-RC1
 ### 20210825
 + [Fix] Jenkins plugin version fixed (old Jenkins versions show that data at the very top of screen)
 + [Feature] Multilanguage (EN and RU) scan brief implemented
@@ -117,3 +117,7 @@
 + [Feature] Raw scan result now contains localized description
 + [Feature] PT AI server URL added to scan results
 + [Feature] PT AI scan info added to Jenkins build's "summary" section
+### 20210901
++ [Feature] CLI plugin supports PT AI project deletion
++ [Feature] CLI plugin supports login / password credentials as these required for critical operations like project delete
++ [Feature] Build script now support publish task

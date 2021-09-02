@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.server.integration.rest.test.BaseIT;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSettings;
@@ -60,7 +59,6 @@ public class ConverterTest extends BaseTest {
 
         Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
-        deleteFolder(TEMP_FOLDER);
     }
 
     @Test
@@ -71,7 +69,6 @@ public class ConverterTest extends BaseTest {
 
         Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
-        deleteFolder(TEMP_FOLDER);
     }
 
     @Test
@@ -82,6 +79,5 @@ public class ConverterTest extends BaseTest {
 
         Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
-        deleteFolder(TEMP_FOLDER);
     }
 }

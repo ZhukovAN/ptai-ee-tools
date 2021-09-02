@@ -4,6 +4,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
@@ -217,7 +218,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .prefix(CONSOLE_PREFIX)
                 .connectionSettings(ConnectionSettings.builder()
                         .url(serverUrl)
-                        .token(credentials.getToken().getPlainText())
+                        .credentials(TokenCredentials.builder().token(credentials.getToken().getPlainText()).build())
                         .caCertsPem(credentials.getServerCaCertificates())
                         .insecure(serverInsecure)
                         .build())
@@ -233,7 +234,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .reports(reports)
                 .fullScanMode(fullScanMode)
                 .build();
-        job.info("JenkinsAstJob created: %s", job.toString());
+        job.fine("JenkinsAstJob created: %s", job.toString());
 
         AbstractJob.JobExecutionResult jobExecutionResult = job.execute();
         if (!AbstractJob.JobExecutionResult.SUCCESS.equals(jobExecutionResult))

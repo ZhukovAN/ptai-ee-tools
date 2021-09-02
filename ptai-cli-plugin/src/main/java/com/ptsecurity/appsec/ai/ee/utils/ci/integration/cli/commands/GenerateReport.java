@@ -4,6 +4,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.operations.LocalFileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenerateReportsJob;
@@ -60,7 +62,7 @@ public class GenerateReport extends BaseCommand implements Callable<Integer> {
      * Reports to be generated. As multiplicity equals 1 this parameter is required,
      * so at least one report is to be defined
      */
-    @CommandLine.ArgGroup(multiplicity = "1", order = 6, exclusive = true)
+    @CommandLine.ArgGroup(multiplicity = "1", order = 6)
     protected BaseCommand.Reporting reports = null;
 
     @CommandLine.Option(
@@ -101,7 +103,9 @@ public class GenerateReport extends BaseCommand implements Callable<Integer> {
         CliGenerateReportsJob job = CliGenerateReportsJob.builder()
                 .console(System.out).prefix("").verbose(verbose)
                 .connectionSettings(ConnectionSettings.builder()
-                        .url(url.toString()).token(token).insecure(insecure)
+                        .url(url.toString())
+                        .credentials(credentials.getBaseCredentials())
+                        .insecure(insecure)
                         .build())
                 .projectId(projectInfo.id)
                 .projectName(projectInfo.name)

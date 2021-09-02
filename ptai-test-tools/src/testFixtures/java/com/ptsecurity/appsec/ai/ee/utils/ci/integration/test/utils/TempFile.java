@@ -35,6 +35,14 @@ public class TempFile implements AutoCloseable {
                 : new TempFile(Files.createTempDirectory(folder, PREFIX));
     }
 
+    public static TempFile createFile() throws IOException {
+        return createFile(null);
+    }
+
+    public static TempFile createFolder() throws IOException {
+        return createFolder(null);
+    }
+
     @Override
     public void close() throws Exception {
         if (path.toFile().isDirectory())

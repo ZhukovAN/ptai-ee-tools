@@ -11,10 +11,7 @@ import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.FileOutputStream;
@@ -28,7 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.logging.LogManager;
 
-public class BaseTest {
+public abstract class BaseTest {
     /**
      * Temporal folder where subfolders will be created
      */
@@ -121,6 +118,7 @@ public class BaseTest {
                         // There are more then one entry in the archive, folder path is to be returned
                         res = rootOutputFolder;
 
+                    out.toFile().getParentFile().mkdirs();
                     try (FileOutputStream fos = new FileOutputStream(out.toFile())) {
                         do {
                             int dataRead = packedFile.read(buffer, 0, buffer.length);
@@ -156,6 +154,7 @@ public class BaseTest {
 
     @SneakyThrows
     public static void deleteFolder(@NonNull final Path path) {
+        if (!path.toFile().exists()) return;
         Files.walkFileTree(path, new FileVisitor<Path>() {
             @Override
             public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
@@ -185,16 +184,10 @@ public class BaseTest {
     public static void fini() {
     }
 
-    @BeforeEach
-    public void pre() {
-
-    }
-
     @SneakyThrows
     @BeforeAll
     public static void init() {
         InputStream stream = getResourceStream("logging.properties");
         LogManager.getLogManager().readConfiguration(stream);
     }
-
 }

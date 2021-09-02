@@ -8,6 +8,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
@@ -61,7 +62,7 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
 
             AbstractApiClient client = Factory.client(ConnectionSettings.builder()
                     .url(serverUrl)
-                    .token(credentials.getToken().getPlainText())
+                    .credentials(TokenCredentials.builder().token(credentials.getToken().getPlainText()).build())
                     .insecure(serverInsecure)
                     .caCertsPem(credentials.getServerCaCertificates())
                     .build());

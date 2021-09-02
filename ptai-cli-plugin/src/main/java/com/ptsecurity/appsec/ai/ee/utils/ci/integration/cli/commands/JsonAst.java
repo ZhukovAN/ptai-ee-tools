@@ -2,6 +2,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliJsonAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
@@ -94,7 +96,9 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
         CliJsonAstJob job = CliJsonAstJob.builder()
                 .console(System.out).prefix("").verbose(verbose)
                 .connectionSettings(ConnectionSettings.builder()
-                        .url(url.toString()).token(token).insecure(insecure)
+                        .url(url.toString())
+                        .credentials(credentials.getBaseCredentials())
+                        .insecure(insecure)
                         .build())
                 .settings(jsonSettings)
                 .policy(jsonPolicy)

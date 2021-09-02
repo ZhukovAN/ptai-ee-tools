@@ -227,8 +227,7 @@ public class JsonAstJobIT extends BaseAstIT {
 
         File json = destination.resolve(rawData.getFileName()).toFile();
         Assertions.assertTrue(json.exists());
-        ScanResult scanResult = BaseJsonHelper.createObjectMapper().readValue(json, ScanResult.class);
-        return scanResult;
+        return BaseJsonHelper.createObjectMapper().readValue(json, ScanResult.class);
     }
 
     @SneakyThrows

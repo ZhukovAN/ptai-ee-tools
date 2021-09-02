@@ -3,9 +3,13 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.BaseCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import picocli.CommandLine;
@@ -220,12 +224,64 @@ public abstract class BaseCommand {
             description = "PT AI server URL, i.e. https://ptai.domain.org:443")
     protected URL url;
 
-    @CommandLine.Option(
-            names = {"-t", "--token"},
-            required = true, order = 2,
-            paramLabel = "<token>",
-            description = "PT AI server API token")
-    protected String token = null;
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class Credentials {
+        @Getter
+        @Setter
+        @SuperBuilder
+        @NoArgsConstructor
+        public static class LoginPassword {
+            @CommandLine.Option(
+                    names = {"--user"},
+                    required = true, order = 2,
+                    paramLabel = "<user>",
+                    description = "PT AI user name")
+            @Builder.Default
+            protected String user = null;
+
+            @CommandLine.Option(
+                    names = {"--password"},
+                    required = true, order = 3,
+                    paramLabel = "<password>",
+                    description = "PT AI user password")
+            @Builder.Default
+            protected String password = null;
+        }
+
+        @CommandLine.ArgGroup(exclusive = false)
+        protected LoginPassword loginPassword = null;
+
+        @CommandLine.Option(
+                names = {"-t", "--token"},
+                required = true, order = 2,
+                paramLabel = "<token>",
+                description = "PT AI server API token")
+        protected String token = null;
+
+        public Credentials(@NonNull final BaseCredentials credentials) {
+            if (credentials instanceof TokenCredentials) {
+                TokenCredentials tokenCredentials = (TokenCredentials) credentials;
+                token = tokenCredentials.getToken();
+            } else {
+                PasswordCredentials passwordCredentials = (PasswordCredentials) credentials;
+                loginPassword = LoginPassword.builder()
+                        .user(passwordCredentials.getUser())
+                        .password(passwordCredentials.getPassword())
+                        .build();
+            }
+        }
+
+        public BaseCredentials getBaseCredentials() {
+            return null == getToken()
+                    ? PasswordCredentials.builder().user(getLoginPassword().getUser()).password(getLoginPassword().getPassword()).build()
+                    : TokenCredentials.builder().token(getToken()).build();
+        }
+    }
+
+    @CommandLine.ArgGroup(exclusive = true)
+    protected Credentials credentials = null;
 
     @CommandLine.Option(
             names = {"--truststore"}, order = 3,

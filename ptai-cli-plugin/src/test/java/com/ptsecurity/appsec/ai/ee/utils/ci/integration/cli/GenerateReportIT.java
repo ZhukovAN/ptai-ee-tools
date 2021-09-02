@@ -6,6 +6,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.NonNull;
@@ -120,7 +121,7 @@ class GenerateReportIT extends BaseCliIT {
     public UUID getLatestCompleteScanResults(@NonNull final String project) {
         AbstractApiClient client = Factory.client(ConnectionSettings.builder()
                 .url(URL)
-                .token(TOKEN)
+                .credentials(TokenCredentials.builder().token(TOKEN).build())
                 .insecure(true)
                 .build());
         ProjectTasks tasks = new Factory().projectTasks(client);

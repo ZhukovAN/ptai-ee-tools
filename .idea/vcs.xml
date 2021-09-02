@@ -2,8 +2,11 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/777" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/DEBUG-PHP-SMOKE" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/JAVA-OWASP-BENCHMARK" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/PHP-SMOKE" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/TEST" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-server/servers/TeamCity-2020.1/buildAgent/work/407138feecde7a43" vcs="Git" />
   </component>
 </project>

@@ -6,6 +6,7 @@ import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.AiProjConverter;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
@@ -13,6 +14,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
@@ -234,5 +236,24 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                 () -> client.getProjectsApi().apiProjectsProjectIdPoliciesRulesPut(projectId, policyJson),
                 "PT AI project policy assignment failed");
         return projectId;
+    }
+
+    @Override
+    public void deleteProject(@NonNull UUID id) throws GenericException {
+        call(() -> client.getProjectsApi().apiProjectsProjectIdDelete(id), "PT AI project delete failed");
+    }
+
+    @Override
+    @NonNull
+    public List<Pair<UUID, String>> listProjects() throws GenericException {
+        // PT AI v.3.6 supports project list load:
+        // without details - if API token authentication used
+        // with details - if login / password authentication used
+        boolean withoutDetails = client.getConnectionSettings().getCredentials() instanceof TokenCredentials;
+        List<Project> projects = call(() -> client.getProjectsApi().apiProjectsGet(false), "PT AI project list read failed");
+        List<Pair<UUID, String>> res = new ArrayList<>();
+        for (Project project : projects)
+            res.add(Pair.of(project.getId(), project.getName()));
+        return res;
     }
 }

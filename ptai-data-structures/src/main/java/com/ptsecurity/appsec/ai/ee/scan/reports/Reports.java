@@ -57,10 +57,10 @@ public class Reports {
      * uses bit masks to support multiple fields definition.
      * For example, issues levels are defined as follows:
      *     None      = 0,
-     *     Low       = 1 << 0,
-     *     Medium    = 1 << 1,
-     *     High      = 1 << 2,
-     *     Potential = 1 << 3,
+     *     Low       = 1 shl 0,
+     *     Medium    = 1 shl 1,
+     *     High      = 1 shl 2,
+     *     Potential = 1 shl 3,
      *     All       = Low | Medium | High | Potential
      * That means that it is possible to define more than one field value to
      * solve task described above. To do that I've changed Swagger API definition

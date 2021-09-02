@@ -4,7 +4,7 @@ plugins {
     id 'org.hidetake.swagger.generator' version '2.18.2'
 }
 
-group = "${rootGroup}.ptai-rest-api"
+group = "${rootGroup}"
 
 dependencies {
     // swaggerCodegen 'org.openapitools:openapi-generator-cli:4.3.1'
@@ -41,6 +41,11 @@ dependencies {
     testFixturesApi(testFixtures(project(":ptai-test-tools")))
     testImplementation(testFixtures(project(":ptai-test-tools")))
     // testFixturesImplementation(testFixtures(project(":ptai-test-tools")))
+}
+
+javadoc {
+    // OpenAPI-generated files contain some javadoc issues, let's ignore them
+    // options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 jar {
