@@ -1,0 +1,300 @@
+@startuml
+enum Engine #EEEEEE {
+    AI
+    PM
+    TAINT
+    DC
+    FINGERPRINT
+    CONFIGURATION
+    BLACKBOX
+}
+
+enum Language #EEEEEE {
+    PHP
+    JAVA
+    CSHARP
+    VB
+    JS
+    GO
+    CPP
+    PYTHON
+    SQL
+    OBJECTIVEC
+    SWIFT
+    KOTLIN
+}
+
+
+class ScanBrief {
+    String ptaiServerUrl
+    String ptaiServerVersion
+    String ptaiAgentVersion
+    UUID id
+    UUID projectId
+    Policy.PolicyState policyState
+}
+
+class ScanResult {
+    boolean issuesParseOk
+    Map<String, Map<Reports.Locale, String>> description
+}
+ScanResult --|> ScanBrief
+
+class ScanSettings {
+    UUID id
+    Boolean unpackUserPackages
+    Boolean downloadDependencies
+    Boolean usePublicAnalysisMethod
+    Boolean useEntryAnalysisPoint
+    String url
+    Boolean useIncrementalScan
+    Boolean autocheckAfterScan
+    String customParameters
+    String javaParameters
+}
+ScanSettings --> "0..*" Engine : engines
+ScanSettings --> Language : language
+
+ScanBrief --> ScanSettings : scanSettings
+ScanResult -right-> "0..*" BaseIssue : issues
+
+class Statistic {
+    String scanDateIso8601
+    String scanDurationIso8601
+    int totalFileCount
+    int totalUrlCount
+    int scannedFileCount
+    int scannedUrlCount
+}
+
+ScanBrief -down-> Statistic : statistic
+
+enum State #EEEEEE {
+    UNKNOWN
+    DONE
+    FAILED
+    ABORTED
+}
+
+ScanBrief -left-> State : state
+
+class BaseIssue {
+    String id
+    String typeId
+    UUID ScanBriefId
+    Map<Reports.Locale, String> title
+    Boolean favorite
+    Boolean suspected
+    Boolean suppressed
+    UUID newInScanBriefId
+    UUID oldInScanBriefId
+    List<String> cweId
+}
+note right of BaseIssue::typeId
+    Key for ScanResult::description
+end note
+
+enum Type #EEEEEE {
+    VULNERABILITY
+    WEAKNESS
+    SCA
+    CONFIGURATION
+    BLACKBOX
+    YARAMATCH
+    UNKNOWN
+}
+
+enum Level #EEEEEE {
+    NONE
+    POTENTIAL
+    LOW
+    MEDIUM
+    HIGH
+}
+
+enum ApprovalState #EEEEEE {
+    NONE
+    APPROVAL
+    DISCARD
+    NOT_EXIST
+    AUTO_APPROVAL
+}
+
+BaseIssue -up-> Level : level
+BaseIssue -up-> ApprovalState : approvalState
+BaseIssue -up-> Type : clazz
+
+class BaseSourceIssue {
+    List<String> owaspId
+    List<String> pciDssId
+    List<String> nistId
+}
+
+class Place {
+    Integer beginLine
+    Integer beginColumn
+    Integer endLine
+    Integer endColumn
+    String file
+    String value
+}
+
+class BlackBoxIssue {
+    List<String> owaspId
+    List<String> pciDssId
+    List<String> nistId
+}
+class ConfigurationIssue {
+    String recommendedValue
+    String currentValue
+    Place vulnerableExpression
+}
+class ScaIssue {
+    String file
+    String componentName
+    String componentVersion
+    String fingerprintId
+    String cveId
+}
+class UnknownIssue
+class VulnerabilityIssue {
+    String conditions;
+    String pvf;
+    Boolean secondOrder;
+    .. DFD ..
+    BestPlaceToFix bpf
+    Place vulnerableExpression
+    Place[] dataTrace
+    Place[] taintDataEntries
+    Place entryPoint
+    .. Exploits ..
+    Exploit autocheckExploit
+    Exploit exploit
+}
+VulnerabilityIssue ..> Place
+VulnerabilityIssue ..> Exploit
+VulnerabilityIssue ..> BestPlaceToFix
+class WeaknessIssue {
+    Place vulnerableExpression
+}
+class YaraMatchIssue
+
+class BestPlaceToFix {
+    Place place
+}
+BestPlaceToFix ..> Place
+
+class Exploit {
+    String url;
+    String text;
+    String type
+}
+
+class Exploit.Parameter {
+    String name
+    String value
+    String source
+    String payload
+    String dependency
+    Boolean vulnerable
+}
+
+Exploit --> "0..*" Exploit.Parameter : parameters
+
+BaseSourceIssue -left-|> BaseIssue
+BlackBoxIssue -up-|> BaseIssue
+ConfigurationIssue -up-|> BaseSourceIssue
+ScaIssue -up-|> BaseIssue
+UnknownIssue -up-|> BaseIssue
+VulnerabilityIssue -left-|> BaseSourceIssue
+enum ScanMode #EEEEEE {
+    NONE
+    FROM_ENTRYPOINT
+    FROM_PUBLICPROTECTED
+    FROM_OTHER
+}
+WeaknessIssue -up-|> BaseSourceIssue
+YaraMatchIssue -up-|> BaseIssue
+
+WeaknessIssue .down.> Place
+ConfigurationIssue .down.> Place
+VulnerabilityIssue -right-> ScanMode : scanMode
+
+class Cvss {
+    String base
+    String baseScore
+    String temp
+    String tempScore
+}
+
+ScaIssue -down-> Cvss : cvss
+
+class ScanBriefDetailed {
+}
+ScanBriefDetailed -down-|> ScanBrief
+ScanBriefDetailed -right[hidden]-|> ScanResult
+ScanBriefDetailed -left-> Details
+Details -left-> ChartData
+
+class Details
+class ChartData {
+    BaseIssueCount[] baseIssueDistributionData
+    SeverityCount[] severityDistributionData
+    SeverityTypeCount[] severityTypeDistributionData
+}
+
+class SeverityCount {
+    BaseIssue.Level level
+    Long count
+}
+
+class SeverityTypeCount {
+    BaseIssue.Level level
+    String type
+    Long count
+}
+SeverityCount -left[hidden]-|> SeverityTypeCount
+
+ChartData .up.> BaseIssueCount
+ChartData .up.> SeverityCount
+ChartData .up.> SeverityTypeCount
+BaseIssueCount -left[hidden]-|> SeverityCount
+
+class BaseIssueCountFields {
+    BaseIssue.Level level
+    BaseIssue.Type clazz
+    String title
+    Boolean favorite
+    Boolean suspected
+    Boolean suppressed
+    BaseIssue.ApprovalState approvalState
+    UUID newInScanResultId
+}
+
+class BaseIssueCount {
+    Long count
+}
+BaseIssueCount -right-|> BaseIssueCountFields
+
+enum Stage #EEEEEE {
+    UNKNOWN
+    ZIP
+    UPLOAD
+    VFSSETUP
+    INITIALIZE
+    PRECHECK
+    SCAN
+    FINALIZE
+    DONE
+    FAILED
+    ABORTED
+    ENQUEUED
+    AUTOCHECK
+}
+
+class Performance {
+    Map<Stage, DateTime> stages
+}
+Performance .up.|> Stage
+ScanBriefDetailed .up.> Performance : performance
+@enduml

@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.ReportFormatType;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import lombok.NonNull;
 
@@ -136,11 +135,6 @@ public class Labels {
      * See {@link Params#REPORTING_JSON_SETTINGS}
      */
     public static final String REPORTING_JSON_SETTINGS = Resources.i18n_ast_result_reporting_json_settings_label();
-
-    @NonNull
-    public Collection<ReportFormatType> getReportFormatTypes() {
-        return Arrays.stream(ReportFormatType.values()).collect(Collectors.toList());
-    }
 
     public static final String REPORTING_LOCALE_ENGLISH = Resources.i18n_misc_enums_locale_english_label();
     public static final String REPORTING_LOCALE_RUSSIAN = Resources.i18n_misc_enums_locale_russian_label();

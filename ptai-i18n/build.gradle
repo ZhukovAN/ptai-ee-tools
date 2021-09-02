@@ -12,7 +12,7 @@ plugins {
     id 'java-library'
 }
 
-group = "${rootGroup}.ptai-i18n"
+group = "${rootGroup}"
 
 dependencies {
     // https://mvnrepository.com/artifact/org.jvnet.localizer/localizer

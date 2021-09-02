@@ -3,6 +3,8 @@ plugins {
     id 'com.github.rodm.teamcity-environments'
 }
 
+group = "${rootGroup}.ptai-teamcity-plugin"
+
 dependencies {
     implementation project(':ptai-teamcity-plugin:ptai-teamcity-plugin-common')
     agent project(path: ':ptai-teamcity-plugin:ptai-teamcity-plugin-agent', configuration: 'plugin')

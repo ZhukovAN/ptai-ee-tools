@@ -26,7 +26,7 @@ V36YaraMatchIssue -right-|> IssueBase
 '/
 
 class IssuesModel
-IssuesModel "1" *-- "issues" IssueBase
+IssuesModel *-- "issues" IssueBase
 
 class DescriptionBaseValue {
     String html
@@ -37,7 +37,7 @@ class IssueDescriptionModel {
     String identity
     int issueType
 }
-IssuesModel "1" *-- "descriptions" IssueDescriptionModel
+IssuesModel *-- "descriptions" IssueDescriptionModel
 IssueDescriptionModel -- "descriptionValue" DescriptionBaseValue
 ' IssueDescriptionModel ..  IssueType
 
@@ -50,7 +50,7 @@ class IssueBaseMetadata {
 }
 ' IssueBaseMetadata ..  IssueType
 ' IssueBaseMetadata ..  IssueLevel
-IssuesModel "1" *-up- "metadatas" IssueBaseMetadata
+IssuesModel *-up- "metadatas" IssueBaseMetadata
 
 class V36FingerprintIssueMetadata {
 }

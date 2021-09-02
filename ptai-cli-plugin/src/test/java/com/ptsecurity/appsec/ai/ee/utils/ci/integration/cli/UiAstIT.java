@@ -1,26 +1,31 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.time.Duration;
 import java.util.UUID;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports.Report.Format.HTML;
+import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report.Format.HTML;
 
 @DisplayName("Check UI-defined AST scans")
-@Tag("integration-legacy")
-class UiAstIT extends BaseIT {
+@Tag("integration")
+class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Show usage of UI-defined AST")
     void testUiAstShowUsage() {
@@ -34,25 +39,25 @@ class UiAstIT extends BaseIT {
     void testExistingProject() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--truststore", PEM_PATH,
-                "--url", PTAI_URL,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--truststore", PEM.toString(),
+                "--url", URL,
                 "--token", TOKEN);
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
     @Test
-    @DisplayName("AST of existing project with no source code included")
+    @DisplayName("Fail AST of existing project with no source code included")
     void testNoSourcesIncluded() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--truststore", PEM_PATH,
-                "--url", PTAI_URL,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--truststore", PEM.toString(),
+                "--url", URL,
                 "--token", TOKEN,
                 "--includes", "**/*.java",
                 "--excludes", "**/*");
@@ -60,43 +65,43 @@ class UiAstIT extends BaseIT {
     }
 
     @Test
-    @DisplayName("AST of policy violating project")
+    @DisplayName("Fail AST of policy violating project")
     void testPolicyFailForExistingProject() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--truststore", PEM_PATH,
-                "--url", PTAI_URL,
+                "--project", EXISTING_PHP_SMOKE_HIGH_PROJECT,
+                "--input", sourcesPhpHigh.toString(),
+                "--output", destination.toString(),
+                "--truststore", PEM.toString(),
+                "--url", URL,
                 "--token", TOKEN,
                 "--fail-if-failed");
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
     @Test
-    @DisplayName("AST of missing project with custom truststore")
+    @DisplayName("Fail AST of missing project with custom truststore")
     void testMissingProject() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT + UUID.randomUUID().toString(),
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--truststore", PEM_PATH,
-                "--url", PTAI_URL,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT + UUID.randomUUID(),
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--truststore", PEM.toString(),
+                "--url", URL,
                 "--token", TOKEN);
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
     @Test
-    @DisplayName("AST of existing project without custom truststore")
+    @DisplayName("Fail AST of existing project without custom truststore")
     void testWithoutTruststore() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--url", PTAI_URL,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--url", URL,
                 "--token", TOKEN);
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
@@ -106,10 +111,10 @@ class UiAstIT extends BaseIT {
     void testInsecureWithoutTruststore() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--url", PTAI_URL,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--url", URL,
                 "--token", TOKEN,
                 "--insecure");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
@@ -119,14 +124,14 @@ class UiAstIT extends BaseIT {
     @Test
     @DisplayName("Twice AST of existing project to test report overwrite")
     void testReportRewrite() {
-        Path report = Paths.get(REPORT_FOLDER).resolve("owasp.en.html");
+        Path report = Paths.get(destination.toString()).resolve("owasp.en.html");
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
                 "--report-file", report.getFileName().toString(),
                 "--report-template", "OWASP top 10 2017 report",
@@ -139,11 +144,11 @@ class UiAstIT extends BaseIT {
 
         res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
                 "--report-file", report.getFileName().toString(),
                 "--report-template", "OWASP top 10 2017 report",
@@ -155,52 +160,61 @@ class UiAstIT extends BaseIT {
         Assertions.assertNotEquals(fileTime, attr.lastModifiedTime());
     }
 
+    @SneakyThrows
     @Test
     @DisplayName("AST existing project with multiple JSON-defined reports")
     void testJsonDefinedReports() {
+        Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
+        FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.1.json"), reportsJson.toFile());
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
-                "--report-json", getResourcePath("json/reports.1.json"));
+                "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
-        Assertions.assertTrue(Paths.get(REPORT_FOLDER).resolve("report.ru.xml").toFile().exists());
-        Assertions.assertTrue(Paths.get(REPORT_FOLDER).resolve("data.en.json").toFile().exists());
-        Assertions.assertTrue(Paths.get(REPORT_FOLDER).resolve("data.en.xml").toFile().exists());
-        Assertions.assertTrue(Paths.get(REPORT_FOLDER).resolve("raw.json").toFile().exists());
+        GenerateReportIT.checkReports(reportsJson, destination);
     }
 
+    @SneakyThrows
     @Test
-    @DisplayName("AST existing project with bad JSON-defined reports")
+    @DisplayName("Fail AST existing project with bad JSON-defined reports")
     public void testInvalidJsonDefinedReports() {
+        Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
+        FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.2.json"), reportsJson.toFile());
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
-                "--report-json", getResourcePath("json/reports.2.json"));
+                "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
+    @SneakyThrows
     @Test
-    @DisplayName("AST existing project with JSON-defined reports with missing templates")
+    @DisplayName("Fail AST existing project with JSON-defined reports with missing templates")
     public void testMissingJsonDefinedReports() {
+        Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
+        FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.3.json"), reportsJson.toFile());
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
-                "--report-json", getResourcePath("json/reports.3.json"));
+                "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
@@ -209,11 +223,11 @@ class UiAstIT extends BaseIT {
     void testExistingProjectAsync() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--truststore", PEM_PATH,
-                "--url", PTAI_URL,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--truststore", PEM.toString(),
+                "--url", URL,
                 "--token", TOKEN,
                 "--async");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
@@ -224,11 +238,11 @@ class UiAstIT extends BaseIT {
     void testMissingProjectAsync() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT + UUID.randomUUID().toString(),
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--truststore", PEM_PATH,
-                "--url", PTAI_URL,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT + UUID.randomUUID(),
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--truststore", PEM.toString(),
+                "--url", URL,
                 "--token", TOKEN,
                 "--async");
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
@@ -239,44 +253,52 @@ class UiAstIT extends BaseIT {
     void testWithoutTruststoreAsync() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--url", PTAI_URL,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--url", URL,
                 "--token", TOKEN);
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
+    @SneakyThrows
     @Test
     @DisplayName("Test incremental AST scan speed increase")
     void testIncrementalScanning() {
-        long fullScan = System.currentTimeMillis();
+        final String rawDataFile = "raw.json";
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--truststore", PEM_PATH,
-                "--url", PTAI_URL,
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--truststore", PEM.toString(),
+                "--url", URL,
                 "--token", TOKEN,
-                "--full-scan");
+                "--full-scan",
+                "--raw-data-file", rawDataFile);
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
-        fullScan = System.currentTimeMillis() - fullScan;
-        System.out.println("Full scan duration " + fullScan + " ms");
+        File rawData = destination.resolve(rawDataFile).toFile();
+        Assertions.assertTrue(rawData.exists());
+        ScanResult scanResult = BaseJsonHelper.createObjectMapper().readValue(rawData, ScanResult.class);
+        Duration durationFull = Duration.parse(scanResult.getStatistics().getScanDurationIso8601());
+        System.out.println("Full scan duration " + durationFull);
 
-        long incrementalScan = System.currentTimeMillis();
         res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PROJECT,
-                "--input", SOURCES_FOLDER,
-                "--output", REPORT_FOLDER,
-                "--truststore", PEM_PATH,
-                "--url", PTAI_URL,
-                "--token", TOKEN);
+                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--input", sourcesPhpMedium.toString(),
+                "--output", destination.toString(),
+                "--truststore", PEM.toString(),
+                "--url", URL,
+                "--token", TOKEN,
+                "--raw-data-file", rawDataFile);
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
-        incrementalScan = System.currentTimeMillis() - incrementalScan;
-        System.out.println("Incremental scan duration " + incrementalScan + " ms");
-
-        Assertions.assertTrue(fullScan > incrementalScan);
+        rawData = destination.resolve(rawDataFile).toFile();
+        Assertions.assertTrue(rawData.exists());
+        scanResult = BaseJsonHelper.createObjectMapper().readValue(rawData, ScanResult.class);
+        Duration durationIncremental = Duration.parse(scanResult.getStatistics().getScanDurationIso8601());
+        System.out.println("Incremental scan duration " + durationIncremental);
+        Assertions.assertTrue(0 < durationFull.compareTo(durationIncremental));
     }
 }

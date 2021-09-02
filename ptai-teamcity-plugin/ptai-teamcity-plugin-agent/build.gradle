@@ -2,7 +2,7 @@ plugins {
     id "com.github.rodm.teamcity-agent"
 }
 
-group = "${rootGroup}.ptai-teamcity-plugin-agent"
+group = "${rootGroup}.ptai-teamcity-plugin"
 
 dependencies {
     implementation project(':ptai-teamcity-plugin:ptai-teamcity-plugin-common')

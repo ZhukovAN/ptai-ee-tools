@@ -1,11 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.UrlHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.UrlHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.util.FormValidation;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -95,19 +95,19 @@ public class Validator {
         // log.log(Level.FINEST, "FormValidation error", e);
         String caption = e.getMessage();
         if (StringUtils.isEmpty(caption))
-            return FormValidation.error(e, Messages.validator_test_failed());
+            return FormValidation.error(e, Resources.i18n_ast_settings_test_message_failed());
         else {
-            Exception cause = e;
-            if (e instanceof ApiException) cause = ((ApiException) e).getInner();
-            return FormValidation.error(cause, Messages.validator_test_failed_details(caption));
+            Throwable cause = e;
+            if (e instanceof GenericException) cause = e.getCause();
+            return FormValidation.error(cause, Resources.i18n_ast_settings_test_message_failed_details(caption));
         }
     }
 
     public static FormValidation error(@NonNull final String message, Exception e) {
         // log.log(Level.FINEST, "FormValidation error", e);
-        Exception cause = e;
-        if (e instanceof ApiException) cause = ((ApiException) e).getInner();
-        return FormValidation.error(cause, Messages.validator_test_failed_details(message));
+        Throwable cause = e;
+        if (e instanceof GenericException) cause = e.getCause();
+        return FormValidation.error(cause, Resources.i18n_ast_settings_test_message_failed_details(message));
     }
 
     public static FormValidation error(String message) {

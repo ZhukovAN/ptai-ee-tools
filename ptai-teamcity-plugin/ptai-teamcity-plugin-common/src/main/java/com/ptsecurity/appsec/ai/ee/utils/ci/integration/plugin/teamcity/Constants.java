@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 
 public class Constants {
     /**
@@ -53,8 +53,8 @@ public class Constants {
     public static final String REPORTING_LOCALE_ENGLISH = Reports.Locale.EN.getValue();
     public static final String REPORTING_LOCALE_RUSSIAN = Reports.Locale.RU.getValue();
 
-    public static final String REPORTING_DATA_FORMAT_XML = Reports.Data.Format.XML.getValue().getValue();
-    public static final String REPORTING_DATA_FORMAT_JSON = Reports.Data.Format.JSON.getValue().getValue();
-    public static final String REPORTING_REPORT_FORMAT_HTML = Reports.Report.Format.HTML.getValue().getValue();
-    public static final String REPORTING_REPORT_FORMAT_PDF = Reports.Report.Format.PDF.getValue().getValue();
+    public static final String REPORTING_DATA_FORMAT_XML = Reports.Data.Format.XML.name();
+    public static final String REPORTING_DATA_FORMAT_JSON = Reports.Data.Format.JSON.name();
+    public static final String REPORTING_REPORT_FORMAT_HTML = Reports.Report.Format.HTML.name();
+    public static final String REPORTING_REPORT_FORMAT_PDF = Reports.Report.Format.PDF.name();
 }

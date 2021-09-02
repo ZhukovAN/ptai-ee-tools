@@ -3,7 +3,7 @@ plugins {
     id "com.github.rodm.teamcity-common"
 }
 
-group = "${rootGroup}.ptai-teamcity-plugin-agent"
+group = "${rootGroup}.ptai-teamcity-plugin"
 
 dependencies {
     api project(':generic-client-lib')

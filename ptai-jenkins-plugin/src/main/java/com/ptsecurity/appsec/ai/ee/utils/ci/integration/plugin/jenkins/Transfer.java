@@ -10,22 +10,9 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.io.Serializable;
 
-@EqualsAndHashCode
-@ToString
-public class Transfer implements Describable<Transfer>, Serializable {
-    @Getter
-    private final String includes;
-    @Getter
-    private final String removePrefix;
-    @Getter
-    private final String excludes;
-    @Getter
-    private final String patternSeparator;
-    @Getter
-    private final boolean useDefaultExcludes;
-    @Getter
-    private final boolean flatten;
-
+@EqualsAndHashCode(callSuper = false)
+@ToString(callSuper = true)
+public class Transfer extends com.ptsecurity.appsec.ai.ee.scan.sources.Transfer implements Describable<Transfer>, Serializable {
     @DataBoundConstructor
     public Transfer(final String includes, final String excludes, final String removePrefix,
                     final boolean flatten,

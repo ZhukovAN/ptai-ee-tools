@@ -1,7 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
@@ -16,8 +20,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serverset
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Utils;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Item;
@@ -27,8 +30,10 @@ import hudson.util.CopyOnWriteList;
 import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
@@ -36,9 +41,13 @@ import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.bind.JavaScriptMethod;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.UUID;
+import java.io.IOException;
+import java.net.URL;
+import java.util.*;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
+@Slf4j
 @Extension
 @Symbol("ptaiUiSast")
 public class PluginDescriptor extends BuildStepDescriptor<Builder> {
@@ -135,7 +144,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             }
             if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
                 if (!Validator.doCheckFieldNotEmpty(configName)) {
-                    res = Validator.error(Messages.validator_check_configName_empty());
+                    res = Validator.error(Resources.i18n_ast_settings_config_global_name_message_empty());
                     break;
                 }
             } else if (configLocalDescriptor.getDisplayName().equals(selectedConfig)) {
@@ -143,7 +152,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
                 res = serverSettingsDescriptor.doCheckServerUrl(serverUrl);
                 if (FormValidation.Kind.OK != res.kind) break;
                 if (!Validator.doCheckFieldNotEmpty(serverCredentialsId)) {
-                    res = Validator.error(Messages.validator_check_serverCredentialsId_empty());
+                    res = Validator.error(Resources.i18n_ast_settings_server_credentials_message_empty());
                     break;
                 }
             }
@@ -199,31 +208,31 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
                 // For manual defined (JSON) scan settings lack of project isn't a crime itself, just show warning
                 // instead of error
                 return selectedScanSettingsUi
-                        ? FormValidation.error(Messages.validator_test_ptaiProject_notfound())
-                        : FormValidation.warning(Messages.validator_test_ptaiProject_notfound());
+                        ? FormValidation.error(Resources.i18n_ast_settings_type_ui_project_message_not_found(realProjectName))
+                        : FormValidation.warning(Resources.i18n_ast_settings_type_ui_project_message_not_found(realProjectName));
             } else
-                return FormValidation.ok(Messages.validator_test_ptaiProject_success(projectId.toString().substring(0, 4)));
-        } catch (ApiException e) {
+                return FormValidation.ok(Resources.i18n_ast_settings_type_ui_project_message_found_id(projectId.toString().substring(0, 4)));
+        } catch (GenericException e) {
             return Validator.error(e);
         }
     }
 
     private UUID searchProject(
             @NonNull final String name, @NonNull final String url,
-            @NonNull final Credentials credentials, final boolean insecure) throws ApiException {
-        Utils utils = Utils.builder()
+            @NonNull final Credentials credentials, final boolean insecure) throws GenericException {
+        AbstractApiClient client = Factory.client(ConnectionSettings.builder()
                 .url(url)
-                .token(credentials.getToken().getPlainText())
+                .credentials(TokenCredentials.builder().token(credentials.getToken().getPlainText()).build())
                 .insecure(insecure)
-                .caCertsPem(credentials.getServerCaCertificates()).build();
-        utils.init();
-        return utils.searchProject(name);
+                .caCertsPem(credentials.getServerCaCertificates())
+                .build());
+        return new Factory().projectTasks(client).searchProject(name);
     }
 
     @Override
     @Nonnull
     public String getDisplayName() {
-        return Messages.captions_plugin_displayName();
+        return Resources.i18n_ast_plugin_label();
     }
 
     public static List<ConfigBase.ConfigBaseDescriptor> getConfigDescriptors() {
@@ -250,4 +259,49 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         return WorkModeSync.DESCRIPTOR;
     }
 
+    protected static Map<String, String> versionInfo = null;
+
+    public static String getVersion() {
+        Map<String, String> version = getVersionInfo();
+        StringBuilder builder = new StringBuilder();
+        if (StringUtils.isNotEmpty(version.get("Implementation-Version")))
+            builder.append(" v.").append(version.get("Implementation-Version"));
+        if (StringUtils.isNotEmpty(version.get("Implementation-Git-Hash")))
+            builder.append("-").append(version.get("Implementation-Git-Hash"));
+        if (StringUtils.isNotEmpty(version.get("Build-Time")))
+            builder.append(" built on ").append(version.get("Build-Time"));
+        return builder.toString();
+    }
+
+    public static Map<String, String> getVersionInfo() {
+        if (null != versionInfo) return versionInfo;
+        versionInfo = new HashMap<>();
+        try {
+            Enumeration<URL> res = PluginDescriptor.class.getClassLoader().getResources("META-INF/MANIFEST.MF");
+            while (res.hasMoreElements()) {
+                URL url = res.nextElement();
+                Manifest manifest = new Manifest(url.openStream());
+
+                if (!isApplicableManifest(manifest)) continue;
+                Attributes attr = manifest.getMainAttributes();
+                versionInfo.put("Implementation-Version", get(attr, "Implementation-Version").toString());
+                versionInfo.put("Implementation-Git-Hash", get(attr, "Implementation-Git-Hash").toString());
+                versionInfo.put("Build-Time", get(attr, "Build-Time").toString());
+                break;
+            }
+        } catch (IOException e) {
+            log.warn("Failed to get build info from plugin metadata");
+            log.debug("Exception details", e);
+        }
+        return versionInfo;
+    }
+
+    private static boolean isApplicableManifest(Manifest manifest) {
+        Attributes attributes = manifest.getMainAttributes();
+        return "com.ptsecurity.appsec.ai.ee.utils.ci.integration".equals(get(attributes, "Implementation-Vendor-Id"));
+    }
+
+    private static Object get(Attributes attributes, String key) {
+        return attributes.get(new Attributes.Name(key));
+    }
 }

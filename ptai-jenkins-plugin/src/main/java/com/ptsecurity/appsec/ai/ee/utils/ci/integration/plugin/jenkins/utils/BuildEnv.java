@@ -1,9 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
 import hudson.FilePath;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -13,6 +15,9 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.TreeMap;
 
+@Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
 public class BuildEnv implements Serializable {
     @Getter
     @Setter
@@ -24,19 +29,11 @@ public class BuildEnv implements Serializable {
     @Setter
     private Calendar buildTime;
 
-    public BuildEnv() { }
-
-    public BuildEnv(final TreeMap<String, String> envVars, final FilePath baseDirectory, final Calendar buildTime) {
-        this.envVars = envVars;
-        this.baseDirectory = baseDirectory;
-        this.buildTime = buildTime;
-    }
-
     public String getNormalizedBaseDirectory() {
         try {
             return baseDirectory.toURI().normalize().getPath();
         } catch (Exception e) {
-            throw new RuntimeException(Messages.exception_normalizeDirectory(baseDirectory), e);
+            throw new RuntimeException("Directory normalization failed", e);
         }
     }
 
@@ -45,6 +42,7 @@ public class BuildEnv implements Serializable {
         try {
             return getNormalizedBaseDirectory();
         } catch (RuntimeException re) {
+            log.debug("Directory normalization failed", re);
             return re.getLocalizedMessage();
         }
     }

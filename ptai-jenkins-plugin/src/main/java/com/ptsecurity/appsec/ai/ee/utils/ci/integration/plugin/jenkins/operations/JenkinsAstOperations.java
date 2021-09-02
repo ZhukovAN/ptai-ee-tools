@@ -1,33 +1,35 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.operations;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
-import com.ptsecurity.appsec.ai.ee.ptai.server.api.v36.IssuesModelJsonHelper;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.projectmanagement.model.IssuesModel;
-import com.ptsecurity.appsec.ai.ee.scanresult.ScanResult;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobSingleResult;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.JenkinsAstJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobSingleResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.RemoteFileUtils;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.IssuesModelHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations.AstOperations;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import hudson.FilePath;
 import hudson.Util;
-import hudson.model.Run;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.ptsecurity.appsec.ai.ee.scan.ScanDataPacked.Type.SCAN_BRIEF_DETAILED;
+
+@Slf4j
 @Builder
 public class JenkinsAstOperations implements AstOperations {
 
@@ -44,7 +46,7 @@ public class JenkinsAstOperations implements AstOperations {
         Transfers transfers = new Transfers();
 
         for (com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Transfer transfer : owner.getTransfers())
-            transfers.addTransfer(com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer.builder()
+            transfers.addTransfer(Transfer.builder()
                     .excludes(replaceMacro(transfer.getExcludes()))
                     .flatten(transfer.isFlatten())
                     .useDefaultExcludes(transfer.isUseDefaultExcludes())
@@ -62,14 +64,34 @@ public class JenkinsAstOperations implements AstOperations {
         return zip;
     }
 
-    public void scanStartedCallback(@NonNull final Project project, @NonNull UUID scanResultId) throws ApiException {
+    @Override
+    public void scanStartedCallback(@NonNull UUID projectId, @NonNull UUID scanResultId) throws GenericException {
+
     }
 
-    public void scanCompleteCallback(@NonNull final Project project, @NonNull final ScanResult scanResult) throws ApiException {
-        Run<?, ?> run = owner.getRun();
-        AstJobSingleResult astJobSingleResult = new AstJobSingleResult(run);
-        astJobSingleResult.setScanResult(scanResult);
-        run.addAction(astJobSingleResult);
+    @Override
+    public void scanCompleteCallback(@NonNull ScanBrief scanBrief, @NonNull final ScanBriefDetailed.Performance performance) throws GenericException {
+        ScanBriefDetailed scanBriefDetailed;
+        if (scanBrief.getUseAsyncScan())
+            scanBriefDetailed = ScanBriefDetailed.create(scanBrief, performance);
+        else {
+            GenericAstTasks genericAstTasks = new Factory().genericAstTasks(owner.getClient());
+            log.debug("Getting full scan results for project:scan {}: {}", scanBrief.getProjectId(), scanBrief.getId());
+            try {
+                ScanResult scanResult = genericAstTasks.getScanResult(scanBrief);
+                log.debug("Converting full scan results to detailed scan brief and storing it as job result");
+                scanBriefDetailed = ScanBriefDetailed.create(scanResult, performance);
+            } catch (GenericException e) {
+                scanBriefDetailed = ScanBriefDetailed.create(scanBrief, performance);
+            }
+        }
+        ScanDataPacked scanDataPacked = ScanDataPacked.builder()
+                .type(SCAN_BRIEF_DETAILED)
+                .data(ScanDataPacked.packData(scanBriefDetailed))
+                .build();
+        AstJobSingleResult action = new AstJobSingleResult(owner.getRun());
+        action.setScanDataPacked(scanDataPacked);
+        owner.getRun().addAction(action);
     }
 
     public String replaceMacro(@NonNull String value) {

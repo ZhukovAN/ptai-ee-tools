@@ -5,9 +5,11 @@ import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
 import jenkins.model.Jenkins;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
+@ToString
 public abstract class WorkMode extends AbstractDescribableImpl<WorkMode> implements Serializable, Cloneable {
     @Getter
     private static final DescriptorExtensionList<WorkMode, WorkModeDescriptor> all =

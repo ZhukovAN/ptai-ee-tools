@@ -11,7 +11,7 @@ import java.util.Comparator;
 @Command (name = "java -jar ptai-cli-plugin.jar", synopsisSubcommandLabel = "COMMAND",
         mixinStandardHelpOptions = true, versionProvider = ManifestVersionProvider.class,
         subcommands = {
-                UiAst.class, JsonAst.class, CheckServer.class, ListReportTemplates.class, GenerateReport.class })
+                UiAst.class, JsonAst.class, CheckServer.class, ListReportTemplates.class, GenerateReport.class, DeleteProject.class })
 public class Plugin implements Runnable {
     /**
      * Return code for successful plugin execution result

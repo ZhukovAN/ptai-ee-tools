@@ -86,3 +86,38 @@
 + [Feature] Scan results data structures refactoring started. Previously plugins like Jenkins used data types defined in ptai-rest-api and those types are version-dependent. This could cause a problems with plugins update as that data stored as an XML representation of Actions
 ### 20210621
 + [Feature] Project- and build-scope actions are temporarily disabled
+### 20210812
++ [Fix] Major code refactoring complete
++ [Feature] Jenkins plugin now supports charts
++ [Fix] Scans stopped from PT AI viewer are terminated in plugins
++ [ToDo] Implement syslog data send. Syslog connection settings are to be taken from PT AI server settings
++ [ToDo] Fix "internal server error" when trying to get scan results for scans deleted / stopped from PT AI viewer
+### 20210813
++ [Fix] Scans stopped from CI are terminated in PT AI server
++ [ToDo] Implement enqueued project scan stop from plugin. This requires current scan stage monitoring and if scan isn't started yet, need to delete scan result instead of scan stop
++ [ToDo] Implement UI for terminated / incomplete scans
+### 20210817
++ [Fix] Jenkins VirtualChannel throws exception that is inherited from Throwable instead of Exception. But CallHelper processes ava.util.concurrent.Callable lambdas that throw Exception. That means that CallHelper can't process VirtualChannel exceptions and some JDK's like OpenJDK 8 raises build error here. So I had to implement own Callable inside CallHelper that throws Throwable
++ [Feature] Jenkins plugin logo changed. Now it uses icon from PT AI IDE plugins
+### 20210819 
++ [Fix] Fixed scan settings change for second and following scans
++ [Feature] UI for terminated / incomplete scans implemented for Jenkins plugin
+### 20210820 
++ [Feature] Integration test for project scan settings change using JSON added
++ [Feature] UI for scan stage duration statistic added
++ [Fix] JSON-defined BlackBox engine level processing fixed
++ [Fix] JSON-defined BlackBox engine programming language settings fixed
++ [Feature] Jenkins plugin shows its version on global configuration page (light gray colored text at plugin global settings bottom right corner)
++ [Fix] Ugly headers removed from transfers and reports settings in Jenkins plugin
+## v.3.6.4-RC1
+### 20210825
++ [Fix] Jenkins plugin version fixed (old Jenkins versions show that data at the very top of screen)
++ [Feature] Multilanguage (EN and RU) scan brief implemented
+### 20210826
++ [Feature] Raw scan result now contains localized description
++ [Feature] PT AI server URL added to scan results
++ [Feature] PT AI scan info added to Jenkins build's "summary" section
+### 20210901
++ [Feature] CLI plugin supports PT AI project deletion
++ [Feature] CLI plugin supports login / password credentials as these required for critical operations like project delete
++ [Feature] Build script now support publish task

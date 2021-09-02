@@ -1,0 +1,461 @@
+{
+  "ptaiServerVersion" : "3.6.4.2843",
+  "ptaiAgentVersion" : "3.6.4.1437",
+  "ptaiServerUrl" : "https://ptai.domain.org:443/",
+  "id" : "b0efd5be-2ff2-40e5-a36f-351b94579ffb",
+  "projectId" : "0dd14fc1-dcfc-4081-989a-b6b5afd31317",
+  "projectName" : "php-smoke",
+  "useAsyncScan" : false,
+  "scanSettings" : {
+    "id" : "c85c50a0-448d-486d-9ca5-d5346f09e051",
+    "engines" : [ "AI", "PM" ],
+    "unpackUserPackages" : false,
+    "downloadDependencies" : false,
+    "usePublicAnalysisMethod" : false,
+    "useEntryAnalysisPoint" : true,
+    "language" : "PHP",
+    "url" : "http://localhost",
+    "useIncrementalScan" : false,
+    "autocheckAfterScan" : false,
+    "customParameters" : null,
+    "javaParameters" : null
+  },
+  "policyState" : "NONE",
+  "statistics" : {
+    "scanDateIso8601" : "2021-06-20T18:04:26.590929Z",
+    "scanDurationIso8601" : "PT4.760208S",
+    "totalFileCount" : 1,
+    "totalUrlCount" : 0,
+    "scannedFileCount" : 1,
+    "scannedUrlCount" : 0
+  },
+  "state" : "DONE",
+  "details" : {
+    "chartData" : {
+      "baseIssueDistributionData" : [ {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2016-10045)",
+          "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2016-10045)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Десериализация произвольных данных",
+          "EN" : "Deserialization of Untrusted Data"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2016-10033)",
+          "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2016-10033)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Удаление произвольного файла",
+          "EN" : "Arbitrary File Deletion"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Удаление произвольного файла",
+          "EN" : "Arbitrary File Deletion"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Десериализация произвольных данных",
+          "EN" : "Deserialization of Untrusted Data"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2021-3603)",
+          "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2021-3603)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2020-13625)",
+          "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2020-13625)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2018-19296)",
+          "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2018-19296)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр expose_php",
+          "EN" : "Expose_php parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр cgi.fix_pathinfo",
+          "EN" : "Cgi.fix_pathinfo parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр log_errors",
+          "EN" : "Log_errors parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Директива max_input_time",
+          "EN" : "Max_input_time directive"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр display_errors",
+          "EN" : "Display_errors parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр assert.active",
+          "EN" : "Assert.active parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Директива session.use_strict_mode",
+          "EN" : "Session.use_strict_mode directive"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр disable_functions",
+          "EN" : "Disable_functions parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Директива session.cookie_secure",
+          "EN" : "Session.cookie_secure directive"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр allow_url_fopen",
+          "EN" : "Allow_url_fopen parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр open_basedir",
+          "EN" : "Open_basedir parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2017-5223)",
+          "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2017-5223)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр magic_quotes_gpc",
+          "EN" : "Magic_quotes_gpc parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр enable_dl",
+          "EN" : "Enable_dl parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр session.cookie_httponly",
+          "EN" : "Session.cookie_httponly parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Параметр session.save_path",
+          "EN" : "Session.save_path parameter"
+        },
+        "count" : 1,
+        "class" : "CONFIGURATION",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Жестко заданный пароль",
+          "EN" : "Hardcoded Password"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Жестко заданный пароль",
+          "EN" : "Hardcoded Password"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "NONE",
+        "title" : {
+          "RU" : "Уязвимый компонент phpmailer 5.2.17 (CVE-2021-34551)",
+          "EN" : "Vulnerable component phpmailer 5.2.17 (CVE-2021-34551)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      } ]
+    }
+  },
+  "performance" : {
+    "stages" : { }
+  }
+}

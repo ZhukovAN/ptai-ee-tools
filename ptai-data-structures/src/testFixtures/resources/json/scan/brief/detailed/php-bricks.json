@@ -1,0 +1,5879 @@
+{
+  "ptaiServerVersion" : "3.6.4.2843",
+  "ptaiAgentVersion" : "3.6.4.1437",
+  "ptaiServerUrl" : "https://ptai.domain.org:443/",
+  "id" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
+  "projectId" : "53950e41-404b-4801-b2fb-78dfa85ef3ff",
+  "projectName" : "php-bricks",
+  "useAsyncScan" : false,
+  "scanSettings" : {
+    "id" : "4cea75e1-3997-45a0-9da6-01c90a7935c7",
+    "engines" : [ "CONFIGURATION", "FINGERPRINT", "PM", "TAINT", "BLACKBOX", "AI" ],
+    "unpackUserPackages" : false,
+    "downloadDependencies" : false,
+    "usePublicAnalysisMethod" : true,
+    "useEntryAnalysisPoint" : true,
+    "language" : "PHP",
+    "url" : "http://test.domain.org/",
+    "useIncrementalScan" : false,
+    "autocheckAfterScan" : true,
+    "customParameters" : null,
+    "javaParameters" : null
+  },
+  "policyState" : "REJECTED",
+  "statistics" : {
+    "scanDateIso8601" : "2021-06-10T08:47:15.195613Z",
+    "scanDurationIso8601" : "PT5M6.2269294S",
+    "totalFileCount" : 66,
+    "totalUrlCount" : 0,
+    "scannedFileCount" : 66,
+    "scannedUrlCount" : 0
+  },
+  "state" : "DONE",
+  "details" : {
+    "chartData" : {
+      "baseIssueDistributionData" : [ {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Создание произвольного файла",
+          "EN" : "Arbitrary File Creation"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Создание произвольного файла",
+          "EN" : "Arbitrary File Creation"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Загрузка произвольного файла",
+          "EN" : "Unrestricted File Upload"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Создание произвольного файла",
+          "EN" : "Arbitrary File Creation"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Загрузка произвольного файла",
+          "EN" : "Unrestricted File Upload"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Изменение произвольных файлов",
+          "EN" : "Arbitrary File Modification"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Загрузка произвольного файла",
+          "EN" : "Unrestricted File Upload"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Загрузка произвольного файла",
+          "EN" : "Unrestricted File Upload"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Загрузка произвольного файла",
+          "EN" : "Unrestricted File Upload"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Изменение произвольных файлов",
+          "EN" : "Arbitrary File Modification"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Создание произвольного файла",
+          "EN" : "Arbitrary File Creation"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Уязвимый компонент Any JQuery version 1.0.0",
+          "EN" : "Vulnerable component Any JQuery version 1.0.0"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Подделка запроса сервера",
+          "EN" : "Server-Side Request Forgery"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Изменение произвольных файлов",
+          "EN" : "Arbitrary File Modification"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Изменение произвольных файлов",
+          "EN" : "Arbitrary File Modification"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Подделка запроса сервера",
+          "EN" : "Server-Side Request Forgery"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Загрузка произвольного файла",
+          "EN" : "Unrestricted File Upload"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Загрузка произвольного файла",
+          "EN" : "Unrestricted File Upload"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Уязвимый компонент Any JQuery version 1.0.0",
+          "EN" : "Vulnerable component Any JQuery version 1.0.0"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "HIGH",
+        "title" : {
+          "RU" : "Внедрение SQL-кода",
+          "EN" : "SQL Injection"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2020-11022)",
+          "EN" : "Vulnerable component jquery 1.8.2 (CVE-2020-11022)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2019-11358)",
+          "EN" : "Vulnerable component jquery 1.8.2 (CVE-2019-11358)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2019-11358)",
+          "EN" : "Vulnerable component jquery 1.8.2 (CVE-2019-11358)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2020-11022)",
+          "EN" : "Vulnerable component jquery 1.8.2 (CVE-2020-11022)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2012-6708)",
+          "EN" : "Vulnerable component jquery 1.8.2 (CVE-2012-6708)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2020-11023)",
+          "EN" : "Vulnerable component jquery 1.8.2 (CVE-2020-11023)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2020-11023)",
+          "EN" : "Vulnerable component jquery 1.8.2 (CVE-2020-11023)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : "69b5c1ea-e390-4bb4-818c-106d6067ef94",
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2015-9251)",
+          "EN" : "Vulnerable component jquery 1.8.2 (CVE-2015-9251)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2015-9251)",
+          "EN" : "Vulnerable component jquery 1.8.2 (CVE-2015-9251)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Уязвимый компонент jquery 1.8.2 (CVE-2012-6708)",
+          "EN" : "Vulnerable component jquery 1.8.2 (CVE-2012-6708)"
+        },
+        "count" : 1,
+        "class" : "SCA",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "AUTO_APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Подделка записи файла журнала",
+          "EN" : "Log Forging"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Разглашение информации",
+          "EN" : "Information Exposure"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "MEDIUM",
+        "title" : {
+          "RU" : "Межсайтовое выполнение сценариев",
+          "EN" : "Cross-Site Scripting"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "LOW",
+        "title" : {
+          "RU" : "Идентификация приложений",
+          "EN" : "Server Fingerprinting"
+        },
+        "count" : 1,
+        "class" : "BLACKBOX",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery заключение элемента в код HTML",
+          "EN" : "JQuery Wrap Element to HTML"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery заключение элемента в код HTML",
+          "EN" : "JQuery Wrap Element to HTML"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Незащищенная передача данных",
+          "EN" : "Insecure Transport"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Передача Cookie через HTTPS сессию без атрибута 'Secure'",
+          "EN" : "Sensitive Cookie in HTTPS Session Without ‘Secure’ Attribute"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery заключение элемента в код HTML",
+          "EN" : "JQuery Wrap Element to HTML"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "DOM модификация HTML тега",
+          "EN" : "DOM Modification HTML Tag"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - setTimeout()",
+          "EN" : "Server Side Injection - setTimeout()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - new Function()",
+          "EN" : "Server Side Injection - new Function()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Жестко заданный пароль",
+          "EN" : "Hardcoded Password"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery заключение элемента в код HTML",
+          "EN" : "JQuery Wrap Element to HTML"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Уязвимые функции хэширования",
+          "EN" : "Weak Cryptographic Hash"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery заключение элемента в код HTML",
+          "EN" : "JQuery Wrap Element to HTML"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery функция заменяющая элемент",
+          "EN" : "JQuery function that replaces element"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery функция заменяющая элемент",
+          "EN" : "JQuery function that replaces element"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Передача Cookie через HTTPS сессию без атрибута 'Httponly'",
+          "EN" : "Sensitive Cookie in HTTPS Session Without ‘Httponly’ Attribute"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Передача Cookie через HTTPS сессию без атрибута 'Httponly'",
+          "EN" : "Sensitive Cookie in HTTPS Session Without ‘Httponly’ Attribute"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - setTimeout()",
+          "EN" : "Server Side Injection - setTimeout()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Незащищенная передача данных",
+          "EN" : "Insecure Transport"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "DOM модификация HTML тега",
+          "EN" : "DOM Modification HTML Tag"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Жестко заданный пароль",
+          "EN" : "Hardcoded Password"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery заключение элемента в код HTML",
+          "EN" : "JQuery Wrap Element to HTML"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - new Function()",
+          "EN" : "Server Side Injection - new Function()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery заключение элемента в код HTML",
+          "EN" : "JQuery Wrap Element to HTML"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery заключение элемента в код HTML",
+          "EN" : "JQuery Wrap Element to HTML"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - new Function()",
+          "EN" : "Server Side Injection - new Function()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - setTimeout()",
+          "EN" : "Server Side Injection - setTimeout()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Жестко заданный пароль",
+          "EN" : "Hardcoded Password"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_ENTRYPOINT"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "DOM модификация HTML тега",
+          "EN" : "DOM Modification HTML Tag"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery функция заменяющая элемент",
+          "EN" : "JQuery function that replaces element"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Незащищенная передача данных",
+          "EN" : "Insecure Transport"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - new Function()",
+          "EN" : "Server Side Injection - new Function()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "DOM модификация HTML тега",
+          "EN" : "DOM Modification HTML Tag"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - new Function()",
+          "EN" : "Server Side Injection - new Function()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Жестко заданный пароль",
+          "EN" : "Hardcoded Password"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - setTimeout()",
+          "EN" : "Server Side Injection - setTimeout()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "DOM модификация HTML тега",
+          "EN" : "DOM Modification HTML Tag"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery заключение элемента в код HTML",
+          "EN" : "JQuery Wrap Element to HTML"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "DOM модификация HTML тега",
+          "EN" : "DOM Modification HTML Tag"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "DOM модификация HTML тега",
+          "EN" : "DOM Modification HTML Tag"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "DOM модификация HTML тега",
+          "EN" : "DOM Modification HTML Tag"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Жестко заданный пароль",
+          "EN" : "Hardcoded Password"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Жестко заданный пароль",
+          "EN" : "Hardcoded Password"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "APPROVAL",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Раскрытие информации в статических файлах или константах",
+          "EN" : "Information Exposure Through Static Content Or String Literals"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery добавление HTML кода в DOM",
+          "EN" : "JQuery HTML Inside DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Утечка отладочной информации",
+          "EN" : "System Information Leak"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Пустой блок обработки исключений",
+          "EN" : "Empty Default Exception Handler"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - setTimeout()",
+          "EN" : "Server Side Injection - setTimeout()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "DISCARD",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - new Function()",
+          "EN" : "Server Side Injection - new Function()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Инъекция на стороне сервера - setTimeout()",
+          "EN" : "Server Side Injection - setTimeout()"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "Неинициализированная переменная",
+          "EN" : "Use of Uninitialized Variable"
+        },
+        "count" : 1,
+        "class" : "WEAKNESS",
+        "isFavorite" : false,
+        "isSuspected" : false,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_OTHER"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      }, {
+        "level" : "POTENTIAL",
+        "title" : {
+          "RU" : "JQuery небезопасная функция для DOM",
+          "EN" : "JQuery Unsafe functions for DOM"
+        },
+        "count" : 1,
+        "class" : "VULNERABILITY",
+        "isFavorite" : false,
+        "isSuspected" : true,
+        "isSuppressed" : false,
+        "approvalState" : "NONE",
+        "newInScanResultId" : null,
+        "scanMode" : "FROM_PUBLICPROTECTED"
+      } ]
+    }
+  },
+  "performance" : {
+    "stages" : { }
+  }
+}

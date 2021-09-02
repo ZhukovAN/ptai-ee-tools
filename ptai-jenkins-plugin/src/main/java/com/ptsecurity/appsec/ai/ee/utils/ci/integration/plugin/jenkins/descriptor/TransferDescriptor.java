@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Transfer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.defaults.TransferDefaults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
@@ -8,6 +8,7 @@ import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.util.FormValidation;
 import lombok.Getter;
+import lombok.NonNull;
 import org.kohsuke.stapler.QueryParameter;
 
 @Extension
@@ -20,15 +21,16 @@ public class TransferDescriptor extends Descriptor<Transfer> {
     TransferDefaults transferDefaults = new TransferDefaults();
 
     @Override
+    @NonNull
     public String getDisplayName() {
         return "TransferDescriptor";
     }
 
     public FormValidation doCheckIncludes(@QueryParameter final String includes) {
-        return Validator.doCheckFieldNotEmpty(includes, Messages.validator_check_field_empty());
+        return Validator.doCheckFieldNotEmpty(includes, Resources.i18n_ast_settings_transfers_transfer_includes_message_empty());
     }
 
     public FormValidation doCheckPatternSeparator(@QueryParameter final String value) {
-        return Validator.doCheckFieldRegEx(value, Messages.validator_check_regex_invalid());
+        return Validator.doCheckFieldRegEx(value, Resources.i18n_ast_settings_transfers_transfer_separator_message_invalid());
     }
 }

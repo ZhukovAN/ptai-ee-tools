@@ -1,12 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.Config;
 import hudson.Extension;
 import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 import lombok.Getter;
+import lombok.NonNull;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -25,8 +26,9 @@ public class ConfigGlobal extends ConfigBase {
     @Symbol("ConfigGlobal")
     public static class Descriptor extends ConfigBaseDescriptor {
         @Override
+        @NonNull
         public String getDisplayName() {
-            return Messages.captions_config_configGlobal();
+            return Resources.i18n_ast_settings_config_global_label();
         }
 
         public ListBoxModel doFillConfigNameItems() {

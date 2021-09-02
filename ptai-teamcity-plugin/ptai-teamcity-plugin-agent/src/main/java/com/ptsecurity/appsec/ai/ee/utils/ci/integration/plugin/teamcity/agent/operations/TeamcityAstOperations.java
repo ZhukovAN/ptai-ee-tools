@@ -1,12 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.operations;
 
-import com.ptsecurity.appsec.ai.ee.scanresult.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.TeamcityAstJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Project;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.operations.AstOperations;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -36,10 +37,12 @@ public class TeamcityAstOperations implements AstOperations {
         return zip;
     }
 
-    public void scanStartedCallback(@NonNull final Project project, @NonNull UUID scanResultId) {
+    public void scanStartedCallback(@NonNull final UUID projectId, @NonNull UUID scanResultId) {
     }
 
-    public void scanCompleteCallback(@NonNull final Project project, @NonNull final ScanResult scanResult)  {
+    @Override
+    public void scanCompleteCallback(@NonNull final ScanBrief scanBrief, @NonNull final ScanBriefDetailed.Performance performance) throws GenericException {
+
     }
 
     public String replaceMacro(@NonNull String value, Map<String, String> replacements) {

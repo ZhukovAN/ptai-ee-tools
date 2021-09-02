@@ -1,9 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
 import hudson.DescriptorExtensionList;
 import hudson.model.AbstractDescribableImpl;
 import hudson.model.Descriptor;
@@ -25,14 +25,14 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
 
     /**
      * Method converts list of miscellaneous report defined for a job to
-     * {@link com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports}
+     * {@link com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports}
      * instance. If there were conversion errors like JSON parse fail,
      * an ApiException will be thrown
      * @param reports List of miscellaneous reports defined for a job
      * @return Reports instance that containt all the reports defined for a job
-     * @throws ApiException Exception that contains error details
+     * @throws GenericException Exception that contains error details
      */
-    public static Reports convert(final List<BaseReport> reports) throws ApiException {
+    public static Reports convert(final List<BaseReport> reports) throws GenericException {
         if (null == reports || reports.isEmpty()) return null;
         Reports res = new Reports();
         for (BaseReport r : reports) {
@@ -71,26 +71,26 @@ public abstract class BaseReport extends AbstractDescribableImpl<BaseReport> imp
     public static abstract class BaseReportDescriptor extends Descriptor<BaseReport> {
 
         public FormValidation doCheckFileName(@QueryParameter("fileName") String fileName) {
-            return Validator.doCheckFieldNotEmpty(fileName, Resources.validator_check_field_empty());
+            return Validator.doCheckFieldNotEmpty(fileName, Resources.i18n_ast_result_reporting_report_file_message_empty());
         }
 
         public FormValidation doCheckTemplate(@QueryParameter("template") String template) {
-            return Validator.doCheckFieldNotEmpty(template, Resources.validator_check_field_empty());
+            return Validator.doCheckFieldNotEmpty(template, Resources.i18n_ast_result_reporting_report_template_message_empty());
         }
 
         public FormValidation doCheckFilter(@QueryParameter("filter") String filter) {
             if (Validator.doCheckFieldNotEmpty(filter))
-                return Validator.doCheckFieldJsonIssuesFilter(filter, Resources.i18n_validator_reporting_issuesfilter_incorrect());
+                return Validator.doCheckFieldJsonIssuesFilter(filter, Resources.i18n_ast_result_reporting_report_filter_message_invalid());
             else
                 return FormValidation.ok();
         }
 
-        public String getDefaultLocale() {
+        public static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale getDefaultLocale() {
             Locale locale = LocaleProvider.getLocale();
             if (locale.getLanguage().equalsIgnoreCase(Reports.Locale.RU.name()))
-                return Reports.Locale.RU.name();
+                return Reports.Locale.RU;
             else
-                return Reports.Locale.EN.name();
+                return Reports.Locale.EN;
         }
     }
 

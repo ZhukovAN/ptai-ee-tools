@@ -1,7 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import hudson.Extension;
+import lombok.NonNull;
 import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -15,8 +16,9 @@ public class WorkModeAsync extends WorkMode {
     @Extension
     public static class Descriptor extends WorkModeDescriptor {
         @Override
+        @NonNull
         public String getDisplayName() {
-            return Messages.captions_workMode_async_displayName();
+            return Resources.i18n_ast_settings_mode_asynchronous_label();
         }
     }
 }

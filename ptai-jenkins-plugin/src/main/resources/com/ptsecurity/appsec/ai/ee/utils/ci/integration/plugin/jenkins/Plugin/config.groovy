@@ -144,7 +144,7 @@ f.entry(
             items: instance?.transfers,
             name: 'transfers',
             minimum: '1',
-            header: _('transfer'),
+            // header: _('transfer'),
             add: _('transferAdd')) {
         table(
                 width: '100%',

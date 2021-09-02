@@ -1,10 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import hudson.Extension;
 import hudson.util.ListBoxModel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
@@ -53,19 +52,19 @@ public class Report extends BaseReport {
         public ListBoxModel doFillFormatItems() {
             ListBoxModel model = new ListBoxModel();
             Arrays.stream(Reports.Report.Format.values())
-                    .forEach(f -> model.add(f.getValue().getValue(), f.name()));
+                    .forEach(f -> model.add(f.name(), f.name()));
             return model;
         }
 
         public ListBoxModel doFillLocaleItems() {
             ListBoxModel model = new ListBoxModel();
-            model.add(Resources.captions_locale_english_displayName(), Reports.Locale.EN.name());
-            model.add(Resources.captions_locale_russian_displayName(), Reports.Locale.RU.name());
+            model.add(Resources.i18n_misc_enums_locale_english_label(), Reports.Locale.EN.name());
+            model.add(Resources.i18n_misc_enums_locale_russian_label(), Reports.Locale.RU.name());
             return model;
         }
 
         public String getDefaultTemplate() {
-            return Reports.Locale.RU.name().equals(getDefaultLocale())
+            return Reports.Locale.RU == getDefaultLocale()
                     ? "Отчет по результатам сканирования"
                     : "Scan results report";
         }

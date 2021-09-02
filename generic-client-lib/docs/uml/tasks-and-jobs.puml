@@ -1,0 +1,78 @@
+@startuml
+class ConnectionSettings {
+    +String url
+    +String token
+    +String caCertsPem
+    +boolean insecure
+    +int timeout
+}
+
+class JwtResponse {
+    +String accessToken
+    +String refreshToken
+    +String expiredAt
+}
+
+abstract class AbstractTool {
+    String prefix
+    PrintStream console
+    boolean verbose
+}
+
+enum JobExecutionResult {
+    ERROR
+    FAILED
+    INTERRUPTED
+    SUCCESS
+}
+
+abstract class AbstractJob {
+    # AbstractApiClient createClient()
+    + JobExecutionResult execute()
+    # {abstract} JobExecutionResult unsafeExecute()
+}
+
+AbstractJob -left-|> AbstractTool
+
+
+class CheckServerJob {
+}
+
+CheckServerJob --|> AbstractJob
+
+abstract class AbstractApiClient {
+    # List<Object> apis
+    + {abstract} JwtResponse authenticate()
+    + boolean init()
+    # void unsafeInit()
+}
+
+AbstractApiClient -right-|> AbstractTool
+
+interface CheckServerTask {
+    ServerCheckResult check()
+}
+
+
+package api.v36 <<Frame>> {
+    class ApiClient
+
+    package tasks <<Frame>> {
+        class CheckServerTaskImpl
+        CheckServerTaskImpl --|> AbstractTaskImpl
+        CheckServerTaskImpl ..|> CheckServerTask
+
+        class AbstractTaskImpl
+        AbstractTaskImpl --|> AbstractTool
+    }
+}
+ApiClient --|> AbstractApiClient
+AbstractTaskImpl -left-> ApiClient
+
+AbstractApiClient --> "apiJwt" JwtResponse
+AbstractJob .down.> JobExecutionResult
+
+AbstractApiClient --> "connectionSettings" ConnectionSettings
+AbstractJob --> "connectionSettings" ConnectionSettings
+
+@enduml

@@ -10,15 +10,15 @@ import picocli.CommandLine;
 import java.util.UUID;
 
 @DisplayName("Server availability check tests")
-@Tag("integration-legacy")
-class CheckServerIT extends BaseIT {
+@Tag("integration")
+class CheckServerIT extends BaseCliIT {
     @Test
     @DisplayName("Connect with valid token")
     public void testGoodToken() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH.toString(),
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN);
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
@@ -28,8 +28,8 @@ class CheckServerIT extends BaseIT {
     public void testInsecureWithCaCertificate() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH.toString(),
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN,
                 "--insecure");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
@@ -40,29 +40,29 @@ class CheckServerIT extends BaseIT {
     public void testInsecureGoodToken() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", PTAI_URL,
+                "--url", URL,
                 "--token", TOKEN,
                 "--insecure");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
     @Test
-    @DisplayName("Secure connect without CA certificates")
+    @DisplayName("Fail secure connect without CA certificates")
     public void testWithoutCaCertificates() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", PTAI_URL,
+                "--url", URL,
                 "--token", TOKEN);
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
     @Test
-    @DisplayName("Connect with invalid token")
+    @DisplayName("Fail connect with invalid token")
     public void testBadToken() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", PTAI_URL,
-                "--truststore", PEM_PATH,
+                "--url", URL,
+                "--truststore", PEM.toString(),
                 "--token", TOKEN + UUID.randomUUID());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }

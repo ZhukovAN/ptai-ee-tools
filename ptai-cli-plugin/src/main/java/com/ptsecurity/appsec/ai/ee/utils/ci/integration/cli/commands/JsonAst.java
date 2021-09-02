@@ -1,18 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.StartScanModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliJsonAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.UUID;
 import java.util.concurrent.Callable;
-
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob.JobFinishedStatus.SUCCESS;
 
 @Slf4j
 @CommandLine.Command(
@@ -37,7 +35,7 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
             names = {"--output"}, order = 4,
             paramLabel = "<path>",
             description = "Folder where AST reports are to be stored. By default .ptai folder is used")
-    protected Path output = Paths.get(System.getProperty("user.dir")).resolve(Base.DEFAULT_SAST_FOLDER);
+    protected Path output = Paths.get(System.getProperty("user.dir")).resolve(AbstractJob.DEFAULT_OUTPUT_FOLDER);
 
     @CommandLine.Option(
             names = {"--settings-json"}, order = 5,
@@ -68,7 +66,7 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--use-default-excludes"}, order = 9,
             description = "Use default excludes list")
-    private boolean useDefaultExcludes = false;
+    protected boolean useDefaultExcludes = false;
 
     @CommandLine.ArgGroup(exclusive = true)
     BaseCommand.Reporting reports;
@@ -76,12 +74,12 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--fail-if-failed"}, order = 10,
             description = "Return code failed if AST failed")
-    private boolean failIfFailed = false;
+    protected boolean failIfFailed = false;
 
     @CommandLine.Option(
             names = {"--fail-if-unstable"}, order = 11,
             description = "Return code failed if AST unstable")
-    private boolean failIfUnstable = false;
+    protected boolean failIfUnstable = false;
 
     @CommandLine.Option(
             names = {"--async"}, order = 20,
@@ -91,13 +89,19 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
     @CommandLine.Option(
             names = {"--full-scan"}, order = 21,
             description = "Execute full AST instead of incremental")
-    private boolean fullScan = false;
+    protected boolean fullScan = false;
 
     @Override
-    public Integer call() throws Exception {
-        CliAstJob job = CliAstJob.builder()
+    public Integer call() {
+        CliJsonAstJob job = CliJsonAstJob.builder()
                 .console(System.out).prefix("").verbose(verbose)
-                .url(url.toString()).token(token).insecure(insecure)
+                .connectionSettings(ConnectionSettings.builder()
+                        .url(url.toString())
+                        .credentials(credentials.getBaseCredentials())
+                        .insecure(insecure)
+                        .build())
+                .settings(jsonSettings)
+                .policy(jsonPolicy)
                 .async(async)
                 .failIfFailed(failIfFailed).failIfUnstable(failIfUnstable)
                 .input(input).output(output)
@@ -105,12 +109,9 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
                 .useDefaultExcludes(useDefaultExcludes)
                 .reporting(reports)
                 .truststore(truststore)
-                .settings(jsonSettings)
-                .policy(jsonPolicy)
                 .fullScanMode(fullScan)
                 .build();
-        if (!job.init()) return BaseCommand.ExitCode.FAILED.getCode();
-        return (SUCCESS == job.execute())
+        return (AbstractJob.JobExecutionResult.SUCCESS == job.execute())
                 ? BaseCommand.ExitCode.SUCCESS.getCode()
                 : BaseCommand.ExitCode.FAILED.getCode();
     }

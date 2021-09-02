@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Messages;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import hudson.Extension;
 import hudson.util.FormValidation;
@@ -25,11 +25,11 @@ public class ScanSettingsUi extends ScanSettings {
     public static class Descriptor extends ScanSettingsDescriptor {
         @Override
         public String getDisplayName() {
-            return Messages.captions_scanSettingsUi_displayName();
+            return Resources.i18n_ast_settings_type_ui_label();
         }
 
         public FormValidation doCheckProjectName(@QueryParameter("projectName") String projectName) {
-            return Validator.doCheckFieldNotEmpty(projectName, Messages.validator_check_field_empty());
+            return Validator.doCheckFieldNotEmpty(projectName, Resources.i18n_ast_settings_type_ui_project_message_empty());
         }
 
         public FormValidation doTestProject(

@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -14,13 +14,13 @@ public class GracefulShutdown extends Thread {
     protected boolean stopped = false;
 
     @NonNull
-    protected final AstJob job;
+    protected final GenericAstJob job;
 
     public void run() {
         if (stopped) return;
         try {
             job.stop();
-        } catch (ApiException e) {
+        } catch (GenericException e) {
             job.severe(e);
         }
     }

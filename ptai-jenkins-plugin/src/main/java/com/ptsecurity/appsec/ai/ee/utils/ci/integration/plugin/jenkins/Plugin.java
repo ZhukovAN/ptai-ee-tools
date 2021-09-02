@@ -1,8 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
@@ -12,6 +15,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalcon
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigGlobal;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsManual;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
@@ -20,10 +24,9 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Bui
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeAsync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.AbortException;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -34,6 +37,7 @@ import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import jenkins.tasks.SimpleBuildStep;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -48,7 +52,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 @Slf4j
 @ToString
 public class Plugin extends Builder implements SimpleBuildStep {
-    private static final String CONSOLE_PREFIX = Base.DEFAULT_PREFIX;
+    private static final String CONSOLE_PREFIX = AbstractTool.DEFAULT_LOG_PREFIX;
 
     @Getter
     private final ConfigBase config;
@@ -99,7 +103,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
             }
             return env;
         } catch (Exception e) {
-            throw new RuntimeException(Resources.exception_failedToGetEnvVars(), e);
+            throw new RuntimeException(Resources.i18n_ast_result_status_failed_environment_label(), e);
         }
     }
 
@@ -153,7 +157,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
             check = scanSettingsManualDescriptor.doTestJsonPolicy(item, jsonPolicy);
             if (FormValidation.Kind.OK != check.kind)
                 throw new AbortException(check.getMessage());
-            ScanSettings scanSettings = JsonSettingsHelper.verify(jsonSettings);
+            AiProjScanSettings scanSettings = JsonSettingsHelper.verify(jsonSettings);
             projectName = scanSettings.getProjectName();
             String changedProjectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
             if (!projectName.equals(changedProjectName))
@@ -170,8 +174,6 @@ public class Plugin extends Builder implements SimpleBuildStep {
         String credentialsId;
         String serverUrl;
         boolean serverInsecure;
-
-        //TODO Move all settings processing to JenkinsAstJob.unsafeInit method
 
         if (config instanceof ConfigGlobal) {
             // Settings are defined globally, job just refers them using configName
@@ -200,17 +202,26 @@ public class Plugin extends Builder implements SimpleBuildStep {
             throw new AbortException(check.getMessage());
         // TODO: Implement scan node support when PT AI will be able to
         // String node = StringUtils.isEmpty(nodeName) ? Base.DEFAULT_PTAI_NODE_NAME : nodeName;
+        Reports reports = null;
+        if (workMode instanceof WorkModeSync) {
+            WorkModeSync workModeSync = (WorkModeSync) workMode;
+            if (null != workModeSync.getReports())
+                reports = BaseReport.convert(workModeSync.getReports());
+        }
 
         JenkinsAstJob job = JenkinsAstJob.builder()
-                .name(projectName)
-                .jsonSettings(jsonSettings)
-                .jsonPolicy(jsonPolicy)
+                .projectName(selectedScanSettingsUi ? projectName : null)
+                .settings(selectedScanSettingsUi ? null : jsonSettings)
+                .policy(selectedScanSettingsUi ?  null : jsonPolicy)
                 .console(listener.getLogger())
                 .verbose(verbose)
                 .prefix(CONSOLE_PREFIX)
-                .url(serverUrl)
-                .token(credentials.getToken().getPlainText())
-                .insecure(serverInsecure)
+                .connectionSettings(ConnectionSettings.builder()
+                        .url(serverUrl)
+                        .credentials(TokenCredentials.builder().token(credentials.getToken().getPlainText()).build())
+                        .caCertsPem(credentials.getServerCaCertificates())
+                        .insecure(serverInsecure)
+                        .build())
                 .async(workMode instanceof WorkModeAsync)
                 .failIfFailed(failIfFailed)
                 .failIfUnstable(failIfUnstable)
@@ -220,17 +231,19 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .listener(listener)
                 .buildInfo(buildInfo)
                 .transfers(transfers)
-                .workMode(workMode)
+                .reports(reports)
                 .fullScanMode(fullScanMode)
                 .build();
-        if (StringUtils.isNotEmpty(credentials.getServerCaCertificates()))
-            job.setCaCertsPem(credentials.getServerCaCertificates());
-        job.info("JenkinsAstJob created: %s", job.toString());
-        if (!job.init())
-            throw new AbortException(Resources.validator_failed());
+        job.fine("JenkinsAstJob created: %s", job.toString());
 
-        if (!AstJob.JobFinishedStatus.SUCCESS.equals(job.execute()))
-            throw new AbortException(Resources.validator_failed());
+        AbstractJob.JobExecutionResult jobExecutionResult = job.execute();
+        if (!AbstractJob.JobExecutionResult.SUCCESS.equals(jobExecutionResult))
+            throw new AbortException(Resources.i18n_ast_result_status_failed_label());
+    }
+
+    @NonNull
+    public static String getPluginUrl() {
+        return "/plugin/" + Objects.requireNonNull(Jenkins.get().getPluginManager().getPlugin("ptai-jenkins-plugin")).getShortName();
     }
 
     @Override
@@ -273,8 +286,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
         if (null != projectActions) return projectActions;
         projectActions = new ArrayList<>();
         projectActions.add(new AstJobMultipleResults(project));
-        // TODO: Implement project actions and uncomment this
-        // projectActions.add(new AstJobTableResults(project.getName()));
+        projectActions.add(new AstJobTableResults(project));
         return projectActions;
     }
 }

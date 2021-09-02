@@ -1,8 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.FileCollector;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.StringHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.StringHelper;
 
 import java.util.Arrays;
 

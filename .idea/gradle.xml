@@ -17,11 +17,13 @@
             <option value="$PROJECT_DIR$/ptai-data-structures" />
             <option value="$PROJECT_DIR$/ptai-i18n" />
             <option value="$PROJECT_DIR$/ptai-jenkins-plugin" />
+            <option value="$PROJECT_DIR$/ptai-report-tools" />
             <option value="$PROJECT_DIR$/ptai-rest-api" />
             <option value="$PROJECT_DIR$/ptai-teamcity-plugin" />
             <option value="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-agent" />
             <option value="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-common" />
             <option value="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-server" />
+            <option value="$PROJECT_DIR$/ptai-test-tools" />
           </set>
         </option>
       </GradleProjectSettings>

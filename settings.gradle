@@ -1,8 +1,10 @@
 rootProject.name = 'ptai-ee-tools'
 
+include ':ptai-test-tools'
 include ':ptai-i18n'
 include ':ptai-data-structures'
 include ':ptai-rest-api'
+include ':ptai-report-tools'
 include ':generic-client-lib'
 include ':ptai-cli-plugin'
 include ':ptai-jenkins-plugin'

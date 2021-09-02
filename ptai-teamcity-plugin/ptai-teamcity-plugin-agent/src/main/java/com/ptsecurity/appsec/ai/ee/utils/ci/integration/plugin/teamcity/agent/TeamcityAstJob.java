@@ -1,18 +1,21 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent;
 
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
-import com.ptsecurity.appsec.ai.ee.ptai.server.v36.scanscheduler.model.ScanType;
+import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
+import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.TextOutput;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.JsonAstJobSetupOperationsImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.UiAstJobSetupOperationsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.ReportsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.operations.TeamcityAstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.operations.TeamcityFileOperations;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfer;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.domain.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.JsonSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.utils.Validator;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.AstJob;
-import com.ptsecurity.appsec.ai.ee.utils.json.ScanSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.artifacts.ArtifactsWatcher;
 import lombok.Getter;
@@ -29,7 +32,7 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.C
 @Getter
 @Setter
 @SuperBuilder
-public class TeamcityAstJob extends AstJob {
+public class TeamcityAstJob extends GenericAstJob implements TextOutput {
     /**
      * Teamcity agent where AST is going on. We need this
      * interface to execute file opertaions
@@ -46,66 +49,28 @@ public class TeamcityAstJob extends AstJob {
     @NonNull
     private ArtifactsWatcher artifactsWatcher;
 
-    /**
-     * Job settings
-     */
-    private Map<String, String> params;
+    protected String settings;
 
-    /**
-     * Global plugin settings
-     */
-    private Map<String, String> globals;
+    protected String policy;
 
     @Override
-    public boolean unsafeInit() {
-        fullScanMode = TRUE.equals(params.get(Params.FULL_SCAN_MODE));
-
-        verbose = TRUE.equals(params.get(Params.VERBOSE));
-
-        if (SERVER_SETTINGS_LOCAL.equals(params.get(Params.SERVER_SETTINGS))) globals = params;
-
-        url = globals.get(Params.URL);
-        insecure = TRUE.equals(globals.get(Params.INSECURE));
-        token = globals.get(Params.TOKEN);
-        caCertsPem = globals.get(Params.CERTIFICATES);
-
-        if (AST_SETTINGS_JSON.equals(params.get(Params.AST_SETTINGS))) {
-            ScanSettings scanSettings = JsonSettingsHelper.verify(params.get(Params.JSON_SETTINGS));
-            name = scanSettings.getProjectName();
-            jsonSettings = JsonSettingsHelper.minimize(params.get(Params.JSON_SETTINGS));
-            jsonPolicy = JsonPolicyHelper.minimize(params.get(Params.JSON_POLICY));
-        } else
-            name = params.get(Params.PROJECT_NAME);
-        if (Validator.validateNotEmpty(name).fail())
-            throw ApiException.raise("Project name is empty", new IllegalArgumentException());
-
-        async = AST_MODE_ASYNC.equals(params.get(Params.AST_MODE));
-        if (!async) {
-            failIfFailed = TRUE.equals(params.get(Params.FAIL_IF_FAILED));
-            failIfUnstable = TRUE.equals(params.get(Params.FAIL_IF_UNSTABLE));
-            reports = ReportsHelper.convert(params);
-        }
-
-        Transfer transfer = new Transfer();
-        if (StringUtils.isNotEmpty(params.get(Params.INCLUDES)))
-            transfer.setIncludes(params.get(Params.INCLUDES));
-        if (StringUtils.isNotEmpty(params.get(Params.EXCLUDES)))
-            transfer.setExcludes(params.get(Params.EXCLUDES));
-        if (StringUtils.isNotEmpty(params.get(Params.PATTERN_SEPARATOR)))
-            transfer.setPatternSeparator(params.get(Params.PATTERN_SEPARATOR));
-        if (StringUtils.isNotEmpty(params.get(Params.REMOVE_PREFIX)))
-            transfer.setRemovePrefix(params.get(Params.REMOVE_PREFIX));
-        transfer.setFlatten(TRUE.equalsIgnoreCase(params.get(Params.FLATTEN)));
-        transfer.setUseDefaultExcludes(TRUE.equalsIgnoreCase(params.get(Params.USE_DEFAULT_EXCLUDES)));
-        transfers = new Transfers().addTransfer(transfer);
-
+    protected void init() throws GenericException {
         astOps = TeamcityAstOperations.builder()
                 .owner(this)
                 .build();
         fileOps = TeamcityFileOperations.builder()
                 .owner(this)
                 .build();
-        return super.unsafeInit();
+        if (null != settings)
+            setupOps = JsonAstJobSetupOperationsImpl.builder()
+                    .jsonSettings(settings)
+                    .jsonPolicy(policy)
+                    .owner(this)
+                    .build();
+        else
+            setupOps = UiAstJobSetupOperationsImpl.builder()
+                    .owner(this)
+                    .build();
     }
 
     @Override
@@ -119,5 +84,4 @@ public class TeamcityAstJob extends AstJob {
         if (null == t) return;
         agent.getBuildLogger().exception(t);
     }
-
 }

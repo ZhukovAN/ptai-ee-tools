@@ -3,7 +3,7 @@ plugins {
     id 'org.jenkins-ci.jpi'
 }
 
-group = "${rootGroup}.ptai-jenkins-plugin"
+group = "${rootGroup}"
 description = 'This plugin used to implement AST using PT Application Inspector'
 version = "${version}"
 
@@ -65,10 +65,10 @@ jenkinsPlugin {
     // localizerOutputDir = "${project.buildDir}/generated-src/localizer"
 
     // disable configuration of Maven Central, the local Maven cache and the Jenkins Maven repository, defaults to true
-    // configureRepositories = false
+    configureRepositories = false
 
     // skip configuration of publications and repositories for the Maven Publishing plugin, defaults to true
-    // configurePublishing = false
+    configurePublishing = false
 
     // plugin file extension, either 'jpi' or 'hpi', defaults to 'hpi'
     fileExtension = 'hpi'
@@ -99,6 +99,7 @@ configurations {
 
 dependencies {
     api project(':generic-client-lib')
+    api project(':ptai-report-tools')
     testImplementation(testFixtures(project(':generic-client-lib')))
 
     processJenkinsVersion()
@@ -133,6 +134,17 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.8.1'
     // https://mvnrepository.com/artifact/commons-validator/commons-validator
     implementation 'commons-validator:commons-validator:1.6'
+    // https://mvnrepository.com/artifact/org.jooq/joor-java-8
+    implementation 'org.jooq:joor-java-8:0.9.13'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
+    implementation 'org.apache.commons:commons-compress:1.21'
+    // Need this to work with 7zip compression
+    // https://mvnrepository.com/artifact/org.tukaani/xz
+    implementation 'org.tukaani:xz:1.9'
+
+    testImplementation(testFixtures(project(":ptai-data-structures")))
+    testImplementation(testFixtures(project(":ptai-rest-api")))
+    testImplementation(testFixtures(project(":generic-client-lib")))
 }
 
 // Retuns -1 if version a is before b, 0 if those are equal and 1 if a is after b

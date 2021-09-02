@@ -3,14 +3,18 @@ plugins {
     id 'java-test-fixtures'
 }
 
-group = "${rootGroup}.generic-client-lib"
+group = "${rootGroup}"
 
 dependencies {
     api project(':ptai-data-structures')
     api project(':ptai-rest-api')
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
-    implementation 'org.apache.commons:commons-compress:1.19'
+    implementation 'org.apache.commons:commons-compress:1.21'
+    // Need this to work with 7zip compression
+    // https://mvnrepository.com/artifact/org.tukaani/xz
+    implementation 'org.tukaani:xz:1.9'
+
     // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
     implementation 'org.apache.httpcomponents:httpclient:4.5.10'
     // https://mvnrepository.com/artifact/commons-io/commons-io
@@ -27,6 +31,9 @@ dependencies {
     implementation 'com.microsoft.signalr:signalr:1.0.0'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     implementation 'org.apache.commons:commons-text:1.9'
+    // Need this to search for VersionRange-annotated classes
+    // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
+    implementation 'io.github.classgraph:classgraph:4.8.110'
 
     testFixturesApi("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testFixturesImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
@@ -35,16 +42,15 @@ dependencies {
     testFixturesApi "org.slf4j:slf4j-jdk14:$slf4jVersion"
     // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
     testFixturesApi 'io.jsonwebtoken:jjwt:0.9.1'
-    // https://mvnrepository.com/artifact/commons-io/commons-io
-    testFixturesApi 'commons-io:commons-io:2.6'
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    testFixturesApi 'org.apache.commons:commons-lang3:3.8.1'
-    // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
-    testFixturesApi "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
-    testFixturesImplementation 'org.apache.commons:commons-compress:1.20'
-    // https://mvnrepository.com/artifact/org.tukaani/xz
-    testFixturesImplementation 'org.tukaani:xz:1.9'
+
+    // Need this to write tests that use data stored in 7zip-packed resource files
+    // like issues model, scan settings etc.
+    testImplementation(testFixtures(project(":ptai-data-structures")))
+    testImplementation(testFixtures(project(":ptai-rest-api")))
+
+    testFixturesImplementation(testFixtures(project(":ptai-data-structures")))
+    testFixturesImplementation(testFixtures(project(":ptai-rest-api")))
+    testFixturesImplementation(testFixtures(project(":ptai-test-tools")))
 }
 
 processResources {
@@ -55,5 +61,12 @@ processResources {
     ]
     filesMatching("**/build.properties") {
         expand(localVersionDetails)
+    }
+}
+
+jar {
+    // See https://www.jenkins.io/blog/2018/01/13/jep-200/
+    manifest {
+        attributes 'Jenkins-ClassFilter-Whitelisted': 'true'
     }
 }

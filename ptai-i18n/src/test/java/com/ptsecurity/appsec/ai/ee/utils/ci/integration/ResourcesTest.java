@@ -11,14 +11,14 @@ class ResourcesTest {
     @DisplayName("Test i18n localization english resources")
     @Test
     public void testEnglishMessages() {
-        Localizable english = Resources._captions_locale_english_displayName();
+        Localizable english = Resources._i18n_misc_enums_locale_english_label();
         Assertions.assertTrue(english.toString(Locale.ENGLISH).equalsIgnoreCase("English"));
     }
 
     @DisplayName("Test i18n localization russian resources")
     @Test
     public void testRussianMessages() {
-        Localizable english = Resources._captions_locale_english_displayName();
+        Localizable english = Resources._i18n_misc_enums_locale_english_label();
         Assertions.assertTrue(english.toString(new Locale("ru")).equalsIgnoreCase("Английский"));
     }
 }

@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils;
 
 import picocli.CommandLine;
 
-import javax.naming.directory.Attribute;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;

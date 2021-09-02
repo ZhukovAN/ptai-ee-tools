@@ -2,25 +2,33 @@ plugins {
     id 'io.freefair.lombok' version '6.0.0-m2' apply false
     id 'com.github.johnrengelman.shadow' version '5.2.0' apply false
     id 'org.jenkins-ci.jpi' version '0.43.0' apply false
-    id 'com.palantir.git-version' version '0.12.3'
+    id 'com.palantir.git-version' version '0.12.3' apply false
 }
 
-ext {
-    buildTimestamp = "${Instant.now().toString()}"
-    versionDetails = versionDetails()
+allprojects {
+    apply plugin: 'com.palantir.git-version'
+    ext {
+        buildTimestamp = "${Instant.now().toString()}"
+        versionDetails = versionDetails()
+    }
 }
 
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
+    // Lombok plugin is made conditional as ptai-i18n project raises duplicate classes
     apply plugin: 'io.freefair.lombok'
+    apply plugin: 'maven-publish'
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
 
+    group = "${rootGroup}"
+
     repositories {
+        mavenLocal()
         mavenCentral()
         maven { url = uri('https://repo.jenkins-ci.org/releases/') }
     }
@@ -38,16 +46,38 @@ subprojects {
 
     test {
         useJUnitPlatform() {
-            excludeTags 'integration', 'integration-legacy'
+            excludeTags 'integration'
         }
+    }
+
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        archiveClassifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    task testsJar(type: Jar, dependsOn: testClasses) {
+        archiveClassifier = 'tests'
+        from sourceSets.test.output
     }
 
     tasks.withType(JavaCompile) {
         options.compilerArgs << "-Xlint:unchecked"
     }
 
+    tasks.withType(Javadoc) {
+        options.encoding = 'UTF-8'
+        // OpenAPI-generated files contain some javadoc issues, let's ignore them
+        // Also delomboked files are also generate warnings
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+
     jar {
-        manifest.attributes['Implementation-Version'] = version
+        manifest.attributes['Implementation-Version'] = project.version
         manifest.attributes['Build-Time'] = buildTimestamp
         manifest.attributes['Implementation-Vendor-Id'] = rootGroup
         manifest.attributes['Implementation-Git-Hash'] = versionDetails.gitHash
@@ -55,16 +85,60 @@ subprojects {
         manifest.attributes['Implementation-Git-Branch'] = versionDetails.branchName
     }
 
-    def integrationTest = tasks.register("integrationTest", Test) {
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+                artifact sourcesJar
+                artifact javadocJar
+                artifact testsJar
+
+                suppressPomMetadataWarningsFor('testFixturesApiElements')
+                suppressPomMetadataWarningsFor('testFixturesRuntimeElements')
+
+                pom {
+                    name = project.name
+                    packaging = 'jar'
+                    inceptionYear = '2018'
+                    url = 'https://www.ptsecurity.com/ww-en/products/ai/'
+                    description = project.description
+
+                    scm {
+                        url = 'https://github.com/ZhukovAN/ptaiPlugins'
+                        connection = 'scm:git:https://github.com/ZhukovAN/ptaiPlugins.git'
+                        developerConnection = 'scm:git:https://github.com/ZhukovAN/ptaiPlugins.git'
+                    }
+
+                    developers {
+                        developer {
+                            id = 'ZhukovAN'
+                            name = 'Alexey Zhukov'
+                            email = 'alexey.n.zhukov@gmail.com'
+                        }
+                    }
+                }
+            }
+        }
+        repositories {
+            mavenLocal()
+        }
+    }
+    def integrationTest = tasks.register('integrationTest', Test) {
         useJUnitPlatform {
-            includeTags "integration"
+            includeTags 'integration'
         }
         testLogging {
-            events "passed", "skipped", "failed"
+            events 'passed', 'skipped', 'failed'
         }
         shouldRunAfter test
     }
 }
+
+/*
+configure(allprojects - project(':ptai-i18n')) {
+    apply plugin: 'io.freefair.lombok'
+}
+*/
 
 wrapper {
     gradleVersion = '6.8.3'

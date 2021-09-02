@@ -1,12 +1,15 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ptsecurity.appsec.ai.ee.ptai.server.ApiException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.base.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ptaiserver.v36.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.BaseCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import picocli.CommandLine;
@@ -14,6 +17,8 @@ import picocli.CommandLine;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
 @Slf4j
 public abstract class BaseCommand {
@@ -58,9 +63,9 @@ public abstract class BaseCommand {
         /**
          * Method converts CLI reporting parameters to {@link Reports} instance.
          * @return {@link Reports} instance that is made of CLI parameters
-         * @throws ApiException EXception that contains error details if CLI-to-Reports conversion failed
+         * @throws GenericException EXception that contains error details if CLI-to-Reports conversion failed
          */
-        public Reports convert() throws ApiException {
+        public Reports convert() throws GenericException {
             if (null != reporting) {
                 Reports reports = new Reports();
                 // Convert CLI-defined report / export data to generic Reports instance
@@ -87,7 +92,7 @@ public abstract class BaseCommand {
                 return reports;
             } else {
                 // Load Reports instance from JSON file
-                String json = Base.callApi(
+                String json = call(
                         () -> FileUtils.readFileToString(reportingJson.toFile(), StandardCharsets.UTF_8),
                         Resources.i18n_ast_result_reporting_json_message_file_read_failed());
                 return Reports.validateJsonReports(json);
@@ -219,12 +224,64 @@ public abstract class BaseCommand {
             description = "PT AI server URL, i.e. https://ptai.domain.org:443")
     protected URL url;
 
-    @CommandLine.Option(
-            names = {"-t", "--token"},
-            required = true, order = 2,
-            paramLabel = "<token>",
-            description = "PT AI server API token")
-    protected String token = null;
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class Credentials {
+        @Getter
+        @Setter
+        @SuperBuilder
+        @NoArgsConstructor
+        public static class LoginPassword {
+            @CommandLine.Option(
+                    names = {"--user"},
+                    required = true, order = 2,
+                    paramLabel = "<user>",
+                    description = "PT AI user name")
+            @Builder.Default
+            protected String user = null;
+
+            @CommandLine.Option(
+                    names = {"--password"},
+                    required = true, order = 3,
+                    paramLabel = "<password>",
+                    description = "PT AI user password")
+            @Builder.Default
+            protected String password = null;
+        }
+
+        @CommandLine.ArgGroup(exclusive = false)
+        protected LoginPassword loginPassword = null;
+
+        @CommandLine.Option(
+                names = {"-t", "--token"},
+                required = true, order = 2,
+                paramLabel = "<token>",
+                description = "PT AI server API token")
+        protected String token = null;
+
+        public Credentials(@NonNull final BaseCredentials credentials) {
+            if (credentials instanceof TokenCredentials) {
+                TokenCredentials tokenCredentials = (TokenCredentials) credentials;
+                token = tokenCredentials.getToken();
+            } else {
+                PasswordCredentials passwordCredentials = (PasswordCredentials) credentials;
+                loginPassword = LoginPassword.builder()
+                        .user(passwordCredentials.getUser())
+                        .password(passwordCredentials.getPassword())
+                        .build();
+            }
+        }
+
+        public BaseCredentials getBaseCredentials() {
+            return null == getToken()
+                    ? PasswordCredentials.builder().user(getLoginPassword().getUser()).password(getLoginPassword().getPassword()).build()
+                    : TokenCredentials.builder().token(getToken()).build();
+        }
+    }
+
+    @CommandLine.ArgGroup(exclusive = true)
+    protected Credentials credentials = null;
 
     @CommandLine.Option(
             names = {"--truststore"}, order = 3,
