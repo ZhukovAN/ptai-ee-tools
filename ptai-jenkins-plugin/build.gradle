@@ -9,7 +9,7 @@ version = "${version}"
 
 repositories {
     maven {
-        url 'https://repo.spring.io/plugins-release/'
+        url 'https://repo.jenkins-ci.org/public/'
     }
 }
 
