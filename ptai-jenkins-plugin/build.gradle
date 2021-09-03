@@ -7,6 +7,12 @@ group = "${rootGroup}"
 description = 'This plugin used to implement AST using PT Application Inspector'
 version = "${version}"
 
+repositories {
+    maven {
+        url 'https://repo.spring.io/plugins-release/'
+    }
+}
+
 ext {
     // Just placeholders for dependencies / test Jenkins
     // plugin versions. Actual versions are calculated
