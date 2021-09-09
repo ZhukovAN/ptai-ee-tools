@@ -108,7 +108,7 @@ dependencies {
     api project(':ptai-report-tools')
     testImplementation(testFixtures(project(':generic-client-lib')))
 
-    processJenkinsVersion()
+    def version = processJenkinsVersion()
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/token-macro
     implementation "org.jenkins-ci.plugins:token-macro:${tokenMacroVersion}"
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/credentials
@@ -132,6 +132,23 @@ dependencies {
     jenkinsServer "org.jenkins-ci.plugins:matrix-project:${matrixProjectVersion}"
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
     jenkinsServer "org.jenkins-ci.plugins:git:${gitVersion}"
+
+    // Special includes for pipeline testing
+    if ("2.303.1".equals(version)) {
+        api platform("io.jenkins.tools.bom:bom-2.302.x:923.v08bdc07cd40f")
+        jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.6"
+    } else if ("2.277.4".equals(version)) {
+        api platform("io.jenkins.tools.bom:bom-2.277.x:937.v51fde92016ed")
+        jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.5"
+    } else if ("2.163.3".equals(version)) {
+        api platform("io.jenkins.tools.bom:bom-2.164.x:10")
+        jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.5"
+    } else if ("2.150.3".equals(version)) {
+        api platform("io.jenkins.tools.bom:bom-2.150.x:8")
+        jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.5"
+    }
+    // Uncomment this to look how DC trend charts are look like
+    // jenkinsServer "org.jenkins-ci.plugins:dependency-check-jenkins-plugin:5.1.1"
 
     // https://mvnrepository.com/artifact/org.webjars/echarts
     webjars 'org.webjars:echarts:5.0.2'
@@ -283,6 +300,7 @@ def processJenkinsVersion() {
         sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-277+' ]
     else
         sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-277-' ]
+    return versionString
 }
 
 // Set Jenkins server debug port

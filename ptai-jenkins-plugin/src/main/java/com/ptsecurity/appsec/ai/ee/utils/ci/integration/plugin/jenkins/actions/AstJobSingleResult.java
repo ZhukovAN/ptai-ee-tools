@@ -15,9 +15,11 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.Tr
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
+import hudson.model.Action;
 import hudson.model.Run;
 import jenkins.model.Jenkins;
 import jenkins.model.RunAction2;
+import jenkins.tasks.SimpleBuildStep;
 import lombok.*;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -33,7 +35,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.ScanDataPacked.Type.SCAN_BRIEF_DE
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel.*;
 
 @RequiredArgsConstructor
-public class AstJobSingleResult implements RunAction2 {
+public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuildAction {
     @NonNull
     @Getter
     private transient Run run;
@@ -288,5 +290,13 @@ public class AstJobSingleResult implements RunAction2 {
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
         return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
+    }
+
+    @Override
+    public Collection<? extends Action> getProjectActions() {
+        List<Action> projectActions = new ArrayList<>();
+        projectActions.add(new AstJobMultipleResults(run.getParent()));
+        projectActions.add(new AstJobTableResults(run.getParent()));
+        return projectActions;
     }
 }

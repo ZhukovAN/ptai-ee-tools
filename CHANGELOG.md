@@ -121,3 +121,6 @@
 + [Feature] CLI plugin supports PT AI project deletion
 + [Feature] CLI plugin supports login / password credentials as these required for critical operations like project delete
 + [Feature] Build script now support publish task
+## v.3.6.4
+### 20210907
++ [Fix] Jenkins pipeline job PT AI actions fixed 

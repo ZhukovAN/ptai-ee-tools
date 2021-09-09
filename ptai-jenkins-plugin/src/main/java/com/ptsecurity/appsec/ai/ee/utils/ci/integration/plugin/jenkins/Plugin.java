@@ -271,22 +271,4 @@ public class Plugin extends Builder implements SimpleBuildStep {
             throw new IllegalArgumentException("Both null, Run and Current Item!");
         }
     }
-
-    /*
-    @Override
-    public Action getProjectAction(AbstractProject<?, ?> project) {
-        return new AstJobMultipleResults(project);
-    }
-    */
-
-    List<Action> projectActions = null;
-
-    @Override
-    public Collection<Action> getProjectActions(AbstractProject<?, ?> project) {
-        if (null != projectActions) return projectActions;
-        projectActions = new ArrayList<>();
-        projectActions.add(new AstJobMultipleResults(project));
-        projectActions.add(new AstJobTableResults(project));
-        return projectActions;
-    }
 }

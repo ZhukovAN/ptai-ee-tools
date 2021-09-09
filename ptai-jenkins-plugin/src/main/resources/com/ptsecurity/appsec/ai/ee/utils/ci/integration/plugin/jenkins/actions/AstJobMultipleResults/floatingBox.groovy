@@ -19,10 +19,11 @@ div(class: 'test-trend-caption') {
     text(from.chartCaption)
 }
 
+// Fix for pipeline jobs, see https://issues.jenkins.io/browse/JENKINS-41753?jql=project%20%3D%20JENKINS%20AND%20component%20%3D%20pipeline-stage-view-plugin
 div(
         id: "${from.urlName}-history-chart",
         class: 'graph-cursor-pointer',
-        style: "width: 500px; min-height: 200px; min-width: 500px; height: 200px;") {}
+        style: "width: 500px; min-height: 200px; min-width: 500px; height: 200px; z-index:1;") {}
 
 script(src: "${rootURL}/plugin/ptai-jenkins-plugin/webjars/echarts/echarts.common.min.js")
 script(src: "${rootURL}/plugin/ptai-jenkins-plugin/js/charts.js")
