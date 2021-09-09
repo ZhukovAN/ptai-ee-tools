@@ -49,11 +49,13 @@ t.summary(icon: my.getIconFileName()) {
                     : ScanBrief.State.DONE == scanBriefDetailed.getState()
                     ? Resources.i18n_ast_result_status_success_label()
                     : "Unknown state: " + scanBriefDetailed.getState()
+            state = Resources.i18n_ast_result_status_label() + ": " + state
             def policyState = Policy.State.REJECTED == scanBriefDetailed.getPolicyState()
                     ? Resources.i18n_ast_result_policy_failed_label()
                     : Policy.State.CONFIRMED == scanBriefDetailed.getPolicyState()
                     ? Resources.i18n_ast_result_policy_confirmed_label()
                     : Resources.i18n_ast_result_policy_none_label()
+            policyState = Resources.i18n_ast_result_policy_label() + ": " + policyState
             ul() {
                 li(state)
                 li(policyState)
