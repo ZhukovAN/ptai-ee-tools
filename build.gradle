@@ -82,7 +82,6 @@ subprojects {
         manifest.attributes['Implementation-Vendor-Id'] = rootGroup
         manifest.attributes['Implementation-Git-Hash'] = versionDetails.gitHash
         manifest.attributes['Implementation-Git-Hash-Full'] = versionDetails.gitHashFull
-        manifest.attributes['Implementation-Git-Branch'] = versionDetails.branchName
     }
 
     publishing {
