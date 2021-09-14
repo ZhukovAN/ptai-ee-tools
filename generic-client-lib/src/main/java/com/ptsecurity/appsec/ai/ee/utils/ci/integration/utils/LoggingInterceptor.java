@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -10,8 +11,15 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.HTTP_RESPONSE_MAX_BODY_SIZE;
+
 @Slf4j
 public class LoggingInterceptor implements Interceptor {
+    /**
+     * Maximum response body size to be output to log
+     */
+    protected static int HTTP_RESPONSE_MAX_BODY_SIZE_VALUE = 10 * 1024;
+
     @NotNull
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -34,10 +42,14 @@ public class LoggingInterceptor implements Interceptor {
             source.request(Long.MAX_VALUE); // Buffer the entire body.
             Buffer buffer = source.getBuffer();
             String bufferData = buffer.clone().readString(StandardCharsets.UTF_8);
-            if (5 * 1024 * 1024 >= bufferData.length()) {
+
+            int maxBody = AdvancedSettings.getInt(HTTP_RESPONSE_MAX_BODY_SIZE, HTTP_RESPONSE_MAX_BODY_SIZE_VALUE);
+            if (maxBody >= bufferData.length()) {
                 log.trace("Response body: {}", bufferData);
-            } else
-                log.trace("Response body skipped as it {} bytes long", bufferData.length());
+            } else {
+                log.trace("Response body trimmed to first {} bytes as it {} bytes long", maxBody, bufferData.length());
+                log.trace("Trimmed response body: {}", bufferData.substring(0, maxBody));
+            }
         }
         return response;
     }

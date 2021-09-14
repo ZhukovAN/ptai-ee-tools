@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
+@Slf4j
 @Getter
 @RequiredArgsConstructor
 public abstract class AbstractApiClient {
@@ -43,10 +45,12 @@ public abstract class AbstractApiClient {
     protected JwtResponse apiJwt = null;
 
     protected void setApiJwt(@NonNull final JwtResponse apiJwt) {
-        for (Object api : apis)
+        for (Object api : apis) {
+            log.trace("Set JWT {} for {} API", apiJwt.getAccessToken(), api.getClass().toString());
             new ApiClientHelper(api)
                     .setApiKeyPrefix("Bearer")
                     .setApiKey(apiJwt.getAccessToken());
+        }
         this.apiJwt = apiJwt;
     }
 

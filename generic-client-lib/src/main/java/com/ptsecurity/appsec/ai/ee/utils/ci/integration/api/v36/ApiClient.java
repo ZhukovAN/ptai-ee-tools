@@ -105,21 +105,24 @@ public class ApiClient extends AbstractApiClient {
     }
 
     public ApiResponse<String> initialAuthentication() throws GenericException {
-        // We have no JWT yet, so need to get it using token-based authentication
         BaseCredentials baseCredentials = connectionSettings.getCredentials();
         if (baseCredentials instanceof TokenCredentials) {
+            log.trace("Using PT AI API token-based credentials for authentication");
             TokenCredentials tokenCredentials = (TokenCredentials) baseCredentials;
             authApi.getApiClient().setApiKey(tokenCredentials.getToken());
             authApi.getApiClient().setApiKeyPrefix(null);
+            log.trace("Calling auth/signin endpoint with API token");
             return call(
                     () -> authApi.apiAuthSigninGetWithHttpInfo(AuthScopeType.ACCESSTOKEN),
                     "Get initial JWT call failed");
         } else {
+            log.trace("Using PT AI API password-based credentials for authentication");
             PasswordCredentials passwordCredentials = (PasswordCredentials) baseCredentials;
 
             UserLoginModel model = new UserLoginModel();
             model.setUser(passwordCredentials.getUser());
             model.setPassword(passwordCredentials.getPassword());
+            log.trace("Calling auth/userLogin endpoint with user name and password");
             return call(
                     () -> authApi.apiAuthUserLoginPostWithHttpInfo(AuthScopeType.WEB, model),
                     "Get initial JWT call failed");
@@ -130,11 +133,13 @@ public class ApiClient extends AbstractApiClient {
         @NonNull
         ApiResponse<String> jwtResponse;
 
-        if (null == this.apiJwt)
+        if (null == this.apiJwt) {
             // We have no JWT yet, so need to get it using token-based authentication
+            log.trace("We have no JWT yet, so need to get it using token- or password-based authentication");
             jwtResponse = initialAuthentication();
-        else {
+        } else {
             // We already have JWT, but it might be expired. Try to refresh it
+            log.trace("Authentication called and we already have JWT. Let's refresh it");
             authApi.getApiClient().setApiKey(null);
             authApi.getApiClient().setApiKeyPrefix(null);
 
@@ -142,6 +147,7 @@ public class ApiClient extends AbstractApiClient {
                 jwtResponse = call(
                         () -> {
                             // Need to replace authApi call token to refresh one
+                            log.trace("Call auth/refreshToken endpoint with existing JWT refresh token");
                             Call call = authApi.apiAuthRefreshTokenGetCall(null);
                             Request request = call.request().newBuilder()
                                     .header("Authorization", "Bearer " + this.apiJwt.getRefreshToken())
@@ -151,9 +157,12 @@ public class ApiClient extends AbstractApiClient {
                             return authApi.getApiClient().execute(call, stringType);
                         },
                         "Refresh JWT call failed");
+                log.trace("JWT token refreshed: {}", jwtResponse);
             } catch (GenericException e) {
                 // Exception thrown while trying to refresh JWT. Let's re-authenticate using API token
+                log.trace("JWT refresh failed, let's authenticate using initial credentials");
                 jwtResponse = initialAuthentication();
+                log.trace("JWT token after re-authentication: {}", jwtResponse);
             }
         }
 
@@ -163,6 +172,7 @@ public class ApiClient extends AbstractApiClient {
         JwtResponse res = call(
                 () -> new ObjectMapper().readValue(jwtData, JwtResponse.class),
                 "JWT parse failed");
+        log.trace("JWT parse result: {}", res);
         // JwtResponse's refreshToken field is null after refresh, let's fill it
         // to avoid multiple parsing calls
         if (StringUtils.isEmpty(res.getRefreshToken()))
