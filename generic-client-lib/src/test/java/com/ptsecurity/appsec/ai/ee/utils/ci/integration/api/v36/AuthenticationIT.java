@@ -40,29 +40,36 @@ public class AuthenticationIT extends BaseClientIT {
 
     @SneakyThrows
     @Test
-    @DisplayName("Authenticate on PT AI server using API token")
-    public void checkAuthentication() {
+    @DisplayName("Check implicit JWT refresh during API calls")
+    public void checkAutoJwtRefresh() {
         ApiClient client = new ApiClient(connectionSettings.validate());
         // Initialize all API clients with URL, timeouts, SSL settings etc.
         client.init();
         client.authenticate();
-        JwtResponse initialJwtResponse = client.getApiJwt();
 
+        JwtResponse initialJwtResponse = client.getApiJwt();
         int signatureIdx = initialJwtResponse.getAccessToken().lastIndexOf('.');
         String withoutSignature = initialJwtResponse.getAccessToken().substring(0, signatureIdx + 1);
-        Jwt<Header, Claims> jwt = Jwts.parser().parseClaimsJwt(withoutSignature);
-        String version = call(
+        Jwt<Header, Claims> initialJwt = Jwts.parser().parseClaimsJwt(withoutSignature);
+        String version = Assertions.assertDoesNotThrow(
                 () -> client.getVersionApi().apiVersionGetCurrentGet(ServerVersionTasks.Component.AIE.getValue()),
                 "PT AI server component API current version get failed");
 
-        Duration duration = Duration.between(jwt.getBody().getNotBefore().toInstant(), jwt.getBody().getExpiration().toInstant());
-        duration = duration.plusMinutes(1);
+        // Wait for access toke expiration
+        Duration duration = Duration.between(initialJwt.getBody().getNotBefore().toInstant(), initialJwt.getBody().getExpiration().toInstant());
+        duration = duration.plusSeconds(5);
         Thread.sleep(duration.toMillis());
-        version = call(
+
+        String versionAfterRefresh = Assertions.assertDoesNotThrow(
                 () -> client.getVersionApi().apiVersionGetCurrentGet(ServerVersionTasks.Component.AIE.getValue()),
                 "PT AI server component API current version get failed");
-        JwtResponse freshJwtResponse = client.getApiJwt();
 
-        System.out.println();
+        Assertions.assertEquals(versionAfterRefresh, version);
+
+        JwtResponse freshJwtResponse = client.getApiJwt();
+        signatureIdx = freshJwtResponse.getAccessToken().lastIndexOf('.');
+        withoutSignature = freshJwtResponse.getAccessToken().substring(0, signatureIdx + 1);
+        Jwt<Header, Claims> freshJwt = Jwts.parser().parseClaimsJwt(withoutSignature);
+        Assertions.assertTrue(freshJwt.getBody().getExpiration().after(initialJwt.getBody().getExpiration()));
     }
 }

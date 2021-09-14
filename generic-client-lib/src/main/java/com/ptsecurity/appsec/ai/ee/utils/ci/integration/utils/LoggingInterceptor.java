@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import okio.Buffer;
 import okio.BufferedSource;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class LoggingInterceptor implements Interceptor {
 
             int maxBody = AdvancedSettings.getInt(HTTP_RESPONSE_MAX_BODY_SIZE, HTTP_RESPONSE_MAX_BODY_SIZE_VALUE);
             if (maxBody >= bufferData.length()) {
-                log.trace("Response body: {}", bufferData);
+                log.trace("Response body: {}", StringUtils.isEmpty(bufferData) ? "[empty]" : bufferData);
             } else {
                 log.trace("Response body trimmed to first {} bytes as it {} bytes long", maxBody, bufferData.length());
                 log.trace("Trimmed response body: {}", bufferData.substring(0, maxBody));

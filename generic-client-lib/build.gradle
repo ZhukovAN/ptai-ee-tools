@@ -28,7 +28,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jooq/joor-java-8
     implementation 'org.jooq:joor-java-8:0.9.13'
     // https://mvnrepository.com/artifact/com.microsoft.signalr/signalr
-    implementation 'com.microsoft.signalr:signalr:1.0.0'
+    // implementation 'com.microsoft.signalr:signalr:1.0.0'
+    implementation 'com.microsoft.signalr:signalr:5.0.9'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     implementation 'org.apache.commons:commons-text:1.9'
     // Need this to search for VersionRange-annotated classes

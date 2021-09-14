@@ -123,4 +123,8 @@
 + [Feature] Build script now support publish task
 ## v.3.6.4
 ### 20210907
-+ [Fix] Jenkins pipeline job PT AI actions fixed 
++ [Fix] Jenkins pipeline job PT AI actions fixed
+### 20210914
++ [Fix] JWT refresh fixed
++ [Feature] SignalR version update 1.0.0 -> 5.0.9. Need this to check if websocket proxy connection issue can be fixed
++ [Feature] Advanced settings class implemented. Use ```-Dhttp.response.max.body.size="10"``` Java parameter to restrict HTTP response body size to store to logs 
