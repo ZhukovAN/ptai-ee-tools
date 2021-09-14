@@ -127,4 +127,4 @@
 ### 20210914
 + [Fix] JWT refresh fixed
 + [Feature] SignalR version update 1.0.0 -> 5.0.9. Need this to check if websocket proxy connection issue can be fixed
-+ [Feature] Advanced settings class implemented. Use ```-Dhttp.response.max.body.size="10"``` Java parameter to restrict HTTP response body size to store to logs 
++ [Feature] Advanced settings class implemented. Use ```-Dptai.http.response.max.body.size="10"``` Java parameter to restrict HTTP response body size to store to logs 

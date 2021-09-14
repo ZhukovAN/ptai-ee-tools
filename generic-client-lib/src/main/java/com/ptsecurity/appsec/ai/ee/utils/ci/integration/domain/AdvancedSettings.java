@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Slf4j
 public class AdvancedSettings {
-    public static final String HTTP_RESPONSE_MAX_BODY_SIZE = "http.response.max.body.size";
+    public static final String HTTP_RESPONSE_MAX_BODY_SIZE = "ptai.http.response.max.body.size";
     public static final Map<String, String> SETTINGS = new HashMap<>();
 
     protected static final List<String> NAMES = Arrays.asList(HTTP_RESPONSE_MAX_BODY_SIZE);
