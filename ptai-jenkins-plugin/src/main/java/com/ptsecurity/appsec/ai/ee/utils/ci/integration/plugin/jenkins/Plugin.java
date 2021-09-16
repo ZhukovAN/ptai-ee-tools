@@ -238,6 +238,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
 
         AbstractJob.JobExecutionResult jobExecutionResult = job.execute();
         if (!AbstractJob.JobExecutionResult.SUCCESS.equals(jobExecutionResult))
+            // build.setResult(Result.UNSTABLE);
             throw new AbortException(Resources.i18n_ast_result_status_failed_label());
     }
 
@@ -271,4 +272,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
             throw new IllegalArgumentException("Both null, Run and Current Item!");
         }
     }
+
+    @Override
+    public Collection<? extends Action> getProjectActions(AbstractProject<?, ?> project) {
+        List<Action> projectActions = new ArrayList<>();
+        projectActions.add(new AstJobMultipleResults(project));
+        projectActions.add(new AstJobTableResults(project));
+        return projectActions;
+    }
+
 }
