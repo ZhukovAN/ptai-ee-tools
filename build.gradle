@@ -30,7 +30,8 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven { url = uri('https://repo.jenkins-ci.org/releases/') }
+        maven { url 'https://repo.jenkins-ci.org/releases/' }
+        maven { url 'https://download.jetbrains.com/teamcity-repository/' }
     }
 
     dependencies {

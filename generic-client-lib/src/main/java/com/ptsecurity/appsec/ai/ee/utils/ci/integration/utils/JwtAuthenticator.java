@@ -22,8 +22,8 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticator extends AbstractTool implements Authenticator {
-    private static final String INVALID_TOKEN_ERROR = "\\s*error\\s*=\\s*\"?invalid_token\"?";
-    private static final String UNAUTHORIZED_ERROR = "\\s*error\\s*=\\s*\"?unauthorized\"?";
+    private static final String INVALID_TOKEN_ERROR = ".*\\s*error\\s*=\\s*\"?invalid_token\"?.*";
+    private static final String UNAUTHORIZED_ERROR = ".*\\s*error\\s*=\\s*\"?unauthorized\"?.*";
 
     @NonNull
     protected final AbstractApiClient client;
@@ -46,10 +46,12 @@ public class JwtAuthenticator extends AbstractTool implements Authenticator {
         synchronized (mutex) {
             String auth = response.header("WWW-Authenticate");
             if (StringUtils.isEmpty(auth) || !auth.startsWith("Bearer")) {
-                log.error("Unauthorized, but invalid WWW-Authenticate response header");
+                log.error("Unauthorized, but invalid WWW-Authenticate response header: {}", auth);
                 return null;
             }
             if (auth.matches(UNAUTHORIZED_ERROR) || auth.matches(INVALID_TOKEN_ERROR) || (null == client.getApiJwt())) {
+                log.trace("WWW-Authenticate: {}", auth);
+                log.trace("Current client JWT: {}", client.getApiJwt());
                 // Need to acquire new / refresh existing JWT using client secret
                 try {
                     client.authenticate();
