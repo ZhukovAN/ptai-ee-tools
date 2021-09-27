@@ -317,6 +317,8 @@ public abstract class AstJob extends Project {
                                     dummyTemplate, data.getLocale(),
                                     data.getFormat().getValue(), data.getFilters());
                         } else return;
+                        fine("Processing %s file that is %d bytes long", reportFile.getAbsolutePath(), reportFile.length());
+                        fine("Read %s contents to RAM", reportFile);
                         byte[] data = ApiHelper.callApi(
                                 () -> Files.readAllBytes(reportFile.toPath()),
                                 "Report data read failed");

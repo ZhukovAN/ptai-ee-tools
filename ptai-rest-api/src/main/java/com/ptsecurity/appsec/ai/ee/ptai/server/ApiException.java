@@ -19,13 +19,6 @@ import static org.joor.Reflect.on;
  */
 public class ApiException extends RuntimeException {
     /**
-     * Root cause of this "boxing" exception
-     */
-    @Getter
-    @NonNull
-    protected Exception inner;
-
-    /**
      * Some exception types, especially ApiException, may hide interesting details like responseBody.
      * We'll put that data here
      */
@@ -43,13 +36,13 @@ public class ApiException extends RuntimeException {
      * @param e Exception to be checked
      * @return True if exception is not an instance of ApiException
      */
-    private static boolean isNotApi(@NonNull Exception e) {
-        Class<? extends @NonNull Exception> clazz = e.getClass();
+    private static boolean isNotApi(@NonNull Throwable e) {
+        Class<? extends @NonNull Throwable> clazz = e.getClass();
         return !clazz.getCanonicalName().matches(APIEXCEPTION_CLASS_REGEX);
     }
 
     @NonNull
-    public static ApiException raise(@NonNull final String caption, @NonNull final Exception cause) {
+    public static ApiException raise(@NonNull final String caption, @NonNull final Throwable cause) {
         // If inner exception is ApiException or its descendants itself, than there's no need
         // to encapsulate it one more time, just return it
         if (cause instanceof ApiException)
@@ -57,11 +50,11 @@ public class ApiException extends RuntimeException {
         return new ApiException(caption, extractDetails(cause), cause);
     }
 
-    protected ApiException(@NonNull final String message, final String details, @NonNull final Exception inner) {
+    protected ApiException(@NonNull final String message, final String details, @NonNull final Throwable inner) {
         // Let's check if inner is an instance of BaseException itself
         super(message);
         this.details = details;
-        this.inner = inner;
+        this.initCause(inner);
     }
 
     protected static String getCode(@NonNull final Exception e) {
@@ -74,7 +67,7 @@ public class ApiException extends RuntimeException {
             return null;
     }
 
-    private static String extractDetails(@NonNull Exception e) {
+    private static String extractDetails(@NonNull Throwable e) {
         if (isNotApi(e)) return null;
         // As API exception may be thrown due to client-side issues like
         // lack of certificate in local trust store or JSON parse error,
@@ -87,7 +80,10 @@ public class ApiException extends RuntimeException {
 
     @Override
     public void printStackTrace(PrintStream s) {
-        inner.printStackTrace(s);
+        if (null != getCause())
+            getCause().printStackTrace(s);
+        else
+            super.printStackTrace(s);
     }
 
     /**
@@ -98,8 +94,8 @@ public class ApiException extends RuntimeException {
      */
     public String getDetailedMessage() {
         String res = getMessage();
-        if (StringUtils.isNotEmpty(inner.getMessage()))
-            res += ". " + inner.getMessage();
+        if (StringUtils.isNotEmpty(getCause().getMessage()))
+            res += ". " + getCause().getMessage();
         if (StringUtils.isNotEmpty(details))
             res += ". " + details;
         return res;

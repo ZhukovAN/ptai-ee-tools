@@ -4,8 +4,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.Callable;
-
 @Slf4j
 @SuperBuilder
 @NoArgsConstructor
@@ -27,7 +25,7 @@ public class ApiHelper {
     public static <V> V callApi(@NonNull Callable<V> call, @NonNull String errorMessage, final boolean warningOnly) throws ApiException {
         try {
             return call.call();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             if (!warningOnly) throw ApiException.raise(errorMessage, e);
             return null;
         }
@@ -38,7 +36,15 @@ public class ApiHelper {
      */
     @FunctionalInterface
     public interface Runnable {
-        void run() throws Exception;
+        void run() throws Throwable;
+    }
+
+    /**
+     * Need to implement our own Runnable that throws checked Exception
+     */
+    @FunctionalInterface
+    public interface Callable<V> {
+        V call() throws Throwable;
     }
 
     public static void callApi(@NonNull Runnable call, @NonNull String errorMessage) throws ApiException {

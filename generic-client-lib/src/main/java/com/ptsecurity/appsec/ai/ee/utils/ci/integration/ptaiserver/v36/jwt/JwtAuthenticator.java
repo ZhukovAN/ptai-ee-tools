@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticator extends Base implements Authenticator {
-    private static final Pattern INVALID_TOKEN_ERROR = Pattern.compile("\\s*error\\s*=\\s*\"?invalid_token\"?");
-    private static final Pattern UNAUTHORIZED_ERROR = Pattern.compile("\\s*error\\s*=\\s*\"?unauthorized\"?");
+    private static final Pattern INVALID_TOKEN_ERROR = Pattern.compile(".*\\s*error\\s*=\\s*\"?invalid_token\"?.*");
+    private static final Pattern UNAUTHORIZED_ERROR = Pattern.compile(".*\\s*error\\s*=\\s*\"?unauthorized\"?.*");
 
     @NonNull
     protected final BaseClient client;

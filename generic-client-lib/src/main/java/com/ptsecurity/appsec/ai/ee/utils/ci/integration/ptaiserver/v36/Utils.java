@@ -89,11 +89,14 @@ public class Utils extends BaseClient {
                 .scanResultId(scanResultId)
                 .projectId(projectId)
                 .localeId(locale.getValue());
+
         if (null != filters) model.setFilters(filters.convert());
         fine("Generating report for project %s, scan result %s. Report template %s, type %s, locale %s", projectId, scanResultId, template, type, locale);
-        return callApi(
+        File file = callApi(
                 () -> reportsApi.apiReportsGeneratePost(model),
                 "Report generation failed");
+        fine("Report saved to %s file", file.getAbsolutePath());
+        return file;
     }
 
     public File generateReport(

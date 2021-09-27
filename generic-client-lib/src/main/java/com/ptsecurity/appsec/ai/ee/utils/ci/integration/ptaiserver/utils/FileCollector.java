@@ -21,7 +21,9 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.FileSet;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -212,6 +214,15 @@ public class FileCollector {
 
         for (FileEntry entry : files) {
             verbose("Add %s file as %s to zip stream", entry.fileName, entry.name);
+            // Check if this is symlink with missing destination
+            if (Files.isSymbolicLink(Paths.get(entry.fileName))) {
+                verbose("%s is a symbolic link, let's check if its destination exist", entry.fileName);
+                if (!Files.readSymbolicLink(Paths.get(entry.fileName)).toFile().exists()) {
+                    verbose("Skip %s as there's no target file exist", entry.fileName);
+                    continue;
+                }
+            }
+
             as.putArchiveEntry(new ZipArchiveEntry(entry.name));
 
             BufferedInputStream is = new BufferedInputStream(new FileInputStream(entry.fileName));

@@ -38,9 +38,11 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
     }
 
     public static FilePath saveReport(Launcher launcher, TaskListener listener, String dir, String artifact, final byte[] data, boolean verbose) throws ApiException {
+        log.debug("Create binary report saver");
         BinaryReportSaver saver = new BinaryReportSaver(dir, artifact, data);
         saver.setConsole(listener.getLogger());
         saver.setVerbose(verbose);
+        log.debug("Call remote file utils instance with binary report saver");
         return Base.callApi(
                 () -> launcher.getChannel().call(new RemoteFileUtils(saver)),
                 "Remote save report call failed");
@@ -88,11 +90,15 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
         }
     }
 
+    @Slf4j
     protected static class BinaryReportSaver extends Base implements Executor, Serializable {
 
         public BinaryReportSaver(@NonNull final String dir, @NonNull final String artifact, final byte[] data) {
+            log.debug("Report will be saved to {}", dir);
             this.dir = dir;
+            log.debug("Report will be saved as {} file", artifact);
             this.artifact = artifact;
+            log.debug("Report binary data length is {} bytes", data.length);
             this.data = Arrays.copyOf(data, data.length);
         }
 
@@ -103,10 +109,12 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
         public File execute() throws ApiException {
             try {
                 Path destination = Paths.get(dir).resolve(Base.DEFAULT_SAST_FOLDER).resolve(artifact);
+                log.debug("Report will be saved to {}", destination);
                 String fileName = Base.callApi(
                         () -> destination.getFileName().toString(),
                         "Empty destination file name");
                 if (!destination.toFile().getParentFile().exists()) {
+                    log.debug("Destination file doesn't exist");
                     if (!destination.toFile().getParentFile().mkdirs())
                         throw new IOException("Failed to create folder structure for " + destination.toFile().toString());
                 }
@@ -116,6 +124,7 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, ApiExceptio
                         log.error("Report " + fileName + " delete failed");
                 }
 
+                log.debug("Calling Files.write to save report");
                 return Files.write(
                         destination,
                         data,

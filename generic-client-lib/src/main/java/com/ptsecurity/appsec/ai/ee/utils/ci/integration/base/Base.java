@@ -52,7 +52,7 @@ public class Base extends ApiHelper {
      * @param critical If exception to be processed as error or warning
      */
     protected void exception(@NonNull final ApiException e, final boolean critical) {
-        Exception cause = e.getInner();
+        Throwable cause = e.getCause();
         String details = e.getDetails();
         if (critical) {
             log.error(e.getMessage(), cause);

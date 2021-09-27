@@ -443,7 +443,7 @@ public class Reports {
         List<ImmutablePair<Locale, String>> existingTemplates = new ArrayList<>();
         utils.fine("Checking report templates existence");
         for (Reports.Locale locale : Reports.Locale.values()) {
-            // Get all templates for given locale
+            utils.fine("Get all templates for given locale");
             List<String> templates = utils.getReportTemplates(locale).stream()
                     .map(ReportTemplateModel::getName)
                     .collect(Collectors.toList());
@@ -453,10 +453,15 @@ public class Reports {
                     .filter(r -> locale.equals(r.locale))
                     .map(r -> r.template)
                     .forEach(t -> {
-                        if (!templates.contains(t)) missingTemplates.add(new ImmutablePair<>(locale, t));
+                        utils.fine("Check %s template", t);
+                        if (!templates.contains(t)) {
+                            utils.fine("Missing template %s found", t);
+                            missingTemplates.add(new ImmutablePair<>(locale, t));
+                        }
                     });
         }
         if (missingTemplates.isEmpty()) return this;
+        utils.fine("Missing templates are detected, provide user with detailed info");
 
         // Let's give user a hint about most similar template names. To do that
         // we will calculate cosine distance between each of existing templates

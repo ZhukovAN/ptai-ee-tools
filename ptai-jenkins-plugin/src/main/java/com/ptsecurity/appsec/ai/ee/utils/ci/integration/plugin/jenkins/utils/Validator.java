@@ -97,16 +97,16 @@ public class Validator {
         if (StringUtils.isEmpty(caption))
             return FormValidation.error(e, Messages.validator_test_failed());
         else {
-            Exception cause = e;
-            if (e instanceof ApiException) cause = ((ApiException) e).getInner();
+            Throwable cause = e;
+            if (e instanceof ApiException) cause = ((ApiException) e).getCause();
             return FormValidation.error(cause, Messages.validator_test_failed_details(caption));
         }
     }
 
     public static FormValidation error(@NonNull final String message, Exception e) {
         // log.log(Level.FINEST, "FormValidation error", e);
-        Exception cause = e;
-        if (e instanceof ApiException) cause = ((ApiException) e).getInner();
+        Throwable cause = e;
+        if (e instanceof ApiException) cause = ((ApiException) e).getCause();
         return FormValidation.error(cause, Messages.validator_test_failed_details(message));
     }
 

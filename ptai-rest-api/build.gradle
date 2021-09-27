@@ -3,7 +3,7 @@ plugins {
     id 'org.hidetake.swagger.generator' version '2.18.2'
 }
 
-group = "${rootGroup}.ptai-rest-api"
+group = "${rootGroup}"
 
 dependencies {
     // swaggerCodegen 'org.openapitools:openapi-generator-cli:4.3.1'
@@ -38,6 +38,11 @@ dependencies {
     implementation 'org.jooq:joor-java-8:0.9.13'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.8.1'
+}
+
+javadoc {
+    // OpenAPI-generated files contain some javadoc issues, let's ignore them
+    // options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 jar {
