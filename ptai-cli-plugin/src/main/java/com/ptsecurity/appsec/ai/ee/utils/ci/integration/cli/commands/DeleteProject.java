@@ -15,6 +15,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.fusesource.jansi.Ansi;
 import picocli.CommandLine;
 
 import java.io.Console;
@@ -93,7 +94,18 @@ public class DeleteProject extends BaseCommand implements Callable<Integer> {
 
     protected DeleteProjectJob.DeleteConfirmationStatus confirm(final boolean singleProject, @NonNull final String name, @NonNull final UUID id) {
         String answers = singleProject ? "y/N" : "y/N/a";
-        System.out.print(String.format("Are you sure you want to delete PT AI project %s (id: %s) [%s]?", name, id, answers));
+        System.out.print(
+                Ansi.ansi()
+                        .a("Are you sure you want to delete PT AI project ")
+                        .fg(Ansi.Color.CYAN)
+                        .a(name)
+                        .reset()
+                        .a(" (id: ")
+                        .fg(Ansi.Color.CYAN)
+                        .a(id)
+                        .reset()
+                        .a(") [" + answers + "]?")
+        );
         try {
             String res = scanner.nextLine();
             if (null == res) res = "";
