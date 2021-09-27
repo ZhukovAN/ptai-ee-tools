@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.Report
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.RawData
 
 import lib.FormTagLib
 

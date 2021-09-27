@@ -5,7 +5,11 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.AstPolicyViolationException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.MinorAstErrorsException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
@@ -47,6 +51,8 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.*;
 
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync.OnAstError.NONE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync.OnAstError.UNSTABLE;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Slf4j
@@ -131,8 +137,10 @@ public class Plugin extends Builder implements SimpleBuildStep {
         // "PT AI EE server connection settings are defined locally" descriptor
         ConfigCustom.Descriptor configCustomDescriptor = Jenkins.get().getDescriptorByType(ConfigCustom.Descriptor.class);
 
-        boolean failIfFailed = (workMode instanceof WorkModeSync) && ((WorkModeSync) workMode).isFailIfFailed();
-        boolean failIfUnstable = (workMode instanceof WorkModeSync) && ((WorkModeSync) workMode).isFailIfUnstable();
+        WorkModeSync.OnAstError onAstFailed = NONE;
+        if (workMode instanceof WorkModeSync) onAstFailed = ((WorkModeSync) workMode).getOnAstFailed();
+        WorkModeSync.OnAstError onAstUnstable = NONE;
+        if (workMode instanceof WorkModeSync) onAstUnstable = ((WorkModeSync) workMode).getOnAstUnstable();
 
         boolean selectedScanSettingsUi = scanSettings instanceof ScanSettingsUi;
         String selectedScanSettings = selectedScanSettingsUi
@@ -223,8 +231,9 @@ public class Plugin extends Builder implements SimpleBuildStep {
                         .insecure(serverInsecure)
                         .build())
                 .async(workMode instanceof WorkModeAsync)
-                .failIfFailed(failIfFailed)
-                .failIfUnstable(failIfUnstable)
+                .failIfFailed(NONE != onAstFailed)
+                .failIfUnstable(NONE != onAstUnstable)
+                .plugin(this)
                 .run(build)
                 .workspace(workspace)
                 .launcher(launcher)
@@ -236,10 +245,24 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .build();
         job.fine("JenkinsAstJob created: %s", job.toString());
 
-        AbstractJob.JobExecutionResult jobExecutionResult = job.execute();
-        if (!AbstractJob.JobExecutionResult.SUCCESS.equals(jobExecutionResult))
-            // build.setResult(Result.UNSTABLE);
-            throw new AbortException(Resources.i18n_ast_result_status_failed_label());
+        job.execute();
+    }
+
+    public void setBuildResult(@NonNull final Run<?, ?> build, @NonNull final AbstractJob.JobExecutionResult jobResult, @NonNull final GenericException e) {
+        if (null == e.getCause())
+            build.setResult(Result.FAILURE);
+        if (e.getCause() instanceof InterruptedException)
+            build.setResult(Result.ABORTED);
+        if (e.getCause() instanceof AstPolicyViolationException) {
+            WorkModeSync.OnAstError onAstFailed = NONE;
+            if (workMode instanceof WorkModeSync) onAstFailed = ((WorkModeSync) workMode).getOnAstFailed();
+            build.setResult(UNSTABLE == onAstFailed ? Result.UNSTABLE : Result.FAILURE);
+        } else if (e.getCause() instanceof MinorAstErrorsException) {
+            WorkModeSync.OnAstError onAstUnstable = NONE;
+            if (workMode instanceof WorkModeSync) onAstUnstable = ((WorkModeSync) workMode).getOnAstUnstable();
+            build.setResult(UNSTABLE == onAstUnstable ? Result.UNSTABLE : Result.FAILURE);
+        } else
+            build.setResult(Result.FAILURE);
     }
 
     @NonNull

@@ -56,5 +56,15 @@
       <option name="name" value="maven3" />
       <option name="url" value="https://repo.spring.io/plugins-release/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven4" />
+      <option name="name" value="maven4" />
+      <option name="url" value="https://nexus.pentaho.org/content/groups/omni/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven3" />
+      <option name="name" value="maven3" />
+      <option name="url" value="https://download.jetbrains.com/teamcity-repository/" />
+    </remote-repository>
   </component>
 </project>

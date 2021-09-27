@@ -13,13 +13,14 @@ f.entry(
 f.entry(
         title: _('format'),
         field: 'format') {
-    f.select()
+    f.select(style: 'width: 120px;')
 }
 
 f.entry(
         title: _('locale'),
         field: 'locale') {
     f.select(
+            style: 'width: 120px;',
             default: descriptor.getDefaultLocale(),
     )
 }

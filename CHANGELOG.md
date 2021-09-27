@@ -131,4 +131,6 @@
 ### 20210916
 + [Fix] Use of LastBuildAction allows plugin to show project-scope actions both for pipeline and freestyle jobs. But this works only if there were at least one successful build (see https://issues.jenkins.io/browse/JENKINS-28479). Added getProjectActions for build step to fix that for at least freestyle projects
 + [Fix] jcenter.bintray.com repository not available. Replaced with https://download.jetbrains.com/teamcity-repository
+### 20210927
++ [Fix] "Fail-if-failed" and "fail-if-unstable" settings for Jenkins plugin are changed from boolean to enum. This allows us to mark build step as unstable and thus allow AST results save in pipeline jobs
 

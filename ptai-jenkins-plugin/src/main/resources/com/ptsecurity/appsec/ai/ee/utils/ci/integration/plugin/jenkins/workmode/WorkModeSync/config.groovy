@@ -6,19 +6,15 @@ def f = namespace(FormTagLib)
 def st = namespace("jelly:stapler")
 
 f.entry(
-        title: _('failIfFailed'),
-        field: 'failIfFailed') {
-    f.checkbox(
-            name: 'failIfFailed',
-            default: true
-    )
+        title: _('onAstFailed'),
+        field: 'onAstFailed') {
+    f.select(style: 'width: 350px; ')
 }
 
 f.entry(
-        title: _('failIfUnstable'),
-        field: 'failIfUnstable',
-        default: 'true') {
-    f.checkbox()
+        title: _('onAstUnstable'),
+        field: 'onAstUnstable') {
+    f.select(style: 'width: 350px; ')
 }
 
 f.entry(
