@@ -17,10 +17,13 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
+import java.io.Console;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
@@ -86,17 +89,22 @@ public class DeleteProject extends BaseCommand implements Callable<Integer> {
         }
     }
 
+    protected final Scanner scanner = new Scanner(System.in);
+
     protected DeleteProjectJob.DeleteConfirmationStatus confirm(final boolean singleProject, @NonNull final String name, @NonNull final UUID id) {
-        String res;
-        if (singleProject)
-            res = System.console().readLine("Are you sure you want to delete PT AI project %s (id: %s) [y/N]?", name, id);
-        else
-            res = System.console().readLine("Are you sure you want to delete PT AI project %s (id: %s) [y/N/a]?", name, id);
-        return res.trim().equalsIgnoreCase("y")
-                ? DeleteProjectJob.DeleteConfirmationStatus.YES
-                : res.trim().equalsIgnoreCase("a")
-                ? DeleteProjectJob.DeleteConfirmationStatus.ALL
-                : DeleteProjectJob.DeleteConfirmationStatus.NO;
+        String answers = singleProject ? "y/N" : "y/N/a";
+        System.out.print(String.format("Are you sure you want to delete PT AI project %s (id: %s) [%s]?", name, id, answers));
+        try {
+            String res = scanner.nextLine();
+            if (null == res) res = "";
+            return res.trim().equalsIgnoreCase("y")
+                    ? DeleteProjectJob.DeleteConfirmationStatus.YES
+                    : res.trim().equalsIgnoreCase("a")
+                    ? DeleteProjectJob.DeleteConfirmationStatus.ALL
+                    : DeleteProjectJob.DeleteConfirmationStatus.NO;
+        } catch (NoSuchElementException e) {
+            return DeleteProjectJob.DeleteConfirmationStatus.TERMINATE;
+        }
     }
 
     @Override
@@ -117,6 +125,8 @@ public class DeleteProject extends BaseCommand implements Callable<Integer> {
                 .confirmation(yes ? null : this::confirm)
                 .build();
         AbstractJob.JobExecutionResult res = job.execute();
+        scanner.close();
+
         return SUCCESS == res ? ExitCode.SUCCESS.getCode() : ExitCode.FAILED.getCode();
     }
 }

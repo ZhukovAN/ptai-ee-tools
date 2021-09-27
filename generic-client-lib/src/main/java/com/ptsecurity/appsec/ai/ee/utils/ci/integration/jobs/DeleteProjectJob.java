@@ -19,7 +19,7 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.
 @SuperBuilder
 public class DeleteProjectJob extends AbstractJob {
     public enum DeleteConfirmationStatus {
-        YES, NO, ALL
+        YES, NO, ALL, TERMINATE
     }
     /**
      * Need to implement our own Runnable that throws checked Exception
@@ -76,6 +76,7 @@ public class DeleteProjectJob extends AbstractJob {
         for (Pair<UUID, String> project : projects) {
             if (null != confirmation && DeleteConfirmationStatus.ALL != status)
                 status = confirmation.confirm(1 == projects.size(), project.getValue(), project.getKey());
+            if (DeleteConfirmationStatus.TERMINATE == status) break;
             if (DeleteConfirmationStatus.NO == status) continue;
             tasks.deleteProject(project.getKey());
         }

@@ -20,6 +20,7 @@ gradle-app.setting
 
 **/*.log
 **/*.log.*
+**/*.trace
 
 out/
 
