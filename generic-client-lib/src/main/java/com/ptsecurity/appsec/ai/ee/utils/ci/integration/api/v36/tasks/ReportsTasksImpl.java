@@ -108,6 +108,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
     @Override
     public void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Reports reports, @NonNull final FileOperations fileOps) throws GenericException {
 
+        log.trace("Validate and check reports to be generated");
         final Reports checkedReports = reports.validate();
         check(checkedReports);
 
@@ -131,6 +132,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                                     dummyTemplate, data.getLocale(),
                                     data.getFormat(), data.getFilters());
                         } else return;
+                        log.trace("Report generated to temp file {}", reportFile.toPath());
                         byte[] data = call(
                                 () -> Files.readAllBytes(reportFile.toPath()),
                                 "Report data read failed");
@@ -150,14 +152,14 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
             File json = call(
                     () -> {
                         Path temp = Files.createTempFile("ptai-", "-scanresult");
-                        log.debug("Created file {} for temporal scan result store", temp);
+                        log.debug("Created file {} for temporal raw scan result store", temp);
                         mapper.writeValue(temp.toFile(), scanResult);
-                        log.debug("Scan result data saved to {}", temp);
+                        log.debug("Raw scan result data saved to {}", temp);
                         return temp.toFile();
-                    }, "Scan result save failed");
+                    }, "Raw scan result save failed");
             for (Reports.RawData raw : checkedReports.getRaw())
                 call(() -> fileOps.saveArtifact(raw.getFileName(), json), "Raw JSON result save failed");
-            log.debug("Deleting temporal scan results file {}", json.getAbsolutePath());
+            log.debug("Deleting temporal raw scan results file {}", json.getAbsolutePath());
             call(json::delete, "Temporal file " + json.getAbsolutePath() + " delete failed", true);
         }
     }
@@ -179,6 +181,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
             @NonNull UUID projectId, @NonNull UUID scanResultId, @NonNull UUID templateId,
             @NonNull Locale locale, @NonNull Reports.Report.Format type,
             Reports.IssuesFilter filters) throws GenericException {
+        log.trace("Create report generation model");
         ReportGenerateModel model = new ReportGenerateModel()
                 .parameters(new UserReportParameters()
                         .includeDFD(true)
@@ -247,6 +250,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
             @NonNull Locale locale, @NonNull Reports.Report.Format type,
             Reports.IssuesFilter filters) throws GenericException {
         // Get all report templates for given locale
+        log.trace("Load all report templates to find one with {} name", template);
         List<ReportTemplateModel> templates = call(
                 () -> client.getReportsApi().apiReportsTemplatesGet(locale.getValue(), false),
                 "PT AI report templates list read failed");

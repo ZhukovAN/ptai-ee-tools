@@ -135,3 +135,5 @@
 + [Fix] "Fail-if-failed" and "fail-if-unstable" settings for Jenkins plugin are changed from boolean to enum. This allows us to mark build step as unstable and thus allow AST results save in pipeline jobs
 + [Fix] Broken symlinks processing fixed. Test task "advancedTest" added as Windows requires "Run as administrator" privilege to create symlinks
 + [Fix] CLI plugin project delete error fixed
+### 20211006
++ [Feature] More logging added to report generation

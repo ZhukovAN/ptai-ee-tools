@@ -12,6 +12,7 @@ import hudson.model.TaskListener;
 import jenkins.security.MasterToSlaveCallable;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -48,8 +49,10 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, GenericExce
     @SuppressWarnings("UnusedReturnValue")
     public static FilePath saveReport(Launcher launcher, TaskListener listener, String dir, String artifact, final byte[] data, boolean verbose) throws GenericException {
         BinaryReportSaver saver = new BinaryReportSaver(dir, artifact, data);
+        log.trace("Binary report saver created");
         saver.setConsole(listener.getLogger());
         saver.setVerbose(verbose);
+        log.trace("Save report using BinaryReportSaver instance: {}", saver);
         return CallHelper.call(
                 () -> Objects.requireNonNull(launcher.getChannel()).call(new RemoteFileUtils(saver)),
                 "Remote save report call failed");
@@ -74,32 +77,11 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, GenericExce
         }
     }
 
-    @RequiredArgsConstructor
-    protected static class ReportSaver extends AbstractTool implements Executor, Serializable {
-        protected final String dir;
-        protected final String artifact;
-        protected final String data;
-
-        public File execute() throws GenericException {
-            try {
-                Path destination = Paths.get(dir).resolve(AbstractJob.DEFAULT_OUTPUT_FOLDER).resolve(artifact);
-                if (!destination.toFile().getParentFile().exists()) {
-                    if (!destination.toFile().getParentFile().mkdirs())
-                        throw new IOException("Failed to create folder structure for " + destination.toFile());
-                }
-                return Files.write(
-                        destination,
-                        data.getBytes(StandardCharsets.UTF_8),
-                        StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING).toFile();
-            } catch (IOException e) {
-                throw GenericException.raise("Report file save failed", e);
-            }
-        }
-    }
-
+    @ToString(callSuper = true)
     protected static class BinaryReportSaver extends AbstractTool implements Executor, Serializable {
 
         public BinaryReportSaver(@NonNull final String dir, @NonNull final String artifact, final byte[] data) {
+            log.trace("Create binary report saver for {} artifact in {} folder", artifact, dir);
             this.dir = dir;
             this.artifact = artifact;
             this.data = Arrays.copyOf(data, data.length);
@@ -107,11 +89,14 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, GenericExce
 
         protected final String dir;
         protected final String artifact;
+
+        @ToString.Exclude
         private final byte[] data;
 
         public File execute() throws GenericException {
             try {
                 Path destination = Paths.get(dir).resolve(AbstractJob.DEFAULT_OUTPUT_FOLDER).resolve(artifact);
+                log.trace("Destination file path: {}", destination);
                 String fileName = CallHelper.call(
                         () -> destination.getFileName().toString(),
                         "Empty destination file name");
@@ -125,6 +110,7 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, GenericExce
                         log.error("Report " + fileName + " delete failed");
                 }
 
+                log.trace("In-memory data will be saved to {} file", destination);
                 return Files.write(
                         destination,
                         data,

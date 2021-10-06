@@ -8,13 +8,13 @@ def st = namespace("jelly:stapler")
 f.entry(
         title: _('onAstFailed'),
         field: 'onAstFailed') {
-    f.select(style: 'width: 350px; ')
+    f.select(style: 'width: 420px; ')
 }
 
 f.entry(
         title: _('onAstUnstable'),
         field: 'onAstUnstable') {
-    f.select(style: 'width: 350px; ')
+    f.select(style: 'width: 420px; ')
 }
 
 f.entry(
@@ -25,4 +25,3 @@ f.entry(
             field: 'reports',
             addCaption: _('reportAdd'))
 }
-
