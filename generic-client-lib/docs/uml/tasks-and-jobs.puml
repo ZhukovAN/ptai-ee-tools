@@ -47,7 +47,7 @@ abstract class AbstractApiClient {
     # void unsafeInit()
 }
 
-AbstractApiClient -right-|> AbstractTool
+AbstractApiClient -right[hidden]-|> AbstractTool
 
 interface CheckServerTask {
     ServerCheckResult check()

@@ -36,6 +36,11 @@ dependencies {
     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
     implementation 'io.github.classgraph:classgraph:4.8.110'
 
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+
     testFixturesApi("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testFixturesImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
