@@ -1,20 +1,18 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.sync.postprocessing.BasePostProcessingStep;
 import hudson.Extension;
 import hudson.util.ListBoxModel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.ToString;
 import org.jenkinsci.Symbol;
-import org.jvnet.localizer.LocaleProvider;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 @ToString
 public class WorkModeSync extends WorkMode {
@@ -33,6 +31,9 @@ public class WorkModeSync extends WorkMode {
     @Getter
     private ArrayList<BaseReport> reports;
 
+    @Getter @Setter
+    private ArrayList<BasePostProcessingStep> afterSteps;
+
     public final void setReports(final ArrayList<BaseReport> reports) {
         if (reports == null)
             this.reports = new ArrayList<>();
@@ -44,10 +45,12 @@ public class WorkModeSync extends WorkMode {
     public WorkModeSync(
             @NonNull final OnAstError onAstFailed,
             @NonNull final OnAstError onAstUnstable,
-            final ArrayList<BaseReport> reports) {
+            final ArrayList<BaseReport> reports,
+            final ArrayList<BasePostProcessingStep> afterSteps) {
         this.onAstFailed = onAstFailed;
         this.onAstUnstable = onAstUnstable;
         setReports(reports);
+        setAfterSteps(afterSteps);
     }
 
     @Symbol("WorkModeSync")
@@ -60,17 +63,17 @@ public class WorkModeSync extends WorkMode {
 
         public ListBoxModel doFillOnAstFailedItems() {
             ListBoxModel model = new ListBoxModel();
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastfailed_none(), OnAstError.NONE.name());
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastfailed_fail(), OnAstError.FAIL.name());
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastfailed_unstable(), OnAstError.UNSTABLE.name());
+            model.add(Resources.i18n_ast_settings_mode_synchronous_onastfailed_actions_none(), OnAstError.NONE.name());
+            model.add(Resources.i18n_ast_settings_mode_synchronous_onastfailed_actions_fail(), OnAstError.FAIL.name());
+            model.add(Resources.i18n_ast_settings_mode_synchronous_onastfailed_actions_unstable(), OnAstError.UNSTABLE.name());
             return model;
         }
 
         public ListBoxModel doFillOnAstUnstableItems() {
             ListBoxModel model = new ListBoxModel();
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastunstable_none(), OnAstError.NONE.name());
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastunstable_fail(), OnAstError.FAIL.name());
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastunstable_unstable(), OnAstError.UNSTABLE.name());
+            model.add(Resources.i18n_ast_settings_mode_synchronous_onastunstable_actions_none(), OnAstError.NONE.name());
+            model.add(Resources.i18n_ast_settings_mode_synchronous_onastunstable_actions_fail(), OnAstError.FAIL.name());
+            model.add(Resources.i18n_ast_settings_mode_synchronous_onastunstable_actions_unstable(), OnAstError.UNSTABLE.name());
             return model;
         }
 
