@@ -15,7 +15,7 @@ public class RawData extends BaseReport {
         this.fileName = fileName;
     }
 
-    @Symbol("RawData")
+    @Symbol("rawData")
     @Extension
     public static class RawDataDescriptor extends BaseReportDescriptor {
         @Override

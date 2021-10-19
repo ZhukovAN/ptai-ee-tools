@@ -10,7 +10,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
 public class ScanSettingsUi extends ScanSettings {
-    @Extension
     public static final ScanSettingsDescriptor DESCRIPTOR = new Descriptor();
 
     @Getter
@@ -21,7 +20,8 @@ public class ScanSettingsUi extends ScanSettings {
         this.projectName = projectName;
     }
 
-    @Symbol("ScanSettingsUi")
+    @Symbol("scanSettingsUi")
+    @Extension
     public static class Descriptor extends ScanSettingsDescriptor {
         @Override
         public String getDisplayName() {

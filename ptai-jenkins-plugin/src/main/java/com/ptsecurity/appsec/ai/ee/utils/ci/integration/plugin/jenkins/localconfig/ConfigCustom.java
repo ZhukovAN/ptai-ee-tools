@@ -18,7 +18,7 @@ public class ConfigCustom extends ConfigBase {
         this.serverSettings = serverSettings;
     }
 
-    @Symbol("ConfigCustom")
+    @Symbol("configCustom")
     @Extension
     public static class Descriptor extends ConfigBaseDescriptor {
         @Override

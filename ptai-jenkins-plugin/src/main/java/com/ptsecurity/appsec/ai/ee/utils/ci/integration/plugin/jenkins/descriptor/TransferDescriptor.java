@@ -23,7 +23,7 @@ public class TransferDescriptor extends Descriptor<Transfer> {
     @Override
     @NonNull
     public String getDisplayName() {
-        return "TransferDescriptor";
+        return "transferDescriptor";
     }
 
     public FormValidation doCheckIncludes(@QueryParameter final String includes) {

@@ -35,7 +35,7 @@ public class Data extends BaseReport {
         this.filter = filter;
     }
 
-    @Symbol("Data")
+    @Symbol("data")
     @Extension
     public static class DataDescriptor extends BaseReportDescriptor {
         @NonNull

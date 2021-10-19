@@ -12,7 +12,7 @@ public class WorkModeAsync extends WorkMode {
     @DataBoundConstructor
     public WorkModeAsync() {}
 
-    @Symbol("WorkModeAsync")
+    @Symbol("workModeAsync")
     @Extension
     public static class Descriptor extends WorkModeDescriptor {
         @Override

@@ -40,7 +40,7 @@ public class Report extends BaseReport {
         this.filter = filter;
     }
 
-    @Symbol("Report")
+    @Symbol("report")
     @Extension
     public static class ReportDescriptor extends BaseReportDescriptor {
         @Override

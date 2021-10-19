@@ -131,4 +131,7 @@
 ### 20210916
 + [Fix] Use of LastBuildAction allows plugin to show project-scope actions both for pipeline and freestyle jobs. But this works only if there were at least one successful build (see https://issues.jenkins.io/browse/JENKINS-28479). Added getProjectActions for build step to fix that for at least freestyle projects
 + [Fix] jcenter.bintray.com repository not available. Replaced with https://download.jetbrains.com/teamcity-repository
+### 20211019
++ [Fix] Bug with custom connection settings in Jenkins pipeline jobs fixed
++ [Fix] Jenkins plugin name changed from "ptaiUiAst" to "ptaiAst". Also all the extension symbol names are made camelcase
 

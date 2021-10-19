@@ -40,7 +40,8 @@ public class WorkModeSync extends WorkMode {
         setReports(reports);
     }
 
-    @Symbol("WorkModeSync")
+    @Symbol("workModeSync")
+    @Extension
     public static class Descriptor extends WorkModeDescriptor {
         @NonNull
         @Override

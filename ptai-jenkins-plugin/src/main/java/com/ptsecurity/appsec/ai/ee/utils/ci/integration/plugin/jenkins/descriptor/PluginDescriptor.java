@@ -49,7 +49,7 @@ import java.util.jar.Manifest;
 
 @Slf4j
 @Extension
-@Symbol("ptaiUiSast")
+@Symbol("ptaiAst")
 public class PluginDescriptor extends BuildStepDescriptor<Builder> {
 
     private final CopyOnWriteList<Config> globalConfigs = new CopyOnWriteList<>();

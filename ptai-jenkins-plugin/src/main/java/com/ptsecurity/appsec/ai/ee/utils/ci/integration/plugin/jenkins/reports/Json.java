@@ -18,7 +18,7 @@ public class Json extends BaseReport {
         this.json = json;
     }
 
-    @Symbol("Json")
+    @Symbol("json")
     @Extension
     public static class JsonDescriptor extends BaseReportDescriptor {
         @NonNull

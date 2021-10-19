@@ -12,7 +12,6 @@ import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 public class ConfigGlobal extends ConfigBase {
-    @Extension
     public static final ConfigBaseDescriptor DESCRIPTOR = new Descriptor();
 
     @Getter
@@ -23,7 +22,8 @@ public class ConfigGlobal extends ConfigBase {
         this.configName = configName;
     }
 
-    @Symbol("ConfigGlobal")
+    @Symbol("configGlobal")
+    @Extension
     public static class Descriptor extends ConfigBaseDescriptor {
         @Override
         @NonNull

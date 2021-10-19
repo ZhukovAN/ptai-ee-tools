@@ -16,7 +16,7 @@ import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
-public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings {
+public class ScanSettingsManual extends ScanSettings {
     @Getter
     private final String jsonSettings;
 
@@ -30,7 +30,7 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
         this.jsonPolicy = jsonPolicy;
     }
 
-    @Symbol("ScanSettingsManual")
+    @Symbol("scanSettingsManual")
     @Extension
     public static class Descriptor extends ScanSettingsDescriptor {
         @Override
