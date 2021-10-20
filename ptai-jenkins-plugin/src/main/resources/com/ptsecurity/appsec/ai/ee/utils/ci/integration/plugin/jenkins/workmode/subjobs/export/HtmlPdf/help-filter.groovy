@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.export.GenerateReport
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.export.HtmlPdf
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
 

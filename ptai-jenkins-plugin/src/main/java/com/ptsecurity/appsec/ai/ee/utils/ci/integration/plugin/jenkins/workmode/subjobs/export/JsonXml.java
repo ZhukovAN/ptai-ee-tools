@@ -49,13 +49,13 @@ public class JsonXml extends Export {
         job.addSubJob(new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.JsonXml(job, data));
     }
 
-    @Symbol("JsonXml")
     @Extension
+    @Symbol("jsonXml")
     public static class JsonXmlDescriptor extends ExportDescriptor {
         @NonNull
         @Override
         public String getDisplayName() {
-            return Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_exportdata_label();
+            return Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_label();
         }
 
         @SuppressWarnings("unused")
@@ -72,6 +72,11 @@ public class JsonXml extends Export {
             model.add(Resources.i18n_misc_enums_locale_english_label(), Reports.Locale.EN.name());
             model.add(Resources.i18n_misc_enums_locale_russian_label(), Reports.Locale.RU.name());
             return model;
+        }
+
+        @SuppressWarnings("unused")
+        public Reports.Data.Format getDefaultFormat() {
+            return Reports.Data.Format.JSON;
         }
     }
 }

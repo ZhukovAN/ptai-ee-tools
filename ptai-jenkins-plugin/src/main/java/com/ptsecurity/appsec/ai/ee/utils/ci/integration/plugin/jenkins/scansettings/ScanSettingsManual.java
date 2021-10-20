@@ -11,11 +11,13 @@ import hudson.model.Item;
 import hudson.util.FormValidation;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
+@ToString
 public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings {
     @Getter
     private final String jsonSettings;
@@ -30,8 +32,8 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
         this.jsonPolicy = jsonPolicy;
     }
 
-    @Symbol("ScanSettingsManual")
     @Extension
+    @Symbol("scanSettingsManual")
     public static class Descriptor extends ScanSettingsDescriptor {
         @Override
         @NonNull

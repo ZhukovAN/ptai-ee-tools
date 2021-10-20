@@ -246,7 +246,7 @@ public class Reports {
         public static final String DEFAULT_FORMAT = Format.JSON.name();
 
         public enum Format {
-            XML, JSON
+            JSON, XML
         }
 
         @NonNull
@@ -294,7 +294,7 @@ public class Reports {
 
     @Getter
     @Setter
-    @ToString(callSuper = true)
+    @ToString
     @NoArgsConstructor
     @SuperBuilder
     public static class RawData {

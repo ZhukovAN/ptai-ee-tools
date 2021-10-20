@@ -14,9 +14,9 @@ import java.util.ArrayList;
 @ToString
 public class WorkModeSync extends WorkMode {
     public enum OnAstError {
-        NONE, FAIL, UNSTABLE
+        FAIL, UNSTABLE
     }
-    @Extension
+
     public static final WorkModeDescriptor DESCRIPTOR = new Descriptor();
 
     @Getter
@@ -30,11 +30,12 @@ public class WorkModeSync extends WorkMode {
     }
 
     @DataBoundConstructor
-    public WorkModeSync(final ArrayList<Base> afterSteps) {
-        setSubJobs(afterSteps);
+    public WorkModeSync(final ArrayList<Base> subJobs) {
+        setSubJobs(subJobs);
     }
 
-    @Symbol("WorkModeSync")
+    @Extension
+    @Symbol("workModeSync")
     public static class Descriptor extends WorkModeDescriptor {
         @NonNull
         @Override

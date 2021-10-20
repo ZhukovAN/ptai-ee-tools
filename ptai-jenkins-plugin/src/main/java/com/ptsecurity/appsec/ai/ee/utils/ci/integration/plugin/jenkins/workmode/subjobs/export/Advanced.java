@@ -27,13 +27,13 @@ public class Advanced extends Export {
         job.addSubJob(new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Advanced(job, reports));
     }
 
-    @Symbol("Json")
     @Extension
+    @Symbol("advanced")
     public static class AdvancedDescriptor extends ExportDescriptor {
         @NonNull
         @Override
         public String getDisplayName() {
-            return Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_exportadvanced_label();
+            return Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_label();
         }
     }
 }

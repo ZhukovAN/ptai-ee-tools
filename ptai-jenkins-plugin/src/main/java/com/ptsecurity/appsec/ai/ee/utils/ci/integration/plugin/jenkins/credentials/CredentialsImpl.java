@@ -22,6 +22,7 @@ import jenkins.model.Jenkins;
 import lombok.Getter;
 import lombok.NonNull;
 import org.apache.commons.lang.StringUtils;
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -73,6 +74,7 @@ public class CredentialsImpl extends BaseStandardCredentials implements Credenti
     }
 
     @Extension
+    @Symbol("serverCredentials")
     public static class ServerCredentialsDescriptor extends BaseStandardCredentialsDescriptor {
         @Override
         @NonNull

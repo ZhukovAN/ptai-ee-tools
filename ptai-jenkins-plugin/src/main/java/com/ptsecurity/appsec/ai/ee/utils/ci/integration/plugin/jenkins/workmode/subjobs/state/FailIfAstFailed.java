@@ -16,7 +16,6 @@ import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync.OnAstError.NONE;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync.OnAstError.UNSTABLE;
 
 @ToString
@@ -35,7 +34,6 @@ public class FailIfAstFailed extends Base {
             try {
                 super.execute(scanBrief);
             } catch (GenericException e) {
-                if (NONE == subJob.getOnAstFailed()) return;
                 job.getRun().setResult(UNSTABLE == subJob.getOnAstFailed() ? Result.UNSTABLE : Result.FAILURE);
             }
         }
@@ -53,20 +51,20 @@ public class FailIfAstFailed extends Base {
         job.addSubJob(new SubJob(job, this));
     }
 
-    @Symbol("FailIfAstFailed")
     @Extension
+    @Symbol("failIfAstFailed")
     public static class FailIfAstFailedDescriptor extends BaseDescriptor {
         @NonNull
         @Override
         public String getDisplayName() {
-            return Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_processpolicy_label();
+            return Resources.i18n_ast_settings_mode_synchronous_subjob_state_processpolicy_label();
         }
 
         @SuppressWarnings("unused")
         public ListBoxModel doFillOnAstFailedItems() {
             ListBoxModel model = new ListBoxModel();
-            model.add(Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_processerrors_action_values_fail(), WorkModeSync.OnAstError.FAIL.name());
-            model.add(Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_processerrors_action_values_unstable(), UNSTABLE.name());
+            model.add(Resources.i18n_ast_settings_mode_synchronous_subjob_state_processpolicy_action_values_fail(), WorkModeSync.OnAstError.FAIL.name());
+            model.add(Resources.i18n_ast_settings_mode_synchronous_subjob_state_processpolicy_action_values_unstable(), UNSTABLE.name());
             return model;
         }
 

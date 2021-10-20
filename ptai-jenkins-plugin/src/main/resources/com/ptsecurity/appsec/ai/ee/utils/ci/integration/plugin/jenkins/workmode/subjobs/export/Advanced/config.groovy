@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.export.ExportAdvanced
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.export.Advanced
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
 import lib.FormTagLib
@@ -6,7 +6,7 @@ import lib.FormTagLib
 def f = namespace(FormTagLib)
 
 f.entry(
-        title: Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_exportadvanced_settings_label(),
+        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_label(),
         field: 'json') {
     f.textarea(
             style: 'height:100px',

@@ -22,6 +22,7 @@ import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 import lombok.NonNull;
 import org.apache.commons.lang.StringUtils;
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -29,6 +30,7 @@ import java.util.Collections;
 import java.util.UUID;
 
 @Extension
+@Symbol("serverSettings")
 public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
     public ServerSettingsDescriptor() {
         super(ServerSettings.class);

@@ -7,11 +7,11 @@ def f = namespace(FormTagLib)
 def st = namespace("jelly:stapler")
 
 f.entry(
-        title: Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_list_label(),
+        title: Resources.i18n_ast_settings_mode_synchronous_subjob_list_label(),
         help: descriptor.getHelpFile()) {
 
     f.repeatableHeteroProperty(
             field: 'subJobs',
             hasHeader: true,
-            addCaption: Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_add_label())
+            addCaption: Resources.i18n_ast_settings_mode_synchronous_subjob_add_label())
 }

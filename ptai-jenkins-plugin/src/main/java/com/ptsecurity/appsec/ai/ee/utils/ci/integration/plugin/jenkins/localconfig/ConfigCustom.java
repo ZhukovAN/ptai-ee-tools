@@ -5,9 +5,11 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serverset
 import hudson.Extension;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+@ToString
 public class ConfigCustom extends ConfigBase {
     @Getter
     private final ServerSettings serverSettings;
@@ -18,8 +20,8 @@ public class ConfigCustom extends ConfigBase {
         this.serverSettings = serverSettings;
     }
 
-    @Symbol("ConfigCustom")
     @Extension
+    @Symbol("configCustom")
     public static class Descriptor extends ConfigBaseDescriptor {
         @Override
         @NonNull

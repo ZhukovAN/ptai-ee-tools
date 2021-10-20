@@ -55,13 +55,13 @@ public class HtmlPdf extends Export {
         job.addSubJob(new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf(job, report));
     }
 
-    @Symbol("HtmlPdf")
     @Extension
+    @Symbol("htmlPdf")
     public static class HtmlPdfDescriptor extends ExportDescriptor {
         @Override
         @NonNull
         public String getDisplayName() {
-            return Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_generatereport_label();
+            return Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_label();
         }
 
         @SuppressWarnings("unused")
@@ -85,6 +85,11 @@ public class HtmlPdf extends Export {
             return Reports.Locale.RU == getDefaultLocale()
                     ? "Отчет по результатам сканирования"
                     : "Scan results report";
+        }
+
+        @SuppressWarnings("unused")
+        public Reports.Report.Format getDefaultFormat() {
+            return Reports.Report.Format.HTML;
         }
     }
 }

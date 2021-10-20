@@ -24,6 +24,7 @@ import java.util.List;
 @ToString
 public class FailIfAstUnstable extends AbstractTool implements Base {
     @NonNull
+    @ToString.Exclude
     protected final GenericAstJob owner;
 
     @Override

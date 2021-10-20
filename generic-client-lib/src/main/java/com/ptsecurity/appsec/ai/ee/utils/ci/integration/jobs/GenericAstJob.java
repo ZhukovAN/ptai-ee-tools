@@ -58,18 +58,22 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
 
     @Getter
     @Builder.Default
+    @ToString.Exclude
     protected AstOperations astOps = null;
 
     @Getter
     @Builder.Default
+    @ToString.Exclude
     protected FileOperations fileOps = null;
 
     @Getter
     @Builder.Default
+    @ToString.Exclude
     protected SetupOperations setupOps = null;
 
     @Getter
     @Builder.Default
+    @ToString.Exclude
     protected ScanBrief scanBrief = null;
 
     @Builder.Default

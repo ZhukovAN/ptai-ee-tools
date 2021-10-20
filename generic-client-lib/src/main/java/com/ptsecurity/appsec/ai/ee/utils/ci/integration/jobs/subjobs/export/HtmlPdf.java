@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @ToString
 public class HtmlPdf extends AbstractTool implements Export {
     @NonNull
+    @ToString.Exclude
     protected final GenericAstJob owner;
 
     @NonNull

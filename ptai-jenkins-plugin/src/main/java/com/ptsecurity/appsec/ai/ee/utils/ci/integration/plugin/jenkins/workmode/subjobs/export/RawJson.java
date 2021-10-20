@@ -6,9 +6,11 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.JenkinsAs
 import hudson.Extension;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+@ToString
 public class RawJson extends Export {
     @Getter
     private final String fileName;
@@ -26,14 +28,14 @@ public class RawJson extends Export {
         job.addSubJob(new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson(job, rawData));
     }
 
-    @Symbol("RawJson")
     @Extension
+    @Symbol("rawJson")
     @SuppressWarnings("unused")
     public static class RawJsonDescriptor extends ExportDescriptor {
         @Override
         @NonNull
         public String getDisplayName() {
-            return Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_exportraw_label();
+            return Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_label();
         }
     }
 }

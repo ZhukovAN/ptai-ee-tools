@@ -14,7 +14,6 @@ import java.io.Serializable;
 
 @EqualsAndHashCode
 @ToString
-@Symbol("ServerSettings")
 public class ServerSettings implements Describable<ServerSettings>, Serializable {
     @Getter
     private final String serverUrl;

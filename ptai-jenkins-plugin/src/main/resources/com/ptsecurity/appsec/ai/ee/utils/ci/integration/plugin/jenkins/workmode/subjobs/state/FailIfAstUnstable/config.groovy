@@ -7,7 +7,10 @@ def f = namespace(FormTagLib)
 def st = namespace("jelly:stapler")
 
 f.entry(
-        title: Resources.i18n_ast_settings_mode_synchronous_postprocessing_step_processerrors_label(),
+        title: Resources.i18n_ast_settings_mode_synchronous_subjob_state_processerrors_label(),
         field: 'onAstUnstable') {
-    f.select(style: 'width: 420px; ')
+    f.select(
+            style: 'width: 420px; ',
+            default: descriptor.getDefaultOnAstUnstable()
+    )
 }
