@@ -1,7 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,7 +23,7 @@ public class ReportsHelper {
             report.setFileName(data.get(REPORTING_REPORT_FILE));
             report.setTemplate(data.get(REPORTING_REPORT_TEMPLATE));
             if (StringUtils.isNotEmpty(data.get(REPORTING_REPORT_FILTER)))
-                report.setFilters(Reports.validateJsonFilter(data.get(REPORTING_REPORT_FILTER)));
+                report.setFilters(ReportUtils.validateJsonFilter(data.get(REPORTING_REPORT_FILTER)));
             res.getReport().add(report);
         }
         if (TRUE.equals(data.getOrDefault(REPORTING_DATA, Defaults.REPORTING_DATA))) {
@@ -33,7 +34,7 @@ public class ReportsHelper {
                     data.getOrDefault(REPORTING_DATA_LOCALE, Defaults.REPORTING_DATA_LOCALE)));
             report.setFileName(data.get(REPORTING_DATA_FILE));
             if (StringUtils.isNotEmpty(data.get(REPORTING_DATA_FILTER)))
-                report.setFilters(Reports.validateJsonFilter(data.get(REPORTING_DATA_FILTER)));
+                report.setFilters(ReportUtils.validateJsonFilter(data.get(REPORTING_DATA_FILTER)));
             res.getData().add(report);
         }
         if (TRUE.equals(data.getOrDefault(REPORTING_RAWDATA, Defaults.REPORTING_RAWDATA))) {
@@ -42,7 +43,7 @@ public class ReportsHelper {
             res.getRaw().add(report);
         }
         if (TRUE.equals(data.getOrDefault(REPORTING_JSON, Defaults.REPORTING_JSON)))
-            res.append(Reports.validateJsonReports(data.get(REPORTING_JSON_SETTINGS)));
+            res.append(ReportUtils.validateJsonReports(data.get(REPORTING_JSON_SETTINGS)));
 
         return res;
     }

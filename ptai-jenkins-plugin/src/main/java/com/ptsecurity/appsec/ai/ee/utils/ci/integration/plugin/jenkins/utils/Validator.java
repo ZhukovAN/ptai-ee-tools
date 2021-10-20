@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.UrlHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
@@ -56,7 +56,7 @@ public class Validator {
     }
 
     public static boolean doCheckFieldJsonIssuesFilter(String value) {
-        return checkViaException(() -> Reports.validateJsonFilter(value));
+        return checkViaException(() -> ReportUtils.validateJsonFilter(value));
     }
 
     public static FormValidation doCheckFieldNotEmpty(String value, String errorMessage) {

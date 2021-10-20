@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
@@ -83,16 +83,16 @@ public class Validator {
 
     @NonNull
     public static Result validateJsonIssuesFilter(String value) {
-        return validateViaException(() -> Reports.validateJsonFilter(value));
+        return validateViaException(() -> ReportUtils.validateJsonFilter(value));
     }
 
     @NonNull
     public static Result validateJsonReports(String value) {
-        return validateViaException(() -> Reports.validateJsonReports(value));
+        return validateViaException(() -> ReportUtils.validateJsonReports(value));
     }
 
     @NonNull
     public static Result validateReports(@NonNull final Reports value) {
-        return validateViaException(() -> value.validate());
+        return validateViaException(() -> ReportUtils.validate(value));
     }
 }

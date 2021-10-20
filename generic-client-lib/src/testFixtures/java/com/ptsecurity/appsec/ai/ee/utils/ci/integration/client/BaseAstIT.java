@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.client;
 
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
@@ -11,13 +12,40 @@ import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
+
 public abstract class BaseAstIT extends BaseClientIT {
+    protected Reports.Report report;
+    protected Reports.Data data;
+    protected Reports.RawData rawData;
+
+    @BeforeEach
+    public void pre() {
+        report = Reports.Report.builder()
+                .format(Reports.Report.Format.HTML)
+                .fileName(UUID.randomUUID() + ".html")
+                .locale(EN)
+                .template(Reports.Report.DEFAULT_TEMPLATE_NAME.get(EN))
+                .build();
+
+        data = Reports.Data.builder()
+                .format(Reports.Data.Format.JSON)
+                .fileName(UUID.randomUUID() + ".json")
+                .locale(EN)
+                .build();
+
+        rawData = Reports.RawData.builder()
+                .fileName(UUID.randomUUID() + ".json")
+                .build();
+    }
+
     @SuperBuilder
     public static class TestAstOperations implements AstOperations {
         protected GenericAstJob owner;

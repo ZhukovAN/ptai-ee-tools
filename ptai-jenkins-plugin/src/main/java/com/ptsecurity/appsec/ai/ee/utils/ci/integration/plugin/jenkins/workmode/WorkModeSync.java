@@ -1,13 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.sync.postprocessing.BasePostProcessingStep;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.Base;
 import hudson.Extension;
-import hudson.util.ListBoxModel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -23,34 +20,18 @@ public class WorkModeSync extends WorkMode {
     public static final WorkModeDescriptor DESCRIPTOR = new Descriptor();
 
     @Getter
-    private final OnAstError onAstFailed;
+    private ArrayList<Base> subJobs;
 
-    @Getter
-    private final OnAstError onAstUnstable;
-
-    @Getter
-    private ArrayList<BaseReport> reports;
-
-    @Getter @Setter
-    private ArrayList<BasePostProcessingStep> afterSteps;
-
-    public final void setReports(final ArrayList<BaseReport> reports) {
-        if (reports == null)
-            this.reports = new ArrayList<>();
+    public final void setSubJobs(final ArrayList<Base> subJobs) {
+        if (subJobs == null)
+            this.subJobs = new ArrayList<>();
         else
-            this.reports = reports;
+            this.subJobs = subJobs;
     }
 
     @DataBoundConstructor
-    public WorkModeSync(
-            @NonNull final OnAstError onAstFailed,
-            @NonNull final OnAstError onAstUnstable,
-            final ArrayList<BaseReport> reports,
-            final ArrayList<BasePostProcessingStep> afterSteps) {
-        this.onAstFailed = onAstFailed;
-        this.onAstUnstable = onAstUnstable;
-        setReports(reports);
-        setAfterSteps(afterSteps);
+    public WorkModeSync(final ArrayList<Base> afterSteps) {
+        setSubJobs(afterSteps);
     }
 
     @Symbol("WorkModeSync")
@@ -59,30 +40,6 @@ public class WorkModeSync extends WorkMode {
         @Override
         public String getDisplayName() {
             return Resources.i18n_ast_settings_mode_synchronous_label();
-        }
-
-        public ListBoxModel doFillOnAstFailedItems() {
-            ListBoxModel model = new ListBoxModel();
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastfailed_actions_none(), OnAstError.NONE.name());
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastfailed_actions_fail(), OnAstError.FAIL.name());
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastfailed_actions_unstable(), OnAstError.UNSTABLE.name());
-            return model;
-        }
-
-        public ListBoxModel doFillOnAstUnstableItems() {
-            ListBoxModel model = new ListBoxModel();
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastunstable_actions_none(), OnAstError.NONE.name());
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastunstable_actions_fail(), OnAstError.FAIL.name());
-            model.add(Resources.i18n_ast_settings_mode_synchronous_onastunstable_actions_unstable(), OnAstError.UNSTABLE.name());
-            return model;
-        }
-
-        public static OnAstError getDefaultOnAstFailed() {
-            return OnAstError.FAIL;
-        }
-
-        public static OnAstError getDefaultOnAstUnstable() {
-            return OnAstError.NONE;
         }
     }
 

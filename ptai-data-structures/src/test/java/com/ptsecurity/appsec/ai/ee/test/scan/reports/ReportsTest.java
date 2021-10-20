@@ -1,7 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.test.scan.reports;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
@@ -46,7 +48,7 @@ public class ReportsTest extends BaseTest {
         InputStream inputStream = getResourceStream("json/scan/reports/reports.2.json");
         Assertions.assertNotNull(inputStream);
         ObjectMapper mapper = createFaultTolerantObjectMapper();
-        Assertions.assertThrows(JsonParseException.class, () -> mapper.readValue(inputStream, Reports.class));
+        Assertions.assertThrows(JsonEOFException.class, () -> mapper.readValue(inputStream, Reports.class));
     }
 
     @Test

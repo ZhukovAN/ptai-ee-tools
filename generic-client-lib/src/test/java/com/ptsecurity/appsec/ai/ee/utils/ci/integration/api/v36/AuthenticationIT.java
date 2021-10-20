@@ -57,7 +57,7 @@ public class AuthenticationIT extends BaseClientIT {
 
         // Wait for access toke expiration
         Duration duration = Duration.between(initialJwt.getBody().getNotBefore().toInstant(), initialJwt.getBody().getExpiration().toInstant());
-        duration = duration.plusSeconds(5);
+        duration = duration.plusSeconds(60);
         Thread.sleep(duration.toMillis());
 
         String versionAfterRefresh = Assertions.assertDoesNotThrow(

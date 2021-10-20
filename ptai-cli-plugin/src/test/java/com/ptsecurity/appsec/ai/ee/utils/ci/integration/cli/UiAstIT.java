@@ -1,8 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;

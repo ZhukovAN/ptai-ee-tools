@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import lombok.NonNull;
 import lombok.SneakyThrows;

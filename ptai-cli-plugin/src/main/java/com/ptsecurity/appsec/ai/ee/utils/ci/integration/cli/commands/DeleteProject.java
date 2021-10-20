@@ -2,15 +2,10 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.ExitCode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.DeleteProjectJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.ListReportTemplatesJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
@@ -18,11 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.fusesource.jansi.Ansi;
 import picocli.CommandLine;
 
-import java.io.Console;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.UUID;

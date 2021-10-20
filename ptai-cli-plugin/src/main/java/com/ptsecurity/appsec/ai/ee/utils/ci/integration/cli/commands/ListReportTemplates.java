@@ -1,11 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.ListReportTemplatesJob;

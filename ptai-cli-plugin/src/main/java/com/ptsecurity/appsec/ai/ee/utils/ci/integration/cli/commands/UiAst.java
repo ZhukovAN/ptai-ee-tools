@@ -4,6 +4,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliUiAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstUnstable;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
@@ -63,7 +65,7 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
             description = "Use default excludes list")
     protected boolean useDefaultExcludes = false;
 
-    @CommandLine.ArgGroup(exclusive = true)
+    @CommandLine.ArgGroup()
     BaseCommand.Reporting reports;
 
     @CommandLine.Option(
@@ -97,14 +99,16 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
                         .build())
                 .projectName(project)
                 .async(async)
-                .failIfFailed(failIfFailed).failIfUnstable(failIfUnstable)
                 .input(input).output(output)
                 .includes(includes).excludes(excludes)
                 .useDefaultExcludes(useDefaultExcludes)
-                .reporting(reports)
                 .truststore(truststore)
                 .fullScanMode(fullScan)
                 .build();
+        if (null != reports) reports.addSubJobs(job);
+        if (failIfFailed) job.addSubJob(new FailIfAstFailed());
+        if (failIfUnstable) job.addSubJob(new FailIfAstUnstable(job));
+
         return (SUCCESS == job.execute())
                 ? BaseCommand.ExitCode.SUCCESS.getCode()
                 : BaseCommand.ExitCode.FAILED.getCode();

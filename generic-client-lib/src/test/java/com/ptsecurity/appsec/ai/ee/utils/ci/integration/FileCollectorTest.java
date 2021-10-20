@@ -4,6 +4,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ public class FileCollectorTest extends BaseTest {
     @Test
     @Tag("advanced")
     public void createSymlink() {
+        // Symlink creation under Windows requires test to be executed on behalf of Administrator, so just skip
+        if (!SystemUtils.IS_OS_LINUX) return;
         final String testString = UUID.randomUUID().toString();
         Path sources = getPackedResourceFile("code/java-app01.7z");
         Path docs = Files.createDirectory(sources.resolve("docs"));

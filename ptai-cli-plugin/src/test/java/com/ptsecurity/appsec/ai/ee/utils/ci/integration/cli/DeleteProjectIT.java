@@ -1,22 +1,19 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.ptsecurity.appsec.ai.ee.ServerCheckResult;
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.CheckServerTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
-import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
 
 @DisplayName("Project deletion tests")
 @Tag("integration")
@@ -69,7 +66,7 @@ class DeleteProjectIT extends BaseJsonIT {
         ProjectTasks projectTasks = new Factory().projectTasks(client);
         List<Pair<String, UUID>> projects = new ArrayList<>();
         for (int i = 1; i <= 5 ; i++) {
-            String projectName = newProjectName + "-" + String.valueOf(i);
+            String projectName = newProjectName + "-" + i;
             scanPhpSettings.setProjectName(projectName);
             projectTasks.setupFromJson(scanPhpSettings, scanPolicy);
             UUID projectId = projectTasks.searchProject(projectName);

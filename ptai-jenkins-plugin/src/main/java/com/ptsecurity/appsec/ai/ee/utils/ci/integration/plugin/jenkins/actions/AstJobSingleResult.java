@@ -8,25 +8,18 @@ import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.PieChartDataModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.TreeChartDataModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.export.Export;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import hudson.model.Action;
 import hudson.model.Run;
-import jenkins.model.Jenkins;
 import jenkins.model.RunAction2;
 import jenkins.tasks.SimpleBuildStep;
 import lombok.*;
-import net.sf.json.JSONObject;
 import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
-import org.kohsuke.stapler.bind.JavaScriptMethod;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -72,7 +65,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
         if (SCAN_BRIEF_DETAILED != scanDataPacked.getType()) return null;
         scanBriefDetailed = scanDataPacked.unpackData(ScanBriefDetailed.class);
 
-        Reports.Locale locale = BaseReport.BaseReportDescriptor.getDefaultLocale();
+        Reports.Locale locale = Export.ExportDescriptor.getDefaultLocale();
         Comparator<ScanBriefDetailed.Details.ChartData.BaseIssueCount> compareLevelTypeAndCount = Comparator
                 .comparing(ScanBriefDetailed.Details.ChartData.BaseIssueCount::getLevel, Comparator.comparingInt(BaseIssue.Level::getValue).reversed())
                 .thenComparing(ScanBriefDetailed.Details.ChartData.BaseIssueCount::getCount, Comparator.reverseOrder())
@@ -154,7 +147,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
     public String getVulnerabilityTypeDistribution() {
         getScanBriefDetailed();
         if (isEmpty()) return null;
-        Reports.Locale locale = BaseReport.BaseReportDescriptor.getDefaultLocale();
+        Reports.Locale locale = Export.ExportDescriptor.getDefaultLocale();
         List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
         Map<Pair<BaseIssue.Level, String>, Long> levelTitleCountMap = baseIssues.stream()
                 .filter(issue -> BaseIssue.ApprovalState.DISCARD != issue.getApprovalState())

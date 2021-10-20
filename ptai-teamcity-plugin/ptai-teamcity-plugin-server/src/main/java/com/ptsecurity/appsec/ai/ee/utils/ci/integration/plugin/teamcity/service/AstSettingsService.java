@@ -1,16 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service;
 
 import com.ptsecurity.appsec.ai.ee.ServerCheckResult;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.AstAdminSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CertificateHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
@@ -127,7 +127,7 @@ public class AstSettingsService {
         else if (SERVER_SETTINGS_LOCAL.equals(res.get(SERVER_SETTINGS))) {
             // If task-scope settings mode is selected - init bean from request
             res.fill(URL, request).fill(CERTIFICATES, request).fill(INSECURE, request);
-            String token = RSACipher.decryptWebRequestData(res.getEncryptedProperty(request, TOKEN));
+            String token = RSACipher.decryptWebRequestData(PropertiesBean.getEncryptedProperty(request, TOKEN));
             res.setProperty(TOKEN, token);
         }
         return res;
@@ -344,7 +344,7 @@ public class AstSettingsService {
             }
             // Check reporting settings
             Reports reports = bean.convert();
-            reports = reports.validate();
+            reports = ReportUtils.validate(reports);
             new Factory().reportsTasks(client).check(reports);
         } catch (GenericException e) {
             log.warn(e.getDetailedMessage(), e);

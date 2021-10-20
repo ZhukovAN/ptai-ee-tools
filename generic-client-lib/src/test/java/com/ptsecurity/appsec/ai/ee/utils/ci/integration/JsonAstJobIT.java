@@ -1,17 +1,15 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Data;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.*;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.JsonAstJobSetupOperationsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
@@ -31,7 +29,6 @@ import java.time.Duration;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
 import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level.*;
 
 @DisplayName("Test JSON-based AST")
@@ -79,37 +76,16 @@ public class JsonAstJobIT extends BaseAstIT {
         settings.setIsUsePublicAnalysisMethod(true);
         jsonSettings = JsonSettingsHelper.serialize(settings);
 
-        Reports reports = new Reports();
-
-        Report report = new Report();
-        report.setFormat(Report.Format.HTML);
-        report.setFileName(UUID.randomUUID() + ".html");
-        report.setLocale(EN);
-        report.setTemplate(Report.DEFAULT_TEMPLATE_NAME.get(report.getLocale()));
-        reports.getReport().add(report);
-
-        Data data = new Data();
-        data.setFormat(Data.Format.JSON);
-        data.setFileName(UUID.randomUUID() + ".json");
-        data.setLocale(EN);
-        reports.getData().add(data);
-
-        RawData rawData = new RawData();
-        rawData.setFileName(UUID.randomUUID() + ".json");
-        reports.getRaw().add(rawData);
-
         GenericAstJob astJob = JsonAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
-                .failIfFailed(true)
-                .failIfUnstable(false)
                 .connectionSettings(CONNECTION_SETTINGS)
                 .console(System.out)
                 .sources(sources)
                 .destination(destination)
-                .reports(reports)
                 .jsonSettings(jsonSettings)
                 .build();
+
         AbstractJob.JobExecutionResult res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
     }
@@ -134,35 +110,13 @@ public class JsonAstJobIT extends BaseAstIT {
         settings.setUseIncrementalScan(false);
         jsonSettings = JsonSettingsHelper.serialize(settings);
 
-        Reports reports = new Reports();
-
-        Report report = new Report();
-        report.setFormat(Report.Format.HTML);
-        report.setFileName(UUID.randomUUID() + ".html");
-        report.setLocale(EN);
-        report.setTemplate(Report.DEFAULT_TEMPLATE_NAME.get(report.getLocale()));
-        reports.getReport().add(report);
-
-        Data data = new Data();
-        data.setFormat(Data.Format.JSON);
-        data.setFileName(UUID.randomUUID() + ".json");
-        data.setLocale(EN);
-        reports.getData().add(data);
-
-        RawData rawData = new RawData();
-        rawData.setFileName(UUID.randomUUID() + ".json");
-        reports.getRaw().add(rawData);
-
         GenericAstJob astJob = JsonAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
-                .failIfFailed(true)
-                .failIfUnstable(false)
                 .connectionSettings(CONNECTION_SETTINGS)
                 .console(System.out)
                 .sources(sources)
                 .destination(destinationFull)
-                .reports(reports)
                 .jsonSettings(jsonSettings)
                 .build();
         AbstractJob.JobExecutionResult res = astJob.execute();
@@ -172,16 +126,14 @@ public class JsonAstJobIT extends BaseAstIT {
         Path destinationIncremental = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
         settings.setUseIncrementalScan(true);
         jsonSettings = JsonSettingsHelper.serialize(settings);
+
         astJob = JsonAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(false)
-                .failIfFailed(true)
-                .failIfUnstable(false)
                 .connectionSettings(CONNECTION_SETTINGS)
                 .console(System.out)
                 .sources(sources)
                 .destination(destinationIncremental)
-                .reports(reports)
                 .jsonSettings(jsonSettings)
                 .build();
         res = astJob.execute();
@@ -205,23 +157,18 @@ public class JsonAstJobIT extends BaseAstIT {
         modifySettings.accept(settings);
         jsonSettings = JsonSettingsHelper.serialize(settings);
 
-        Reports reports = new Reports();
-        RawData rawData = new RawData();
-        rawData.setFileName(UUID.randomUUID() + ".json");
-        reports.getRaw().add(rawData);
-
         GenericAstJob astJob = JsonAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
-                .failIfFailed(true)
-                .failIfUnstable(false)
                 .connectionSettings(CONNECTION_SETTINGS)
                 .console(System.out)
                 .sources(sources)
                 .destination(destination)
-                .reports(reports)
                 .jsonSettings(jsonSettings)
                 .build();
+        astJob.addSubJob(RawJson.builder().owner(astJob).rawData(rawData).build());
+        astJob.addSubJob(new FailIfAstFailed());
+
         AbstractJob.JobExecutionResult res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
 

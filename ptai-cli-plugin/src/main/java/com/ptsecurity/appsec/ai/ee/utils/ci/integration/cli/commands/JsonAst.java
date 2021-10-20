@@ -2,9 +2,9 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.CliJsonAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstUnstable;
 import lombok.extern.slf4j.Slf4j;
 import picocli.CommandLine;
 
@@ -68,7 +68,7 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
             description = "Use default excludes list")
     protected boolean useDefaultExcludes = false;
 
-    @CommandLine.ArgGroup(exclusive = true)
+    @CommandLine.ArgGroup()
     BaseCommand.Reporting reports;
 
     @CommandLine.Option(
@@ -103,14 +103,16 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
                 .settings(jsonSettings)
                 .policy(jsonPolicy)
                 .async(async)
-                .failIfFailed(failIfFailed).failIfUnstable(failIfUnstable)
                 .input(input).output(output)
                 .includes(includes).excludes(excludes)
                 .useDefaultExcludes(useDefaultExcludes)
-                .reporting(reports)
                 .truststore(truststore)
                 .fullScanMode(fullScan)
                 .build();
+        if (null != reports) reports.addSubJobs(job);
+        if (failIfFailed) job.addSubJob(new FailIfAstFailed());
+        if (failIfUnstable) job.addSubJob(new FailIfAstUnstable(job));
+
         return (AbstractJob.JobExecutionResult.SUCCESS == job.execute())
                 ? BaseCommand.ExitCode.SUCCESS.getCode()
                 : BaseCommand.ExitCode.FAILED.getCode();
