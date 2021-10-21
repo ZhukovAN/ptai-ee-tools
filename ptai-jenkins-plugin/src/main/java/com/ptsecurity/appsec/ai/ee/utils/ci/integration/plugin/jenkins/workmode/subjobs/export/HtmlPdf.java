@@ -52,7 +52,7 @@ public class HtmlPdf extends Export {
                 .template(template)
                 .filters(StringUtils.isNotEmpty(filter) ? ReportUtils.validateJsonFilter(filter) : null)
                 .build();
-        job.addSubJob(new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf(job, report));
+        new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf(report).attach(job);
     }
 
     @Extension

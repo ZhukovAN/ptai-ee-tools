@@ -11,6 +11,7 @@ import hudson.model.Result;
 import hudson.util.ListBoxModel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -19,24 +20,17 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.wo
 
 @ToString
 public class FailIfAstUnstable extends Base {
+    @RequiredArgsConstructor
     private static class SubJob extends com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstUnstable {
         @NonNull
-        private final JenkinsAstJob job;
-
-        @NonNull
         private final FailIfAstUnstable subJob;
-
-        public SubJob(JenkinsAstJob job, FailIfAstUnstable subJob) {
-            super(job);
-            this.job = job;
-            this.subJob = subJob;
-        }
 
         @Override
         public void execute(@NonNull final ScanBrief scanBrief) throws GenericException {
             try {
                 super.execute(scanBrief);
             } catch (GenericException e) {
+                JenkinsAstJob job = (JenkinsAstJob) owner;
                 job.getRun().setResult(UNSTABLE == subJob.getOnAstUnstable() ? Result.UNSTABLE : Result.FAILURE);
             }
         }
@@ -51,7 +45,7 @@ public class FailIfAstUnstable extends Base {
 
     @Override
     public void apply(@NonNull JenkinsAstJob job) {
-        job.addSubJob(new FailIfAstUnstable.SubJob(job, this));
+        new FailIfAstUnstable.SubJob(this).attach(job);
     }
 
     @Extension

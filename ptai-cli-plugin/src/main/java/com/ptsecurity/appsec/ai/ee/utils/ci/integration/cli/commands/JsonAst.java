@@ -110,8 +110,8 @@ public class JsonAst extends BaseCommand implements Callable<Integer> {
                 .fullScanMode(fullScan)
                 .build();
         if (null != reports) reports.addSubJobs(job);
-        if (failIfFailed) job.addSubJob(new FailIfAstFailed());
-        if (failIfUnstable) job.addSubJob(new FailIfAstUnstable(job));
+        if (failIfFailed) new FailIfAstFailed().attach(job);
+        if (failIfUnstable) new FailIfAstUnstable().attach(job);
 
         return (AbstractJob.JobExecutionResult.SUCCESS == job.execute())
                 ? BaseCommand.ExitCode.SUCCESS.getCode()

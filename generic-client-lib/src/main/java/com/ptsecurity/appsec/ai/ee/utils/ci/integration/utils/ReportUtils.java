@@ -73,6 +73,6 @@ public class ReportUtils {
     public static Reports load(String json) throws GenericException {
         return call(
                 () -> BaseJsonHelper.createObjectMapper().readValue(json, Reports.class),
-                Resources.i18n_ast_result_reporting_json_message_file_parse_failed());
+                Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_invalid());
     }
 }

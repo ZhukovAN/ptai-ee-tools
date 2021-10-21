@@ -19,9 +19,9 @@ import static com.ptsecurity.appsec.ai.ee.scan.settings.Policy.State.REJECTED;
 @Getter
 @Setter
 @SuperBuilder
-@NoArgsConstructor
+@RequiredArgsConstructor
 @ToString
-public class FailIfAstFailed extends AbstractTool implements Base {
+public class FailIfAstFailed extends Base {
     @Override
     public void validate() throws GenericException {}
 
@@ -38,7 +38,7 @@ public class FailIfAstFailed extends AbstractTool implements Base {
         if (!REJECTED.equals(policyState)) return;
 
         // AST policy assessment failed
-        info(Resources.i18n_ast_result_status_failed_policy_label());
+        owner.info(Resources.i18n_ast_result_status_failed_policy_label());
         throw GenericException.raise(
                 "AST policy assessment failed",
                 new AstPolicyViolationException());

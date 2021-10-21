@@ -135,14 +135,14 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                 .build();
         if (null != reports) {
             for (Report report : reports.getReport())
-                job.addSubJob(HtmlPdf.builder().owner(job).report(report).build());
+                HtmlPdf.builder().owner(job).report(report).build().attach(job);
             for (Data data : reports.getData())
-                job.addSubJob(JsonXml.builder().owner(job).data(data).build());
+                JsonXml.builder().owner(job).data(data).build().attach(job);
             for (RawData rawData : reports.getRaw())
-                job.addSubJob(RawJson.builder().owner(job).rawData(rawData).build());
+                RawJson.builder().owner(job).rawData(rawData).build().attach(job);
         }
-        if (failIfFailed) job.addSubJob(new FailIfAstFailed());
-        if (failIfUnstable) job.addSubJob(new FailIfAstUnstable(job));
+        if (failIfFailed) new FailIfAstFailed().attach(job);
+        if (failIfUnstable) new FailIfAstUnstable().attach(job);
 
         return job.execute();
     }

@@ -285,11 +285,15 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
         return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
     }
 
+    protected List<Action> projectActions;
+
     @Override
     public Collection<? extends Action> getProjectActions() {
-        List<Action> projectActions = new ArrayList<>();
-        projectActions.add(new AstJobMultipleResults(run.getParent()));
-        projectActions.add(new AstJobTableResults(run.getParent()));
+        if (null == projectActions) {
+            projectActions = new ArrayList<>();
+            projectActions.add(new AstJobMultipleResults(run.getParent()));
+            projectActions.add(new AstJobTableResults(run.getParent()));
+        }
         return projectActions;
     }
 }

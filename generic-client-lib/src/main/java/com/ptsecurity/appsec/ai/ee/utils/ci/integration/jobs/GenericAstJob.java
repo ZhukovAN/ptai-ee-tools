@@ -80,7 +80,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
     protected List<Base> subJobs = new ArrayList<>();
 
     public void addSubJob(@NonNull final Base job) {
-        // TODO: Fill job owner here
+        job.setOwner(this);
         subJobs.add(job);
     }
 

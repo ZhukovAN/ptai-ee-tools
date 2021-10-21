@@ -25,7 +25,7 @@ public class RawJson extends Export {
         Reports.RawData rawData = Reports.RawData.builder()
                 .fileName(fileName)
                 .build();
-        job.addSubJob(new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson(job, rawData));
+        new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson(rawData).attach(job);
     }
 
     @Extension

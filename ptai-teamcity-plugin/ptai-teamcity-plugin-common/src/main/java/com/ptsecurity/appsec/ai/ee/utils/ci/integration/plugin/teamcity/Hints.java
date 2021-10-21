@@ -64,75 +64,74 @@ public class Hints {
     /**
      * See {@link Params#REPORTING_REPORT}
      */
-    public static final String REPORTING_REPORT = Resources.i18n_ast_result_reporting_report_hint();
+    public static final String REPORTING_REPORT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_hint();
 
     /**
      * See {@link Params#REPORTING_DATA}
      */
-    public static final String REPORTING_DATA = Resources.i18n_ast_result_reporting_data_hint();
+    public static final String REPORTING_DATA = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_hint();
 
     /**
      * See {@link Params#REPORTING_RAWDATA}
      */
-    public static final String REPORTING_RAWDATA = Resources.i18n_ast_result_reporting_rawdata_hint();
+    public static final String REPORTING_RAWDATA = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_hint();
     /**
      * See {@link Params#REPORTING_JSON}
      */
-    public static final String REPORTING_JSON = Resources.i18n_ast_result_reporting_json_hint();
+    public static final String REPORTING_JSON = Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_hint();
 
     /**
      * See {@link Params#REPORTING_REPORT_FILE}
      */
-    public static final String REPORTING_REPORT_FILE = Resources.i18n_ast_result_reporting_report_file_hint();
+    public static final String REPORTING_REPORT_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_file_hint();
 
     /**
      * See {@link Params#REPORTING_REPORT_TEMPLATE}
      */
-    public static final String REPORTING_REPORT_TEMPLATE = Resources.i18n_ast_result_reporting_report_template_hint();
+    public static final String REPORTING_REPORT_TEMPLATE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_template_hint();
 
     /**
      * See {@link Params#REPORTING_REPORT_FORMAT}
      */
-    public static final String REPORTING_REPORT_FORMAT = Resources.i18n_ast_result_reporting_report_format_hint();
+    public static final String REPORTING_REPORT_FORMAT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_format_hint();
 
     /**
      * See {@link Params#REPORTING_REPORT_LOCALE}
      */
-    public static final String REPORTING_REPORT_LOCALE = Resources.i18n_ast_result_reporting_report_locale_hint();
+    public static final String REPORTING_REPORT_LOCALE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_locale_hint();
 
     /**
      * See {@link Params#REPORTING_REPORT_FILTER}
      */
-    public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_result_reporting_report_filter_hint();
+    public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_filter_hint();
 
     /**
      * See {@link Params#REPORTING_DATA_FILE}
      */
-    public static final String REPORTING_DATA_FILE = Resources.i18n_ast_result_reporting_data_file_hint();
+    public static final String REPORTING_DATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_file_hint();
 
     /**
      * See {@link Params#REPORTING_DATA_FORMAT}
      */
-    public static final String REPORTING_DATA_FORMAT = Resources.i18n_ast_result_reporting_data_format_hint();
+    public static final String REPORTING_DATA_FORMAT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_format_hint();
 
     /**
      * See {@link Params#REPORTING_DATA_LOCALE}
      */
-    public static final String REPORTING_DATA_LOCALE = Resources.i18n_ast_result_reporting_data_locale_hint();
+    public static final String REPORTING_DATA_LOCALE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_locale_hint();
 
     /**
      * See {@link Params#REPORTING_DATA_FILTER}
      */
-    public static final String REPORTING_DATA_FILTER = Resources.i18n_ast_result_reporting_data_filter_hint();
+    public static final String REPORTING_DATA_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_filter_hint();
 
     /**
      * See {@link Params#REPORTING_RAWDATA_FILE}
      */
-    public static final String REPORTING_RAWDATA_FILE = Resources.i18n_ast_result_reporting_rawdata_file_hint();
+    public static final String REPORTING_RAWDATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_file_hint();
 
     /**
      * See {@link Params#REPORTING_JSON_SETTINGS}
      */
-    public static final String REPORTING_JSON_SETTINGS = Resources.i18n_ast_result_reporting_json_settings_hint();
-
+    public static final String REPORTING_JSON_SETTINGS = Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_hint();
 }

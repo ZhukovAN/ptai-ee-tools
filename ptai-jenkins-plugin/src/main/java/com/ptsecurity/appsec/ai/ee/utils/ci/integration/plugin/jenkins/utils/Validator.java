@@ -59,6 +59,10 @@ public class Validator {
         return checkViaException(() -> ReportUtils.validateJsonFilter(value));
     }
 
+    public static boolean doCheckFieldJsonReports(String value) {
+        return checkViaException(() -> ReportUtils.validateJsonReports(value));
+    }
+
     public static FormValidation doCheckFieldNotEmpty(String value, String errorMessage) {
         return doCheckFieldNotEmpty(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
     }
@@ -89,6 +93,10 @@ public class Validator {
 
     public static FormValidation doCheckFieldJsonIssuesFilter(String value, String errorMessage) {
         return doCheckFieldJsonIssuesFilter(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
+    }
+
+    public static FormValidation doCheckFieldJsonReports(String value, String errorMessage) {
+        return doCheckFieldJsonReports(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
     }
 
     public static FormValidation error(Exception e) {

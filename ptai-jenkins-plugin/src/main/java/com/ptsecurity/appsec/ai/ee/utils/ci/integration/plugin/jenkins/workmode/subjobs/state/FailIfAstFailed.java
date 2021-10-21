@@ -24,9 +24,6 @@ public class FailIfAstFailed extends Base {
     @RequiredArgsConstructor
     private static class SubJob extends com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed {
         @NonNull
-        private final JenkinsAstJob job;
-
-        @NonNull
         private final FailIfAstFailed subJob;
 
         @Override
@@ -34,6 +31,7 @@ public class FailIfAstFailed extends Base {
             try {
                 super.execute(scanBrief);
             } catch (GenericException e) {
+                JenkinsAstJob job = (JenkinsAstJob) owner;
                 job.getRun().setResult(UNSTABLE == subJob.getOnAstFailed() ? Result.UNSTABLE : Result.FAILURE);
             }
         }
@@ -48,7 +46,7 @@ public class FailIfAstFailed extends Base {
 
     @Override
     public void apply(@NonNull JenkinsAstJob job) {
-        job.addSubJob(new SubJob(job, this));
+        new SubJob(this).attach(job);
     }
 
     @Extension

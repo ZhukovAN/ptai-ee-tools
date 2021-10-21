@@ -46,7 +46,7 @@ public class JsonXml extends Export {
                 .fileName(fileName)
                 .filters(StringUtils.isNotEmpty(filter) ? ReportUtils.validateJsonFilter(filter) : null)
                 .build();
-        job.addSubJob(new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.JsonXml(job, data));
+        new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.JsonXml(data).attach(job);
     }
 
     @Extension

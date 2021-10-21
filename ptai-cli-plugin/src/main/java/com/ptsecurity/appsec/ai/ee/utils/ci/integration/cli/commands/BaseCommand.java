@@ -96,7 +96,7 @@ public abstract class BaseCommand {
                 // Load Reports instance from JSON file
                 String json = call(
                         () -> FileUtils.readFileToString(reportingJson.toFile(), StandardCharsets.UTF_8),
-                        Resources.i18n_ast_result_reporting_json_message_file_read_failed());
+                        Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_invalid());
                 return ReportUtils.validateJsonReports(json);
             }
         }
@@ -105,11 +105,11 @@ public abstract class BaseCommand {
             Reports reports = convert();
             if (null == reports) return;
             for (com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report report : reports.getReport())
-                owner.addSubJob(HtmlPdf.builder().owner(owner).report(report).build());
+                HtmlPdf.builder().owner(owner).report(report).build().attach(owner);
             for (Reports.Data data : reports.getData())
-                owner.addSubJob(JsonXml.builder().owner(owner).data(data).build());
+                JsonXml.builder().owner(owner).data(data).build().attach(owner);
             for (Reports.RawData rawData : reports.getRaw())
-                owner.addSubJob(RawJson.builder().owner(owner).rawData(rawData).build());
+                RawJson.builder().owner(owner).rawData(rawData).build().attach(owner);
         }
     }
 

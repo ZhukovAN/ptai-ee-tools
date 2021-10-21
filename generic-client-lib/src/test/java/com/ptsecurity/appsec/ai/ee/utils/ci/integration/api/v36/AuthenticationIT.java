@@ -1,27 +1,17 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36;
 
-import com.ptsecurity.appsec.ai.ee.ServerCheckResult;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseClientIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.JwtResponse;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.CheckServerTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import lombok.SneakyThrows;
-import org.joor.Reflect;
 import org.junit.jupiter.api.*;
 
-import java.security.Key;
 import java.time.Duration;
-
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
-import static org.joor.Reflect.onClass;
 
 @DisplayName("Test API client authentication")
 @Tag("integration")

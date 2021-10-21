@@ -7,6 +7,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.MinorAstErrorsException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
@@ -22,11 +23,7 @@ import java.util.List;
 @SuperBuilder
 @RequiredArgsConstructor
 @ToString
-public class FailIfAstUnstable extends AbstractTool implements Base {
-    @NonNull
-    @ToString.Exclude
-    protected final GenericAstJob owner;
-
+public class FailIfAstUnstable extends Base {
     @Override
     public void validate() throws GenericException {}
 
@@ -39,7 +36,7 @@ public class FailIfAstUnstable extends AbstractTool implements Base {
 
         // Check errors / warnings
         if (null == errors || errors.isEmpty()) return;
-        info(Resources.i18n_ast_result_status_failed_unstable_label());
+        owner.info(Resources.i18n_ast_result_status_failed_unstable_label());
         throw GenericException.raise(
                 "AST failed due to minor errors / warnings during scan",
                 new MinorAstErrorsException());

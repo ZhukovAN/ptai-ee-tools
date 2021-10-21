@@ -2,10 +2,9 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,11 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @SuperBuilder
 @RequiredArgsConstructor
 @ToString
-public class HtmlPdf extends AbstractTool implements Export {
-    @NonNull
-    @ToString.Exclude
-    protected final GenericAstJob owner;
-
+public class HtmlPdf extends Export {
     @NonNull
     protected final Reports.Report report;
 
@@ -38,7 +33,7 @@ public class HtmlPdf extends AbstractTool implements Export {
         try {
             reportsTasks.generate(scanBrief.getProjectId(), scanBrief.getId(), report, owner.getFileOps());
         } catch (GenericException e) {
-            warning(e);
+            owner.warning(e);
         }
     }
 }

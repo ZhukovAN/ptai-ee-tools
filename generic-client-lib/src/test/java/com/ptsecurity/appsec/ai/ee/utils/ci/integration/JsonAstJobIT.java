@@ -166,8 +166,8 @@ public class JsonAstJobIT extends BaseAstIT {
                 .destination(destination)
                 .jsonSettings(jsonSettings)
                 .build();
-        astJob.addSubJob(RawJson.builder().owner(astJob).rawData(rawData).build());
-        astJob.addSubJob(new FailIfAstFailed());
+        RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
+        FailIfAstFailed.builder().build().attach(astJob);
 
         AbstractJob.JobExecutionResult res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
