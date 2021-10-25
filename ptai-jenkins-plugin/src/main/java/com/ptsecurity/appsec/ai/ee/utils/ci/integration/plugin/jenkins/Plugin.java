@@ -273,12 +273,16 @@ public class Plugin extends Builder implements SimpleBuildStep {
         }
     }
 
+    protected List<Action> projectActions;
+
     @Override
+    @NonNull
     public Collection<? extends Action> getProjectActions(AbstractProject<?, ?> project) {
-        List<Action> projectActions = new ArrayList<>();
-        projectActions.add(new AstJobMultipleResults(project));
-        projectActions.add(new AstJobTableResults(project));
+        if (null == projectActions) {
+            projectActions = new ArrayList<>();
+            // projectActions.add(new AstJobMultipleResults(project));
+            // projectActions.add(new AstJobTableResults(project));
+        }
         return projectActions;
     }
-
 }

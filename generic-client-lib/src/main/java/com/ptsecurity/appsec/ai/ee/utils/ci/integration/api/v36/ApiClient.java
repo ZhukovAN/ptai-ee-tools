@@ -52,7 +52,7 @@ import java.util.concurrent.BlockingQueue;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
 @Slf4j
-@VersionRange(min = { 3, 6, 4, 2805 }, max = { 3, 6, 4, 2843 })
+@VersionRange(min = { 3, 6, 4, 2805 }, max = { 3, 6, 5, 2875 })
 public class ApiClient extends AbstractApiClient {
     @Getter
     protected final String id = UUID.randomUUID().toString();
