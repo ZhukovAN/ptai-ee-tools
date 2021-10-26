@@ -137,3 +137,5 @@
 + [Fix] CLI plugin project delete error fixed
 ### 20211006
 + [Feature] More logging added to report generation
+### 20211025
++ [Feature] Support for PT AI 3.6.5.1541 added
