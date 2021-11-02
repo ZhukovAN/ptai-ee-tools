@@ -4,7 +4,6 @@
 // that isn't accessible now
 pluginManagement {
     repositories {
-        maven { url 'https://nexus.pentaho.org/content/groups/omni/' }
         gradlePluginPortal() // Include public Gradle plugin portal
     }
 }
