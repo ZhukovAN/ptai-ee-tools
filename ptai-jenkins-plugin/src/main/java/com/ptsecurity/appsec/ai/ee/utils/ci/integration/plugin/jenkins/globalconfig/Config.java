@@ -10,6 +10,7 @@ import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
 import lombok.Getter;
 import lombok.NonNull;
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
@@ -44,6 +45,7 @@ public class Config extends AbstractDescribableImpl<Config> implements Cloneable
     }
 
     @Extension
+    @Symbol("config")
     public static class ConfigDescriptor extends Descriptor<Config> {
         @Override
         @NonNull

@@ -140,7 +140,7 @@ dependencies {
     } else if ("2.277.4".equals(version)) {
         api platform("io.jenkins.tools.bom:bom-2.277.x:937.v51fde92016ed")
         jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.5"
-    } else if ("2.163.3".equals(version)) {
+    } else if ("2.164.3".equals(version)) {
         api platform("io.jenkins.tools.bom:bom-2.164.x:10")
         jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.5"
     } else if ("2.150.3".equals(version)) {

@@ -1,22 +1,18 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs;
 
-import com.ptsecurity.appsec.ai.ee.scan.errors.Error;
 import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
-import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.AstPolicyViolationException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.MinorAstErrorsException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.EventConsumer;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Export;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.SetupOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +25,6 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.State.*;
-import static com.ptsecurity.appsec.ai.ee.scan.settings.Policy.State.REJECTED;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
 @Slf4j
@@ -45,32 +40,11 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
     protected boolean async;
 
     /**
-     * Do we need to throw {@link AstPolicyViolationException} wrapped
-     * into {@link GenericException} if AST is done and policy assessment failed
-     */
-    @Setter
-    protected boolean failIfFailed;
-
-    /**
-     * Do we need to throw {@link MinorAstErrorsException} wrapped
-     * into {@link GenericException} if AST is done and there were minor
-     * warnings / errors like missing dependencies etc.
-     */
-    @Setter
-    protected boolean failIfUnstable;
-
-    /**
      * Do we need to force full scan mode instead of incremental
      */
     @Getter
     @Setter
     protected boolean fullScanMode;
-
-    /**
-     * Set of reports to be generated
-     */
-    @Setter
-    protected Reports reports;
 
     @Getter
     @Setter
@@ -82,18 +56,37 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
     @Builder.Default
     protected UUID scanResultId = null;
 
+    @Getter
     @Builder.Default
+    @ToString.Exclude
     protected AstOperations astOps = null;
 
+    @Getter
     @Builder.Default
+    @ToString.Exclude
     protected FileOperations fileOps = null;
 
+    @Getter
     @Builder.Default
+    @ToString.Exclude
     protected SetupOperations setupOps = null;
 
     @Getter
     @Builder.Default
+    @ToString.Exclude
     protected ScanBrief scanBrief = null;
+
+    @Builder.Default
+    protected List<Base> subJobs = new ArrayList<>();
+
+    public void addSubJob(@NonNull final Base job) {
+        job.setOwner(this);
+        subJobs.add(job);
+    }
+
+    public void clearSubJobs() {
+        subJobs.clear();
+    }
 
     /**
      * Method sets up AST job and executes it. Method returns FAILED if:
@@ -103,7 +96,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
      * - there were API exceptions
      * - there were settings errors like JSON problems, project not found etc.
      * - sources zip / upload failed
-     * - {@link GenericAstJob#failIfFailed} is true and policy assessment failed
+     * - any of {@link GenericAstJob#subJobs} thrown an exception during validation or execution
      * - minor errors during scan
      * @throws GenericException Error details
      */
@@ -111,11 +104,9 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         client.setEventConsumer(this);
         process(Stage.SETUP);
         // Check if all the reports exist. Throw an exception if there are problems
-        ReportsTasks reportsTasks = new Factory().reportsTasks(client);
-        if (null != reports) {
-            reports = reports.validate();
-            reportsTasks.check(reports);
-        }
+        // Validate postprocessing tasks
+        for (Base job : subJobs)
+            job.validate();
 
         projectId = setupOps.setupProject();
         info("PT AI project ID is " + projectId);
@@ -196,8 +187,6 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
                     Resources.i18n_ast_result_status_failed_server_label(),
                     new IllegalArgumentException("AST job state " + scanBrief.getState()));
 
-        if (resultsAvailable && null != reports) reportsTasks.generate(projectId, scanResultId, reports, fileOps);
-
         if (ABORTED == scanBrief.getState()) {
             info(abortedFromCi
                     ? Resources.i18n_ast_result_status_interrupted_ci_label()
@@ -207,41 +196,12 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
                     new InterruptedException());
         }
 
-        // Let's process DONE stage warnings / errors and AST policy assessment result
-        List<Error> errors = genericAstTasks.getScanErrors(projectId, scanResultId);
-
-        // OK, scan complete, let's check for policy violations
-        Policy.State policyState = Optional.of(scanBrief)
-                .map(ScanBrief::getPolicyState)
-                .orElseThrow(() -> GenericException.raise(
-                        "PT AI server API error",
-                        new NullPointerException("Failed to get finished job policy assessment state")));
-
-        if (REJECTED.equals(policyState)) {
-            // AST policy assessment failed
-            if (failIfFailed) {
-                info(Resources.i18n_ast_result_status_failed_policy_label());
-                throw GenericException.raise(
-                        "AST policy assessment failed",
-                        new AstPolicyViolationException());
-            }
-        } else if (Policy.State.CONFIRMED.equals(policyState)) {
-            // AST policy assessment OK, check errors / warnings
-            if (failIfUnstable && null != errors && !errors.isEmpty()) {
-                info(Resources.i18n_ast_result_status_failed_unstable_label());
-                throw GenericException.raise(
-                        "AST failed due to minor errors / warnings during scan",
-                        new MinorAstErrorsException());
-            }
-        } else {
-            // No AST policy defined. AST success depends on minor errors / warnings
-            if (failIfUnstable && null != errors && !errors.isEmpty()) {
-                info(Resources.i18n_ast_result_status_failed_unstable_label());
-                throw GenericException.raise(
-                        "AST failed due to minor errors / warnings during scan",
-                        new MinorAstErrorsException());
-            }
+        // Call postprocessing tasks
+        for (Base job : subJobs) {
+            if (job instanceof Export && !resultsAvailable) continue;
+            job.execute(scanBrief);
         }
+
         info(Resources.i18n_ast_result_status_success_label());
     }
 
@@ -282,5 +242,10 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         for (Map.Entry<Stage, Duration> entry : durations.entrySet())
             performance.put(entry.getKey(), entry.getValue().toString());
         return performance;
+    }
+
+    @Override
+    protected void validate() throws GenericException {
+        super.validate();
     }
 }

@@ -2,25 +2,21 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.ExitCode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.DeleteProjectJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.ListReportTemplatesJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.fusesource.jansi.Ansi;
 import picocli.CommandLine;
 
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
@@ -86,17 +82,33 @@ public class DeleteProject extends BaseCommand implements Callable<Integer> {
         }
     }
 
+    protected final Scanner scanner = new Scanner(System.in);
+
     protected DeleteProjectJob.DeleteConfirmationStatus confirm(final boolean singleProject, @NonNull final String name, @NonNull final UUID id) {
-        String res;
-        if (singleProject)
-            res = System.console().readLine("Are you sure you want to delete PT AI project %s (id: %s) [y/N]?", name, id);
-        else
-            res = System.console().readLine("Are you sure you want to delete PT AI project %s (id: %s) [y/N/a]?", name, id);
-        return res.trim().equalsIgnoreCase("y")
-                ? DeleteProjectJob.DeleteConfirmationStatus.YES
-                : res.trim().equalsIgnoreCase("a")
-                ? DeleteProjectJob.DeleteConfirmationStatus.ALL
-                : DeleteProjectJob.DeleteConfirmationStatus.NO;
+        String answers = singleProject ? "y/N" : "y/N/a";
+        System.out.print(
+                Ansi.ansi()
+                        .a("Are you sure you want to delete PT AI project ")
+                        .fg(Ansi.Color.CYAN)
+                        .a(name)
+                        .reset()
+                        .a(" (id: ")
+                        .fg(Ansi.Color.CYAN)
+                        .a(id)
+                        .reset()
+                        .a(") [" + answers + "]?")
+        );
+        try {
+            String res = scanner.nextLine();
+            if (null == res) res = "";
+            return res.trim().equalsIgnoreCase("y")
+                    ? DeleteProjectJob.DeleteConfirmationStatus.YES
+                    : res.trim().equalsIgnoreCase("a")
+                    ? DeleteProjectJob.DeleteConfirmationStatus.ALL
+                    : DeleteProjectJob.DeleteConfirmationStatus.NO;
+        } catch (NoSuchElementException e) {
+            return DeleteProjectJob.DeleteConfirmationStatus.TERMINATE;
+        }
     }
 
     @Override
@@ -117,6 +129,8 @@ public class DeleteProject extends BaseCommand implements Callable<Integer> {
                 .confirmation(yes ? null : this::confirm)
                 .build();
         AbstractJob.JobExecutionResult res = job.execute();
+        scanner.close();
+
         return SUCCESS == res ? ExitCode.SUCCESS.getCode() : ExitCode.FAILED.getCode();
     }
 }

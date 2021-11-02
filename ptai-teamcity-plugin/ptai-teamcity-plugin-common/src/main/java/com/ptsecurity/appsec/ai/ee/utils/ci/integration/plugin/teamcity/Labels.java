@@ -65,76 +65,76 @@ public class Labels {
     /**
      * See {@link Params#REPORTING_REPORT}
      */
-    public static final String REPORTING_REPORT = Resources.i18n_ast_result_reporting_report_label();
+    public static final String REPORTING_REPORT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_label();
 
     /**
      * See {@link Params#REPORTING_DATA}
      */
-    public static final String REPORTING_DATA = Resources.i18n_ast_result_reporting_data_label();
+    public static final String REPORTING_DATA = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_label();
 
     /**
      * See {@link Params#REPORTING_RAWDATA}
      */
-    public static final String REPORTING_RAWDATA = Resources.i18n_ast_result_reporting_rawdata_label();
+    public static final String REPORTING_RAWDATA = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_label();
     /**
      * See {@link Params#REPORTING_JSON}
      */
-    public static final String REPORTING_JSON = Resources.i18n_ast_result_reporting_json_label();
+    public static final String REPORTING_JSON = Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_label();
 
     /**
      * See {@link Params#REPORTING_REPORT_FILE}
      */
-    public static final String REPORTING_REPORT_FILE = Resources.i18n_ast_result_reporting_report_file_label();
+    public static final String REPORTING_REPORT_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_file_label();
 
     /**
      * See {@link Params#REPORTING_REPORT_TEMPLATE}
      */
-    public static final String REPORTING_REPORT_TEMPLATE = Resources.i18n_ast_result_reporting_report_template_label();
+    public static final String REPORTING_REPORT_TEMPLATE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_template_label();
 
     /**
      * See {@link Params#REPORTING_REPORT_FORMAT}
      */
-    public static final String REPORTING_REPORT_FORMAT = Resources.i18n_ast_result_reporting_report_format_label();
+    public static final String REPORTING_REPORT_FORMAT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_format_label();
 
     /**
      * See {@link Params#REPORTING_REPORT_LOCALE}
      */
-    public static final String REPORTING_REPORT_LOCALE = Resources.i18n_ast_result_reporting_report_locale_label();
+    public static final String REPORTING_REPORT_LOCALE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_locale_label();
 
     /**
      * See {@link Params#REPORTING_REPORT_FILTER}
      */
-    public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_result_reporting_report_filter_label();
+    public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_filter_label();
 
     /**
      * See {@link Params#REPORTING_DATA_FILE}
      */
-    public static final String REPORTING_DATA_FILE = Resources.i18n_ast_result_reporting_data_file_label();
+    public static final String REPORTING_DATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_file_label();
 
     /**
      * See {@link Params#REPORTING_DATA_FORMAT}
      */
-    public static final String REPORTING_DATA_FORMAT = Resources.i18n_ast_result_reporting_data_format_label();
+    public static final String REPORTING_DATA_FORMAT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_format_label();
 
     /**
      * See {@link Params#REPORTING_DATA_LOCALE}
      */
-    public static final String REPORTING_DATA_LOCALE = Resources.i18n_ast_result_reporting_data_locale_label();
+    public static final String REPORTING_DATA_LOCALE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_locale_label();
 
     /**
      * See {@link Params#REPORTING_DATA_FILTER}
      */
-    public static final String REPORTING_DATA_FILTER = Resources.i18n_ast_result_reporting_data_filter_label();
+    public static final String REPORTING_DATA_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_filter_label();
 
     /**
      * See {@link Params#REPORTING_RAWDATA_FILE}
      */
-    public static final String REPORTING_RAWDATA_FILE = Resources.i18n_ast_result_reporting_rawdata_file_label();
+    public static final String REPORTING_RAWDATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_file_label();
 
     /**
      * See {@link Params#REPORTING_JSON_SETTINGS}
      */
-    public static final String REPORTING_JSON_SETTINGS = Resources.i18n_ast_result_reporting_json_settings_label();
+    public static final String REPORTING_JSON_SETTINGS = Resources. i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_label();
 
     public static final String REPORTING_LOCALE_ENGLISH = Resources.i18n_misc_enums_locale_english_label();
     public static final String REPORTING_LOCALE_RUSSIAN = Resources.i18n_misc_enums_locale_russian_label();

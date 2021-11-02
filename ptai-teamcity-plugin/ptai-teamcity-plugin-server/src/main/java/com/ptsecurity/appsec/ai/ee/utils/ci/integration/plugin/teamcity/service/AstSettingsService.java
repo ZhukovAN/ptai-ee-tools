@@ -1,16 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service;
 
 import com.ptsecurity.appsec.ai.ee.ServerCheckResult;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.AstAdminSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CertificateHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
@@ -127,7 +127,7 @@ public class AstSettingsService {
         else if (SERVER_SETTINGS_LOCAL.equals(res.get(SERVER_SETTINGS))) {
             // If task-scope settings mode is selected - init bean from request
             res.fill(URL, request).fill(CERTIFICATES, request).fill(INSECURE, request);
-            String token = RSACipher.decryptWebRequestData(res.getEncryptedProperty(request, TOKEN));
+            String token = RSACipher.decryptWebRequestData(PropertiesBean.getEncryptedProperty(request, TOKEN));
             res.setProperty(TOKEN, token);
         }
         return res;
@@ -199,7 +199,7 @@ public class AstSettingsService {
                 if (certs.isEmpty())
                     temp.addError(CERTIFICATES, Resources.i18n_ast_settings_server_ca_pem_message_parse_empty());
             } catch (GenericException e) {
-                temp.addError(CERTIFICATES, Resources.i18n_ast_result_reporting_json_message_file_parse_failed_details(e.getDetailedMessage()));
+                temp.addError(CERTIFICATES, Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_message_file_parse_failed_details(e.getDetailedMessage()));
                 log.warn(e.getDetailedMessage(), e);
             }
         }
@@ -257,36 +257,36 @@ public class AstSettingsService {
 
         if (bean.isTrue(REPORTING_REPORT)) {
             if (bean.empty(REPORTING_REPORT_FILE))
-                results.add(REPORTING_REPORT_FILE, Resources.i18n_ast_result_reporting_report_file_message_empty());
+                results.add(REPORTING_REPORT_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_file_message_empty());
             if (bean.empty(REPORTING_REPORT_TEMPLATE))
-                results.add(REPORTING_REPORT_TEMPLATE, Resources.i18n_ast_result_reporting_report_template_message_empty());
+                results.add(REPORTING_REPORT_TEMPLATE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_template_message_empty());
             if (!bean.empty(REPORTING_REPORT_FILTER)) {
                 Validator.Result result = Validator.validateJsonIssuesFilter(bean.get(REPORTING_REPORT_FILTER));
                 if (result.fail())
-                    results.add(REPORTING_REPORT_FILTER, Resources.i18n_ast_result_reporting_report_filter_message_invalid_details(result.getDetails()));
+                    results.add(REPORTING_REPORT_FILTER, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_filter_message_invalid_details(result.getDetails()));
             }
         }
 
         if (bean.isTrue(REPORTING_DATA)) {
             if (bean.empty(REPORTING_DATA_FILE))
-                results.add(REPORTING_DATA_FILE, Resources.i18n_ast_result_reporting_data_file_message_empty());
+                results.add(REPORTING_DATA_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_file_message_empty());
             if (!bean.empty(REPORTING_DATA_FILTER)) {
                 Validator.Result result = Validator.validateJsonIssuesFilter(bean.get(REPORTING_DATA_FILTER));
                 if (result.fail())
-                    results.add(REPORTING_DATA_FILTER, Resources.i18n_ast_result_reporting_data_filter_message_invalid_details(result.getDetails()));
+                    results.add(REPORTING_DATA_FILTER, Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_filter_message_invalid_details(result.getDetails()));
             }
         }
 
         if (bean.isTrue(REPORTING_RAWDATA) && bean.empty(REPORTING_RAWDATA_FILE))
-            results.add(REPORTING_RAWDATA_FILE, Resources.i18n_ast_result_reporting_rawdata_file_message_empty());
+            results.add(REPORTING_RAWDATA_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_file_message_empty());
 
         if (bean.isTrue(REPORTING_JSON)) {
             if (bean.empty(REPORTING_JSON_SETTINGS))
-                results.add(REPORTING_JSON_SETTINGS, Resources.i18n_ast_result_reporting_json_settings_message_empty());
+                results.add(REPORTING_JSON_SETTINGS, Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_empty());
             else {
                 Validator.Result result = Validator.validateJsonReports(bean.get(REPORTING_JSON_SETTINGS));
                 if (result.fail())
-                    results.add(REPORTING_JSON_SETTINGS, Resources.i18n_ast_result_reporting_json_settings_message_invalid_details(result.getDetails()));
+                    results.add(REPORTING_JSON_SETTINGS, Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_invalid_details(result.getDetails()));
             }
         }
     }
@@ -344,7 +344,7 @@ public class AstSettingsService {
             }
             // Check reporting settings
             Reports reports = bean.convert();
-            reports = reports.validate();
+            reports = ReportUtils.validate(reports);
             new Factory().reportsTasks(client).check(reports);
         } catch (GenericException e) {
             log.warn(e.getDetailedMessage(), e);

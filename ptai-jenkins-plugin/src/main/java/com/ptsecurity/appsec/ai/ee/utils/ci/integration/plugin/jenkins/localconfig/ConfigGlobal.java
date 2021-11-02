@@ -8,9 +8,11 @@ import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+@ToString
 public class ConfigGlobal extends ConfigBase {
     public static final ConfigBaseDescriptor DESCRIPTOR = new Descriptor();
 
@@ -22,8 +24,8 @@ public class ConfigGlobal extends ConfigBase {
         this.configName = configName;
     }
 
-    @Symbol("configGlobal")
     @Extension
+    @Symbol("configGlobal")
     public static class Descriptor extends ConfigBaseDescriptor {
         @Override
         @NonNull

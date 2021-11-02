@@ -6,6 +6,7 @@ import hudson.model.Describable;
 import hudson.model.Descriptor;
 import jenkins.model.Jenkins;
 import lombok.NonNull;
+import org.jenkinsci.Symbol;
 
 public class TransferDefaults implements Describable<TransferDefaults> {
     public String getIncludes() {
@@ -29,6 +30,7 @@ public class TransferDefaults implements Describable<TransferDefaults> {
     }
 
     @Extension
+    @Symbol("transferDefaults")
     public static final class TransferDefaultsDescriptor extends Descriptor<TransferDefaults> {
         @Override
         @NonNull

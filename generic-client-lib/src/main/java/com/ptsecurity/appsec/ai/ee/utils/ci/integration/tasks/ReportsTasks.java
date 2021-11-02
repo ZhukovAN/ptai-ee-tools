@@ -1,7 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks;
 
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Data;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
@@ -13,6 +17,10 @@ import java.util.UUID;
 
 public interface ReportsTasks {
     void check(@NonNull final Reports reports);
+
+    void check(@NonNull final Report report) throws GenericException;
+    void check(@NonNull final Data data) throws GenericException;
+    void check(@NonNull final RawData rawData) throws GenericException;
 
     /**
      * Generate reports for specific AST result. As this method may be called both
@@ -28,18 +36,22 @@ public interface ReportsTasks {
      */
     void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Reports reports, @NonNull final FileOperations fileOps) throws GenericException;
 
+    void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Report report, @NonNull final FileOperations fileOps) throws GenericException;
+    void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Data data, @NonNull final FileOperations fileOps) throws GenericException;
+    void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final RawData rawData, @NonNull final FileOperations fileOps) throws GenericException;
+
     UUID getDummyReportTemplateId(@NonNull final Locale locale) throws GenericException;
 
     File generateReport(
             @NonNull final UUID projectId, @NonNull final UUID scanResultId,
             @NonNull final UUID templateId, @NonNull final Locale locale,
-            @NonNull final Reports.Report.Format type,
+            @NonNull final Report.Format type,
             final Reports.IssuesFilter filters) throws GenericException;
 
     File generateReport(
             @NonNull final UUID projectId, @NonNull final UUID scanResultId,
             @NonNull final UUID templateId, @NonNull final Locale locale,
-            @NonNull final Reports.Data.Format type,
+            @NonNull final Data.Format type,
             final Reports.IssuesFilter filters) throws GenericException;
 
     List<String> listReportTemplates(Locale locale) throws GenericException;

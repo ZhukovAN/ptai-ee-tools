@@ -1,13 +1,18 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.BaseCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.JsonXml;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +35,7 @@ public abstract class BaseCommand {
 
         @Getter
         @JsonProperty
-        protected int code;
+        private int code;
     }
 
     /**
@@ -69,34 +74,42 @@ public abstract class BaseCommand {
             if (null != reporting) {
                 Reports reports = new Reports();
                 // Convert CLI-defined report / export data to generic Reports instance
-                if (null != reporting.data) {
-                    Reports.Data data = new Reports.Data();
-                    data.setFileName(reporting.data.file.normalize().toString());
-                    data.setFormat(reporting.data.format);
-                    data.setLocale(reporting.data.locale);
-                    reports.getData().add(data);
-                }
-                if (null != reporting.report) {
-                    Reports.Report report = new Reports.Report();
-                    report.setFileName(reporting.report.file.normalize().toString());
-                    report.setFormat(reporting.report.format);
-                    report.setLocale(reporting.report.locale);
-                    report.setTemplate(reporting.report.template);
-                    reports.getReport().add(report);
-                }
-                if (null != reporting.raw) {
-                    Reports.RawData raw = new Reports.RawData();
-                    raw.setFileName(reporting.raw.normalize().toString());
-                    reports.getRaw().add(raw);
-                }
+                if (null != reporting.data)
+                    reports.getData().add(Reports.Data.builder()
+                            .fileName(reporting.data.file.normalize().toString())
+                            .format(reporting.data.format)
+                            .locale(reporting.data.locale)
+                            .build());
+                if (null != reporting.report)
+                    reports.getReport().add(Reports.Report.builder()
+                            .fileName(reporting.report.file.normalize().toString())
+                            .template(reporting.report.template)
+                            .format(reporting.report.format)
+                            .locale(reporting.report.locale)
+                            .build());
+                if (null != reporting.raw)
+                    reports.getRaw().add(Reports.RawData.builder()
+                            .fileName(reporting.raw.normalize().toString())
+                            .build());
                 return reports;
             } else {
                 // Load Reports instance from JSON file
                 String json = call(
                         () -> FileUtils.readFileToString(reportingJson.toFile(), StandardCharsets.UTF_8),
-                        Resources.i18n_ast_result_reporting_json_message_file_read_failed());
-                return Reports.validateJsonReports(json);
+                        Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_invalid());
+                return ReportUtils.validateJsonReports(json);
             }
+        }
+
+        public void addSubJobs(@NonNull final GenericAstJob owner) throws GenericException {
+            Reports reports = convert();
+            if (null == reports) return;
+            for (com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report report : reports.getReport())
+                HtmlPdf.builder().owner(owner).report(report).build().attach(owner);
+            for (Reports.Data data : reports.getData())
+                JsonXml.builder().owner(owner).data(data).build().attach(owner);
+            for (Reports.RawData rawData : reports.getRaw())
+                RawJson.builder().owner(owner).rawData(rawData).build().attach(owner);
         }
     }
 
@@ -129,7 +142,7 @@ public abstract class BaseCommand {
                 names = { "--raw-data-file" }, order = 1,
                 paramLabel = "<file>",
                 description = "JSON file where raw issues data are to be saved")
-        Path raw = null;
+        public Path raw = null;
     }
 
     /**
@@ -280,7 +293,7 @@ public abstract class BaseCommand {
         }
     }
 
-    @CommandLine.ArgGroup(exclusive = true)
+    @CommandLine.ArgGroup()
     protected Credentials credentials = null;
 
     @CommandLine.Option(

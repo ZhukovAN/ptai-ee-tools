@@ -125,12 +125,13 @@ public class ScanBrief {
     @NonNull
     @Builder.Default
     @JsonProperty
-    Policy.State policyState = Policy.State.NONE;
+    protected Policy.State policyState = Policy.State.NONE;
 
     @Getter
     @Setter
     @SuperBuilder
     @NoArgsConstructor
+    @ToString
     public static class Statistics {
         /**
          * Scan execution date / time. Can't use Java 8 ZonedDateTime, Instant etc. as Jenkins

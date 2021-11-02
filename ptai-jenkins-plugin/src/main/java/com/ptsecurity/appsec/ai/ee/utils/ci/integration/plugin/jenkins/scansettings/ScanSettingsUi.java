@@ -5,10 +5,12 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Val
 import hudson.Extension;
 import hudson.util.FormValidation;
 import lombok.Getter;
+import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
+@ToString
 public class ScanSettingsUi extends ScanSettings {
     public static final ScanSettingsDescriptor DESCRIPTOR = new Descriptor();
 
@@ -20,8 +22,8 @@ public class ScanSettingsUi extends ScanSettings {
         this.projectName = projectName;
     }
 
-    @Symbol("scanSettingsUi")
     @Extension
+    @Symbol("scanSettingsUi")
     public static class Descriptor extends ScanSettingsDescriptor {
         @Override
         public String getDisplayName() {

@@ -31,7 +31,6 @@ public abstract class GenericCliAstJob extends GenericAstJob implements FileSave
     protected boolean useDefaultExcludes;
     protected Path output;
 
-    protected BaseCommand.Reporting reporting;
     protected Path truststore;
     private GracefulShutdown shutdown;
 
@@ -46,8 +45,6 @@ public abstract class GenericCliAstJob extends GenericAstJob implements FileSave
                     },
                     Resources.i18n_ast_settings_server_ca_pem_message_file_read_failed());
         connectionSettings.setCaCertsPem(caCertsPem);
-
-        reports = (null == reporting) ? null : reporting.convert();
 
         fileOps = LocalFileOperations.builder()
                 .saver(this)

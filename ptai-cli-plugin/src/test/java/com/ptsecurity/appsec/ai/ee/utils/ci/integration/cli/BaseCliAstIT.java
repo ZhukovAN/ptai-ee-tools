@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -17,9 +18,9 @@ public abstract class BaseCliAstIT extends BaseCliIT {
     @Override
     public void pre() {
         super.pre();
-        sourcesPhpMedium = getPackedResourceFile("code/php-smoke-medium.7z");
-        sourcesPhpHigh = getPackedResourceFile("code/php-smoke-high.7z");
-        sourcesJavaMisc = getPackedResourceFile("code/java-app01.7z");
+        sourcesPhpMedium = getPackedResourceFile(BaseAstIT.PHP_SMOKE_MEDIUM.getCode());
+        sourcesPhpHigh = getPackedResourceFile(BaseAstIT.PHP_SMOKE_HIGH.getCode());
+        sourcesJavaMisc = getPackedResourceFile(BaseAstIT.JAVA_APP01.getCode());
         destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
     }
 }

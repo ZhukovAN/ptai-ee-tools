@@ -28,6 +28,9 @@ import java.util.List;
 @ToString(callSuper = true)
 public class JenkinsAstJob extends GenericAstJob implements TextOutput {
     @NonNull
+    protected Plugin plugin;
+
+    @NonNull
     protected Run<?, ?> run;
     /**
      * CI workspace folder
@@ -105,5 +108,12 @@ public class JenkinsAstJob extends GenericAstJob implements TextOutput {
             setupOps = UiAstJobSetupOperationsImpl.builder()
                     .owner(this)
                     .build();
+    }
+
+    @Override
+    public JobExecutionResult processException(@NonNull final GenericException e) {
+        JobExecutionResult res = super.processException(e);
+        plugin.setBuildResult(run, res, e);
+        return res;
     }
 }

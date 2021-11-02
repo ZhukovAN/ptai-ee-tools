@@ -19,7 +19,7 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.
 @SuperBuilder
 public class DeleteProjectJob extends AbstractJob {
     public enum DeleteConfirmationStatus {
-        YES, NO, ALL
+        YES, NO, ALL, TERMINATE
     }
     /**
      * Need to implement our own Runnable that throws checked Exception
@@ -55,6 +55,9 @@ public class DeleteProjectJob extends AbstractJob {
             if (projects.isEmpty())
                 throw GenericException.raise("Projects not found", new IllegalArgumentException(expression));
             call(() -> projects.removeIf(p -> !p.getValue().matches(expression)), "Regular expression syntax invalid");
+            if (projects.isEmpty())
+                throw GenericException.raise("Projects not found", new IllegalArgumentException(expression));
+            System.out.printf("Found %d projects matching %s expression\r\n", projects.size(), expression);
         } else {
             projects = new ArrayList<>();
             if (null != projectId) {
@@ -76,8 +79,13 @@ public class DeleteProjectJob extends AbstractJob {
         for (Pair<UUID, String> project : projects) {
             if (null != confirmation && DeleteConfirmationStatus.ALL != status)
                 status = confirmation.confirm(1 == projects.size(), project.getValue(), project.getKey());
-            if (DeleteConfirmationStatus.NO == status) continue;
+            if (DeleteConfirmationStatus.TERMINATE == status) break;
+            if (DeleteConfirmationStatus.NO == status) {
+                System.out.printf("Project %s skipped\r\n", project.getValue());
+                continue;
+            }
             tasks.deleteProject(project.getKey());
+            System.out.printf("Project %s deleted\r\n", project.getValue());
         }
     }
 }

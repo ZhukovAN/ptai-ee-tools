@@ -29,8 +29,8 @@ import org.kohsuke.stapler.QueryParameter;
 import java.util.Collections;
 import java.util.UUID;
 
-@Symbol("serverSettings")
 @Extension
+@Symbol("serverSettings")
 public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
     public ServerSettingsDescriptor() {
         super(ServerSettings.class);

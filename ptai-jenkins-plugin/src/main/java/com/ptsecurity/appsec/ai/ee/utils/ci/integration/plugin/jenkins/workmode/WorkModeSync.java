@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.Base;
 import hudson.Extension;
 import lombok.Getter;
 import lombok.NonNull;
@@ -13,35 +13,29 @@ import java.util.ArrayList;
 
 @ToString
 public class WorkModeSync extends WorkMode {
-    @Extension
+    public enum OnAstError {
+        FAIL, UNSTABLE
+    }
+
     public static final WorkModeDescriptor DESCRIPTOR = new Descriptor();
 
     @Getter
-    private final boolean failIfFailed;
+    private ArrayList<Base> subJobs;
 
-    @Getter
-    private final boolean failIfUnstable;
-
-    @Getter
-    private ArrayList<BaseReport> reports;
-
-    public final void setReports(final ArrayList<BaseReport> reports) {
-        if (reports == null)
-            this.reports = new ArrayList<>();
+    public final void setSubJobs(final ArrayList<Base> subJobs) {
+        if (subJobs == null)
+            this.subJobs = new ArrayList<>();
         else
-            this.reports = reports;
+            this.subJobs = subJobs;
     }
 
     @DataBoundConstructor
-    public WorkModeSync(
-            final boolean failIfFailed, final boolean failIfUnstable, final ArrayList<BaseReport> reports) {
-        this.failIfFailed = failIfFailed;
-        this.failIfUnstable = failIfUnstable;
-        setReports(reports);
+    public WorkModeSync(final ArrayList<Base> subJobs) {
+        setSubJobs(subJobs);
     }
 
-    @Symbol("workModeSync")
     @Extension
+    @Symbol("workModeSync")
     public static class Descriptor extends WorkModeDescriptor {
         @NonNull
         @Override

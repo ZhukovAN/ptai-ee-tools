@@ -3,8 +3,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
@@ -15,7 +15,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalcon
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigGlobal;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.reports.BaseReport;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsManual;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
@@ -25,6 +24,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeAsync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.AbortException;
@@ -131,9 +131,6 @@ public class Plugin extends Builder implements SimpleBuildStep {
         // "PT AI EE server connection settings are defined locally" descriptor
         ConfigCustom.Descriptor configCustomDescriptor = Jenkins.get().getDescriptorByType(ConfigCustom.Descriptor.class);
 
-        boolean failIfFailed = (workMode instanceof WorkModeSync) && ((WorkModeSync) workMode).isFailIfFailed();
-        boolean failIfUnstable = (workMode instanceof WorkModeSync) && ((WorkModeSync) workMode).isFailIfUnstable();
-
         boolean selectedScanSettingsUi = scanSettings instanceof ScanSettingsUi;
         String selectedScanSettings = selectedScanSettingsUi
                 ? scanSettingsUiDescriptor.getDisplayName()
@@ -202,13 +199,6 @@ public class Plugin extends Builder implements SimpleBuildStep {
             throw new AbortException(check.getMessage());
         // TODO: Implement scan node support when PT AI will be able to
         // String node = StringUtils.isEmpty(nodeName) ? Base.DEFAULT_PTAI_NODE_NAME : nodeName;
-        Reports reports = null;
-        if (workMode instanceof WorkModeSync) {
-            WorkModeSync workModeSync = (WorkModeSync) workMode;
-            if (null != workModeSync.getReports())
-                reports = BaseReport.convert(workModeSync.getReports());
-        }
-
         JenkinsAstJob job = JenkinsAstJob.builder()
                 .projectName(selectedScanSettingsUi ? projectName : null)
                 .settings(selectedScanSettingsUi ? null : jsonSettings)
@@ -223,23 +213,34 @@ public class Plugin extends Builder implements SimpleBuildStep {
                         .insecure(serverInsecure)
                         .build())
                 .async(workMode instanceof WorkModeAsync)
-                .failIfFailed(failIfFailed)
-                .failIfUnstable(failIfUnstable)
+                .plugin(this)
                 .run(build)
                 .workspace(workspace)
                 .launcher(launcher)
                 .listener(listener)
                 .buildInfo(buildInfo)
                 .transfers(transfers)
-                .reports(reports)
                 .fullScanMode(fullScanMode)
                 .build();
+        if (workMode instanceof WorkModeSync) {
+            WorkModeSync workModeSync = (WorkModeSync) workMode;
+            if (null != workModeSync.getSubJobs())
+                for (Base step : workModeSync.getSubJobs())
+                    step.apply(job);
+        }
+
         job.fine("JenkinsAstJob created: %s", job.toString());
 
-        AbstractJob.JobExecutionResult jobExecutionResult = job.execute();
-        if (!AbstractJob.JobExecutionResult.SUCCESS.equals(jobExecutionResult))
-            // build.setResult(Result.UNSTABLE);
-            throw new AbortException(Resources.i18n_ast_result_status_failed_label());
+        job.execute();
+    }
+
+    public void setBuildResult(@NonNull final Run<?, ?> build, @NonNull final AbstractJob.JobExecutionResult jobResult, @NonNull final GenericException e) {
+        if (null == e.getCause())
+            build.setResult(Result.FAILURE);
+        if (e.getCause() instanceof InterruptedException)
+            build.setResult(Result.ABORTED);
+        else
+            build.setResult(Result.FAILURE);
     }
 
     @NonNull

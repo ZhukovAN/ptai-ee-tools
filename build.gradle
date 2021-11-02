@@ -48,7 +48,7 @@ subprojects {
 
     test {
         useJUnitPlatform() {
-            excludeTags 'integration'
+            excludeTags 'integration', 'advanced'
         }
     }
 
@@ -124,9 +124,20 @@ subprojects {
             mavenLocal()
         }
     }
+
     def integrationTest = tasks.register('integrationTest', Test) {
         useJUnitPlatform {
             includeTags 'integration'
+        }
+        testLogging {
+            events 'passed', 'skipped', 'failed'
+        }
+        shouldRunAfter test
+    }
+
+    def advancedTest = tasks.register('advancedTest', Test) {
+        useJUnitPlatform {
+            includeTags 'advanced'
         }
         testLogging {
             events 'passed', 'skipped', 'failed'

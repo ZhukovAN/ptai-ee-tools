@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.scan.reports;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -198,7 +199,9 @@ public class Reports {
 
     @Getter
     @Setter
+    @SuperBuilder
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NoArgsConstructor
     @ToString
     public static abstract class AbstractReport {
         /**
@@ -219,8 +222,8 @@ public class Reports {
          * Report property that contain report generation filters
          */
         @JsonProperty
+        @Builder.Default
         protected IssuesFilter filters = null;
-
     }
 
     /**
@@ -229,6 +232,8 @@ public class Reports {
     @Getter
     @Setter
     @ToString(callSuper = true)
+    @SuperBuilder
+    @NoArgsConstructor
     public static class Data extends AbstractReport {
         /**
          * Default report locale to be used for new data exports
@@ -241,7 +246,7 @@ public class Reports {
         public static final String DEFAULT_FORMAT = Format.JSON.name();
 
         public enum Format {
-            XML, JSON
+            JSON, XML
         }
 
         @NonNull
@@ -253,6 +258,8 @@ public class Reports {
     @Getter
     @Setter
     @ToString(callSuper = true)
+    @SuperBuilder
+    @NoArgsConstructor
     public static class Report extends AbstractReport {
 
         /**
@@ -287,7 +294,9 @@ public class Reports {
 
     @Getter
     @Setter
-    @ToString(callSuper = true)
+    @ToString
+    @NoArgsConstructor
+    @SuperBuilder
     public static class RawData {
         /**
          * File name where report should be saved to

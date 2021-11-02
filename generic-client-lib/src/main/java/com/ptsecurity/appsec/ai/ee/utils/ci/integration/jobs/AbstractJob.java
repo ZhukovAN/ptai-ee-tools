@@ -51,19 +51,23 @@ public abstract class AbstractJob extends AbstractTool {
             unsafeExecute();
             return JobExecutionResult.SUCCESS;
         } catch (GenericException e) {
-            if (null != e.getCause()) {
-                if (e.getCause() instanceof InterruptedException) {
-                    log.debug("Job execution interrupted");
-                    return JobExecutionResult.INTERRUPTED;
-                } else if (e.getCause() instanceof AstPolicyViolationException || e.getCause() instanceof MinorAstErrorsException) {
-                    log.debug(e.getDetailedMessage(), e.getCause());
-                    return JobExecutionResult.FAILED;
-                }
-            }
-            severe(e.getDetailedMessage());
-            log.error(e.getDetailedMessage(), e.getCause());
-            return JobExecutionResult.FAILED;
+            return processException(e);
         }
+    }
+
+    public JobExecutionResult processException(@NonNull final GenericException e) {
+        if (null != e.getCause()) {
+            if (e.getCause() instanceof InterruptedException) {
+                log.debug("Job execution interrupted");
+                return JobExecutionResult.INTERRUPTED;
+            } else if (e.getCause() instanceof AstPolicyViolationException || e.getCause() instanceof MinorAstErrorsException) {
+                log.debug(e.getDetailedMessage(), e.getCause());
+                return JobExecutionResult.FAILED;
+            }
+        }
+        severe(e.getDetailedMessage());
+        log.error(e.getDetailedMessage(), e.getCause());
+        return JobExecutionResult.FAILED;
     }
 
     protected abstract void init() throws GenericException;

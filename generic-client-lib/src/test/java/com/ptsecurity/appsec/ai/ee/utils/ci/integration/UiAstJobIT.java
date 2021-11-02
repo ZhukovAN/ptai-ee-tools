@@ -1,13 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Data;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.JsonXml;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.UiAstJobSetupOperationsImpl;
 import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
@@ -21,8 +21,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
-
-import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
 
 @DisplayName("Test UI-based AST")
 @Tag("integration")
@@ -53,68 +51,72 @@ public class UiAstJobIT extends BaseAstIT {
     @Test
     @DisplayName("Scan PHP smoke project with medium level vulnerabilities")
     public void scanPhpSmoke() {
-        Path sources = getPackedResourceFile("code/php-smoke-medium.7z");
+        Path sources = getSourcesRoot(PHP_SMOKE_MEDIUM);
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
-
-        Reports reports = new Reports();
-
-        Report report = new Report();
-        report.setFormat(Report.Format.HTML);
-        report.setFileName(UUID.randomUUID() + ".html");
-        report.setLocale(EN);
-        report.setTemplate(Report.DEFAULT_TEMPLATE_NAME.get(report.getLocale()));
-        reports.getReport().add(report);
-
-        Data data = new Data();
-        data.setFormat(Data.Format.JSON);
-        data.setFileName(UUID.randomUUID() + ".json");
-        data.setLocale(EN);
-        reports.getData().add(data);
-
-        RawData rawData = new RawData();
-        rawData.setFileName(UUID.randomUUID() + ".json");
-        reports.getRaw().add(rawData);
 
         GenericAstJob astJob = UiAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
-                .failIfFailed(true)
-                .failIfUnstable(false)
-                .projectName(EXISTING_PHP_SMOKE_MEDIUM_PROJECT)
+                .projectName(PHP_SMOKE_MEDIUM.getName())
                 .connectionSettings(CONNECTION_SETTINGS)
                 .console(System.out)
                 .sources(sources)
                 .destination(destination)
-                .reports(reports)
                 .build();
+
+        HtmlPdf.builder().owner(astJob).report(report).build().attach(astJob);
+        JsonXml.builder().owner(astJob).data(data).build().attach(astJob);
+        RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
+        FailIfAstFailed.builder().build().attach(astJob);
+
         AbstractJob.JobExecutionResult res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
     }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Fail scan because of missing report template")
+    public void failMissingReportTemplate() {
+        Path sources = getSourcesRoot(PHP_SMOKE_MEDIUM);
+        Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
+
+        GenericAstJob astJob = UiAstJobImpl.builder()
+                .async(false)
+                .fullScanMode(true)
+                .projectName(PHP_SMOKE_MEDIUM.getName())
+                .connectionSettings(CONNECTION_SETTINGS)
+                .console(System.out)
+                .sources(sources)
+                .destination(destination)
+                .build();
+
+        report.setTemplate(report.getTemplate() + "-" + UUID.randomUUID());
+        HtmlPdf.builder().owner(astJob).report(report).build().attach(astJob);
+        FailIfAstFailed.builder().build().attach(astJob);
+
+        AbstractJob.JobExecutionResult res = astJob.execute();
+        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.FAILED);
+    }
+
     @SneakyThrows
     @Test
     @DisplayName("Scan PHP smoke project with miscellaneous level vulnerabilities")
     public void scanPhpSmokeMisc() {
-        Path sources = getPackedResourceFile("code/php-smoke-misc.7z");
+        Path sources = getSourcesRoot(PHP_SMOKE_MISC);
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
-
-        Reports reports = new Reports();
-
-        RawData rawData = new RawData();
-        rawData.setFileName(UUID.randomUUID() + ".json");
-        reports.getRaw().add(rawData);
 
         GenericAstJob astJob = UiAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
-                .failIfFailed(true)
-                .failIfUnstable(false)
-                .projectName(EXISTING_PHP_SMOKE_MISC_PROJECT)
+                .projectName(PHP_SMOKE_MISC.getName())
                 .connectionSettings(CONNECTION_SETTINGS)
                 .console(System.out)
                 .sources(sources)
                 .destination(destination)
-                .reports(reports)
                 .build();
+
+        FailIfAstFailed.builder().build().attach(astJob);
+
         AbstractJob.JobExecutionResult res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
     }
@@ -123,20 +125,19 @@ public class UiAstJobIT extends BaseAstIT {
     @Test
     @DisplayName("Test async scan duration")
     public void scanPhpSmokeAsync() {
-        Path sources = getPackedResourceFile("code/php-smoke-medium.7z");
+        Path sources = getSourcesRoot(PHP_SMOKE_MEDIUM);
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
 
         GenericAstJob astJob = UiAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
-                .failIfFailed(true)
-                .failIfUnstable(false)
-                .projectName(EXISTING_PHP_SMOKE_MEDIUM_PROJECT)
+                .projectName(PHP_SMOKE_MEDIUM.getName())
                 .connectionSettings(CONNECTION_SETTINGS)
                 .console(System.out)
                 .sources(sources)
                 .destination(destination)
                 .build();
+
         Instant start = Instant.now();
         AbstractJob.JobExecutionResult res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
@@ -145,6 +146,7 @@ public class UiAstJobIT extends BaseAstIT {
         astJob.setAsync(true);
         start = Instant.now();
         res = astJob.execute();
+
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
         Duration asyncScan = Duration.between(start, Instant.now());
         Assertions.assertEquals(asyncScan.compareTo(syncScan), -1);
