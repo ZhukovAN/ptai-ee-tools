@@ -139,3 +139,6 @@
 + [Feature] More logging added to report generation
 ### 20211025
 + [Feature] Support for PT AI 3.6.5.1541 added
+### 20211102
++ [Fix] Integration tests for incremental scans are removed as those may fail
++ [Feature] Jenkins plugin "fail-if-failed" / "Fail-if-unstable" and reports generation are merged to single UI that allows to manually define set of post-AST actions including reports generation, policy processing etc. 

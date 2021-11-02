@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
@@ -39,7 +40,7 @@ class UiAstIT extends BaseCliAstIT {
     void testExistingProject() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--truststore", PEM.toString(),
@@ -53,7 +54,7 @@ class UiAstIT extends BaseCliAstIT {
     void testNoSourcesIncluded() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--truststore", PEM.toString(),
@@ -67,9 +68,10 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Fail AST of policy violating project")
     void testPolicyFailForExistingProject() {
+        BaseAstIT.setupProject(BaseAstIT.PHP_SMOKE_HIGH, BaseAstIT.getDefaultPolicy());
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_HIGH_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_HIGH.getName(),
                 "--input", sourcesPhpHigh.toString(),
                 "--output", destination.toString(),
                 "--truststore", PEM.toString(),
@@ -84,7 +86,7 @@ class UiAstIT extends BaseCliAstIT {
     void testMissingProject() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT + UUID.randomUUID(),
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName() + UUID.randomUUID(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--truststore", PEM.toString(),
@@ -98,7 +100,7 @@ class UiAstIT extends BaseCliAstIT {
     void testWithoutTruststore() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--url", URL,
@@ -111,7 +113,7 @@ class UiAstIT extends BaseCliAstIT {
     void testInsecureWithoutTruststore() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--url", URL,
@@ -127,7 +129,7 @@ class UiAstIT extends BaseCliAstIT {
         Path report = Paths.get(destination.toString()).resolve("owasp.en.html");
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--url", URL,
@@ -144,7 +146,7 @@ class UiAstIT extends BaseCliAstIT {
 
         res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--url", URL,
@@ -169,7 +171,7 @@ class UiAstIT extends BaseCliAstIT {
 
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--url", URL,
@@ -189,7 +191,7 @@ class UiAstIT extends BaseCliAstIT {
 
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--url", URL,
@@ -208,7 +210,7 @@ class UiAstIT extends BaseCliAstIT {
 
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--url", URL,
@@ -223,7 +225,7 @@ class UiAstIT extends BaseCliAstIT {
     void testExistingProjectAsync() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--truststore", PEM.toString(),
@@ -238,7 +240,7 @@ class UiAstIT extends BaseCliAstIT {
     void testMissingProjectAsync() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT + UUID.randomUUID(),
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName() + UUID.randomUUID(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--truststore", PEM.toString(),
@@ -253,52 +255,11 @@ class UiAstIT extends BaseCliAstIT {
     void testWithoutTruststoreAsync() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--url", URL,
                 "--token", TOKEN);
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
-    }
-
-    @SneakyThrows
-    @Test
-    @DisplayName("Test incremental AST scan speed increase")
-    void testIncrementalScanning() {
-        final String rawDataFile = "raw.json";
-
-        Integer res = new CommandLine(new Plugin()).execute(
-                "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
-                "--input", sourcesPhpMedium.toString(),
-                "--output", destination.toString(),
-                "--truststore", PEM.toString(),
-                "--url", URL,
-                "--token", TOKEN,
-                "--full-scan",
-                "--raw-data-file", rawDataFile);
-        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
-        File rawData = destination.resolve(rawDataFile).toFile();
-        Assertions.assertTrue(rawData.exists());
-        ScanResult scanResult = BaseJsonHelper.createObjectMapper().readValue(rawData, ScanResult.class);
-        Duration durationFull = Duration.parse(scanResult.getStatistics().getScanDurationIso8601());
-        System.out.println("Full scan duration " + durationFull);
-
-        res = new CommandLine(new Plugin()).execute(
-                "ui-ast",
-                "--project", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
-                "--input", sourcesPhpMedium.toString(),
-                "--output", destination.toString(),
-                "--truststore", PEM.toString(),
-                "--url", URL,
-                "--token", TOKEN,
-                "--raw-data-file", rawDataFile);
-        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
-        rawData = destination.resolve(rawDataFile).toFile();
-        Assertions.assertTrue(rawData.exists());
-        scanResult = BaseJsonHelper.createObjectMapper().readValue(rawData, ScanResult.class);
-        Duration durationIncremental = Duration.parse(scanResult.getStatistics().getScanDurationIso8601());
-        System.out.println("Incremental scan duration " + durationIncremental);
-        Assertions.assertTrue(0 < durationFull.compareTo(durationIncremental));
     }
 }

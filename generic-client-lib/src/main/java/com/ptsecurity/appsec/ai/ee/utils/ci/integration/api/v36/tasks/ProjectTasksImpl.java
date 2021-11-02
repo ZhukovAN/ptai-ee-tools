@@ -229,9 +229,8 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                     () -> client.getProjectsApi().apiProjectsProjectIdScanSettingsPut(projectId, scanSettings),
                     "PT AI project settings update failed");
         }
-        if (null == policy) return projectId;
 
-        String policyJson = JsonPolicyHelper.serialize(policy);
+        String policyJson = (null == policy) ? "" : JsonPolicyHelper.serialize(policy);
         call(
                 () -> client.getProjectsApi().apiProjectsProjectIdPoliciesRulesPut(projectId, policyJson),
                 "PT AI project policy assignment failed");

@@ -8,10 +8,6 @@ import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 
 public abstract class BaseIT extends BaseTest {
-    public static final String EXISTING_PHP_SMOKE_MISC_PROJECT = "junit-it-php-smoke-misc";
-    public static final String EXISTING_PHP_SMOKE_MEDIUM_PROJECT = "junit-it-php-smoke-medium";
-    public static final String EXISTING_PHP_SMOKE_HIGH_PROJECT = "junit-it-php-smoke-high";
-
     public static final String TOKEN = (null != System.getenv("ptai.token"))
             ? System.getenv("ptai.token")
             : "6M9Qsct5fg20/UEzN7/hvR2RlXkTWOI5";

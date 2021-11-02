@@ -62,7 +62,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @DisplayName("Scan PHP smoke project with medium level vulnerabilities using JSON settings and policy")
     public void scanPhpSmoke() {
-        Path sources = getPackedResourceFile("code/php-smoke-medium.7z");
+        Path sources = getSourcesRoot(PHP_SMOKE_MEDIUM);
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
 
         String jsonSettings = getResourceString("json/scan/settings/settings.minimal.aiproj");
@@ -91,61 +91,8 @@ public class JsonAstJobIT extends BaseAstIT {
     }
 
     @SneakyThrows
-    @Test
-    @DisplayName("Compare PHP smoke project scan duration and results for full and incremental modes")
-    public void compareFullAndIncremental() {
-
-        Path sources = getPackedResourceFile("code/php-smoke-medium.7z");
-        Path destinationFull = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
-
-        String jsonSettings = getResourceString("json/scan/settings/settings.minimal.aiproj");
-        Assertions.assertFalse(StringUtils.isEmpty(jsonSettings));
-
-        AiProjScanSettings settings = JsonSettingsHelper.verify(jsonSettings);
-        settings.setProjectName("junit-" + UUID.randomUUID());
-        settings.setProgrammingLanguage(ScanBrief.ScanSettings.Language.PHP);
-        settings.setScanAppType("PHP");
-        settings.setIsUseEntryAnalysisPoint(true);
-        settings.setIsUsePublicAnalysisMethod(true);
-        settings.setUseIncrementalScan(false);
-        jsonSettings = JsonSettingsHelper.serialize(settings);
-
-        GenericAstJob astJob = JsonAstJobImpl.builder()
-                .async(false)
-                .fullScanMode(true)
-                .connectionSettings(CONNECTION_SETTINGS)
-                .console(System.out)
-                .sources(sources)
-                .destination(destinationFull)
-                .jsonSettings(jsonSettings)
-                .build();
-        AbstractJob.JobExecutionResult res = astJob.execute();
-        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
-        Duration durationFull = Duration.parse(astJob.getScanBrief().getStatistics().getScanDurationIso8601());
-
-        Path destinationIncremental = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
-        settings.setUseIncrementalScan(true);
-        jsonSettings = JsonSettingsHelper.serialize(settings);
-
-        astJob = JsonAstJobImpl.builder()
-                .async(false)
-                .fullScanMode(false)
-                .connectionSettings(CONNECTION_SETTINGS)
-                .console(System.out)
-                .sources(sources)
-                .destination(destinationIncremental)
-                .jsonSettings(jsonSettings)
-                .build();
-        res = astJob.execute();
-        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
-        Duration durationIncremental = Duration.parse(astJob.getScanBrief().getStatistics().getScanDurationIso8601());
-
-        Assertions.assertTrue(0 < durationFull.compareTo(durationIncremental));
-    }
-
-    @SneakyThrows
     public ScanResult analyseMiscScanResults(@NonNull final Consumer<AiProjScanSettings> modifySettings) {
-        Path sources = getPackedResourceFile("code/php-smoke-misc.7z");
+        Path sources = getSourcesRoot(PHP_SMOKE_MISC);
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
 
         String jsonSettings = getResourceString("json/scan/settings/settings.minimal.aiproj");

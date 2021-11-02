@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
@@ -63,7 +64,7 @@ class GenerateReportIT extends BaseCliIT {
     @Test
     @DisplayName("Generate specific app01 scan results report using all possible configurations")
     public void testSpecificScanResultsReport() {
-        UUID scanResultId = getLatestCompleteScanResults(EXISTING_PHP_SMOKE_MEDIUM_PROJECT);
+        UUID scanResultId = getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName());
         testScanResultsReport(scanResultId);
     }
 
@@ -101,7 +102,7 @@ class GenerateReportIT extends BaseCliIT {
                     "--truststore", PEM.toString(),
                     "--token", TOKEN,
                     "--output", folder.toString(),
-                    "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT));
+                    "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName()));
             if (null != scanResultId) {
                 args.add("--scan-result-id");
                 args.add(scanResultId.toString());
@@ -139,7 +140,7 @@ class GenerateReportIT extends BaseCliIT {
                 "--truststore", PEM.toString(),
                 "--token", TOKEN,
                 "--output", destination.toString(),
-                "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--report-template", "Отчет OWASP Top 10 2017",
                 "--report-file", "owasp.ru.html",
                 "--report-locale", EN.name(),
@@ -160,7 +161,7 @@ class GenerateReportIT extends BaseCliIT {
                 "--truststore", PEM.toString(),
                 "--token", TOKEN,
                 "--output", destination.toString(),
-                "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
+                "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--report-template", "Отчет OWASP Top 10 2017 ",
                 "--report-file", "owasp.ru.html",
                 "--report-locale", EN.name(),
@@ -181,8 +182,8 @@ class GenerateReportIT extends BaseCliIT {
                 "--truststore", PEM.toString(),
                 "--token", TOKEN,
                 "--output", destination.toString(),
-                "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
-                "--scan-result-id", getLatestCompleteScanResults(EXISTING_PHP_SMOKE_MEDIUM_PROJECT).toString(),
+                "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
+                "--scan-result-id", getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName()).toString(),
                 "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
         checkReports(reportsJson, destination);
@@ -201,8 +202,8 @@ class GenerateReportIT extends BaseCliIT {
                 "--truststore", PEM.toString(),
                 "--token", TOKEN,
                 "--output", destination.toString(),
-                "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
-                "--scan-result-id", getLatestCompleteScanResults(EXISTING_PHP_SMOKE_MEDIUM_PROJECT).toString(),
+                "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
+                "--scan-result-id", getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName()).toString(),
                 "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
@@ -220,8 +221,8 @@ class GenerateReportIT extends BaseCliIT {
                 "--truststore", PEM.toString(),
                 "--token", TOKEN,
                 "--output", destination.toString(),
-                "--project-name", EXISTING_PHP_SMOKE_MEDIUM_PROJECT,
-                "--scan-result-id", getLatestCompleteScanResults(EXISTING_PHP_SMOKE_MEDIUM_PROJECT).toString(),
+                "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
+                "--scan-result-id", getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName()).toString(),
                 "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
         checkReports(reportsJson, destination);

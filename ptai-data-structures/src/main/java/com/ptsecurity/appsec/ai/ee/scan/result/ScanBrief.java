@@ -125,7 +125,7 @@ public class ScanBrief {
     @NonNull
     @Builder.Default
     @JsonProperty
-    Policy.State policyState = Policy.State.NONE;
+    protected Policy.State policyState = Policy.State.NONE;
 
     @Getter
     @Setter
