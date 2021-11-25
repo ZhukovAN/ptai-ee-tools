@@ -235,32 +235,38 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         return Resources.i18n_ast_plugin_label();
     }
 
+    @SuppressWarnings("unused")
     public static List<ConfigBase.ConfigBaseDescriptor> getConfigDescriptors() {
         return ConfigBase.getAll();
     }
 
+    @SuppressWarnings("unused")
     public static ConfigBase.ConfigBaseDescriptor getDefaultConfigDescriptor() {
-        return ConfigGlobal.DESCRIPTOR;
+        return Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
     }
 
+    @SuppressWarnings("unused")
     public static List<ScanSettings.ScanSettingsDescriptor> getScanSettingsDescriptors() {
         return ScanSettings.getAll();
     }
 
+    @SuppressWarnings("unused")
     public static ScanSettings.ScanSettingsDescriptor getDefaultScanSettingsDescriptor() {
-        return ScanSettingsUi.DESCRIPTOR;
+        return Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class);
     }
 
     public static List<WorkMode.WorkModeDescriptor> getWorkModeDescriptors() {
         return WorkMode.getAll();
     }
 
+    @SuppressWarnings("unused")
     public static WorkMode.WorkModeDescriptor getDefaultWorkModeDescriptor() {
-        return WorkModeSync.DESCRIPTOR;
+        return Jenkins.get().getDescriptorByType(WorkModeSync.Descriptor.class);
     }
 
     protected static Map<String, String> versionInfo = null;
 
+    @NonNull
     public static String getVersion() {
         Map<String, String> version = getVersionInfo();
         StringBuilder builder = new StringBuilder();

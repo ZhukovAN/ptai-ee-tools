@@ -45,4 +45,12 @@ public class FileCollectorTest extends BaseTest {
         File zip = FileCollector.collect(null, sources.toFile(), new Tool());
         Assertions.assertTrue(zip.exists());
     }
+
+    @SneakyThrows
+    @Test
+    public void createZip() {
+        Path sources = getPackedResourceFile(BaseAstIT.JAVA_APP01.getCode());
+        File zip = FileCollector.collect(null, sources.toFile(), new Tool());
+        Assertions.assertTrue(zip.exists());
+    }
 }

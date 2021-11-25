@@ -27,10 +27,18 @@ public class ScanResult extends ScanBrief {
     @Getter
     protected final List<BaseIssue> issues = new ArrayList<>();
 
+    @Getter @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class Strings {
+        protected String title;
+        protected String description;
+    }
+
     @NonNull
     @Getter
     @Builder.Default
-    @JsonProperty("description")
-    protected Map<String, Map<Reports.Locale, String>> description = new HashMap<>();
-
+    @JsonProperty("i18n")
+    protected Map<String, Map<Reports.Locale, Strings>> i18n = new HashMap<>();
 }

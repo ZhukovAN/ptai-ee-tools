@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.server.integration.rest.test.BaseIT;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.IssuesConverter;
@@ -12,6 +13,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelpe
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -56,6 +58,19 @@ public class ConverterTest extends BaseTest {
     @SneakyThrows
     public void generateOwaspBricksResultsV36() {
         ScanResult scanResult = generateScanResultV36("php-bricks");
+        Assertions.assertTrue(scanResult.getIssues().stream()
+                .map(issue -> scanResult.getI18n().get(issue.getTypeId()).get(Reports.Locale.EN).getTitle())
+                .anyMatch(title -> title.equals("Cross-Site Scripting")));
+
+        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
+        BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
+    }
+
+    @Test
+    @DisplayName("Convert PHP Smoke multiflow scan results")
+    @SneakyThrows
+    public void generatePhpSmokeMultiflowResultsV36() {
+        ScanResult scanResult = generateScanResultV36("php-smoke-multiflow");
 
         Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
@@ -76,6 +91,16 @@ public class ConverterTest extends BaseTest {
     @SneakyThrows
     public void generatePhpSmokeResultsV36() {
         ScanResult scanResult = generateScanResultV36("php-smoke");
+
+        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
+        BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
+    }
+
+    @Test
+    @DisplayName("Convert App01 scan results")
+    @SneakyThrows
+    public void generateApp01ResultsV36() {
+        ScanResult scanResult = generateScanResultV36("java-app01");
 
         Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);

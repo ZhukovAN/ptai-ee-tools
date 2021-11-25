@@ -13,7 +13,7 @@ import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 @ToString
-public class RawJson extends Export {
+public class Sarif extends Export {
     @Getter
     private final String fileName;
 
@@ -21,28 +21,28 @@ public class RawJson extends Export {
     private final String filter;
 
     @DataBoundConstructor
-    public RawJson(final String fileName, final String filter) {
+    public Sarif(final String fileName, final String filter) {
         this.fileName = fileName;
         this.filter = filter;
     }
 
     @Override
     public void apply(@NonNull JenkinsAstJob job) {
-        Reports.RawData rawData = Reports.RawData.builder()
+        Reports.Sarif sarif = Reports.Sarif.builder()
                 .fileName(fileName)
                 .filters(StringUtils.isNotEmpty(filter) ? ReportUtils.validateJsonFilter(filter) : null)
                 .build();
-        new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson(rawData).attach(job);
+        new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Sarif(sarif).attach(job);
     }
 
     @Extension
-    @Symbol("rawJson")
+    @Symbol("sarif")
     @SuppressWarnings("unused")
-    public static class RawJsonDescriptor extends ExportDescriptor {
+    public static class SarifDescriptor extends ExportDescriptor {
         @Override
         @NonNull
         public String getDisplayName() {
-            return Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_label();
+            return Resources.i18n_ast_settings_mode_synchronous_subjob_export_sarif_label();
         }
     }
 }

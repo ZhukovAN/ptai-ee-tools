@@ -31,7 +31,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericExcept
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ApiClientHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.LoggingInterceptor;
-import io.reactivex.Single;
+import io.reactivex.rxjava3.core.Single;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;

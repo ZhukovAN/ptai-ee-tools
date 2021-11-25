@@ -17,8 +17,6 @@ public class WorkModeSync extends WorkMode {
         FAIL, UNSTABLE
     }
 
-    public static final WorkModeDescriptor DESCRIPTOR = new Descriptor();
-
     @Getter
     private ArrayList<Base> subJobs;
 

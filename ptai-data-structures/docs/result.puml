@@ -36,9 +36,14 @@ class ScanBrief {
 
 class ScanResult {
     boolean issuesParseOk
-    Map<String, Map<Reports.Locale, String>> description
+    Map<String, Map<Reports.Locale, Strings>> i8n
 }
 ScanResult --|> ScanBrief
+
+class Strings {
+    String title
+    String description
+}
 
 class ScanSettings {
     UUID id
@@ -80,9 +85,9 @@ ScanBrief -left-> State : state
 
 class BaseIssue {
     String id
+    String groupId
     String typeId
     UUID ScanBriefId
-    Map<Reports.Locale, String> title
     Boolean favorite
     Boolean suspected
     Boolean suppressed
@@ -91,7 +96,7 @@ class BaseIssue {
     List<String> cweId
 }
 note right of BaseIssue::typeId
-    Key for ScanResult::description
+    Key for ScanResult::i18n
 end note
 
 enum Type #EEEEEE {

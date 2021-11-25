@@ -39,8 +39,6 @@ import static org.joor.Reflect.on;
 
 @Slf4j
 public class IssuesConverter {
-    private static final String UNIQUE_PREFIX = UUID.randomUUID().toString();
-
     private static final Map<IssueApprovalState, BaseIssue.ApprovalState> ISSUE_APPROVAL_STATE_MAP = new HashMap<>();
     private static final Map<String, BaseIssue.Type> ISSUE_TYPE_MAP = new HashMap<>();
     private static final Map<IssueLevel, BaseIssue.Level> ISSUE_LEVEL_MAP = new HashMap<>();
@@ -210,7 +208,7 @@ public class IssuesConverter {
         // As there's no localization in metadatas, use english model as source
         IssuesModel model = null;
         // Parse localizedModels and extract titles and descriptions from them
-        Map<String, Map<Reports.Locale, String>> dictionary = new HashMap<>();
+        Map<String, Map<Reports.Locale, ScanResult.Strings>> dictionary = new HashMap<>();
         // At this point we have ScanResult that is initialized with vulnerability list. But these
         // vulnerabilities have titleId field that points nowhere. So we need to create localized
         // descriptions for all of them
@@ -224,15 +222,16 @@ public class IssuesConverter {
             for (IssueDescriptionModel idm : descriptions.values()) {
                 if (null == idm.getDescriptionValue() || StringUtils.isEmpty(idm.getDescriptionValue().getHeader())) continue;
                 // Store localized title to dictionary
-                Map<Reports.Locale, String> values = dictionary.computeIfAbsent(idm.getIdentity(), l -> new HashMap<>());
-                values.put(locale, idm.getDescriptionValue().getHeader());
+                Map<Reports.Locale, ScanResult.Strings> values = dictionary.computeIfAbsent(idm.getIdentity(), l -> new HashMap<>());
+                values.put(locale, ScanResult.Strings.builder()
+                        .title(idm.getDescriptionValue().getHeader())
+                        .description(idm.getDescriptionValue().getDescription())
+                        .build());
                 // Store localized description to the same dictionary, but use different key
                 if (StringUtils.isEmpty(idm.getDescriptionValue().getDescription())) {
                     log.warn("Vulnerability {} have no description", idm.getDescriptionValue().getHeader());
                     continue;
                 }
-                values = dictionary.computeIfAbsent(UNIQUE_PREFIX + idm.getIdentity(), l -> new HashMap<>());
-                values.put(locale, idm.getDescriptionValue().getDescription());
             }
         }
 
@@ -256,9 +255,9 @@ public class IssuesConverter {
         }
         // Issue format conversion sets type field to value that can be safely mapped to localized description
         for (BaseIssue issue : res.getIssues()) {
-            String key = UNIQUE_PREFIX + issue.getTypeId();
-            issue.setTypeId(md5(issue.getTypeId()));
-            res.getDescription().put(issue.getTypeId(), dictionary.get(key));
+            String key = issue.getTypeId();
+            // issue.setTypeId("ptai-" + md5(issue.getTypeId()));
+            res.getI18n().put(issue.getTypeId(), dictionary.get(key));
         }
         res.setIssuesParseOk(model != EMPTY_ISSUES_MODEL);
         return res;
@@ -359,12 +358,12 @@ public class IssuesConverter {
     protected static void setBaseFields(
             @NonNull final IssueBase source,
             @NonNull final BaseIssue destination,
-            @NonNull final Map<String, Map<Reports.Locale, String>> dictionary) {
+            @NonNull final Map<String, Map<Reports.Locale, ScanResult.Strings>> dictionary) {
         destination.setId(source.getId());
+        destination.setGroupId(source.getGroupId());
         destination.setScanResultId(Objects.requireNonNull(source.getScanResultId()));
         destination.setClazz(ISSUE_TYPE_MAP.get(source.getPropertyClass()));
         destination.setLevel(ISSUE_LEVEL_MAP.get(source.getLevel()));
-        destination.setTitle(dictionary.get(source.getType()));
 
         destination.setApprovalState(ISSUE_APPROVAL_STATE_MAP.get(source.getApprovalState()));
         destination.setFavorite(source.getIsFavorite());
@@ -481,7 +480,7 @@ public class IssuesConverter {
     protected static List<BaseIssue> convert(
             @NonNull final IssueBase issueBase,
             @NonNull final Map<String, IssueBaseMetadata> metadataMap,
-            @NonNull final Map<String, Map<Reports.Locale, String>> dictionary) {
+            @NonNull final Map<String, Map<Reports.Locale, ScanResult.Strings>> dictionary) {
         // Issue description linked to issue via IssueBase:type - IssueDescriptionModel:identity
         // association. So let's create single localized dictionary of vulnerability titles
 
@@ -562,13 +561,13 @@ public class IssuesConverter {
                 if (null != issue.getVulnerableExpression())
                     res.setFile(issue.getVulnerableExpression().getFile());
                 // SCA-related descriptions are ugly: sometimes they do contain CVE ID only. Let's replace it with more descriptive data
-                for (Reports.Locale locale : res.getTitle().keySet()) {
+                for (Reports.Locale locale : Reports.Locale.values()) {
                     String title = Reports.Locale.RU == locale
                             ? "Уязвимый компонент" : "Vulnerable component";
                     title += " " + issue.getComponentName() + " " + issue.getComponentVersion();
                     if (StringUtils.isNotEmpty(res.getCveId()))
                         title += " (" + res.getCveId() + ")";
-                    res.getTitle().put(locale, title);
+                    dictionary.get(fingerprintId).get(locale).setTitle(title);
                 }
                 // As single file may be subject to a multiple vulnerabilities, we need to
                 // create separate issue for each fingerprint and use metadata values

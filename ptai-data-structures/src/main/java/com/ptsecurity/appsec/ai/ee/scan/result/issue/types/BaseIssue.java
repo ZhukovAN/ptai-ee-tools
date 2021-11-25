@@ -1,8 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.scan.result.issue.types;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.*;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -19,10 +17,11 @@ import java.util.UUID;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "Class")
+        property = "class")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = BlackBoxIssue.class, name = "BLACKBOX"),
         @JsonSubTypes.Type(value = ConfigurationIssue.class, name = "CONFIGURATION"),
@@ -40,6 +39,12 @@ public abstract class BaseIssue {
     protected String id;
 
     /**
+     * Issue group identifier. Null if issue doesn't belong to group
+     */
+    @JsonProperty("groupId")
+    protected String groupId;
+
+    /**
      * Unique issue type identifier
      */
     @JsonProperty("typeId")
@@ -47,6 +52,7 @@ public abstract class BaseIssue {
 
     /**
      * Scan result this issue belongs to
+     * TODO: Chek if we may get rid of this
      */
     @NonNull
     @JsonProperty("scanResultId")
@@ -59,18 +65,9 @@ public abstract class BaseIssue {
     /**
      * Issue type: vulnerability, weakness, SCA, DAST etc.
      */
-    @JsonProperty("class")
+    // @JsonProperty("class")
+    @JsonIgnore
     protected Type clazz;
-
-    /**
-     * Issue type. This field can't be one-to-one mapped to corresponding
-     * IssueBase field as fingerprint vulnerabilities always have null type. For
-     * those vulnerability types we need to create multiple instances: one
-     * for each of fingerprintIds
-     */
-    @NonNull
-    @JsonProperty("title")
-    protected Map<Reports.Locale, String> title;
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Level {

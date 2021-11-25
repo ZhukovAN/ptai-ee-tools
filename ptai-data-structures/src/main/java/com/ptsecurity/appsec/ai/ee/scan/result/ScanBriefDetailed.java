@@ -45,7 +45,7 @@ public class ScanBriefDetailed extends ScanBrief {
                 protected BaseIssue.Type clazz;
 
                 /**
-                 * See {@link BaseIssue#getTitle()} description
+                 * Issue title
                  */
                 @JsonProperty
                 protected Map<Reports.Locale, String> title;
@@ -172,20 +172,27 @@ public class ScanBriefDetailed extends ScanBrief {
     public static List<Details.ChartData.BaseIssueCount> createBaseIssueDistributionData(@NonNull final ScanResult scanResult) {
         Map<Details.ChartData.BaseIssueCountFields, Long> distribution = scanResult.getIssues().stream()
                 .collect(Collectors.groupingBy(
-                        issue -> Details.ChartData.BaseIssueCountFields.builder()
-                                .approvalState(issue.getApprovalState())
-                                .clazz(issue.getClazz())
-                                .title(issue.getTitle())
-                                .favorite(issue.getFavorite())
-                                .level(issue.getLevel())
-                                .newInScanResultId(issue.getNewInScanResultId())
-                                .suppressed(issue.getSuppressed())
-                                .suspected(issue.getSuspected())
-                                .suppressed(issue.getSuppressed())
-                                .scanMode(issue instanceof VulnerabilityIssue
-                                        ? ((VulnerabilityIssue) issue).getScanMode()
-                                        : VulnerabilityIssue.ScanMode.FROM_OTHER)
-                                .build(),
+                        issue -> {
+                            Map<Reports.Locale, String> title = new HashMap<>();
+                            for (Reports.Locale locale : Reports.Locale.values()) {
+                                String titleStr = scanResult.getI18n().get(issue.getTypeId()).get(locale).getTitle();
+                                title.put(locale, titleStr);
+                            }
+                            return Details.ChartData.BaseIssueCountFields.builder()
+                                    .approvalState(issue.getApprovalState())
+                                    .clazz(issue.getClazz())
+                                    .title(title)
+                                    .favorite(issue.getFavorite())
+                                    .level(issue.getLevel())
+                                    .newInScanResultId(issue.getNewInScanResultId())
+                                    .suppressed(issue.getSuppressed())
+                                    .suspected(issue.getSuspected())
+                                    .suppressed(issue.getSuppressed())
+                                    .scanMode(issue instanceof VulnerabilityIssue
+                                            ? ((VulnerabilityIssue) issue).getScanMode()
+                                            : VulnerabilityIssue.ScanMode.FROM_OTHER)
+                                    .build();
+                        },
                         Collectors.counting()));
         Comparator<Details.ChartData.BaseIssueCount> compareLevelTypeAndCount = Comparator
                 .comparing(Details.ChartData.BaseIssueCount::getLevel, Comparator.comparingInt(BaseIssue.Level::getValue).reversed())

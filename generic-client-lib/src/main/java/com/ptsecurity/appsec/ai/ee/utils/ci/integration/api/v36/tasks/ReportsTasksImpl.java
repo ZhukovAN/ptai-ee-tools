@@ -20,6 +20,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperation
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanResultHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.StringHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.NonNull;
@@ -142,6 +143,11 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
     @Override
     public void check(@NonNull RawData rawData) throws GenericException {}
 
+    @Override
+    public void check(Reports.@NonNull Sarif rawData) throws GenericException {
+
+    }
+
     /**
      * Generate reports for specific AST result. As this method may be called both
      * for AST job and for CLI reports generation we need to explicitly check reports
@@ -251,6 +257,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         // Save raw JSON report
         GenericAstTasks genericAstTasks = new Factory().genericAstTasks(client);
         ScanResult scanResult = genericAstTasks.getScanResult(projectId, scanResultId);
+        ScanResultHelper.apply(scanResult, rawData.getFilters());
         final ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
         File json = call(
                 () -> {

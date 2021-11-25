@@ -12,8 +12,6 @@ import org.kohsuke.stapler.QueryParameter;
 
 @ToString
 public class ScanSettingsUi extends ScanSettings {
-    public static final ScanSettingsDescriptor DESCRIPTOR = new Descriptor();
-
     @Getter
     private final String projectName;
 

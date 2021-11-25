@@ -304,6 +304,34 @@ public class Reports {
         @NonNull
         @JsonProperty
         public String fileName;
+
+        /**
+         * Report property that contain report generation filters
+         */
+        @JsonProperty
+        @Builder.Default
+        protected IssuesFilter filters = null;
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    @SuperBuilder
+    public static class Sarif {
+        /**
+         * File name where report should be saved to
+         */
+        @NonNull
+        @JsonProperty
+        public String fileName;
+
+        /**
+         * Report property that contain report generation filters
+         */
+        @JsonProperty
+        @Builder.Default
+        protected IssuesFilter filters = null;
     }
 
     /**
@@ -324,11 +352,14 @@ public class Reports {
 
     /**
      * Raw JSON report that is result of conversion from /api/Projects/{projectId}/scanResults/{scanResultId}/issues
-     * call result to PT ai version-independent {@link com.ptsecurity.appsec.ai.ee.scan.result.ScanResult}.
+     * call result to PT AI version-independent {@link com.ptsecurity.appsec.ai.ee.scan.result.ScanResult}.
      * If null then no report will be generated
      */
     @JsonProperty
     protected List<RawData> raw = new ArrayList<>();
+
+    @JsonProperty
+    protected List<Sarif> sarif = new ArrayList<>();
 
     /**
      * Builder-like method that adds reports and returns "this" instance
@@ -339,6 +370,7 @@ public class Reports {
         getReport().addAll(reports.getReport());
         getData().addAll(reports.getData());
         getRaw().addAll(reports.getRaw());
+        getSarif().addAll(reports.getSarif());
         return this;
     }
 }

@@ -1,16 +1,22 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters;
 
+import com.contrastsecurity.sarif.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.*;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.URI;
+import java.util.*;
 
+import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
+import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 @Slf4j

@@ -25,9 +25,12 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level.*;
 
@@ -271,5 +274,38 @@ public class JsonAstJobIT extends BaseAstIT {
         });
         Assertions.assertNotNull(secondScanResult);
         Assertions.assertTrue(firstScanResult.getIssues().size() > secondScanResult.getIssues().size());
+    }
+
+    @Test
+    @SneakyThrows
+    @DisplayName("Check raw report multiflow XSS representation via group Id")
+    public void checkMultiflow() {
+        Path sources = getSourcesRoot(PHP_SMOKE_MULTIFLOW);
+        Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
+
+        String jsonSettings = getResourceString(PHP_SMOKE_MULTIFLOW.getSettings());
+        AiProjScanSettings settings = JsonSettingsHelper.verify(jsonSettings);
+        settings.setProjectName("junit-" + UUID.randomUUID());
+        jsonSettings = JsonSettingsHelper.serialize(settings);
+
+        GenericAstJob astJob = JsonAstJobImpl.builder()
+                .async(false)
+                .fullScanMode(true)
+                .connectionSettings(CONNECTION_SETTINGS)
+                .console(System.out)
+                .sources(sources)
+                .destination(destination)
+                .jsonSettings(jsonSettings)
+                .build();
+        RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
+
+        AbstractJob.JobExecutionResult res = astJob.execute();
+        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+
+        Path rawPath = destination.resolve(rawData.getFileName());
+        ScanResult scanResult = createFaultTolerantObjectMapper().readValue(rawPath.toFile(), ScanResult.class);
+        Map<String, Long> groups = scanResult.getIssues().stream()
+                 .collect(Collectors.groupingBy(BaseIssue::getGroupId, Collectors.counting()));
+        Assertions.assertTrue(groups.values().stream().anyMatch(l -> l > 1));
     }
 }

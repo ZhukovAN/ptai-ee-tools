@@ -17,7 +17,7 @@ import java.util.ArrayList;
 @DisplayName("Test PT AI server v.3.6 REST API data structures conversion")
 public class ConverterTest extends BaseTest {
     @Test
-    @DisplayName("Convert DAST-only JSON scan results")
+    @DisplayName("Convert DAST-only JSON scan settings")
     @SneakyThrows
     public void convertDastOnlyJsonSettingsV36() {
         InputStream inputStream = getResourceStream("json/scan/settings/settings.dast.aiproj");

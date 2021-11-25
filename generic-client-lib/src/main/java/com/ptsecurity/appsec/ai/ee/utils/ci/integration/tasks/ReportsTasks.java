@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Data;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Sarif;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
@@ -21,6 +22,7 @@ public interface ReportsTasks {
     void check(@NonNull final Report report) throws GenericException;
     void check(@NonNull final Data data) throws GenericException;
     void check(@NonNull final RawData rawData) throws GenericException;
+    void check(@NonNull final Sarif rawData) throws GenericException;
 
     /**
      * Generate reports for specific AST result. As this method may be called both
@@ -38,6 +40,16 @@ public interface ReportsTasks {
 
     void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Report report, @NonNull final FileOperations fileOps) throws GenericException;
     void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Data data, @NonNull final FileOperations fileOps) throws GenericException;
+
+    /**
+     * Method saves "raw JSON" issues to file using task-specific file operations
+     * @param projectId Project identifier that raw scan results are to be saved as JSON
+     * @param scanResultId Scan result identifier that is to be exported as raw JSON
+     * @param rawData Raw JSON generation settings like file name etc
+     * @param fileOps File operations instance that is used to save results to local file.
+     *                Can't just use {@link java.io.File} as this methom may be called remotely
+     * @throws GenericException Something bad happened during file export. See {@link GenericException#getCause()} for details
+     */
     void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final RawData rawData, @NonNull final FileOperations fileOps) throws GenericException;
 
     UUID getDummyReportTemplateId(@NonNull final Locale locale) throws GenericException;

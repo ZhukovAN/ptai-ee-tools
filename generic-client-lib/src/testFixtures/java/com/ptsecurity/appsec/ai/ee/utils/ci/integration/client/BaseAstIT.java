@@ -45,6 +45,7 @@ public abstract class BaseAstIT extends BaseClientIT {
     public static final Project PHP_SMOKE_MISC = new Project("junit-it-php-smoke-misc", "code/php-smoke-misc.7z", "json/scan/settings/settings.php-smoke.aiproj");
     public static final Project PHP_SMOKE_MEDIUM = new Project("junit-it-php-smoke-medium", "code/php-smoke-medium.7z", "json/scan/settings/settings.php-smoke.aiproj");
     public static final Project PHP_SMOKE_HIGH = new Project("junit-it-php-smoke-high", "code/php-smoke-high.7z", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_MULTIFLOW = new Project("junit-it-php-smoke-multiflow", "code/php-smoke-multiflow.7z", "json/scan/settings/settings.php-smoke.aiproj");
 
     public Path getSourcesRoot(@NonNull final Project project) {
         return getPackedResourceFile(project.code);

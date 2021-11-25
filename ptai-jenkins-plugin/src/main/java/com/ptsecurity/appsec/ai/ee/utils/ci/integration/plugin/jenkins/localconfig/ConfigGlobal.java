@@ -14,8 +14,6 @@ import org.kohsuke.stapler.DataBoundConstructor;
 
 @ToString
 public class ConfigGlobal extends ConfigBase {
-    public static final ConfigBaseDescriptor DESCRIPTOR = new Descriptor();
-
     @Getter
     private final String configName;
 
