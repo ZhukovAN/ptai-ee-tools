@@ -26,6 +26,7 @@ public class Advanced extends Export {
 
     @Override
     public void apply(@NonNull JenkinsAstJob job) {
+        String json = job.replaceMacro(this.json);
         Reports reports = ReportUtils.validateJsonReports(json);
         new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Advanced(reports).attach(job);
     }

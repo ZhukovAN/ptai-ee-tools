@@ -44,8 +44,4 @@ public class TeamcityAstOperations implements AstOperations {
     public void scanCompleteCallback(@NonNull final ScanBrief scanBrief, @NonNull final ScanBriefDetailed.Performance performance) throws GenericException {
 
     }
-
-    public String replaceMacro(@NonNull String value, Map<String, String> replacements) {
-        return value;
-    }
 }

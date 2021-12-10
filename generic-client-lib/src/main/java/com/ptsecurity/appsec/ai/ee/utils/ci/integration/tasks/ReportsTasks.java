@@ -22,7 +22,8 @@ public interface ReportsTasks {
     void check(@NonNull final Report report) throws GenericException;
     void check(@NonNull final Data data) throws GenericException;
     void check(@NonNull final RawData rawData) throws GenericException;
-    void check(@NonNull final Sarif rawData) throws GenericException;
+    void check(@NonNull final Sarif sarif) throws GenericException;
+    void check(@NonNull final Reports.SonarGiif sonarGiif) throws GenericException;
 
     /**
      * Generate reports for specific AST result. As this method may be called both

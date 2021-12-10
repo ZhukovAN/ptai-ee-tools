@@ -334,6 +334,27 @@ public class Reports {
         protected IssuesFilter filters = null;
     }
 
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    @SuperBuilder
+    public static class SonarGiif {
+        /**
+         * File name where report should be saved to
+         */
+        @NonNull
+        @JsonProperty
+        public String fileName;
+
+        /**
+         * Report property that contain report generation filters
+         */
+        @JsonProperty
+        @Builder.Default
+        protected IssuesFilter filters = null;
+    }
+
     /**
      * List of human-readable reports to be generated. Such report type
      * generation requires template name, output format (HTML or PDF),
@@ -361,6 +382,9 @@ public class Reports {
     @JsonProperty
     protected List<Sarif> sarif = new ArrayList<>();
 
+    @JsonProperty
+    protected List<SonarGiif> sonarGiif = new ArrayList<>();
+
     /**
      * Builder-like method that adds reports and returns "this" instance
      * @param reports Reports to be added
@@ -371,6 +395,7 @@ public class Reports {
         getData().addAll(reports.getData());
         getRaw().addAll(reports.getRaw());
         getSarif().addAll(reports.getSarif());
+        getSonarGiif().addAll(reports.getSonarGiif());
         return this;
     }
 }

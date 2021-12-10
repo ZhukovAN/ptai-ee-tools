@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.export.RawJson
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.export.Sarif
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
 

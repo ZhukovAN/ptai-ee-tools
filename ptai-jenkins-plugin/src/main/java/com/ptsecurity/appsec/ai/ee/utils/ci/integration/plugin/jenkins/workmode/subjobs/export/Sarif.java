@@ -28,6 +28,8 @@ public class Sarif extends Export {
 
     @Override
     public void apply(@NonNull JenkinsAstJob job) {
+        String fileName = job.replaceMacro(this.fileName);
+        String filter = job.replaceMacro(this.filter);
         Reports.Sarif sarif = Reports.Sarif.builder()
                 .fileName(fileName)
                 .filters(StringUtils.isNotEmpty(filter) ? ReportUtils.validateJsonFilter(filter) : null)

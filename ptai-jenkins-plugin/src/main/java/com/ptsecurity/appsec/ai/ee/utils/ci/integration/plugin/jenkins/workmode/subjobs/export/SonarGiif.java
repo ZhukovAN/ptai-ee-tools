@@ -13,7 +13,7 @@ import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 @ToString
-public class RawJson extends Export {
+public class SonarGiif extends Export {
     @Getter
     private final String fileName;
 
@@ -21,7 +21,7 @@ public class RawJson extends Export {
     private final String filter;
 
     @DataBoundConstructor
-    public RawJson(final String fileName, final String filter) {
+    public SonarGiif(final String fileName, final String filter) {
         this.fileName = fileName;
         this.filter = filter;
     }
@@ -30,21 +30,21 @@ public class RawJson extends Export {
     public void apply(@NonNull JenkinsAstJob job) {
         String fileName = job.replaceMacro(this.fileName);
         String filter = job.replaceMacro(this.filter);
-        Reports.RawData rawData = Reports.RawData.builder()
+        Reports.SonarGiif sonarGiif = Reports.SonarGiif.builder()
                 .fileName(fileName)
                 .filters(StringUtils.isNotEmpty(filter) ? ReportUtils.validateJsonFilter(filter) : null)
                 .build();
-        new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson(rawData).attach(job);
+        new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif(sonarGiif).attach(job);
     }
 
     @Extension
-    @Symbol("rawJson")
+    @Symbol("sonarGiif")
     @SuppressWarnings("unused")
-    public static class RawJsonDescriptor extends ExportDescriptor {
+    public static class SonarGiifDescriptor extends ExportDescriptor {
         @Override
         @NonNull
         public String getDisplayName() {
-            return Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_label();
+            return Resources.i18n_ast_settings_mode_synchronous_subjob_export_sonargiif_label();
         }
     }
 }

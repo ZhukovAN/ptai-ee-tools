@@ -144,7 +144,12 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
     public void check(@NonNull RawData rawData) throws GenericException {}
 
     @Override
-    public void check(Reports.@NonNull Sarif rawData) throws GenericException {
+    public void check(Reports.@NonNull Sarif sarif) throws GenericException {
+
+    }
+
+    @Override
+    public void check(Reports.@NonNull SonarGiif sonarGiif) throws GenericException {
 
     }
 

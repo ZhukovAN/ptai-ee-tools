@@ -10,6 +10,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.operation
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.BuildInfo;
 import hudson.FilePath;
 import hudson.Launcher;
+import hudson.Util;
 import hudson.model.Run;
 import hudson.model.TaskListener;
 import lombok.Getter;
@@ -20,6 +21,7 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Getter
@@ -115,5 +117,13 @@ public class JenkinsAstJob extends GenericAstJob implements TextOutput {
         JobExecutionResult res = super.processException(e);
         plugin.setBuildResult(run, res, e);
         return res;
+    }
+
+    public String replaceMacro(@NonNull String value) {
+        return replaceMacro(value, getBuildInfo().getEnvVars());
+    }
+
+    public String replaceMacro(@NonNull String value, Map<String, String> replacements) {
+        return Util.replaceMacro(value, replacements);
     }
 }

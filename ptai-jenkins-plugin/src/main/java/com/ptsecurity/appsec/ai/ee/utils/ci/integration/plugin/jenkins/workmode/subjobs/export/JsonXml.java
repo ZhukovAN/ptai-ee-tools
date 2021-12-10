@@ -40,6 +40,8 @@ public class JsonXml extends Export {
 
     @Override
     public void apply(@NonNull JenkinsAstJob job) {
+        String fileName = job.replaceMacro(this.fileName);
+        String filter = job.replaceMacro(this.filter);
         Reports.Data data = Reports.Data.builder()
                 .locale(Reports.Locale.valueOf(locale))
                 .format(Reports.Data.Format.valueOf(format))

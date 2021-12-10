@@ -114,11 +114,6 @@ public abstract class BaseAstIT extends BaseClientIT {
         public void scanCompleteCallback(@NonNull ScanBrief scanBrief, @NonNull final ScanBriefDetailed.Performance performance) throws GenericException {
             System.out.println("Project scan finished");
         }
-
-        @Override
-        public String replaceMacro(@NonNull String value, Map<String, String> replacements) {
-            return value;
-        }
     }
 
     @SuperBuilder

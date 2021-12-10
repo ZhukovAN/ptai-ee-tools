@@ -148,3 +148,6 @@
 ### 20211125
 + [Fix] SignalR version changed to 6.0.0
 + [Feature] SARIF report generation added to Jenkins plugin
+### 20211210 
++ [Feature] Jenkins reports now support environment variables macro expansion for file / template names and for JSON filter
++ [Feature] SonarQube's [Generic Issue Import Format](https://docs.sonarqube.org/latest/analysis/generic-issue/) report generation added to Jenkins plugin

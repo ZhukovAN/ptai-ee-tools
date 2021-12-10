@@ -47,12 +47,12 @@ public class JenkinsAstOperations implements AstOperations {
 
         for (com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Transfer transfer : owner.getTransfers())
             transfers.addTransfer(Transfer.builder()
-                    .excludes(replaceMacro(transfer.getExcludes()))
+                    .excludes(owner.replaceMacro(transfer.getExcludes()))
                     .flatten(transfer.isFlatten())
                     .useDefaultExcludes(transfer.isUseDefaultExcludes())
-                    .includes(replaceMacro(transfer.getIncludes()))
+                    .includes(owner.replaceMacro(transfer.getIncludes()))
                     .patternSeparator(transfer.getPatternSeparator())
-                    .removePrefix(replaceMacro(transfer.getRemovePrefix()))
+                    .removePrefix(owner.replaceMacro(transfer.getRemovePrefix()))
                     .build());
         // Upload project sources
         FilePath remoteZip = RemoteFileUtils.collect(owner.getLauncher(), owner.getListener(), transfers, owner.getWorkspace().getRemote(), owner.isVerbose());
@@ -92,13 +92,5 @@ public class JenkinsAstOperations implements AstOperations {
         AstJobSingleResult action = new AstJobSingleResult(owner.getRun());
         action.setScanDataPacked(scanDataPacked);
         owner.getRun().addAction(action);
-    }
-
-    public String replaceMacro(@NonNull String value) {
-        return replaceMacro(value, owner.getBuildInfo().getEnvVars());
-    }
-
-    public String replaceMacro(@NonNull String value, Map<String, String> replacements) {
-        return Util.replaceMacro(value, replacements);
     }
 }

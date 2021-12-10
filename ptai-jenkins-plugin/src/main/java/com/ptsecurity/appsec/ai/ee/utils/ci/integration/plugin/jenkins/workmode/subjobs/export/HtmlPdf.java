@@ -45,6 +45,9 @@ public class HtmlPdf extends Export {
 
     @Override
     public void apply(@NonNull JenkinsAstJob job) {
+        String fileName = job.replaceMacro(this.fileName);
+        String template = job.replaceMacro(this.template);
+        String filter = job.replaceMacro(this.filter);
         Reports.Report report = Reports.Report.builder()
                 .locale(Reports.Locale.valueOf(locale))
                 .format(Reports.Report.Format.valueOf(format))

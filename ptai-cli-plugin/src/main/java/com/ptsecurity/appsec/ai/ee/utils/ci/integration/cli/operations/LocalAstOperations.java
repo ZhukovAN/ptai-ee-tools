@@ -54,8 +54,4 @@ public class LocalAstOperations implements AstOperations {
     public void scanCompleteCallback(@NonNull final ScanBrief scanBrief, @NonNull final ScanBriefDetailed.Performance performance)  {
         if (null != shutdown) shutdown.setStopped(true);
     }
-
-    public String replaceMacro(@NonNull String value, Map<String, String> replacements) {
-        return value;
-    }
 }

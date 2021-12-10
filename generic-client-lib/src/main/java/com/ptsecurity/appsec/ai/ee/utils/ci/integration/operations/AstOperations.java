@@ -45,15 +45,4 @@ public interface AstOperations {
      * @throws GenericException
      */
     void scanCompleteCallback(@NonNull final ScanBrief scanBrief, @NonNull final ScanBriefDetailed.Performance performance) throws GenericException;
-
-    /**
-     * Method replaces macro expressions like ${FOO} in the input text using dictionary. AstJob's
-     * method doesn't do any replacements as those are to be implemented in its descendants.
-     * For example, Jenkins plugin may override this implementation
-     * with hudson.Util.replaceMacro call
-     * @param value String with macro expressions to be replaced
-     * @param replacements Dictionary with name / value pairs
-     * @return String with macro substitutions complete
-     */
-    String replaceMacro(@NonNull final String value, final Map<String, String> replacements);
 }
