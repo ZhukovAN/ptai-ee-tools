@@ -144,7 +144,7 @@ public abstract class AstJob extends Project {
                 () -> scanApi.apiScanStartPost(startScanModel),
                 "PT AI project scan start failed");
 
-        info("Scan enqueued, PT AI AST result ID is " + scanResultId);
+        info("Scan enqueued, project name: %s, id: %s, result id: %s", name, id, scanResultId);
         astOps.scanStartedCallback(this, scanResultId);
 
         // Save result URL to artifacts
@@ -167,6 +167,8 @@ public abstract class AstJob extends Project {
 
         // Wait for AST to complete and process results
         waitForComplete(scanResultId);
+        info("Scan finished, project name: %s, id: %s, result id: %s", name, id, scanResultId);
+
         ScanResult scanResultV36 = ApiHelper.callApi(
                 () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdGet(finalProjectId, scanResultId),
                 "Get project scan result failed");
@@ -326,6 +328,7 @@ public abstract class AstJob extends Project {
                         ApiHelper.callApi(
                                 () -> fileOps.saveArtifact(r.getFileName(), data),
                                 "Report file save failed");
+                        info("Report saved to %s file. Project id: %s, scan result id: %s", r.getFileName(), projectId, scanResultId);
                     } catch (ApiException e) {
                         warning(e);
                     }
@@ -333,10 +336,12 @@ public abstract class AstJob extends Project {
         if (null != checkedReports.getRaw()) {
             // Save raw JSON report
             File json = getJsonResult(projectId, scanResultId);
-            for (Reports.RawData raw : checkedReports.getRaw())
+            for (Reports.RawData raw : checkedReports.getRaw()) {
                 ApiHelper.callApi(
                         () -> fileOps.saveArtifact(raw.getFileName(), json),
                         "Raw JSON result save failed");
+                info("Report saved to %s file. Project id: %s, scan result id: %s", raw.getFileName(), projectId, scanResultId);
+            }
             ApiHelper.callApi(
                     json::delete,
                     "Temporal file " + json.getPath() + " delete failed", true);

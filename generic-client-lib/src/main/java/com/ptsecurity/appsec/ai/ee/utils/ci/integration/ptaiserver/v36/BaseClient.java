@@ -264,7 +264,7 @@ public class BaseClient extends Base {
         });
 
         connection.on("ScanStarted", (data) -> {
-            info("Scan started");
+            info("Scan started. Project id: %s, scan result id: %s", data.getResult().getProjectId(), data.getResult().getId());
             log.trace(data.toString());
         }, ScanStartedEvent.class);
 

@@ -78,6 +78,7 @@ public class Utils extends BaseClient {
             @NonNull final UUID template, @NonNull final Reports.Locale locale,
             @NonNull final ReportFormatType type,
             @Nullable final Reports.IssuesFilterEx filters) throws ApiException {
+        info("Report generation started. Project id: %s, scan result id: %s, template: %s, locale: %s, type: %s", projectId, scanResultId, template, locale.getValue(), type.getValue());
         ReportGenerateModel model = new ReportGenerateModel()
                 .parameters(new UserReportParameters()
                         .includeDFD(true)
@@ -91,11 +92,11 @@ public class Utils extends BaseClient {
                 .localeId(locale.getValue());
 
         if (null != filters) model.setFilters(filters.convert());
-        fine("Generating report for project %s, scan result %s. Report template %s, type %s, locale %s", projectId, scanResultId, template, type, locale);
         File file = callApi(
                 () -> reportsApi.apiReportsGeneratePost(model),
                 "Report generation failed");
         fine("Report saved to %s file", file.getAbsolutePath());
+        info("Report generation complete. Project id: %s, scan result id: %s, template: %s, locale: %s, type: %s", projectId, scanResultId, template, locale.getValue(), type.getValue());
         return file;
     }
 
@@ -175,8 +176,11 @@ public class Utils extends BaseClient {
     }
 
     public File getJsonResult(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws ApiException {
-        return callApi(
+        info("Raw report generation started. Project id: %s, scan result id: %s", projectId, scanResultId);
+        File result = callApi(
                 () -> projectsApi.apiProjectsProjectIdScanResultsScanResultIdIssuesGet(projectId, scanResultId, null),
                 "PT AI project scan status JSON read failed");
+        info("Raw report generation complete. Project id: %s, scan result id: %s", projectId, scanResultId);
+        return result;
     }
 }
