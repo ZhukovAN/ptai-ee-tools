@@ -16,22 +16,26 @@ import java.util.stream.Collectors;
  */
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ScanBriefDetailed extends ScanBrief {
     @Getter
     @Setter
     @SuperBuilder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Details {
         @Getter
         @Setter
         @SuperBuilder
         @NoArgsConstructor
+        @AllArgsConstructor
         public static class ChartData {
 
             @Getter
             @Setter
             @SuperBuilder
             @NoArgsConstructor
+            @AllArgsConstructor
             public static class BaseIssueCountFields {
                 /**
                  * See {@link BaseIssue#getLevel()} description
@@ -92,6 +96,7 @@ public class ScanBriefDetailed extends ScanBrief {
             @Setter
             @SuperBuilder
             @NoArgsConstructor
+            @AllArgsConstructor
             public static class BaseIssueCount extends BaseIssueCountFields {
                 @JsonProperty
                 protected Long count;
@@ -117,6 +122,7 @@ public class ScanBriefDetailed extends ScanBrief {
     @Setter
     @SuperBuilder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Performance {
         @JsonProperty
         @Builder.Default

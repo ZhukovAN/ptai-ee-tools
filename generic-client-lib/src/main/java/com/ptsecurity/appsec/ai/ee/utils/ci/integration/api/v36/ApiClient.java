@@ -32,6 +32,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericExcept
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ApiClientHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.LoggingInterceptor;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +54,7 @@ import java.util.concurrent.BlockingQueue;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
 @Slf4j
-@VersionRange(min = { 3, 6, 4, 2805 }, max = { 3, 6, 5, 2875 })
+@VersionRange(min = { 3, 6, 4, 2805 }, max = { 3, 6, 9, 9999 })
 public class ApiClient extends AbstractApiClient {
     @Getter
     protected final String id = UUID.randomUUID().toString();
@@ -237,7 +238,7 @@ public class ApiClient extends AbstractApiClient {
         });
 
         connection.on("ScanStarted", (data) -> {
-            if (projectId != data.getResult().getProjectId())
+            if (!projectId.equals(data.getResult().getProjectId()))
                 log.trace("Skip ScanStarted event as its projectId != {}", projectId);
             else {
                 if (null != console) console.info("Scan started");
@@ -259,7 +260,7 @@ public class ApiClient extends AbstractApiClient {
         }, ScanResultRemovedEvent.class);
 
         connection.on("ScanProgress", (data) -> {
-            if (projectId != data.getId())
+            if (!scanResultId.equals(data.getScanResultId()))
                 log.trace("Skip ScanProgress event as its projectId != {}", projectId);
             else {
                 StringBuilder builder = new StringBuilder();
@@ -293,16 +294,18 @@ public class ApiClient extends AbstractApiClient {
         }, ScanProgressEvent.class);
 
         connection.on("ScanCompleted", (data) -> {
-            if (projectId != data.getResult().getProjectId())
+            if (!projectId.equals(data.getResult().getProjectId()))
                 log.trace("Skip ScanCompleted event as its projectId != {}", projectId);
             else
                 queue.add(Stage.DONE);
             log.trace(data.toString());
         }, ScanCompleteEvent.class);
 
-        subscribe(connection, projectId, scanResultId);
-
         return connection;
+    }
+
+    public void wait(@NonNull final HubConnection connection, @NonNull UUID projectId, @NonNull final UUID scanResultId) {
+        connection.start().doOnComplete(() -> subscribe(connection, projectId, scanResultId)).blockingAwait();
     }
 
     @Getter

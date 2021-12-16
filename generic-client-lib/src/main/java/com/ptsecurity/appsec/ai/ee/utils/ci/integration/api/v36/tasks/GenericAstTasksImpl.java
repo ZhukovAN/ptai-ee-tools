@@ -70,8 +70,9 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         BlockingQueue<Stage> queue = new LinkedBlockingDeque<>();
 
         HubConnection connection = client.createSignalrConnection(projectId, scanResultId, queue);
+        client.wait(connection, projectId, scanResultId);
+        // connection.start().blockingAwait();
 
-        connection.start().blockingAwait();
         Stage stage = queue.take();
         connection.stop();
 

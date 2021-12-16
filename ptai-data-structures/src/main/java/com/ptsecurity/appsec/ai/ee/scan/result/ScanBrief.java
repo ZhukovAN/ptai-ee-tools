@@ -18,6 +18,7 @@ import java.util.UUID;
  */
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ScanBrief {
     @NonNull
     @Getter
@@ -131,6 +132,7 @@ public class ScanBrief {
     @Setter
     @SuperBuilder
     @NoArgsConstructor
+    @AllArgsConstructor
     @ToString
     public static class Statistics {
         /**

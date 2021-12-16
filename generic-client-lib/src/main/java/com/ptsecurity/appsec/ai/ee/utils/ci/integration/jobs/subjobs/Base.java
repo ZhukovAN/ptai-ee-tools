@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
 @SuperBuilder
+@AllArgsConstructor
 public abstract class Base {
     @Getter @Setter
     protected GenericAstJob owner;

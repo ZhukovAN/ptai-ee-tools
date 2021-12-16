@@ -14,6 +14,7 @@ import java.io.PrintStream;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
 public abstract class AbstractTool implements TextOutput {
     public static final String DEFAULT_LOG_PREFIX = "[PT AI] ";
