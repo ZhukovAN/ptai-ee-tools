@@ -71,8 +71,6 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
 
         HubConnection connection = client.createSignalrConnection(projectId, scanResultId, queue);
 
-        connection.on("ScanCompleted", (data) -> queue.add(Stage.DONE), ScanCompleteEvent.class);
-
         connection.start().blockingAwait();
         Stage stage = queue.take();
         connection.stop();

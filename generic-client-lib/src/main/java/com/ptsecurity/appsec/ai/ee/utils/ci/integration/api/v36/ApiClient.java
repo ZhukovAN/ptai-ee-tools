@@ -22,6 +22,7 @@ import com.ptsecurity.appsec.ai.ee.server.v36.updateserver.api.VersionApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.VersionRange;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.EnumsConverter;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanCompleteEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanProgressEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanResultRemovedEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanStartedEvent;
@@ -236,8 +237,12 @@ public class ApiClient extends AbstractApiClient {
         });
 
         connection.on("ScanStarted", (data) -> {
-            if (null != console) console.info("Scan started");
-            if (null != eventConsumer) eventConsumer.process(data);
+            if (projectId != data.getResult().getProjectId())
+                log.trace("Skip ScanStarted event as its projectId != {}", projectId);
+            else {
+                if (null != console) console.info("Scan started");
+                if (null != eventConsumer) eventConsumer.process(data);
+            }
             log.trace(data.toString());
         }, ScanStartedEvent.class);
 
@@ -254,34 +259,48 @@ public class ApiClient extends AbstractApiClient {
         }, ScanResultRemovedEvent.class);
 
         connection.on("ScanProgress", (data) -> {
-            StringBuilder builder = new StringBuilder();
-            builder.append(Optional.of(data)
-                    .map(ScanProgressEvent::getProgress)
-                    .map(ScanProgress::getStage)
-                    .map(Stage::getValue)
-                    .orElse("data.progress.stage missing"));
-            Optional.of(data)
-                    .map(ScanProgressEvent::getProgress)
-                    .map(ScanProgress::getSubStage)
-                    .ifPresent(s -> builder.append(" -> ").append(s));
-            Optional.of(data)
-                    .map(ScanProgressEvent::getProgress)
-                    .map(ScanProgress::getValue)
-                    .ifPresent(s -> builder.append(" ").append(s).append("%"));
-            if (null != console) console.info(builder.toString());
-            // Failed or aborted scans do not generate ScanCompleted event but
-            // send ScanProgress event with stage failed or aborted
-            Optional<Stage> stage = Optional.of(data).map(ScanProgressEvent::getProgress).map(ScanProgress::getStage);
-            if (stage.isPresent()) {
-                if (null != eventConsumer) eventConsumer.process(EnumsConverter.convert(stage.get()));
-                if (null != queue && (Stage.ABORTED == stage.get() || Stage.FAILED == stage.get())) {
-                    if (null != console) console.info("Scan job was terminated with state " + stage.get());
-                    log.debug("ScanProgressEvent stage {} is to be put to AST task queue", stage.get());
-                    queue.add(stage.get());
+            if (projectId != data.getId())
+                log.trace("Skip ScanProgress event as its projectId != {}", projectId);
+            else {
+                StringBuilder builder = new StringBuilder();
+                builder.append(Optional.of(data)
+                        .map(ScanProgressEvent::getProgress)
+                        .map(ScanProgress::getStage)
+                        .map(Stage::getValue)
+                        .orElse("data.progress.stage missing"));
+                Optional.of(data)
+                        .map(ScanProgressEvent::getProgress)
+                        .map(ScanProgress::getSubStage)
+                        .ifPresent(s -> builder.append(" -> ").append(s));
+                Optional.of(data)
+                        .map(ScanProgressEvent::getProgress)
+                        .map(ScanProgress::getValue)
+                        .ifPresent(s -> builder.append(" ").append(s).append("%"));
+                if (null != console) console.info(builder.toString());
+                // Failed or aborted scans do not generate ScanCompleted event but
+                // send ScanProgress event with stage failed or aborted
+                Optional<Stage> stage = Optional.of(data).map(ScanProgressEvent::getProgress).map(ScanProgress::getStage);
+                if (stage.isPresent()) {
+                    if (null != eventConsumer) eventConsumer.process(EnumsConverter.convert(stage.get()));
+                    if (null != queue && (Stage.ABORTED == stage.get() || Stage.FAILED == stage.get())) {
+                        if (null != console) console.info("Scan job was terminated with state " + stage.get());
+                        log.debug("ScanProgressEvent stage {} is to be put to AST task queue", stage.get());
+                        queue.add(stage.get());
+                    }
                 }
             }
             log.trace(data.toString());
         }, ScanProgressEvent.class);
+
+        connection.on("ScanCompleted", (data) -> {
+            if (projectId != data.getResult().getProjectId())
+                log.trace("Skip ScanCompleted event as its projectId != {}", projectId);
+            else
+                queue.add(Stage.DONE);
+            log.trace(data.toString());
+        }, ScanCompleteEvent.class);
+
+        subscribe(connection, projectId, scanResultId);
 
         return connection;
     }
@@ -309,7 +328,7 @@ public class ApiClient extends AbstractApiClient {
             @NonNull final UUID scanResultId) {
         SubscriptionOnNotification subscription = new SubscriptionOnNotification();
         subscription.ClientId = id;
-        subscription.Ids.add(scanResultId);
+        // subscription.Ids.add(scanResultId);
 
         subscription.NotificationTypeName = "ScanStarted";
         connection.send("SubscribeOnNotification", subscription);
