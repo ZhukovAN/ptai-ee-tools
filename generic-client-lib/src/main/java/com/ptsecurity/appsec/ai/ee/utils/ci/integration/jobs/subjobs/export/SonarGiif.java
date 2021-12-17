@@ -266,8 +266,8 @@ public class SonarGiif extends Export {
         if (place.getEndLine() > 0 && place.getEndLine() > place.getBeginLine()) result.setEndLine(place.getEndLine());
 
         if (!place.getBeginColumn().equals(place.getEndColumn())) {
-            if (place.getBeginColumn() > 0) result.setStartColumn(place.getBeginColumn());
-            if (place.getEndColumn() > 0 && place.getEndColumn() > place.getBeginColumn()) result.setEndColumn(place.getEndColumn());
+            if (place.getBeginColumn() > 0) result.setStartColumn(place.getBeginColumn() - 1);
+            if (place.getEndColumn() > 0 && place.getEndColumn() > place.getBeginColumn()) result.setEndColumn(place.getEndColumn() - 1);
         }
 
         return result;
