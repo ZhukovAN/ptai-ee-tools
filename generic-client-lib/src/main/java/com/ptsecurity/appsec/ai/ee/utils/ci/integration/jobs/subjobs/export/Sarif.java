@@ -7,11 +7,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanResultHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +15,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
@@ -43,15 +38,12 @@ public class Sarif extends Export {
 
     @Override
     public void execute(@NonNull ScanBrief scanBrief) throws GenericException {
-        GenericAstTasks genericAstTasks = new Factory().genericAstTasks(owner.getClient());
-        ScanResult scanResult = genericAstTasks.getScanResult(scanBrief.getProjectId(), scanBrief.getId());
-        ScanResultHelper.apply(scanResult, sarif.getFilters());
-
-        SarifSchema210 sarif = convert(scanResult, true);
-        String sarifStr = CallHelper.call(
-                () -> BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(sarif),
-                "SARIF report serialization failed");
-        owner.getFileOps().saveArtifact(this.sarif.getFileName(), sarifStr.getBytes(StandardCharsets.UTF_8));
+        ReportsTasks reportsTasks = new Factory().reportsTasks(owner.getClient());
+        try {
+            reportsTasks.exportSarif(scanBrief.getProjectId(), scanBrief.getId(), sarif, owner.getFileOps());
+        } catch (GenericException e) {
+            owner.warning(e);
+        }
     }
 
     private static final Map<BaseIssue.Level, Result.Level> ISSUE_LEVEL_MAP = new HashMap<>();

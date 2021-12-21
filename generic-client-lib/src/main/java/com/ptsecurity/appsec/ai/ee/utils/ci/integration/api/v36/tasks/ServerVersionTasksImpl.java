@@ -21,7 +21,7 @@ public class ServerVersionTasksImpl extends AbstractTaskImpl implements ServerVe
     public Map<Component, String> current() throws GenericException {
         Map<Component, String> res = new HashMap<>();
         for (Component component : Component.values()) {
-            log.debug("Getting currrent {} component version", component.getValue());
+            log.debug("Getting current {} component version", component.getValue());
             String version = call(
                     () -> client.getVersionApi().apiVersionGetCurrentGet(component.getValue()),
                     "PT AI server component API current version get failed");

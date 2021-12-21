@@ -14,6 +14,7 @@ import lombok.experimental.SuperBuilder;
 public abstract class Base {
     @Getter @Setter
     protected GenericAstJob owner;
+
     public void attach(@NonNull final GenericAstJob owner) {
         this.owner = owner;
         this.owner.addSubJob(this);

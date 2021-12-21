@@ -52,7 +52,7 @@ public class FileCollector {
 
     @AllArgsConstructor
     @Getter
-    static class FileEntry {
+    public static class FileEntry {
         private final String fileName;
         private final String name;
     }

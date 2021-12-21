@@ -76,7 +76,7 @@ public class JenkinsAstOperations implements AstOperations {
             scanBriefDetailed = ScanBriefDetailed.create(scanBrief, performance);
         else {
             GenericAstTasks genericAstTasks = new Factory().genericAstTasks(owner.getClient());
-            log.debug("Getting full scan results for project:scan {}: {}", scanBrief.getProjectId(), scanBrief.getId());
+            log.debug("Getting full scan results for project id: {}, scan id: {}", scanBrief.getProjectId(), scanBrief.getId());
             try {
                 ScanResult scanResult = genericAstTasks.getScanResult(scanBrief);
                 log.debug("Converting full scan results to detailed scan brief and storing it as job result");

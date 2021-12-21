@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;

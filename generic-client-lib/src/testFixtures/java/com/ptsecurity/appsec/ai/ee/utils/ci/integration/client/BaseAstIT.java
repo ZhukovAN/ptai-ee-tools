@@ -11,6 +11,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AbstractFileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
@@ -117,16 +118,13 @@ public abstract class BaseAstIT extends BaseClientIT {
     }
 
     @SuperBuilder
-    public static class TestFileOperations implements FileOperations {
+    public static class TestFileOperations extends AbstractFileOperations implements FileOperations {
         protected GenericAstJob owner;
 
         protected Path destination;
 
-        public void saveArtifact(@NonNull String name, @NonNull File data) {
-            Assertions.assertDoesNotThrow(() -> FileUtils.moveFile(data, destination.resolve(name).toFile()));
-        }
-
-        public void saveArtifact(@NonNull String name, byte[] data) {
+        @Override
+        protected void saveInMemoryData(@NonNull String name, byte[] data) {
             Assertions.assertDoesNotThrow(() -> FileUtils.writeByteArrayToFile(destination.resolve(name).toFile(), data));
         }
     }

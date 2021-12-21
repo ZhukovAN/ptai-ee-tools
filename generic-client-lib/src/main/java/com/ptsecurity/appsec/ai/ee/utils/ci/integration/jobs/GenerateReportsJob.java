@@ -57,6 +57,6 @@ public class GenerateReportsJob extends AbstractJob implements FileSaver, TextOu
         if (null == scanResultId)
             throw GenericException.raise("Latest scan result not found", new IllegalArgumentException(projectName));
 
-        reportsTasks.generate(projectId, scanResultId, reports, fileOps);
+        reportsTasks.exportAdvanced(projectId, scanResultId, reports, fileOps);
     }
 }

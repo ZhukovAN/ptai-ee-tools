@@ -49,13 +49,14 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, GenericExce
     @SuppressWarnings("UnusedReturnValue")
     public static FilePath saveReport(Launcher launcher, TaskListener listener, String dir, String artifact, final byte[] data, boolean verbose) throws GenericException {
         BinaryReportSaver saver = new BinaryReportSaver(dir, artifact, data);
-        log.trace("Binary report saver created");
         saver.setConsole(listener.getLogger());
         saver.setVerbose(verbose);
-        log.trace("Save report using BinaryReportSaver instance: {}", saver);
-        return CallHelper.call(
+        log.trace("Started: save binary data as {} file to {} folder", artifact, dir);
+        FilePath result = CallHelper.call(
                 () -> Objects.requireNonNull(launcher.getChannel()).call(new RemoteFileUtils(saver)),
                 "Remote save report call failed");
+        log.trace("Finished: save binary data as {} file to {} folder", artifact, dir);
+        return result;
     }
 
     @Override
@@ -84,13 +85,14 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, GenericExce
             log.trace("Create binary report saver for {} artifact in {} folder", artifact, dir);
             this.dir = dir;
             this.artifact = artifact;
-            this.data = Arrays.copyOf(data, data.length);
+            this.data = (null == data) ? new byte[0] : Arrays.copyOf(data, data.length);
         }
 
         protected final String dir;
         protected final String artifact;
 
         @ToString.Exclude
+        @NonNull
         private final byte[] data;
 
         public File execute() throws GenericException {
@@ -100,10 +102,12 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, GenericExce
                 String fileName = CallHelper.call(
                         () -> destination.getFileName().toString(),
                         "Empty destination file name");
+
                 if (!destination.toFile().getParentFile().exists()) {
                     if (!destination.toFile().getParentFile().mkdirs())
                         throw new IOException("Failed to create folder structure for " + destination.toFile());
                 }
+
                 if (destination.toFile().exists()) {
                     log.warn("Existing report " + fileName + " will be overwritten");
                     if (!destination.toFile().delete())

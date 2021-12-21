@@ -146,13 +146,6 @@ subprojects {
     }
 }
 
-/*
-configure(allprojects - project(':ptai-i18n')) {
-    apply plugin: 'io.freefair.lombok'
-}
-*/
-
 wrapper {
-    // gradleVersion = '6.8.3'
     gradleVersion = '7.1'
 }

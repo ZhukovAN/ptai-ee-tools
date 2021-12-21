@@ -202,6 +202,7 @@ public class Reports {
     @SuperBuilder
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @NoArgsConstructor
+    @AllArgsConstructor
     @ToString
     public static abstract class AbstractReport {
         /**
@@ -234,6 +235,7 @@ public class Reports {
     @ToString(callSuper = true)
     @SuperBuilder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Data extends AbstractReport {
         /**
          * Default report locale to be used for new data exports
@@ -260,6 +262,7 @@ public class Reports {
     @ToString(callSuper = true)
     @SuperBuilder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Report extends AbstractReport {
 
         /**
@@ -296,6 +299,7 @@ public class Reports {
     @Setter
     @ToString
     @NoArgsConstructor
+    @AllArgsConstructor
     @SuperBuilder
     public static class RawData {
         /**
@@ -317,6 +321,7 @@ public class Reports {
     @Setter
     @ToString
     @NoArgsConstructor
+    @AllArgsConstructor
     @SuperBuilder
     public static class Sarif {
         /**
@@ -338,6 +343,7 @@ public class Reports {
     @Setter
     @ToString
     @NoArgsConstructor
+    @AllArgsConstructor
     @SuperBuilder
     public static class SonarGiif {
         /**

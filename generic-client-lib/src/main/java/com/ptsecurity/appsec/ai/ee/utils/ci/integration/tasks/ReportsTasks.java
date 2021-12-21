@@ -1,12 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Data;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Sarif;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
@@ -23,7 +18,7 @@ public interface ReportsTasks {
     void check(@NonNull final Data data) throws GenericException;
     void check(@NonNull final RawData rawData) throws GenericException;
     void check(@NonNull final Sarif sarif) throws GenericException;
-    void check(@NonNull final Reports.SonarGiif sonarGiif) throws GenericException;
+    void check(@NonNull final SonarGiif sonarGiif) throws GenericException;
 
     /**
      * Generate reports for specific AST result. As this method may be called both
@@ -37,10 +32,10 @@ public interface ReportsTasks {
      *                of {@link GenericAstJob#execute()} call
      * @throws GenericException Exception that contains details about failed report validation / generation
      */
-    void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Reports reports, @NonNull final FileOperations fileOps) throws GenericException;
+    void exportAdvanced(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Reports reports, @NonNull final FileOperations fileOps) throws GenericException;
 
-    void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Report report, @NonNull final FileOperations fileOps) throws GenericException;
-    void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Data data, @NonNull final FileOperations fileOps) throws GenericException;
+    void exportHtmlPdf(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Report report, @NonNull final FileOperations fileOps) throws GenericException;
+    void exportJsonXml(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Data data, @NonNull final FileOperations fileOps) throws GenericException;
 
     /**
      * Method saves "raw JSON" issues to file using task-specific file operations
@@ -51,21 +46,10 @@ public interface ReportsTasks {
      *                Can't just use {@link java.io.File} as this methom may be called remotely
      * @throws GenericException Something bad happened during file export. See {@link GenericException#getCause()} for details
      */
-    void generate(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final RawData rawData, @NonNull final FileOperations fileOps) throws GenericException;
+    void exportRawJson(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final RawData rawData, @NonNull final FileOperations fileOps) throws GenericException;
 
-    UUID getDummyReportTemplateId(@NonNull final Locale locale) throws GenericException;
-
-    File generateReport(
-            @NonNull final UUID projectId, @NonNull final UUID scanResultId,
-            @NonNull final UUID templateId, @NonNull final Locale locale,
-            @NonNull final Report.Format type,
-            final Reports.IssuesFilter filters) throws GenericException;
-
-    File generateReport(
-            @NonNull final UUID projectId, @NonNull final UUID scanResultId,
-            @NonNull final UUID templateId, @NonNull final Locale locale,
-            @NonNull final Data.Format type,
-            final Reports.IssuesFilter filters) throws GenericException;
+    void exportSarif(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Sarif sarif, @NonNull final FileOperations fileOps) throws GenericException;
+    void exportSonarGiif(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final SonarGiif sonarGiif, @NonNull final FileOperations fileOps) throws GenericException;
 
     List<String> listReportTemplates(Locale locale) throws GenericException;
 }

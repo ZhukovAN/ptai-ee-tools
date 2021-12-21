@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.o
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AbstractFileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.TeamcityAstJob;
 import lombok.Builder;
@@ -16,18 +17,13 @@ import java.nio.file.Path;
 
 @Builder
 @RequiredArgsConstructor
-public class TeamcityFileOperations implements FileOperations {
+public class TeamcityFileOperations extends AbstractFileOperations implements FileOperations {
     @NonNull
     protected final TeamcityAstJob owner;
 
+    @Override
     @SneakyThrows
-    public void saveArtifact(@NonNull String name, @NonNull File file) {
-        byte[] data = Files.readAllBytes(file.toPath());
-        saveArtifact(name, data);
-    }
-
-    @SneakyThrows
-    public void saveArtifact(@NonNull String name, @NonNull byte[] data) {
+    protected void saveInMemoryData(@NonNull String name, byte[] data) {
         Path out = owner.getAgent().getBuildTempDirectory().toPath()
                 .resolve(owner.getAgent().getProjectName())
                 .resolve(owner.getAgent().getBuildTypeName());

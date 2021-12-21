@@ -122,7 +122,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         // Start scan
         process(Stage.ENQUEUED);
         scanResultId = genericAstTasks.startScan(projectId, fullScanMode);
-        info("Scan enqueued, PT AI AST result ID is " + scanResultId);
+        info("Scan enqueued, project name: %s, id: %s, result id: %s", projectName, projectId, scanResultId);
         // Now we know scan result ID, so create initial scan brief with ID's and scan settings
         scanBrief = genericAstTasks.createScanBrief(projectId, scanResultId);
         scanBrief.setUseAsyncScan(async);
@@ -160,6 +160,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             abortedFromCi = true;
             stop();
         }
+        info("Scan finished, project name: %s, project id: %s, result id: %s", projectName, projectId, scanResultId);
         fine("Resulting state is " + scanBrief.getState());
         if (!EnumSet.of(DONE, ABORTED, FAILED).contains(scanBrief.getState()))
             throw GenericException.raise(

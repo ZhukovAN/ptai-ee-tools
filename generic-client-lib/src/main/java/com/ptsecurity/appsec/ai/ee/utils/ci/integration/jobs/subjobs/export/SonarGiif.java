@@ -188,15 +188,12 @@ public class SonarGiif extends Export {
 
     @Override
     public void execute(@NonNull ScanBrief scanBrief) throws GenericException {
-        GenericAstTasks genericAstTasks = new Factory().genericAstTasks(owner.getClient());
-        ScanResult scanResult = genericAstTasks.getScanResult(scanBrief.getProjectId(), scanBrief.getId());
-        ScanResultHelper.apply(scanResult, sonar.getFilters());
-
-        SonarGiifReport sonarGiif = convert(scanResult);
-        String sarifStr = CallHelper.call(
-                () -> BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(sonarGiif),
-                "SARIF report serialization failed");
-        owner.getFileOps().saveArtifact(this.sonar.getFileName(), sarifStr.getBytes(StandardCharsets.UTF_8));
+        ReportsTasks reportsTasks = new Factory().reportsTasks(owner.getClient());
+        try {
+            reportsTasks.exportSonarGiif(scanBrief.getProjectId(), scanBrief.getId(), sonar, owner.getFileOps());
+        } catch (GenericException e) {
+            owner.warning(e);
+        }
     }
 
     private static final Map<BaseIssue.Level, SonarGiifReport.Issue.Severity> ISSUE_LEVEL_MAP = new HashMap<>();
@@ -214,7 +211,6 @@ public class SonarGiif extends Export {
         ISSUE_TYPE_MAP.put(BaseIssue.Level.LOW, SonarGiifReport.Issue.Type.VULNERABILITY);
         ISSUE_TYPE_MAP.put(BaseIssue.Level.MEDIUM, SonarGiifReport.Issue.Type.VULNERABILITY);
         ISSUE_TYPE_MAP.put(BaseIssue.Level.HIGH, SonarGiifReport.Issue.Type.VULNERABILITY);
-
     }
 
     @SneakyThrows

@@ -4,7 +4,6 @@ import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -31,7 +30,7 @@ public class HtmlPdf extends Export {
             @NonNull final ScanBrief scanBrief) throws GenericException {
         ReportsTasks reportsTasks = new Factory().reportsTasks(owner.getClient());
         try {
-            reportsTasks.generate(scanBrief.getProjectId(), scanBrief.getId(), report, owner.getFileOps());
+            reportsTasks.exportHtmlPdf(scanBrief.getProjectId(), scanBrief.getId(), report, owner.getFileOps());
         } catch (GenericException e) {
             owner.warning(e);
         }
