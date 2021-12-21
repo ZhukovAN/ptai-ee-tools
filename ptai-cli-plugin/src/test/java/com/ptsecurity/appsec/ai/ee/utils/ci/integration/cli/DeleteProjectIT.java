@@ -85,4 +85,19 @@ class DeleteProjectIT extends BaseJsonIT {
         for (Pair<String, UUID> project : projects)
             Assertions.assertNull(projectTasks.searchProject(project.getLeft()));
     }
+
+    @Test
+    @DisplayName("Delete all junit-GUID-like projects")
+    public void deleteAllTestProjects() {
+        Integer res = new CommandLine(new Plugin()).execute(
+                "delete-project",
+                "--project-name-regexp", "junit-[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}",
+                "--yes",
+                "--url", URL,
+                "--truststore", PEM.toString(),
+                "--user", USER,
+                "--password", PASSWORD);
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+    }
+
 }

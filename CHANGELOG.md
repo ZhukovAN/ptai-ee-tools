@@ -144,7 +144,7 @@
 + [Feature] Support for PT AI 3.6.5.1541 added
 ### 20211102
 + [Fix] Integration tests for incremental scans are removed as those may fail
-+ [Feature] Jenkins plugin "fail-if-failed" / "Fail-if-unstable" and reports generation are merged to single UI that allows to manually define set of post-AST actions including reports generation, policy processing etc. 
++ [Feature] Jenkins plugin "fail-if-failed" / "fail-if-unstable" and reports generation are merged to single UI that allows to manually define set of post-AST actions including reports generation, policy processing etc. 
 ### 20211125
 + [Fix] SignalR version changed to 6.0.0
 + [Feature] SARIF report generation added to Jenkins plugin
