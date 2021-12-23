@@ -37,8 +37,8 @@ public class ReportsTest extends BaseTest {
         Assertions.assertEquals(2, reports.getData().size());
         Assertions.assertEquals(1, reports.getRaw().size());
 
-        Assertions.assertEquals(Reports.Report.Format.HTML, reports.getReport().get(0).format);
-        Assertions.assertEquals(Reports.Data.Format.XML, reports.getData().get(1).format);
+        Assertions.assertEquals(Reports.Report.Format.HTML, reports.getReport().get(0).getFormat());
+        Assertions.assertEquals(Reports.Data.Format.XML, reports.getData().get(1).getFormat());
     }
 
     @Test

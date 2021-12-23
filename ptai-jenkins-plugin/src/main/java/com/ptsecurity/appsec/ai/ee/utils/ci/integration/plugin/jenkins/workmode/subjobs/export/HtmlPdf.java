@@ -1,11 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.export;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.JenkinsAstJob;
 import hudson.Extension;
 import hudson.util.ListBoxModel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
@@ -32,15 +34,24 @@ public class HtmlPdf extends Export {
     @Getter
     private final String filter;
 
+    @Getter
+    protected boolean includeDfd;
+
+    @Getter
+    protected boolean includeGlossary;
+
     @DataBoundConstructor
     public HtmlPdf(final String format, final String template,
                    final String fileName, final String locale,
-                   final String filter) {
+                   final String filter,
+                   final boolean includeDfd, final boolean includeGlossary) {
         this.locale = locale;
         this.format = format;
         this.fileName = fileName;
         this.template = template;
         this.filter = filter;
+        this.includeDfd = includeDfd;
+        this.includeGlossary = includeGlossary;
     }
 
     @Override
@@ -53,6 +64,8 @@ public class HtmlPdf extends Export {
                 .format(Reports.Report.Format.valueOf(format))
                 .fileName(fileName)
                 .template(template)
+                .includeDfd(includeDfd)
+                .includeGlossary(includeGlossary)
                 .filters(StringUtils.isNotEmpty(filter) ? ReportUtils.validateJsonFilter(filter) : null)
                 .build();
         new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf(report).attach(job);

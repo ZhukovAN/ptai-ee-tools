@@ -29,13 +29,22 @@ public class JsonXml extends Export {
     @Getter
     private final String filter;
 
+    @Getter
+    protected boolean includeDfd;
+
+    @Getter
+    protected boolean includeGlossary;
+
     @DataBoundConstructor
     public JsonXml(final String format, final String fileName,
-                   final String locale, final String filter) {
+                   final String locale, final String filter,
+                   final boolean includeDfd, final boolean includeGlossary) {
         this.locale = locale;
         this.format = format;
         this.fileName = fileName;
         this.filter = filter;
+        this.includeDfd = includeDfd;
+        this.includeGlossary = includeGlossary;
     }
 
     @Override
@@ -46,6 +55,8 @@ public class JsonXml extends Export {
                 .locale(Reports.Locale.valueOf(locale))
                 .format(Reports.Data.Format.valueOf(format))
                 .fileName(fileName)
+                .includeDfd(includeDfd)
+                .includeGlossary(includeGlossary)
                 .filters(StringUtils.isNotEmpty(filter) ? ReportUtils.validateJsonFilter(filter) : null)
                 .build();
         new com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.JsonXml(data).attach(job);

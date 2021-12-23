@@ -35,7 +35,7 @@ public abstract class BaseCommand {
 
         @Getter
         @JsonProperty
-        private int code;
+        private final int code;
     }
 
     /**
@@ -79,6 +79,8 @@ public abstract class BaseCommand {
                             .fileName(reporting.data.file.normalize().toString())
                             .format(reporting.data.format)
                             .locale(reporting.data.locale)
+                            .includeDfd(reporting.data.includeDfd)
+                            .includeGlossary(reporting.data.includeGlossary)
                             .build());
                 if (null != reporting.report)
                     reports.getReport().add(Reports.Report.builder()
@@ -86,6 +88,8 @@ public abstract class BaseCommand {
                             .template(reporting.report.template)
                             .format(reporting.report.format)
                             .locale(reporting.report.locale)
+                            .includeDfd(reporting.report.includeDfd)
+                            .includeGlossary(reporting.report.includeGlossary)
                             .build());
                 if (null != reporting.raw)
                     reports.getRaw().add(Reports.RawData.builder()
@@ -182,6 +186,16 @@ public abstract class BaseCommand {
                 paramLabel = "<file>",
                 description = "File name where exported data is to be saved")
         public Path file;
+
+        @CommandLine.Option(
+                names = {"--data-include-dfd"}, order = 5,
+                description = "Enable this option if you want to add the dataflow diagram to the report")
+        protected boolean includeDfd = false;
+
+        @CommandLine.Option(
+                names = {"--data-include-glossary"}, order = 6,
+                description = "Enable this option if you want to add reference information about vulnerabilities to the report")
+        protected boolean includeGlossary = false;
     }
 
     /**
@@ -228,6 +242,16 @@ public abstract class BaseCommand {
                 paramLabel = "<file>",
                 description = "File name where generated report is to be saved")
         public Path file;
+
+        @CommandLine.Option(
+                names = {"--report-include-dfd"}, order = 5,
+                description = "Enable this option if you want to add the dataflow diagram to the report")
+        protected boolean includeDfd = false;
+
+        @CommandLine.Option(
+                names = {"--report-include-glossary"}, order = 6,
+                description = "Enable this option if you want to add reference information about vulnerabilities to the report")
+        protected boolean includeGlossary = false;
     }
 
     @CommandLine.Option(
@@ -245,6 +269,7 @@ public abstract class BaseCommand {
         @Setter
         @SuperBuilder
         @NoArgsConstructor
+        @AllArgsConstructor
         public static class LoginPassword {
             @CommandLine.Option(
                     names = {"--user"},

@@ -229,6 +229,43 @@ class GenerateReportIT extends BaseCliIT {
     }
 
     @SneakyThrows
+    @Test
+    @DisplayName("Generate reports with- and without DFD and glossary")
+    public void generateReportsWithAndWithoutDfdAndGlossary() {
+        Path reportMin = destination.resolve("minimal.html");
+        Path reportMax = destination.resolve("maximum.html");
+        Path reportDfd = destination.resolve("dfd.html");
+        Path reportGlossary = destination.resolve("glossary.html");
+
+        final String scanResultId = getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName()).toString();
+
+        for (Path report : new Path[] { reportMin, reportMax, reportDfd, reportGlossary }) {
+            List<String> args = new ArrayList<>(Arrays.asList(
+                    "generate-report",
+                    "--url", URL,
+                    "--truststore", PEM.toString(),
+                    "--token", TOKEN,
+                    "--output", destination.toString(),
+                    "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
+                    "--scan-result-id", scanResultId,
+                    "--report-file", report.getFileName().toString(),
+                    "--report-template", "Scan results report",
+                    "--report-locale", EN.name(),
+                    "--report-format", HTML.name()));
+            if (report.equals(reportMax) || report.equals(reportDfd)) args.add("--report-include-dfd");
+            if (report.equals(reportMax) || report.equals(reportGlossary)) args.add("--report-include-glossary");
+            Integer res = new CommandLine(new Plugin()).execute(args.toArray(new String[0]));
+            Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+        }
+        Assertions.assertTrue(reportMin.toFile().length() < reportDfd.toFile().length());
+        Assertions.assertTrue(reportMin.toFile().length() < reportGlossary.toFile().length());
+        Assertions.assertTrue(reportMin.toFile().length() < reportMax.toFile().length());
+
+        Assertions.assertTrue(reportDfd.toFile().length() < reportMax.toFile().length());
+        Assertions.assertTrue(reportGlossary.toFile().length() < reportMax.toFile().length());
+    }
+
+    @SneakyThrows
     protected static void checkReports(@NonNull final Path reportsJson, @NonNull final Path destination) {
         ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
         Reports reports = mapper.readValue(reportsJson.toFile(), Reports.class);

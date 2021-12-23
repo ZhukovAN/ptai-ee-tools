@@ -26,6 +26,20 @@ f.entry(
     )
 }
 
+f.entry(
+        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_includedfd_label(),
+        field: 'includeDfd',
+        default: 'true') {
+    f.checkbox()
+}
+
+f.entry(
+        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_includeglossary_label(),
+        field: 'includeGlossary',
+        default: 'true') {
+    f.checkbox()
+}
+
 f.advanced() {
     f.entry(
             title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_filter_label(),

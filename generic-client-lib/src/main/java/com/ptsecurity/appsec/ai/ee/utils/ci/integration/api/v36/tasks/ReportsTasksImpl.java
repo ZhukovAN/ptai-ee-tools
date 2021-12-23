@@ -31,16 +31,13 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.text.similarity.CosineDistance;
 
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
@@ -69,7 +66,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
             for (String template : templates) existingTemplates.add(new ImmutablePair<>(locale, template));
             // Check if all the required report templates are present in list
             reports.getReport().stream()
-                    .filter(r -> locale.equals(r.locale))
+                    .filter(r -> locale.equals(r.getLocale()))
                     .map(Report::getTemplate)
                     .forEach(t -> {
                         if (!templates.contains(t)) missingTemplates.add(new ImmutablePair<>(locale, t));
@@ -218,8 +215,8 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         log.trace("Create report generation model and apply filters");
         ReportGenerateModel model = new ReportGenerateModel()
                 .parameters(new UserReportParameters()
-                        .includeDFD(true)
-                        .includeGlossary(true)
+                        .includeDFD(report.isIncludeDfd())
+                        .includeGlossary(report.isIncludeGlossary())
                         .useFilters(null != report.getFilters())
                         .formatType(ReportsConverter.convert(report.getFormat()))
                         .reportTemplateId(templateModel.getId())
@@ -252,8 +249,8 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
     protected void exportJsonXml(@NonNull UUID projectId, @NonNull UUID scanResultId, @NonNull Data data, @NonNull UUID dummyTemplateId, @NonNull FileOperations fileOps) throws GenericException {
         ReportGenerateModel model = new ReportGenerateModel()
                 .parameters(new UserReportParameters()
-                        .includeDFD(true)
-                        .includeGlossary(true)
+                        .includeDFD(data.isIncludeDfd())
+                        .includeGlossary(data.isIncludeGlossary())
                         .useFilters(null != data.getFilters())
                         .formatType(ReportsConverter.convert(data.getFormat()))
                         .reportTemplateId(dummyTemplateId)

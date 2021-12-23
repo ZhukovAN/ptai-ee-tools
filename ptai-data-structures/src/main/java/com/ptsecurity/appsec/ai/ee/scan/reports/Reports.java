@@ -210,14 +210,22 @@ public class Reports {
          */
         @NonNull
         @JsonProperty
-        public String fileName;
+        protected String fileName;
 
         /**
          * Report locale
          */
         @NonNull
         @JsonProperty
-        public Locale locale;
+        protected Locale locale;
+
+        @JsonProperty
+        @Builder.Default
+        protected boolean includeDfd = true;
+
+        @JsonProperty
+        @Builder.Default
+        protected boolean includeGlossary = true;
 
         /**
          * Report property that contain report generation filters
@@ -253,7 +261,7 @@ public class Reports {
 
         @NonNull
         @JsonProperty
-        public Format format;
+        protected Format format;
     }
 
 
@@ -292,7 +300,7 @@ public class Reports {
 
         @NonNull
         @JsonProperty
-        public Format format;
+        protected Format format;
     }
 
     @Getter
@@ -307,7 +315,7 @@ public class Reports {
          */
         @NonNull
         @JsonProperty
-        public String fileName;
+        protected String fileName;
 
         /**
          * Report property that contain report generation filters
@@ -329,7 +337,7 @@ public class Reports {
          */
         @NonNull
         @JsonProperty
-        public String fileName;
+        protected String fileName;
 
         /**
          * Report property that contain report generation filters
@@ -351,7 +359,7 @@ public class Reports {
          */
         @NonNull
         @JsonProperty
-        public String fileName;
+        protected String fileName;
 
         /**
          * Report property that contain report generation filters
