@@ -151,3 +151,8 @@
 ### 20211210 
 + [Feature] Jenkins reports now support environment variables macro expansion for file / template names and for JSON filter
 + [Feature] SonarQube's [Generic Issue Import Format](https://docs.sonarqube.org/latest/analysis/generic-issue/) report generation added to Jenkins plugin
+### 20211223
++ [Feature] "Include DFD" and "Include glossary" options are added to Jenkins and CLI plugins
+### 20211224
++ [Feature] SARIF and SonarQube GIIF reports are added to CLI
++ [Feature] SARIF and SonarQube GIIF reports are added to TeamCity (no filtering yet)

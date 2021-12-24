@@ -42,6 +42,16 @@ public class ReportsHelper {
             report.setFileName(data.get(REPORTING_RAWDATA_FILE));
             res.getRaw().add(report);
         }
+        if (TRUE.equals(data.getOrDefault(REPORTING_SARIF, Defaults.REPORTING_SARIF))) {
+            Reports.Sarif report = new Reports.Sarif();
+            report.setFileName(data.get(REPORTING_SARIF_FILE));
+            res.getSarif().add(report);
+        }
+        if (TRUE.equals(data.getOrDefault(REPORTING_SONARGIIF, Defaults.REPORTING_SONARGIIF))) {
+            Reports.SonarGiif report = new Reports.SonarGiif();
+            report.setFileName(data.get(REPORTING_SONARGIIF_FILE));
+            res.getSonarGiif().add(report);
+        }
         if (TRUE.equals(data.getOrDefault(REPORTING_JSON, Defaults.REPORTING_JSON)))
             res.append(ReportUtils.validateJsonReports(data.get(REPORTING_JSON_SETTINGS)));
 

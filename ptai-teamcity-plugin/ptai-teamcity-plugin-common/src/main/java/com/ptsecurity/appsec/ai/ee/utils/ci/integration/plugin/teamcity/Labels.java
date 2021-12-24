@@ -77,6 +77,14 @@ public class Labels {
      */
     public static final String REPORTING_RAWDATA = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_label();
     /**
+     * See {@link Params#REPORTING_SARIF}
+     */
+    public static final String REPORTING_SARIF = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sarif_label();
+    /**
+     * See {@link Params#REPORTING_SONARGIIF}
+     */
+    public static final String REPORTING_SONARGIIF = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sonargiif_label();
+    /**
      * See {@link Params#REPORTING_JSON}
      */
     public static final String REPORTING_JSON = Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_label();
@@ -130,6 +138,16 @@ public class Labels {
      * See {@link Params#REPORTING_RAWDATA_FILE}
      */
     public static final String REPORTING_RAWDATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_file_label();
+
+    /**
+     * See {@link Params#REPORTING_SARIF_FILE}
+     */
+    public static final String REPORTING_SARIF_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sarif_file_label();
+
+    /**
+     * See {@link Params#REPORTING_SONARGIIF_FILE}
+     */
+    public static final String REPORTING_SONARGIIF_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sonargiif_file_label();
 
     /**
      * See {@link Params#REPORTING_JSON_SETTINGS}

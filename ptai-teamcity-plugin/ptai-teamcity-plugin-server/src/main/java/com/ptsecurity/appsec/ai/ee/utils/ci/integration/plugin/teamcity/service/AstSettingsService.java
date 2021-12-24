@@ -280,6 +280,12 @@ public class AstSettingsService {
         if (bean.isTrue(REPORTING_RAWDATA) && bean.empty(REPORTING_RAWDATA_FILE))
             results.add(REPORTING_RAWDATA_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_file_message_empty());
 
+        if (bean.isTrue(REPORTING_SARIF) && bean.empty(REPORTING_SARIF_FILE))
+            results.add(REPORTING_SARIF_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_sarif_file_message_empty());
+
+        if (bean.isTrue(REPORTING_SONARGIIF) && bean.empty(REPORTING_SONARGIIF_FILE))
+            results.add(REPORTING_SONARGIIF_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_sonargiif_file_message_empty());
+
         if (bean.isTrue(REPORTING_JSON)) {
             if (bean.empty(REPORTING_JSON_SETTINGS))
                 results.add(REPORTING_JSON_SETTINGS, Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_empty());

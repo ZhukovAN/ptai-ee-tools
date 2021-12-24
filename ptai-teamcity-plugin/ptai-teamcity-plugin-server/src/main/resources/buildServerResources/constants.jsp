@@ -162,6 +162,24 @@
 <c:set var="HINT_REPORTING_RAWDATA_FILE" value="<%=Hints.REPORTING_RAWDATA_FILE%>"/>
 
 
+<c:set var="REPORTING_SARIF" value="<%=Params.REPORTING_SARIF%>"/>
+<c:set var="LABEL_REPORTING_SARIF" value="<%=Labels.REPORTING_SARIF%>"/>
+<c:set var="HINT_REPORTING_SARIF" value="<%=Hints.REPORTING_SARIF%>"/>
+
+<c:set var="REPORTING_SARIF_FILE" value="<%=Params.REPORTING_SARIF_FILE%>"/>
+<c:set var="LABEL_REPORTING_SARIF_FILE" value="<%=Labels.REPORTING_SARIF_FILE%>"/>
+<c:set var="HINT_REPORTING_SARIF_FILE" value="<%=Hints.REPORTING_SARIF_FILE%>"/>
+
+
+<c:set var="REPORTING_SONARGIIF" value="<%=Params.REPORTING_SONARGIIF%>"/>
+<c:set var="LABEL_REPORTING_SONARGIIF" value="<%=Labels.REPORTING_SONARGIIF%>"/>
+<c:set var="HINT_REPORTING_SONARGIIF" value="<%=Hints.REPORTING_SONARGIIF%>"/>
+
+<c:set var="REPORTING_SONARGIIF_FILE" value="<%=Params.REPORTING_SONARGIIF_FILE%>"/>
+<c:set var="LABEL_REPORTING_SONARGIIF_FILE" value="<%=Labels.REPORTING_SONARGIIF_FILE%>"/>
+<c:set var="HINT_REPORTING_SONARGIIF_FILE" value="<%=Hints.REPORTING_SONARGIIF_FILE%>"/>
+
+
 <c:set var="REPORTING_JSON" value="<%=Params.REPORTING_JSON%>"/>
 <c:set var="LABEL_REPORTING_JSON" value="<%=Labels.REPORTING_JSON%>"/>
 <c:set var="HINT_REPORTING_JSON" value="<%=Hints.REPORTING_JSON%>"/>

@@ -106,6 +106,18 @@ public class Params {
     public static final String REPORTING_RAWDATA = PARAM("ReportingRawData");
 
     /**
+     * If this field value equals to {@link Constants#TRUE} then raw vulnerabilities data will be exported as
+     * SARIF JSON file. User also need to provide output file name
+     */
+    public static final String REPORTING_SARIF = PARAM("ReportingSarif");
+
+    /**
+     * If this field value equals to {@link Constants#TRUE} then raw vulnerabilities data will be exported as
+     * SonarQube GIIF JSON file. User also need to provide output file name
+     */
+    public static final String REPORTING_SONARGIIF = PARAM("ReportingSonarGiif");
+
+    /**
      * If this field value equals to {@link Constants#TRUE} then JSON-defined
      * reports and data exports will be done
      */
@@ -170,6 +182,18 @@ public class Params {
      * contain name of the file where raw AST data will be saved to
      */
     public static final String REPORTING_RAWDATA_FILE = PARAM("ReportingRawDataFile");
+
+    /**
+     * If {@link Params#REPORTING_SARIF} is on then this field is to
+     * contain name of the file where raw SARIF JSON data will be saved to
+     */
+    public static final String REPORTING_SARIF_FILE = PARAM("ReportingSarifFile");
+
+    /**
+     * If {@link Params#REPORTING_SONARGIIF} is on then this field is to
+     * contain name of the file where SonarQube GIIF JSON data will be saved to
+     */
+    public static final String REPORTING_SONARGIIF_FILE = PARAM("ReportingSonarGiifFile");
 
     /**
      * If {@link Params#REPORTING_JSON} is on then this field is to

@@ -110,6 +110,22 @@
             BS.MultilineProperties.updateVisible();
         };
 
+        ptaiReportingSarifShowHide = function (show) {
+            if (true == show)
+                BS.Util.show('row_${REPORTING_SARIF_FILE}');
+            else
+                BS.Util.hide('row_${REPORTING_SARIF_FILE}');
+            BS.MultilineProperties.updateVisible();
+        };
+
+        ptaiReportingSonarGiifShowHide = function (show) {
+            if (true == show)
+                BS.Util.show('row_${REPORTING_SONARGIIF_FILE}');
+            else
+                BS.Util.hide('row_${REPORTING_SONARGIIF_FILE}');
+            BS.MultilineProperties.updateVisible();
+        };
+
         ptaiReportingJsonShowHide = function (show) {
             if (true == show)
                 BS.Util.show('row_${REPORTING_JSON_SETTINGS}');
@@ -130,6 +146,14 @@
             ptaiReportingRawDataShowHide($('${REPORTING_RAWDATA}').checked)
         };
 
+        ptaiReportingSarifClick = function () {
+            ptaiReportingSarifShowHide($('${REPORTING_SARIF}').checked)
+        };
+
+        ptaiReportingSonarGiifClick = function () {
+            ptaiReportingSonarGiifShowHide($('${REPORTING_SONARGIIF}').checked)
+        };
+
         ptaiReportingJsonClick = function () {
             ptaiReportingJsonShowHide($('${REPORTING_JSON}').checked)
         };
@@ -140,6 +164,8 @@
             'row_${REPORTING_REPORT}',
             'row_${REPORTING_DATA}',
             'row_${REPORTING_RAWDATA}',
+            'row_${REPORTING_SARIF}',
+            'row_${REPORTING_SONARGIIF}',
             'row_${REPORTING_JSON}' ];
 
         ptaiAstWorkModeChange = function () {
@@ -149,6 +175,8 @@
                 ptaiReportingReportShowHide(false);
                 ptaiReportingDataShowHide(false);
                 ptaiReportingRawDataShowHide(false);
+                ptaiReportingSarifShowHide(false);
+                ptaiReportingSonarGiifShowHide(false);
                 ptaiReportingJsonShowHide(false);
             }
             if (mode === '${AST_MODE_SYNC}') {
@@ -156,6 +184,8 @@
                 ptaiReportingReportClick();
                 ptaiReportingDataClick();
                 ptaiReportingRawDataClick();
+                ptaiReportingSarifClick();
+                ptaiReportingSonarGiifClick();
                 ptaiReportingJsonClick();
             }
             BS.MultilineProperties.updateVisible();
@@ -502,6 +532,44 @@
         <td class="noBorder dense">
             <props:textProperty name="${REPORTING_RAWDATA_FILE}" className="longField"/>
             <span class="smallNote">${HINT_REPORTING_RAWDATA_FILE}</span>
+        </td>
+    </tr>
+
+    <tr id="row_${REPORTING_SARIF}">
+        <th class="noBorder dense">
+            <label for="${REPORTING_SARIF}">${LABEL_REPORTING_SARIF}</label>
+        </th>
+        <td>
+            <props:checkboxProperty name="${REPORTING_SARIF}" onclick="ptaiReportingSarifClick()"/>
+            <span class="smallNote">${HINT_REPORTING_SARIF}</span>
+        </td>
+    </tr>
+    <tr id="row_${REPORTING_SARIF_FILE}">
+        <th class="noBorder dense">
+            <label for="${REPORTING_SARIF_FILE}">${LABEL_REPORTING_SARIF_FILE}<l:star/></label>
+        </th>
+        <td class="noBorder dense">
+            <props:textProperty name="${REPORTING_SARIF_FILE}" className="longField"/>
+            <span class="smallNote">${HINT_REPORTING_SARIF_FILE}</span>
+        </td>
+    </tr>
+
+    <tr id="row_${REPORTING_SONARGIIF}">
+        <th class="noBorder dense">
+            <label for="${REPORTING_SONARGIIF}">${LABEL_REPORTING_SONARGIIF}</label>
+        </th>
+        <td>
+            <props:checkboxProperty name="${REPORTING_SONARGIIF}" onclick="ptaiReportingSonarGiifClick()"/>
+            <span class="smallNote">${HINT_REPORTING_SONARGIIF}</span>
+        </td>
+    </tr>
+    <tr id="row_${REPORTING_SONARGIIF_FILE}">
+        <th class="noBorder dense">
+            <label for="${REPORTING_SONARGIIF_FILE}">${LABEL_REPORTING_SONARGIIF_FILE}<l:star/></label>
+        </th>
+        <td class="noBorder dense">
+            <props:textProperty name="${REPORTING_SONARGIIF_FILE}" className="longField"/>
+            <span class="smallNote">${HINT_REPORTING_SONARGIIF_FILE}</span>
         </td>
     </tr>
 

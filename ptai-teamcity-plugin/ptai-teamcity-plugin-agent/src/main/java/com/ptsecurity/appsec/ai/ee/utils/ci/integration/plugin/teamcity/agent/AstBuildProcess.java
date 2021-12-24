@@ -10,9 +10,7 @@ import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.JsonXml;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstUnstable;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
@@ -140,6 +138,10 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                 JsonXml.builder().owner(job).data(data).build().attach(job);
             for (RawData rawData : reports.getRaw())
                 RawJson.builder().owner(job).rawData(rawData).build().attach(job);
+            for (Reports.Sarif sarif : reports.getSarif())
+                Sarif.builder().owner(job).sarif(sarif).build().attach(job);
+            for (Reports.SonarGiif sonarGiif : reports.getSonarGiif())
+                SonarGiif.builder().owner(job).sonar(sonarGiif).build().attach(job);
         }
         if (failIfFailed) new FailIfAstFailed().attach(job);
         if (failIfUnstable) new FailIfAstUnstable().attach(job);

@@ -132,6 +132,16 @@ public class Defaults {
     public static final String REPORTING_RAWDATA = FALSE;
 
     /**
+     * See {@link Params#REPORTING_SARIF}
+     */
+    public static final String REPORTING_SARIF = FALSE;
+
+    /**
+     * See {@link Params#REPORTING_GIIF}
+     */
+    public static final String REPORTING_SONARGIIF = FALSE;
+
+    /**
      * See {@link Params#REPORTING_JSON}
      */
     public static final String REPORTING_JSON = FALSE;
@@ -185,6 +195,16 @@ public class Defaults {
      * See {@link Params#REPORTING_RAWDATA_FILE}
      */
     public static final String REPORTING_RAWDATA_FILE = EMPTY;
+
+    /**
+     * See {@link Params#REPORTING_SARIF_FILE}
+     */
+    public static final String REPORTING_SARIF_FILE = EMPTY;
+
+    /**
+     * See {@link Params#REPORTING_SONARGIIF_FILE}
+     */
+    public static final String REPORTING_SONARGIIF_FILE = EMPTY;
 
     /**
      * See {@link Params#REPORTING_JSON_SETTINGS}

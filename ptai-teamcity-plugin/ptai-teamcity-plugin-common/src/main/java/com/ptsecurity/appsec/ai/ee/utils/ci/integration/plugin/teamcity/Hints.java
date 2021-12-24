@@ -76,6 +76,14 @@ public class Hints {
      */
     public static final String REPORTING_RAWDATA = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_hint();
     /**
+     * See {@link Params#REPORTING_SARIF}
+     */
+    public static final String REPORTING_SARIF = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sarif_hint();
+    /**
+     * See {@link Params#REPORTING_SONARGIIF}
+     */
+    public static final String REPORTING_SONARGIIF = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sonargiif_hint();
+    /**
      * See {@link Params#REPORTING_JSON}
      */
     public static final String REPORTING_JSON = Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_hint();
@@ -129,6 +137,16 @@ public class Hints {
      * See {@link Params#REPORTING_RAWDATA_FILE}
      */
     public static final String REPORTING_RAWDATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_file_hint();
+
+    /**
+     * See {@link Params#REPORTING_SARIF_FILE}
+     */
+    public static final String REPORTING_SARIF_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sarif_file_hint();
+
+    /**
+     * See {@link Params#REPORTING_SONARGIIF_FILE}
+     */
+    public static final String REPORTING_SONARGIIF_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sonargiif_file_hint();
 
     /**
      * See {@link Params#REPORTING_JSON_SETTINGS}
