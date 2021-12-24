@@ -95,6 +95,14 @@ public abstract class BaseCommand {
                     reports.getRaw().add(Reports.RawData.builder()
                             .fileName(reporting.raw.normalize().toString())
                             .build());
+                if (null != reporting.sarif)
+                    reports.getSarif().add(Reports.Sarif.builder()
+                            .fileName(reporting.sarif.file.normalize().toString())
+                            .build());
+                if (null != reporting.sonarGiif)
+                    reports.getSonarGiif().add(Reports.SonarGiif.builder()
+                            .fileName(reporting.sonarGiif.file.normalize().toString())
+                            .build());
                 return reports;
             } else {
                 // Load Reports instance from JSON file
@@ -128,7 +136,7 @@ public abstract class BaseCommand {
          * includes format (XML or JSON), locate and optional filters
          */
         @CommandLine.ArgGroup(exclusive = false)
-        Data data = null;
+        public Data data = null;
 
         /**
          * Human-readable report definition that includes
@@ -147,6 +155,12 @@ public abstract class BaseCommand {
                 paramLabel = "<file>",
                 description = "JSON file where raw issues data are to be saved")
         public Path raw = null;
+
+        @CommandLine.ArgGroup(exclusive = false)
+        public Sarif sarif = null;
+
+        @CommandLine.ArgGroup(exclusive = false)
+        public SonarGiif sonarGiif = null;
     }
 
     /**
@@ -252,6 +266,34 @@ public abstract class BaseCommand {
                 names = {"--report-include-glossary"}, order = 6,
                 description = "Enable this option if you want to add reference information about vulnerabilities to the report")
         protected boolean includeGlossary = false;
+    }
+
+    @Getter @Setter
+    @NoArgsConstructor
+    public static class Sarif {
+        /**
+         * Generated report file name
+         */
+        @CommandLine.Option(
+                names = { "--sarif-report-file" }, order = 4,
+                required = true,
+                paramLabel = "<file>",
+                description = "File name where generated Static Analysis Results Interchange Format (SARIF) report is to be saved")
+        public Path file;
+    }
+
+    @Getter @Setter
+    @NoArgsConstructor
+    public static class SonarGiif {
+        /**
+         * Generated report file name
+         */
+        @CommandLine.Option(
+                names = { "--giif-report-file" }, order = 4,
+                required = true,
+                paramLabel = "<file>",
+                description = "File name where generated SonarQube Generic Issue Import Format (GIIF) report is to be saved")
+        public Path file;
     }
 
     @CommandLine.Option(

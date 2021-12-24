@@ -31,17 +31,31 @@ public class Reports {
             for (Locale f : values()) VALUES.put(f.value, f);
         }
 
+        /**
+         * Method converts "human-readable" locale to Locale instance
+         * @param value "Human-readable" locale like "en-US"
+         * @return {@link Locale} instance
+         */
         public static Locale from(@NonNull final String value) {
             return VALUES.get(value);
         }
 
+        /**
+         * Human-readable locale definition like "ru-RU", "en-US" etc.
+         */
         @Getter
         @NonNull
         private final String value;
 
+        /**
+         * Locale identifier (LCID)
+         */
         @Getter
         private final int code;
 
+        /**
+         * Java locale
+         */
         @Getter
         @NonNull
         private final java.util.Locale locale;
@@ -86,7 +100,7 @@ public class Reports {
         private Level issueLevel;
 
         @JsonProperty("issueLevels")
-        private Level[] issueLevels;
+        private List<Level> issueLevels;
 
         public enum ApprovalState {
             UNDEFINED, NONE, APPROVED, AUTOAPPROVED, DISCARDED, ALL
@@ -96,7 +110,7 @@ public class Reports {
         private ApprovalState confirmationStatus;
 
         @JsonProperty("confirmationStatuses")
-        private ApprovalState[] confirmationStatuses;
+        private List<ApprovalState> confirmationStatuses;
 
         public enum Condition {
             NONE, NOCONDITION, UNDERCONDITION, ALL
@@ -105,7 +119,7 @@ public class Reports {
         private Condition exploitationCondition;
 
         @JsonProperty("exploitationConditions")
-        private Condition[] exploitationConditions;
+        private List<Condition> exploitationConditions;
 
         public enum SuppressStatus {
             NONE, SUPPRESSED, EXCEPTSUPPRESSED, ALL
@@ -114,7 +128,7 @@ public class Reports {
         private SuppressStatus suppressStatus;
 
         @JsonProperty("suppressStatuses")
-        private SuppressStatus[] suppressStatuses;
+        private List<SuppressStatus> suppressStatuses;
 
         public enum SourceType {
             NONE, STATIC, BLACKBOX, ALL
@@ -124,7 +138,7 @@ public class Reports {
         private SourceType sourceType;
 
         @JsonProperty("sourceTypes")
-        private SourceType[] sourceTypes;
+        private List<SourceType> sourceTypes;
 
         public enum ScanMode {
             NONE, FROMENTRYPOINT, FROMPUBLICPROTECTED, FROMOTHER, ALL
@@ -133,7 +147,7 @@ public class Reports {
         private ScanMode scanMode;
 
         @JsonProperty("scanModes")
-        private ScanMode[] scanModes;
+        private List<ScanMode> scanModes;
 
         public enum ActualStatus {
             ISNEW, NOTISNEW, ALL

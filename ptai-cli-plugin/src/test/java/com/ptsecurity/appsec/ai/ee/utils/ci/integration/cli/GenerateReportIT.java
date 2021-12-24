@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
+import com.contrastsecurity.sarif.SarifSchema210;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
@@ -8,6 +9,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.NonNull;
@@ -263,6 +265,88 @@ class GenerateReportIT extends BaseCliIT {
 
         Assertions.assertTrue(reportDfd.toFile().length() < reportMax.toFile().length());
         Assertions.assertTrue(reportGlossary.toFile().length() < reportMax.toFile().length());
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Generate SARIF report")
+    public void generateSarifReport() {
+        Path report = destination.resolve("sarif.json");
+        final String scanResultId = getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName()).toString();
+
+        List<String> args = new ArrayList<>(Arrays.asList(
+                "generate-report",
+                "--url", URL,
+                "--truststore", PEM.toString(),
+                "--token", TOKEN,
+                "--output", destination.toString(),
+                "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
+                "--scan-result-id", scanResultId,
+                "--sarif-report-file", report.getFileName().toString()));
+        Integer res = new CommandLine(new Plugin()).execute(args.toArray(new String[0]));
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+
+        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        SarifSchema210 sarif = mapper.readValue(report.toFile(), SarifSchema210.class);
+        Assertions.assertEquals("Positive Technologies", sarif.getRuns().get(0).getTool().getDriver().getOrganization());
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Generate filtered JSON-defined SARIF report")
+    public void generateFilteredSarifReport() {
+        Path reportFull = destination.resolve("sarif.full.json");
+        Path reportLow = destination.resolve("sarif.low.json");
+        Path reportMedium = destination.resolve("sarif.medium.json");
+        final String scanResultId = getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName()).toString();
+
+        Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
+        FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.6.json"), reportsJson.toFile());
+
+        Integer res = new CommandLine(new Plugin()).execute(
+                "generate-report",
+                "--url", URL,
+                "--truststore", PEM.toString(),
+                "--token", TOKEN,
+                "--output", destination.toString(),
+                "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
+                "--scan-result-id", scanResultId,
+                "--report-json", reportsJson.toString());
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+
+        Assertions.assertTrue(reportFull.toFile().length() > reportLow.toFile().length());
+        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        SarifSchema210 sarifFull = mapper.readValue(reportFull.toFile(), SarifSchema210.class);
+        SarifSchema210 sarifLow = mapper.readValue(reportLow.toFile(), SarifSchema210.class);
+        SarifSchema210 sarifMedium = mapper.readValue(reportMedium.toFile(), SarifSchema210.class);
+        Assertions.assertEquals(sarifLow.getRuns().get(0).getResults().size(), 0);
+        Assertions.assertNotEquals(sarifFull.getRuns().get(0).getResults().size(), 0);
+        Assertions.assertNotEquals(sarifMedium.getRuns().get(0).getResults().size(), 0);
+        Assertions.assertEquals(sarifFull.getRuns().get(0).getResults().size(), sarifMedium.getRuns().get(0).getResults().size());
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Generate GIIF report")
+    public void generateGiifReport() {
+        Path report = destination.resolve("giif.json");
+        final String scanResultId = getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName()).toString();
+
+        List<String> args = new ArrayList<>(Arrays.asList(
+                "generate-report",
+                "--url", URL,
+                "--truststore", PEM.toString(),
+                "--token", TOKEN,
+                "--output", destination.toString(),
+                "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
+                "--scan-result-id", scanResultId,
+                "--giif-report-file", report.getFileName().toString()));
+        Integer res = new CommandLine(new Plugin()).execute(args.toArray(new String[0]));
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+
+        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        SonarGiif.SonarGiifReport giifReport = mapper.readValue(report.toFile(), SonarGiif.SonarGiifReport.class);
+        Assertions.assertFalse(giifReport.getIssues().isEmpty());
     }
 
     @SneakyThrows

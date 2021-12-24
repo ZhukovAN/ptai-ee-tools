@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -83,7 +84,7 @@ public class ReportsTest extends BaseTest {
         Assertions.assertNotNull(reports);
         Assertions.assertEquals(1, reports.getReport().size());
         Assertions.assertNotNull(reports.getReport().get(0).getFilters());
-        Set<Reports.IssuesFilter.Level> levels = Arrays.stream(reports.getReport().get(0).getFilters().getIssueLevels()).collect(Collectors.toSet());
+        Set<Reports.IssuesFilter.Level> levels = new HashSet<>(reports.getReport().get(0).getFilters().getIssueLevels());
         Assertions.assertEquals(2, levels.size());
         Assertions.assertTrue(levels.contains(Reports.IssuesFilter.Level.MEDIUM));
         Assertions.assertTrue(levels.contains(Reports.IssuesFilter.Level.HIGH));

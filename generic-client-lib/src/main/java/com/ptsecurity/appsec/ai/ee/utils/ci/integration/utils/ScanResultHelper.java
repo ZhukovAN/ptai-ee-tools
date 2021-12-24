@@ -5,13 +5,13 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
 import lombok.NonNull;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 /**
  * As {@link ScanResult} is in fact a DTO class, we need to implement its processing separately
@@ -33,9 +33,9 @@ public class ScanResultHelper {
         // Filter by issue level
         Set<Reports.IssuesFilter.Level> filterLevels = new HashSet<>();
         if (null != filter.getIssueLevel()) filterLevels.add(filter.getIssueLevel());
-        if (CollectionUtils.isNotEmpty(Arrays.asList(filter.getIssueLevels()))) filterLevels.addAll(Arrays.asList(filter.getIssueLevels()));
+        if (isNotEmpty(filter.getIssueLevels())) filterLevels.addAll(filter.getIssueLevels());
         // At this point filterLevels contain issue levels that are to be kept in scan result
-        if (!filterLevels.contains(Reports.IssuesFilter.Level.ALL)) {
+        if (!filterLevels.isEmpty() && !filterLevels.contains(Reports.IssuesFilter.Level.ALL)) {
             Iterator<BaseIssue> iterator = scanResult.getIssues().iterator();
             while (iterator.hasNext()) {
                 BaseIssue issue = iterator.next();
@@ -51,9 +51,9 @@ public class ScanResultHelper {
         // Filter by confirmation status
         Set<Reports.IssuesFilter.ApprovalState> approvalStates = new HashSet<>();
         if (null != filter.getConfirmationStatus()) approvalStates.add(filter.getConfirmationStatus());
-        if (CollectionUtils.isNotEmpty(Arrays.asList(filter.getConfirmationStatuses()))) approvalStates.addAll(Arrays.asList(filter.getConfirmationStatuses()));
+        if (isNotEmpty(filter.getConfirmationStatuses())) approvalStates.addAll(filter.getConfirmationStatuses());
         // At this point approvalStates contain confirmatiion sttatuses that are to be kept in scan result
-        if (!approvalStates.contains(Reports.IssuesFilter.ApprovalState.ALL)) {
+        if (!approvalStates.isEmpty() && !approvalStates.contains(Reports.IssuesFilter.ApprovalState.ALL)) {
             Iterator<BaseIssue> iterator = scanResult.getIssues().iterator();
             while (iterator.hasNext()) {
                 BaseIssue issue = iterator.next();
@@ -69,9 +69,9 @@ public class ScanResultHelper {
         // Filter by exploitation condition
         Set<Reports.IssuesFilter.Condition> conditions = new HashSet<>();
         if (null != filter.getExploitationCondition()) conditions.add(filter.getExploitationCondition());
-        if (CollectionUtils.isNotEmpty(Arrays.asList(filter.getExploitationConditions()))) conditions.addAll(Arrays.asList(filter.getExploitationConditions()));
+        if (isNotEmpty(filter.getExploitationConditions())) conditions.addAll(filter.getExploitationConditions());
         // At this point exploitation condition statuses contain those that are to be kept in scan result
-        if (!conditions.contains(Reports.IssuesFilter.Condition.ALL)) {
+        if (!conditions.isEmpty() && !conditions.contains(Reports.IssuesFilter.Condition.ALL)) {
             Iterator<BaseIssue> iterator = scanResult.getIssues().iterator();
             while (iterator.hasNext()) {
                 BaseIssue issue = iterator.next();
@@ -87,9 +87,9 @@ public class ScanResultHelper {
         // Filter by suppress statuses
         Set<Reports.IssuesFilter.SuppressStatus> suppressStatuses = new HashSet<>();
         if (null != filter.getSuppressStatus()) suppressStatuses.add(filter.getSuppressStatus());
-        if (CollectionUtils.isNotEmpty(Arrays.asList(filter.getSuppressStatuses()))) suppressStatuses.addAll(Arrays.asList(filter.getSuppressStatuses()));
+        if (isNotEmpty(filter.getSuppressStatuses())) suppressStatuses.addAll(filter.getSuppressStatuses());
         // At this point suppress statuses contain those that are to be kept in scan result
-        if (!suppressStatuses.contains(Reports.IssuesFilter.SuppressStatus.ALL)) {
+        if (!suppressStatuses.isEmpty() && !suppressStatuses.contains(Reports.IssuesFilter.SuppressStatus.ALL)) {
             Iterator<BaseIssue> iterator = scanResult.getIssues().iterator();
             while (iterator.hasNext()) {
                 BaseIssue issue = iterator.next();
@@ -102,9 +102,9 @@ public class ScanResultHelper {
         // Filter by source type
         Set<Reports.IssuesFilter.SourceType> sourceTypes = new HashSet<>();
         if (null != filter.getSourceType()) sourceTypes.add(filter.getSourceType());
-        if (CollectionUtils.isNotEmpty(Arrays.asList(filter.getSourceTypes()))) sourceTypes.addAll(Arrays.asList(filter.getSourceTypes()));
+        if (isNotEmpty(filter.getSourceTypes())) sourceTypes.addAll(filter.getSourceTypes());
         // At this point source types contain those that are to be kept in scan result
-        if (!sourceTypes.contains(Reports.IssuesFilter.SourceType.ALL)) {
+        if (!sourceTypes.isEmpty() && !sourceTypes.contains(Reports.IssuesFilter.SourceType.ALL)) {
             Iterator<BaseIssue> iterator = scanResult.getIssues().iterator();
             while (iterator.hasNext()) {
                 BaseIssue issue = iterator.next();
@@ -117,9 +117,9 @@ public class ScanResultHelper {
         // Filter by scan mode
         Set<Reports.IssuesFilter.ScanMode> scanModes = new HashSet<>();
         if (null != filter.getScanMode()) scanModes.add(filter.getScanMode());
-        if (CollectionUtils.isNotEmpty(Arrays.asList(filter.getScanModes()))) scanModes.addAll(Arrays.asList(filter.getScanModes()));
+        if (isNotEmpty(filter.getScanModes())) scanModes.addAll(filter.getScanModes());
         // At this point scan modes contain those that are to be kept in scan result
-        if (!scanModes.contains(Reports.IssuesFilter.ScanMode.ALL)) {
+        if (!scanModes.isEmpty() && !scanModes.contains(Reports.IssuesFilter.ScanMode.ALL)) {
             Iterator<BaseIssue> iterator = scanResult.getIssues().iterator();
             while (iterator.hasNext()) {
                 BaseIssue issue = iterator.next();
@@ -137,7 +137,7 @@ public class ScanResultHelper {
         Set<Reports.IssuesFilter.ActualStatus> actualStatuses = new HashSet<>();
         if (null != filter.getActualStatus()) actualStatuses.add(filter.getActualStatus());
         // At this point new / old statuses contain those that are to be kept in scan result
-        if (!actualStatuses.contains(Reports.IssuesFilter.ActualStatus.ALL)) {
+        if (!actualStatuses.isEmpty() && !actualStatuses.contains(Reports.IssuesFilter.ActualStatus.ALL)) {
             Iterator<BaseIssue> iterator = scanResult.getIssues().iterator();
             while (iterator.hasNext()) {
                 BaseIssue issue = iterator.next();
@@ -154,9 +154,9 @@ public class ScanResultHelper {
             do {
                 if (BaseIssue.Type.VULNERABILITY.equals(issue.getClazz())) {
                     VulnerabilityIssue vulnerabilityIssue = (VulnerabilityIssue) issue;
-                    if (filter.getHideSecondOrder() && vulnerabilityIssue.getSecondOrder()) break;
+                    if (Boolean.TRUE.equals(filter.getHideSecondOrder()) && Boolean.TRUE.equals(vulnerabilityIssue.getSecondOrder())) break;
                 }
-                if (filter.getHideSuspected() && issue.getSuspected()) break;
+                if (Boolean.TRUE.equals(filter.getHideSuspected()) && Boolean.TRUE.equals(issue.getSuspected())) break;
                 remove = false;
             } while (false);
             if (remove) iterator.remove();
