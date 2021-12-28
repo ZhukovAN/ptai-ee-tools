@@ -197,14 +197,29 @@ public class Defaults {
     public static final String REPORTING_RAWDATA_FILE = EMPTY;
 
     /**
+     * See {@link Params#REPORTING_RAWDATA_FILTER}
+     */
+    public static final String REPORTING_RAWDATA_FILTER = EMPTY;
+
+    /**
      * See {@link Params#REPORTING_SARIF_FILE}
      */
     public static final String REPORTING_SARIF_FILE = EMPTY;
 
     /**
+     * See {@link Params#REPORTING_SARIF_FILTER}
+     */
+
+    public static final String REPORTING_SARIF_FILTER = EMPTY;
+    /**
      * See {@link Params#REPORTING_SONARGIIF_FILE}
      */
     public static final String REPORTING_SONARGIIF_FILE = EMPTY;
+
+    /**
+     * See {@link Params#REPORTING_SONARGIIF_FILTER}
+     */
+    public static final String REPORTING_SONARGIIF_FILTER = EMPTY;
 
     /**
      * See {@link Params#REPORTING_JSON_SETTINGS}

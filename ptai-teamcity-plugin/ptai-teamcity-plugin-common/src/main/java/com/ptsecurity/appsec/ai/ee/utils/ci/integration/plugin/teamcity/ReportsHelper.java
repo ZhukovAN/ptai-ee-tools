@@ -40,16 +40,22 @@ public class ReportsHelper {
         if (TRUE.equals(data.getOrDefault(REPORTING_RAWDATA, Defaults.REPORTING_RAWDATA))) {
             Reports.RawData report = new Reports.RawData();
             report.setFileName(data.get(REPORTING_RAWDATA_FILE));
+            if (StringUtils.isNotEmpty(data.get(REPORTING_RAWDATA_FILTER)))
+                report.setFilters(ReportUtils.validateJsonFilter(data.get(REPORTING_RAWDATA_FILTER)));
             res.getRaw().add(report);
         }
         if (TRUE.equals(data.getOrDefault(REPORTING_SARIF, Defaults.REPORTING_SARIF))) {
             Reports.Sarif report = new Reports.Sarif();
             report.setFileName(data.get(REPORTING_SARIF_FILE));
+            if (StringUtils.isNotEmpty(data.get(REPORTING_SARIF_FILTER)))
+                report.setFilters(ReportUtils.validateJsonFilter(data.get(REPORTING_SARIF_FILTER)));
             res.getSarif().add(report);
         }
         if (TRUE.equals(data.getOrDefault(REPORTING_SONARGIIF, Defaults.REPORTING_SONARGIIF))) {
             Reports.SonarGiif report = new Reports.SonarGiif();
             report.setFileName(data.get(REPORTING_SONARGIIF_FILE));
+            if (StringUtils.isNotEmpty(data.get(REPORTING_SONARGIIF_FILTER)))
+                report.setFilters(ReportUtils.validateJsonFilter(data.get(REPORTING_SONARGIIF_FILTER)));
             res.getSonarGiif().add(report);
         }
         if (TRUE.equals(data.getOrDefault(REPORTING_JSON, Defaults.REPORTING_JSON)))

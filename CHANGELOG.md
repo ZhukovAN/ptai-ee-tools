@@ -156,3 +156,5 @@
 ### 20211224
 + [Feature] SARIF and SonarQube GIIF reports are added to CLI
 + [Feature] SARIF and SonarQube GIIF reports are added to TeamCity (no filtering yet)
+### 20211228
++ [Feature] Raw JSON, SARIF and SonarQube GIIF reports filtering support added to TeamCity plugin

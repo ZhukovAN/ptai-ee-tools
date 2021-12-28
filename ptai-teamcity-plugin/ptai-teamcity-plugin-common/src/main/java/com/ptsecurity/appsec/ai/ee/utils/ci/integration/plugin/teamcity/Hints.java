@@ -139,14 +139,29 @@ public class Hints {
     public static final String REPORTING_RAWDATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_file_hint();
 
     /**
+     * See {@link Params#REPORTING_RAWDATA_FILTER}
+     */
+    public static final String REPORTING_RAWDATA_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_filter_hint();
+
+    /**
      * See {@link Params#REPORTING_SARIF_FILE}
      */
     public static final String REPORTING_SARIF_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sarif_file_hint();
 
     /**
+     * See {@link Params#REPORTING_SARIF_FILTER}
+     */
+    public static final String REPORTING_SARIF_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sarif_filter_hint();
+
+    /**
      * See {@link Params#REPORTING_SONARGIIF_FILE}
      */
     public static final String REPORTING_SONARGIIF_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sonargiif_file_hint();
+
+    /**
+     * See {@link Params#REPORTING_SONARGIIF_FILTER}
+     */
+    public static final String REPORTING_SONARGIIF_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_sonargiif_filter_hint();
 
     /**
      * See {@link Params#REPORTING_JSON_SETTINGS}

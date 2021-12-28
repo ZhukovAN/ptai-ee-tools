@@ -102,27 +102,42 @@
             BS.MultilineProperties.updateVisible();
         };
 
+        // Array of table row identifiers that are to be shown if raw data export option is checked
+        var ptaiReportingRawDataFieldRows = [
+            'row_${REPORTING_RAWDATA_FILE}',
+            'row_${REPORTING_RAWDATA_FILTER}' ];
+
         ptaiReportingRawDataShowHide = function (show) {
             if (true == show)
-                BS.Util.show('row_${REPORTING_RAWDATA_FILE}');
+                BS.Util.show(...ptaiReportingRawDataFieldRows);
             else
-                BS.Util.hide('row_${REPORTING_RAWDATA_FILE}');
+                BS.Util.hide(...ptaiReportingRawDataFieldRows);
             BS.MultilineProperties.updateVisible();
         };
+
+        // Array of table row identifiers that are to be shown if SARIF report export option is checked
+        var ptaiReportingSarifFieldRows = [
+            'row_${REPORTING_SARIF_FILE}',
+            'row_${REPORTING_SARIF_FILTER}' ];
 
         ptaiReportingSarifShowHide = function (show) {
             if (true == show)
-                BS.Util.show('row_${REPORTING_SARIF_FILE}');
+                BS.Util.show(...ptaiReportingSarifFieldRows);
             else
-                BS.Util.hide('row_${REPORTING_SARIF_FILE}');
+                BS.Util.hide(...ptaiReportingSarifFieldRows);
             BS.MultilineProperties.updateVisible();
         };
 
+        // Array of table row identifiers that are to be shown if SARIF report export option is checked
+        var ptaiReportingSonarGiifFieldRows = [
+            'row_${REPORTING_SONARGIIF_FILE}',
+            'row_${REPORTING_SONARGIIF_FILTER}' ];
+
         ptaiReportingSonarGiifShowHide = function (show) {
             if (true == show)
-                BS.Util.show('row_${REPORTING_SONARGIIF_FILE}');
+                BS.Util.show(...ptaiReportingSonarGiifFieldRows);
             else
-                BS.Util.hide('row_${REPORTING_SONARGIIF_FILE}');
+                BS.Util.hide(...ptaiReportingSonarGiifFieldRows);
             BS.MultilineProperties.updateVisible();
         };
 
@@ -534,6 +549,22 @@
             <span class="smallNote">${HINT_REPORTING_RAWDATA_FILE}</span>
         </td>
     </tr>
+    <tr id="row_${REPORTING_RAWDATA_FILTER}">
+        <th class="noBorder dense">
+            <label for="${REPORTING_RAWDATA_FILTER}">${LABEL_REPORTING_RAWDATA_FILTER}</label>
+        </th>
+        <td class="noBorder dense">
+            <props:multilineProperty
+                    name="${REPORTING_RAWDATA_FILTER}"
+                    className="longField"
+                    linkTitle=""
+                    rows="3"
+                    cols="49"
+                    expanded="${true}"
+                    note="${HINT_REPORTING_RAWDATA_FILTER}"/>
+            <span class="error" id="error_${REPORTING_RAWDATA_FILTER}"></span>
+        </td>
+    </tr>
 
     <tr id="row_${REPORTING_SARIF}">
         <th class="noBorder dense">
@@ -553,6 +584,23 @@
             <span class="smallNote">${HINT_REPORTING_SARIF_FILE}</span>
         </td>
     </tr>
+    <tr id="row_${REPORTING_SARIF_FILTER}">
+        <th class="noBorder dense">
+            <label for="${REPORTING_SARIF_FILTER}">${LABEL_REPORTING_SARIF_FILTER}</label>
+        </th>
+        <td class="noBorder dense">
+            <props:multilineProperty
+                    name="${REPORTING_SARIF_FILTER}"
+                    className="longField"
+                    linkTitle=""
+                    rows="3"
+                    cols="49"
+                    expanded="${true}"
+                    note="${HINT_REPORTING_SARIF_FILTER}"/>
+            <span class="error" id="error_${REPORTING_SARIF_FILTER}"></span>
+        </td>
+    </tr>
+
 
     <tr id="row_${REPORTING_SONARGIIF}">
         <th class="noBorder dense">
@@ -570,6 +618,22 @@
         <td class="noBorder dense">
             <props:textProperty name="${REPORTING_SONARGIIF_FILE}" className="longField"/>
             <span class="smallNote">${HINT_REPORTING_SONARGIIF_FILE}</span>
+        </td>
+    </tr>
+    <tr id="row_${REPORTING_SONARGIIF_FILTER}">
+        <th class="noBorder dense">
+            <label for="${REPORTING_SONARGIIF_FILTER}">${LABEL_REPORTING_SONARGIIF_FILTER}</label>
+        </th>
+        <td class="noBorder dense">
+            <props:multilineProperty
+                    name="${REPORTING_SONARGIIF_FILTER}"
+                    className="longField"
+                    linkTitle=""
+                    rows="3"
+                    cols="49"
+                    expanded="${true}"
+                    note="${HINT_REPORTING_SONARGIIF_FILTER}"/>
+            <span class="error" id="error_${REPORTING_SONARGIIF_FILTER}"></span>
         </td>
     </tr>
 
