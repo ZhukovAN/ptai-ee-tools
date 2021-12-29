@@ -362,7 +362,6 @@ public class IssuesConverter {
         destination.setId(source.getId());
         destination.setGroupId(source.getGroupId());
         destination.setScanResultId(Objects.requireNonNull(source.getScanResultId()));
-        destination.setClazz(ISSUE_TYPE_MAP.get(source.getPropertyClass()));
         destination.setLevel(ISSUE_LEVEL_MAP.get(source.getLevel()));
 
         destination.setApprovalState(ISSUE_APPROVAL_STATE_MAP.get(source.getApprovalState()));

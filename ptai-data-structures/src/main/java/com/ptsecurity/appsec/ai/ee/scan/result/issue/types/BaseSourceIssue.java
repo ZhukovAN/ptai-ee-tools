@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 public abstract class BaseSourceIssue extends BaseIssue {
     /**
      * Place in the file that defines file fragment
@@ -22,6 +23,7 @@ public abstract class BaseSourceIssue extends BaseIssue {
     @Setter
     @SuperBuilder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Place {
         @NonNull
         @JsonProperty("beginLine")

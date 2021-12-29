@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,6 +33,18 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = YaraMatchIssue.class, name = "YARAMATCH")
 })
 public abstract class BaseIssue {
+    public static Map<Class<? extends BaseIssue>, Type> TYPES = new HashMap<>();
+
+    static {
+        TYPES.put(UnknownIssue.class, Type.UNKNOWN);
+        TYPES.put(BlackBoxIssue.class, Type.BLACKBOX);
+        TYPES.put(ConfigurationIssue.class, Type.CONFIGURATION);
+        TYPES.put(ScaIssue.class, Type.SCA);
+        TYPES.put(WeaknessIssue.class, Type.WEAKNESS);
+        TYPES.put(VulnerabilityIssue.class, Type.VULNERABILITY);
+        TYPES.put(YaraMatchIssue.class, Type.YARAMATCH);
+    }
+
     /**
      * Unique issue identifier
      */
@@ -65,9 +78,9 @@ public abstract class BaseIssue {
     /**
      * Issue type: vulnerability, weakness, SCA, DAST etc.
      */
-    // @JsonProperty("class")
-    @JsonIgnore
-    protected Type clazz;
+    public Type getClazz() {
+        return TYPES.get(getClass());
+    }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Level {

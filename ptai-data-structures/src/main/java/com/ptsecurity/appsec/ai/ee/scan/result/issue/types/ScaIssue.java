@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ScaIssue extends BaseIssue {
     /**
      * Vulnerable file
@@ -37,6 +38,7 @@ public class ScaIssue extends BaseIssue {
     @Setter
     @SuperBuilder
     @NoArgsConstructor
+    @AllArgsConstructor
     public static class Cvss {
         @JsonProperty("base")
         protected String base;
