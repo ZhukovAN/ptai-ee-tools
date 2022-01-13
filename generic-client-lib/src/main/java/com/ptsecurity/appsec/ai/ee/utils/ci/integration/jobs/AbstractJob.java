@@ -88,7 +88,7 @@ public abstract class AbstractJob extends AbstractTool {
      * @param replacements Dictionary with name / value pairs
      * @return String with macro substitutions complete
      */
-    public String replaceMacro(@NonNull final String value, final Map<String, String> replacements) {
+    public String replaceMacro(final String value, final Map<String, String> replacements) {
         return value;
     };
 }

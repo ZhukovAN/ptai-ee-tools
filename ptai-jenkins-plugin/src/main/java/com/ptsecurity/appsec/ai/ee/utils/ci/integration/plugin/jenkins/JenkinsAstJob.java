@@ -19,6 +19,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -119,11 +120,12 @@ public class JenkinsAstJob extends GenericAstJob implements TextOutput {
         return res;
     }
 
-    public String replaceMacro(@NonNull String value) {
+    public String replaceMacro(final String value) {
         return replaceMacro(value, getBuildInfo().getEnvVars());
     }
 
-    public String replaceMacro(@NonNull String value, Map<String, String> replacements) {
+    public String replaceMacro(final String value, Map<String, String> replacements) {
+        if (StringUtils.isEmpty(value)) return "";
         return Util.replaceMacro(value, replacements);
     }
 }

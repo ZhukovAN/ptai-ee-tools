@@ -109,7 +109,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
     public static Map<Language, Set<PatternLanguage>> LANGUAGE_GROUP = new HashMap<>();
     static {
         LANGUAGE_GROUP.put(Language.PHP, Collections.singleton(PatternLanguage.PHP));
-        LANGUAGE_GROUP.put(Language.JAVA, Collections.singleton(PatternLanguage.PHP));
+        LANGUAGE_GROUP.put(Language.JAVA, Collections.singleton(PatternLanguage.JAVA));
         LANGUAGE_GROUP.put(Language.CSHARP, Collections.singleton(PatternLanguage.CSHARP));
         LANGUAGE_GROUP.put(Language.VB, Collections.singleton(PatternLanguage.VB));
         LANGUAGE_GROUP.put(Language.JS, Collections.singleton(PatternLanguage.JAVASCRIPT));

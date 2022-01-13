@@ -158,3 +158,5 @@
 + [Feature] SARIF and SonarQube GIIF reports are added to TeamCity (no filtering yet)
 ### 20211228
 + [Feature] Raw JSON, SARIF and SonarQube GIIF reports filtering support added to TeamCity plugin
+### 20220113
++ [Fix] Macro replacement in Jenkins plugin fixed

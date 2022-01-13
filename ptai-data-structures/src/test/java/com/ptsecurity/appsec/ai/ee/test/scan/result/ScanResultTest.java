@@ -51,4 +51,15 @@ public class ScanResultTest extends BaseTest {
         Assertions.assertNotEquals(0, xssCount);
     }
 
+    @SneakyThrows
+    @Test
+    @DisplayName("Check scan results JSON serialization")
+    public void serializeScanResults() {
+        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        InputStream inputStream = getResourceStream("json/scan/result/php-smoke.json");
+        Assertions.assertNotNull(inputStream);
+        ScanResult scanResult = mapper.readValue(inputStream, ScanResult.class);
+        String json = mapper.writeValueAsString(scanResult);
+        Assertions.assertFalse(json.contains("\"clazz\":"));
+    }
 }

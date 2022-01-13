@@ -65,7 +65,7 @@ public abstract class BaseIssue {
 
     /**
      * Scan result this issue belongs to
-     * TODO: Chek if we may get rid of this
+     * TODO: Check if we may get rid of this
      */
     @NonNull
     @JsonProperty("scanResultId")
@@ -78,6 +78,7 @@ public abstract class BaseIssue {
     /**
      * Issue type: vulnerability, weakness, SCA, DAST etc.
      */
+    @JsonIgnore
     public Type getClazz() {
         return TYPES.get(getClass());
     }

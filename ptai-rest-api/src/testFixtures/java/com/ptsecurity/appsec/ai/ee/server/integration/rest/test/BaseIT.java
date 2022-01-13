@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 public abstract class BaseIT extends BaseTest {
     public static final String TOKEN = (null != System.getenv("ptai.token"))
             ? System.getenv("ptai.token")
-            : "6M9Qsct5fg20/UEzN7/hvR2RlXkTWOI5";
+            : "3F4y+YC+ZSkwkAGvzVDLvzvH4QXO+E2m";
 
     public static final String USER = (null != System.getenv("ptai.user"))
             ? System.getenv("ptai.user")
