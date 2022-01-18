@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
+@AllArgsConstructor
 public class ScanDataPacked {
     public enum Type {
         SCAN_BRIEF_DETAILED

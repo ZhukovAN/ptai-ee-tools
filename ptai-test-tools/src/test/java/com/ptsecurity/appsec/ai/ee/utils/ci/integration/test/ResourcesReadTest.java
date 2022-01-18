@@ -51,7 +51,7 @@ public class ResourcesReadTest extends BaseTest {
     @SneakyThrows
     @Test
     @DisplayName("Read and parse data from 7-zip-packed JSON resource file")
-    public void readPackedJsonResource() {
+    public void readSevenZipPackedJsonResource() {
         Path packedFileContents = getPackedResourceFile("data/test.7z");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile jsonFile = new TempFile(packedFileContents)) {
@@ -65,9 +65,43 @@ public class ResourcesReadTest extends BaseTest {
 
     @SneakyThrows
     @Test
+    @DisplayName("Read and parse data from zip-packed JSON resource file")
+    public void readZipPackedJsonResource() {
+        Path packedFileContents = getPackedResourceFile("data/test.zip");
+        Assertions.assertNotNull(packedFileContents);
+        try (TempFile jsonFile = new TempFile(packedFileContents)) {
+            Assertions.assertTrue(jsonFile.toFile().isFile());
+
+            ObjectMapper mapper = createFaultTolerantObjectMapper();
+            TestJson json = mapper.readValue(jsonFile.toFile(), TestJson.class);
+            Assertions.assertTrue("TEST".equalsIgnoreCase(json.value));
+        }
+    }
+
+    @SneakyThrows
+    @Test
     @DisplayName("Read and parse multiple data from 7-zip-packed JSON resource file")
-    public void readPackedJsonResources() {
+    public void readSevenZipPackedJsonResources() {
         Path packedFileContents = getPackedResourceFile("data/tests.7z");
+        Assertions.assertNotNull(packedFileContents);
+        try (TempFile folder = new TempFile(packedFileContents)) {
+            Assertions.assertTrue(folder.toFile().isDirectory());
+
+            Path txtFile = folder.toPath().resolve("test.txt");
+            String data = FileUtils.readFileToString(txtFile.toFile(), StandardCharsets.UTF_8);
+            Assertions.assertTrue("TEST".equalsIgnoreCase(data));
+
+            Path jsonFile = folder.toPath().resolve("test.json");
+            ObjectMapper mapper = createFaultTolerantObjectMapper();
+            TestJson json = mapper.readValue(jsonFile.toFile(), TestJson.class);
+            Assertions.assertTrue("TEST".equalsIgnoreCase(json.value));
+        }
+    }
+    @SneakyThrows
+    @Test
+    @DisplayName("Read and parse multiple data from zip-packed JSON resource file")
+    public void readZipPackedJsonResources() {
+        Path packedFileContents = getPackedResourceFile("data/tests.zip");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile folder = new TempFile(packedFileContents)) {
             Assertions.assertTrue(folder.toFile().isDirectory());

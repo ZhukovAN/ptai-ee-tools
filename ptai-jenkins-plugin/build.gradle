@@ -165,6 +165,12 @@ dependencies {
     // https://mvnrepository.com/artifact/org.tukaani/xz
     implementation 'org.tukaani:xz:1.9'
 
+    // Need this to execute Jenkins plugin integration tests
+    // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-test-harness
+    testImplementation group: 'org.jenkins-ci.main', name: 'jenkins-test-harness', version: '1690.vfcb_959006c07'
+    // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-war
+    testImplementation "org.jenkins-ci.main:jenkins-war:${jenkinsVersion}"
+
     testImplementation(testFixtures(project(":ptai-data-structures")))
     testImplementation(testFixtures(project(":ptai-rest-api")))
     testImplementation(testFixtures(project(":generic-client-lib")))
@@ -181,7 +187,7 @@ def compareVersion(a, b) {
         def numberB = versionB[i].toInteger()
         if (numberA != numberB)
             return numberA <=> numberB
-   }
+    }
     // If we got this far then all the common indices are identical, so whichever version is longer must be more recent
     return versionA.size() <=> versionB.size()
 }
@@ -205,14 +211,18 @@ def processJenkinsVersion() {
 
     // Calculate structs-plugin version. For Jenkins 2.107.3 version 1.21 is to be used, for 2.222.4 - 1.22
     if (-1 == compareVersion('2.222.4', versionString))
+    // https://updates.jenkins.io/download/plugins/structs/1.22/structs.hpi
         structsVersion = '1.22'
     else
+    // https://updates.jenkins.io/download/plugins/structs/1.21/structs.hpi
         structsVersion = '1.21'
     logger.info("Using Structs plugin version: $structsVersion")
     // workflow-step-api: 2.22 -> 2.138.4, 2.23 -> 2.176.4
     if (-1 == compareVersion('2.176.4', versionString))
+    // https://updates.jenkins.io/download/plugins/workflow-step-api/2.23/workflow-step-api.hpi
         workflowStepApiVersion = '2.23'
     else
+    // https://updates.jenkins.io/download/plugins/workflow-step-api/2.22/workflow-step-api.hpi
         workflowStepApiVersion = '2.22'
     logger.info("Using Workflow step API plugin version: $workflowStepApiVersion")
     // token-macro:
@@ -220,18 +230,23 @@ def processJenkinsVersion() {
     // 2.13 -> 2.222.3
     // 2.14 -> 2.274
     if (-1 == compareVersion('2.274', versionString))
+    // https://updates.jenkins.io/download/plugins/token-macro/2.14/token-macro.hpi
         tokenMacroVersion = '2.14'
     else if (-1 == compareVersion('2.222.3', versionString))
+    // https://updates.jenkins.io/download/plugins/token-macro/2.13/token-macro.hpi
         tokenMacroVersion = '2.13'
     else
+    // https://updates.jenkins.io/download/plugins/token-macro/2.12/token-macro.hpi
         tokenMacroVersion = '2.12'
     logger.info("Using Token macro plugin version: $tokenMacroVersion")
     // credentials:
     // 2.3.11 -> 2.138.4
     // 2.3.12 -> 2.222.4
     if (-1 == compareVersion('2.222.4', versionString))
+    // https://updates.jenkins.io/download/plugins/credentials/2.3.12/credentials.hpi
         credentialsVersion = '2.3.12'
     else
+    // https://updates.jenkins.io/download/plugins/credentials/2.3.11/credentials.hpi
         credentialsVersion = '2.3.11'
     logger.info("Using Credentials plugin version: $credentialsVersion")
     // scm-api:
@@ -240,10 +255,13 @@ def processJenkinsVersion() {
     // 2.6.3 -> 2.107.3
     // 2.6.4 -> 2.176.4
     if (-1 == compareVersion('2.176.4', versionString))
+    // https://updates.jenkins.io/download/plugins/scm-api/2.6.4/scm-api.hpi
         scmApiVersion = '2.6.4'
     else if (-1 == compareVersion('2.164.3', versionString))
+    // https://updates.jenkins.io/download/plugins/scm-api/2.6.2/scm-api.hpi
         scmApiVersion = '2.6.2'
     else
+    // https://updates.jenkins.io/download/plugins/scm-api/2.6.3/scm-api.hpi
         scmApiVersion = '2.6.3'
     logger.info("Using SCM API plugin version: $scmApiVersion")
     // trilead-api:
@@ -253,10 +271,13 @@ def processJenkinsVersion() {
     // 1.0.10 -> 2.184
     // 1.0.12 - 1.0.13 -> 2.204
     if (-1 == compareVersion('2.204', versionString))
+    // https://updates.jenkins.io/download/plugins/trilead-api/1.0.13/trilead-api.hpi
         trileadApiVersion = '1.0.13'
     else if (-1 == compareVersion('2.184', versionString))
+    // https://updates.jenkins.io/download/plugins/trilead-api/1.0.10/trilead-api.hpi
         trileadApiVersion = '1.0.10'
     else
+    // https://updates.jenkins.io/download/plugins/trilead-api/1.0.3/trilead-api.hpi
         trileadApiVersion = '1.0.3'
     logger.info("Using Trilead API plugin version: $trileadApiVersion")
     // script-security:
@@ -264,10 +285,13 @@ def processJenkinsVersion() {
     // 1.72 - 1.76 -> 2.176.4
     // 1.77 -> 2.222.4
     if (-1 == compareVersion('2.222.4', versionString))
+    // https://updates.jenkins.io/download/plugins/script-security/1.77/script-security.hpi
         scriptSecurityVersion = '1.77'
     else if (-1 == compareVersion('2.176.4', versionString))
+    // https://updates.jenkins.io/download/plugins/script-security/1.76/script-security.hpi
         scriptSecurityVersion = '1.76'
     else
+    // https://updates.jenkins.io/download/plugins/script-security/1.71/script-security.hpi
         scriptSecurityVersion = '1.71'
     logger.info("Using Script security plugin version: $scriptSecurityVersion")
     // matrix project:
@@ -275,10 +299,13 @@ def processJenkinsVersion() {
     // 1.15 - 1.18 -> 2.164.3
     // 1.19 -> 2.282
     if (-1 == compareVersion('2.282', versionString))
+    // https://updates.jenkins.io/download/plugins/matrix-project/1.19/matrix-project.hpi
         matrixProjectVersion = '1.19'
     else if (-1 == compareVersion('2.164.3', versionString))
+    // https://updates.jenkins.io/download/plugins/matrix-project/1.18/matrix-project.hpi
         matrixProjectVersion = '1.18'
     else
+    // https://updates.jenkins.io/download/plugins/matrix-project/1.14/matrix-project.hpi
         matrixProjectVersion = '1.14'
     // git:
     // 4.2.2 -> 2.138.4
@@ -286,12 +313,16 @@ def processJenkinsVersion() {
     // 4.5.0 - 4.6.0 -> 2.222.4
     // 4.7.0 - 4.7.2 -> 2.263.1
     if (-1 == compareVersion('2.263.1', versionString))
+    // https://updates.jenkins.io/download/plugins/git/4.7.2/git.hpi
         gitVersion = '4.7.2'
     else if (-1 == compareVersion('2.222.4', versionString))
+    // https://updates.jenkins.io/download/plugins/git/4.6.0/git.hpi
         gitVersion = '4.6.0'
     else if (-1 == compareVersion('2.204.1', versionString))
+    // https://updates.jenkins.io/download/plugins/git/4.4.5/git.hpi
         gitVersion = '4.4.5'
     else
+    // https://updates.jenkins.io/download/plugins/git/4.2.2/git.hpi
         gitVersion = '4.2.2'
     logger.info("Using Git plugin version: $gitVersion")
 
@@ -364,4 +395,11 @@ tasks.getByName('jpi') {
 
 clean {
     delete 'src/main/webapp/webjars'
+}
+
+jar {
+    // See https://www.jenkins.io/blog/2018/01/13/jep-200/
+    manifest {
+        attributes 'Jenkins-ClassFilter-Whitelisted': 'true'
+    }
 }

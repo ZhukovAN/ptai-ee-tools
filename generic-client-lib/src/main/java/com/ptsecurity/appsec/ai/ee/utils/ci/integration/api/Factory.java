@@ -5,13 +5,11 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericExcept
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.VersionUnsupportedException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.VersionHelper;
-import io.github.classgraph.ClassGraph;
-import io.github.classgraph.ClassInfoList;
-import io.github.classgraph.ScanResult;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.reflections.Reflections;
 
 import java.lang.reflect.Modifier;
 import java.time.Duration;
@@ -19,6 +17,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
@@ -51,15 +50,11 @@ public class Factory {
         // Search for available VersionRange-annotated non-abstract descendants of AbstractApiClient
         log.debug("Scan PT AI server API client implementations");
         Instant start = Instant.now();
-        ScanResult scanResult = new ClassGraph()
-                .enableClassInfo()
-                .enableAnnotationInfo()
-                .acceptPackages("com.ptsecurity.appsec")
-                .scan();
-        ClassInfoList classInfoList = scanResult.getClassesWithAnnotation(VersionRange.class.getName());
+        Reflections reflections = new Reflections("com.ptsecurity.appsec.ai.ee.utils.ci.integration.api");
+        Set<Class<?>> classes = reflections.getTypesAnnotatedWith(VersionRange.class);
         Duration classScanDuration = Duration.between(start, Instant.now());
-        log.debug("Scan took {} ns, {} client implementations found", classScanDuration.toNanos(), classInfoList.size());
-        return new ArrayList<>(classInfoList.loadClasses());
+        log.debug("Scan took {} ns, {} client implementations found", classScanDuration.toNanos(), classes.size());
+        return new ArrayList<>(classes);
     }
 
     @NonNull

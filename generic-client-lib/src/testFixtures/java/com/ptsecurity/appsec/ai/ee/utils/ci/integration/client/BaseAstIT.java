@@ -42,11 +42,11 @@ public abstract class BaseAstIT extends BaseClientIT {
         protected final String settings;
     }
 
-    public static final Project JAVA_APP01 = new Project("junit-it-java-app01", "code/java-app01.7z", "json/scan/settings/settings.java-app01.aiproj");
-    public static final Project PHP_SMOKE_MISC = new Project("junit-it-php-smoke-misc", "code/php-smoke-misc.7z", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_MEDIUM = new Project("junit-it-php-smoke-medium", "code/php-smoke-medium.7z", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_HIGH = new Project("junit-it-php-smoke-high", "code/php-smoke-high.7z", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_MULTIFLOW = new Project("junit-it-php-smoke-multiflow", "code/php-smoke-multiflow.7z", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project JAVA_APP01 = new Project("junit-it-java-app01", "code/java-app01.zip", "json/scan/settings/settings.java-app01.aiproj");
+    public static final Project PHP_SMOKE_MISC = new Project("junit-it-php-smoke-misc", "code/php-smoke-misc.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_MEDIUM = new Project("junit-it-php-smoke-medium", "code/php-smoke-medium.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_HIGH = new Project("junit-it-php-smoke-high", "code/php-smoke-high.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_MULTIFLOW = new Project("junit-it-php-smoke-multiflow", "code/php-smoke-multiflow.zip", "json/scan/settings/settings.php-smoke.aiproj");
 
     public Path getSourcesRoot(@NonNull final Project project) {
         return getPackedResourceFile(project.code);

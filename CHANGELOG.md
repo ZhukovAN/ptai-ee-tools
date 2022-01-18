@@ -160,3 +160,8 @@
 + [Feature] Raw JSON, SARIF and SonarQube GIIF reports filtering support added to TeamCity plugin
 ### 20220113
 + [Fix] Macro replacement in Jenkins plugin fixed
+### 20220118
++ [Fix] Log4J version changed for CLI plugin due to [vulnerability](https://logging.apache.org/log4j/2.x/security.html)
++ [Feature] Jenkins plugin integration tests implemented
++ [Fix] ClassGraph library replaced with Reflections
++ [Fix] 7z-packed sources are replaced with zip-packed ones as ExtractResourceSCM supports zip archives

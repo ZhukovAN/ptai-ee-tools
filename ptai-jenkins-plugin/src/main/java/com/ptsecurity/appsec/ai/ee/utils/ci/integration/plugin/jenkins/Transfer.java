@@ -25,6 +25,15 @@ public class Transfer extends com.ptsecurity.appsec.ai.ee.scan.sources.Transfer 
         this.patternSeparator = patternSeparator;
     }
 
+    public Transfer() {
+        this.includes = DEFAULT_INCLUDES;
+        this.excludes = DEFAULT_EXCLUDES;
+        this.removePrefix = DEFAULT_REMOVE_PREFIX;
+        this.flatten = DEFAULT_FLATTEN;
+        this.useDefaultExcludes = DEFAULT_USE_DEFAULT_EXCLUDES;
+        this.patternSeparator = DEFAULT_PATTERN_SEPARATOR;
+    }
+
     public TransferDescriptor getDescriptor() {
         return Jenkins.get().getDescriptorByType(TransferDescriptor.class);
     }

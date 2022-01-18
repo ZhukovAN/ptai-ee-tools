@@ -14,6 +14,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.logging.LogManager;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public abstract class BaseTest {
     /**
@@ -78,6 +81,8 @@ public abstract class BaseTest {
     public Path getPackedResourceFile(@NonNull final String name, final Path tempFolder) {
         if (name.endsWith(".7z"))
             return getSevenZippedResourceFile(name, tempFolder);
+        else if (name.endsWith(".zip"))
+            return getZippedResourceFile(name, tempFolder);
         else
             throw new IllegalArgumentException("Unsupported packed file " + name);
     }
@@ -110,18 +115,16 @@ public abstract class BaseTest {
             SevenZArchiveEntry entry = packedFile.getNextEntry();
             while (null != entry) {
                 if (!entry.isDirectory()) {
-                    Path out = rootOutputFolder.resolve(entry.getName());
-                    if (null == res)
-                        // If this is first entry then it is to returned as a result
-                        res = out;
-                    else
-                        // There are more then one entry in the archive, folder path is to be returned
-                        res = rootOutputFolder;
+                    File out = rootOutputFolder.resolve(entry.getName()).toFile();
 
-                    out.toFile().getParentFile().mkdirs();
-                    try (FileOutputStream fos = new FileOutputStream(out.toFile())) {
+                    // If this is first entry then it is to returned as a result. If there are more then one entry in the archive, folder path is to be returned
+                    res = (null == res) ? out.toPath() : rootOutputFolder;
+
+                    if (!out.getParentFile().exists() && !out.getParentFile().mkdirs()) throw new IOException("Failed to create directory " + out.getParentFile());
+
+                    try (FileOutputStream fos = new FileOutputStream(out)) {
                         do {
-                            int dataRead = packedFile.read(buffer, 0, buffer.length);
+                            int dataRead = packedFile.read(buffer);
                             if (-1 == dataRead || 0 == dataRead) break;
                             fos.write(buffer, 0, dataRead);
                         } while (true);
@@ -130,6 +133,42 @@ public abstract class BaseTest {
                 entry = packedFile.getNextEntry();
             }
             packedFile.close();
+        }
+        return res;
+    }
+
+    /**
+     * Method extracts zip-packed resource file contents to temp folder
+     * @param name Absolute name of resource like "code/php-smoke-misc.zip"
+     * @param tempFolder Folder where resources are to be unpacked.
+     *                   If null value is passed, temporal directory will be automatically created
+     * @return Path to extracted resources. If packed resource contains exactly one file then path
+     * to extracted file will be returned. If resuorce contains more then one file all these files
+     * will be extracted to destination folder and its path will be returned
+     */
+    @SneakyThrows
+    public Path getZippedResourceFile(@NonNull final String name, final Path tempFolder) {
+        Path res = null;
+        Path rootOutputFolder = (null == tempFolder)
+                ? Files.createTempDirectory(TEMP_FOLDER, "")
+                : tempFolder;
+
+        byte[] buffer = new byte[1024];
+        try (InputStream is = getResourceStream(name);
+             ZipInputStream zis = new ZipInputStream(is);) {
+            ZipEntry entry = zis.getNextEntry();
+            while (null != entry) {
+                if (!entry.isDirectory()) {
+                    File out = rootOutputFolder.resolve(entry.getName()).toFile();
+                    // If this is first entry then it is to returned as a result. If there are more then one entry in the archive, folder path is to be returned
+                    res = (null == res) ? out.toPath() : rootOutputFolder;
+                    if (!out.getParentFile().exists() && !out.getParentFile().mkdirs()) throw new IOException("Failed to create directory " + out.getParentFile());
+                    try (FileOutputStream fos = new FileOutputStream(out)) {
+                        IOUtils.copy(zis, fos);
+                    }
+                }
+                entry = zis.getNextEntry();
+            }
         }
         return res;
     }
