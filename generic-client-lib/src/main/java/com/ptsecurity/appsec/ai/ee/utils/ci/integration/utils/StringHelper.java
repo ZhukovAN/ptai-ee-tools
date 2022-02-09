@@ -14,4 +14,10 @@ public class StringHelper {
                 .concat(list.get(list.size() - 1))
                 : list.get(0);
     }
+
+    @NonNull
+    public static String arrayAsString(final String[] values) {
+        if (null == values || 0 == values.length) return "[<empty>]";
+        return "".concat(String.join(", ", values)).concat("]");
+    }
 }
