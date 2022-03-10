@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
 import lib.FormTagLib
 
 def f = namespace(FormTagLib)
@@ -166,20 +167,28 @@ f.entry(
     }
 }
 
-// f.advanced() {
-f.entry(
-        title: _('fullScanMode'),
-        field: 'fullScanMode',
-        default: 'false') {
-    f.checkbox()
+f.advanced() {
+    f.entry(
+            title: Resources.i18n_ast_settings_advanced_label(),
+            field: 'advancedSettings') {
+        f.textarea(
+                style: 'height:100px',
+                checkMethod: 'post')
+    }
+
+    f.entry(
+            title: _('fullScanMode'),
+            field: 'fullScanMode',
+            default: 'false') {
+        f.checkbox()
+    }
+
+    f.entry(
+            title: _('verbose'),
+            field: 'verbose',
+            default: 'false') {
+        f.checkbox()
+    }
 }
 
-f.entry(
-        title: _('verbose'),
-        field: 'verbose',
-        default: 'false') {
-    f.checkbox()
-}
-
-// }
 

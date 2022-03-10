@@ -104,7 +104,8 @@ class UiAstIT extends BaseCliAstIT {
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--url", URL,
-                "--token", TOKEN);
+                "--token", TOKEN,
+                "--truststore", DUMMY.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
@@ -259,7 +260,8 @@ class UiAstIT extends BaseCliAstIT {
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--url", URL,
-                "--token", TOKEN);
+                "--token", TOKEN,
+                "--truststore", DUMMY.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 }

@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.JwtResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
@@ -25,10 +26,13 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.
 @RequiredArgsConstructor
 public abstract class AbstractApiClient {
     @Setter
-    protected TextOutput console;
+    protected TextOutput console = null;
 
     @NonNull
     protected final ConnectionSettings connectionSettings;
+
+    @NonNull
+    protected final AdvancedSettings advancedSettings;
 
     @Setter
     protected EventConsumer eventConsumer = null;

@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.UrlHelper;
@@ -63,6 +64,10 @@ public class Validator {
         return checkViaException(() -> ReportUtils.validateJsonReports(value));
     }
 
+    public static boolean doCheckFieldAdvancedSettings(String value) {
+        return checkViaException(() -> AdvancedSettings.validate(value));
+    }
+
     public static FormValidation doCheckFieldNotEmpty(String value, String errorMessage) {
         return doCheckFieldNotEmpty(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
     }
@@ -97,6 +102,10 @@ public class Validator {
 
     public static FormValidation doCheckFieldJsonReports(String value, String errorMessage) {
         return doCheckFieldJsonReports(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
+    }
+
+    public static FormValidation doCheckFieldAdvancedSettings(String value, String errorMessage) {
+        return doCheckFieldAdvancedSettings(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
     }
 
     public static FormValidation error(Exception e) {

@@ -101,7 +101,12 @@ public class ApiClient extends AbstractApiClient {
     protected final VersionApi versionApi = new VersionApi(new com.ptsecurity.appsec.ai.ee.server.v36.updateserver.ApiClient());
 
     public ApiClient(@NonNull final ConnectionSettings connectionSettings) {
-        super(connectionSettings);
+        super(connectionSettings, AdvancedSettings.getDefault());
+        apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
+    }
+
+    public ApiClient(@NonNull final ConnectionSettings connectionSettings, @NonNull final AdvancedSettings advancedSettings) {
+        super(connectionSettings, advancedSettings);
         apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
     }
 
@@ -211,7 +216,7 @@ public class ApiClient extends AbstractApiClient {
         OkHttpClient.Builder httpBuilder = okHttpClient.newBuilder();
         httpBuilder
                 .hostnameVerifier((hostname, session) -> true)
-                .addInterceptor(new LoggingInterceptor())
+                .addInterceptor(new LoggingInterceptor(advancedSettings))
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1));
         if (null != trustManager) {
             SSLContext sslContext = call(() -> SSLContext.getInstance("TLS"), "SSL context creation failed");

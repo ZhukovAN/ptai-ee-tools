@@ -23,12 +23,20 @@ public abstract class BaseIT extends BaseTest {
     public static final String URL = (null != System.getenv("ptai.url"))
             ? System.getenv("ptai.url")
             : "https://ptai.domain.org:443/";
+
     public static final String CA = CA();
+
+    public static final String DUMMY = DUMMY();
 
     @SneakyThrows
     protected static String CA() {
         if (null != System.getenv("ptai.url"))
             return IOUtils.toString(new FileInputStream(System.getenv("ptai.ca.file")), StandardCharsets.UTF_8);
         return getResourceString("keys/domain.org.pem");
+    }
+
+    @SneakyThrows
+    protected static String DUMMY() {
+        return getResourceString("keys/root-ca.dummy.org.pem");
     }
 }

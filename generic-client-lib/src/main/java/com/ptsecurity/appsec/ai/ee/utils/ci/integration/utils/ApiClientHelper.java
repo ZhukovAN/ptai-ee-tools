@@ -98,7 +98,7 @@ public class ApiClientHelper {
             OkHttpClient.Builder builder = helper.getHttpClient().newBuilder()
                     .hostnameVerifier((hostname, session) -> true)
                     .authenticator(new JwtAuthenticator(client))
-                    .addInterceptor(new LoggingInterceptor())
+                    .addInterceptor(new LoggingInterceptor(client.getAdvancedSettings()))
                     .protocols(Collections.singletonList(Protocol.HTTP_1_1));
             if (null != trustManager) {
                 SSLContext sslContext = SSLContext.getInstance("TLS");

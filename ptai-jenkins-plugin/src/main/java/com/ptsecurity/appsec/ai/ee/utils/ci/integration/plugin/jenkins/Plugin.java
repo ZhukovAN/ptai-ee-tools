@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
@@ -64,6 +65,9 @@ public class Plugin extends Builder implements SimpleBuildStep {
     private final WorkMode workMode;
 
     @Getter
+    private final String advancedSettings;
+
+    @Getter
     private final boolean verbose;
 
     @Getter
@@ -83,12 +87,14 @@ public class Plugin extends Builder implements SimpleBuildStep {
     public Plugin(final com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings scanSettings,
                   final ConfigBase config,
                   final WorkMode workMode,
+                  final String advancedSettings,
                   final boolean verbose,
                   final boolean fullScanMode,
                   final ArrayList<Transfer> transfers) {
         this.scanSettings = scanSettings;
         this.config = config;
         this.workMode = workMode;
+        this.advancedSettings = advancedSettings;
         this.verbose = verbose;
         this.fullScanMode = fullScanMode;
         this.transfers = transfers;
@@ -189,6 +195,10 @@ public class Plugin extends Builder implements SimpleBuildStep {
             serverInsecure = configCustom.getServerSettings().isServerInsecure();
         }
 
+        AdvancedSettings advancedSettings = new AdvancedSettings();
+        advancedSettings.apply(descriptor.getAdvancedSettings());
+        advancedSettings.apply(this.advancedSettings);
+
         check = descriptor.doTestProjectFields(
                 selectedScanSettings,
                 selectedConfig,
@@ -221,6 +231,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .buildInfo(buildInfo)
                 .transfers(transfers)
                 .fullScanMode(fullScanMode)
+                .advancedSettings(advancedSettings)
                 .build();
         if (workMode instanceof WorkModeSync) {
             WorkModeSync workModeSync = (WorkModeSync) workMode;

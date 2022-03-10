@@ -165,3 +165,9 @@
 + [Feature] Jenkins plugin integration tests implemented
 + [Fix] ClassGraph library replaced with Reflections
 + [Fix] 7z-packed sources are replaced with zip-packed ones as ExtractResourceSCM supports zip archives
+### 20220215
++ [Fix] Fixed FileCollector bug where it doesn't add folder entries to zipped file. Processing of such zip files sometimes fails on a PT AI server
+### 20220228
++ [Feature] CLI plugin may now use -Dptai.logging.http.response.max.body.size=10 Java option to restrict logged HTTP body size
+### 20220310
++ [Feature] Jenkins plugin now supports global- and task-scope defined advanced settings. logging.http.response.max.body.size is supported

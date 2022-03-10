@@ -17,6 +17,7 @@ abstract class AbstractTool {
     String prefix
     PrintStream console
     boolean verbose
+    AdvancedSettings advancedSettings
 }
 
 enum JobExecutionResult {
@@ -34,7 +35,6 @@ abstract class AbstractJob {
 
 AbstractJob -left-|> AbstractTool
 
-
 class CheckServerJob {
 }
 
@@ -42,6 +42,7 @@ CheckServerJob --|> AbstractJob
 
 abstract class AbstractApiClient {
     # List<Object> apis
+    # AdvancedSettings advancedSettings
     + {abstract} JwtResponse authenticate()
     + boolean init()
     # void unsafeInit()

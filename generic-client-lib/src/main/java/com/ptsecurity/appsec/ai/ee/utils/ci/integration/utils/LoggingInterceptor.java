@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
@@ -12,14 +13,13 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.HTTP_RESPONSE_MAX_BODY_SIZE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE;
 
 @Slf4j
+@AllArgsConstructor
 public class LoggingInterceptor implements Interceptor {
-    /**
-     * Maximum response body size to be output to log
-     */
-    protected static int HTTP_RESPONSE_MAX_BODY_SIZE_VALUE = 10 * 1024;
+    @NonNull
+    protected AdvancedSettings advancedSettings = AdvancedSettings.getDefault();
 
     @NotNull
     @Override
@@ -44,7 +44,7 @@ public class LoggingInterceptor implements Interceptor {
             Buffer buffer = source.getBuffer();
             String bufferData = buffer.clone().readString(StandardCharsets.UTF_8);
 
-            int maxBody = AdvancedSettings.getInt(HTTP_RESPONSE_MAX_BODY_SIZE, HTTP_RESPONSE_MAX_BODY_SIZE_VALUE);
+            int maxBody = advancedSettings.getInt(LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE);
             if (maxBody >= bufferData.length()) {
                 log.trace("Response body: {}", StringUtils.isEmpty(bufferData) ? "[empty]" : bufferData);
             } else {

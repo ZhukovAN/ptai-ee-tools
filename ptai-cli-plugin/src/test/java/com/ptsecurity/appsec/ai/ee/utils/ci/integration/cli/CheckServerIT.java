@@ -1,17 +1,23 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
+import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 @DisplayName("Server availability check tests")
 @Tag("integration")
 class CheckServerIT extends BaseCliIT {
+    @SneakyThrows
     @Test
     @DisplayName("Connect with valid token")
     public void testGoodToken() {
@@ -46,13 +52,15 @@ class CheckServerIT extends BaseCliIT {
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
+    @SneakyThrows
     @Test
-    @DisplayName("Fail secure connect without CA certificates")
+    @DisplayName("Fail secure connect without valid CA certificates")
     public void testWithoutCaCertificates() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
                 "--url", URL,
-                "--token", TOKEN);
+                "--token", TOKEN,
+                "--truststore", DUMMY.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 

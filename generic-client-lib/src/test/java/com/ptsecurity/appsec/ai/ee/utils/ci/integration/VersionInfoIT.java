@@ -27,8 +27,10 @@ public class VersionInfoIT extends BaseClientIT {
 
     @SneakyThrows
     @Test
-    @DisplayName("Check PT AI server status using insecure connection")
+    @DisplayName("Check PT AI server status using insecure connection without trusted CA certificates")
     public void checkInsecureConnection() {
+        // As we do not know if JRE's truststore contains integration test CA certificates, let's use dummy one
+        connectionSettings.setCaCertsPem(DUMMY());
         AbstractApiClient client = Assertions.assertDoesNotThrow(() -> Factory.client(connectionSettings));
 
         CheckServerTasks checkServerTasks = new Factory().checkServerTasks(client);
@@ -51,9 +53,8 @@ public class VersionInfoIT extends BaseClientIT {
         ServerCheckResult serverCheckResult = checkServerTasks.check();
         Assertions.assertEquals(ServerCheckResult.State.OK, serverCheckResult.getState());
 
-        connectionSettings.setCaCertsPem(null);
+        connectionSettings.setCaCertsPem(getResourceString("keys/root-ca.dummy.org.pem"));
         Assertions.assertThrows(GenericException.class, () -> Factory.client(connectionSettings));
-
     }
 
 }

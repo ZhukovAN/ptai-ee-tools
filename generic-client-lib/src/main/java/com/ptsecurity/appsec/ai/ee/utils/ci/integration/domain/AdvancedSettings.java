@@ -1,70 +1,107 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain;
 
-import lombok.NonNull;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
-
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.StringHelper.arrayAsString;
+import java.util.function.Supplier;
 
 @Slf4j
+@ToString
 public class AdvancedSettings {
-    public static final String HTTP_RESPONSE_MAX_BODY_SIZE = "ptai.http.response.max.body.size";
-    protected static final List<String> NAMES = Arrays.asList(HTTP_RESPONSE_MAX_BODY_SIZE);
+    protected static final String SYSTEM_PREFIX = "ptai.";
+    private static AdvancedSettings DEFAULT;
 
-    static {
-        for (String name : NAMES) {
-            if (null == System.getProperty(name)) continue;
-            log.trace("Set parameter {} = {}", name, System.getProperty(name));
-            settings.put(name, System.getProperty(name));
-        }
+    private final Map<SettingInfo, Object> settings = new HashMap<>();
+
+    public enum SettingType {
+        STRING, INTEGER
     }
 
-    public final Map<String, String> settings = new HashMap<>();
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    @Getter
+    public enum SettingInfo {
+        /**
+         * Maximum response body size to be output to log
+         */
+        LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE("logging.http.response.max.body.size", SettingType.INTEGER, 1024, Resources::i18n_ast_settings_advanced_logging_http_response_max_body_size),
+        LOGGING_HTTP_REQUEST_MAX_BODY_SIZE("logging.http.request.max.body.size", SettingType.INTEGER, 512, Resources::i18n_ast_settings_advanced_logging_http_request_max_body_size),
+        HTTP_REQUEST_READ_TIMEOUT("http.request.read.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_http_request_read_timeout),
+        HTTP_REQUEST_WRITE_TIMEOUT("http.request.write.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_logging_http_response_max_body_size);
+
+        private final String name;
+        private final SettingType type;
+        private final Object defaultValue;
+        private final Supplier<String> descriptionFunction;
+    }
+
+    public static AdvancedSettings getDefault() {
+        if (null == DEFAULT) DEFAULT = new AdvancedSettings();
+        return DEFAULT;
+    }
 
     public AdvancedSettings() {
-        for (String name : NAMES) {
-            if (null == System.getProperty(name)) continue;
-            log.trace("Set parameter {} = {} as global setting", name, System.getProperty(name));
-            settings.put(name, System.getProperty(name));
+        for (SettingInfo settingInfo : SettingInfo.values())
+            settings.put(settingInfo, settingInfo.getDefaultValue());
+        apply();
+    }
+
+    public void apply(@NonNull final Properties properties, final boolean systemProperties) {
+        for (SettingInfo setting : SettingInfo.values()) {
+            String settingName = setting.getName();
+            if (systemProperties) settingName = SYSTEM_PREFIX + settingName;
+            String stringValue = properties.getProperty(settingName);
+            if (null == stringValue) continue;
+            if (SettingType.STRING == setting.getType()) {
+                log.trace("Set {} = {}", setting.getName(), stringValue);
+                settings.put(setting, stringValue);
+            } else if (SettingType.INTEGER == setting.getType()) {
+                try {
+                    int value = Integer.parseInt(stringValue);
+                    log.trace("Set {} = {}", setting.getName(), stringValue);
+                    settings.put(setting, value);
+                } catch (NumberFormatException e) {
+                    log.warn("Skip {} = {} as string to number conversion failed", setting.getName(), stringValue);
+                }
+            } else
+                log.trace("Skip {} = {} as parameter of unknown type", setting.getName(), stringValue);
         }
     }
 
-    public AdvancedSettings(final Properties properties) {
-        this();
-        if (null == properties) return;
-        for (String name : properties.stringPropertyNames()) {
-            log.trace("Set (override) parameter {} = {} from properties", name, properties.getProperty(name));
-            settings.put(name, System.getProperty(name));
-        }
+    public void apply() {
+        log.trace("Set advanced settings values using system properties");
+        apply(System.getProperties(), true);
     }
 
-    public int getInt(@NonNull final String name, final int defaultValue) {
-        if (!settings.containsKey(name)) {
-            log.trace("Parameter {} not found, {} value will be used instead", name, defaultValue);
-            return defaultValue;
-        }
-        try {
-            return Integer.parseInt(settings.get(name));
-        } catch (NumberFormatException e) {
-            log.warn("Bad numeric parameter {} value {}. Default {} will be used instead", name, settings.get(name), defaultValue);
-            return defaultValue;
-        }
+    @SneakyThrows
+    public void apply(final String settings) {
+        if (StringUtils.isEmpty(settings)) return;
+        Properties properties = new Properties();
+        ByteArrayInputStream bis = new ByteArrayInputStream(settings.getBytes(StandardCharsets.UTF_8));
+        properties.load(bis);
+        apply(properties, false);
     }
 
-    public String[] getStrings(@NonNull final String name, final String[] defaultValue) {
-        if (!settings.containsKey(name)) return defaultValue;
-        try {
-            String values = settings.get(name);
-            return values.split("[, ]+");
-        } catch (NumberFormatException e) {
-            log.warn("Bad string array parameter {} value {}. Default {} will be used instead", name, settings.get(name), arrayAsString(defaultValue));
-            return defaultValue;
-        }
+    public static void validate(final String settings) throws GenericException {
+        ByteArrayInputStream bis = new ByteArrayInputStream(settings.getBytes(StandardCharsets.UTF_8));
+        CallHelper.call(() -> new Properties().load(bis), "Properties load failed");
     }
 
-    public String getString(@NonNull final String name, final String defaultValue) {
-        if (!settings.containsKey(name)) return defaultValue;
-        return settings.get(name);
+    public int getInt(@NonNull final SettingInfo info) {
+        if (SettingType.INTEGER != info.getType())
+            throw GenericException.raise("Can't get advanced setting integer value", new ClassCastException());
+        return (Integer) settings.get(info);
+    }
+
+    public String getString(@NonNull final SettingInfo info) {
+        if (SettingType.STRING != info.getType())
+            throw GenericException.raise("Can't get advanced setting integer value", new ClassCastException());
+        return (String) settings.get(info);
     }
 }

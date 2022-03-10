@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
 import lib.FormTagLib
 
 def f = namespace(FormTagLib);
@@ -19,6 +20,16 @@ f.section(
                     f.repeatableDeleteButton()
                 }
             }
+        }
+    }
+
+    f.advanced() {
+        f.entry(
+                title: Resources.i18n_ast_settings_advanced_label(),
+                field: 'advancedSettings') {
+            f.textarea(
+                    style: 'height:100px',
+                    checkMethod: 'post')
         }
     }
 }
