@@ -11,9 +11,9 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @Slf4j
-@ToString
 public class AdvancedSettings {
     protected static final String SYSTEM_PREFIX = "ptai.";
     private static AdvancedSettings DEFAULT;
@@ -103,5 +103,15 @@ public class AdvancedSettings {
         if (SettingType.STRING != info.getType())
             throw GenericException.raise("Can't get advanced setting integer value", new ClassCastException());
         return (String) settings.get(info);
+    }
+
+    @Override
+    public String toString() {
+        List<String> result = new ArrayList<>();
+        for (SettingInfo setting : SettingInfo.values()) {
+            result.add("# " + setting.descriptionFunction.get());
+            result.add(setting.getName() + " = " + settings.get(setting));
+        }
+        return result.stream().collect(Collectors.joining(System.getProperty("line.separator")));
     }
 }

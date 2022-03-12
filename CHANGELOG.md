@@ -171,3 +171,5 @@
 + [Feature] CLI plugin may now use -Dptai.logging.http.response.max.body.size=10 Java option to restrict logged HTTP body size
 ### 20220310
 + [Feature] Jenkins plugin now supports global- and task-scope defined advanced settings. logging.http.response.max.body.size is supported
+### 20220312
++ [Feature] Added logging.http.request.max.body.size, http.request.read.timeout and http.request.write.timeout for Jenkins and CLI plugins 

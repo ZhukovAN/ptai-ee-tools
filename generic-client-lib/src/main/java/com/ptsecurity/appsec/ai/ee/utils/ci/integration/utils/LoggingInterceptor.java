@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import okio.Buffer;
+import okio.BufferedSink;
 import okio.BufferedSource;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.LOGGING_HTTP_REQUEST_MAX_BODY_SIZE;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE;
 
 @Slf4j
@@ -64,13 +66,25 @@ public class LoggingInterceptor implements Interceptor {
             @NonNull final Headers headers,
             @NonNull final RequestBody body) throws IOException {
         long contentLength = body.contentLength();
-        String bodySize = -1L != body.contentLength() ? contentLength + " byte" : "unknown";
+        String bodySize = -1L != contentLength ? contentLength + " byte" : "unknown";
         log.trace("Request body size: {}", bodySize);
 
-        if (!"application/json".equalsIgnoreCase(headers.get("Content-Type"))) return;
+        if (!"application/json".equalsIgnoreCase(headers.get("Content-Type"))) {
+            log.trace("Non-JSON request body skipped");
+            return;
+        }
 
         Buffer buffer = new Buffer();
         body.writeTo(buffer);
-        log.trace("Request body: {}", buffer.readString(StandardCharsets.UTF_8));
+        int maxBody = advancedSettings.getInt(LOGGING_HTTP_REQUEST_MAX_BODY_SIZE);
+
+        if (maxBody >= contentLength) {
+            String stringBody = buffer.readString(StandardCharsets.UTF_8);
+            log.trace("Request body: {}", StringUtils.isEmpty(stringBody) ? "[empty]" : stringBody);
+        } else {
+            log.trace("Request body trimmed to first {} bytes as it {} bytes long", maxBody, contentLength);
+            String stringBody = buffer.readString(maxBody, StandardCharsets.UTF_8);
+            log.trace("Trimmed request body: {}", StringUtils.isEmpty(stringBody) ? "[empty]" : stringBody);
+        }
     }
 }

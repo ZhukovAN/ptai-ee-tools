@@ -9,12 +9,14 @@ import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
 import java.time.Duration;
 
 @DisplayName("Test API client authentication")
 @Tag("integration")
+@Slf4j
 public class AuthenticationIT extends BaseClientIT {
     protected ConnectionSettings connectionSettings = null;
 
@@ -38,6 +40,7 @@ public class AuthenticationIT extends BaseClientIT {
         client.authenticate();
 
         JwtResponse initialJwtResponse = client.getApiJwt();
+        log.trace("Initial authentication using API token: JWT is {}", initialJwtResponse);
         int signatureIdx = initialJwtResponse.getAccessToken().lastIndexOf('.');
         String withoutSignature = initialJwtResponse.getAccessToken().substring(0, signatureIdx + 1);
         Jwt<Header, Claims> initialJwt = Jwts.parser().parseClaimsJwt(withoutSignature);
@@ -57,6 +60,7 @@ public class AuthenticationIT extends BaseClientIT {
         Assertions.assertEquals(versionAfterRefresh, version);
 
         JwtResponse freshJwtResponse = client.getApiJwt();
+        log.trace("Subsequent re-authentication using refresh token: JWT is {}", freshJwtResponse);
         signatureIdx = freshJwtResponse.getAccessToken().lastIndexOf('.');
         withoutSignature = freshJwtResponse.getAccessToken().substring(0, signatureIdx + 1);
         Jwt<Header, Claims> freshJwt = Jwts.parser().parseClaimsJwt(withoutSignature);

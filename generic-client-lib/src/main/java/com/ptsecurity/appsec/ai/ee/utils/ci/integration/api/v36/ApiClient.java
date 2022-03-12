@@ -58,8 +58,6 @@ public class ApiClient extends AbstractApiClient {
     @Getter
     protected final String id = UUID.randomUUID().toString();
 
-    protected static final int TIMEOUT = 3600 * 1000;
-
     @Getter
     @ToString.Exclude
     protected final AuthApi authApi = new AuthApi(new com.ptsecurity.appsec.ai.ee.server.v36.auth.ApiClient());

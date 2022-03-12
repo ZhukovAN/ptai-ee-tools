@@ -8,6 +8,7 @@ import com.cloudbees.plugins.credentials.domains.Domain;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
@@ -87,7 +88,7 @@ public class PluginIT extends BaseAstIT {
         ArrayList<Transfer> transfers = new ArrayList<>();
         transfers.add(new Transfer());
 
-        Plugin ptai = new Plugin(scanSettings, configCustom, workMode, false, false, transfers);
+        Plugin ptai = new Plugin(scanSettings, configCustom, workMode, AdvancedSettings.getDefault().toString(), false, false, transfers);
         project.getBuildersList().add(ptai);
 
         FreeStyleBuild build = project.scheduleBuild2(0).get();
