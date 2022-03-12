@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descript
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
@@ -29,6 +30,7 @@ import hudson.tasks.Builder;
 import hudson.util.CopyOnWriteList;
 import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
@@ -53,6 +55,9 @@ import java.util.jar.Manifest;
 public class PluginDescriptor extends BuildStepDescriptor<Builder> {
 
     private final CopyOnWriteList<Config> globalConfigs = new CopyOnWriteList<>();
+
+    @Getter
+    private String advancedSettings = null;
 
     public List<Config> getGlobalConfigs() {
         return globalConfigs.getView();
@@ -99,6 +104,8 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             if ((jsonConfigs instanceof JSONObject) && ((JSONObject) jsonConfigs).isEmpty()) break;
 
             globalConfigs.replaceBy(request.bindJSONToList(Config.class, jsonConfigs));
+
+            advancedSettings = formData.getString("advancedSettings");
         } while (false);
 
         save();
@@ -220,12 +227,15 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
     private UUID searchProject(
             @NonNull final String name, @NonNull final String url,
             @NonNull final Credentials credentials, final boolean insecure) throws GenericException {
+        AdvancedSettings advancedSettings = new AdvancedSettings();
+        if (StringUtils.isNotEmpty(this.advancedSettings))
+            advancedSettings.apply(this.advancedSettings);
         AbstractApiClient client = Factory.client(ConnectionSettings.builder()
                 .url(url)
                 .credentials(TokenCredentials.builder().token(credentials.getToken().getPlainText()).build())
                 .insecure(insecure)
                 .caCertsPem(credentials.getServerCaCertificates())
-                .build());
+                .build(), advancedSettings);
         return new Factory().projectTasks(client).searchProject(name);
     }
 
@@ -300,6 +310,10 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             log.debug("Exception details", e);
         }
         return versionInfo;
+    }
+
+    public FormValidation doCheckAdvancedSettings(@QueryParameter("advancedSettings") String advancedSettings) {
+        return Validator.doCheckFieldAdvancedSettings(advancedSettings, Resources.i18n_ast_settings_advanced_message_invalid());
     }
 
     private static boolean isApplicableManifest(Manifest manifest) {

@@ -7,6 +7,7 @@ import com.ptsecurity.appsec.ai.ee.ServerCheckResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
@@ -62,12 +63,16 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
 
             Credentials credentials = CredentialsImpl.getCredentialsById(item, serverCredentialsId);
 
+            PluginDescriptor pluginDescriptor = Jenkins.get().getDescriptorByType(PluginDescriptor.class);
+            AdvancedSettings advancedSettings = new AdvancedSettings();
+            advancedSettings.apply(pluginDescriptor.getAdvancedSettings());
+
             AbstractApiClient client = Factory.client(ConnectionSettings.builder()
                     .url(serverUrl)
                     .credentials(TokenCredentials.builder().token(credentials.getToken().getPlainText()).build())
                     .insecure(serverInsecure)
                     .caCertsPem(credentials.getServerCaCertificates())
-                    .build());
+                    .build(), advancedSettings);
             ServerCheckResult res = new Factory().checkServerTasks(client).check();
             return ServerCheckResult.State.ERROR.equals(res.getState())
                     ? FormValidation.error(res.text())

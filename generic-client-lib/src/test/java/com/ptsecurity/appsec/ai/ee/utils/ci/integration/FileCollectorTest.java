@@ -83,36 +83,36 @@ public class FileCollectorTest extends BaseTest {
                 .excludes("./module/*/build/*/*.class")
                 .build());
         FileCollector collector = new FileCollector(transfers, new Tool());
-        List<FileCollector.FileEntry> entries = collector.collectFiles(sources.toFile());
-        Assertions.assertEquals(2, entries.size());
+        List<FileCollector.Entry> entries = collector.collectFiles(sources.toFile());
+        Assertions.assertEquals(2, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
 
         transfers.clear();
         transfers.addTransfer(Transfer.builder()
                 .excludes("**/build/**/module/**/*.class")
                 .build());
         entries = collector.collectFiles(sources.toFile());
-        Assertions.assertEquals(1, entries.size());
+        Assertions.assertEquals(1, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
 
         transfers.clear();
         transfers.addTransfer(Transfer.builder()
                 .excludes("**/*.class")
                 .build());
         entries = collector.collectFiles(sources.toFile());
-        Assertions.assertEquals(1, entries.size());
+        Assertions.assertEquals(1, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
 
         transfers.clear();
         transfers.addTransfer(Transfer.builder()
                 .excludes("module/**/build/**/module/**/*.class")
                 .build());
         entries = collector.collectFiles(sources.toFile());
-        Assertions.assertEquals(1, entries.size());
+        Assertions.assertEquals(1, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
 
         transfers.clear();
         transfers.addTransfer(Transfer.builder()
                 .excludes("**/build/**/*.class")
                 .build());
         entries = collector.collectFiles(sources.toFile());
-        Assertions.assertEquals(1, entries.size());
+        Assertions.assertEquals(1, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
     }
 
 }

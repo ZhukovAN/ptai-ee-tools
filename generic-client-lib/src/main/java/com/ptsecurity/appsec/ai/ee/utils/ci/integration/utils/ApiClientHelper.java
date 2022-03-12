@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -87,8 +88,8 @@ public class ApiClientHelper {
             // Set API client URL and timeout
             ApiClientHelper helper = new ApiClientHelper(api)
                     .setBasePath(connectionSettings.getUrl())
-                    .setReadTimeout(connectionSettings.getTimeout())
-                    .setWriteTimeout(connectionSettings.getTimeout());
+                    .setReadTimeout(1000 * client.getAdvancedSettings().getInt(AdvancedSettings.SettingInfo.HTTP_REQUEST_READ_TIMEOUT))
+                    .setWriteTimeout(1000 * client.getAdvancedSettings().getInt(AdvancedSettings.SettingInfo.HTTP_REQUEST_WRITE_TIMEOUT));
             // If custom certificates are defined, set API clients with those
             if (null != client.getConnectionSettings().getCaCertsPem())
                 helper.setSslCaCert(CertificateHelper.cleanupCaPem(connectionSettings.getCaCertsPem()));
@@ -98,7 +99,7 @@ public class ApiClientHelper {
             OkHttpClient.Builder builder = helper.getHttpClient().newBuilder()
                     .hostnameVerifier((hostname, session) -> true)
                     .authenticator(new JwtAuthenticator(client))
-                    .addInterceptor(new LoggingInterceptor())
+                    .addInterceptor(new LoggingInterceptor(client.getAdvancedSettings()))
                     .protocols(Collections.singletonList(Protocol.HTTP_1_1));
             if (null != trustManager) {
                 SSLContext sslContext = SSLContext.getInstance("TLS");

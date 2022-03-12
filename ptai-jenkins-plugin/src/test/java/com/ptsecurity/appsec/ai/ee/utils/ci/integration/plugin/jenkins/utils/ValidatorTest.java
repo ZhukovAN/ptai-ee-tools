@@ -19,6 +19,6 @@ class ValidatorTest {
         assertTrue(Validator.doCheckFieldUrl("https://ptai.domain.org:8443"));
         assertTrue(Validator.doCheckFieldUrl("http://ptai.domain.local:8443"));
         assertTrue(Validator.doCheckFieldUrl("https://ptai.domain.local:8443"));
-        assertFalse(Validator.doCheckFieldUrl("https://ast.ptai:8443"));
+        assertFalse(Validator.doCheckFieldUrl("https://ast.ptai:port"));
     }
 }

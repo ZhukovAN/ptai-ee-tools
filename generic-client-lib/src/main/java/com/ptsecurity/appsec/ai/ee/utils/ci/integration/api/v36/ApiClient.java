@@ -32,7 +32,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericExcept
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ApiClientHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.LoggingInterceptor;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -58,8 +57,6 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.
 public class ApiClient extends AbstractApiClient {
     @Getter
     protected final String id = UUID.randomUUID().toString();
-
-    protected static final int TIMEOUT = 3600 * 1000;
 
     @Getter
     @ToString.Exclude
@@ -102,7 +99,12 @@ public class ApiClient extends AbstractApiClient {
     protected final VersionApi versionApi = new VersionApi(new com.ptsecurity.appsec.ai.ee.server.v36.updateserver.ApiClient());
 
     public ApiClient(@NonNull final ConnectionSettings connectionSettings) {
-        super(connectionSettings);
+        super(connectionSettings, AdvancedSettings.getDefault());
+        apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
+    }
+
+    public ApiClient(@NonNull final ConnectionSettings connectionSettings, @NonNull final AdvancedSettings advancedSettings) {
+        super(connectionSettings, advancedSettings);
         apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
     }
 
@@ -212,7 +214,7 @@ public class ApiClient extends AbstractApiClient {
         OkHttpClient.Builder httpBuilder = okHttpClient.newBuilder();
         httpBuilder
                 .hostnameVerifier((hostname, session) -> true)
-                .addInterceptor(new LoggingInterceptor())
+                .addInterceptor(new LoggingInterceptor(advancedSettings))
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1));
         if (null != trustManager) {
             SSLContext sslContext = call(() -> SSLContext.getInstance("TLS"), "SSL context creation failed");

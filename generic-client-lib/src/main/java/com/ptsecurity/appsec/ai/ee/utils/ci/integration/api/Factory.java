@@ -1,8 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.VersionUnsupportedException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.VersionHelper;
 import lombok.NonNull;
@@ -58,14 +60,14 @@ public class Factory {
     }
 
     @NonNull
-    public static AbstractApiClient client(@NonNull final ConnectionSettings connectionSettings) throws GenericException {
+    public static AbstractApiClient client(@NonNull final ConnectionSettings connectionSettings, @NonNull AdvancedSettings advancedSettings) throws GenericException {
         List<Class<?>> clients = getAllClientImplementations();
         for (Class<?> clazz : clients) {
             log.debug("Checking {} class", clazz.getCanonicalName());
             if (!AbstractApiClient.class.isAssignableFrom(clazz)) continue;
             if (Modifier.isAbstract(clazz.getModifiers())) continue;
 
-            AbstractApiClient client = onClass(clazz).create(connectionSettings.validate()).get();
+            AbstractApiClient client = onClass(clazz).create(connectionSettings.validate(), advancedSettings).get();
             // Initialize all API clients with URL, timeouts, SSL settings etc.
             client.init();
             log.debug("Class {} instance created", clazz.getCanonicalName());
@@ -106,5 +108,17 @@ public class Factory {
             }
         }
         throw GenericException.raise("PT AI server API client create failed", new VersionUnsupportedException());
+    }
+
+    @NonNull
+    public static AbstractApiClient client(@NonNull final ConnectionSettings connectionSettings) throws GenericException {
+        return client(connectionSettings, AdvancedSettings.getDefault());
+    }
+
+    @NonNull
+    public static AbstractApiClient client(@NonNull final AbstractJob job) throws GenericException {
+        AbstractApiClient result = client(job.getConnectionSettings(), job.getAdvancedSettings());
+        result.setConsole(job);
+        return result;
     }
 }
