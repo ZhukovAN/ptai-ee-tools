@@ -1,32 +1,32 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36;
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
-import com.ptsecurity.appsec.ai.ee.server.v36.auth.ApiResponse;
-import com.ptsecurity.appsec.ai.ee.server.v36.auth.api.AuthApi;
-import com.ptsecurity.appsec.ai.ee.server.v36.auth.model.AuthScopeType;
-import com.ptsecurity.appsec.ai.ee.server.v36.auth.model.UserLoginModel;
-import com.ptsecurity.appsec.ai.ee.server.v36.filesstore.api.StoreApi;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.api.ConfigsApi;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.api.LicenseApi;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.api.ProjectsApi;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.api.ReportsApi;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanProgress;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.Stage;
-import com.ptsecurity.appsec.ai.ee.server.v36.scanscheduler.api.ScanAgentApi;
-import com.ptsecurity.appsec.ai.ee.server.v36.scanscheduler.api.ScanApi;
-import com.ptsecurity.appsec.ai.ee.server.v36.systemmanagement.api.HealthCheckApi;
-import com.ptsecurity.appsec.ai.ee.server.v36.updateserver.api.VersionApi;
+import com.ptsecurity.appsec.ai.ee.server.v40.auth.ApiResponse;
+import com.ptsecurity.appsec.ai.ee.server.v40.auth.api.AuthApi;
+import com.ptsecurity.appsec.ai.ee.server.v40.auth.model.AuthResultModel;
+import com.ptsecurity.appsec.ai.ee.server.v40.auth.model.AuthScopeType;
+import com.ptsecurity.appsec.ai.ee.server.v40.auth.model.UserLoginModel;
+import com.ptsecurity.appsec.ai.ee.server.v40.filesstore.api.StoreApi;
+import com.ptsecurity.appsec.ai.ee.server.v40.legacy.api.ProjectsApi;
+import com.ptsecurity.appsec.ai.ee.server.v40.legacy.api.ReportsApi;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.api.ConfigsApi;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.api.LicenseApi;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.ScanProgress;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.Stage;
+import com.ptsecurity.appsec.ai.ee.server.v40.scanscheduler.api.ScanAgentApi;
+import com.ptsecurity.appsec.ai.ee.server.v40.scanscheduler.api.ScanQueueApi;
+import com.ptsecurity.appsec.ai.ee.server.v40.systemmanagement.api.HealthCheckApi;
+import com.ptsecurity.appsec.ai.ee.server.v40.updateserver.api.VersionApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.VersionRange;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.EnumsConverter;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanCompleteEvent;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanProgressEvent;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanResultRemovedEvent;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanStartedEvent;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.tasks.ServerVersionTasksImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.EnumsConverter;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.events.ScanCompleteEvent;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.events.ScanProgressEvent;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.events.ScanResultRemovedEvent;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.events.ScanStartedEvent;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.tasks.ServerVersionTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
@@ -53,62 +53,70 @@ import java.util.concurrent.BlockingQueue;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
 @Slf4j
-@VersionRange(min = { 3, 6, 4, 2805 }, max = { 3, 6, 9, 9999 })
+@VersionRange(min = { 4, 0, 0, 0 }, max = { 4, 0, 0, 9999 })
 public class ApiClient extends AbstractApiClient {
     @Getter
     protected final String id = UUID.randomUUID().toString();
 
     @Getter
     @ToString.Exclude
-    protected final AuthApi authApi = new AuthApi(new com.ptsecurity.appsec.ai.ee.server.v36.auth.ApiClient());
+    protected final AuthApi authApi = new AuthApi(new com.ptsecurity.appsec.ai.ee.server.v40.auth.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final ProjectsApi projectsApi = new ProjectsApi(new com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.ApiClient());
+    protected final ProjectsApi legacyProjectsApi = new ProjectsApi(new com.ptsecurity.appsec.ai.ee.server.v40.legacy.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final ConfigsApi configsApi = new ConfigsApi(new com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.ApiClient());
+    protected final com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.api.ProjectsApi projectsApi = new com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.api.ProjectsApi(new com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final ReportsApi reportsApi = new ReportsApi(new com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.ApiClient());
+    protected final ConfigsApi configsApi = new ConfigsApi(new com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final LicenseApi licenseApi = new LicenseApi(new com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.ApiClient());
+    protected final com.ptsecurity.appsec.ai.ee.server.v40.legacy.api.ConfigsApi legacyConfigsApi = new com.ptsecurity.appsec.ai.ee.server.v40.legacy.api.ConfigsApi(new com.ptsecurity.appsec.ai.ee.server.v40.legacy.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final ScanApi scanApi = new ScanApi(new com.ptsecurity.appsec.ai.ee.server.v36.scanscheduler.ApiClient());
+    protected final ReportsApi legacyReportsApi = new ReportsApi(new com.ptsecurity.appsec.ai.ee.server.v40.legacy.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final ScanAgentApi scanAgentApi = new ScanAgentApi(new com.ptsecurity.appsec.ai.ee.server.v36.scanscheduler.ApiClient());
+    protected final LicenseApi licenseApi = new LicenseApi(new com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final StoreApi storeApi = new StoreApi(new com.ptsecurity.appsec.ai.ee.server.v36.filesstore.ApiClient());
+    protected final ScanQueueApi scanQueueApi = new ScanQueueApi(new com.ptsecurity.appsec.ai.ee.server.v40.scanscheduler.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final HealthCheckApi healthCheckApi = new HealthCheckApi(new com.ptsecurity.appsec.ai.ee.server.v36.systemmanagement.ApiClient());
+    protected final ScanAgentApi scanAgentApi = new ScanAgentApi(new com.ptsecurity.appsec.ai.ee.server.v40.scanscheduler.ApiClient());
 
     @Getter
     @ToString.Exclude
-    protected final VersionApi versionApi = new VersionApi(new com.ptsecurity.appsec.ai.ee.server.v36.updateserver.ApiClient());
+    protected final StoreApi storeApi = new StoreApi(new com.ptsecurity.appsec.ai.ee.server.v40.filesstore.ApiClient());
+
+    @Getter
+    @ToString.Exclude
+    protected final HealthCheckApi healthCheckApi = new HealthCheckApi(new com.ptsecurity.appsec.ai.ee.server.v40.systemmanagement.ApiClient());
+
+    @Getter
+    @ToString.Exclude
+    protected final VersionApi versionApi = new VersionApi(new com.ptsecurity.appsec.ai.ee.server.v40.updateserver.ApiClient());
 
     public ApiClient(@NonNull final ConnectionSettings connectionSettings) {
         super(connectionSettings, AdvancedSettings.getDefault());
-        apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
+        apis.addAll(Arrays.asList(authApi, projectsApi, legacyProjectsApi, configsApi, legacyConfigsApi, legacyReportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
     }
 
     public ApiClient(@NonNull final ConnectionSettings connectionSettings, @NonNull final AdvancedSettings advancedSettings) {
         super(connectionSettings, advancedSettings);
-        apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
+        apis.addAll(Arrays.asList(authApi, projectsApi, legacyProjectsApi, configsApi, legacyConfigsApi, legacyReportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
     }
 
-    protected ApiResponse<String> initialAuthentication() throws GenericException {
+    protected ApiResponse<AuthResultModel> initialAuthentication() throws GenericException {
         BaseCredentials baseCredentials = connectionSettings.getCredentials();
         if (baseCredentials instanceof TokenCredentials) {
             log.trace("Using PT AI API token-based credentials for authentication");
@@ -124,7 +132,7 @@ public class ApiClient extends AbstractApiClient {
             PasswordCredentials passwordCredentials = (PasswordCredentials) baseCredentials;
 
             UserLoginModel model = new UserLoginModel();
-            model.setUser(passwordCredentials.getUser());
+            model.setLogin(passwordCredentials.getUser());
             model.setPassword(passwordCredentials.getPassword());
             log.trace("Calling auth/userLogin endpoint with user name and password");
             return call(
@@ -135,7 +143,7 @@ public class ApiClient extends AbstractApiClient {
 
     public JwtResponse authenticate() throws GenericException {
         @NonNull
-        ApiResponse<String> jwtResponse;
+        ApiResponse<AuthResultModel> jwtResponse;
 
         if (null == this.apiJwt) {
             // We have no JWT yet, so need to get it using token-based authentication
@@ -171,11 +179,12 @@ public class ApiClient extends AbstractApiClient {
         }
 
         // Parse JWT from response string
-        final String jwtData = jwtResponse.getData();
+        final AuthResultModel jwtData = jwtResponse.getData();
         @NonNull
-        JwtResponse res = call(
-                () -> new ObjectMapper().readValue(jwtData, JwtResponse.class),
-                "JWT parse failed");
+        JwtResponse res = new JwtResponse(
+                jwtData.getAccessToken(),
+                jwtData.getRefreshToken(),
+                Objects.requireNonNull(jwtData.getExpiredAt()).toString());
         log.trace("JWT parse result: {}", res);
         // JwtResponse's refreshToken field is null after refresh, let's fill it
         // to avoid multiple parsing calls

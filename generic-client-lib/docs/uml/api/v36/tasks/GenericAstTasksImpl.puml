@@ -1,0 +1,70 @@
+@startuml
+
+group upload(UUID id, File sources)
+GenericAstTasksImpl -> storeApi: uploadSources(id, sources)
+end
+
+group startScan(projectId, fullScanMode)
+GenericAstTasksImpl -> StartScanModel ** : new
+GenericAstTasksImpl -> StartScanModel: setProjectId(projectId)
+alt Force full scan mode
+GenericAstTasksImpl -> StartScanModel: setScanType(ScanType.FULL)
+else Default (incremental) scan mode)
+GenericAstTasksImpl -> StartScanModel: setScanType(ScanType.INCREMENTAL)
+end
+GenericAstTasksImpl -> scanApi ++ : apiScanStartPost(startScanModel)
+scanApi --> GenericAstTasksImpl -- : scanId
+end
+
+group getLatestAstResult(UUID id)
+GenericAstTasksImpl -> projectsApi:apiProjectsProjectIdScanResultsLastGet(id)
+end
+
+group getLatestCompleteAstResult(UUID id)
+GenericAstTasksImpl -> projectsApi:apiProjectsProjectIdScanResultsGet(id)
+end
+
+group setupFromJson(AiProjScanSettings settings, Policy[] policy)
+note over GenericAstTasksImpl, configsApi
+  PT AI server API doesn't create project if DisabledPatterms and EnabledPatterns are missing even if scanAppType have
+  no PmTaint. So we need at least pass empty arrays and use predefined enabled / disabled pattern lists
+end note
+GenericAstTasksImpl -> configsApi: apiConfigsPmPatternsGet
+hnote over GenericAstTasksImpl, configsApi
+  Initialize disabled and enabled patterns list using patterns definition and programming
+  language. Details are skipped for diagram clarity, see sources instead
+end hnote
+== Convert AIPROJ-defined scan settings to PT AI's REST API ScanSettings ==
+
+GenericAstTasksImpl -> AiProjConverter ++ : convert(settings, patterns)
+AiProjConverter -> V36ScanSettings ** : new
+AiProjConverter -> V36ScanSettings: init(...)
+AiProjConverter --> GenericAstTasksImpl -- : scanSettings
+== Check if we should create project first ==
+GenericAstTasksImpl -> projectsApi ++ : apiProjectsLightNameGet(settings.projectName)
+projectsApi --> GenericAstTasksImpl -- : ProjectLight projectInfo
+alt Project not exists, create new one
+GenericAstTasksImpl -> CreateProjectModel ** : new
+CreateProjectModel --> GenericAstTasksImpl: createProjectModel
+GenericAstTasksImpl -> CreateProjectModel: setName(settings.projectName)
+GenericAstTasksImpl -> CreateProjectModel: setScanSettings(scanSettings)
+GenericAstTasksImpl -> projectsApi ++ : apiProjectsPost(createProjectModel)
+projectsApi --> GenericAstTasksImpl -- : project
+else Project exists, update its scan settings
+GenericAstTasksImpl -> scanSettings: setId(project.getSettingsId())
+GenericAstTasksImpl -> projectsApi: apiProjectsProjectIdScanSettingsPut(projectInfo.id, scanSettings)
+end
+== Assign security policy to project ==
+GenericAstTasksImpl -> projectsApi: apiProjectsProjectIdPoliciesRulesPut(project.id, policy.json)
+end
+
+group deleteProject(UUID id)
+GenericAstTasksImpl -> projectsApi: apiProjectsProjectIdDelete(id)
+end
+
+group listProjects
+GenericAstTasksImpl -> projectsApi: apiProjectsGet
+
+end
+
+@enduml

@@ -1,17 +1,22 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.test;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
-import lombok.NonNull;
-import lombok.SneakyThrows;
+import lombok.*;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
@@ -24,11 +29,51 @@ import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Map;
+import java.util.Objects;
 import java.util.logging.LogManager;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public abstract class BaseTest {
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id")
+    public static class Connection {
+        protected String id;
+        protected String url;
+        protected String token;
+        protected String user;
+        protected String password;
+        protected String ca;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class Configuration {
+        protected Map<String, Connection> connections;
+        @JsonProperty("current")
+        protected Connection current;
+    }
+
+    private static Connection CONNECTION = null;
+
+    @SneakyThrows
+    public static Connection CONNECTION() {
+        if (null == CONNECTION) {
+            // final Yaml yaml = new Yaml();
+            final InputStream inputStream = BaseTest.class.getResourceAsStream("/configuration.yaml");
+            // CONFIGURATION = yaml.load(inputStream);
+            final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+            Configuration configuration = objectMapper.readValue(inputStream, Configuration.class);
+            CONNECTION = configuration.getCurrent();
+        }
+        return CONNECTION;
+    }
+
     /**
      * Temporal folder where subfolders will be created
      */
@@ -51,16 +96,16 @@ public abstract class BaseTest {
     @SneakyThrows
     @NonNull
     public static String getResourceString(@NonNull final String name) {
-        InputStream inputStream = BaseTest.class.getClassLoader().getResourceAsStream(name);
+        InputStream inputStream = Objects.requireNonNull(BaseTest.class.getClassLoader().getResourceAsStream(name));
         return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
 
     /**
-     * Method extracts packed resource file contents to temp folder. Currently only 7-zip packed resources
+     * Method extracts packed resource file contents to temp folder. Currently, only 7-zip packed resources
      * are supported
      * @param name Absolute name of resource
      * @return Path to extracted resources. If packed resource contains exactly one file then path
-     * to extracted file will be returned. If resuorce contains more then one file all these files
+     * to extracted file will be returned. If resource contains more than one file all these files
      * will be extracted to destination folder and its path will be returned
      */
     public Path getPackedResourceFile(@NonNull final String name) {
@@ -68,13 +113,13 @@ public abstract class BaseTest {
     }
 
     /**
-     * Method extracts packed resource file contents to temp folder. Currently only 7-zip packed resources
+     * Method extracts packed resource file contents to temp folder. Currently, only 7-zip packed resources
      * are supported
      * @param name Absolute name of resource
      * @param tempFolder Folder where resources are to be unpacked.
      *                   If null value is passed, temporal directory will be automatically created
      * @return Path to extracted resources. If packed resource contains exactly one file then path
-     * to extracted file will be returned. If resuorce contains more then one file all these files
+     * to extracted file will be returned. If resource contains more than one file all these files
      * will be extracted to destination folder and its path will be returned
      */
     @SneakyThrows
@@ -93,7 +138,7 @@ public abstract class BaseTest {
      * @param tempFolder Folder where resources are to be unpacked.
      *                   If null value is passed, temporal directory will be automatically created
      * @return Path to extracted resources. If packed resource contains exactly one file then path
-     * to extracted file will be returned. If resuorce contains more then one file all these files
+     * to extracted file will be returned. If resource contains more than one file all these files
      * will be extracted to destination folder and its path will be returned
      */
     @SneakyThrows
@@ -117,7 +162,7 @@ public abstract class BaseTest {
                 if (!entry.isDirectory()) {
                     File out = rootOutputFolder.resolve(entry.getName()).toFile();
 
-                    // If this is first entry then it is to returned as a result. If there are more then one entry in the archive, folder path is to be returned
+                    // If this is first entry then it is to returned as a result. If there are more than one entry in the archive, folder path is to be returned
                     res = (null == res) ? out.toPath() : rootOutputFolder;
 
                     if (!out.getParentFile().exists() && !out.getParentFile().mkdirs()) throw new IOException("Failed to create directory " + out.getParentFile());
@@ -143,7 +188,7 @@ public abstract class BaseTest {
      * @param tempFolder Folder where resources are to be unpacked.
      *                   If null value is passed, temporal directory will be automatically created
      * @return Path to extracted resources. If packed resource contains exactly one file then path
-     * to extracted file will be returned. If resuorce contains more then one file all these files
+     * to extracted file will be returned. If resource contains more than one file all these files
      * will be extracted to destination folder and its path will be returned
      */
     @SneakyThrows
@@ -153,14 +198,13 @@ public abstract class BaseTest {
                 ? Files.createTempDirectory(TEMP_FOLDER, "")
                 : tempFolder;
 
-        byte[] buffer = new byte[1024];
         try (InputStream is = getResourceStream(name);
-             ZipInputStream zis = new ZipInputStream(is);) {
+             ZipInputStream zis = new ZipInputStream(is)) {
             ZipEntry entry = zis.getNextEntry();
             while (null != entry) {
                 if (!entry.isDirectory()) {
                     File out = rootOutputFolder.resolve(entry.getName()).toFile();
-                    // If this is first entry then it is to returned as a result. If there are more then one entry in the archive, folder path is to be returned
+                    // If this is first entry then it is to returned as a result. If there are more than one entry in the archive, folder path is to be returned
                     res = (null == res) ? out.toPath() : rootOutputFolder;
                     if (!out.getParentFile().exists() && !out.getParentFile().mkdirs()) throw new IOException("Failed to create directory " + out.getParentFile());
                     try (FileOutputStream fos = new FileOutputStream(out)) {
@@ -186,7 +230,7 @@ public abstract class BaseTest {
         // Need this as JSON report contains "Descriptions" while IssuesModel have "descriptions"
         mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES);
         mapper.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS);
-        // Need this as JSON may contains fields that are missing from model
+        // Need this as JSON may contain fields that are missing from model
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return mapper;
     }
@@ -196,23 +240,23 @@ public abstract class BaseTest {
         if (!path.toFile().exists()) return;
         Files.walkFileTree(path, new FileVisitor<Path>() {
             @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                file.toFile().setWritable(true);
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                Assertions.assertTrue(file.toFile().setWritable(true));
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+            public FileVisitResult visitFileFailed(Path file, IOException exc) {
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
                 return FileVisitResult.CONTINUE;
             }
         });

@@ -1,12 +1,12 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters;
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.*;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.JSON;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.server.v40.legacy.JSON;
+import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
@@ -24,10 +24,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -42,26 +39,27 @@ public class IssuesConverter {
     private static final Map<IssueApprovalState, BaseIssue.ApprovalState> ISSUE_APPROVAL_STATE_MAP = new HashMap<>();
     private static final Map<String, BaseIssue.Type> ISSUE_TYPE_MAP = new HashMap<>();
     private static final Map<IssueLevel, BaseIssue.Level> ISSUE_LEVEL_MAP = new HashMap<>();
-    private static final Map<V36VulnerabilityIssueScanMode, VulnerabilityIssue.ScanMode> SCAN_MODE_MAP = new HashMap<>();
+    private static final Map<V40VulnerabilityIssueScanMode, VulnerabilityIssue.ScanMode> SCAN_MODE_MAP = new HashMap<>();
     private static final Map<PolicyState, Policy.State> POLICY_STATE_MAP = new HashMap<>();
-    private static final Map<V36ProgrammingLanguage, ScanResult.ScanSettings.Language> LANGUAGE_MAP = new HashMap<>();
+    private static final Map<V40ProgrammingLanguage, ScanResult.ScanSettings.Language> LANGUAGE_MAP = new HashMap<>();
     private static final Map<Stage, ScanResult.State> STATE_MAP = new HashMap<>();
-    private static final Map<ScanResult.ScanSettings.Language, V36ProgrammingLanguage> REVERSE_LANGUAGE_MAP = new HashMap<>();
+    private static final Map<ScanResult.ScanSettings.Language, V40ProgrammingLanguage> REVERSE_LANGUAGE_MAP = new HashMap<>();
+    private static final Map<ScanResult.ScanSettings.Language, ProgrammingLanguageGroup> REVERSE_LANGUAGE_GROUP_MAP = new HashMap<>();
 
     static {
-        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.None, BaseIssue.ApprovalState.NONE);
-        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.Approval, BaseIssue.ApprovalState.APPROVAL);
-        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.Discard, BaseIssue.ApprovalState.DISCARD);
-        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.NotExist, BaseIssue.ApprovalState.NOT_EXIST);
-        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.AutoApproval, BaseIssue.ApprovalState.AUTO_APPROVAL);
+        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.NONE, BaseIssue.ApprovalState.NONE);
+        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.APPROVAL, BaseIssue.ApprovalState.APPROVAL);
+        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.DISCARD, BaseIssue.ApprovalState.DISCARD);
+        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.NOTEXIST, BaseIssue.ApprovalState.NOT_EXIST);
+        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.AUTOAPPROVAL, BaseIssue.ApprovalState.AUTO_APPROVAL);
 
-        ISSUE_TYPE_MAP.put(IssueType.Unknown.name(), BaseIssue.Type.UNKNOWN);
-        ISSUE_TYPE_MAP.put(IssueType.Vulnerability.name(), BaseIssue.Type.VULNERABILITY);
-        ISSUE_TYPE_MAP.put(IssueType.Weakness.name(), BaseIssue.Type.WEAKNESS);
-        ISSUE_TYPE_MAP.put(IssueType.Configuration.name(), BaseIssue.Type.CONFIGURATION);
-        ISSUE_TYPE_MAP.put(IssueType.Fingerprint.name(), BaseIssue.Type.SCA);
-        ISSUE_TYPE_MAP.put(IssueType.BlackBox.name(), BaseIssue.Type.BLACKBOX);
-        ISSUE_TYPE_MAP.put(IssueType.YaraMatch.name(), BaseIssue.Type.YARAMATCH);
+        ISSUE_TYPE_MAP.put(IssueType.UNKNOWN.name(), BaseIssue.Type.UNKNOWN);
+        ISSUE_TYPE_MAP.put(IssueType.VULNERABILITY.name(), BaseIssue.Type.VULNERABILITY);
+        ISSUE_TYPE_MAP.put(IssueType.WEAKNESS.name(), BaseIssue.Type.WEAKNESS);
+        ISSUE_TYPE_MAP.put(IssueType.CONFIGURATION.name(), BaseIssue.Type.CONFIGURATION);
+        ISSUE_TYPE_MAP.put(IssueType.FINGERPRINT.name(), BaseIssue.Type.SCA);
+        ISSUE_TYPE_MAP.put(IssueType.BLACKBOX.name(), BaseIssue.Type.BLACKBOX);
+        ISSUE_TYPE_MAP.put(IssueType.YARAMATCH.name(), BaseIssue.Type.YARAMATCH);
 
         ISSUE_LEVEL_MAP.put(IssueLevel.None, BaseIssue.Level.NONE);
         ISSUE_LEVEL_MAP.put(IssueLevel.Potential, BaseIssue.Level.POTENTIAL);
@@ -69,8 +67,8 @@ public class IssuesConverter {
         ISSUE_LEVEL_MAP.put(IssueLevel.Medium, BaseIssue.Level.MEDIUM);
         ISSUE_LEVEL_MAP.put(IssueLevel.High, BaseIssue.Level.HIGH);
 
-        SCAN_MODE_MAP.put(V36VulnerabilityIssueScanMode.FromEntryPoint, VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT);
-        SCAN_MODE_MAP.put(V36VulnerabilityIssueScanMode.FromPublicProtected, VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED);
+        SCAN_MODE_MAP.put(V40VulnerabilityIssueScanMode.FromEntryPoint, VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT);
+        SCAN_MODE_MAP.put(V40VulnerabilityIssueScanMode.FromPublicProtected, VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED);
 
         // Bug https://jira.ptsecurity.com/browse/AI-4866 with swapped
         // confirmed / rejected states fixed and will be included in 3.7
@@ -78,19 +76,19 @@ public class IssuesConverter {
         POLICY_STATE_MAP.put(PolicyState.CONFIRMED, Policy.State.REJECTED);
         POLICY_STATE_MAP.put(PolicyState.REJECTED, Policy.State.CONFIRMED);
 
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.JAVA, ScanResult.ScanSettings.Language.JAVA);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.PHP, ScanResult.ScanSettings.Language.PHP);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.CSHARP, ScanResult.ScanSettings.Language.CSHARP);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.VB, ScanResult.ScanSettings.Language.VB);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.GO, ScanResult.ScanSettings.Language.GO);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.CPLUSPLUS, ScanResult.ScanSettings.Language.CPP);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.PYTHON, ScanResult.ScanSettings.Language.PYTHON);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.PLSQL, ScanResult.ScanSettings.Language.SQL);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.JAVASCRIPT, ScanResult.ScanSettings.Language.JS);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.KOTLIN, ScanResult.ScanSettings.Language.KOTLIN);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.SWIFT, ScanResult.ScanSettings.Language.SWIFT);
-        LANGUAGE_MAP.put(V36ProgrammingLanguage.OBJECTIVEC, ScanResult.ScanSettings.Language.OBJECTIVEC);
-        for (V36ProgrammingLanguage language : LANGUAGE_MAP.keySet())
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.JAVA, ScanResult.ScanSettings.Language.JAVA);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.PHP, ScanResult.ScanSettings.Language.PHP);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.CSHARP, ScanResult.ScanSettings.Language.CSHARP);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.VB, ScanResult.ScanSettings.Language.VB);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.GO, ScanResult.ScanSettings.Language.GO);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.CPLUSPLUS, ScanResult.ScanSettings.Language.CPP);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.PYTHON, ScanResult.ScanSettings.Language.PYTHON);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.PLSQL, ScanResult.ScanSettings.Language.SQL);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.JAVASCRIPT, ScanResult.ScanSettings.Language.JS);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.KOTLIN, ScanResult.ScanSettings.Language.KOTLIN);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.SWIFT, ScanResult.ScanSettings.Language.SWIFT);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.OBJECTIVEC, ScanResult.ScanSettings.Language.OBJECTIVEC);
+        for (V40ProgrammingLanguage language : LANGUAGE_MAP.keySet())
             REVERSE_LANGUAGE_MAP.put(LANGUAGE_MAP.get(language), language);
 
         STATE_MAP.put(Stage.ABORTED, ScanResult.State.ABORTED);
@@ -104,14 +102,26 @@ public class IssuesConverter {
         STATE_MAP.put(Stage.PRECHECK, ScanResult.State.UNKNOWN);
         STATE_MAP.put(Stage.SCAN, ScanResult.State.UNKNOWN);
         STATE_MAP.put(Stage.VFSSETUP, ScanResult.State.UNKNOWN);
+
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.CPP, ProgrammingLanguageGroup.CANDCPLUSPLUS);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.GO, ProgrammingLanguageGroup.GO);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.JS, ProgrammingLanguageGroup.JAVASCRIPT);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.CSHARP, ProgrammingLanguageGroup.CSHARP);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.JAVA, ProgrammingLanguageGroup.JAVA);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.KOTLIN, ProgrammingLanguageGroup.KOTLIN);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.SQL, ProgrammingLanguageGroup.SQL);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.PYTHON, ProgrammingLanguageGroup.PYTHON);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.SWIFT, ProgrammingLanguageGroup.SWIFT);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.VB, ProgrammingLanguageGroup.VB);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.OBJECTIVEC, ProgrammingLanguageGroup.OBJECTIVEC);
     }
 
     /**
-     * Method converts PT AI v.3.6 API scan settings to API version independent scan settings
-     * @param scanSettings PT AI v.3.6 API scan settings
+     * Method converts PT AI v.4.0 API scan settings to API version independent scan settings
+     * @param scanSettings PT AI v.4.0 API scan settings
      * @return PT AI API version independent scan settings
      */
-    public static ScanResult.ScanSettings convert(@NonNull final V36ScanSettings scanSettings) {
+    public static ScanResult.ScanSettings convert(@NonNull final V40ScanSettings scanSettings) {
         ScanResult.ScanSettings res = ScanResult.ScanSettings.builder()
                 .id(Objects.requireNonNull(scanSettings.getId(), "Scan settings ID is null"))
                 .build();
@@ -135,24 +145,24 @@ public class IssuesConverter {
         List<String> scanAppTypes = parseCommaSeparatedValues(scanAppTypeString);
         if (null == scanAppTypes) return res;
         for (String scanAppType : scanAppTypes) {
-            if (ScanAppType.Configuration.name().equalsIgnoreCase(scanAppType))
+            if (ScanAppType.CONFIGURATION.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.CONFIGURATION);
-            else if (ScanAppType.Fingerprint.name().equalsIgnoreCase(scanAppType))
+            else if (ScanAppType.FINGERPRINT.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.FINGERPRINT);
-            else if (ScanAppType.Java.name().equalsIgnoreCase(scanAppType))
+            else if (ScanAppType.JAVA.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.AI);
-            else if (ScanAppType.CSharp.name().equalsIgnoreCase(scanAppType))
+            else if (ScanAppType.CSHARP.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.AI);
             else if (ScanAppType.PHP.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.AI);
-            else if (ScanAppType.PmTaint.name().equalsIgnoreCase(scanAppType)) {
+            else if (ScanAppType.PMTAINT.name().equalsIgnoreCase(scanAppType)) {
                 if (Objects.requireNonNull(scanSettings.getUsePmAnalysis(), "usePmAnalysis is null"))
                     res.getEngines().add(ScanResult.ScanSettings.Engine.PM);
                 if (Objects.requireNonNull(scanSettings.getUseTaintAnalysis(), "useTaintAnalysis is null"))
                     res.getEngines().add(ScanResult.ScanSettings.Engine.TAINT);
-            } else if (ScanAppType.BlackBox.name().equalsIgnoreCase(scanAppType))
+            } else if (ScanAppType.BLACKBOX.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.BLACKBOX);
-            else if (ScanAppType.DependencyCheck.name().equalsIgnoreCase(scanAppType))
+            else if (ScanAppType.DEPENDENCYCHECK.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.DC);
         }
         return res;
@@ -196,9 +206,9 @@ public class IssuesConverter {
      */
     public static ScanResult convert(
             @NonNull final String projectName,
-            @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
+            @NonNull final com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult scanResult,
             @NonNull final Map<Reports.Locale, InputStream> modelStreams,
-            @NonNull final V36ScanSettings scanSettings,
+            @NonNull final V40ScanSettings scanSettings,
             @NonNull final String ptaiUrl,
             @NonNull final Map<ServerVersionTasks.Component, String> versions) {
         ScanResult res = new ScanResult();
@@ -218,8 +228,8 @@ public class IssuesConverter {
             // no difference what locale will be used
             if (null == model) model = localizedModel;
             if (null == localizedModel.getDescriptions() || localizedModel.getDescriptions().isEmpty()) continue;
-            Map<String, IssueDescriptionModel> descriptions = localizedModel.getDescriptions();
-            for (IssueDescriptionModel idm : descriptions.values()) {
+            Map<String, V40IssueDescriptionModel> descriptions = localizedModel.getDescriptions();
+            for (V40IssueDescriptionModel idm : descriptions.values()) {
                 if (null == idm.getDescriptionValue() || StringUtils.isEmpty(idm.getDescriptionValue().getHeader())) continue;
                 // Store localized title to dictionary
                 Map<Reports.Locale, ScanResult.Strings> values = dictionary.computeIfAbsent(idm.getIdentity(), l -> new HashMap<>());
@@ -265,13 +275,9 @@ public class IssuesConverter {
 
     public static ScanBrief.Statistics convert(
             final ScanResultStatistic statistic,
-            @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult) {
+            @NonNull final com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult scanResult) {
         if (null == statistic) return null;
-
-        // PT AI REST API uses UTC date / time representation, but without "Z" letter at the end of ISO 8601 representation
-        String scanDateString = Objects.requireNonNull(scanResult.getScanDate(), "Scan result date is null");
-        if (!StringUtils.endsWith(scanDateString, "Z")) scanDateString = scanDateString + "Z";
-        ZonedDateTime zonedScanDate = ZonedDateTime.parse(scanDateString, DateTimeFormatter.ISO_DATE_TIME);
+        ZonedDateTime zonedScanDate = Objects.requireNonNull(scanResult.getScanDate(), "Scan result date is null").toZonedDateTime();
 
         String scanDurationString = Objects.requireNonNull(statistic.getScanDuration(), "Scan duration is null");
         Duration scanDuration = parseDuration(scanDurationString);
@@ -286,7 +292,7 @@ public class IssuesConverter {
                 .build();
     }
 
-    public static VulnerabilityIssue.Exploit convert(final V36Exploit exploit) {
+    public static VulnerabilityIssue.Exploit convert(final V40Exploit exploit) {
         if (null == exploit) return null;
         VulnerabilityIssue.Exploit res = VulnerabilityIssue.Exploit.builder()
                 .url(exploit.getUrl())
@@ -298,7 +304,7 @@ public class IssuesConverter {
         return res;
     }
 
-    public static VulnerabilityIssue.Exploit.Parameter convert(final V36ExploitParameter parameter) {
+    public static VulnerabilityIssue.Exploit.Parameter convert(final V40ExploitParameter parameter) {
         if (null == parameter) return null;
         return VulnerabilityIssue.Exploit.Parameter.builder()
                 .name(parameter.getName())
@@ -310,14 +316,14 @@ public class IssuesConverter {
                 .build();
     }
 
-    public static VulnerabilityIssue.BestPlaceToFix convert(final V36BestPlaceToFix bpf) {
+    public static VulnerabilityIssue.BestPlaceToFix convert(final V40BestPlaceToFix bpf) {
         if (null == bpf) return null;
         return VulnerabilityIssue.BestPlaceToFix.builder()
                 .place(convert(bpf.getPlace()))
                 .build();
     }
 
-    public static BaseSourceIssue.Place convert(final V36Place place) {
+    public static BaseSourceIssue.Place convert(final V40Place place) {
         if (null == place) return null;
         return BaseSourceIssue.Place.builder()
                 .file(Objects.requireNonNull(place.getFile()))
@@ -334,7 +340,7 @@ public class IssuesConverter {
      * @param cvss PT AI v.3.6 CVSS data that is to be converted
      * @return PT AI API version independent CVSS instance
      */
-    public static ScaIssue.Cvss convert(final V36CvssMetadata cvss) {
+    public static ScaIssue.Cvss convert(final V40CvssMetadata cvss) {
         if (null == cvss) return null;
         return ScaIssue.Cvss.builder()
                 .base(cvss.getBase())
@@ -459,7 +465,7 @@ public class IssuesConverter {
             on(issue).call("setCveId", value);
         }
         if (haveAccessor(metadata, "getCvss") && haveAccessor(issue, "setCvss", ScaIssue.Cvss.class)) {
-            V36CvssMetadata value = on(metadata).call("getCvss").get();
+            V40CvssMetadata value = on(metadata).call("getCvss").get();
             on(issue).call("setCvss", convert(value));
         }
         if (haveAccessor(metadata, "getLevel") && haveAccessor(issue, "setLevel", BaseIssue.Level.class)) {
@@ -489,7 +495,7 @@ public class IssuesConverter {
         // SCA uses array of fingerprint IDs and those are to be processed separately
         IssueBaseMetadata baseMetadata = null;
 
-        if (IssueType.Fingerprint != issueType) {
+        if (IssueType.FINGERPRINT != issueType) {
             baseMetadata = metadataMap.get(issueBase.getType());
             if (null == baseMetadata) {
                 log.warn("Skipping issue {} as there were no metadata found", issueBase.getId());
@@ -503,16 +509,16 @@ public class IssuesConverter {
             }
         }
 
-        if (IssueType.BlackBox == issueType && issueBase instanceof V36BlackBoxIssue) {
-                V36BlackBoxIssue issue = (V36BlackBoxIssue) issueBase;
+        if (IssueType.BLACKBOX == issueType && issueBase instanceof V40BlackBoxIssue) {
+                V40BlackBoxIssue issue = (V40BlackBoxIssue) issueBase;
 
                 BlackBoxIssue res = new BlackBoxIssue();
                 setBaseFields(issue, res, dictionary);
                 applyMetadata(baseMetadata, res);
 
                 return Collections.singletonList(res);
-        } else if (IssueType.Configuration == issueType && issueBase instanceof V36ConfigurationIssue) {
-            V36ConfigurationIssue issue = (V36ConfigurationIssue) issueBase;
+        } else if (IssueType.CONFIGURATION == issueType && issueBase instanceof V40ConfigurationIssue) {
+            V40ConfigurationIssue issue = (V40ConfigurationIssue) issueBase;
 
             ConfigurationIssue res = new ConfigurationIssue();
             setBaseFields(issue, res, dictionary);
@@ -523,8 +529,8 @@ public class IssuesConverter {
             res.setRecommendedValue(issue.getRecommendedValue());
 
             return Collections.singletonList(res);
-        } else if (IssueType.Fingerprint == issueType) {
-            V36FingerprintIssue issue = (V36FingerprintIssue) issueBase;
+        } else if (IssueType.FINGERPRINT == issueType) {
+            V40FingerprintIssue issue = (V40FingerprintIssue) issueBase;
 
             List<String> fingerprintIds = issue.getFingerprintIds();
             if (null == fingerprintIds || fingerprintIds.isEmpty()) return null;
@@ -548,7 +554,7 @@ public class IssuesConverter {
                 // to avoid setBaseFields change
                 issue.setType(fingerprintId);
                 setBaseFields(issue, res, dictionary);
-                // As single V36FingerprintIssue may have multiple fingerprint IDs
+                // As single v40FingerprintIssue may have multiple fingerprint IDs
                 // PT AI looks these IDs for maximum severity level and assigns it
                 // to issue. But as we decide to create individual ScaIssue for
                 // each fingerprintId, we need to fix level by applying actual level
@@ -573,14 +579,14 @@ public class IssuesConverter {
                 scaIssues.add(res);
             }
             return scaIssues;
-        } else if (IssueType.Unknown == issueType) {
-            V36UnknownIssue issue = (V36UnknownIssue) issueBase;
+        } else if (IssueType.UNKNOWN == issueType) {
+            V40UnknownIssue issue = (V40UnknownIssue) issueBase;
 
             UnknownIssue res = new UnknownIssue();
             setBaseFields(issue, res, dictionary);
             return Collections.singletonList(res);
-        } else if (IssueType.Vulnerability == issueType) {
-            V36VulnerabilityIssue issue = (V36VulnerabilityIssue) issueBase;
+        } else if (IssueType.VULNERABILITY == issueType) {
+            V40VulnerabilityIssue issue = (V40VulnerabilityIssue) issueBase;
 
             VulnerabilityIssue res = new VulnerabilityIssue();
             setBaseFields(issue, res, dictionary);
@@ -591,7 +597,7 @@ public class IssuesConverter {
             res.setVulnerableExpression(convert(issue.getVulnerableExpression()));
             res.setEntryPoint(convert(issue.getEntryPoint()));
 
-            List<V36Place> entries = issue.getTaintDataEntries();
+            List<V40Place> entries = issue.getTaintDataEntries();
             if (null != entries && !entries.isEmpty())
                 res.setTaintDataEntries(entries.stream().map(IssuesConverter::convert).collect(Collectors.toList()));
             entries = issue.getDataTrace();
@@ -609,8 +615,8 @@ public class IssuesConverter {
             res.setAutocheckExploit(convert(issue.getAutocheckExploit()));
 
             return Collections.singletonList(res);
-        } else if (IssueType.Weakness == issueType) {
-            V36WeaknessIssue issue = (V36WeaknessIssue) issueBase;
+        } else if (IssueType.WEAKNESS == issueType) {
+            V40WeaknessIssue issue = (V40WeaknessIssue) issueBase;
 
             WeaknessIssue res = new WeaknessIssue();
             setBaseFields(issue, res, dictionary);
@@ -618,8 +624,8 @@ public class IssuesConverter {
             res.setVulnerableExpression(convert(issue.getVulnerableExpression()));
 
             return Collections.singletonList(res);
-        } else if (IssueType.YaraMatch == issueType) {
-            V36YaraMatchIssue issue = (V36YaraMatchIssue) issueBase;
+        } else if (IssueType.YARAMATCH == issueType) {
+            V40YaraMatchIssue issue = (V40YaraMatchIssue) issueBase;
 
             YaraMatchIssue res = new YaraMatchIssue();
             setBaseFields(issue, res, dictionary);
@@ -629,14 +635,20 @@ public class IssuesConverter {
     }
 
     /**
-     * Method converts PT AI API version independent language to PT AI v.3.6 API language
+     * Method converts PT AI API version independent language to PT AI v.4.0 API programming language group
      * @param language PT AI API version independent language
-     * @return PT AI v.3.6 API language
+     * @return PT AI v.4.0 API programming language group
      */
     @NonNull
-    public static V36ProgrammingLanguage convert(@NonNull final ScanResult.ScanSettings.Language language) {
-        V36ProgrammingLanguage res = REVERSE_LANGUAGE_MAP.get(language);
-        return null == res ? V36ProgrammingLanguage.NONE : res;
+    public static ProgrammingLanguageGroup convertLanguageGroup(@NonNull final ScanResult.ScanSettings.Language language) {
+        ProgrammingLanguageGroup res = REVERSE_LANGUAGE_GROUP_MAP.get(language);
+        return null == res ? ProgrammingLanguageGroup.NONE : res;
+    }
+
+    @NonNull
+    public static V40ProgrammingLanguage convertLanguage(@NonNull final ScanResult.ScanSettings.Language language) {
+        V40ProgrammingLanguage res = REVERSE_LANGUAGE_MAP.get(language);
+        return null == res ? V40ProgrammingLanguage.NONE : res;
     }
 
     public static final IssuesModel EMPTY_ISSUES_MODEL = new IssuesModel();
@@ -673,8 +685,8 @@ public class IssuesConverter {
      */
     public static void convertInto(
             @NonNull final String projectName,
-            @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
-            @NonNull final V36ScanSettings scanSettings,
+            @NonNull final com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult scanResult,
+            @NonNull final V40ScanSettings scanSettings,
             @NonNull final Map<ServerVersionTasks.Component, String> versions,
             @NonNull final ScanBrief destination) {
         destination.setPtaiServerVersion(versions.get(ServerVersionTasks.Component.AIE));
@@ -695,8 +707,8 @@ public class IssuesConverter {
 
     public static ScanBrief convert(
             @NonNull final String projectName,
-            @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
-            @NonNull final V36ScanSettings scanSettings,
+            @NonNull final com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult scanResult,
+            @NonNull final V40ScanSettings scanSettings,
             @NonNull final String ptaiUrl,
             @NonNull final Map<ServerVersionTasks.Component, String> versions) {
         ScanBrief res = new ScanBrief();

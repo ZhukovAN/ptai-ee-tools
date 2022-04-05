@@ -24,4 +24,4 @@ gradle-app.setting
 **/*.trace
 
 out/
-
+ptai-test-tools/src/testFixtures/resources/configuration.yaml

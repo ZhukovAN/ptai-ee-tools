@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.BlackBoxProxySettingsModel;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -13,17 +14,31 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ConverterHelper.initRemainingSettingsFields;
 import static org.joor.Reflect.on;
 
 @Slf4j
 public class AiProjConverter {
     private static final Map<AiProjScanSettings.BlackBoxScanLevel, BlackBoxScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
+    private static final Map<AiProjScanSettings.CredentialsType, AuthType> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
+    private static final Map<AiProjScanSettings.ProxyType, ProxyType> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
 
     static {
         BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NONE, BlackBoxScanLevel.None);
         BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FAST, BlackBoxScanLevel.Fast);
         BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NORMAL, BlackBoxScanLevel.Normal);
         BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FULL, BlackBoxScanLevel.Full);
+
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.FORM, AuthType.Form);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.HTTP, AuthType.Http);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.NONE, AuthType.None);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.COOKIE, AuthType.RawCookie);
+
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.HTTP, ProxyType.Http);
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.HTTPNOCONNECT, ProxyType.HttpNoConnect);
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.SOCKS4, ProxyType.Socks4);
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.SOCKS5, ProxyType.Socks5);
+
     }
 
     protected static BlackBoxAuthentication fillAuthentication(@NonNull final BlackBoxAuthentication auth, @NonNull final AiProjScanSettings.Authentication jsonAuth) {
@@ -38,15 +53,8 @@ public class AiProjConverter {
                 .regexpOfSuccess(jsonAuthItem.getRegexpOfSuccess());
         if (null != jsonAuthItem.getCredentials()) {
             AuthenticationCredentials credentials = new AuthenticationCredentials()
-                    .cookie(jsonAuthItem.getCredentials().getCookie());
-            if (AiProjScanSettings.CredentialsType.FORM.equals(jsonAuthItem.getCredentials().getType()))
-                credentials.setType(AuthType.Form);
-            else if (AiProjScanSettings.CredentialsType.HTTP.equals(jsonAuthItem.getCredentials().getType()))
-                credentials.setType(AuthType.Http);
-            else if (AiProjScanSettings.CredentialsType.NONE.equals(jsonAuthItem.getCredentials().getType()))
-                credentials.setType(AuthType.None);
-            else if (AiProjScanSettings.CredentialsType.COOKIE.equals(jsonAuthItem.getCredentials().getType()))
-                credentials.setType(AuthType.RawCookie);
+                    .cookie(jsonAuthItem.getCredentials().getCookie())
+                    .type(BLACKBOX_AUTH_TYPE_MAP.get(jsonAuthItem.getCredentials().getType()));
             if (null != jsonAuthItem.getCredentials().getLogin()) {
                 AiProjScanSettings.Login jsonLogin = jsonAuthItem.getCredentials().getLogin();
                 credentials.login(new MappedAuthenticationObject()
@@ -71,65 +79,17 @@ public class AiProjConverter {
         return auth;
     }
 
-    protected static BlackBoxProxySettings fillProxy(@NonNull final BlackBoxProxySettings proxy, @NonNull final AiProjScanSettings.ProxySettings jsonProxy) {
-        proxy.host(jsonProxy.getHost())
-                .port(jsonProxy.getPort())
-                .username(jsonProxy.getUsername())
-                .password(jsonProxy.getPassword())
-                .isEnabled(jsonProxy.getIsEnabled());
+    protected static BlackBoxProxySettings convertProxySettings(final AiProjScanSettings.ProxySettings settings) {
+        if (null == settings) return null;
 
-        if (null != jsonProxy.getType()) {
-            AiProjScanSettings.ProxyType jsonType = jsonProxy.getType();
-            if (AiProjScanSettings.ProxyType.HTTP.equals(jsonType))
-                proxy.setType(ProxyType.Http);
-            else if (AiProjScanSettings.ProxyType.HTTPNOCONNECT.equals(jsonType))
-                proxy.setType(ProxyType.HttpNoConnect);
-            else if (AiProjScanSettings.ProxyType.SOCKS4.equals(jsonType))
-                proxy.setType(ProxyType.Socks4);
-            else if (AiProjScanSettings.ProxyType.SOCKS5.equals(jsonType))
-                proxy.setType(ProxyType.Socks5);
-        }
-
-        return proxy;
+        return new BlackBoxProxySettings()
+                .host(settings.getHost())
+                .port(settings.getPort())
+                .username(settings.getUsername())
+                .password(settings.getPassword())
+                .isEnabled(settings.getIsEnabled())
+                .type(BLACKBOX_PROXY_TYPE_MAP.get(settings.getType()));
     }
-
-    /**
-     * Method hierarchically searches Boolean fields annotated
-     * as SerializedName and sets them to false
-     * @param object Object instance to init
-     */
-    @SneakyThrows
-    public static void initRemainingSettingsFields(final Object object) {
-        if (null == object) return;
-        Class<?> c = object.getClass();
-        // Iterate through class hierarchy
-        while (null != c) {
-            // Init fields annotated with @SerializedName
-            for (Field field : c.getDeclaredFields()) {
-                if (!field.isAnnotationPresent(SerializedName.class)) continue;
-                initField(object, field);
-            }
-            c = c.getSuperclass();
-        }
-    }
-
-    /**
-     * If field is of Boolean type, set its value to false. Iterate
-     * through its nested fields otherwise and set them in the same manner
-     * @param object Object instance field belongs to
-     * @param field Field that value is to be initialized
-     */
-    @SneakyThrows
-    protected static void initField(final Object object, final Field field) {
-        if (null == field) return;
-        Class<?> c = field.getType();
-        if (ClassUtils.isPrimitiveWrapper(c) && Boolean.class.equals(c))
-            if (null == on(object).field(field.getName()).get())
-                on(object).set(field.getName(), false);
-        else
-            initRemainingSettingsFields(on(object).field(field.getName()).get());
-    }
-
 
     public static V36ScanSettings convert(
             @NonNull AiProjScanSettings settings,
@@ -213,16 +173,12 @@ public class AiProjConverter {
             AiProjScanSettings.Authentication jsonAuth = settings.getAuthentication();
             if (null != jsonAuth)
                 res.authentication(fillAuthentication(new BlackBoxAuthentication(), jsonAuth));
-            AiProjScanSettings.ProxySettings jsonProxy = settings.getProxySettings();
-            if (null != jsonProxy)
-                res.proxySettings(fillProxy(new BlackBoxProxySettings(), jsonProxy));
+            res.setProxySettings(convertProxySettings(settings.getProxySettings()));
 
             jsonAuth = settings.getAutocheckAuthentication();
             if (null != jsonAuth)
                 res.autocheckAuthentication(fillAuthentication(new BlackBoxAuthentication(), jsonAuth));
-            jsonProxy = settings.getAutocheckProxySettings();
-            if (null != jsonProxy)
-                res.autocheckProxySettings(fillProxy(new BlackBoxProxySettings(), jsonProxy));
+            res.setAutocheckProxySettings(convertProxySettings(settings.getAutocheckProxySettings()));
         }
 
         if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.JAVASCRIPT)) {

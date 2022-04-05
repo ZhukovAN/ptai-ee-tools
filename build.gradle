@@ -16,7 +16,6 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-    // Lombok plugin is made conditional as ptai-i18n project raises duplicate classes
     apply plugin: 'io.freefair.lombok'
     apply plugin: 'maven-publish'
 

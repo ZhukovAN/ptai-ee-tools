@@ -1,0 +1,15 @@
+connections:
+  ptai40:
+    url: https://ptai4.domain.org:443/
+    token: TOKEN_GOES_HERE
+    user: Administrator
+    password: PASSWORD
+    ca: keys/ptai4.domain.org.pem
+  ptai36: &current
+    url: https://ptai.domain.org:443/
+    token: TOKEN_GOES_HERE
+    user: Administrator
+    password: PASSWORD
+    ca: keys/domain.org.pem
+
+current: *current

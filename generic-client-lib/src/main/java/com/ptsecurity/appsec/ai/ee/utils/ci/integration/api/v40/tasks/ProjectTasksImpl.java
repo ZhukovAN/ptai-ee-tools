@@ -1,11 +1,14 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.tasks;
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.tasks;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.*;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.ApiException;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.BaseProjectSettingsModel;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.ProjectLight;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.AiProjConverter;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.AiProjConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
@@ -15,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.http.HttpStatus;
 
 import java.util.*;
 
@@ -100,14 +104,13 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
          */
         KOTLIN(1048576);
 
-        protected final int value;
+        private final int value;
     }
 
     /**
      * See Messages.DataContracts.LanguageExtensions::LangGroupToLangMapping
      */
     public static Map<Language, Set<PatternLanguage>> LANGUAGE_GROUP = new HashMap<>();
-
     static {
         LANGUAGE_GROUP.put(Language.PHP, Collections.singleton(PatternLanguage.PHP));
         LANGUAGE_GROUP.put(Language.JAVA, Collections.singleton(PatternLanguage.JAVA));
@@ -129,38 +132,58 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
 
     public UUID searchProject(
             @NonNull final String name) throws GenericException {
+        ProjectLight projectLight = searchProjectLight(name);
+        return (null != projectLight) ? projectLight.getId() : null;
+    }
+
+    protected ProjectLight searchProjectLight(
+            @NonNull final String name) throws GenericException {
         log.debug("Looking for project with name {}", name);
         ProjectLight projectLight = call(
-                () -> client.getProjectsApi().apiProjectsLightNameGet(name),
+                () -> {
+                    try {
+                        return client.getProjectsApi().apiProjectsLightNameGet(name);
+                    } catch (ApiException e) {
+                        log.trace("PT AI v.4.0 API returns HTTP status 204 if there's no project with given name {}", name);
+                        if (HttpStatus.SC_NO_CONTENT == e.getCode()) return null;
+                        throw e;
+                    }
+                },
                 "PT AI project search failed");
         if (null == projectLight) {
             log.debug("Project not found");
             return null;
         } else {
             log.debug("Project found, id is {}", projectLight.getId());
-            return projectLight.getId();
+            return projectLight;
         }
     }
 
     public String searchProject(
             @NonNull final UUID id) throws GenericException {
         log.debug("Looking for project with id {}", id);
-        Project project = call(
-                () -> client.getProjectsApi().apiProjectsProjectIdGet(id),
+        String result = call(
+                () -> {
+                    try {
+                        return client.getProjectsApi().apiProjectsProjectIdNameGet(id);
+                    } catch (ApiException e) {
+                        log.trace("PT AI v.4.0 API returns HTTP status 204 if there's no project with given Id {}", id);
+                        if (HttpStatus.SC_NO_CONTENT == e.getCode()) return null;
+                        throw e;
+                    }
+                },
                 "PT AI project search failed");
-        if (null == project) {
+        if (null == result)
             log.debug("Project not found");
-            return null;
-        } else {
-            log.debug("Project found, name is {}", project.getName());
-            return project.getName();
-        }
+        else
+            log.debug("Project found, name is {}", result);
+        return result;
     }
 
     @Override
     public UUID getLatestAstResult(@NonNull UUID id) throws GenericException {
         ScanResult scanResult = call(
-                () -> client.getProjectsApi().apiProjectsProjectIdScanResultsLastGet(id),
+                () -> client.getLegacyProjectsApi().apiProjectsProjectIdScanResultsLastGet(id),
                 "PT AI project latest scan result search failed");
         return (null == scanResult) ? null : scanResult.getId();
     }
@@ -169,7 +192,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
     @NonNull
     public UUID getLatestCompleteAstResult(@NonNull UUID id) throws GenericException {
         List<ScanResult> scanResults = call(
-                () -> client.getProjectsApi().apiProjectsProjectIdScanResultsGet(id, AuthScopeType.ACCESSTOKEN),
+                () -> client.getLegacyProjectsApi().apiProjectsProjectIdScanResultsGet(id, AuthScopeType.ACCESSTOKEN),
                 "PT AI project scan results load failed");
         ScanResult result = scanResults.stream()
                 .filter(r -> null != r.getProgress())
@@ -188,8 +211,8 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         // arrays and use predefined enabled / disabled pattern lists
         List<String> defaultEnabledPatterns = new ArrayList<>();
         List<String> defaultDisabledPatterns = new ArrayList<>();
-        List<PmPattern> patterns = call(
-                () -> client.getConfigsApi().apiConfigsPmPatternsGet(),
+        List<com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.PmPattern> patterns = call(
+                () -> client.getLegacyConfigsApi().apiConfigsPmPatternsGet(),
                 "PT AI patterns load failed");
         Set<PatternLanguage> languages = LANGUAGE_GROUP.get(settings.getProgrammingLanguage());
         long languageMask = 0;
@@ -209,39 +232,37 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                 log.debug("Added default enabled pattern {}", pmPattern.getKey());
             }
         }
-        final V36ScanSettings scanSettings = AiProjConverter.convert(settings, defaultEnabledPatterns, defaultDisabledPatterns);
+        final V40ScanSettings scanSettings = AiProjConverter.convert(settings, defaultEnabledPatterns, defaultDisabledPatterns);
 
         final UUID projectId;
-        ProjectLight projectInfo = call(
-                () -> client.getProjectsApi().apiProjectsLightNameGet(settings.getProjectName()),
-                "PT AI project search failed");
-        if (null == projectInfo) {
-            CreateProjectModel createProjectModel = new CreateProjectModel();
+        final ProjectLight projectLight = searchProjectLight(settings.getProjectName());
+        if (null == projectLight) {
+            com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.CreateProjectModel createProjectModel = new com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.CreateProjectModel();
             createProjectModel.setName(settings.getProjectName());
             createProjectModel.setScanSettings(scanSettings);
-            Project project = call(
-                    () -> client.getProjectsApi().apiProjectsPost(createProjectModel),
+            com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.Project project = call(
+                    () -> client.getLegacyProjectsApi().apiProjectsPost(createProjectModel),
                     "PT AI project create failed");
             projectId = project.getId();
-            log.debug("Project {} created, ID = {}", settings.getProjectName(), projectId);
+            log.debug("Project {} created, ID = {}", settings.getProjectName(), projectLight);
         } else {
-            projectId = projectInfo.getId();
-            scanSettings.setId(projectInfo.getSettingsId());
+            projectId = projectLight.getId();
+            scanSettings.setId(projectLight.getSettingsId());
             call(
-                    () -> client.getProjectsApi().apiProjectsProjectIdScanSettingsPut(projectId, scanSettings),
+                    () -> client.getLegacyProjectsApi().apiProjectsProjectIdScanSettingsPut(projectId, scanSettings),
                     "PT AI project settings update failed");
         }
 
         String policyJson = (null == policy) ? "" : JsonPolicyHelper.serialize(policy);
         call(
-                () -> client.getProjectsApi().apiProjectsProjectIdPoliciesRulesPut(projectId, policyJson),
+                () -> client.getLegacyProjectsApi().apiProjectsProjectIdPoliciesRulesPut(projectId, policyJson),
                 "PT AI project policy assignment failed");
         return projectId;
     }
 
     @Override
     public void deleteProject(@NonNull UUID id) throws GenericException {
-        call(() -> client.getProjectsApi().apiProjectsProjectIdDelete(id), "PT AI project delete failed");
+        call(() -> client.getLegacyProjectsApi().apiProjectsProjectIdDelete(id), "PT AI project delete failed");
     }
 
     @Override
@@ -251,9 +272,9 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         // without details - if API token authentication used
         // with details - if login / password authentication used
         boolean withoutDetails = client.getConnectionSettings().getCredentials() instanceof TokenCredentials;
-        List<Project> projects = call(() -> client.getProjectsApi().apiProjectsGet(false), "PT AI project list read failed");
+        List<ProjectLight> projects = call(() -> client.getProjectsApi().apiProjectsGet(false), "PT AI project list read failed");
         List<Pair<UUID, String>> res = new ArrayList<>();
-        for (Project project : projects)
+        for (ProjectLight project : projects)
             res.add(Pair.of(project.getId(), project.getName()));
         return res;
     }

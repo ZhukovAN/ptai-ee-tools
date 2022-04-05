@@ -1,0 +1,6925 @@
+openapi: 3.0.1
+info:
+  title: projectManagement
+  version: 1.0.0
+servers:
+  - url: https://ptai4.domain.org:443/
+security:
+  - Bearer: []
+paths:
+  /api/configs/yaraRules:
+    get:
+      tags:
+        - Configs
+      summary: Get YARA rules
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Configs
+      summary: Save YARA rules
+      requestBody:
+        description: All YARA rules
+        content:
+          application/json-patch+json:
+            schema:
+              type: string
+          application/json:
+            schema:
+              type: string
+          text/json:
+            schema:
+              type: string
+          application/*+json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/configs/sastRules:
+    get:
+      tags:
+        - Configs
+      summary: Get all SAST rules
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: object
+                properties:
+                  None:
+                    type: string
+                  Binary:
+                    type: string
+                  Configuration:
+                    type: string
+                  Fingerprint:
+                    type: string
+                  Java:
+                    type: string
+                  CSharp:
+                    type: string
+                  PHP:
+                    type: string
+                  PmTaint:
+                    type: string
+                  BlackBox:
+                    type: string
+                  JavaScript:
+                    type: string
+                  DependencyCheck:
+                    type: string
+                additionalProperties: false
+            application/json:
+              schema:
+                type: object
+                properties:
+                  None:
+                    type: string
+                  Binary:
+                    type: string
+                  Configuration:
+                    type: string
+                  Fingerprint:
+                    type: string
+                  Java:
+                    type: string
+                  CSharp:
+                    type: string
+                  PHP:
+                    type: string
+                  PmTaint:
+                    type: string
+                  BlackBox:
+                    type: string
+                  JavaScript:
+                    type: string
+                  DependencyCheck:
+                    type: string
+                additionalProperties: false
+            text/json:
+              schema:
+                type: object
+                properties:
+                  None:
+                    type: string
+                  Binary:
+                    type: string
+                  Configuration:
+                    type: string
+                  Fingerprint:
+                    type: string
+                  Java:
+                    type: string
+                  CSharp:
+                    type: string
+                  PHP:
+                    type: string
+                  PmTaint:
+                    type: string
+                  BlackBox:
+                    type: string
+                  JavaScript:
+                    type: string
+                  DependencyCheck:
+                    type: string
+                additionalProperties: false
+        '401':
+          description: Unauthorized
+  /api/configs/sastRules/{type}:
+    get:
+      tags:
+        - Configs
+      summary: Get SAST rules
+      parameters:
+        - name: type
+          in: path
+          description: Scan app type
+          required: true
+          schema:
+            $ref: '#/components/schemas/ScanAppType'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Configs
+      summary: Save SAST rules
+      parameters:
+        - name: type
+          in: path
+          description: Scan language type
+          required: true
+          schema:
+            $ref: '#/components/schemas/ScanAppType'
+      requestBody:
+        description: All SAST rules
+        content:
+          application/json-patch+json:
+            schema:
+              type: string
+          application/json:
+            schema:
+              type: string
+          text/json:
+            schema:
+              type: string
+          application/*+json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/configs/pmPatterns:
+    get:
+      tags:
+        - Configs
+      summary: Get pattern matching patterns
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PmPattern'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PmPattern'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PmPattern'
+        '401':
+          description: Unauthorized
+  /api/configs/yara:
+    get:
+      tags:
+        - Configs
+      summary: Get YARA rules
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Configs
+      summary: Update YARA rules
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/configs/sast/{language}:
+    get:
+      tags:
+        - Configs
+      summary: Get SAST rule
+      parameters:
+        - name: language
+          in: path
+          description: Programming language group
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProgrammingLanguageGroup'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Configs
+      summary: Update SAST rule
+      parameters:
+        - name: language
+          in: path
+          description: Programming language group
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProgrammingLanguageGroup'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/license:
+    get:
+      tags:
+        - License
+      summary: Current license
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/EnterpriseLicenseData'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseLicenseData'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/EnterpriseLicenseData'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - License
+      summary: Update license
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+            encoding:
+              file:
+                style: form
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/license/fingerprint:
+    get:
+      tags:
+        - License
+      summary: Get server fingerprint
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/license/languageGroups:
+    get:
+      tags:
+        - License
+      summary: Get list available programm language groups.
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProgrammingLanguageGroupModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProgrammingLanguageGroupModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProgrammingLanguageGroupModel'
+        '401':
+          description: Unauthorized
+  /api/lifetime:
+    post:
+      tags:
+        - Lifetime
+      summary: Register lifetime. Only for agent
+      requestBody:
+        description: Activity data
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ActivityData'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityData'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ActivityData'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ActivityData'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Lifetime
+      summary: Apply lifetime. Only for agent
+      requestBody:
+        description: Activity data
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ActivityData'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityData'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ActivityData'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ActivityData'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/lifetime/{id}:
+    delete:
+      tags:
+        - Lifetime
+      summary: Exclude lifetime. Only for agent
+      parameters:
+        - name: id
+          in: path
+          description: Activity data id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/mailing/mailProfiles/{mailProfileId}/internal:
+    get:
+      tags:
+        - Mailing
+      summary: Get mail profile
+      parameters:
+        - name: mailProfileId
+          in: path
+          description: Mail profile id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/MailProfile'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MailProfile'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/MailProfile'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+  /api/mailing/sendTestEmail:
+    post:
+      tags:
+        - Mailing
+      summary: Send test email
+      parameters:
+        - name: localeId
+          in: query
+          description: Locale id
+          schema:
+            type: string
+      requestBody:
+        description: Test mail model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TestMailModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestMailModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TestMailModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TestMailModel'
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+  /api/mailing/mailProfiles:
+    get:
+      tags:
+        - Mailing
+      summary: Get all mail profiles
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MailProfileModelWithId'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MailProfileModelWithId'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MailProfileModelWithId'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - Mailing
+      summary: Create mail profile
+      requestBody:
+        description: Mail profile model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MailProfileModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MailProfileModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MailProfileModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MailProfileModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: uuid
+            application/json:
+              schema:
+                type: string
+                format: uuid
+            text/json:
+              schema:
+                type: string
+                format: uuid
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+  /api/mailing/mailProfiles/light:
+    get:
+      tags:
+        - Mailing
+      summary: Get all light mail profiles
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LightMailProfileModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LightMailProfileModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LightMailProfileModel'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+  /api/mailing/mailProfiles/{mailProfileId}:
+    get:
+      tags:
+        - Mailing
+      summary: Get mail profile model
+      parameters:
+        - name: mailProfileId
+          in: path
+          description: Mail profile id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/MailProfileModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MailProfileModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/MailProfileModel'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+    patch:
+      tags:
+        - Mailing
+      summary: Update mail profile
+      parameters:
+        - name: mailProfileId
+          in: path
+          description: Mail profile id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Mail profile model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/MailProfilePatchModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MailProfilePatchModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/MailProfilePatchModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/MailProfilePatchModel'
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - Mailing
+      summary: Delete mail profile
+      parameters:
+        - name: mailProfileId
+          in: path
+          description: Mail profile id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: uuid
+            application/json:
+              schema:
+                type: string
+                format: uuid
+            text/json:
+              schema:
+                type: string
+                format: uuid
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Nullable'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Nullable'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Nullable'
+  /api/mailing/mailProfiles/{mailProfileId}/usedInProjects:
+    get:
+      tags:
+        - Mailing
+      summary: Get all projects when used mail profile
+      parameters:
+        - name: mailProfileId
+          in: path
+          description: Mail profile id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BriefProjectInfo'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BriefProjectInfo'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BriefProjectInfo'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Project'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Project'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/Project'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - Projects
+      summary: Delete project
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/count:
+    get:
+      tags:
+        - Projects
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: integer
+                format: int32
+            application/json:
+              schema:
+                type: integer
+                format: int32
+            text/json:
+              schema:
+                type: integer
+                format: int32
+        '401':
+          description: Unauthorized
+  /api/projects/correctNameForNewProject:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: initialName
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/isNameAvailable:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: name
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanResults:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: authScope
+          in: query
+          schema:
+            $ref: '#/components/schemas/AuthScopeType'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanResult'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanResult'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanResult'
+        '401':
+          description: Unauthorized
+  /api/projects:
+    post:
+      tags:
+        - Projects
+      summary: Create project
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/Project'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+    get:
+      tags:
+        - Projects
+      summary: Get projects
+      parameters:
+        - name: withoutDetails
+          in: query
+          description: true only for plugins, not for client applications
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/name:
+    put:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: name
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+        '401':
+          description: Unauthorized
+    get:
+      tags:
+        - Projects
+      summary: Project name
+      parameters:
+        - name: projectId
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+  /api/projects/withScans:
+    get:
+      tags:
+        - Projects
+      summary: Get projects with high vulnerabilities statistic
+      responses:
+        '200':
+          description: Returns projects with high vulnerabilities statistic
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectWithExtendedInfo'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectWithExtendedInfo'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectWithExtendedInfo'
+        '401':
+          description: Unauthorized
+  /api/projects/withScans/{projectId}:
+    get:
+      tags:
+        - Projects
+      summary: Get project with high vulnerabilities statistic
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Returns project with high vulnerabilities statistic
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProjectWithExtendedInfo'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectWithExtendedInfo'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProjectWithExtendedInfo'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanResults/{scanResultId}/issues:
+    get:
+      tags:
+        - Projects
+      summary: Read issues and  descriptions and metadatas to stream
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: localeId
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            # V.4.0: Had to replace as issues report may be very big, so we need rather to store it in the file than to put to memory
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanSettings:
+    put:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        # V.4.0: Had to replace ScanSettings with manually added V40ScanSettings
+        content:
+          application/json:
+            schema:
+              # $ref: '#/components/schemas/ScanSettings'
+              $ref: '#/components/schemas/V40ScanSettings'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanSettingsWithSourcesChangingDate:
+    put:
+      tags:
+        - Projects
+      summary: Update scan settings rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Scan settings model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ScanSettings'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScanSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ScanSettings'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ScanSettings'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanSettings/{scanSettingsId}:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanSettingsId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          # V.4.0: Had to replace IScanSettings with manually added V40ScanSettings
+          description: Success
+          content:
+            text/plain:
+              schema:
+                # $ref: '#/components/schemas/ScanSettings'
+                $ref: '#/components/schemas/V40ScanSettings'
+            application/json:
+              schema:
+                # $ref: '#/components/schemas/ScanSettings'
+                $ref: '#/components/schemas/V40ScanSettings'
+            text/json:
+              schema:
+                # $ref: '#/components/schemas/ScanSettings'
+                $ref: '#/components/schemas/V40ScanSettings'
+            application/x-msgpack:
+              schema:
+                # $ref: '#/components/schemas/ScanSettings'
+                $ref: '#/components/schemas/V40ScanSettings'
+            application/msgpack:
+              schema:
+                # $ref: '#/components/schemas/ScanSettings'
+                $ref: '#/components/schemas/V40ScanSettings'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanResults/{scanResultId}:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: deleteGroup
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/scanResult/{scanResultId}:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanResults/last:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanResults/{scanResultId}/previous:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanResults/{scanResultId}/vfs:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanResults/{scanResultId}/vfs/exists:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/issues/{issueId}/exploit:
+    put:
+      tags:
+        - Projects
+      summary: Обновить exploit уязвимости
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: issueId
+          in: path
+          description: Vulnerability id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Details of changing exploit
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/UpdateIssueExploitModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateIssueExploitModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UpdateIssueExploitModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UpdateIssueExploitModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanResults/{scanResultId}/errors:
+    put:
+      tags:
+        - Projects
+      summary: Обновить ошибки сканирования
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          description: Scan result id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Scan errors
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ScanError'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ScanError'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ScanError'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ScanError'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanError'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanError'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScanError'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/tracker/settings:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/tracker/settings/default:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/tracker/settings/{id}:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - Projects
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/tracker/links/{id}:
+    post:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: entityId
+          in: query
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TicketLink'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketLink'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TicketLink'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TicketLink'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/tracker/links/{id}/unlink:
+    post:
+      tags:
+        - Projects
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: entityId
+          in: query
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/TicketLink'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketLink'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/TicketLink'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/TicketLink'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/stages:
+    get:
+      tags:
+        - Projects
+      summary: Get project stages
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectStage'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectStage'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectStage'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/scanResults/{scanResultId}/stage:
+    put:
+      tags:
+        - Projects
+      summary: Set scan result stage. Only for agents
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: scanResultId
+          in: path
+          description: Scan result id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: stage
+          in: query
+          description: Stage
+          schema:
+            $ref: '#/components/schemas/Stage'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/light/{name}:
+    get:
+      tags:
+        - Projects
+      summary: Get project by name without details
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProjectLight'
+        '401':
+          description: Unauthorized
+  /api/projects/{name}/exists:
+    get:
+      tags:
+        - Projects
+      summary: Check exists project by name
+      parameters:
+        - name: name
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+        '401':
+          description: Unauthorized
+  /api/projects/temp/{expirationInterval}:
+    get:
+      tags:
+        - Projects
+      parameters:
+        - name: expirationInterval
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+        '401':
+          description: Unauthorized
+  /api/projects/base:
+    post:
+      tags:
+        - Projects
+      summary: Create project with base settings
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/BaseProjectSettingsModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseProjectSettingsModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/BaseProjectSettingsModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/BaseProjectSettingsModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: uuid
+            application/json:
+              schema:
+                type: string
+                format: uuid
+            text/json:
+              schema:
+                type: string
+                format: uuid
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/blackBoxSettings:
+    get:
+      tags:
+        - Projects
+      summary: BlackBox settings
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ExtendedBlackBoxSettingsModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedBlackBoxSettingsModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedBlackBoxSettingsModel'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+    patch:
+      tags:
+        - Projects
+      summary: BlackBox settings
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Extended box settings model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ActionResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActionResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ActionResult'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/filePatterns:
+    get:
+      tags:
+        - Projects
+      summary: Project`s file patterns
+      parameters:
+        - name: projectId
+          in: path
+          description: Project Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  type: string
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+            text/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      summary: Project`s file patterns
+      parameters:
+        - name: projectId
+          in: path
+          description: Project Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: File patterns
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                type: string
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+          text/json:
+            schema:
+              type: array
+              items:
+                type: string
+          application/*+json:
+            schema:
+              type: array
+              items:
+                type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: boolean
+            application/json:
+              schema:
+                type: boolean
+            text/json:
+              schema:
+                type: boolean
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/defaultSettings:
+    get:
+      tags:
+        - Projects
+      summary: Get default settings for existing project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/BaseProjectSettingsModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseProjectSettingsModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BaseProjectSettingsModel'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/exclusions:
+    get:
+      tags:
+        - Projects
+      summary: Get exlusions files/dir from scan
+      parameters:
+        - name: projectId
+          in: path
+          description: Project Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/FileFolderExclusionsModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileFolderExclusionsModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/FileFolderExclusionsModel'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      summary: Update exlusions files/dir from scan
+      parameters:
+        - name: projectId
+          in: path
+          description: Project Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Exclusions Model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/FileFolderExclusionsModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileFolderExclusionsModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/FileFolderExclusionsModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/FileFolderExclusionsModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/defaultSettings:
+    get:
+      tags:
+        - Projects
+      summary: Get default settings
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/BaseProjectSettingsModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseProjectSettingsModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/BaseProjectSettingsModel'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/settings:
+    get:
+      tags:
+        - Projects
+      summary: Get project settings
+      parameters:
+        - name: projectId
+          in: path
+          description: Project Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ProjectSettingsModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSettingsModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSettingsModel'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      summary: Update project settings
+      parameters:
+        - name: projectId
+          in: path
+          description: Project Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Project settings model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ProjectSettingsModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectSettingsModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProjectSettingsModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProjectSettingsModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/settingsChangingDate:
+    get:
+      tags:
+        - Projects
+      summary: Get date of last changing scan settings
+      parameters:
+        - name: projectId
+          in: path
+          description: Project Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: date-time
+            application/json:
+              schema:
+                type: string
+                format: date-time
+            text/json:
+              schema:
+                type: string
+                format: date-time
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/completeConfiguration:
+    post:
+      tags:
+        - Projects
+      summary: Complete project configuration
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/BaseProjectSettingsModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BaseProjectSettingsModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/BaseProjectSettingsModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/BaseProjectSettingsModel'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+  /api/projects/{projectId}/policiesRules:
+    get:
+      tags:
+        - Projects
+      summary: Policies rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      summary: Policies rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Policy rules template
+        content:
+          application/json-patch+json:
+            schema:
+              type: string
+          application/json:
+            schema:
+              type: string
+          text/json:
+            schema:
+              type: string
+          application/*+json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/securityPolicies:
+    get:
+      tags:
+        - Projects
+      summary: Get policies rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/SecurityPoliciesModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecurityPoliciesModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SecurityPoliciesModel'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      summary: Update policies rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Security policies model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/SecurityPoliciesModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SecurityPoliciesModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SecurityPoliciesModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SecurityPoliciesModel'
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/sastRules:
+    get:
+      tags:
+        - Projects
+      summary: Get SAST rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/SastRulesModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SastRulesModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SastRulesModel'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      summary: Update SAST rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: SAST rules model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/SastRulesBaseModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SastRulesBaseModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SastRulesBaseModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/SastRulesBaseModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/yaraRules:
+    get:
+      tags:
+        - Projects
+      summary: Get YARA rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/YaraRulesModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YaraRulesModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/YaraRulesModel'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      summary: Update YARA rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: SAST rules model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/YaraRulesBaseModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YaraRulesBaseModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/YaraRulesBaseModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/YaraRulesBaseModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/analysisRules:
+    get:
+      tags:
+        - Projects
+      summary: Get analysis rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AnalysisRulesModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisRulesModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisRulesModel'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      summary: Update analysis rules
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Analysis rules model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/AnalysisRulesBaseModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalysisRulesBaseModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AnalysisRulesBaseModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AnalysisRulesBaseModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/securityPoliciesTemplate:
+    get:
+      tags:
+        - Projects
+      summary: Get policies rules template
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+  /api/projects/yaraRulesTemplate:
+    get:
+      tags:
+        - Projects
+      summary: Get YARA rules template
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+  /api/projects/sastRulesTemplate/{language}:
+    get:
+      tags:
+        - Projects
+      summary: Get policies rules template
+      parameters:
+        - name: language
+          in: path
+          description: Project id
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProgrammingLanguageGroup'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/issues/{issueId}/state:
+    put:
+      tags:
+        - Projects
+      summary: Change issue state
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: issueId
+          in: path
+          description: Vulnerability id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Details of changing approval status
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/issues/{issueId}/favorite:
+    put:
+      tags:
+        - Projects
+      summary: Change issue favorite state
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: issueId
+          in: path
+          description: Vulnerability id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Details of changing favorite status
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/issues/state:
+    put:
+      tags:
+        - Projects
+      summary: Change issues state
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Details of changing approval statuses
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/tracker/extendedSettings:
+    get:
+      tags:
+        - Projects
+      summary: Get issue tracker integration settings
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Projects
+      summary: Update issue tracker integration settings
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: Project id
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema: {}
+            application/json:
+              schema: {}
+            text/json:
+              schema: {}
+        '401':
+          description: Unauthorized
+  /api/projects/activeScans:
+    get:
+      tags:
+        - Projects
+      summary: Active scans
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActiveScanModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActiveScanModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActiveScanModel'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/issues/{issueId}/resources:
+    get:
+      tags:
+        - Projects
+      summary: Get issue`s descriptions and metadatas
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: issueId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: localeId
+          in: query
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/IssueResourcesModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IssueResourcesModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/IssueResourcesModel'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/pin:
+    post:
+      tags:
+        - Projects
+      summary: Pin project for current user
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}/unpin:
+    post:
+      tags:
+        - Projects
+      summary: Unpin project for current user
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/reports/generateWafPatch:
+    post:
+      tags:
+        - Reports
+      summary: Generate WAF patch report
+      requestBody:
+        description: Report generate model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/WafPatchGenerateModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WafPatchGenerateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/WafPatchGenerateModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/WafPatchGenerateModel'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream: {}
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/reports/templates:
+    get:
+      tags:
+        - Reports
+      summary: Get all reports templates
+      parameters:
+        - name: localeId
+          in: query
+          schema:
+            type: string
+        - name: withContent
+          in: query
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportTemplateModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportTemplateModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportTemplateModel'
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - Reports
+      summary: Create report template
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateUpsertModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateUpsertModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateUpsertModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateUpsertModel'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/reports/templates/{id}:
+    get:
+      tags:
+        - Reports
+      summary: Get report template by id
+      parameters:
+        - name: id
+          in: path
+          description: Report id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: localeId
+          in: query
+          description: Locale id
+          schema:
+            type: string
+        - name: needAddCss
+          in: query
+          description: Add CSS styles?
+          schema:
+            type: boolean
+            default: true
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Reports
+      summary: Update report template
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateUpsertModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateUpsertModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateUpsertModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateUpsertModel'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - Reports
+      summary: Delete report template by id
+      parameters:
+        - name: id
+          in: path
+          description: Report id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/reports/templates/{type}:
+    get:
+      tags:
+        - Reports
+      summary: Get report template by type
+      operationId: TemplateByType
+      parameters:
+        - name: type
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/ReportType'
+        - name: localeId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+        '401':
+          description: Unauthorized
+  /api/reports/userTemplates/{name}:
+    get:
+      tags:
+        - Reports
+      summary: Get user report template by name
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: localeId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ReportTemplateModel'
+        '401':
+          description: Unauthorized
+  /api/reports/templates/check:
+    post:
+      tags:
+        - Reports
+      summary: Check template on errors. Pass template text in body
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/TemplateValidationResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateValidationResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/TemplateValidationResult'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/reports/generate:
+    post:
+      tags:
+        - Reports
+      summary: "Generate report\r\nPass sessionId in model for progress notifications.\r\nsessionId will be removed when the report generation process becomes asynchronous"
+      requestBody:
+        description: Report generate model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ReportGenerateModel'
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/File'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/File'
+            application/x-msgpack:
+              schema:
+                $ref: '#/components/schemas/File'
+            application/msgpack:
+              schema:
+                $ref: '#/components/schemas/File'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/reports/preview:
+    post:
+      tags:
+        - Reports
+      summary: Preview report
+      parameters:
+        - name: localeId
+          in: query
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ReportTemplateModel'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream: {}
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/reports/parameters:
+    get:
+      tags:
+        - Reports
+      summary: Get report parameters for current user
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UserReportParametersModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserReportParametersModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserReportParametersModel'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Reports
+      summary: Save report parameters for current user
+      requestBody:
+        description: Report parameters model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/UserReportParametersModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserReportParametersModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserReportParametersModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserReportParametersModel'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/stat/vulnTimeDistrib:
+    post:
+      tags:
+        - Statistic
+      summary: Get vulnerabilities time distribution statistic
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/VulnTimeDistribFilter'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VulnTimeDistribFilter'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/VulnTimeDistribFilter'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/VulnTimeDistribFilter'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StatisticByScanResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticByScanResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StatisticByScanResult'
+        '401':
+          description: Unauthorized
+  /api/stat/vulnState:
+    get:
+      tags:
+        - Statistic
+      summary: Get vulnerabilities state
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/StatisticVulnStateResult'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticVulnStateResult'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/StatisticVulnStateResult'
+        '401':
+          description: Unauthorized
+components:
+  schemas:
+    ActionResult:
+      type: object
+      additionalProperties: false
+    ActiveScanModel:
+      type: object
+      properties:
+        scanResultId:
+          type: string
+          format: uuid
+        progress:
+          $ref: '#/components/schemas/ScanProgress'
+        project:
+          $ref: '#/components/schemas/ProjectLight'
+      additionalProperties: false
+    ActivityData:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        lifeTime:
+          type: string
+          format: date-span
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    AdditionalHttpHeader:
+      type: object
+      properties:
+        key:
+          type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AdditionalParams:
+      type: object
+      additionalProperties: false
+    AnalysisRulesBaseModel:
+      type: object
+      properties:
+        sastRules:
+          $ref: '#/components/schemas/SastRulesBaseModel'
+        yaraRules:
+          $ref: '#/components/schemas/YaraRulesBaseModel'
+      additionalProperties: false
+    AnalysisRulesModel:
+      type: object
+      properties:
+        sastRules:
+          $ref: '#/components/schemas/SastRulesModel'
+        yaraRules:
+          $ref: '#/components/schemas/YaraRulesModel'
+      additionalProperties: false
+    ApiErrorModel:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ApiErrorType'
+        details:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+      additionalProperties: false
+    ApiErrorType:
+      enum:
+        - None
+        - INCORRECT_USER_AND_PASSWORD
+        - USER_ID_IS_EMPTY
+        - MEMBER_ALREADY_EXISTS
+        - PROJECT_ROLE_PERMISSIONS_ALREADY_EXISTS
+        - ACCESS_TOKEN_IS_INCORRECT
+        - ACCESS_TOKEN_WITH_SAME_NAME_ALREADY_EXISTS
+        - PASSWORD_IS_INCORRECT
+        - USER_IS_INCORRECT
+        - INITIATOR_NOT_FOUND
+        - ROOT_LOGIN_VIA_VIEWER_IS_NOT_ALLOWED
+        - CREDENTIAL_STORE_IS_UNVAILABLE_OR_TAINTED
+        - EXT_AUTH_PROVIDERS_GET_ERROR
+        - EXT_AUTH_PROVIDERS_BY_SAME_SCHEME_LIMIT_ERROR
+        - EXT_AUTH_PROVIDERS_AT_LEAST_ONE_ENABLED_LIMIT_ERROR
+        - EXT_AUTH_PROVIDER_GET_NOT_FOUND
+        - EXT_AUTH_PROVIDER_GET_ERROR
+        - EXT_AUTH_PROVIDER_UPDATE_ERROR
+        - EXT_AUTH_PROVIDER_DELETE_ERROR
+        - EXT_AUTH_PROVIDER_IS_INCORRECT
+        - EXT_AUTH_PROVIDER_NAME_IS_EMPTY
+        - EXT_AUTH_PROVIDER_NAME_LENGTH_LIMIT
+        - EXT_AUTH_SETTINGS_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_OPENID_AUTHORITY_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_OPENID_CLIENT_ID_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_OPENID_CLIENT_SECRET_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_ISSUER_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_ALLOWED_ISSUER_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_ACS_URL_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_LOGOUT_URL_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_SIGN_VALIDATION_CERT_IS_EMPTY
+        - EXT_AUTH_SETTINGS_SAML2_SIGN_VALIDATION_CERT_SIZE_LIMIT
+        - EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_IS_EMPTY
+        - EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_SIZE_LIMIT
+        - EXT_AUTH_SETTINGS_SAML2_NAMEID_POLICY_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_EMPTY
+        - EXT_AUTH_SETTINGS_LDAP_HOST_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_LDAP_HOST_HAS_SCHEMA
+        - EXT_AUTH_SETTINGS_LDAP_PORT_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_LDAP_SSL_PORT_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_LDAP_BASE_DN_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_TEST_CONNECTION_FAILED
+        - EXT_AUTH_ROLE_MAPPINGS_EMPTY_FIELDS
+        - EXT_AUTH_ROLE_MAPPINGS_NO_GLOBAL_ROLES
+        - EXT_AUTH_SIGNIN_ERROR
+        - EXT_AUTH_SIGNIN_CALLBACK_ERROR
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_EMPTY
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_EMPTY_OR_DISABLED
+        - EXT_AUTH_SIGNIN_SCOPE_TYPE_IS_INCORRECT
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_NOT_AUTHENTICATED
+        - EXT_AUTH_SIGNIN_INVALID_CREDENTIALS
+        - EXT_AUTH_SIGNIN_INVALID_SESSION_ID
+        - EXT_AUTH_SIGNIN_SCHEME_IS_INCORRECT
+        - EXT_AUTH_SIGNIN_OPENID_INVALID_CONFIGURATION
+        - EXT_AUTH_SIGNIN_OPENID_TOKEN_EXPIRED
+        - EXT_AUTH_SIGNIN_OPENID_INCONSISTENT_RESPONSE_MODE_AND_TYPE
+        - EXT_AUTH_SIGNIN_SAML2_SETTINGS_IS_EMPTY
+        - EXT_AUTH_SIGNIN_SAML2_RESPONSE_STATUS_ERROR
+        - EXT_AUTH_SIGNIN_SAML2_INVALID_SIGNATURE
+        - EXT_AUTH_SIGNIN_LDAP_SSL_REQUIRED
+        - EXT_AUTH_SIGNIN_LDAP_SETTINGS_IS_EMPTY
+        - EXT_AUTH_SIGN_OUT_ERROR
+        - EXT_AUTH_SIGN_OUT_PROVIDER_IS_EMPTY
+        - EXT_AUTH_SIGN_OUT_TOKEN_NOT_FOUND
+        - EXT_AUTH_SIGN_OUT_SCHEME_IS_INCORRECT
+        - EXT_AUTH_SIGN_OUT_OPENID_ERROR
+        - EXT_AUTH_SIGN_OUT_SAML2_ERROR
+        - EXT_AUTH_SIGN_OUT_SAML2_EMPTY_LOGOUT_URL_ERROR
+        - EXT_AUTH_SESSION_GET_ERROR
+        - EXT_AUTH_SESSION_CLAIMS_NOT_DEFINED
+        - EXT_AUTH_SESSION_NOT_FOUND
+        - EXT_AUTH_SESSION_EXPIRED
+        - EXT_AUTH_SESSION_PROVIDER_NOT_FOUND
+        - EXT_AUTH_SESSION_USER_NOT_EQUAL
+        - EXT_AUTH_METADATA_SAML2_ERROR
+        - EXT_AUTH_USER_PROVISION_ERROR
+        - EXT_AUTH_USER_PROVISION_USER_IS_NOT_DEFINED
+        - EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_NOT_MAPPED
+        - EXT_AUTH_USER_PROVISION_NAME_FIELD_IS_NOT_MAPPED
+        - UPDATE_PACKAGE_VERSION_IS_ALREADY_UPLOADED
+        - UPDATE_PACKAGE_UPLOADED_IS_ALREADY_STARTED
+        - UPDATE_PACKAGE_UNKNOWN_PRODUCT
+        - UPDATE_PACKAGE_VERSION_INVALID
+        - UPDATE_PACKAGE_VERSION_IS_NOT_UPLOADED
+        - UPDATE_SERVER_PROCESS_RUN_TIMEOUT
+        - UPDATE_SERVER_PARAMETERS_INVALID
+        - UPDATE_SERVER_INSTALLER_EXIT_WITH_ERROR
+        - UPDATE_SERVER_PACKAGE_IS_INCORRECT
+        - UPDATE_SERVER_NOT_ENOUGH_SPACE
+        - CERTIFICATE_FILE_IS_EMPTY
+        - CERTIFICATE_IS_ALREADY_INSTALLED
+        - CERTIFICATE_IS_NOT_VALID
+        - URI_IS_NOT_VALID
+        - PROJECT_WITH_SAME_NAME_ALREADY_EXISTS
+        - UNEXPECTED_SCAN_STAGE
+        - PROJECT_NOT_FOUND
+        - INVALID_JSON_FIELDS
+        - INCORRECT_SAST_RULES
+        - UNEXPECTED_LANGUAGE
+        - MAIL_PROFILES_NOT_EXISTS
+        - MAIL_PROFILE_NOT_FOUND
+        - ISSUE_TRACKER_CONNECTION_NOT_FOUND
+        - ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET
+        - ISSUE_TRACKER_SETTINGS_ID_NOT_SET
+        - ISSUE_TRACKER_CREDENTIALS_NOT_SET
+        - ISSUE_TRACKER_HOST_IS_INCORRECT
+        - ISSUE_TRACKER_OAUTH_DATA_NOT_SET
+        - ISSUE_TRACKER_TRACKER_NOT_FOUND
+        - ISSUE_TRACKER_TRACKER_NOT_FOUND_WITH_OAUTH
+        - ISSUE_TRACKER_INVALID_TICKET_LINK
+        - ISSUE_TRACKER_IMPOSSIBLE_SKIP_UPDATE_CREDENTIALS
+        - ISSUE_TRACKER_UNSUPPORTED_FIELDS_COFIGURATION
+        - ISSUE_TRACKER_TICKET_CREATION_FAILED
+        - ISSUE_TRACKER_PRIORITIES_GETTING_FAILED
+        - ISSUE_TRACKER_USERS_GETTING_FAILED
+        - ISSUE_TRACKER_STATUSES_GETTING_FAILED
+        - ISSUE_TRACKER_FIELDS_GETTING_FAILED
+        - ISSUE_TRACKER_OPTIONS_GETTING_FAILED
+        - ISSUE_TRACKER_EXISTING_TICKETS_GETTING_FAILED
+        - ISSUE_TRACKER_COMPONENTS_GETTING_FAILED
+        - ISSUE_TRACKER_CAPTCHA_CHALLENGE
+        - ISSUE_TRACKER_AUTHENTICATION_DENIED_DETAILED
+        - ISSUE_TRACKER_AUTHENTICATION_DENIED
+        - ISSUE_TRACKER_AUTHENTICATION_FAILED
+        - ISSUE_TRACKER_OAUTH_SETTINGS_INVALID
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_GETTING_ACCESS_TOKEN_FAILED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_INVALID_ACCESS_TOKEN_RETURNED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_GETTING_REQUEST_TOKEN_FAILED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_INVALID_REQUEST_TOKEN_RETURNED
+        - FS_SOURCE_IS_BUSY
+        - DIRECTORY_NOT_FOUND
+        - ISSUE_ATTACH_TICKET_LINK_FAILED
+        - COMMENT_POLICY_FAILED_COMMENT_IS_EMPTY
+        - PROJECTS_COUNT_LIMITED_BY_LICENSE
+        - LICENSE_FILE_IS_INVALID
+        - LICENSE_FINGERPRINT_ERROR
+        - LANGUAGE_NOT_ALLOWED_BY_LICENCE
+        - UNKNOWN_SOURCE_VERSION_CONTROL_SYSTEM
+        - SOURCE_VERSION_CONTROL_SYSTEM_ERROR
+        - INVALID_VERSION_CONTROL_SYSTEM_SETTINGS
+        - SCAN_AGENT_NOT_FOUND
+        - SCAN_ALREADY_SCHEDULED
+        - INCORRECT_AGENT_STATUS
+        - SCAN_AGENT_WAS_SUSPENDED
+        - SCAN_AGENT_IS_SCANNING
+        - SCAN_NOT_FOUND
+        - ACTIVE_SCAN_AGENTS_NOT_FOUND
+        - SCAN_AGENT_IS_ACTIVE
+        - SERVER_CERTIFICATE_NOT_FOUND
+        - FILESYSTEM_ERROR_ACCESS_DENIED
+        - VAULT_CREDENTIALS_NOT_FOUND
+        - REPORT_TEMPLATE_NOT_FOUND
+        - REPORT_GENERATE_FAILED
+        - REPORT_TEMPLATE_INVALID
+        - REPORT_TEMPLATE_UNKNOWN_FORMAT
+        - REPORT_INCORRECT_PARAMETERS
+        - REPORT_TEMPLATE_WITH_SAME_NAME_ALREADY_EXISTS
+        - REPORT_TEMPLATE_FILE_NAME_INCORRECT_MACROS
+        - INVALID_VERSION_CONTROL_SYSTEM_CONNECTION_SETTINGS
+        - COULD_NOT_STORE_PROJECT
+        - COULD_NOT_STORE_SCAN_SETTINGS
+        - FILES_FOR_DOWNLOAD_NOT_FOUND
+        - PROJECTS_FILES_NOT_FOUND
+        - INVALID_UPLOAD_PATH
+        - INVALID_PATH_PARAMETER
+        - COULD_NOT_CHECKOUT_PROJECT
+        - USER_ID_IS_INCORRECT
+      type: string
+      format: ''
+    AuthenticationCredentials:
+      type: object
+      properties:
+        cookie:
+          type: string
+          nullable: true
+        cookies:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          nullable: true
+        type:
+          $ref: '#/components/schemas/AuthType'
+        login:
+          $ref: '#/components/schemas/MappedAuthenticationObject'
+        password:
+          $ref: '#/components/schemas/MappedAuthenticationObject'
+        credentials_id:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    AuthenticationItem:
+      type: object
+      properties:
+        domain:
+          type: string
+          nullable: true
+        credentials:
+          $ref: '#/components/schemas/AuthenticationCredentials'
+        test_url:
+          type: string
+          nullable: true
+        form_url:
+          type: string
+          nullable: true
+        form_xpath:
+          type: string
+          nullable: true
+        regexp_of_success:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AuthProvider:
+      type: object
+      properties:
+        Id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        scheme:
+          $ref: '#/components/schemas/AuthProviderScheme'
+        enabled:
+          type: boolean
+      additionalProperties: false
+    AuthProviderScheme:
+      enum:
+        - OpenIdConnect
+        - Saml2
+        - Ldap
+      type: string
+      format: ''
+    AuthScopeType:
+      enum:
+        - None
+        - Agent
+        - Viewer
+        - Internal
+        - Web
+        - WebRefresh
+        - WebLongRefresh
+        - AccessToken
+        - AccessTokenRefresh
+        - ViewerRefresh
+      type: string
+      format: ''
+    AuthType:
+      enum:
+        - Form
+        - Http
+        - None
+        - RawCookie
+      type: string
+      format: ''
+    BaseProjectSettingsModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        programmingLanguageGroup:
+          $ref: '#/components/schemas/ProgrammingLanguageGroup'
+        projectUrl:
+          type: string
+          nullable: true
+        whiteBox:
+          $ref: '#/components/schemas/WhiteBoxSettingsModel'
+        blackBoxEnabled:
+          type: boolean
+        blackBox:
+          $ref: '#/components/schemas/BlackBoxSettingsModel'
+      additionalProperties: false
+    BlackBoxAuthentication:
+      type: object
+      properties:
+        auth_item:
+          $ref: '#/components/schemas/AuthenticationItem'
+      additionalProperties: false
+    BlackBoxAuthenticationModel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/AuthType'
+      additionalProperties: false
+    BlackBoxProxySettings:
+      type: object
+      properties:
+        isEnabled:
+          type: boolean
+        host:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+          nullable: true
+        type:
+          $ref: '#/components/schemas/ProxyType'
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        credentialsId:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    BlackBoxProxySettingsModel:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+        type:
+          $ref: '#/components/schemas/ProxyType'
+        host:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+        login:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BlackBoxScanLevel:
+      # V.4.0: Need to add x-enum-varnames as API returns scanLevel as integer
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+      x-enum-varnames:
+        - None
+        - Fast
+        - Normal
+        - Full
+      type: integer
+    BlackBoxSettingsModel:
+      type: object
+      properties:
+        authentication:
+          $ref: '#/components/schemas/AuthType'
+        login:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        loginKey:
+          type: string
+          nullable: true
+        passwordKey:
+          type: string
+          nullable: true
+        testUrl:
+          type: string
+          nullable: true
+        domainName:
+          type: string
+          nullable: true
+        formUrl:
+          type: string
+          nullable: true
+        formXpath:
+          type: string
+          nullable: true
+        validationRegexTemplate:
+          type: string
+          nullable: true
+        cookie:
+          type: string
+          nullable: true
+        runAutocheckAfterScan:
+          type: boolean
+      additionalProperties: false
+    BriefProjectInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        projectName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ChangeIssueApprovalStateModel:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/IssueApprovalState'
+        comment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ChangeIssueIsFavoriteModel:
+      type: object
+      properties:
+        isFavorite:
+          type: boolean
+        comment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ChangeIssuesApprovalStateModel:
+      type: object
+      properties:
+        issuesStates:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/IssueApprovalState'
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ComponentVersion:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        version:
+          type: string
+          nullable: true
+      additionalProperties: false
+    CreateProjectModel:
+      # V.4.0: Had to replace ScanSettings with manually added V40ScanSettings
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        scanSettings:
+          # $ref: '#/components/schemas/ScanSettings'
+          $ref: '#/components/schemas/V40ScanSettings'
+        isTemp:
+          type: boolean
+      additionalProperties: false
+    DataFormat:
+      enum:
+        - Json
+        - Dsl
+      type: string
+      format: ''
+    DotNetProjectType:
+      # V.4.0: Had to add x-enum-varnames as API returns projectType as an integer value
+      enum:
+        - 0
+        - 1
+        - 2
+      x-enum-varnames:
+        - None
+        - Solution
+        - WebSite
+      type: integer
+    EnterpriseLicenseData:
+      type: object
+      properties:
+        key:
+          type: string
+          nullable: true
+        circuit:
+          type: string
+          nullable: true
+        currentDate:
+          type: string
+          format: date-time
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        limitProjects:
+          type: integer
+          format: int32
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProgrammingLanguage'
+          nullable: true
+        isBlackBoxDisabled:
+          type: boolean
+        isValid:
+          type: boolean
+        licenseNumber:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ErrorLevel:
+      enum:
+        - Error
+        - Warn
+        - Info
+        - Debug
+        - Trace
+      type: string
+      format: ''
+    ExtendedBlackBoxSettingsModel:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+        runAutocheckAfterScan:
+          type: boolean
+        host:
+          type: string
+          nullable: true
+        scanLevel:
+          $ref: '#/components/schemas/BlackBoxScanLevel'
+        scanScope:
+          $ref: '#/components/schemas/ScanScope'
+        additionalHttpHeaders:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdditionalHttpHeader'
+          nullable: true
+        authentication:
+          $ref: '#/components/schemas/BlackBoxAuthenticationModel'
+        proxySettings:
+          $ref: '#/components/schemas/BlackBoxProxySettingsModel'
+      additionalProperties: false
+    ExtendedIssueTrackerIntegrationSettings:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+        issueTrackerSettings:
+          $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
+      additionalProperties: false
+    FieldName:
+      type: object
+      additionalProperties: false
+    FieldSettings:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/FieldName'
+        values:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    FileFolderExclusionsModel:
+      type: object
+      properties:
+        exclusions:
+          type: string
+          nullable: true
+      additionalProperties: false
+    IRvpExpression:
+      type: object
+      additionalProperties: false
+    IssueApprovalState:
+      enum:
+        - None
+        - Approval
+        - Discard
+        - NotExist
+        - AutoApproval
+      type: string
+      format: ''
+    IssueBase:
+      # V.4.0 Discriminator added to allow parsing of specific vulnerabilities like fingerprint, configuration etc.
+      discriminator:
+        mapping:
+          Vulnerability: '#/components/schemas/V40VulnerabilityIssue'
+          Weakness: '#/components/schemas/V40WeaknessIssue'
+          Fingerprint: '#/components/schemas/V40FingerprintIssue'
+          Unknown: '#/components/schemas/V40UnknownIssue'
+          Configuration: '#/components/schemas/V40ConfigurationIssue'
+          BlackBox: '#/components/schemas/V40BlackBoxIssue'
+          YaraMatch: '#/components/schemas/V40YaraMatchIssue'
+        propertyName: Class
+      required:
+        - Class
+      type: object
+      properties:
+        rvpPvo:
+          $ref: '#/components/schemas/RvpPvo'
+        Class:
+          # OpenAPI generator doesn't support enum discriminator type so we
+          # need to replace this with string
+          # $ref: '#/components/schemas/IssueType'
+          type: string
+          nullable: false
+        internalId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          nullable: true
+        isOldInScanResultId:
+          type: string
+          format: uuid
+          nullable: true
+        isFavorite:
+          type: boolean
+        groupId:
+          type: string
+          nullable: true
+        approvalState:
+          $ref: '#/components/schemas/IssueApprovalState'
+        isNewInScanResultId:
+          type: string
+          format: uuid
+          nullable: true
+        scanResultId:
+          type: string
+          format: uuid
+        isSuspected:
+          type: boolean
+        isSuppressed:
+          type: boolean
+        type:
+          type: string
+          nullable: true
+        linkedTickets:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketLink'
+          nullable: true
+        counter:
+          type: integer
+          format: int64
+        level:
+          $ref: '#/components/schemas/IssueLevel'
+      additionalProperties: false
+    IssueBaseMetadata:
+      type: object
+      properties:
+        key:
+          type: string
+          nullable: true
+        issueType:
+          $ref: '#/components/schemas/IssueType'
+        level:
+          $ref: '#/components/schemas/IssueLevel'
+      additionalProperties: false
+    IssueDescriptionModelBase:
+      type: object
+      properties:
+        identity:
+          type: string
+          nullable: true
+        issueType:
+          $ref: '#/components/schemas/IssueType'
+      additionalProperties: false
+    IssueLevel:
+      enum:
+        - 0
+        - 10
+        - 20
+        - 30
+        - 40
+      x-enum-varnames:
+        - None
+        - Potential
+        - Low
+        - Medium
+        - High
+      type: integer
+    IssueResourcesModel:
+      type: object
+      properties:
+        descriptions:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/IssueDescriptionModelBase'
+          nullable: true
+        metadatas:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/IssueBaseMetadata'
+          nullable: true
+      additionalProperties: false
+    IssuesModel:
+      type: object
+      properties:
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssueBase'
+          nullable: true
+        descriptions:
+          type: object
+          additionalProperties:
+            # IssueDescriptionModelBase have no issues text descriptions
+            # $ref: '#/components/schemas/IssueDescriptionModelBase'
+            $ref: '#/components/schemas/V40IssueDescriptionModel'
+          nullable: true
+        metadatas:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/IssueBaseMetadata'
+          nullable: true
+      additionalProperties: false
+    IssueTrackerIntegrationSettings:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        triggerId:
+          type: string
+          format: uuid
+          nullable: true
+        connectionId:
+          type: string
+          format: uuid
+        project:
+          type: string
+          nullable: true
+        ticketType:
+          type: string
+          nullable: true
+        template:
+          $ref: '#/components/schemas/TicketTemplate'
+      additionalProperties: false
+    IssueType:
+      enum:
+        - Unknown
+        - Vulnerability
+        - Weakness
+        - Configuration
+        - Fingerprint
+        - BlackBox
+        - YaraMatch
+      type: string
+      format: ''
+    JavaVersions:
+      # V.4.0: Needed to fix that as API returns enum as integer instead of string
+      enum:
+        - 0
+        - 1
+      x-enum-varnames:
+        - v1_8
+        - v1_11
+      type: integer
+    LightMailProfileModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        profileName:
+          type: string
+          nullable: true
+        smtpServerAddress:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MailAuthentication:
+      type: object
+      properties:
+        isAuthRequired:
+          type: boolean
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MailAuthenticationPatch:
+      type: object
+      properties:
+        isAuthRequired:
+          type: boolean
+          nullable: true
+        username:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+    MailingProjectSettings:
+      type: object
+      properties:
+        state:
+          type: boolean
+        mailProfileId:
+          type: string
+          format: uuid
+          nullable: true
+        emailRecipients:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    MailProfile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        credentialsId:
+          type: string
+          format: uuid
+          nullable: true
+        compressReport:
+          type: boolean
+        profileName:
+          type: string
+          nullable: true
+        subject:
+          type: string
+          nullable: true
+        smtpServerAddress:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+        senderEmail:
+          type: string
+          nullable: true
+        enableSsl:
+          type: boolean
+        considerCertificateErrors:
+          type: boolean
+      additionalProperties: false
+    MailProfileModel:
+      type: object
+      properties:
+        authentication:
+          $ref: '#/components/schemas/MailAuthentication'
+        profileName:
+          type: string
+          nullable: true
+        compressReport:
+          type: boolean
+        subject:
+          type: string
+          nullable: true
+        smtpServerAddress:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+        senderEmail:
+          type: string
+          nullable: true
+        enableSsl:
+          type: boolean
+        considerCertificateErrors:
+          type: boolean
+      additionalProperties: false
+    MailProfileModelWithId:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        authentication:
+          $ref: '#/components/schemas/MailAuthentication'
+        profileName:
+          type: string
+          nullable: true
+        compressReport:
+          type: boolean
+        subject:
+          type: string
+          nullable: true
+        smtpServerAddress:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+        senderEmail:
+          type: string
+          nullable: true
+        enableSsl:
+          type: boolean
+        considerCertificateErrors:
+          type: boolean
+      additionalProperties: false
+    MailProfilePatchModel:
+      type: object
+      properties:
+        authentication:
+          $ref: '#/components/schemas/MailAuthenticationPatch'
+        profileName:
+          type: string
+          nullable: true
+        compressReport:
+          type: boolean
+          nullable: true
+        subject:
+          type: string
+          nullable: true
+        smtpServerAddress:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+          nullable: true
+        senderEmail:
+          type: string
+          nullable: true
+        enableSsl:
+          type: boolean
+          nullable: true
+        considerCertificateErrors:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    MappedAuthenticationObject:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
+        regexp:
+          type: string
+          nullable: true
+        is_regexp:
+          type: boolean
+      additionalProperties: false
+    Nullable:
+      type: object
+      additionalProperties: false
+    PatchBlackBoxAuthenticationModel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/AuthType'
+      additionalProperties: false
+    PatchBlackBoxProxySettingsModel:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+          nullable: true
+        type:
+          $ref: '#/components/schemas/ProxyType'
+        host:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+          nullable: true
+        login:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PatchBlackBoxSettingsModel:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+          nullable: true
+        runAutocheckAfterScan:
+          type: boolean
+          nullable: true
+        host:
+          type: string
+          nullable: true
+        scanLevel:
+          $ref: '#/components/schemas/BlackBoxScanLevel'
+        scanScope:
+          $ref: '#/components/schemas/ScanScope'
+        additionalHttpHeaders:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdditionalHttpHeader'
+          nullable: true
+        authentication:
+          $ref: '#/components/schemas/PatchBlackBoxAuthenticationModel'
+        proxySettings:
+          $ref: '#/components/schemas/PatchBlackBoxProxySettingsModel'
+      additionalProperties: false
+    PermissionType:
+      enum:
+        - None
+        - ManageIssueTrackerTicket
+        - ManagePermissions
+        - ViewProject
+        - CreateProject
+        - DeleteProject
+        - ChangeIssueStatus
+        - ManageScan
+        - ManageGlobalParams
+        - DeleteScanResult
+        - UpdateProject
+        - ManageUpdate
+        - ManageIssueTracker
+        - DiscardIssueWithoutComment
+        - ApproveIssueWithoutComment
+        - ManageIssueTrackerIntegration
+        - ManageLicense
+        - DeleteIssueTrackerTicket
+        - WorkWithScanScheduler
+        - ReadSettings
+      type: string
+      format: ''
+    PmPattern:
+      type: object
+      properties:
+        key:
+          type: string
+          nullable: true
+        pattern:
+          type: string
+          nullable: true
+        filenameWildcard:
+          type: string
+          nullable: true
+        programmingLanguages:
+          # V.4.0: Autogenerated Swagger description doesn't supports bit masks
+          # so need to replace ProgrammingLanguages with int64
+          # $ref: '#/components/schemas/ProgrammingLanguages'
+          type: integer
+          format: int64
+        dataFormat:
+          $ref: '#/components/schemas/DataFormat'
+      additionalProperties: false
+    PolicyState:
+      enum:
+        - None
+        - Rejected
+        - Confirmed
+      type: string
+      format: ''
+    ProgrammingLanguage:
+      enum:
+        - DotNet
+        - Php
+        - Java
+        - Html
+        - JavaScript
+        - All
+        - SandBox
+        - Binary
+        - PlSql
+        - TSql
+        - Aspx
+        - C
+        - CPlusPlus
+        - ObjectiveC
+        - Swift
+        - MySql
+        - Python
+        - CSharp
+        - VB
+        - Go
+        - Kotlin
+        - None
+      type: string
+      format: ''
+    ProgrammingLanguageGroup:
+      enum:
+        - None
+        - Java
+        - CSharp
+        - VB
+        - Php
+        - JavaScript
+        - Python
+        - ObjectiveC
+        - Swift
+        - CAndCPlusPlus
+        - Go
+        - Kotlin
+        - Sql
+      type: string
+      format: ''
+    ProgrammingLanguageGroupModel:
+      type: object
+      properties:
+        languageGroup:
+          $ref: '#/components/schemas/ProgrammingLanguageGroup'
+        isTaintLanguageGroup:
+          type: boolean
+        isSupportsDependenciesDownloading:
+          type: boolean
+      additionalProperties: false
+    ProgrammingLanguages:
+      # V.4.0: EnterpriseLicenseData uses integer representation of ProgrammingLanguage, so we need to add x-enum-varnames
+      # Also PmPattern use integer representation of ProgrammingLanguages that is bitmask for
+      # language values. For example, pattern for C / C++ have 2^14 + 2^15 value
+      enum:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+      x-enum-varnames:
+        - None
+        - VB
+        - DotNet
+        - CSharp
+        - Php
+        - Java
+        - Html
+        - JavaScript
+        - SandBox
+        - Binary
+        - PlSql
+        - TSql
+        - MySql
+        - Aspx
+        - C
+        - CPlusPlus
+        - ObjectiveC
+        - Swift
+        - Python
+        - Go
+        - Kotlin
+      type: integer
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        creationDate:
+          type: string
+          format: date-time
+        settingsId:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        lastScanDate:
+          type: string
+          format: date-time
+        filePatterns:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    ProjectLight:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        settingsId:
+          type: string
+          format: uuid
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProgrammingLanguage'
+          nullable: true
+        isPinned:
+          type: boolean
+        scanStartErrors:
+          $ref: '#/components/schemas/ScanStartErrors'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+      additionalProperties: false
+    ProjectSettingsModel:
+      type: object
+      properties:
+        projectSource:
+          $ref: '#/components/schemas/ProjectSourceModel'
+        projectName:
+          type: string
+          nullable: true
+        programmingLanguageGroup:
+          $ref: '#/components/schemas/ProgrammingLanguageGroup'
+        whiteBoxSettings:
+          $ref: '#/components/schemas/WhiteBoxSettingsModel'
+        launchParameters:
+          type: string
+          nullable: true
+        useAvailablePublicAndProtectedMethods:
+          type: boolean
+        isLoadDependencies:
+          type: boolean
+        additionalParams:
+          $ref: '#/components/schemas/AdditionalParams'
+        reportAfterScan:
+          $ref: '#/components/schemas/MailingProjectSettings'
+      additionalProperties: false
+    ProjectSourceModel:
+      type: object
+      properties:
+        sourceType:
+          $ref: '#/components/schemas/SourceType'
+        lastDateTimeUpdate:
+          type: string
+          format: date-time
+        updaterInfo:
+          $ref: '#/components/schemas/UpdaterInfo'
+        isHidePathAndUserName:
+          type: boolean
+      additionalProperties: false
+    ProjectStage:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        policyState:
+          $ref: '#/components/schemas/PolicyState'
+        progress:
+          $ref: '#/components/schemas/ScanProgress'
+      additionalProperties: false
+    ProjectWithExtendedInfo:
+      type: object
+      properties:
+        project:
+          $ref: '#/components/schemas/ProjectLight'
+        lastScan:
+          $ref: '#/components/schemas/ScanStatistic'
+        prevScan:
+          $ref: '#/components/schemas/ScanStatistic'
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionType'
+          nullable: true
+      additionalProperties: false
+    ProxyType:
+      enum:
+        - Http
+        - HttpNoConnect
+        - Socks4
+        - Socks5
+      type: string
+      format: ''
+    ReportFormatType:
+      enum:
+        - Html
+        - Xml
+        - Json
+        - Custom
+        - Pdf
+        - Md
+      type: string
+      format: ''
+    ReportGenerateModel:
+      type: object
+      properties:
+        parameters:
+          $ref: '#/components/schemas/UserReportParametersBaseModel'
+        sessionId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: true
+        projectId:
+          type: string
+          format: uuid
+        localeId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ReportMailSenderParameters:
+      type: object
+      properties:
+        mailProfileId:
+          type: string
+          format: uuid
+          nullable: true
+        smtpServerAddress:
+          type: string
+          nullable: true
+        userName:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        useDefaultSettings:
+          type: boolean
+        emailRecipients:
+          type: string
+          nullable: true
+        enableSsl:
+          type: boolean
+        subject:
+          type: string
+          nullable: true
+        considerCertificateErrors:
+          type: boolean
+        senderEmail:
+          type: string
+          nullable: true
+        credentialsId:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    ReportTemplateModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        data:
+          type: string
+          nullable: true
+        isReadOnly:
+          type: boolean
+        isFavorite:
+          type: boolean
+        type:
+          $ref: '#/components/schemas/ReportType'
+        outputFileName:
+          type: string
+          nullable: true
+        creator:
+          $ref: '#/components/schemas/User'
+        creationDate:
+          type: string
+          format: date-time
+      additionalProperties: false
+    ReportTemplateUpsertModel:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        data:
+          type: string
+          nullable: true
+        outputFileName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ReportType:
+      enum:
+        - Custom
+        - PlainReport
+        - AutoCheck
+        - Nist
+        - Oud4
+        - Owasp
+        - Owaspm
+        - Pcidss
+        - Sans
+        - Json
+        - Xml
+      type: string
+      format: ''
+    RepositoryType:
+      enum:
+        - None
+        - Git
+        - TFS
+      type: string
+      format: ''
+    RvpGrammar:
+      enum:
+        - Undefined
+        - SqlCommon
+        - SqlCe
+        - MySql
+        - MsSql
+        - NpgSql
+        - OracleSql
+        - Sqlite
+        - SqlTableName
+        - ConnectionStringText
+        - ConnectionStringItem
+        - Xquery
+        - ConfigurationKey
+        - ConfigurationValue
+        - FileName
+        - LogEntry
+        - CommandLineArguments
+        - Ldap
+        - Linq
+        - HttpHeaderName
+        - HttpHeaderValue
+        - Host
+        - Port
+        - IpAddress
+        - WebSocketUri
+        - HttpUri
+        - HtmlText
+        - JavaScriptCode
+        - SerializedBase64XmlData
+        - SerializedXmlData
+        - SerializedJsonData
+        - XPath
+        - XmlDocument
+        - ArbitraryIntData
+        - ArbitraryStringData
+      type: string
+      format: ''
+    RvpPvo:
+      type: object
+      properties:
+        grammar:
+          $ref: '#/components/schemas/RvpGrammar'
+        requestPath:
+          type: string
+          nullable: true
+        condition:
+          $ref: '#/components/schemas/IRvpExpression'
+        argument:
+          $ref: '#/components/schemas/IRvpExpression'
+      additionalProperties: false
+    SastRulesBaseModel:
+      type: object
+      properties:
+        useRules:
+          type: boolean
+      additionalProperties: false
+    SastRulesModel:
+      type: object
+      properties:
+        rules:
+          type: object
+          properties:
+            None:
+              type: string
+            Java:
+              type: string
+            CSharp:
+              type: string
+            VB:
+              type: string
+            Php:
+              type: string
+            JavaScript:
+              type: string
+            Python:
+              type: string
+            ObjectiveC:
+              type: string
+            Swift:
+              type: string
+            CAndCPlusPlus:
+              type: string
+            Go:
+              type: string
+            Kotlin:
+              type: string
+            Sql:
+              type: string
+          additionalProperties: false
+          nullable: true
+        useRules:
+          type: boolean
+      additionalProperties: false
+    ScanAppType:
+      enum:
+        - None
+        - Binary
+        - Configuration
+        - Fingerprint
+        - Java
+        - CSharp
+        - PHP
+        - PmTaint
+        - BlackBox
+        - JavaScript
+        - DependencyCheck
+      type: string
+      format: ''
+    ScanEnvironment:
+      type: object
+      properties:
+        infrastructureVersion:
+          $ref: '#/components/schemas/ComponentVersion'
+        componentVersions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentVersion'
+          nullable: true
+        installatorVersion:
+          $ref: '#/components/schemas/ComponentVersion'
+        clientVersion:
+          $ref: '#/components/schemas/ComponentVersion'
+        yaraHash:
+          type: string
+          format: byte
+          nullable: true
+        sastHashes:
+          type: object
+          properties:
+            None:
+              type: string
+              format: byte
+            Binary:
+              type: string
+              format: byte
+            Configuration:
+              type: string
+              format: byte
+            Fingerprint:
+              type: string
+              format: byte
+            Java:
+              type: string
+              format: byte
+            CSharp:
+              type: string
+              format: byte
+            PHP:
+              type: string
+              format: byte
+            PmTaint:
+              type: string
+              format: byte
+            BlackBox:
+              type: string
+              format: byte
+            JavaScript:
+              type: string
+              format: byte
+            DependencyCheck:
+              type: string
+              format: byte
+          additionalProperties: false
+          nullable: true
+        extraOptions:
+          $ref: '#/components/schemas/ScanExtraOptions'
+      additionalProperties: false
+    ScanError:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        hash:
+          type: string
+          format: byte
+          nullable: true
+        scanResultId:
+          type: string
+          format: uuid
+        errorType:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        scanStage:
+          $ref: '#/components/schemas/Stage'
+        workType:
+          $ref: '#/components/schemas/WorkType'
+        primaryFile:
+          type: string
+          nullable: true
+        isCritical:
+          type: boolean
+        level:
+          $ref: '#/components/schemas/ErrorLevel'
+      additionalProperties: false
+    ScanExtraOptions:
+      type: object
+      properties:
+        fullRescanOnNewFilesAdded:
+          type: boolean
+      additionalProperties: false
+    ScanProgress:
+      type: object
+      properties:
+        stage:
+          $ref: '#/components/schemas/Stage'
+        subStage:
+          type: string
+          nullable: true
+        value:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ScanResult:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          # V.4.0 Non-nullable constraint added
+          nullable: false
+        projectId:
+          type: string
+          format: uuid
+        settingsId:
+          type: string
+          format: uuid
+        version:
+          type: integer
+          format: int32
+        scanDate:
+          type: string
+          format: date-time
+        progress:
+          $ref: '#/components/schemas/ScanProgress'
+        statistic:
+          $ref: '#/components/schemas/ScanResultStatistic'
+        scanEnvironment:
+          $ref: '#/components/schemas/ScanEnvironment'
+        previousScanResultId:
+          type: string
+          format: uuid
+          nullable: true
+        isRunFromQueue:
+          type: boolean
+        hasSources:
+          type: boolean
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+      additionalProperties: false
+    ScanResultState:
+      enum:
+        - None
+        - Inaccurate
+        - Incremental
+        - Incorrect
+      type: string
+      format: ''
+    ScanResultStatistic:
+      type: object
+      properties:
+        highLevelVulnerabilityCount:
+          type: integer
+          format: int32
+        mediumLevelVulnerabilityCount:
+          type: integer
+          format: int32
+        lowLevelVulnerabilityCount:
+          type: integer
+          format: int32
+        potentialVulnerabilityCount:
+          type: integer
+          format: int32
+        totalBlackBoxVulnerabilityCount:
+          type: integer
+          format: int32
+        totalStaticVulnerabilityCount:
+          type: integer
+          format: int32
+        totalVulnerabilityCount:
+          type: integer
+          format: int32
+        totalFileCount:
+          type: integer
+          format: int32
+        totalUrlCount:
+          type: integer
+          format: int32
+        scannedUrlCount:
+          type: integer
+          format: int32
+        scannedFileCount:
+          type: integer
+          format: int32
+        scanDuration:
+          type: string
+          format: date-span
+        state:
+          $ref: '#/components/schemas/ScanResultState'
+        policyState:
+          $ref: '#/components/schemas/PolicyState'
+      additionalProperties: false
+    ScanScope:
+      enum:
+        - Folder
+        - Domain
+        - Path
+      type: string
+      format: ''
+    ScanSettings:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          $ref: '#/components/schemas/ProgrammingLanguage'
+        scanAppType:
+          $ref: '#/components/schemas/ScanAppType'
+        rootFolder:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        javaParameters:
+          type: string
+          nullable: true
+        userPackagePrefixes:
+          type: string
+          nullable: true
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        customParameters:
+          type: string
+          nullable: true
+        isUseIssueScan:
+          type: boolean
+        isUseTaintScan:
+          type: boolean
+        isUsePatternmatchingScan:
+          type: boolean
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        configurationFiles:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledPatterns:
+          type: array
+          items:
+            type: string
+          nullable: true
+        enabledPatterns:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        customYaraRules:
+          type: string
+          nullable: true
+        useDefaultFingerprints:
+          type: boolean
+        useCustomYaraRules:
+          type: boolean
+        hideSuspectedVulnerabilities:
+          type: boolean
+        level:
+          $ref: '#/components/schemas/BlackBoxScanLevel'
+        autocheckSite:
+          type: string
+          nullable: true
+        autocheckCustomHeaders:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          nullable: true
+        customHeaders:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          nullable: true
+        authentication:
+          $ref: '#/components/schemas/BlackBoxAuthentication'
+        autocheckAuthentication:
+          $ref: '#/components/schemas/BlackBoxAuthentication'
+        configurationPath:
+          type: string
+          nullable: true
+        projectType:
+          $ref: '#/components/schemas/DotNetProjectType'
+        solutionFile:
+          type: string
+          nullable: true
+        webSiteFolder:
+          type: string
+          nullable: true
+        isGraphEnabled:
+          type: boolean
+        proxySettings:
+          $ref: '#/components/schemas/BlackBoxProxySettings'
+        autocheckProxySettings:
+          $ref: '#/components/schemas/BlackBoxProxySettings'
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        useIncrementalScan:
+          type: boolean
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+        useTaintAnalysis:
+          type: boolean
+        usePmAnalysis:
+          type: boolean
+          nullable: true
+        disableInterpretCores:
+          type: boolean
+        tempDir:
+          type: string
+          nullable: true
+        javaVersion:
+          $ref: '#/components/schemas/JavaVersions'
+        bindAddress:
+          type: string
+          nullable: true
+        runAutocheckAfterScan:
+          type: boolean
+        reportMailSenderParameters:
+          $ref: '#/components/schemas/ReportMailSenderParameters'
+        useIssueTrackerIntegration:
+          type: boolean
+        scanScope:
+          $ref: '#/components/schemas/ScanScope'
+        useSecurityPolicies:
+          type: boolean
+        fileFolderExclusions:
+          type: string
+          nullable: true
+        useSastRules:
+          type: boolean
+        sourceSettings:
+          $ref: '#/components/schemas/SourceSettings'
+        skipGitIgnoreFiles:
+          type: boolean
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+      additionalProperties: false
+    ScanStartErrors:
+      enum:
+        - None
+        - License
+        - Sources
+        - Language
+        - Modules
+      type: string
+      format: ''
+    ScanStatistic:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        date:
+          type: string
+          format: date-time
+          nullable: true
+        total:
+          type: integer
+          format: int32
+        potential:
+          type: integer
+          format: int32
+        low:
+          type: integer
+          format: int32
+        medium:
+          type: integer
+          format: int32
+        high:
+          type: integer
+          format: int32
+        filesScanned:
+          type: integer
+          format: int32
+        filesTotal:
+          type: integer
+          format: int32
+        urlsScanned:
+          type: integer
+          format: int32
+        urlsTotal:
+          type: integer
+          format: int32
+        progress:
+          $ref: '#/components/schemas/ScanProgress'
+        threatLevel:
+          $ref: '#/components/schemas/ThreatLevel'
+        policyState:
+          $ref: '#/components/schemas/PolicyState'
+      additionalProperties: false
+    SecurityPoliciesModel:
+      type: object
+      properties:
+        checkSecurityPoliciesAccordance:
+          type: boolean
+        securityPolicies:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SourceControlCredentalsType:
+      enum:
+        - None
+        - Anonymous
+        - Password
+        - AuthenticationToken
+      type: string
+      format: ''
+    SourceControlSettings:
+      type: object
+      properties:
+        repositoryType:
+          $ref: '#/components/schemas/RepositoryType'
+        repositoryUrl:
+          type: string
+          nullable: true
+        checkoutDir:
+          type: string
+          nullable: true
+        sourceControlCredentalsType:
+          $ref: '#/components/schemas/SourceControlCredentalsType'
+        user:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        catalog:
+          type: string
+          nullable: true
+        project:
+          type: string
+          nullable: true
+        branch:
+          type: string
+          nullable: true
+        includeSubmodules:
+          type: boolean
+        updateSourcesBeforeScan:
+          type: boolean
+        credentialsId:
+          type: string
+          format: uuid
+          nullable: true
+      additionalProperties: false
+    SourceSettings:
+      type: object
+      properties:
+        sourceType:
+          $ref: '#/components/schemas/SourceType'
+        lastDateTimeUpdate:
+          type: string
+          format: date-time
+        updaterInfo:
+          $ref: '#/components/schemas/UpdaterInfo'
+        isHidePathAndUser:
+          type: boolean
+        scanTargetName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    SourceType:
+      enum:
+        - Empty
+        - File
+        - Folder
+        - SourceControl
+      type: string
+      format: ''
+    Stage:
+      enum:
+        - Unknown
+        - VFSSetup
+        - Initialize
+        - Precheck
+        - Scan
+        - Finalize
+        - Done
+        - Failed
+        - Aborted
+        - Enqueued
+        - Autocheck
+      type: string
+      format: ''
+    StatisticByScanResult:
+      type: object
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/VulnerabilityTimeDistribResult'
+          nullable: true
+        totalCount:
+          type: integer
+          format: int64
+      additionalProperties: false
+    StatisticVulnStateResult:
+      type: object
+      properties:
+        lastState:
+          $ref: '#/components/schemas/StatisticVulnStateRow'
+        prevState:
+          $ref: '#/components/schemas/StatisticVulnStateRow'
+        level:
+          $ref: '#/components/schemas/ThreatLevel'
+      additionalProperties: false
+    StatisticVulnStateRow:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+        potential:
+          type: integer
+          format: int32
+        low:
+          type: integer
+          format: int32
+        medium:
+          type: integer
+          format: int32
+        high:
+          type: integer
+          format: int32
+        level:
+          $ref: '#/components/schemas/ThreatLevel'
+      additionalProperties: false
+    TemplateValidationResult:
+      type: object
+      properties:
+        hasErrors:
+          type: boolean
+        messages:
+          type: array
+          items:
+            type: string
+          nullable: true
+      additionalProperties: false
+    TestMailModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          nullable: true
+        authentication:
+          $ref: '#/components/schemas/MailAuthenticationPatch'
+        subject:
+          type: string
+          nullable: true
+        smtpServerAddress:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+          nullable: true
+        senderEmail:
+          type: string
+          nullable: true
+        enableSsl:
+          type: boolean
+          nullable: true
+        considerCertificateErrors:
+          type: boolean
+          nullable: true
+        emailRecipient:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ThreatLevel:
+      enum:
+        - None
+        - Potential
+        - Low
+        - Medium
+        - High
+      type: string
+      format: ''
+    TicketLink:
+      type: object
+      properties:
+        trackerType:
+          $ref: '#/components/schemas/TrackerType'
+        connectionId:
+          type: string
+          format: uuid
+        ticketId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    TicketTemplate:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldSettings'
+          nullable: true
+      additionalProperties: false
+    TrackerType:
+      enum:
+        - Unknown
+        - Jira
+        - Tfs
+        - Youtrack
+      type: string
+      format: ''
+    UpdateIssueExploitModel:
+      type: object
+      properties:
+        exploitUrl:
+          type: string
+          nullable: true
+        exploit:
+          type: string
+          nullable: true
+        comment:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UpdaterInfo:
+      type: object
+      properties:
+        tokenName:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        username:
+          type: string
+          nullable: true
+      additionalProperties: false
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        login:
+          type: string
+          nullable: true
+        isRoot:
+          type: boolean
+        isExternal:
+          type: boolean
+        isActive:
+          type: boolean
+        needChangePassword:
+          type: boolean
+        authProvider:
+          $ref: '#/components/schemas/AuthProvider'
+        lastLoginDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    UserReportParametersBaseModel:
+      type: object
+      properties:
+        useFilters:
+          type: boolean
+        includeDFD:
+          type: boolean
+        includeGlossary:
+          type: boolean
+        reportTemplateId:
+          type: string
+          format: uuid
+        formatType:
+          $ref: '#/components/schemas/ReportFormatType'
+        createPdfPrintVersion:
+          type: boolean
+        includeSuppressedVulnerabilities:
+          type: boolean
+        includeDiscardedVulnerabilities:
+          type: boolean
+        includeSuspectedVulnerabilities:
+          type: boolean
+      additionalProperties: false
+    UserReportParametersModel:
+      type: object
+      properties:
+        saveAsPath:
+          type: string
+          nullable: true
+        useFilters:
+          type: boolean
+        includeDFD:
+          type: boolean
+        includeGlossary:
+          type: boolean
+        reportTemplateId:
+          type: string
+          format: uuid
+        formatType:
+          $ref: '#/components/schemas/ReportFormatType'
+        createPdfPrintVersion:
+          type: boolean
+        includeSuppressedVulnerabilities:
+          type: boolean
+        includeDiscardedVulnerabilities:
+          type: boolean
+        includeSuspectedVulnerabilities:
+          type: boolean
+      additionalProperties: false
+    VulnerabilityTimeDistribResult:
+      type: object
+      properties:
+        scanDate:
+          type: string
+          format: date-time
+        total:
+          type: integer
+          format: int32
+        potential:
+          type: integer
+          format: int32
+        low:
+          type: integer
+          format: int32
+        medium:
+          type: integer
+          format: int32
+        high:
+          type: integer
+          format: int32
+        level:
+          $ref: '#/components/schemas/ThreatLevel'
+      additionalProperties: false
+    VulnTimeDistribFilter:
+      type: object
+      properties:
+        projectIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          nullable: true
+        from:
+          type: string
+          format: date-time
+          nullable: true
+        to:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+    WafPatchGenerateModel:
+      type: object
+      properties:
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: true
+        projectId:
+          type: string
+          format: uuid
+        localeId:
+          type: string
+          nullable: true
+      additionalProperties: false
+    WhiteBoxSettingsModel:
+      type: object
+      properties:
+        searchForVulnerableSourceCodeEnabled:
+          type: boolean
+        dataFlowAnalysisEnabled:
+          type: boolean
+        patternMatchingEnabled:
+          type: boolean
+        searchForVulnerableComponentsEnabled:
+          type: boolean
+        searchForConfigurationFlawsEnabled:
+          type: boolean
+      additionalProperties: false
+    WorkType:
+      enum:
+        - Unknown
+        - Scan
+        - Autocheck
+      type: string
+      format: ''
+    YaraRulesBaseModel:
+      type: object
+      properties:
+        useRules:
+          type: boolean
+      additionalProperties: false
+    YaraRulesModel:
+      type: object
+      properties:
+        rules:
+          type: string
+          nullable: true
+        useRules:
+          type: boolean
+      additionalProperties: false
+    # V.4.0 Can't use IssuesFilterScanMode as a ScanMode field value. The reason is that
+    # IssueBase of vulnerability type uses 0 as "from entry point" and 1 as "from public and protected"
+    V40VulnerabilityIssueScanMode:
+      enum:
+        - 0
+        - 1
+      x-enum-varnames:
+        - FromEntryPoint
+        - FromPublicProtected
+      type: integer
+    # V.4.0: Had to add V40BestPlaceToFix class that is used in vulnerabilities like fingerprint, abstract interpretation, etc
+    V40BestPlaceToFix:
+      type: object
+      properties:
+        Type:
+          type: object
+          nullable: true
+        Place:
+          $ref: '#/components/schemas/V40Place'
+          nullable: false
+    # V.4.0: Had to add V40Place class that is used as taint data entry attribute, BPF etc
+    V40Place:
+      type: object
+      properties:
+        File:
+          type: string
+          nullable: false
+        Value:
+          type: string
+          nullable: true
+        EndLine:
+          type: integer
+          nullable: false
+        BeginLine:
+          type: integer
+          nullable: false
+        EndColumn:
+          type: integer
+          nullable: false
+        BeginColumn:
+          type: integer
+          nullable: false
+    V40ExploitParameter:
+      type: object
+      properties:
+        Name:
+          type: string
+          nullable: false
+        Value:
+          type: string
+          nullable: false
+        Source:
+          type: string
+          nullable: false
+        Payload:
+          type: string
+          nullable: true
+        Dependency:
+          type: string
+          nullable: false
+        Vulnerable:
+          type: boolean
+          nullable: false
+    V40Exploit:
+      type: object
+      properties:
+        Url:
+          type: string
+          nullable: false
+        Text:
+          type: string
+          nullable: true
+        Type:
+          type: string
+          nullable: false
+        Parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/V40ExploitParameter'
+          nullable: true
+    # V.4.0: Had to add IssueBase descendant classes to support specific fields like taint data entries etc.
+    V40FingerprintIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            ComponentVersion:
+              type: string
+              nullable: false
+            ComponentName:
+              type: string
+              nullable: false
+            BestPlaceToFix:
+              $ref: '#/components/schemas/V40BestPlaceToFix'
+            FingerprintIds:
+              type: array
+              items:
+                type: string
+              nullable: false
+            RelativeFilePath:
+              type: string
+              nullable: true
+            VulnerableCode:
+              type: string
+              nullable: true
+            VulnerableExpression:
+              $ref: '#/components/schemas/V40Place'
+    V40VulnerabilityIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            BestPlaceToFix:
+              $ref: '#/components/schemas/V40BestPlaceToFix'
+            # V.4.0 Always null
+            RelativeFilePath:
+              type: string
+              nullable: true
+            # V.4.0 Always null
+            VisualizationInfo:
+              type: object
+              nullable: true
+            # V.4.0 Always null
+            PrimordialExploit:
+              type: object
+              nullable: true
+            AdditionalConditions:
+              type: string
+              nullable: true
+            # V.4.0 Always null
+            VulnerableCode:
+              type: string
+              nullable: true
+            AutocheckExploit:
+              $ref: '#/components/schemas/V40Exploit'
+            Exploit:
+              $ref: '#/components/schemas/V40Exploit'
+            # V.4.0 Always null
+            AfXml:
+              type: object
+              nullable: true
+            # V.4.0 Always null
+            GraphId:
+              type: object
+              nullable: true
+            Function:
+              type: string
+              nullable: true
+            # V.4.0 Always null
+            StackTrace:
+              type: object
+              nullable: true
+            IsSecondOrder:
+              type: boolean
+              nullable: false
+            EntryPoint:
+              $ref: '#/components/schemas/V40Place'
+            VulnerableExpression:
+              $ref: '#/components/schemas/V40Place'
+            TaintDataEntries:
+              type: array
+              items:
+                $ref: '#/components/schemas/V40Place'
+            DataTrace:
+              type: array
+              items:
+                $ref: '#/components/schemas/V40Place'
+            ScanMode:
+              $ref: '#/components/schemas/V40VulnerabilityIssueScanMode'
+    V40WeaknessIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            VulnerableExpression:
+              $ref: '#/components/schemas/V40Place'
+            # V.4.0 Always null
+            BestPlaceToFix:
+              $ref: '#/components/schemas/V40BestPlaceToFix'
+            # V.4.0 Always null
+            VulnerableCode:
+              type: object
+              nullable: true
+            # V.4.0 Always null
+            RelativeFilePath:
+              type: object
+              nullable: true
+    V40UnknownIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+    V40ConfigurationIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            VulnerableExpression:
+              $ref: '#/components/schemas/V40Place'
+            RecommendedValue:
+              type: string
+              nullable: false
+            ExistingValue:
+              type: string
+              nullable: false
+            Function:
+              description: 'Setting name'
+              type: string
+              nullable: true
+            # V.4.0 Always null
+            BestPlaceToFix:
+              $ref: '#/components/schemas/V40BestPlaceToFix'
+            # V.4.0 Always null
+            VulnerableCode:
+              type: object
+              nullable: true
+            # V.4.0 Always null
+            RelativeFilePath:
+              type: object
+              nullable: true
+    V40BlackBoxIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+        - type: object
+          properties:
+            Items:
+              type: array
+              items:
+                $ref: '#/components/schemas/V40BlackBoxItem'
+            Request:
+              $ref: '#/components/schemas/V40Exploit'
+            Response:
+              $ref: '#/components/schemas/V40Exploit'
+            PrimordialRequest:
+              $ref: '#/components/schemas/V40Exploit'
+            HttpResponse:
+              type: string
+              nullable: true
+            SandId:
+              type: string
+              nullable: false
+            CustomId:
+              type: string
+              nullable: false
+            Line:
+              type: integer
+              nullable: false
+            OriginalCompressedMessage:
+              type: string
+              nullable: false
+            ScannedUrl:
+              type: string
+              nullable: false
+            SignificantString:
+              type: string
+              nullable: true
+            Source:
+              type: string
+              nullable: true
+            # V.4.0 Always null
+            Title:
+              type: object
+              nullable: true
+            # V.4.0 Always null
+            MarkerPosition:
+              type: object
+              nullable: true
+    V40YaraMatchIssue:
+      allOf:
+        - $ref: '#/components/schemas/IssueBase'
+    V40BlackBoxItem:
+      type: object
+      properties:
+        Key:
+          type: string
+          nullable: false
+        IsUrl:
+          type: boolean
+          nullable: false
+        Value:
+          type: string
+          nullable: false
+        LocalizeValue:
+          type: boolean
+          nullable: false
+        UseLocalization:
+          type: boolean
+          nullable: false
+    # V.4.0: Need to implement own ScanSettings type as existing v.4.0 API returns data that doesn't corresponds ScanSettings
+    V40ScanSettings:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        scope:
+          type: string
+          nullable: true
+        programmingLanguage:
+          # As for v.4.0 programmingLanguage is returned as string enum value
+          # $ref: '#/components/schemas/ProgrammingLanguage'
+          $ref: '#/components/schemas/V40ProgrammingLanguage'
+        scanAppType:
+          # As for v.4.0 scanAppType is returned as comma-separated string
+          # $ref: '#/components/schemas/ScanAppType'
+          type: string
+        rootFolder:
+          type: string
+          nullable: true
+        scanTarget:
+          type: string
+          nullable: true
+        actualScanTarget:
+          type: string
+          nullable: true
+        site:
+          type: string
+          nullable: true
+        javaParameters:
+          type: string
+          nullable: true
+        isUnpackUserPackages:
+          type: boolean
+        isDownloadDependencies:
+          type: boolean
+        isUsePublicAnalysisMethod:
+          type: boolean
+        isUseEntryAnalysisPoint:
+          type: boolean
+        customParameters:
+          type: string
+          nullable: true
+        isUseIssueScan:
+          type: boolean
+        isUseTaintScan:
+          type: boolean
+        isUsePatternmatchingScan:
+          type: boolean
+        skipFileFormats:
+          type: array
+          items:
+            type: string
+          nullable: true
+        skipFilesFolders:
+          type: array
+          items:
+            type: string
+          nullable: true
+        configurationFiles:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledPatterns:
+          type: array
+          items:
+            type: string
+          nullable: true
+        enabledPatterns:
+          type: array
+          items:
+            type: string
+          nullable: true
+        disabledTypes:
+          type: array
+          items:
+            type: string
+          nullable: true
+        customYaraRules:
+          type: string
+          nullable: true
+        useDefaultFingerprints:
+          type: boolean
+        useCustomYaraRules:
+          type: boolean
+        hideSuspectedVulnerabilities:
+          type: boolean
+        level:
+          $ref: '#/components/schemas/BlackBoxScanLevel'
+        autocheckSite:
+          type: string
+          nullable: true
+        autocheckCustomHeaders:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          nullable: true
+        customHeaders:
+          type: array
+          items:
+            type: array
+            items:
+              type: string
+          nullable: true
+        authentication:
+          $ref: '#/components/schemas/BlackBoxAuthentication'
+        autocheckAuthentication:
+          $ref: '#/components/schemas/BlackBoxAuthentication'
+        configurationPath:
+          type: string
+          nullable: true
+        projectType:
+          $ref: '#/components/schemas/DotNetProjectType'
+        solutionFile:
+          type: string
+          nullable: true
+        webSiteFolder:
+          type: string
+          nullable: true
+        isGraphEnabled:
+          type: boolean
+        proxySettings:
+          $ref: '#/components/schemas/BlackBoxProxySettings'
+        autocheckProxySettings:
+          $ref: '#/components/schemas/BlackBoxProxySettings'
+        sourceControlSettings:
+          $ref: '#/components/schemas/SourceControlSettings'
+        preprocessingTimeout:
+          type: integer
+          format: int32
+        useIncrementalScan:
+          type: boolean
+        sendEmailWithReportsAfterScan:
+          type: boolean
+        compressReport:
+          type: boolean
+        considerPreviousScan:
+          type: boolean
+          nullable: true
+        fullRescanOnNewFilesAdded:
+          type: boolean
+        useTaintAnalysis:
+          type: boolean
+        usePmAnalysis:
+          type: boolean
+          nullable: true
+        disableInterpretCores:
+          type: boolean
+        tempDir:
+          type: string
+          nullable: true
+        javaVersion:
+          $ref: '#/components/schemas/JavaVersions'
+        bindAddress:
+          type: string
+          nullable: true
+        runAutocheckAfterScan:
+          type: boolean
+        reportMailSenderParameters:
+          $ref: '#/components/schemas/ReportMailSenderParameters'
+        useIssueTrackerIntegration:
+          type: boolean
+        scanScope:
+          $ref: '#/components/schemas/ScanScope'
+        isStaticScanEnabled:
+          type: boolean
+          readOnly: true
+        isBlackBoxScanEnabled:
+          type: boolean
+          readOnly: true
+        useSecurityPolicies:
+          type: boolean
+        fileFolderExclusions:
+          type: string
+          nullable: true
+        useSastRules:
+          type: boolean
+        sourceSettings:
+          $ref: '#/components/schemas/SourceSettings'
+        skipGitIgnoreFiles:
+          type: boolean
+        userPackagePrefixes:
+          type: string
+          nullable: true
+      additionalProperties: false
+    V40ProgrammingLanguage:
+      # V.4.0: As EnterpriseLicenseData uses integer representation of ProgrammingLanguage, but ScanSettings
+      # are use string representationso we need to add new type
+      enum:
+        - DotNet
+        - Php
+        - Java
+        - Html
+        - JavaScript
+        - All
+        - SandBox
+        - Binary
+        - PlSql
+        - TSql
+        - Aspx
+        - C
+        - CPlusPlus
+        - ObjectiveC
+        - Swift
+        - MySql
+        - Python
+        - CSharp
+        - VB
+        - Go
+        - Kotlin
+        - None
+      type: string
+    # V.4.0: Need missing CVSS type for SCA analysis metadata
+    V40CvssMetadata:
+      type: object
+      properties:
+        Base:
+          type: string
+          nullable: true
+        BaseScore:
+          type: string
+          nullable: true
+        Temp:
+          type: string
+          nullable: true
+        TempScore:
+          type: string
+          nullable: true
+      additionalProperties: false
+    # V.4.0: Had ta add this as there's no text description in IssueDescriptionModelBase
+    V40IssueDescriptionModel:
+      type: object
+      properties:
+        identity:
+          type: string
+          nullable: true
+        issueType:
+          $ref: '#/components/schemas/IssueType'
+        descriptionValue:
+          $ref: '#/components/schemas/V40DescriptionBaseValue'
+      additionalProperties: false
+    # V.4.0:
+    V40DescriptionBaseValue:
+      type: object
+      properties:
+        # V.4.0: Had to explicitly add html field as it exists in issues report
+        html:
+          type: string
+          nullable: true
+        header:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+      additionalProperties: false
+    # Enum values are defined as integer numbers as now we do support bit masks
+    V40IssuesFilterLevel:
+      enum:
+        - 0
+        - 1
+        - 2
+        - 4
+        - 8
+        - 31
+      x-enum-varnames:
+        - None
+        - Low
+        - Medium
+        - High
+        - Potential
+        - All
+      type: integer
+    # Enum values are defined as integer numbers as now we do support bit masks
+    V40IssuesFilterConfirmationStatus:
+      enum:
+        - 0
+        - 1
+        - 2
+        - 4
+        - 8
+        - 31
+      x-enum-varnames:
+        - Undefined
+        - None
+        - Approved
+        - AutoApproved
+        - Discarded
+        - All
+      type: integer
+    # Enum values are defined as integer numbers as now we do support bit masks
+    V40IssuesFilterExploitationCondition:
+      enum:
+        - 0
+        - 1
+        - 2
+        - 7
+      x-enum-varnames:
+        - None
+        - NoCondition
+        - UnderCondition
+        - All
+      type: integer
+    # Enum values are defined as integer numbers as now we do support bit masks
+    V40IssuesFilterSuppressStatus:
+      enum:
+        - 0
+        - 1
+        - 2
+        - 7
+      x-enum-varnames:
+        - None
+        - Suppressed
+        - ExceptSuppressed
+        - All
+      type: integer
+    # Enum values are defined as integer numbers as now we do support bit masks
+    V40IssuesFilterSourceType:
+      enum:
+        - 0
+        - 1
+        - 2
+        - 7
+      x-enum-varnames:
+        - None
+        - Static
+        - BlackBox
+        - All
+      type: integer
+    # Enum values are defined as integer numbers as now we do support bit masks
+    V40IssuesFilterScanMode:
+      enum:
+        - 0
+        - 1
+        - 2
+        - 4
+        - 15
+      x-enum-varnames:
+        - None
+        - FromEntryPoint
+        - FromPublicProtected
+        - FromOther
+        - All
+      type: integer
+    # Enum values are defined as integer numbers as now we do support bit masks
+    V40IssuesFilterActualStatus:
+      enum:
+        - All
+        - IsNew
+        - NotIsNew
+      type: string
+    V40IssuesFilterType:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        enable:
+          type: boolean
+      additionalProperties: false
+    V40IssuesFilterPathInfo:
+      type: object
+      properties:
+        path:
+          type: string
+          nullable: true
+        physicalPath:
+          type: string
+          nullable: true
+      additionalProperties: false
+    # Property types are changed to integers as issueLevel, confirmationStatus,
+    # exploitationCondition, suppressStatus, sourceType, scanMode and actualStatus are support bit masks
+    V40IssuesFilter:
+      type: object
+      properties:
+        issueLevel:
+          # $ref: '#/components/schemas/IssuesFilterLevel'
+          type: integer
+          format: int32
+        confirmationStatus:
+          # $ref: '#/components/schemas/IssuesFilterConfirmationStatus'
+          type: integer
+          format: int32
+        exploitationCondition:
+          # $ref: '#/components/schemas/IssuesFilterExploitationCondition'
+          type: integer
+          format: int32
+        suppressStatus:
+          # $ref: '#/components/schemas/IssuesFilterSuppressStatus'
+          type: integer
+          format: int32
+        sourceType:
+          # $ref: '#/components/schemas/IssuesFilterSourceType'
+          type: integer
+          format: int32
+        scanMode:
+          # $ref: '#/components/schemas/IssuesFilterScanMode'
+          type: integer
+          format: int32
+        actualStatus:
+          $ref: '#/components/schemas/V40IssuesFilterActualStatus'
+        hideSecondOrder:
+          type: boolean
+        hideSuspected:
+          type: boolean
+        hidePotential:
+          type: boolean
+        byFavorite:
+          type: boolean
+        byBestPlaceToFix:
+          type: boolean
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/V40IssuesFilterType'
+          nullable: true
+        pathInfo:
+          $ref: '#/components/schemas/V40IssuesFilterPathInfo'
+        pattern:
+          type: string
+          nullable: true
+        selectAllLevelsSeparately:
+          type: boolean
+        selectAllConfirmationStatusSeparately:
+          type: boolean
+        selectAllExploitationConditionSeparately:
+          type: boolean
+        selectAllSuppressStatusSeparately:
+          type: boolean
+        selectAllScanModeSeparately:
+          type: boolean
+        selectAllActualStatusSeparately:
+          type: boolean
+      additionalProperties: false
+    File:
+      type: object
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please insert JWT with Bearer into field
+      name: Authorization
+      in: header

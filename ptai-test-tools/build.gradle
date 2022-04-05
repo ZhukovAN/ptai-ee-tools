@@ -32,6 +32,8 @@ dependencies {
     // Need this to create fault-tolerant JSON parser
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
     testFixturesImplementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml
+    testFixturesImplementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
     // Need this to implement logging inside test fixtures
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     testFixturesImplementation "org.slf4j:slf4j-api:$slf4jVersion"

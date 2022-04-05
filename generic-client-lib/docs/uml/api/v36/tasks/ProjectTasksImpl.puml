@@ -1,0 +1,66 @@
+@startuml
+
+group searchProject(name)
+ProjectTasksImpl -> projectsApi ++ : apiProjectsLightNameGet(name)
+projectsApi --> ProjectTasksImpl -- : projectId
+end
+
+group searchProject(id)
+ProjectTasksImpl -> projectsApi ++ : apiProjectsProjectIdGet(id)
+projectsApi --> ProjectTasksImpl -- : projectName
+end
+
+group getLatestAstResult(id)
+ProjectTasksImpl -> projectsApi ++ : apiProjectsProjectIdScanResultsLastGet(id)
+projectsApi --> ProjectTasksImpl -- : scanResultId
+end
+
+group getLatestCompleteAstResult(id)
+ProjectTasksImpl -> projectsApi ++ : apiProjectsProjectIdScanResultsGet(id)
+projectsApi --> ProjectTasksImpl -- : scanResultId
+end
+
+group setupFromJson(settings, policy)
+note over ProjectTasksImpl, configsApi
+  PT AI server API doesn't create project if DisabledPatterms and EnabledPatterns are missing even if scanAppType have
+  no PmTaint. So we need at least pass empty arrays and use predefined enabled / disabled pattern lists
+end note
+ProjectTasksImpl -> configsApi: apiConfigsPmPatternsGet
+hnote over ProjectTasksImpl, configsApi
+  Initialize disabled and enabled patterns list using patterns definition and programming
+  language. Details are skipped for diagram clarity, see sources instead
+end hnote
+== Convert AIPROJ-defined scan settings to PT AI's REST API ScanSettings ==
+
+ProjectTasksImpl -> AiProjConverter ++ : convert(settings, patterns)
+AiProjConverter -> V36ScanSettings ** : new
+AiProjConverter -> V36ScanSettings: init(...)
+AiProjConverter --> ProjectTasksImpl -- : scanSettings
+== Check if we should create project first ==
+ProjectTasksImpl -> projectsApi ++ : apiProjectsLightNameGet(settings.projectName)
+projectsApi --> ProjectTasksImpl -- : ProjectLight projectInfo
+alt Project not exists, create new one
+ProjectTasksImpl -> CreateProjectModel ** : new
+CreateProjectModel --> ProjectTasksImpl: createProjectModel
+ProjectTasksImpl -> CreateProjectModel: setName(settings.projectName)
+ProjectTasksImpl -> CreateProjectModel: setScanSettings(scanSettings)
+ProjectTasksImpl -> projectsApi ++ : apiProjectsPost(createProjectModel)
+projectsApi --> ProjectTasksImpl -- : project
+else Project exists, update its scan settings
+ProjectTasksImpl -> scanSettings: setId(project.getSettingsId())
+ProjectTasksImpl -> projectsApi: apiProjectsProjectIdScanSettingsPut(projectInfo.id, scanSettings)
+end
+== Assign security policy to project ==
+ProjectTasksImpl -> projectsApi: apiProjectsProjectIdPoliciesRulesPut(project.id, policy.json)
+end
+
+group deleteProject(id)
+ProjectTasksImpl -> projectsApi ++ : apiProjectsProjectIdDelete(id)
+end
+
+group listProjects()
+ProjectTasksImpl -> projectsApi ++ : apiProjectsGet
+projectsApi --> ProjectTasksImpl -- : projects
+end
+
+@enduml

@@ -10,19 +10,19 @@ import java.nio.charset.StandardCharsets;
 public abstract class BaseIT extends BaseTest {
     public static final String TOKEN = (null != System.getenv("ptai.token"))
             ? System.getenv("ptai.token")
-            : "3F4y+YC+ZSkwkAGvzVDLvzvH4QXO+E2m";
+            : CONNECTION().getToken();
 
     public static final String USER = (null != System.getenv("ptai.user"))
             ? System.getenv("ptai.user")
-            : "Administrator";
+            : CONNECTION().getUser();
 
     public static final String PASSWORD = (null != System.getenv("ptai.password"))
             ? System.getenv("ptai.password")
-            : "P@ssw0rd";
+            : CONNECTION().getPassword();
 
     public static final String URL = (null != System.getenv("ptai.url"))
             ? System.getenv("ptai.url")
-            : "https://ptai.domain.org:443/";
+            : CONNECTION().getUrl();
 
     public static final String CA = CA();
 
@@ -30,9 +30,9 @@ public abstract class BaseIT extends BaseTest {
 
     @SneakyThrows
     protected static String CA() {
-        if (null != System.getenv("ptai.url"))
-            return IOUtils.toString(new FileInputStream(System.getenv("ptai.ca.file")), StandardCharsets.UTF_8);
-        return getResourceString("keys/domain.org.pem");
+        if (null != System.getenv("ptai.ca"))
+            return IOUtils.toString(new FileInputStream(System.getenv("ptai.ca")), StandardCharsets.UTF_8);
+        return getResourceString(CONNECTION().getCa());
     }
 
     @SneakyThrows
