@@ -1216,7 +1216,7 @@
           }
         }
       },
-      "put": {
+      "patch": {
         "tags": [
           "Projects"
         ],
@@ -1238,22 +1238,22 @@
           "content": {
             "application/json-patch+json": {
               "schema": {
-                "$ref": "#/components/schemas/ExtendedBlackBoxSettingsModel"
+                "$ref": "#/components/schemas/PatchBlackBoxSettingsModel"
               }
             },
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExtendedBlackBoxSettingsModel"
+                "$ref": "#/components/schemas/PatchBlackBoxSettingsModel"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExtendedBlackBoxSettingsModel"
+                "$ref": "#/components/schemas/PatchBlackBoxSettingsModel"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ExtendedBlackBoxSettingsModel"
+                "$ref": "#/components/schemas/PatchBlackBoxSettingsModel"
               }
             }
           }
@@ -3712,6 +3712,7 @@
           "INITIATOR_NOT_FOUND",
           "ROOT_LOGIN_VIA_VIEWER_IS_NOT_ALLOWED",
           "CREDENTIAL_STORE_IS_UNVAILABLE_OR_TAINTED",
+          "USER_BLOCKED",
           "EXT_AUTH_PROVIDERS_GET_ERROR",
           "EXT_AUTH_PROVIDERS_BY_SAME_SCHEME_LIMIT_ERROR",
           "EXT_AUTH_PROVIDERS_AT_LEAST_ONE_ENABLED_LIMIT_ERROR",
@@ -3722,6 +3723,7 @@
           "EXT_AUTH_PROVIDER_IS_INCORRECT",
           "EXT_AUTH_PROVIDER_NAME_IS_EMPTY",
           "EXT_AUTH_PROVIDER_NAME_LENGTH_LIMIT",
+          "EXT_AUTH_PROVIDER_WITH_SAME_NAME_ALREADY_EXISTS",
           "EXT_AUTH_SETTINGS_IS_INCORRECT",
           "EXT_AUTH_SETTINGS_OPENID_AUTHORITY_IS_INCORRECT",
           "EXT_AUTH_SETTINGS_OPENID_CLIENT_ID_IS_INCORRECT",
@@ -3837,6 +3839,7 @@
           "PROJECTS_COUNT_LIMITED_BY_LICENSE",
           "LICENSE_FILE_IS_INVALID",
           "LICENSE_FINGERPRINT_ERROR",
+          "LANGUAGE_NOT_ALLOWED_BY_LICENCE",
           "UNKNOWN_SOURCE_VERSION_CONTROL_SYSTEM",
           "SOURCE_VERSION_CONTROL_SYSTEM_ERROR",
           "INVALID_VERSION_CONTROL_SYSTEM_SETTINGS",
@@ -3848,6 +3851,7 @@
           "SCAN_NOT_FOUND",
           "ACTIVE_SCAN_AGENTS_NOT_FOUND",
           "SCAN_AGENT_IS_ACTIVE",
+          "SCHEDULING_IS_LOCKED",
           "SERVER_CERTIFICATE_NOT_FOUND",
           "FILESYSTEM_ERROR_ACCESS_DENIED",
           "VAULT_CREDENTIALS_NOT_FOUND",
@@ -4538,6 +4542,82 @@
         "type": "object",
         "additionalProperties": false
       },
+      "PatchBlackBoxAuthenticationModel": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/AuthType"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PatchBlackBoxProxySettingsModel": {
+        "type": "object",
+        "properties": {
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/ProxyType"
+          },
+          "host": {
+            "type": "string",
+            "nullable": true
+          },
+          "port": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "login": {
+            "type": "string",
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PatchBlackBoxSettingsModel": {
+        "type": "object",
+        "properties": {
+          "isActive": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "runAutocheckAfterScan": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "host": {
+            "type": "string",
+            "nullable": true
+          },
+          "scanLevel": {
+            "$ref": "#/components/schemas/BlackBoxScanLevel"
+          },
+          "scanScope": {
+            "$ref": "#/components/schemas/ScanScope"
+          },
+          "additionalHttpHeaders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdditionalHttpHeader"
+            },
+            "nullable": true
+          },
+          "authentication": {
+            "$ref": "#/components/schemas/PatchBlackBoxAuthenticationModel"
+          },
+          "proxySettings": {
+            "$ref": "#/components/schemas/PatchBlackBoxProxySettingsModel"
+          }
+        },
+        "additionalProperties": false
+      },
       "ProgrammingLanguage": {
         "enum": [
           "DotNet",
@@ -4625,8 +4705,8 @@
           "isPinned": {
             "type": "boolean"
           },
-          "hasSources": {
-            "type": "boolean"
+          "scanStartErrors": {
+            "$ref": "#/components/schemas/ScanStartErrors"
           },
           "scanAppType": {
             "$ref": "#/components/schemas/ScanAppType"
@@ -4802,7 +4882,9 @@
           "Owasp",
           "Owaspm",
           "Pcidss",
-          "Sans"
+          "Sans",
+          "Json",
+          "Xml"
         ],
         "type": "string",
         "format": ""
@@ -4910,6 +4992,19 @@
           "Folder",
           "Domain",
           "Path"
+        ],
+        "type": "string",
+        "format": ""
+      },
+      "ScanStartErrors": {
+        "enum": [
+          "None",
+          "License",
+          "Sources",
+          "Language",
+          "Modules",
+          "LicenseExpired",
+          "ScanSchedulerIsLocked"
         ],
         "type": "string",
         "format": ""

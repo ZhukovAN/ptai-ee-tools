@@ -2,16 +2,12 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
 import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 @DisplayName("Server availability check tests")
@@ -23,9 +19,9 @@ class CheckServerIT extends BaseCliIT {
     public void testGoodToken() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN);
+                "--token", CONNECTION().getToken());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
@@ -34,9 +30,9 @@ class CheckServerIT extends BaseCliIT {
     public void testInsecureWithCaCertificate() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
+                "--token", CONNECTION().getToken(),
                 "--insecure");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
@@ -46,8 +42,8 @@ class CheckServerIT extends BaseCliIT {
     public void testInsecureGoodToken() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", URL,
-                "--token", TOKEN,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--insecure");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
@@ -58,9 +54,9 @@ class CheckServerIT extends BaseCliIT {
     public void testWithoutCaCertificates() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", URL,
-                "--token", TOKEN,
-                "--truststore", DUMMY.toString());
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
+                "--truststore", DUMMY_CA_PEM_FILE.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
@@ -69,9 +65,9 @@ class CheckServerIT extends BaseCliIT {
     public void testBadToken() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN + UUID.randomUUID());
+                "--token", CONNECTION().getToken() + UUID.randomUUID());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 }

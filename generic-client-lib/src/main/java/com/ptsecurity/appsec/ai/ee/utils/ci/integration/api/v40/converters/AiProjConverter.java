@@ -1,270 +1,70 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters;
 
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
+import com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ConverterHelper.initRemainingSettingsFields;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper.createObjectMapper;
 
 @Slf4j
 public class AiProjConverter {
     private static final Map<AiProjScanSettings.BlackBoxScanLevel, BlackBoxScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
-    private static final Map<AiProjScanSettings.CredentialsType, AuthType> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
-    private static final Map<AiProjScanSettings.ProxyType, ProxyType> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
+    private static final Map<AiProjScanSettings.BlackBoxScanScope, ScanScope> BLACKBOX_SCAN_SCOPE_MAP = new HashMap<>();
+    private static final Map<AiProjScanSettings.Authentication.Item.Credentials.Type, AuthType> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
+    private static final Map<AiProjScanSettings.ProxySettings.Type, ProxyType> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
+    private static final Map<ScanResult.ScanSettings.Language, ProgrammingLanguageGroup> REVERSE_LANGUAGE_GROUP_MAP = new HashMap<>();
 
     static {
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NONE, BlackBoxScanLevel.None);
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FAST, BlackBoxScanLevel.Fast);
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NORMAL, BlackBoxScanLevel.Normal);
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FULL, BlackBoxScanLevel.Full);
+        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NONE, BlackBoxScanLevel.NONE);
+        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FAST, BlackBoxScanLevel.FAST);
+        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NORMAL, BlackBoxScanLevel.NORMAL);
+        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FULL, BlackBoxScanLevel.FULL);
 
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.FORM, AuthType.FORM);
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.HTTP, AuthType.HTTP);
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.NONE, AuthType.NONE);
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.COOKIE, AuthType.RAWCOOKIE);
+        BLACKBOX_SCAN_SCOPE_MAP.put(AiProjScanSettings.BlackBoxScanScope.DOMAIN, ScanScope.DOMAIN);
+        BLACKBOX_SCAN_SCOPE_MAP.put(AiProjScanSettings.BlackBoxScanScope.FOLDER, ScanScope.FOLDER);
+        BLACKBOX_SCAN_SCOPE_MAP.put(AiProjScanSettings.BlackBoxScanScope.PATH, ScanScope.PATH);
 
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.HTTP, ProxyType.HTTP);
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.HTTPNOCONNECT, ProxyType.HTTPNOCONNECT);
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.SOCKS4, ProxyType.SOCKS4);
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.SOCKS5, ProxyType.SOCKS5);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.FORM, AuthType.FORM);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.HTTP, AuthType.HTTP);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.NONE, AuthType.NONE);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.COOKIE, AuthType.RAWCOOKIE);
+
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.HTTP, ProxyType.HTTP);
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.HTTPNOCONNECT, ProxyType.HTTPNOCONNECT);
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.SOCKS4, ProxyType.SOCKS4);
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.SOCKS5, ProxyType.SOCKS5);
+
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.CPP, ProgrammingLanguageGroup.CANDCPLUSPLUS);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.GO, ProgrammingLanguageGroup.GO);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.JS, ProgrammingLanguageGroup.JAVASCRIPT);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.CSHARP, ProgrammingLanguageGroup.CSHARP);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.JAVA, ProgrammingLanguageGroup.JAVA);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.KOTLIN, ProgrammingLanguageGroup.KOTLIN);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.SQL, ProgrammingLanguageGroup.SQL);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.PYTHON, ProgrammingLanguageGroup.PYTHON);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.SWIFT, ProgrammingLanguageGroup.SWIFT);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.VB, ProgrammingLanguageGroup.VB);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.PHP, ProgrammingLanguageGroup.PHP);
+        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.OBJECTIVEC, ProgrammingLanguageGroup.OBJECTIVEC);
     }
 
-    protected static BlackBoxAuthentication fillAuthentication(@NonNull final BlackBoxAuthentication auth, @NonNull final AiProjScanSettings.Authentication jsonAuth) {
-        AiProjScanSettings.AuthItem jsonAuthItem = jsonAuth.getAuthItem();
-        if (null == jsonAuthItem) return auth;
-
-        AuthenticationItem authItem = new AuthenticationItem()
-                .domain(jsonAuthItem.getDomain())
-                .formUrl(jsonAuthItem.getFormUrl())
-                .formXpath(jsonAuthItem.getFormXPath())
-                .testUrl(jsonAuthItem.getTestUrl())
-                .regexpOfSuccess(jsonAuthItem.getRegexpOfSuccess());
-        if (null != jsonAuthItem.getCredentials()) {
-            AuthenticationCredentials credentials = new AuthenticationCredentials()
-                    .cookie(jsonAuthItem.getCredentials().getCookie())
-                    .type(BLACKBOX_AUTH_TYPE_MAP.get(jsonAuthItem.getCredentials().getType()));
-            if (null != jsonAuthItem.getCredentials().getLogin()) {
-                AiProjScanSettings.Login jsonLogin = jsonAuthItem.getCredentials().getLogin();
-                credentials.login(new MappedAuthenticationObject()
-                        .name(jsonLogin.getName())
-                        .value(jsonLogin.getValue())
-                        .isRegexp(jsonLogin.getRegexpUsed())
-                        .regexp(jsonLogin.getRegexp())
-                );
-            }
-            if (null != jsonAuthItem.getCredentials().getPassword()) {
-                AiProjScanSettings.Password jsonPassword = jsonAuthItem.getCredentials().getPassword();
-                credentials.password(new MappedAuthenticationObject()
-                        .name(jsonPassword.getName())
-                        .value(jsonPassword.getValue())
-                        .isRegexp(jsonPassword.getRegexpUsed())
-                        .regexp(jsonPassword.getRegexp())
-                );
-            }
-        }
-
-        auth.setAuthItem(authItem);
-        return auth;
-    }
-
-    protected static BlackBoxProxySettings convertProxySettings(final AiProjScanSettings.ProxySettings settings) {
-        if (null == settings) return null;
-        return new BlackBoxProxySettings()
-                .host(settings.getHost())
-                .port(settings.getPort())
-                .username(settings.getUsername())
-                .password(settings.getPassword())
-                .isEnabled(settings.getIsEnabled())
-                .type(BLACKBOX_PROXY_TYPE_MAP.get(settings.getType()));
-    }
-
-    public static V40ScanSettings convert(
-            @NonNull AiProjScanSettings settings,
-            @NonNull final List<String> defaultEnabledPatterns,
-            @NonNull final List<String> defaultDisabledPatterns) {
-        V40ScanSettings res = new V40ScanSettings();
-        // PT AI server API creates invalid project scan settings if DisabledPatterns and EnabledPatterns are not defined (null)
-        res.setDisabledPatterns(defaultDisabledPatterns);
-        // As there's no enabled patterns in AIPROJ file, let's fill them with default patterns
-        res.setEnabledPatterns(defaultEnabledPatterns);
-
-        res.setScanAppType(settings.getScanAppType());
-        // Vulnerability search modules. Possible values are: Php, Java, CSharp, Configuration,
-        // Fingerprint (includes DependencyCheck), PmTaint , BlackBox, JavaScript
-        Set<AiProjScanSettings.ScanAppType> scanAppTypes = Arrays.stream(settings.getScanAppType().split("[, ]+"))
-                .map(AiProjScanSettings.ScanAppType::from)
-                .collect(Collectors.toSet());
-        // Check if PHP / Java / C# modules are to be engaged
-        if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.PHP))
-            fillCommonFields(res, settings);
-
-        if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.JAVA)) {
-            fillCommonFields(res, settings);
-            res
-                    .javaParameters(settings.getJavaParameters())
-                    .javaVersion(0 == settings.getJavaVersion() ? JavaVersions.v1_8 : JavaVersions.v1_11);
-        }
-
-        if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.CSHARP)) {
-            fillCommonFields(res, settings);
-            res
-                    .projectType("Solution".equalsIgnoreCase(settings.getProjectType()) ? DotNetProjectType.Solution : DotNetProjectType.WebSite)
-                    .solutionFile(settings.getSolutionFile())
-                    .webSiteFolder(settings.getWebSiteFolder());
-        }
-
-        if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.CONFIGURATION))
-            fillCommonFields(res, settings);
-
-        if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.FINGERPRINT)) {
-            fillCommonFields(res, settings);
-            res
-                    .useDefaultFingerprints(settings.getUseDefaultFingerprints())
-                    .useCustomYaraRules(settings.getUseCustomYaraRules());
-            // TODO: Check ignored customYaraRules as for v3.6 it can be setup only via viewer
-
-            // TODO: Check ignored isDependencyCheckAutoUpdateEnabled as there's now such setting in aiproj JSON
-            // TODO: Check ignored dependencyCheckAutoUpdateBaseUrl as there's now such setting in aiproj JSON
-            // TODO: Check ignored dependencyCheckAutoUpdateModifiedUrl as there's now such setting in aiproj JSON
-            // TODO: Check ignored dependencyCheckDataBaseFolder as there's now such setting in aiproj JSON
-            // TODO: Check ignored dependencyCheckAutoUpdateRetireJsUrl as there's now such setting in aiproj JSON
-        }
-
-        if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.PMTAINT)) {
-            fillCommonFields(res, settings);
-            res
-                    .usePmAnalysis(settings.getUsePmAnalysis())
-                    .useTaintAnalysis(settings.getUseTaintAnalysis());
-            // User may have added custom disabled patterns. If those aren't disabled by language and may be enabled for this language, add'em
-            if (null != settings.getDisabledPatterns())
-                settings.getDisabledPatterns().stream()
-                .filter(defaultEnabledPatterns::contains)
-                .forEach(p -> Objects.requireNonNull(res.getDisabledPatterns()).add(p));
-        }
-
-        if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.BLACKBOX)) {
-            fillCommonFields(res, settings);
-            res
-                    .level(BLACKBOX_SCAN_LEVEL_MAP.get(settings.getBlackBoxScanLevel()))
-                    .autocheckSite(settings.getAutocheckSite())
-                    .customHeaders(settings.getCustomHeaders())
-                    .autocheckCustomHeaders(settings.getAutocheckCustomHeaders());
-            // TODO: Check ignored scanScope as there's now such setting in aiproj JSON
-            // TODO: Check ignored configurationPath as there's now such setting in aiproj JSON
-            // TODO: Check ignored bindAddress as there's now such setting in aiproj JSON
-
-            AiProjScanSettings.Authentication jsonAuth = settings.getAuthentication();
-            if (null != jsonAuth)
-                res.authentication(fillAuthentication(new BlackBoxAuthentication(), jsonAuth));
-            res.proxySettings(convertProxySettings(settings.getProxySettings()));
-
-            jsonAuth = settings.getAutocheckAuthentication();
-            if (null != jsonAuth)
-                res.autocheckAuthentication(fillAuthentication(new BlackBoxAuthentication(), jsonAuth));
-            res.autocheckProxySettings(convertProxySettings(settings.getAutocheckProxySettings()));
-        }
-
-        if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.JAVASCRIPT))
-            fillCommonFields(res, settings);
-        // PT AI server API creates unpredictable project scan settings if field values
-        // are null and excluded from serialization. For example, missing useIssueTrackerIntegration
-        // does enable Jira integration. So we need to explicitly set these field values to false
-        initRemainingSettingsFields(res);
-        return res;
-    }
-
-    @NonNull
-    public static BaseProjectSettingsModel convertBaseProjectSettings(
-            @NonNull AiProjScanSettings settings) {
-        BaseProjectSettingsModel result = new BaseProjectSettingsModel();
-
-        log.trace("Set base project settings");
-        result.setName(settings.getProjectName());
-        result.setProgrammingLanguageGroup(IssuesConverter.convertLanguageGroup(settings.getProgrammingLanguage()));
-        result.setProjectUrl(settings.getSite());
-
-        result.setWhiteBox(convertWhiteBoxSettings(settings));
-
-        // Vulnerability search modules. Possible values are: Php, Java, CSharp, Configuration,
-        // Fingerprint (includes DependencyCheck), PmTaint , BlackBox, JavaScript
-        Set<AiProjScanSettings.ScanAppType> scanAppTypes = Arrays.stream(settings.getScanAppType().split("[, ]+"))
-                .map(AiProjScanSettings.ScanAppType::from)
-                .collect(Collectors.toSet());
-        result.setBlackBoxEnabled(scanAppTypes.contains(AiProjScanSettings.ScanAppType.BLACKBOX));
-        if (Boolean.TRUE.equals(result.getBlackBoxEnabled())) {
-            log.trace("Set base project blackbox settings");
-            result.setBlackBox(convertBlackBoxSettings(settings));
-        }
-
-        return result;
-    }
-
-    /**
-     * @param destination Instance of IJavaSettings, IPmTaintSettings etc. As v.3.6's definition
-     *                    for these classes all contain big set of similar fields, to avoid lots of
-     *                    "if-else" we will use reflection to set these fields
-     * @param source Scan settings that were parsed from aiproj JSON file
-     */
-    protected static void fillCommonFields(@NonNull final V40ScanSettings destination, @NonNull final AiProjScanSettings source) {
-        destination
-                .actualScanTarget(null)
-                .compressReport(source.getCompressReport())
-                .considerPreviousScan(source.getConsiderPreviousScan())
-                .customParameters(source.getCustomParameters())
-                .disabledTypes(source.getDisabledTypes())
-                .fullRescanOnNewFilesAdded(source.getFullRescanOnNewFilesAdded())
-                .hideSuspectedVulnerabilities(source.getHideSuspectedVulnerabilities())
-                .preprocessingTimeout(source.getPreprocessingTimeout())
-                .programmingLanguage(IssuesConverter.convertLanguage(source.getProgrammingLanguage()))
-                .rootFolder(null)
-                .runAutocheckAfterScan(source.getRunAutocheckAfterScan())
-                .scanTarget(null)
-                .scope(null)
-                .sendEmailWithReportsAfterScan(source.getSendEmailWithReportsAfterScan())
-                .site(source.getSite())
-                .skipFileFormats(source.getSkipFileFormats())
-                .skipFilesFolders(source.getSkipFilesFolders())
-                .tempDir(null)
-                .useIncrementalScan(source.getUseIncrementalScan())
-                .useIssueTrackerIntegration(source.getUseIssueTrackerIntegration())
-                .disableInterpretCores(false)
-                .isDownloadDependencies(source.getIsDownloadDependencies())
-                .isGraphEnabled(false)
-                .isUnpackUserPackages(source.getIsUnpackUserPackages())
-                .isUseEntryAnalysisPoint(source.getIsUseEntryAnalysisPoint())
-                .isUsePublicAnalysisMethod(source.getIsUsePublicAnalysisMethod());
-    }
-
-    public static ExtendedBlackBoxSettingsModel convertExtendedBlackBoxSettings(@NonNull final AiProjScanSettings settings) {
-        Set<AiProjScanSettings.ScanAppType> scanAppTypes = Arrays.stream(settings.getScanAppType().split("[, ]+"))
-                .map(AiProjScanSettings.ScanAppType::from)
-                .collect(Collectors.toSet());
-        if (!scanAppTypes.contains(AiProjScanSettings.ScanAppType.BLACKBOX)) return null;
-        ExtendedBlackBoxSettingsModel result = new ExtendedBlackBoxSettingsModel();
-        result.setHost(settings.getSite());
-        result.setRunAutocheckAfterScan(settings.getRunAutocheckAfterScan());
-        result.setIsActive(true);
-        result.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.get(settings.getBlackBoxScanLevel()));
-        // TODO: Check ignored scanScope as there's now such setting in aiproj JSON
-        if (null != settings.getCustomHeaders()) {
-            log.trace("Set additional HTTP headers");
-            List<AdditionalHttpHeader> headers = new ArrayList<>();
-            for (List<String> header : settings.getCustomHeaders()) {
-                if (2 != header.size()) continue;
-                headers.add(new AdditionalHttpHeader().key(header.get(0)).value(header.get(1)));
-            }
-            result.setAdditionalHttpHeaders(headers);
-        }
-        return result;
-    }
-
-    protected static WhiteBoxSettingsModel convertWhiteBoxSettings(@NonNull final AiProjScanSettings settings) {
-        WhiteBoxSettingsModel result = new WhiteBoxSettingsModel();
-
+    protected static WhiteBoxSettingsModel apply(@NonNull final AiProjScanSettings settings, @NonNull WhiteBoxSettingsModel model) {
         log.trace("Parse AIPROJ vulnerability search modules list");
         // Vulnerability search modules. Possible values are: Php, Java, CSharp, Configuration,
         // Fingerprint (includes DependencyCheck), PmTaint , BlackBox, JavaScript
@@ -275,61 +75,398 @@ public class AiProjConverter {
         log.trace("Set base project whitebox settings");
         // Check if PHP / Java / C# / JavaScript modules are to be engaged
         final Set<AiProjScanSettings.ScanAppType> abstractInterpretationEngines = new HashSet<>(Arrays.asList(AiProjScanSettings.ScanAppType.PHP, AiProjScanSettings.ScanAppType.JAVA, AiProjScanSettings.ScanAppType.CSHARP, AiProjScanSettings.ScanAppType.JAVASCRIPT));
-        result.setSearchForVulnerableSourceCodeEnabled(scanAppTypes.stream().anyMatch(abstractInterpretationEngines::contains));
-        result.setDataFlowAnalysisEnabled(settings.getUseTaintAnalysis() && scanAppTypes.contains(AiProjScanSettings.ScanAppType.PMTAINT));
-        result.setPatternMatchingEnabled(settings.getUsePmAnalysis() && scanAppTypes.contains(AiProjScanSettings.ScanAppType.PMTAINT));
-        result.setSearchForConfigurationFlawsEnabled(scanAppTypes.contains(AiProjScanSettings.ScanAppType.CONFIGURATION));
-        result.setSearchForVulnerableComponentsEnabled(scanAppTypes.contains(AiProjScanSettings.ScanAppType.FINGERPRINT));
+        model.setSearchForVulnerableSourceCodeEnabled(scanAppTypes.stream().anyMatch(abstractInterpretationEngines::contains));
+        model.setDataFlowAnalysisEnabled(null != settings.getUseTaintAnalysis() && settings.getUseTaintAnalysis() && scanAppTypes.contains(AiProjScanSettings.ScanAppType.PMTAINT));
+        model.setPatternMatchingEnabled(null != settings.getUsePmAnalysis() && settings.getUsePmAnalysis() && scanAppTypes.contains(AiProjScanSettings.ScanAppType.PMTAINT));
+        model.setSearchForConfigurationFlawsEnabled(scanAppTypes.contains(AiProjScanSettings.ScanAppType.CONFIGURATION));
+        model.setSearchForVulnerableComponentsEnabled(scanAppTypes.contains(AiProjScanSettings.ScanAppType.FINGERPRINT));
+
+        return model;
+    }
+
+    @NonNull
+    protected static BlackBoxSettingsModel apply(@NonNull final AiProjScanSettings settings, @NonNull final BlackBoxSettingsModel model) {
+        model.setAuthentication(AuthType.NONE);
+
+        log.trace("Check if AIPROJ authentication field is defined");
+        if (null == settings.getAuthentication()) return model;
+        AiProjScanSettings.Authentication.Item jsonAuth = settings.getAuthentication().getItem();
+        if (null == jsonAuth) return model;
+
+        model.setDomainName(jsonAuth.getDomain());
+        model.setFormUrl(jsonAuth.getFormUrl());
+        model.setFormXpath(jsonAuth.getFormXPath());
+        model.setTestUrl(jsonAuth.getTestUrl());
+        model.setValidationRegexTemplate(jsonAuth.getRegexpOfSuccess());
+
+
+        if (null == jsonAuth.getCredentials()) return model;
+
+        model.setAuthentication(BLACKBOX_AUTH_TYPE_MAP.getOrDefault(jsonAuth.getCredentials().getType(), AuthType.NONE));
+        if (AuthType.RAWCOOKIE.equals(model.getAuthentication())) {
+            log.trace("Set cookie authentication");
+            if (null != jsonAuth.getCredentials())
+                model.setCookie(jsonAuth.getCredentials().getCookie());
+        } else if (AuthType.FORM.equals(model.getAuthentication())) {
+            log.trace("Set form authentication");
+            if (null != jsonAuth.getCredentials()) {
+                if (null != jsonAuth.getCredentials().getLogin()) {
+                    model.setLoginKey(jsonAuth.getCredentials().getLogin().getName());
+                    model.setLogin(jsonAuth.getCredentials().getLogin().getValue());
+                }
+                if (null != jsonAuth.getCredentials().getPassword()) {
+                    model.setPasswordKey(jsonAuth.getCredentials().getPassword().getName());
+                    model.setPassword(jsonAuth.getCredentials().getPassword().getValue());
+                }
+            }
+        } else if (AuthType.HTTP.equals(model.getAuthentication())) {
+            log.trace("Set HTTP authentication");
+            if (null != jsonAuth.getCredentials()) {
+                if (null != jsonAuth.getCredentials().getLogin())
+                    model.setLogin(jsonAuth.getCredentials().getLogin().getValue());
+                if (null != jsonAuth.getCredentials().getPassword())
+                    model.setPassword(jsonAuth.getCredentials().getPassword().getValue());
+            }
+        }
+
+        model.setRunAutocheckAfterScan(settings.getRunAutocheckAfterScan());
+        return model;
+    }
+
+    @SneakyThrows
+    public static BaseProjectSettingsModel convert(
+            @NonNull final AiProjScanSettings settings,
+            @NonNull final BaseProjectSettingsModel defaultSettings) {
+        // Create deep settings copy
+        ObjectMapper objectMapper = new ObjectMapper();
+        BaseProjectSettingsModel result = objectMapper.readValue(objectMapper.writeValueAsString(defaultSettings), BaseProjectSettingsModel.class);
+
+        log.trace("Set base project settings");
+        result.setName(settings.getProjectName());
+        result.setProgrammingLanguageGroup(convertLanguageGroup(settings.getProgrammingLanguage()));
+        result.setProjectUrl(settings.getSite());
+
+        result.setWhiteBox(apply(settings, new WhiteBoxSettingsModel()));
+
+        // Vulnerability search modules. Possible values are: Php, Java, CSharp, Configuration,
+        // Fingerprint (includes DependencyCheck), PmTaint , BlackBox, JavaScript
+        Set<AiProjScanSettings.ScanAppType> scanAppTypes = Arrays.stream(settings.getScanAppType().split("[, ]+"))
+                .map(AiProjScanSettings.ScanAppType::from)
+                .collect(Collectors.toSet());
+        result.setBlackBoxEnabled(scanAppTypes.contains(AiProjScanSettings.ScanAppType.BLACKBOX));
+        if (Boolean.TRUE.equals(result.getBlackBoxEnabled())) {
+            log.trace("Set base project blackbox settings");
+            result.setBlackBox(apply(settings, new BlackBoxSettingsModel()));
+        }
 
         return result;
     }
 
-    protected static BlackBoxSettingsModel convertBlackBoxSettings(@NonNull final AiProjScanSettings settings) {
-        BlackBoxSettingsModel result = new BlackBoxSettingsModel();
-        result.setAuthentication(AuthType.NONE);
+    /**
+     * Method converts PT AI API version independent language to PT AI v.4.0 API programming language group
+     * @param language PT AI API version independent language
+     * @return PT AI v.4.0 API programming language group
+     */
+    @NonNull
+    public static ProgrammingLanguageGroup convertLanguageGroup(@NonNull final ScanResult.ScanSettings.Language language) {
+        return REVERSE_LANGUAGE_GROUP_MAP.getOrDefault(language, ProgrammingLanguageGroup.NONE);
+    }
 
+    @AllArgsConstructor
+    @Getter
+    protected static class JavaParametersParseResult {
+        protected String prefixes;
+        protected String other;
+    }
+
+    /**
+     * @param javaParameters Java CLI parameters that are passed to Java scanning core
+     * @return CLI parameters split into two parts: {@link JavaParametersParseResult#prefixes user package prefixes}
+     * and {@link JavaParametersParseResult#other remaining part of CLI}
+     */
+    protected static JavaParametersParseResult parseJavaParameters(final String javaParameters) {
+        if (StringUtils.isEmpty(javaParameters)) return null;
+        log.trace("Split Java parameters string using 'quote-safe' regular expression");
+        String[] parameters = javaParameters.split("(\"[^\"]*\")|(\\S+)");
+        if (0 == parameters.length) return null;
+        log.trace("Parse Java parameters");
+        List<String> commands = new ArrayList<>();
+        Map<String, List<String>> arguments = new HashMap<>();
+        for (int i = 0 ; i < parameters.length ; i++) {
+            log.trace("Iterate through commands");
+            if (!parameters[i].startsWith("-")) continue;
+            if (parameters.length - 1 == i)
+                // If this is last token just add it as command
+                commands.add(parameters[i]);
+            else if (parameters[i + 1].startsWith("-"))
+                // Next token is a command too
+                commands.add(parameters[i]);
+            else {
+                List<String> argumentValues = new ArrayList<>();
+                for (int j = i + 1; j < parameters.length; j++)
+                    if (!parameters[j].startsWith("-")) argumentValues.add(parameters[j]); else break;
+                arguments.put(parameters[i], argumentValues);
+            }
+        }
+        String prefixes = "";
+        StringBuilder commandBuilder = new StringBuilder();
+        for (String cmd : commands) {
+            if ("-upp".equals(cmd) || "--user-package=prefix".equals(cmd))
+                if (arguments.containsKey(cmd) && 1 == arguments.get(cmd).size())
+                    prefixes = arguments.get(cmd).get(0);
+                else {
+                    commandBuilder.append(cmd).append(" ");
+                    if (arguments.containsKey(cmd))
+                        commandBuilder.append(String.join(" ", arguments.get(cmd))).append(" ");
+                }
+        }
+        return new JavaParametersParseResult(prefixes, commandBuilder.toString().trim());
+    }
+
+    @SneakyThrows
+    public static AdditionalParams apply(
+            @NonNull final AiProjScanSettings settings,
+            @NonNull final AdditionalParams model) {
+        // Set isUnpackUserJarFiles
+        model.setIsUnpackUserJarFiles(settings.getIsUnpackUserPackages());
+        // Set userPackagePrefixes and launchJvmParameters
+        log.trace("Try to extract user package prefixes from Java parameters");
+        // noinspection ConstantConditions
+        do {
+            if (StringUtils.isEmpty(settings.getJavaParameters())) break;
+            JavaParametersParseResult parseResult = parseJavaParameters(settings.getJavaParameters());
+            if (null == parseResult) break;
+            model.setUserPackagePrefixes(parseResult.getPrefixes());
+            model.setLaunchJvmParameters(parseResult.getOther());
+        } while (false);
+        // Set jdkVersion
+        model.setJdkVersion(0 == settings.getJavaVersion() ? JavaVersions.v1_8 : JavaVersions.v1_11);
+        // Set projectType
+        model.setProjectType(
+                DotNetProjectType.Solution.name().equalsIgnoreCase(settings.getProjectType())
+                        ? DotNetProjectType.Solution
+                        : DotNetProjectType.WebSite.name().equalsIgnoreCase(settings.getProjectType())
+                        ? DotNetProjectType.WebSite : DotNetProjectType.None);
+        // Set solutionFile
+        model.setSolutionFile(settings.getSolutionFile());
+        return model;
+    }
+
+    /**
+     * Method sets project settings attributes using AIPROJ-defined ones
+     * @param settings
+     * @param model
+     * @return
+     */
+    @SneakyThrows
+    public static ProjectSettingsModel apply(
+            @NonNull final AiProjScanSettings settings,
+            @NonNull final ProjectSettingsModel model) {
+        log.trace("Set base project settings");
+        // Set projectSource
+        model.setProjectSource(new ProjectSourceModel().sourceType(SourceType.EMPTY));
+        // Set projectName
+        model.setProjectName(settings.getProjectName());
+        // Set programmingLanguageGroup
+        model.setProgrammingLanguageGroup(convertLanguageGroup(settings.getProgrammingLanguage()));
+        // Set whiteBoxSettings
+        model.setWhiteBoxSettings(apply(settings, new WhiteBoxSettingsModel()));
+        // Set launchParameters
+        model.setLaunchParameters(settings.getCustomParameters());
+        //Set useAvailablePublicAndProtectedMethods
+        model.setUseAvailablePublicAndProtectedMethods(settings.getIsUsePublicAnalysisMethod());
+        // Set isLoadDependencies
+        model.setIsLoadDependencies(settings.getIsDownloadDependencies());
+        // Set additionalParams
+        AdditionalParams additionalParams = model.getAdditionalParams();
+        if (null == additionalParams) {
+            additionalParams = new AdditionalParams();
+            model.setAdditionalParams(additionalParams);
+        }
+        apply(settings, additionalParams);
+        return model;
+    }
+
+    @SneakyThrows
+    public static PatchBlackBoxAuthenticationModel apply(
+            @NonNull final AiProjScanSettings source,
+            @NonNull final PatchBlackBoxAuthenticationModel destination) {
+        destination.setType(AuthType.NONE);
         log.trace("Check if AIPROJ authentication field is defined");
-        if (null == settings.getAuthentication()) return result;
-        AiProjScanSettings.AuthItem jsonAuth = settings.getAuthentication().getAuthItem();
-        if (null == jsonAuth) return result;
+        if (null == source.getAuthentication()) return destination;
+        AiProjScanSettings.Authentication.Item jsonAuth = source.getAuthentication().getItem();
+        if (null == jsonAuth) return destination;
 
-        result.setDomainName(jsonAuth.getDomain());
-        result.setFormUrl(jsonAuth.getFormUrl());
-        result.setFormXpath(jsonAuth.getFormXPath());
-        result.setTestUrl(jsonAuth.getTestUrl());
-        result.setValidationRegexTemplate(jsonAuth.getRegexpOfSuccess());
-
-
-        if (null == jsonAuth.getCredentials()) return result;
-
-        result.setAuthentication(BLACKBOX_AUTH_TYPE_MAP.getOrDefault(jsonAuth.getCredentials().getType(), AuthType.NONE));
-        if (AuthType.RAWCOOKIE.equals(result.getAuthentication())) {
+        destination.setValidationAddress(jsonAuth.getTestUrl());
+        destination.setFormUrl(jsonAuth.getFormUrl());
+        destination.setFormXpath(jsonAuth.getFormXPath());
+        destination.setValidationTemplate(jsonAuth.getRegexpOfSuccess());
+        // TODO: Check {@link AuthItem.getDomain} parameter
+        if (null == jsonAuth.getCredentials()) return destination;
+        destination.setType(BLACKBOX_AUTH_TYPE_MAP.getOrDefault(jsonAuth.getCredentials().getType(), AuthType.NONE));
+        if (AuthType.RAWCOOKIE.equals(destination.getType())) {
             log.trace("Set cookie authentication");
             if (null != jsonAuth.getCredentials())
-                result.setCookie(jsonAuth.getCredentials().getCookie());
-        } else if (AuthType.FORM.equals(result.getAuthentication())) {
+                destination.setCookie(jsonAuth.getCredentials().getCookie());
+        } else if (AuthType.FORM.equals(destination.getType())) {
             log.trace("Set form authentication");
             if (null != jsonAuth.getCredentials()) {
                 if (null != jsonAuth.getCredentials().getLogin()) {
-                    result.setLoginKey(jsonAuth.getCredentials().getLogin().getName());
-                    result.setLogin(jsonAuth.getCredentials().getLogin().getValue());
+                    destination.setLoginKey(jsonAuth.getCredentials().getLogin().getName());
+                    destination.setLogin(jsonAuth.getCredentials().getLogin().getValue());
                 }
                 if (null != jsonAuth.getCredentials().getPassword()) {
-                    result.setPasswordKey(jsonAuth.getCredentials().getPassword().getName());
-                    result.setPassword(jsonAuth.getCredentials().getPassword().getValue());
+                    destination.setPasswordKey(jsonAuth.getCredentials().getPassword().getName());
+                    destination.setPassword(jsonAuth.getCredentials().getPassword().getValue());
                 }
             }
-        } else if (AuthType.HTTP.equals(result.getAuthentication())) {
+        } else if (AuthType.HTTP.equals(destination.getType())) {
             log.trace("Set HTTP authentication");
             if (null != jsonAuth.getCredentials()) {
                 if (null != jsonAuth.getCredentials().getLogin())
-                    result.setLogin(jsonAuth.getCredentials().getLogin().getValue());
+                    destination.setLogin(jsonAuth.getCredentials().getLogin().getValue());
                 if (null != jsonAuth.getCredentials().getPassword())
-                    result.setPassword(jsonAuth.getCredentials().getPassword().getValue());
+                    destination.setPassword(jsonAuth.getCredentials().getPassword().getValue());
             }
         }
+        return destination;
+    }
 
-        result.setRunAutocheckAfterScan(settings.getRunAutocheckAfterScan());
-        return result;
+    @SneakyThrows
+    protected static PatchBlackBoxProxySettingsModel apply(
+            @NonNull final AiProjScanSettings.ProxySettings source,
+            @NonNull final PatchBlackBoxProxySettingsModel destination) {
+        destination.setIsActive(null != source.getType());
+        if (Boolean.FALSE.equals(destination.getIsActive())) return destination;
+        destination.setType(BLACKBOX_PROXY_TYPE_MAP.get(source.getType()));
+        destination.setHost(source.getHost());
+        destination.setPort(source.getPort());
+        destination.setLogin(source.getUsername());
+        destination.setPassword(source.getPassword());
+        return destination;
+    }
+
+    @SneakyThrows
+    protected static PatchBlackBoxProxySettingsModel apply(final AiProjScanSettings.ProxySettings source) {
+        return null == source ? null : apply(source, new PatchBlackBoxProxySettingsModel());
+    }
+
+    @SneakyThrows
+    protected static PatchBlackBoxProxySettingsModel apply(
+            @NonNull final BlackBoxProxySettingsModel source,
+            @NonNull final PatchBlackBoxProxySettingsModel destination) {
+        destination.setIsActive(source.getIsActive());
+        destination.setType(source.getType());
+        destination.setHost(source.getHost());
+        destination.setPort(source.getPort());
+        destination.setLogin(source.getLogin());
+        destination.setPassword(source.getPassword());
+        return destination;
+    }
+
+    @SneakyThrows
+    protected static PatchBlackBoxProxySettingsModel apply(
+            final BlackBoxProxySettingsModel source) {
+        return null == source ? null : apply(source, new PatchBlackBoxProxySettingsModel());
+    }
+
+    @SneakyThrows
+    protected static PatchBlackBoxAuthenticationModel apply(
+            @NonNull final BlackBoxAuthenticationModel source,
+            @NonNull final PatchBlackBoxAuthenticationModel destination) {
+        destination.setType(source.getType());
+        destination.setCookie(source.getCookie());
+        destination.setFormUrl(source.getFormUrl());
+        destination.setFormXpath(source.getFormXpath());
+        destination.setLogin(source.getLogin());
+        destination.setLoginKey(source.getLoginKey());
+        destination.setPassword(source.getPassword());
+        destination.setPasswordKey(source.getPasswordKey());
+        return destination;
+    }
+
+    @SneakyThrows
+    protected static PatchBlackBoxAuthenticationModel apply(
+            final BlackBoxAuthenticationModel source) {
+        return null == source ? null : apply(source, new PatchBlackBoxAuthenticationModel());
+    }
+
+    @SneakyThrows
+    public static PatchBlackBoxSettingsModel apply(
+            @NonNull final ExtendedBlackBoxSettingsModel source,
+            @NonNull final PatchBlackBoxSettingsModel destination) {
+        destination.setHost(source.getHost());
+        destination.setRunAutocheckAfterScan(source.getRunAutocheckAfterScan());
+        destination.setAdditionalHttpHeaders(source.getAdditionalHttpHeaders());
+        destination.setAuthentication(apply(source.getAuthentication()));
+        destination.setIsActive(source.getIsActive());
+        destination.setScanLevel(source.getScanLevel());
+        destination.setScanScope(source.getScanScope());
+        destination.setProxySettings(apply(source.getProxySettings()));
+        return destination;
+    }
+
+    @SneakyThrows
+    public static PatchBlackBoxSettingsModel apply(
+            @NonNull final AiProjScanSettings settings,
+            @NonNull final PatchBlackBoxSettingsModel model) {
+        model.setRunAutocheckAfterScan(settings.getRunAutocheckAfterScan());
+        model.setHost(settings.getSite());
+        Set<AiProjScanSettings.ScanAppType> scanAppTypes = Arrays.stream(settings.getScanAppType().split("[, ]+"))
+                .map(AiProjScanSettings.ScanAppType::from)
+                .collect(Collectors.toSet());
+        if (!scanAppTypes.contains(AiProjScanSettings.ScanAppType.BLACKBOX)) return model;
+        model.setIsActive(true);
+        model.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.get(settings.getBlackBoxScanLevel()));
+        model.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.get(settings.getBlackBoxScanScope()));
+        if (CollectionUtils.isNotEmpty(settings.getCustomHeaders())) {
+            log.trace("Set additional HTTP headers");
+            List<AdditionalHttpHeader> headers = new ArrayList<>();
+            for (List<String> header : settings.getCustomHeaders()) {
+                if (2 != header.size()) continue;
+                headers.add(new AdditionalHttpHeader().key(header.get(0)).value(header.get(1)));
+            }
+            model.setAdditionalHttpHeaders(headers);
+        }
+        model.setAuthentication(apply(settings, new PatchBlackBoxAuthenticationModel()));
+        model.setProxySettings(null == settings.getProxySettings() ? null : apply(settings.getProxySettings()));
+        return model;
+    }
+
+    @SneakyThrows
+    public static SecurityPoliciesModel apply(
+            final Policy[] policy,
+            @NonNull final SecurityPoliciesModel model) {
+        model.setCheckSecurityPoliciesAccordance(null != policy && 0 != policy.length);
+        model.setSecurityPolicies(Boolean.TRUE.equals(model.getCheckSecurityPoliciesAccordance()) ? JsonPolicyHelper.serialize(policy) : "");
+        return model;
+    }
+
+    public static AiProjScanSettings verify(String json) throws GenericException {
+        return call(() -> {
+            ObjectMapper mapper = createObjectMapper();
+            AiProjScanSettings res = mapper.readValue(json, AiProjScanSettings.class);
+            if (StringUtils.isEmpty(res.getProjectName()))
+                throw new IllegalArgumentException("ProjectName field is not defined or empty");
+            if (null == res.getProgrammingLanguage())
+                throw new IllegalArgumentException("ProgrammingLanguage field is not defined or empty");
+            return res.fix();
+        }, "JSON settings parse failed");
+    }
+
+    private static String serialize(AiProjScanSettings settings) throws GenericException {
+        return call(
+                () -> new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(settings.fix()),
+                "JSON settings serialization failed");
+    }
+
+    /**
+     * @param settingsJson JSON-defined AST settings
+     * @return Minimized JSON-defined AST settings, i.e. without comments, formatting etc.
+     * @throws GenericException
+     */
+    public static String minimize(@NonNull String settingsJson) throws GenericException {
+        AiProjScanSettings settings = verify(settingsJson);
+        return serialize(settings);
     }
 }

@@ -44,22 +44,21 @@ public class IssuesConverter {
     private static final Map<V40ProgrammingLanguage, ScanResult.ScanSettings.Language> LANGUAGE_MAP = new HashMap<>();
     private static final Map<Stage, ScanResult.State> STATE_MAP = new HashMap<>();
     private static final Map<ScanResult.ScanSettings.Language, V40ProgrammingLanguage> REVERSE_LANGUAGE_MAP = new HashMap<>();
-    private static final Map<ScanResult.ScanSettings.Language, ProgrammingLanguageGroup> REVERSE_LANGUAGE_GROUP_MAP = new HashMap<>();
 
     static {
-        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.NONE, BaseIssue.ApprovalState.NONE);
-        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.APPROVAL, BaseIssue.ApprovalState.APPROVAL);
-        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.DISCARD, BaseIssue.ApprovalState.DISCARD);
-        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.NOTEXIST, BaseIssue.ApprovalState.NOT_EXIST);
-        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.AUTOAPPROVAL, BaseIssue.ApprovalState.AUTO_APPROVAL);
+        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.None, BaseIssue.ApprovalState.NONE);
+        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.Approval, BaseIssue.ApprovalState.APPROVAL);
+        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.Discard, BaseIssue.ApprovalState.DISCARD);
+        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.NotExist, BaseIssue.ApprovalState.NOT_EXIST);
+        ISSUE_APPROVAL_STATE_MAP.put(IssueApprovalState.AutoApproval, BaseIssue.ApprovalState.AUTO_APPROVAL);
 
-        ISSUE_TYPE_MAP.put(IssueType.UNKNOWN.name(), BaseIssue.Type.UNKNOWN);
-        ISSUE_TYPE_MAP.put(IssueType.VULNERABILITY.name(), BaseIssue.Type.VULNERABILITY);
-        ISSUE_TYPE_MAP.put(IssueType.WEAKNESS.name(), BaseIssue.Type.WEAKNESS);
-        ISSUE_TYPE_MAP.put(IssueType.CONFIGURATION.name(), BaseIssue.Type.CONFIGURATION);
-        ISSUE_TYPE_MAP.put(IssueType.FINGERPRINT.name(), BaseIssue.Type.SCA);
-        ISSUE_TYPE_MAP.put(IssueType.BLACKBOX.name(), BaseIssue.Type.BLACKBOX);
-        ISSUE_TYPE_MAP.put(IssueType.YARAMATCH.name(), BaseIssue.Type.YARAMATCH);
+        ISSUE_TYPE_MAP.put(IssueType.Unknown.name(), BaseIssue.Type.UNKNOWN);
+        ISSUE_TYPE_MAP.put(IssueType.Vulnerability.name(), BaseIssue.Type.VULNERABILITY);
+        ISSUE_TYPE_MAP.put(IssueType.Weakness.name(), BaseIssue.Type.WEAKNESS);
+        ISSUE_TYPE_MAP.put(IssueType.Configuration.name(), BaseIssue.Type.CONFIGURATION);
+        ISSUE_TYPE_MAP.put(IssueType.Fingerprint.name(), BaseIssue.Type.SCA);
+        ISSUE_TYPE_MAP.put(IssueType.BlackBox.name(), BaseIssue.Type.BLACKBOX);
+        ISSUE_TYPE_MAP.put(IssueType.YaraMatch.name(), BaseIssue.Type.YARAMATCH);
 
         ISSUE_LEVEL_MAP.put(IssueLevel.None, BaseIssue.Level.NONE);
         ISSUE_LEVEL_MAP.put(IssueLevel.Potential, BaseIssue.Level.POTENTIAL);
@@ -72,9 +71,9 @@ public class IssuesConverter {
 
         // Bug https://jira.ptsecurity.com/browse/AI-4866 with swapped
         // confirmed / rejected states fixed and will be included in 3.7
-        POLICY_STATE_MAP.put(PolicyState.NONE, Policy.State.NONE);
-        POLICY_STATE_MAP.put(PolicyState.CONFIRMED, Policy.State.REJECTED);
-        POLICY_STATE_MAP.put(PolicyState.REJECTED, Policy.State.CONFIRMED);
+        POLICY_STATE_MAP.put(PolicyState.None, Policy.State.NONE);
+        POLICY_STATE_MAP.put(PolicyState.Confirmed, Policy.State.REJECTED);
+        POLICY_STATE_MAP.put(PolicyState.Rejected, Policy.State.CONFIRMED);
 
         LANGUAGE_MAP.put(V40ProgrammingLanguage.JAVA, ScanResult.ScanSettings.Language.JAVA);
         LANGUAGE_MAP.put(V40ProgrammingLanguage.PHP, ScanResult.ScanSettings.Language.PHP);
@@ -102,18 +101,6 @@ public class IssuesConverter {
         STATE_MAP.put(Stage.PRECHECK, ScanResult.State.UNKNOWN);
         STATE_MAP.put(Stage.SCAN, ScanResult.State.UNKNOWN);
         STATE_MAP.put(Stage.VFSSETUP, ScanResult.State.UNKNOWN);
-
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.CPP, ProgrammingLanguageGroup.CANDCPLUSPLUS);
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.GO, ProgrammingLanguageGroup.GO);
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.JS, ProgrammingLanguageGroup.JAVASCRIPT);
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.CSHARP, ProgrammingLanguageGroup.CSHARP);
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.JAVA, ProgrammingLanguageGroup.JAVA);
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.KOTLIN, ProgrammingLanguageGroup.KOTLIN);
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.SQL, ProgrammingLanguageGroup.SQL);
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.PYTHON, ProgrammingLanguageGroup.PYTHON);
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.SWIFT, ProgrammingLanguageGroup.SWIFT);
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.VB, ProgrammingLanguageGroup.VB);
-        REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.OBJECTIVEC, ProgrammingLanguageGroup.OBJECTIVEC);
     }
 
     /**
@@ -277,7 +264,11 @@ public class IssuesConverter {
             final ScanResultStatistic statistic,
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult scanResult) {
         if (null == statistic) return null;
-        ZonedDateTime zonedScanDate = Objects.requireNonNull(scanResult.getScanDate(), "Scan result date is null").toZonedDateTime();
+
+        // PT AI REST API uses UTC date / time representation, but without "Z" letter at the end of ISO 8601 representation
+        String scanDateString = Objects.requireNonNull(scanResult.getScanDate(), "Scan result date is null");
+        if (!StringUtils.endsWith(scanDateString, "Z")) scanDateString = scanDateString + "Z";
+        ZonedDateTime zonedScanDate = ZonedDateTime.parse(scanDateString, DateTimeFormatter.ISO_DATE_TIME);
 
         String scanDurationString = Objects.requireNonNull(statistic.getScanDuration(), "Scan duration is null");
         Duration scanDuration = parseDuration(scanDurationString);
@@ -495,7 +486,7 @@ public class IssuesConverter {
         // SCA uses array of fingerprint IDs and those are to be processed separately
         IssueBaseMetadata baseMetadata = null;
 
-        if (IssueType.FINGERPRINT != issueType) {
+        if (IssueType.Fingerprint != issueType) {
             baseMetadata = metadataMap.get(issueBase.getType());
             if (null == baseMetadata) {
                 log.warn("Skipping issue {} as there were no metadata found", issueBase.getId());
@@ -509,7 +500,7 @@ public class IssuesConverter {
             }
         }
 
-        if (IssueType.BLACKBOX == issueType && issueBase instanceof V40BlackBoxIssue) {
+        if (IssueType.BlackBox == issueType && issueBase instanceof V40BlackBoxIssue) {
                 V40BlackBoxIssue issue = (V40BlackBoxIssue) issueBase;
 
                 BlackBoxIssue res = new BlackBoxIssue();
@@ -517,7 +508,7 @@ public class IssuesConverter {
                 applyMetadata(baseMetadata, res);
 
                 return Collections.singletonList(res);
-        } else if (IssueType.CONFIGURATION == issueType && issueBase instanceof V40ConfigurationIssue) {
+        } else if (IssueType.Configuration == issueType && issueBase instanceof V40ConfigurationIssue) {
             V40ConfigurationIssue issue = (V40ConfigurationIssue) issueBase;
 
             ConfigurationIssue res = new ConfigurationIssue();
@@ -529,7 +520,7 @@ public class IssuesConverter {
             res.setRecommendedValue(issue.getRecommendedValue());
 
             return Collections.singletonList(res);
-        } else if (IssueType.FINGERPRINT == issueType) {
+        } else if (IssueType.Fingerprint == issueType) {
             V40FingerprintIssue issue = (V40FingerprintIssue) issueBase;
 
             List<String> fingerprintIds = issue.getFingerprintIds();
@@ -579,13 +570,13 @@ public class IssuesConverter {
                 scaIssues.add(res);
             }
             return scaIssues;
-        } else if (IssueType.UNKNOWN == issueType) {
+        } else if (IssueType.Unknown == issueType) {
             V40UnknownIssue issue = (V40UnknownIssue) issueBase;
 
             UnknownIssue res = new UnknownIssue();
             setBaseFields(issue, res, dictionary);
             return Collections.singletonList(res);
-        } else if (IssueType.VULNERABILITY == issueType) {
+        } else if (IssueType.Vulnerability == issueType) {
             V40VulnerabilityIssue issue = (V40VulnerabilityIssue) issueBase;
 
             VulnerabilityIssue res = new VulnerabilityIssue();
@@ -615,7 +606,7 @@ public class IssuesConverter {
             res.setAutocheckExploit(convert(issue.getAutocheckExploit()));
 
             return Collections.singletonList(res);
-        } else if (IssueType.WEAKNESS == issueType) {
+        } else if (IssueType.Weakness == issueType) {
             V40WeaknessIssue issue = (V40WeaknessIssue) issueBase;
 
             WeaknessIssue res = new WeaknessIssue();
@@ -624,7 +615,7 @@ public class IssuesConverter {
             res.setVulnerableExpression(convert(issue.getVulnerableExpression()));
 
             return Collections.singletonList(res);
-        } else if (IssueType.YARAMATCH == issueType) {
+        } else if (IssueType.YaraMatch == issueType) {
             V40YaraMatchIssue issue = (V40YaraMatchIssue) issueBase;
 
             YaraMatchIssue res = new YaraMatchIssue();
@@ -632,17 +623,6 @@ public class IssuesConverter {
             return Collections.singletonList(res);
         } else
             return null;
-    }
-
-    /**
-     * Method converts PT AI API version independent language to PT AI v.4.0 API programming language group
-     * @param language PT AI API version independent language
-     * @return PT AI v.4.0 API programming language group
-     */
-    @NonNull
-    public static ProgrammingLanguageGroup convertLanguageGroup(@NonNull final ScanResult.ScanSettings.Language language) {
-        ProgrammingLanguageGroup res = REVERSE_LANGUAGE_GROUP_MAP.get(language);
-        return null == res ? ProgrammingLanguageGroup.NONE : res;
     }
 
     @NonNull

@@ -8,9 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public abstract class BaseCliAstIT extends BaseCliIT {
-    protected Path sourcesPhpMedium;
-    protected Path sourcesPhpHigh;
-    protected Path sourcesJavaMisc;
     protected Path destination;
 
     @SneakyThrows
@@ -18,9 +15,6 @@ public abstract class BaseCliAstIT extends BaseCliIT {
     @Override
     public void pre() {
         super.pre();
-        sourcesPhpMedium = getPackedResourceFile(BaseAstIT.PHP_SMOKE_MEDIUM.getCode());
-        sourcesPhpHigh = getPackedResourceFile(BaseAstIT.PHP_SMOKE_HIGH.getCode());
-        sourcesJavaMisc = getPackedResourceFile(BaseAstIT.JAVA_APP01.getCode());
         destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
     }
 }

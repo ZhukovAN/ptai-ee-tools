@@ -24,4 +24,5 @@ gradle-app.setting
 **/*.trace
 
 out/
-ptai-test-tools/src/testFixtures/resources/configuration.yaml
+# Do not store API tokens to repository
+ptai-test-tools/src/testFixtures/resources/configuration.yml

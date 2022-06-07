@@ -767,7 +767,7 @@ paths:
               schema: {}
         '401':
           description: Unauthorized
-    put:
+    patch:
       tags:
         - Projects
       summary: BlackBox settings
@@ -784,16 +784,16 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: '#/components/schemas/ExtendedBlackBoxSettingsModel'
+              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
           application/json:
             schema:
-              $ref: '#/components/schemas/ExtendedBlackBoxSettingsModel'
+              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
           text/json:
             schema:
-              $ref: '#/components/schemas/ExtendedBlackBoxSettingsModel'
+              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/ExtendedBlackBoxSettingsModel'
+              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
       responses:
         '200':
           description: Success
@@ -2282,6 +2282,22 @@ components:
       additionalProperties: false
     AdditionalParams:
       type: object
+      # PT AI v.4.0
+      properties:
+        isUnpackUserJarFiles:
+          type: boolean
+        userPackagePrefixes:
+          type: string
+        launchJvmParameters:
+          type: string
+        jdkVersion:
+          $ref: '#/components/schemas/JavaVersions'
+        projectType:
+          $ref: '#/components/schemas/DotNetProjectType'
+        solutionFile:
+          type: string
+        webSiteFolder:
+          type: string
       additionalProperties: false
     AnalysisRulesBaseModel:
       type: object
@@ -2324,6 +2340,7 @@ components:
         - INITIATOR_NOT_FOUND
         - ROOT_LOGIN_VIA_VIEWER_IS_NOT_ALLOWED
         - CREDENTIAL_STORE_IS_UNVAILABLE_OR_TAINTED
+        - USER_BLOCKED
         - EXT_AUTH_PROVIDERS_GET_ERROR
         - EXT_AUTH_PROVIDERS_BY_SAME_SCHEME_LIMIT_ERROR
         - EXT_AUTH_PROVIDERS_AT_LEAST_ONE_ENABLED_LIMIT_ERROR
@@ -2334,6 +2351,7 @@ components:
         - EXT_AUTH_PROVIDER_IS_INCORRECT
         - EXT_AUTH_PROVIDER_NAME_IS_EMPTY
         - EXT_AUTH_PROVIDER_NAME_LENGTH_LIMIT
+        - EXT_AUTH_PROVIDER_WITH_SAME_NAME_ALREADY_EXISTS
         - EXT_AUTH_SETTINGS_IS_INCORRECT
         - EXT_AUTH_SETTINGS_OPENID_AUTHORITY_IS_INCORRECT
         - EXT_AUTH_SETTINGS_OPENID_CLIENT_ID_IS_INCORRECT
@@ -2449,6 +2467,7 @@ components:
         - PROJECTS_COUNT_LIMITED_BY_LICENSE
         - LICENSE_FILE_IS_INVALID
         - LICENSE_FINGERPRINT_ERROR
+        - LANGUAGE_NOT_ALLOWED_BY_LICENCE
         - UNKNOWN_SOURCE_VERSION_CONTROL_SYSTEM
         - SOURCE_VERSION_CONTROL_SYSTEM_ERROR
         - INVALID_VERSION_CONTROL_SYSTEM_SETTINGS
@@ -2460,6 +2479,7 @@ components:
         - SCAN_NOT_FOUND
         - ACTIVE_SCAN_AGENTS_NOT_FOUND
         - SCAN_AGENT_IS_ACTIVE
+        - SCHEDULING_IS_LOCKED
         - SERVER_CERTIFICATE_NOT_FOUND
         - FILESYSTEM_ERROR_ACCESS_DENIED
         - VAULT_CREDENTIALS_NOT_FOUND
@@ -2536,6 +2556,34 @@ components:
       properties:
         type:
           $ref: '#/components/schemas/AuthType'
+        # V.4.0: Had to add these properties as those missing from Swagger JSON
+        cookie:
+          type: string
+          nullable: true
+        formUrl:
+          type: string
+          nullable: true
+        formXpath:
+          type: string
+          nullable: true
+        login:
+          type: string
+          nullable: true
+        loginKey:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        passwordKey:
+          type: string
+          nullable: true
+        validationAddress:
+          type: string
+          nullable: true
+        validationTemplate:
+          type: string
+          nullable: true
       additionalProperties: false
     BlackBoxProxySettingsModel:
       type: object
@@ -2962,6 +3010,88 @@ components:
     Nullable:
       type: object
       additionalProperties: false
+    PatchBlackBoxAuthenticationModel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/AuthType'
+        # V.4.0: Had to add these properties as those missing from Swagger JSON
+        cookie:
+          type: string
+          nullable: true
+        formUrl:
+          type: string
+          nullable: true
+        formXpath:
+          type: string
+          nullable: true
+        login:
+          type: string
+          nullable: true
+        loginKey:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        passwordKey:
+          type: string
+          nullable: true
+        validationAddress:
+          type: string
+          nullable: true
+        validationTemplate:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PatchBlackBoxProxySettingsModel:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+          nullable: true
+        type:
+          $ref: '#/components/schemas/ProxyType'
+        host:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+          nullable: true
+        login:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+      additionalProperties: false
+    PatchBlackBoxSettingsModel:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+          nullable: true
+        runAutocheckAfterScan:
+          type: boolean
+          nullable: true
+        host:
+          type: string
+          nullable: true
+        scanLevel:
+          $ref: '#/components/schemas/BlackBoxScanLevel'
+        scanScope:
+          $ref: '#/components/schemas/ScanScope'
+        additionalHttpHeaders:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdditionalHttpHeader'
+          nullable: true
+        authentication:
+          $ref: '#/components/schemas/PatchBlackBoxAuthenticationModel'
+        proxySettings:
+          $ref: '#/components/schemas/PatchBlackBoxProxySettingsModel'
+      additionalProperties: false
     ProgrammingLanguage:
       enum:
         - DotNet
@@ -3034,10 +3164,13 @@ components:
           nullable: true
         isPinned:
           type: boolean
-        hasSources:
-          type: boolean
+        scanStartErrors:
+          $ref: '#/components/schemas/ScanStartErrors'
+        # V.4.0: Had to comment this out as API returns comma-separated string instead of single enum
+        # value. BTW, API should return set of enum values instead
         scanAppType:
-          $ref: '#/components/schemas/ScanAppType'
+          #   $ref: '#/components/schemas/ScanAppType'
+          type: string
       additionalProperties: false
     ProjectSettingsModel:
       type: object
@@ -3070,7 +3203,8 @@ components:
           $ref: '#/components/schemas/SourceType'
         lastDateTimeUpdate:
           type: string
-          format: date-time
+          # V.4.0: Had to remove date-time specification as value returned doesn't conform to RFC 3339
+          # format: date-time
         updaterInfo:
           $ref: '#/components/schemas/UpdaterInfo'
         isHidePathAndUserName:
@@ -3164,6 +3298,8 @@ components:
         - Owaspm
         - Pcidss
         - Sans
+        - Json
+        - Xml
       type: string
       format: ''
     SastRulesBaseModel:
@@ -3241,6 +3377,17 @@ components:
         - Folder
         - Domain
         - Path
+      type: string
+      format: ''
+    ScanStartErrors:
+      enum:
+        - None
+        - License
+        - Sources
+        - Language
+        - Modules
+        - LicenseExpired
+        - ScanSchedulerIsLocked
       type: string
       format: ''
     SecurityPoliciesModel:
@@ -3448,6 +3595,26 @@ components:
         useRules:
           type: boolean
       additionalProperties: false
+    JavaVersions:
+      # V.4.0: Needed to fix that as API returns enum as integer instead of string
+      enum:
+        - 0
+        - 1
+      x-enum-varnames:
+        - v1_8
+        - v1_11
+      type: integer
+    DotNetProjectType:
+      # V.4.0: Had to add x-enum-varnames as API returns projectType as an integer value
+      enum:
+        - 0
+        - 1
+        - 2
+      x-enum-varnames:
+        - None
+        - Solution
+        - WebSite
+      type: integer
   securitySchemes:
     Bearer:
       type: apiKey

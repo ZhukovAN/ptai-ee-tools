@@ -7,8 +7,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
@@ -100,9 +98,9 @@ class GenerateReportIT extends BaseCliIT {
             Path folder = Paths.get(destination.toString()).resolve(UUID.randomUUID().toString());
             List<String> args = new ArrayList<>(Arrays.asList(
                     "generate-report",
-                    "--url", URL,
+                    "--url", CONNECTION().getUrl(),
                     "--truststore", PEM.toString(),
-                    "--token", TOKEN,
+                    "--token", CONNECTION().getToken(),
                     "--output", folder.toString(),
                     "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName()));
             if (null != scanResultId) {
@@ -122,11 +120,7 @@ class GenerateReportIT extends BaseCliIT {
 
     @SneakyThrows
     public UUID getLatestCompleteScanResults(@NonNull final String project) {
-        AbstractApiClient client = Factory.client(ConnectionSettings.builder()
-                .url(URL)
-                .credentials(TokenCredentials.builder().token(TOKEN).build())
-                .insecure(true)
-                .build());
+        AbstractApiClient client = Factory.client(CONNECTION_SETTINGS());
         ProjectTasks tasks = new Factory().projectTasks(client);
         UUID projectId = tasks.searchProject(project);
         Assertions.assertNotNull(projectId);
@@ -138,9 +132,9 @@ class GenerateReportIT extends BaseCliIT {
     public void testDuplicateFileNamesProcessing() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
+                "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--report-template", "Отчет OWASP Top 10 2017",
@@ -159,9 +153,9 @@ class GenerateReportIT extends BaseCliIT {
     public void testMissingTemplateNamesProcessing() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
+                "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--report-template", "Отчет OWASP Top 10 2017 ",
@@ -180,9 +174,9 @@ class GenerateReportIT extends BaseCliIT {
 
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
+                "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--scan-result-id", getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName()).toString(),
@@ -200,9 +194,9 @@ class GenerateReportIT extends BaseCliIT {
 
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
+                "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--scan-result-id", getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName()).toString(),
@@ -219,9 +213,9 @@ class GenerateReportIT extends BaseCliIT {
         
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
+                "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--scan-result-id", getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName()).toString(),
@@ -244,9 +238,9 @@ class GenerateReportIT extends BaseCliIT {
         for (Path report : new Path[] { reportMin, reportMax, reportDfd, reportGlossary }) {
             List<String> args = new ArrayList<>(Arrays.asList(
                     "generate-report",
-                    "--url", URL,
+                    "--url", CONNECTION().getUrl(),
                     "--truststore", PEM.toString(),
-                    "--token", TOKEN,
+                    "--token", CONNECTION().getToken(),
                     "--output", destination.toString(),
                     "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                     "--scan-result-id", scanResultId,
@@ -276,9 +270,9 @@ class GenerateReportIT extends BaseCliIT {
 
         List<String> args = new ArrayList<>(Arrays.asList(
                 "generate-report",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
+                "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--scan-result-id", scanResultId,
@@ -305,9 +299,9 @@ class GenerateReportIT extends BaseCliIT {
 
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
+                "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--scan-result-id", scanResultId,
@@ -334,9 +328,9 @@ class GenerateReportIT extends BaseCliIT {
 
         List<String> args = new ArrayList<>(Arrays.asList(
                 "generate-report",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
+                "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--scan-result-id", scanResultId,

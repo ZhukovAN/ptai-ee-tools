@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
+import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
@@ -7,8 +8,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSetting
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
@@ -24,8 +23,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Bui
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeAsync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.AbortException;
@@ -160,13 +159,20 @@ public class Plugin extends Builder implements SimpleBuildStep {
             check = scanSettingsManualDescriptor.doTestJsonPolicy(item, jsonPolicy);
             if (FormValidation.Kind.OK != check.kind)
                 throw new AbortException(check.getMessage());
-            AiProjScanSettings scanSettings = JsonSettingsHelper.verify(jsonSettings);
+            JsonSettingsHelper helper = new JsonSettingsHelper(jsonSettings);
+            projectName = helper.getProjectName();
+            jsonSettings = helper.serialize();
+
+            // TODO: Add replaceMacro call
+            /*
+            AbstractAiProjScanSettings scanSettings = JsonSettingsHelper.verifyBaseSettings(jsonSettings);
             projectName = scanSettings.getProjectName();
             String changedProjectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
             if (!projectName.equals(changedProjectName))
                 scanSettings.setProjectName(projectName);
+             */
             // These lines also minimize settings and policy JSONs
-            jsonSettings = JsonSettingsHelper.serialize(scanSettings);
+            // jsonSettings = BaseJsonHelper.serialize(scanSettings);
             if (StringUtils.isNotEmpty(jsonPolicy))
                 jsonPolicy = JsonPolicyHelper.minimize(jsonPolicy);
         }

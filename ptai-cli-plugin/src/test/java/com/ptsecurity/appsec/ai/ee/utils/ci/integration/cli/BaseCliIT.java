@@ -11,15 +11,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public abstract class BaseCliIT extends BaseClientIT {
+    /**
+     * As CLI plugin accepts file-based truststores, we need
+     * to save certificates from resources to PEM files
+     */
     protected Path PEM;
-    protected Path DUMMY;
+
+    protected Path DUMMY_CA_PEM_FILE;
 
     @SneakyThrows
     @BeforeEach
     public void pre() {
-        PEM = Files.createTempFile(TEMP_FOLDER, "ptai-", "-ca");
-        FileUtils.write(PEM.toFile(), BaseIT.CA, StandardCharsets.UTF_8);
-        DUMMY = Files.createTempFile(TEMP_FOLDER, "ptai-", "-ca");
-        FileUtils.write(DUMMY.toFile(), BaseIT.DUMMY, StandardCharsets.UTF_8);
+        PEM = Files.createTempFile(TEMP_FOLDER, "ptai-", "-ca-pem");
+        FileUtils.write(PEM.toFile(), CONNECTION().getCaPem(), StandardCharsets.UTF_8);
+        DUMMY_CA_PEM_FILE = Files.createTempFile(TEMP_FOLDER, "ptai-", "-dummy-ca-pem");
+        FileUtils.write(DUMMY_CA_PEM_FILE.toFile(), BaseIT.DUMMY_CA_PEM, StandardCharsets.UTF_8);
     }
 }

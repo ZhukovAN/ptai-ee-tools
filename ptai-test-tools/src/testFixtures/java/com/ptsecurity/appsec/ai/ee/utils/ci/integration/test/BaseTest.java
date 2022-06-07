@@ -42,12 +42,21 @@ public abstract class BaseTest {
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
             property = "id")
     public static class Connection {
+        public enum Version {
+            V36, V40
+        }
         protected String id;
+        protected Version version;
         protected String url;
         protected String token;
         protected String user;
         protected String password;
         protected String ca;
+        protected boolean insecure;
+
+        public String getCaPem() {
+            return getResourceString(CONNECTION().getCa());
+        }
     }
 
     @Getter
@@ -65,7 +74,7 @@ public abstract class BaseTest {
     public static Connection CONNECTION() {
         if (null == CONNECTION) {
             // final Yaml yaml = new Yaml();
-            final InputStream inputStream = BaseTest.class.getResourceAsStream("/configuration.yaml");
+            final InputStream inputStream = BaseTest.class.getResourceAsStream("/configuration.yml");
             // CONFIGURATION = yaml.load(inputStream);
             final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
             Configuration configuration = objectMapper.readValue(inputStream, Configuration.class);
@@ -78,7 +87,12 @@ public abstract class BaseTest {
      * Temporal folder where subfolders will be created
      */
     @TempDir
-    protected Path TEMP_FOLDER;
+    protected static Path TEMP_FOLDER;
+
+    public static Path TEMP_FOLDER() {
+        Assertions.assertNotNull(TEMP_FOLDER);
+        return TEMP_FOLDER;
+    }
 
     /**
      * Method returns InputStream that allows to read resource data
@@ -108,26 +122,25 @@ public abstract class BaseTest {
      * to extracted file will be returned. If resource contains more than one file all these files
      * will be extracted to destination folder and its path will be returned
      */
-    public Path getPackedResourceFile(@NonNull final String name) {
-        return getPackedResourceFile(name, null);
+    @SneakyThrows
+    public static Path extractPackedResourceFile(@NonNull final String name) {
+        return extractPackedResourceFile(name, Files.createTempDirectory(TEMP_FOLDER, ""));
     }
 
     /**
      * Method extracts packed resource file contents to temp folder. Currently, only 7-zip packed resources
      * are supported
      * @param name Absolute name of resource
-     * @param tempFolder Folder where resources are to be unpacked.
-     *                   If null value is passed, temporal directory will be automatically created
      * @return Path to extracted resources. If packed resource contains exactly one file then path
      * to extracted file will be returned. If resource contains more than one file all these files
      * will be extracted to destination folder and its path will be returned
      */
     @SneakyThrows
-    public Path getPackedResourceFile(@NonNull final String name, final Path tempFolder) {
+    public static Path extractPackedResourceFile(@NonNull final String name, @NonNull final Path destinationFolder) {
         if (name.endsWith(".7z"))
-            return getSevenZippedResourceFile(name, tempFolder);
+            return extractSevenZippedResourceFile(name, destinationFolder);
         else if (name.endsWith(".zip"))
-            return getZippedResourceFile(name, tempFolder);
+            return extractZippedResourceFile(name, destinationFolder);
         else
             throw new IllegalArgumentException("Unsupported packed file " + name);
     }
@@ -135,23 +148,32 @@ public abstract class BaseTest {
     /**
      * Method extracts 7z-packed resource file contents to temp folder
      * @param name Absolute name of resource
-     * @param tempFolder Folder where resources are to be unpacked.
+     * @return Path to extracted resources. If packed resource contains exactly one file then path
+     * to extracted file will be returned. If resource contains more than one file all these files
+     * will be extracted to destination folder and its path will be returned
+     */
+    @SneakyThrows
+    public static Path extractSevenZippedResourceFile(@NonNull final String name) {
+        return extractSevenZippedResourceFile(name, Files.createTempDirectory(TEMP_FOLDER, ""));
+    }
+
+    /**
+     * Method extracts 7z-packed resource file contents to temp folder
+     * @param name Absolute name of resource
+     * @param destinationFolder Folder where resources are to be unpacked.
      *                   If null value is passed, temporal directory will be automatically created
      * @return Path to extracted resources. If packed resource contains exactly one file then path
      * to extracted file will be returned. If resource contains more than one file all these files
      * will be extracted to destination folder and its path will be returned
      */
     @SneakyThrows
-    public Path getSevenZippedResourceFile(@NonNull final String name, final Path tempFolder) {
+    public static Path extractSevenZippedResourceFile(@NonNull final String name, @NonNull final Path destinationFolder) {
         Path res = null;
-        Path rootOutputFolder = (null == tempFolder)
-                ? Files.createTempDirectory(TEMP_FOLDER, "")
-                : tempFolder;
 
         // As 7zip needs random access to packed file, there's no direct way to use
         // InputStream: we are allowed to use File or SeekableByteChannel only. So we
-        // need to copy resource contents to temp file
-        try (TempFile tempResourceFile = TempFile.createFile(TEMP_FOLDER)) {
+        // need to copy resource contents to auto-closeable temp file
+        try (TempFile tempResourceFile = TempFile.createFile()) {
             InputStream is = getResourceStream(name);
             FileUtils.copyInputStreamToFile(is, tempResourceFile.toFile());
             SevenZFile packedFile = new SevenZFile(tempResourceFile.toFile());
@@ -160,10 +182,10 @@ public abstract class BaseTest {
             SevenZArchiveEntry entry = packedFile.getNextEntry();
             while (null != entry) {
                 if (!entry.isDirectory()) {
-                    File out = rootOutputFolder.resolve(entry.getName()).toFile();
+                    File out = destinationFolder.resolve(entry.getName()).toFile();
 
                     // If this is first entry then it is to returned as a result. If there are more than one entry in the archive, folder path is to be returned
-                    res = (null == res) ? out.toPath() : rootOutputFolder;
+                    res = (null == res) ? out.toPath() : destinationFolder;
 
                     if (!out.getParentFile().exists() && !out.getParentFile().mkdirs()) throw new IOException("Failed to create directory " + out.getParentFile());
 
@@ -185,27 +207,36 @@ public abstract class BaseTest {
     /**
      * Method extracts zip-packed resource file contents to temp folder
      * @param name Absolute name of resource like "code/php-smoke-misc.zip"
-     * @param tempFolder Folder where resources are to be unpacked.
+     * @return Path to extracted resources. If packed resource contains exactly one file then path
+     * to extracted file will be returned. If resource contains more than one file all these files
+     * will be extracted to destination folder and its path will be returned
+     */
+    @SneakyThrows
+    public Path extractZippedResourceFile(@NonNull final String name) {
+        return extractZippedResourceFile(name, Files.createTempDirectory(TEMP_FOLDER, ""));
+    }
+
+    /**
+     * Method extracts zip-packed resource file contents to temp folder
+     * @param name Absolute name of resource like "code/php-smoke-misc.zip"
+     * @param destinationFolder Folder where resources are to be unpacked.
      *                   If null value is passed, temporal directory will be automatically created
      * @return Path to extracted resources. If packed resource contains exactly one file then path
      * to extracted file will be returned. If resource contains more than one file all these files
      * will be extracted to destination folder and its path will be returned
      */
     @SneakyThrows
-    public Path getZippedResourceFile(@NonNull final String name, final Path tempFolder) {
+    public static Path extractZippedResourceFile(@NonNull final String name, final Path destinationFolder) {
         Path res = null;
-        Path rootOutputFolder = (null == tempFolder)
-                ? Files.createTempDirectory(TEMP_FOLDER, "")
-                : tempFolder;
 
         try (InputStream is = getResourceStream(name);
              ZipInputStream zis = new ZipInputStream(is)) {
             ZipEntry entry = zis.getNextEntry();
             while (null != entry) {
                 if (!entry.isDirectory()) {
-                    File out = rootOutputFolder.resolve(entry.getName()).toFile();
+                    File out = destinationFolder.resolve(entry.getName()).toFile();
                     // If this is first entry then it is to returned as a result. If there are more than one entry in the archive, folder path is to be returned
-                    res = (null == res) ? out.toPath() : rootOutputFolder;
+                    res = (null == res) ? out.toPath() : destinationFolder;
                     if (!out.getParentFile().exists() && !out.getParentFile().mkdirs()) throw new IOException("Failed to create directory " + out.getParentFile());
                     try (FileOutputStream fos = new FileOutputStream(out)) {
                         IOUtils.copy(zis, fos);

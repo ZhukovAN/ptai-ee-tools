@@ -1,15 +1,19 @@
 connections:
-  ptai40:
+  ptai40: &current
+    version: V40
     url: https://ptai4.domain.org:443/
     token: TOKEN_GOES_HERE
     user: Administrator
     password: PASSWORD
-    ca: keys/ptai4.domain.org.pem
-  ptai36: &current
+    ca: keys/domain.org.pem
+    insecure: false
+  ptai36:
+    version: V36
     url: https://ptai.domain.org:443/
     token: TOKEN_GOES_HERE
     user: Administrator
     password: PASSWORD
     ca: keys/domain.org.pem
+    insecure: false
 
 current: *current

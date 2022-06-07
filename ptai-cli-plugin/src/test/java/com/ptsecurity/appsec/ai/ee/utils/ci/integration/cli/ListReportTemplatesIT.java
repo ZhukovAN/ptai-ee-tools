@@ -19,9 +19,9 @@ class ListReportTemplatesIT extends BaseCliIT {
     public void testReportTemplatesRu() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "list-report-templates",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
                 "--locale", RU.name());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
@@ -31,9 +31,9 @@ class ListReportTemplatesIT extends BaseCliIT {
     public void testReportTemplatesEn() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "list-report-templates",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
                 "--locale", EN.name());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
@@ -43,11 +43,10 @@ class ListReportTemplatesIT extends BaseCliIT {
     public void testReportTemplatesKo() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "list-report-templates",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
                 "--locale", "KO");
         Assertions.assertEquals(BaseCommand.ExitCode.INVALID_INPUT.getCode(), res);
     }
-
 }

@@ -1,9 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings;
 
+import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.Extension;
@@ -55,28 +55,28 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
         }
 
         public FormValidation doTestJsonSettings(
-                @AncestorInPath Item item,
+                @AncestorInPath Item ignoredItem,
                 @QueryParameter("jsonSettings") final String jsonSettings) {
             try {
                 if (!Validator.doCheckFieldNotEmpty(jsonSettings))
                     return Validator.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty());
 
-                AiProjScanSettings settings = JsonSettingsHelper.verify(jsonSettings);
-                return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_settings_message_success(settings.getProjectName(), settings.getProgrammingLanguage()));
+                JsonSettingsHelper helper = new JsonSettingsHelper(jsonSettings).verifyRequiredFields();
+                return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_settings_message_success(helper.getProjectName(), helper.getProgrammingLanguage()));
             } catch (Exception e) {
                 return Validator.error(e);
             }
         }
 
         public FormValidation doTestJsonPolicy(
-                @AncestorInPath Item item,
+                @AncestorInPath Item ignoredItem,
                 @QueryParameter("jsonPolicy") final String jsonPolicy) {
             try {
                 if (!Validator.doCheckFieldNotEmpty(jsonPolicy))
                     return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_empty());
 
                 Policy[] policy = JsonPolicyHelper.verify(jsonPolicy);
-                if (0 == policy.length)
+                if (null == policy || 0 == policy.length)
                     return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_empty());
                 else
                     return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_success(policy.length));

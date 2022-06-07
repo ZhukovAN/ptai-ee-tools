@@ -49,7 +49,7 @@ public class Validator {
     }
 
     public static boolean doCheckFieldJsonSettings(String value) {
-        return checkViaException(() -> JsonSettingsHelper.verify(value));
+        return checkViaException(() -> new JsonSettingsHelper(value).verifyRequiredFields());
     }
 
     public static boolean doCheckFieldJsonPolicy(String value) {

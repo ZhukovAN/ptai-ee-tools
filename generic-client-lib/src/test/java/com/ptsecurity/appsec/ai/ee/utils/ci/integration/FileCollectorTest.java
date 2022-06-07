@@ -33,7 +33,7 @@ public class FileCollectorTest extends BaseTest {
         // Symlink creation under Windows requires test to be executed on behalf of Administrator, so just skip
         if (!SystemUtils.IS_OS_LINUX) return;
         final String testString = UUID.randomUUID().toString();
-        Path sources = getPackedResourceFile(BaseAstIT.JAVA_APP01.getCode());
+        Path sources = BaseAstIT.JAVA_APP01.getCode();
         Path docs = Files.createDirectory(sources.resolve("docs"));
         Files.write(docs.resolve("DOC"), testString.getBytes(StandardCharsets.UTF_8));
         Files.createSymbolicLink(sources.resolve("DOC.link"), docs.resolve("DOC"));
@@ -54,7 +54,7 @@ public class FileCollectorTest extends BaseTest {
     @SneakyThrows
     @Test
     public void createZip() {
-        Path sources = getPackedResourceFile(BaseAstIT.JAVA_APP01.getCode());
+        Path sources = BaseAstIT.JAVA_APP01.getCode();
         File zip = FileCollector.collect(null, sources.toFile(), new Tool());
         Assertions.assertTrue(zip.exists());
     }

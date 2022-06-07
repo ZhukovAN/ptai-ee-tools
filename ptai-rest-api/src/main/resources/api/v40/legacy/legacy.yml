@@ -1038,9 +1038,10 @@ paths:
       summary: Create project
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/CreateProjectModel'
+          # V.4.0 Comment that out for debug purposes
+          # application/json-patch+json:
+          #  schema:
+          #    $ref: '#/components/schemas/CreateProjectModel'
           application/json:
             schema:
               $ref: '#/components/schemas/CreateProjectModel'
@@ -4066,13 +4067,18 @@ components:
       type: string
       format: ''
     AuthType:
+      # V.4.0: Need to add x-enum-varnames as API returns authType as integer
       enum:
+        - 0
+        - 1
+        - 2
+        - 3
+      x-enum-varnames:
         - Form
         - Http
         - None
         - RawCookie
-      type: string
-      format: ''
+      type: integer
     BaseProjectSettingsModel:
       type: object
       properties:
@@ -4266,11 +4272,14 @@ components:
           type: boolean
       additionalProperties: false
     DataFormat:
+      # V.4.0: Had to add x-enum-varnames as API returns projectType as an integer value
       enum:
+        - 0
+        - 1
+      x-enum-varnames:
         - Json
         - Dsl
-      type: string
-      format: ''
+      type: integer
     DotNetProjectType:
       # V.4.0: Had to add x-enum-varnames as API returns projectType as an integer value
       enum:
@@ -4382,14 +4391,20 @@ components:
       type: object
       additionalProperties: false
     IssueApprovalState:
+      # V.4.0: Need to add x-enum-varnames as API returns approvalState as integer
       enum:
+        - 0
+        - 10
+        - 20
+        - 30
+        - 40
+      x-enum-varnames:
         - None
         - Approval
         - Discard
         - NotExist
         - AutoApproval
-      type: string
-      format: ''
+      type: integer
     IssueBase:
       # V.4.0 Discriminator added to allow parsing of specific vulnerabilities like fingerprint, configuration etc.
       discriminator:
@@ -4406,7 +4421,7 @@ components:
         - Class
       type: object
       properties:
-        rvpPvo:
+        RvpPvo:
           $ref: '#/components/schemas/RvpPvo'
         Class:
           # OpenAPI generator doesn't support enum discriminator type so we
@@ -4414,57 +4429,77 @@ components:
           # $ref: '#/components/schemas/IssueType'
           type: string
           nullable: false
-        internalId:
+        InternalId:
           type: string
           format: uuid
-        id:
+        Id:
           type: string
           nullable: true
-        isOldInScanResultId:
+        IsOldInScanResultId:
           type: string
           format: uuid
           nullable: true
-        isFavorite:
+        IsFavorite:
           type: boolean
-        groupId:
+        GroupId:
           type: string
           nullable: true
-        approvalState:
+        ApprovalState:
           $ref: '#/components/schemas/IssueApprovalState'
-        isNewInScanResultId:
+        IsNewInScanResultId:
           type: string
           format: uuid
           nullable: true
-        scanResultId:
+        ScanResultId:
           type: string
           format: uuid
-        isSuspected:
+        IsSuspected:
           type: boolean
-        isSuppressed:
+        IsSuppressed:
           type: boolean
-        type:
+        Type:
           type: string
           nullable: true
-        linkedTickets:
+        LinkedTickets:
           type: array
           items:
             $ref: '#/components/schemas/TicketLink'
           nullable: true
-        counter:
+        Counter:
           type: integer
           format: int64
-        level:
+        Level:
           $ref: '#/components/schemas/IssueLevel'
       additionalProperties: false
     IssueBaseMetadata:
+      # V.4.0 Discriminator added to allow parsing of specific metadatas like fingerprint, configuration etc.
+      discriminator:
+        mapping:
+          1: '#/components/schemas/V40VulnerabilityIssueMetadata'
+          2: '#/components/schemas/V40WeaknessIssueMetadata'
+          4: '#/components/schemas/V40FingerprintIssueMetadata'
+          0: '#/components/schemas/V40UnknownIssueMetadata'
+          3: '#/components/schemas/V40ConfigurationIssueMetadata'
+          5: '#/components/schemas/V40BlackBoxIssueMetadata'
+          6: '#/components/schemas/V40YaraMatchIssueMetadata'
+        propertyName: IssueType
+      required:
+        - IssueType
       type: object
       properties:
-        key:
+        # V.4.0 First letter made uppercase
+        Key:
           type: string
           nullable: true
-        issueType:
-          $ref: '#/components/schemas/IssueType'
-        level:
+        # V.4.0 First letter made uppercase
+        IssueType:
+          # OpenAPI generator doesn't support enum discriminator type so we
+          # need to replace this with string
+          # $ref: '#/components/schemas/IssueType'
+          type: string
+          nullable: false
+        # V.4.0 First letter made uppercase
+        Level:
           $ref: '#/components/schemas/IssueLevel'
       additionalProperties: false
     IssueDescriptionModelBase:
@@ -4507,19 +4542,20 @@ components:
     IssuesModel:
       type: object
       properties:
-        issues:
+        # V.4.0 issues, descriptions and metadatas field names are capitalized
+        Issues:
           type: array
           items:
             $ref: '#/components/schemas/IssueBase'
           nullable: true
-        descriptions:
+        Descriptions:
           type: object
           additionalProperties:
             # IssueDescriptionModelBase have no issues text descriptions
             # $ref: '#/components/schemas/IssueDescriptionModelBase'
             $ref: '#/components/schemas/V40IssueDescriptionModel'
           nullable: true
-        metadatas:
+        Metadatas:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/IssueBaseMetadata'
@@ -4551,7 +4587,16 @@ components:
           $ref: '#/components/schemas/TicketTemplate'
       additionalProperties: false
     IssueType:
+      # V.4.0: Needed to fix that as API returns enum as integer instead of string
       enum:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+      x-enum-varnames:
         - Unknown
         - Vulnerability
         - Weakness
@@ -4559,8 +4604,7 @@ components:
         - Fingerprint
         - BlackBox
         - YaraMatch
-      type: string
-      format: ''
+      type: integer
     JavaVersions:
       # V.4.0: Needed to fix that as API returns enum as integer instead of string
       enum:
@@ -4861,12 +4905,16 @@ components:
           $ref: '#/components/schemas/DataFormat'
       additionalProperties: false
     PolicyState:
+      # V.4.0: Had to add x-enum-varnames as API returns ineger value instead of enum
       enum:
+        - 0
+        - 1
+        - 2
+      x-enum-varnames:
         - None
         - Rejected
         - Confirmed
-      type: string
-      format: ''
+      type: integer
     ProgrammingLanguage:
       enum:
         - DotNet
@@ -4986,7 +5034,8 @@ components:
           nullable: true
         lastScanDate:
           type: string
-          format: date-time
+          # V.4.0: Had to remove date-time specification as value returned doesn't conform to RFC 3339
+          # format: date-time
         filePatterns:
           type: array
           items:
@@ -5084,13 +5133,18 @@ components:
           nullable: true
       additionalProperties: false
     ProxyType:
+      # V.4.0: Had to add x-enum-varnames as API returns integer value instead of enum
       enum:
+        - 0
+        - 1
+        - 2
+        - 3
+      x-enum-varnames:
         - Http
         - HttpNoConnect
         - Socks4
         - Socks5
-      type: string
-      format: ''
+      type: integer
     ReportFormatType:
       enum:
         - Html
@@ -5455,7 +5509,8 @@ components:
           format: int32
         scanDate:
           type: string
-          format: date-time
+          # V.4.0: Had to remove date-time specification as value returned doesn't conform to RFC 3339
+          # format: date-time
         progress:
           $ref: '#/components/schemas/ScanProgress'
         statistic:
@@ -5470,17 +5525,25 @@ components:
           type: boolean
         hasSources:
           type: boolean
+        # V.4.0: Had to comment this out as API returns comma-separated string instead of single enum
+        # value. BTW, API should return set of enum values instead
         scanAppType:
-          $ref: '#/components/schemas/ScanAppType'
+          #   $ref: '#/components/schemas/ScanAppType'
+          type: string
       additionalProperties: false
     ScanResultState:
+      # V.4.0: Had to add x-enum-varnames as API returns ineger value instead of enum
       enum:
+        - 0
+        - 1
+        - 2
+        - 3
+      x-enum-varnames:
         - None
         - Inaccurate
         - Incremental
         - Incorrect
-      type: string
-      format: ''
+      type: integer
     ScanResultStatistic:
       type: object
       properties:
@@ -5526,12 +5589,16 @@ components:
           $ref: '#/components/schemas/PolicyState'
       additionalProperties: false
     ScanScope:
+      # V.4.0: Had to add x-enum-varnames as API returns ineger value instead of enum
       enum:
+        - 0
+        - 1
+        - 2
+      x-enum-varnames:
         - Folder
         - Domain
         - Path
-      type: string
-      format: ''
+      type: integer
     ScanSettings:
       type: object
       properties:
@@ -5546,8 +5613,11 @@ components:
           nullable: true
         programmingLanguage:
           $ref: '#/components/schemas/ProgrammingLanguage'
+        # V.4.0: Had to comment this out as API returns comma-separated string instead of single enum
+        # value. BTW, API should return set of enum values instead
         scanAppType:
-          $ref: '#/components/schemas/ScanAppType'
+          #   $ref: '#/components/schemas/ScanAppType'
+          type: string
         rootFolder:
           type: string
           nullable: true
@@ -5834,7 +5904,8 @@ components:
           $ref: '#/components/schemas/SourceType'
         lastDateTimeUpdate:
           type: string
-          format: date-time
+          # V.4.0: Had to remove date-time specification as value returned doesn't conform to RFC 3339
+          # format: date-time
         updaterInfo:
           $ref: '#/components/schemas/UpdaterInfo'
         isHidePathAndUser:
@@ -5844,13 +5915,18 @@ components:
           nullable: true
       additionalProperties: false
     SourceType:
+      # V.4.0: Need to add x-enum-varnames as API returns scanLevel as integer
       enum:
+        - 0
+        - 1
+        - 2
+        - 3
+      x-enum-varnames:
         - Empty
         - File
         - Folder
         - SourceControl
-      type: string
-      format: ''
+      type: integer
     Stage:
       enum:
         - Unknown
@@ -6709,6 +6785,103 @@ components:
           type: string
           nullable: true
       additionalProperties: false
+    # V.4.0: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V40FingerprintIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+        - type: object
+          properties:
+            ComponentName:
+              type: string
+              nullable: false
+            CveId:
+              type: string
+              nullable: true
+            CweId:
+              type: string
+              nullable: true
+            Cvss:
+              $ref: '#/components/schemas/V40CvssMetadata'
+    # V.4.0: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V40ConfigurationIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+        - type: object
+          properties:
+            CweId:
+              type: string
+              nullable: true
+            OwaspId:
+              type: string
+              nullable: true
+            PciId:
+              type: string
+              nullable: true
+            Nist:
+              type: string
+              nullable: true
+    # V.4.0: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V40YaraMatchIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+    # V.4.0: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V40WeaknessIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+        - type: object
+          properties:
+            CweId:
+              type: string
+              nullable: true
+            OwaspId:
+              type: string
+              nullable: true
+            PciId:
+              type: string
+              nullable: true
+            Nist:
+              type: string
+              nullable: true
+    # V.4.0: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V40BlackBoxIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+        - type: object
+          properties:
+            CweId:
+              type: string
+              nullable: true
+            OwaspId:
+              type: string
+              nullable: true
+            PciId:
+              type: string
+              nullable: true
+            Nist:
+              type: string
+              nullable: true
+    # V.4.0: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V40VulnerabilityIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
+        - type: object
+          properties:
+            CweId:
+              type: string
+              nullable: true
+            OwaspId:
+              type: string
+              nullable: true
+            PciId:
+              type: string
+              nullable: true
+            Nist:
+              type: string
+              nullable: true
+    # V.4.0: Had to add IssueBaseMetadata descendant classes to support specific fields like CVSS etc.
+    V40UnknownIssueMetadata:
+      allOf:
+        - $ref: '#/components/schemas/IssueBaseMetadata'
     # V.4.0: Had ta add this as there's no text description in IssueDescriptionModelBase
     V40IssueDescriptionModel:
       type: object
@@ -6726,13 +6899,13 @@ components:
       type: object
       properties:
         # V.4.0: Had to explicitly add html field as it exists in issues report
-        html:
+        Html:
           type: string
           nullable: true
-        header:
+        Header:
           type: string
           nullable: true
-        description:
+        Description:
           type: string
           nullable: true
       additionalProperties: false

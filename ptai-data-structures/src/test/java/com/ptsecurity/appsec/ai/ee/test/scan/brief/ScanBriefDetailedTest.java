@@ -9,14 +9,11 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
 import lombok.NonNull;
 import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 @DisplayName("Read and convert data from PT AI version-independent scan results JSON resource files")
@@ -61,7 +58,7 @@ public class ScanBriefDetailedTest extends BaseTest {
     @Test
     @DisplayName("Read and convert data from PT AI version-independent OWASP Benchmark scan results JSON resource file")
     public void parseOwaspBenchmarkScanResults() {
-        Path packedFileContents = getPackedResourceFile("json/scan/result/java-owasp-benchmark.json.7z");
+        Path packedFileContents = extractPackedResourceFile("json/scan/result/java-owasp-benchmark.json.7z");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile jsonFile = new TempFile(packedFileContents)) {
             Assertions.assertTrue(jsonFile.toFile().isFile());

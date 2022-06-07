@@ -1,12 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.tasks;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
+import com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.*;
 import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.ApiException;
 import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.BaseProjectSettingsModel;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.ExtendedBlackBoxSettingsModel;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.PatchBlackBoxSettingsModel;
 import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.ProjectLight;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.ProjectSettingsModel;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.SecurityPoliciesModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.AiProjConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
@@ -202,67 +206,76 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         return result.getId();
     }
 
-    public UUID setupFromJson(@NonNull final AiProjScanSettings settings, final Policy[] policy) throws GenericException {
+    public JsonParseBrief setupFromJson(@NonNull final String jsonSettings, final String jsonPolicy) throws GenericException {
+        log.trace("Parse settings and policy");
+        // Check if JSON settings and policy are defined correctly. Throw an exception if there are problems
+        AiProjScanSettings settings = (StringUtils.isEmpty(jsonSettings))
+                ? null
+                : AiProjConverter.verify(jsonSettings);
+        if (null == settings)
+            throw GenericException.raise("JSON settings must not be empty", new IllegalArgumentException());
         if (StringUtils.isEmpty(settings.getProjectName()))
             throw GenericException.raise("Project name in JSON settings must not be empty", new IllegalArgumentException());
 
-        // PT AI server API doesn't create project if DisabledPatterms and EnabledPatterns
-        // are missing even if scanAppType have no PmTaint. So we need at least pass empty
-        // arrays and use predefined enabled / disabled pattern lists
-        List<String> defaultEnabledPatterns = new ArrayList<>();
-        List<String> defaultDisabledPatterns = new ArrayList<>();
-        List<com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.PmPattern> patterns = call(
-                () -> client.getLegacyConfigsApi().apiConfigsPmPatternsGet(),
-                "PT AI patterns load failed");
-        Set<PatternLanguage> languages = LANGUAGE_GROUP.get(settings.getProgrammingLanguage());
-        long languageMask = 0;
-        for (PatternLanguage pl : languages) languageMask |= pl.value;
-        for (PmPattern pmPattern : patterns) {
-            Long patternLanguages = pmPattern.getProgrammingLanguages();
-            if (null == patternLanguages) {
-                log.warn("PM pattern programming languages is null for {}", pmPattern);
-                continue;
-            }
-            if (0 == (patternLanguages & languageMask)) {
-                // Pattern can't be applied to this language. Add it to disabledPatterns
-                defaultDisabledPatterns.add(pmPattern.getKey());
-                log.debug("Added default disabled pattern {}", pmPattern.getKey());
-            } else {
-                defaultEnabledPatterns.add(pmPattern.getKey());
-                log.debug("Added default enabled pattern {}", pmPattern.getKey());
-            }
-        }
-        final V40ScanSettings scanSettings = AiProjConverter.convert(settings, defaultEnabledPatterns, defaultDisabledPatterns);
+        Policy[] policy = (StringUtils.isEmpty(jsonPolicy))
+                ? null
+                : JsonPolicyHelper.verify(jsonPolicy);
+
+        BaseProjectSettingsModel defaultSettings = call(
+                client.getProjectsApi()::apiProjectsDefaultSettingsGet,
+                "Failed to get default PT AI project settings");
+        BaseProjectSettingsModel projectSettings = AiProjConverter.convert(settings, defaultSettings);
 
         final UUID projectId;
         final ProjectLight projectLight = searchProjectLight(settings.getProjectName());
         if (null == projectLight) {
-            com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.CreateProjectModel createProjectModel = new com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.CreateProjectModel();
-            createProjectModel.setName(settings.getProjectName());
-            createProjectModel.setScanSettings(scanSettings);
-            com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.Project project = call(
-                    () -> client.getLegacyProjectsApi().apiProjectsPost(createProjectModel),
-                    "PT AI project create failed");
-            projectId = project.getId();
+            log.trace("Create project {} as there's no such project name in PT AI", settings.getProjectName());
+            projectId = call(() -> client.getProjectsApi().apiProjectsBasePost(projectSettings), "PT AI project create failed");
             log.debug("Project {} created, ID = {}", settings.getProjectName(), projectLight);
-        } else {
+        } else
             projectId = projectLight.getId();
-            scanSettings.setId(projectLight.getSettingsId());
-            call(
-                    () -> client.getLegacyProjectsApi().apiProjectsProjectIdScanSettingsPut(projectId, scanSettings),
-                    "PT AI project settings update failed");
-        }
 
-        String policyJson = (null == policy) ? "" : JsonPolicyHelper.serialize(policy);
+        log.trace("Get existing PT AI project generic settings");
+        ProjectSettingsModel projectSettingsModel = call(
+                () -> client.getProjectsApi().apiProjectsProjectIdSettingsGet(projectId),
+                "Failed to get PT AI project generic settings");
+        log.trace("Apply AIPROJ-defined project generic settings");
+        AiProjConverter.apply(settings, projectSettingsModel);
+        log.trace("Save modified settings");
+        call(() -> client.getProjectsApi().apiProjectsProjectIdSettingsPut(projectId, projectSettingsModel),
+                "Update PT AI project generic settings failed");
+
+        log.trace("Get existing PT AI project blackbox settings");
+        ExtendedBlackBoxSettingsModel blackBoxSettingsModel = call(
+                () -> client.getProjectsApi().apiProjectsProjectIdBlackBoxSettingsGet(projectId),
+                "Failed to get PT AI project blackbox settings");
+        log.trace("Apply AIPROJ-defined project blackbox settings");
+        final PatchBlackBoxSettingsModel patch = AiProjConverter.apply(blackBoxSettingsModel, new PatchBlackBoxSettingsModel());
+        AiProjConverter.apply(settings, patch);
+        log.trace("Save modified blackbox settings");
+        call(() -> client.getProjectsApi().apiProjectsProjectIdBlackBoxSettingsPatch(projectId, patch),
+                "Update PT AI project blackbox settings failed");
+
+        log.trace("Get existing PT AI project security policy");
+        SecurityPoliciesModel securityPoliciesModel = call(
+                () -> client.getProjectsApi().apiProjectsProjectIdSecurityPoliciesGet(projectId),
+                "failed to get PT AI project security policies");
+        log.trace("Apply security policy");
+        AiProjConverter.apply(policy, securityPoliciesModel);
         call(
-                () -> client.getLegacyProjectsApi().apiProjectsProjectIdPoliciesRulesPut(projectId, policyJson),
+                () -> client.getProjectsApi().apiProjectsProjectIdSecurityPoliciesPut(projectId, securityPoliciesModel),
                 "PT AI project policy assignment failed");
-        return projectId;
+
+        return JsonParseBrief.builder()
+                .projectId(projectId)
+                .projectName(settings.getProjectName())
+                .incremental(true)
+                .build();
     }
 
     @Override
     public void deleteProject(@NonNull UUID id) throws GenericException {
-        call(() -> client.getLegacyProjectsApi().apiProjectsProjectIdDelete(id), "PT AI project delete failed");
+        call(() -> client.getProjectsApi().apiProjectsProjectIdDelete(id), "PT AI project delete failed");
     }
 
     @Override

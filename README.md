@@ -12,7 +12,7 @@ Jenkins and Teamcity plugins will be built for CI versions defined in ```gradle.
 $ ./gradlew build -P jenkinsVersion=2.150.2 -P teamcityVersion=2020.1
 ```
 #### Launch integation tests
-Execute ```gradlew integrationTest``` command in project root. PT AI server URL and API token are to be set in ```ptai.url``` and ```ptai.token``` environment variables accordingly. 
+Create ptai-test-tools\src\testFixtures\resources\configuration.yml and set URL, credentials etc. (See configuration.template.yml). Execute ```gradlew integrationTest``` command in project root. 
 
 ### Build plugins using Docker Gradle image
 Execute ```docker run``` command in project root:

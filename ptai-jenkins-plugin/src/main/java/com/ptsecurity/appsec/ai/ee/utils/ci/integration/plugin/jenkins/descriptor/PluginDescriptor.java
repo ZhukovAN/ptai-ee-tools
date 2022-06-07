@@ -92,6 +92,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
 
     @Override
     public boolean configure(StaplerRequest request, JSONObject formData) {
+        // noinspection ConstantConditions
         do {
             globalConfigs.clear();
             if (formData.isEmpty()) break;
@@ -139,6 +140,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         ConfigGlobal.Descriptor configGlobalDescriptor = Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
         ConfigCustom.Descriptor configLocalDescriptor = Jenkins.get().getDescriptorByType(ConfigCustom.Descriptor.class);
 
+        // noinspection ConstantConditions
         do {
             if (scanSettingsUiDescriptor.getDisplayName().equals(selectedScanSettings)) {
                 res = scanSettingsUiDescriptor.doCheckProjectName(projectName);
@@ -167,6 +169,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         return res;
     }
 
+    @SuppressWarnings("unused")
     public FormValidation doTestProject(
             @AncestorInPath Item item,
             @QueryParameter("selectedScanSettings") final String selectedScanSettings,
@@ -209,7 +212,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             boolean selectedScanSettingsUi = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class).getDisplayName().equals(selectedScanSettings);
             String realProjectName = selectedScanSettingsUi
                     ? projectName
-                    : JsonSettingsHelper.verify(jsonSettings).getProjectName();
+                    : new JsonSettingsHelper(jsonSettings).verifyRequiredFields().getProjectName();
             UUID projectId = searchProject(realProjectName, realServerUrl, credentials, insecure);
             if (null == projectId) {
                 // For manual defined (JSON) scan settings lack of project isn't a crime itself, just show warning
@@ -312,6 +315,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         return versionInfo;
     }
 
+    @SuppressWarnings("unused")
     public FormValidation doCheckAdvancedSettings(@QueryParameter("advancedSettings") String advancedSettings) {
         return Validator.doCheckFieldAdvancedSettings(advancedSettings, Resources.i18n_ast_settings_advanced_message_invalid());
     }

@@ -1,27 +1,26 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters;
 
-import com.google.gson.annotations.SerializedName;
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.scan.settings.v36.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
-import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.BlackBoxProxySettingsModel;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ConverterHelper.initRemainingSettingsFields;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper.createObjectMapper;
 import static org.joor.Reflect.on;
 
 @Slf4j
 public class AiProjConverter {
     private static final Map<AiProjScanSettings.BlackBoxScanLevel, BlackBoxScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
-    private static final Map<AiProjScanSettings.CredentialsType, AuthType> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
-    private static final Map<AiProjScanSettings.ProxyType, ProxyType> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
+    private static final Map<AiProjScanSettings.Authentication.Item.Credentials.Type, AuthType> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
+    private static final Map<AiProjScanSettings.ProxySettings.Type, ProxyType> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
 
     static {
         BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NONE, BlackBoxScanLevel.None);
@@ -29,34 +28,34 @@ public class AiProjConverter {
         BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NORMAL, BlackBoxScanLevel.Normal);
         BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FULL, BlackBoxScanLevel.Full);
 
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.FORM, AuthType.Form);
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.HTTP, AuthType.Http);
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.NONE, AuthType.None);
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.CredentialsType.COOKIE, AuthType.RawCookie);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.FORM, AuthType.Form);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.HTTP, AuthType.Http);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.NONE, AuthType.None);
+        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.COOKIE, AuthType.RawCookie);
 
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.HTTP, ProxyType.Http);
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.HTTPNOCONNECT, ProxyType.HttpNoConnect);
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.SOCKS4, ProxyType.Socks4);
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxyType.SOCKS5, ProxyType.Socks5);
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.HTTP, ProxyType.Http);
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.HTTPNOCONNECT, ProxyType.HttpNoConnect);
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.SOCKS4, ProxyType.Socks4);
+        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.SOCKS5, ProxyType.Socks5);
 
     }
 
     protected static BlackBoxAuthentication fillAuthentication(@NonNull final BlackBoxAuthentication auth, @NonNull final AiProjScanSettings.Authentication jsonAuth) {
-        AiProjScanSettings.AuthItem jsonAuthItem = jsonAuth.getAuthItem();
-        if (null == jsonAuthItem) return auth;
+        AiProjScanSettings.Authentication.Item jsonItem = jsonAuth.getItem();
+        if (null == jsonItem) return auth;
 
         AuthenticationItem authItem = new AuthenticationItem()
-                .domain(jsonAuthItem.getDomain())
-                .formUrl(jsonAuthItem.getFormUrl())
-                .formXpath(jsonAuthItem.getFormXPath())
-                .testUrl(jsonAuthItem.getTestUrl())
-                .regexpOfSuccess(jsonAuthItem.getRegexpOfSuccess());
-        if (null != jsonAuthItem.getCredentials()) {
+                .domain(jsonItem.getDomain())
+                .formUrl(jsonItem.getFormUrl())
+                .formXpath(jsonItem.getFormXPath())
+                .testUrl(jsonItem.getTestUrl())
+                .regexpOfSuccess(jsonItem.getRegexpOfSuccess());
+        if (null != jsonItem.getCredentials()) {
             AuthenticationCredentials credentials = new AuthenticationCredentials()
-                    .cookie(jsonAuthItem.getCredentials().getCookie())
-                    .type(BLACKBOX_AUTH_TYPE_MAP.get(jsonAuthItem.getCredentials().getType()));
-            if (null != jsonAuthItem.getCredentials().getLogin()) {
-                AiProjScanSettings.Login jsonLogin = jsonAuthItem.getCredentials().getLogin();
+                    .cookie(jsonItem.getCredentials().getCookie())
+                    .type(BLACKBOX_AUTH_TYPE_MAP.get(jsonItem.getCredentials().getType()));
+            if (null != jsonItem.getCredentials().getLogin()) {
+                AiProjScanSettings.Authentication.Item.Credentials.Login jsonLogin = jsonItem.getCredentials().getLogin();
                 credentials.login(new MappedAuthenticationObject()
                         .name(jsonLogin.getName())
                         .value(jsonLogin.getValue())
@@ -64,8 +63,8 @@ public class AiProjConverter {
                         .regexp(jsonLogin.getRegexp())
                 );
             }
-            if (null != jsonAuthItem.getCredentials().getPassword()) {
-                AiProjScanSettings.Password jsonPassword = jsonAuthItem.getCredentials().getPassword();
+            if (null != jsonItem.getCredentials().getPassword()) {
+                AiProjScanSettings.Authentication.Item.Credentials.Password jsonPassword = jsonItem.getCredentials().getPassword();
                 credentials.password(new MappedAuthenticationObject()
                         .name(jsonPassword.getName())
                         .value(jsonPassword.getValue())
@@ -241,5 +240,33 @@ public class AiProjConverter {
         on(destination).call("isUnpackUserPackages", source.getIsUnpackUserPackages());
         on(destination).call("isUseEntryAnalysisPoint", source.getIsUseEntryAnalysisPoint());
         on(destination).call("isUsePublicAnalysisMethod", source.getIsUsePublicAnalysisMethod());
+    }
+
+    public static AiProjScanSettings verify(String json) throws GenericException {
+        return call(() -> {
+            ObjectMapper mapper = createObjectMapper();
+            AiProjScanSettings res = mapper.readValue(json, AiProjScanSettings.class);
+            if (StringUtils.isEmpty(res.getProjectName()))
+                throw new IllegalArgumentException("ProjectName field is not defined or empty");
+            if (null == res.getProgrammingLanguage())
+                throw new IllegalArgumentException("ProgrammingLanguage field is not defined or empty");
+            return res.fix();
+        }, "JSON settings parse failed");
+    }
+
+    public static String serialize(AiProjScanSettings settings) throws GenericException {
+        return call(
+                () -> new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(settings.fix()),
+                "JSON settings serialization failed");
+    }
+
+    /**
+     * @param settingsJson JSON-defined AST settings
+     * @return Minimized JSON-defined AST settings, i.e. without comments, formatting etc.
+     * @throws GenericException
+     */
+    public static String minimize(@NonNull String settingsJson) throws GenericException {
+        AiProjScanSettings settings = verify(settingsJson);
+        return serialize(settings);
     }
 }

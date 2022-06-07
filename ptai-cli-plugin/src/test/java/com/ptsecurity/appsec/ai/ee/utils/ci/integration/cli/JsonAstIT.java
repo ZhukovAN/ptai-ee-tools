@@ -2,8 +2,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +16,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.JAVA;
+
 @DisplayName("Check JSON-defined AST scans")
 @Tag("integration")
 class JsonAstIT extends BaseJsonIT {
@@ -27,9 +29,9 @@ class JsonAstIT extends BaseJsonIT {
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--settings-json", savedScanSettingsPath());
@@ -44,9 +46,9 @@ class JsonAstIT extends BaseJsonIT {
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--settings-json", savedScanSettingsPath(),
@@ -63,9 +65,9 @@ class JsonAstIT extends BaseJsonIT {
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
                 "--input", sourcesPhpHigh.toString(),
                 "--output", destination.toString(),
                 "--settings-json", savedScanSettingsPath(),
@@ -78,19 +80,18 @@ class JsonAstIT extends BaseJsonIT {
     @Test
     @DisplayName("Execute AST of new project with missing dependencies")
     public void testJsonAstWithMissingDependencies() {
-        AiProjScanSettings scanJavaSettings = scanPhpSettings;
+        JsonSettingsTestHelper scanJavaSettings = scanPhpSettings;
         scanJavaSettings.setProjectName(newProjectName);
         scanJavaSettings.setIsDownloadDependencies(false);
         scanJavaSettings.setProgrammingLanguage(Language.JAVA);
         // As we changed programming language we need also to reset scan app type
-        scanJavaSettings.setScanAppType(null);
-        scanJavaSettings.fix();
+        scanJavaSettings.setScanAppType(JAVA);
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
                 "--input", sourcesJavaMisc.toString(),
                 "--output", destination.toString(),
                 "--settings-json", savedScanSettingsPath(),
@@ -106,9 +107,9 @@ class JsonAstIT extends BaseJsonIT {
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--settings-json", savedScanSettingsPath(),
@@ -137,9 +138,9 @@ class JsonAstIT extends BaseJsonIT {
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
-                "--url", URL,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--truststore", PEM.toString(),
-                "--token", TOKEN,
                 "--input", sourcesPhpMedium.toString(),
                 "--output", destination.toString(),
                 "--settings-json", savedScanSettingsPath(),

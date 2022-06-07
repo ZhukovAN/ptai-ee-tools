@@ -1,12 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.client;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
@@ -15,6 +11,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AbstractFileO
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import lombok.*;
@@ -22,52 +19,70 @@ import lombok.experimental.SuperBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile.PREFIX;
 
 public abstract class BaseAstIT extends BaseClientIT {
-    @RequiredArgsConstructor
-    @Getter @Setter
+    @Getter
     public static class Project {
         protected final String name;
-        protected final String code;
         protected final String settings;
+        @TempDir
+        protected final Path code;
+
+        @SneakyThrows
+        private Project(@NonNull final String name, @NonNull final String sourcesZipResourceName, @NonNull final String settingsResourceName) {
+            this.name = name;
+            String genericSettings = getResourceString(settingsResourceName);
+            this.settings = new JsonSettingsHelper(genericSettings).projectName(name).verifyRequiredFields().serialize();
+            this.code = extractPackedResourceFile(sourcesZipResourceName);
+            setupProject(this);
+        }
     }
 
-    public static final Project JAVA_APP01 = new Project("junit-it-java-app01", "code/java-app01.zip", "json/scan/settings/settings.java-app01.aiproj");
+    static {
+        JAVA_APP01 = new Project(
+                "junit-it-java-app01",
+                "code/java-app01.zip",
+                "json/scan/settings/settings.java-app01.aiproj");
+
+    }
+    public static final Project JAVA_APP01;
+
     public static final Project PHP_SMOKE_MISC = new Project("junit-it-php-smoke-misc", "code/php-smoke-misc.zip", "json/scan/settings/settings.php-smoke.aiproj");
     public static final Project PHP_SMOKE_MEDIUM = new Project("junit-it-php-smoke-medium", "code/php-smoke-medium.zip", "json/scan/settings/settings.php-smoke.aiproj");
     public static final Project PHP_SMOKE_HIGH = new Project("junit-it-php-smoke-high", "code/php-smoke-high.zip", "json/scan/settings/settings.php-smoke.aiproj");
     public static final Project PHP_SMOKE_MULTIFLOW = new Project("junit-it-php-smoke-multiflow", "code/php-smoke-multiflow.zip", "json/scan/settings/settings.php-smoke.aiproj");
 
-    public Path getSourcesRoot(@NonNull final Project project) {
-        return getPackedResourceFile(project.code);
-    }
-
     @SneakyThrows
-    public static void setupProject(@NonNull final Project project, final Policy[] policy) {
-        AiProjScanSettings settings = JsonSettingsHelper.verify(getResourceString(project.getSettings()));
-        if (!JAVA_APP01.equals(project))
-            settings.setProjectName(project.getName());
-
-        AbstractApiClient client = Factory.client(CONNECTION_SETTINGS);
+    public static void setupProject(@NonNull final Project project, final String policy) {
+        // As projects share same set of settings there's need to modify project name in JSON
+        String settings = getResourceString(project.getSettings());
+        settings = new JsonSettingsHelper(settings).projectName(project.getName()).verifyRequiredFields().serialize();
+        AbstractApiClient client = Factory.client(CONNECTION_SETTINGS());
         ProjectTasks projectTasks = new Factory().projectTasks(client);
         projectTasks.setupFromJson(settings, policy);
     }
 
     @SneakyThrows
-    public static Policy[] getDefaultPolicy() {
+    public static void setupProject(@NonNull final Project project) {
+        setupProject(project, null);
+    }
+
+    @SneakyThrows
+    public static String getDefaultPolicy() {
         InputStream inputStream = getResourceStream("json/scan/settings/policy.generic.json");
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
-        return mapper.readValue(inputStream, Policy[].class);
+        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
     }
 
     protected Reports.Report report;

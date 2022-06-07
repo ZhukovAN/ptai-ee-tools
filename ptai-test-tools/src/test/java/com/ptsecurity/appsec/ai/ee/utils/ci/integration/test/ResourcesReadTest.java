@@ -52,7 +52,7 @@ public class ResourcesReadTest extends BaseTest {
     @Test
     @DisplayName("Read and parse data from 7-zip-packed JSON resource file")
     public void readSevenZipPackedJsonResource() {
-        Path packedFileContents = getPackedResourceFile("data/test.7z");
+        Path packedFileContents = extractPackedResourceFile("data/test.7z");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile jsonFile = new TempFile(packedFileContents)) {
             Assertions.assertTrue(jsonFile.toFile().isFile());
@@ -67,7 +67,7 @@ public class ResourcesReadTest extends BaseTest {
     @Test
     @DisplayName("Read and parse data from zip-packed JSON resource file")
     public void readZipPackedJsonResource() {
-        Path packedFileContents = getPackedResourceFile("data/test.zip");
+        Path packedFileContents = extractPackedResourceFile("data/test.zip");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile jsonFile = new TempFile(packedFileContents)) {
             Assertions.assertTrue(jsonFile.toFile().isFile());
@@ -82,7 +82,7 @@ public class ResourcesReadTest extends BaseTest {
     @Test
     @DisplayName("Read and parse multiple data from 7-zip-packed JSON resource file")
     public void readSevenZipPackedJsonResources() {
-        Path packedFileContents = getPackedResourceFile("data/tests.7z");
+        Path packedFileContents = extractPackedResourceFile("data/tests.7z");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile folder = new TempFile(packedFileContents)) {
             Assertions.assertTrue(folder.toFile().isDirectory());
@@ -101,7 +101,7 @@ public class ResourcesReadTest extends BaseTest {
     @Test
     @DisplayName("Read and parse multiple data from zip-packed JSON resource file")
     public void readZipPackedJsonResources() {
-        Path packedFileContents = getPackedResourceFile("data/tests.zip");
+        Path packedFileContents = extractPackedResourceFile("data/tests.zip");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile folder = new TempFile(packedFileContents)) {
             Assertions.assertTrue(folder.toFile().isDirectory());

@@ -18,7 +18,7 @@ public class ScanDataPackedTest extends BaseTest {
     @Test
     @DisplayName("Packing OWASP Benchmarks detailed scan brief")
     public void packOwaspBenchmarksScanBriefDetailed() {
-        File scanBriefDetailedFile = getPackedResourceFile("json/scan/brief/detailed/java-owasp-benchmark.json.7z").toFile();
+        File scanBriefDetailedFile = extractPackedResourceFile("json/scan/brief/detailed/java-owasp-benchmark.json.7z").toFile();
         ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
         ScanBriefDetailed scanBriefDetailed = mapper.readValue(scanBriefDetailedFile, ScanBriefDetailed.class);
         String unpackedData = mapper.writeValueAsString(scanBriefDetailed);
