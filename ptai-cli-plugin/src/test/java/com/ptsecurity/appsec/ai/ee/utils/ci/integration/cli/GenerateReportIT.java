@@ -99,7 +99,7 @@ class GenerateReportIT extends BaseCliIT {
             List<String> args = new ArrayList<>(Arrays.asList(
                     "generate-report",
                     "--url", CONNECTION().getUrl(),
-                    "--truststore", PEM.toString(),
+                    "--truststore", CA_PEM_FILE.toString(),
                     "--token", CONNECTION().getToken(),
                     "--output", folder.toString(),
                     "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName()));
@@ -133,7 +133,7 @@ class GenerateReportIT extends BaseCliIT {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -154,7 +154,7 @@ class GenerateReportIT extends BaseCliIT {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -175,7 +175,7 @@ class GenerateReportIT extends BaseCliIT {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -195,7 +195,7 @@ class GenerateReportIT extends BaseCliIT {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -214,7 +214,7 @@ class GenerateReportIT extends BaseCliIT {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -239,7 +239,7 @@ class GenerateReportIT extends BaseCliIT {
             List<String> args = new ArrayList<>(Arrays.asList(
                     "generate-report",
                     "--url", CONNECTION().getUrl(),
-                    "--truststore", PEM.toString(),
+                    "--truststore", CA_PEM_FILE.toString(),
                     "--token", CONNECTION().getToken(),
                     "--output", destination.toString(),
                     "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -271,7 +271,7 @@ class GenerateReportIT extends BaseCliIT {
         List<String> args = new ArrayList<>(Arrays.asList(
                 "generate-report",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -300,7 +300,7 @@ class GenerateReportIT extends BaseCliIT {
         Integer res = new CommandLine(new Plugin()).execute(
                 "generate-report",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -329,7 +329,7 @@ class GenerateReportIT extends BaseCliIT {
         List<String> args = new ArrayList<>(Arrays.asList(
                 "generate-report",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),

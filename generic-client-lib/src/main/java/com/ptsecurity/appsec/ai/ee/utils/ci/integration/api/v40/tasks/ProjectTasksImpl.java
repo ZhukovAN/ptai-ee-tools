@@ -231,7 +231,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         if (null == projectLight) {
             log.trace("Create project {} as there's no such project name in PT AI", settings.getProjectName());
             projectId = call(() -> client.getProjectsApi().apiProjectsBasePost(projectSettings), "PT AI project create failed");
-            log.debug("Project {} created, ID = {}", settings.getProjectName(), projectLight);
+            log.debug("Project {} created, ID = {}", settings.getProjectName(), projectId);
         } else
             projectId = projectLight.getId();
 

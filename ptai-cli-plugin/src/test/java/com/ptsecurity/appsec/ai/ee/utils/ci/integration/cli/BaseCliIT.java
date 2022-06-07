@@ -15,15 +15,15 @@ public abstract class BaseCliIT extends BaseClientIT {
      * As CLI plugin accepts file-based truststores, we need
      * to save certificates from resources to PEM files
      */
-    protected Path PEM;
+    protected Path CA_PEM_FILE;
 
     protected Path DUMMY_CA_PEM_FILE;
 
     @SneakyThrows
     @BeforeEach
     public void pre() {
-        PEM = Files.createTempFile(TEMP_FOLDER, "ptai-", "-ca-pem");
-        FileUtils.write(PEM.toFile(), CONNECTION().getCaPem(), StandardCharsets.UTF_8);
+        CA_PEM_FILE = Files.createTempFile(TEMP_FOLDER, "ptai-", "-ca-pem");
+        FileUtils.write(CA_PEM_FILE.toFile(), CONNECTION().getCaPem(), StandardCharsets.UTF_8);
         DUMMY_CA_PEM_FILE = Files.createTempFile(TEMP_FOLDER, "ptai-", "-dummy-ca-pem");
         FileUtils.write(DUMMY_CA_PEM_FILE.toFile(), BaseIT.DUMMY_CA_PEM, StandardCharsets.UTF_8);
     }

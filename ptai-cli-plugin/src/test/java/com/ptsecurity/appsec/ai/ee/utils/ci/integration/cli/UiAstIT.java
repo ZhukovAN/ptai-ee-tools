@@ -40,7 +40,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--project", PHP_SMOKE_MEDIUM.getName(),
                 "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
                 "--output", destination.toString(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
@@ -54,7 +54,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
                 "--output", destination.toString(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--includes", "**/*.java",
@@ -71,7 +71,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--project", BaseAstIT.PHP_SMOKE_HIGH.getName(),
                 "--input", PHP_SMOKE_HIGH.getCode().toString(),
                 "--output", destination.toString(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--fail-if-failed");
@@ -86,7 +86,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName() + UUID.randomUUID(),
                 "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
                 "--output", destination.toString(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
@@ -132,7 +132,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--output", destination.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--report-file", report.getFileName().toString(),
                 "--report-template", "OWASP top 10 2017 report",
                 "--report-format", HTML.name(),
@@ -149,7 +149,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--output", destination.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--report-file", report.getFileName().toString(),
                 "--report-template", "OWASP top 10 2017 report",
                 "--report-format", HTML.name(),
@@ -175,7 +175,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--output", destination.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
         GenerateReportIT.checkReports(reportsJson, destination);
@@ -195,7 +195,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--output", destination.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
@@ -214,7 +214,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--output", destination.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
@@ -227,7 +227,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
                 "--output", destination.toString(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--async");
@@ -242,7 +242,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName() + UUID.randomUUID(),
                 "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
                 "--output", destination.toString(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--async");

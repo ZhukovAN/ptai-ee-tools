@@ -21,7 +21,7 @@ class ListReportTemplatesIT extends BaseCliIT {
                 "list-report-templates",
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--locale", RU.name());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
@@ -33,7 +33,7 @@ class ListReportTemplatesIT extends BaseCliIT {
                 "list-report-templates",
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--locale", EN.name());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
@@ -45,7 +45,7 @@ class ListReportTemplatesIT extends BaseCliIT {
                 "list-report-templates",
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--locale", "KO");
         Assertions.assertEquals(BaseCommand.ExitCode.INVALID_INPUT.getCode(), res);
     }

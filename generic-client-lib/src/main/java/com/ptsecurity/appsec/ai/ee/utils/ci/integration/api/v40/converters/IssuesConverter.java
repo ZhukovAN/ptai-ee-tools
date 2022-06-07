@@ -69,11 +69,9 @@ public class IssuesConverter {
         SCAN_MODE_MAP.put(V40VulnerabilityIssueScanMode.FromEntryPoint, VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT);
         SCAN_MODE_MAP.put(V40VulnerabilityIssueScanMode.FromPublicProtected, VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED);
 
-        // Bug https://jira.ptsecurity.com/browse/AI-4866 with swapped
-        // confirmed / rejected states fixed and will be included in 3.7
         POLICY_STATE_MAP.put(PolicyState.None, Policy.State.NONE);
-        POLICY_STATE_MAP.put(PolicyState.Confirmed, Policy.State.REJECTED);
-        POLICY_STATE_MAP.put(PolicyState.Rejected, Policy.State.CONFIRMED);
+        POLICY_STATE_MAP.put(PolicyState.Rejected, Policy.State.REJECTED);
+        POLICY_STATE_MAP.put(PolicyState.Confirmed, Policy.State.CONFIRMED);
 
         LANGUAGE_MAP.put(V40ProgrammingLanguage.JAVA, ScanResult.ScanSettings.Language.JAVA);
         LANGUAGE_MAP.put(V40ProgrammingLanguage.PHP, ScanResult.ScanSettings.Language.PHP);

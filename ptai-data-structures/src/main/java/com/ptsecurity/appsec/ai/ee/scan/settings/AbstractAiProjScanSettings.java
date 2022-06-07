@@ -111,82 +111,6 @@ public abstract class AbstractAiProjScanSettings {
 
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class Authentication {
-        @Getter
-        @JsonIgnoreProperties(ignoreUnknown = true)
-        public static class Item {
-            @JsonProperty("domain")
-            protected String domain;
-
-            @Getter
-            @JsonIgnoreProperties(ignoreUnknown = true)
-            public static class Credentials {
-                @JsonProperty("cookie")
-                protected String cookie;
-
-                @AllArgsConstructor
-                public enum Type {
-                    // 0 = Form, 1 = HTTP, 2 = None, 3 = Cookie
-                    FORM(0),
-                    HTTP(1),
-                    NONE(2),
-                    COOKIE(3);
-
-                    @JsonValue
-                    private final int type;
-                }
-                @JsonProperty("type")
-                protected Type type;
-
-                @Getter
-                @JsonIgnoreProperties(ignoreUnknown = true)
-                public static class Login {
-                    @JsonProperty("name")
-                    protected String name;
-                    @JsonProperty("value")
-                    protected String value;
-                    @JsonProperty("regexp")
-                    protected String regexp;
-                    @JsonProperty("is_regexp")
-                    protected Boolean regexpUsed;
-                }
-                @JsonProperty("login")
-                protected Login login;
-
-                @Getter
-                @JsonIgnoreProperties(ignoreUnknown = true)
-                public static class Password {
-                    @JsonProperty("name")
-                    protected String name;
-                    @JsonProperty("value")
-                    protected String value;
-                    @JsonProperty("regexp")
-                    protected String regexp;
-                    @JsonProperty("is_regexp")
-                    protected Boolean regexpUsed;
-                }
-                @JsonProperty("password")
-                protected Password password;
-            }
-            @JsonProperty("credentials")
-            protected Credentials credentials;
-            @JsonProperty("test_url")
-            protected String testUrl;
-            @JsonProperty("form_url")
-            protected String formUrl;
-            @JsonProperty("form_xpath")
-            protected String formXPath;
-            @JsonProperty("regexp_of_success")
-            protected String regexpOfSuccess;
-        }
-        @JsonProperty("auth_item")
-        protected Item item;
-    }
-    @JsonProperty("Authentication")
-    protected Authentication authentication;
-
-    @Getter
-    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class ProxySettings {
         @JsonProperty("IsEnabled")
         protected Boolean isEnabled;
@@ -221,8 +145,6 @@ public abstract class AbstractAiProjScanSettings {
     protected Boolean runAutocheckAfterScan;
     @JsonProperty("AutocheckCustomHeaders")
     protected List<List<String>> autocheckCustomHeaders;
-    @JsonProperty("AutocheckAuthentication")
-    protected Authentication autocheckAuthentication;
     @JsonProperty("AutocheckProxySettings")
     protected ProxySettings autocheckProxySettings;
 

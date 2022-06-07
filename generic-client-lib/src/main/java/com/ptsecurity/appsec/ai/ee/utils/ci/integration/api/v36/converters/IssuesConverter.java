@@ -73,7 +73,7 @@ public class IssuesConverter {
         SCAN_MODE_MAP.put(V36VulnerabilityIssueScanMode.FromPublicProtected, VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED);
 
         // Bug https://jira.ptsecurity.com/browse/AI-4866 with swapped
-        // confirmed / rejected states fixed and will be included in 3.7
+        // confirmed / rejected states fixed and will be included in 4.0
         POLICY_STATE_MAP.put(PolicyState.NONE, Policy.State.NONE);
         POLICY_STATE_MAP.put(PolicyState.CONFIRMED, Policy.State.REJECTED);
         POLICY_STATE_MAP.put(PolicyState.REJECTED, Policy.State.CONFIRMED);

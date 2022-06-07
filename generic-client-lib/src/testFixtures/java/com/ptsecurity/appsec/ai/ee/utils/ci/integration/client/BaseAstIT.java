@@ -50,14 +50,10 @@ public abstract class BaseAstIT extends BaseClientIT {
         }
     }
 
-    static {
-        JAVA_APP01 = new Project(
-                "junit-it-java-app01",
-                "code/java-app01.zip",
-                "json/scan/settings/settings.java-app01.aiproj");
-
-    }
-    public static final Project JAVA_APP01;
+    public static final Project JAVA_APP01 = new Project(
+            "junit-it-java-app01",
+            "code/java-app01.zip",
+            "json/scan/settings/settings.java-app01.aiproj");
 
     public static final Project PHP_SMOKE_MISC = new Project("junit-it-php-smoke-misc", "code/php-smoke-misc.zip", "json/scan/settings/settings.php-smoke.aiproj");
     public static final Project PHP_SMOKE_MEDIUM = new Project("junit-it-php-smoke-medium", "code/php-smoke-medium.zip", "json/scan/settings/settings.php-smoke.aiproj");
@@ -67,11 +63,9 @@ public abstract class BaseAstIT extends BaseClientIT {
     @SneakyThrows
     public static void setupProject(@NonNull final Project project, final String policy) {
         // As projects share same set of settings there's need to modify project name in JSON
-        String settings = getResourceString(project.getSettings());
-        settings = new JsonSettingsHelper(settings).projectName(project.getName()).verifyRequiredFields().serialize();
         AbstractApiClient client = Factory.client(CONNECTION_SETTINGS());
         ProjectTasks projectTasks = new Factory().projectTasks(client);
-        projectTasks.setupFromJson(settings, policy);
+        projectTasks.setupFromJson(project.getSettings(), policy);
     }
 
     @SneakyThrows

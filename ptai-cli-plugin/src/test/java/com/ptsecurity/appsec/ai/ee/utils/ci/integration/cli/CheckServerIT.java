@@ -20,7 +20,7 @@ class CheckServerIT extends BaseCliIT {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
@@ -31,7 +31,7 @@ class CheckServerIT extends BaseCliIT {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--insecure");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
@@ -66,7 +66,7 @@ class CheckServerIT extends BaseCliIT {
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
                 "--url", CONNECTION().getUrl(),
-                "--truststore", PEM.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken() + UUID.randomUUID());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }

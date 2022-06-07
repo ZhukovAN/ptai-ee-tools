@@ -4,11 +4,19 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest.TEMP_FOLDER;
 
 public class JsonSettingsTestHelper extends JsonSettingsHelper {
     public JsonSettingsTestHelper(@NonNull String json) throws GenericException {
@@ -106,6 +114,19 @@ public class JsonSettingsTestHelper extends JsonSettingsHelper {
 
     public JsonSettingsTestHelper usePmAnalysis(final boolean value) {
         setUsePmAnalysis(value);
+        return this;
+    }
+
+    @SneakyThrows
+    public Path serializeToFile() {
+        String data = this.serialize();
+        File file = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-settings").toFile();
+        Files.write(file.toPath(), data.getBytes(StandardCharsets.UTF_8));
+        return file.toPath();
+    }
+
+    public JsonSettingsTestHelper randomizeProjectName() {
+        setProjectName("junit-" + UUID.randomUUID());
         return this;
     }
 }

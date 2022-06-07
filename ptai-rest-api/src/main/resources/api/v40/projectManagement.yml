@@ -3596,14 +3596,13 @@ components:
           type: boolean
       additionalProperties: false
     JavaVersions:
-      # V.4.0: Needed to fix that as API returns enum as integer instead of string
       enum:
-        - 0
-        - 1
+        - v1_8
+        - v1_11
       x-enum-varnames:
         - v1_8
         - v1_11
-      type: integer
+      type: string
     DotNetProjectType:
       # V.4.0: Had to add x-enum-varnames as API returns projectType as an integer value
       enum:

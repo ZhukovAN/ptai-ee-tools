@@ -94,14 +94,9 @@ public class JsonAstJobIT extends BaseAstIT {
     public ScanResult analyseMiscScanResults(@NonNull final Consumer<JsonSettingsTestHelper> modifySettings) {
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
 
-        String jsonSettings = getResourceString("json/scan/settings/settings.minimal.aiproj");
-        Assertions.assertFalse(StringUtils.isEmpty(jsonSettings));
-
-        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(jsonSettings);
+        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MISC.getSettings());
         settings.setProgrammingLanguage(PHP);
-        settings.setProjectName("junit-" + UUID.randomUUID());
         modifySettings.accept(settings);
-        jsonSettings = settings.serialize();
 
         GenericAstJob astJob = JsonAstJobImpl.builder()
                 .async(false)
@@ -110,7 +105,7 @@ public class JsonAstJobIT extends BaseAstIT {
                 .console(System.out)
                 .sources(PHP_SMOKE_MISC.getCode())
                 .destination(destination)
-                .jsonSettings(jsonSettings)
+                .jsonSettings(settings.serialize())
                 .build();
         RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
         FailIfAstFailed.builder().build().attach(astJob);
@@ -287,11 +282,6 @@ public class JsonAstJobIT extends BaseAstIT {
     public void checkMultiflow() {
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
 
-        String jsonSettings = getResourceString(PHP_SMOKE_MULTIFLOW.getSettings());
-        jsonSettings = new JsonSettingsTestHelper(jsonSettings)
-                .projectName("junit-" + UUID.randomUUID())
-                .serialize();
-
         GenericAstJob astJob = JsonAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
@@ -299,7 +289,7 @@ public class JsonAstJobIT extends BaseAstIT {
                 .console(System.out)
                 .sources(PHP_SMOKE_MULTIFLOW.getCode())
                 .destination(destination)
-                .jsonSettings(jsonSettings)
+                .jsonSettings(PHP_SMOKE_MULTIFLOW.getSettings())
                 .build();
         RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
 

@@ -69,7 +69,7 @@ public class JsonSettingsHelper extends BaseJsonHelper {
         if (!root.has(PROGRAMMING_LANGUAGE) || StringUtils.isEmpty(root.get(PROGRAMMING_LANGUAGE).asText())) return null;
         String value = root.get(PROGRAMMING_LANGUAGE).asText().trim();
         return call(
-                () -> Language.valueOf(value),
+                () -> Language.fromString(value),
                 "Invalid " + PROGRAMMING_LANGUAGE + " field value " + value);
     };
 

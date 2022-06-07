@@ -92,8 +92,28 @@ public class ScanBrief {
         @JsonProperty
         protected Boolean useEntryAnalysisPoint;
 
+        @RequiredArgsConstructor
         public enum Language {
-            PHP, JAVA, CSHARP, VB, JS, GO, CPP, PYTHON, SQL, OBJECTIVEC, SWIFT, KOTLIN
+            PHP("PHP"),
+            JAVA("Java"),
+            CSHARP("CSharp"),
+            VB("VB"),
+            JS("JavaScript"),
+            GO("Go"),
+            CPP("CPlusPlus"),
+            PYTHON("Python"),
+            SQL("SQL"),
+            OBJECTIVEC("ObjectiveC"),
+            SWIFT("Swift"), KOTLIN("Kotlin");
+
+            public static Language fromString(@NonNull final String value) {
+                for (Language language : Language.values())
+                    if (language.value.equalsIgnoreCase(value)) return language;
+                throw new IllegalArgumentException("No enum value " + Language.class.getCanonicalName() + "." + value);
+            }
+
+            @NonNull
+            private final String value;
         }
 
         @JsonProperty

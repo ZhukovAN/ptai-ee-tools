@@ -17,6 +17,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.JAVA;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
 
 @DisplayName("Check JSON-defined AST scans")
 @Tag("integration")
@@ -25,16 +26,16 @@ class JsonAstIT extends BaseJsonIT {
     @Test
     @DisplayName("Execute AST of new project with no policy defined")
     public void testMissingPolicy() {
-        scanPhpSettings.setProjectName(newProjectName);
+        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MEDIUM.getSettings());
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
-                "--input", sourcesPhpMedium.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
+                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
                 "--output", destination.toString(),
-                "--settings-json", savedScanSettingsPath());
+                "--settings-json", settings.serializeToFile().toString());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
@@ -42,16 +43,16 @@ class JsonAstIT extends BaseJsonIT {
     @Test
     @DisplayName("Execute AST of new project ignoring policy assessment result")
     public void testIgnorePolicy() {
-        scanPhpSettings.setProjectName(newProjectName);
+        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MEDIUM.getSettings());
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
-                "--input", sourcesPhpMedium.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
+                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
                 "--output", destination.toString(),
-                "--settings-json", savedScanSettingsPath(),
+                "--settings-json", settings.serializeToFile().toString(),
                 "--policy-json", savedScanPolicyPath());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
@@ -60,17 +61,18 @@ class JsonAstIT extends BaseJsonIT {
     @Test
     @DisplayName("Execute AST of new project with policy assessment")
     public void testJsonAst() {
-        scanPhpSettings.setProjectName(newProjectName);
-        scanPhpSettings.setProgrammingLanguage(Language.PHP);
+        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_HIGH.getSettings());
+        settings.setProjectName(PHP_SMOKE_HIGH.getName());
+        settings.setProgrammingLanguage(Language.PHP);
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
-                "--input", sourcesPhpHigh.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
+                "--input", PHP_SMOKE_HIGH.getCode().toString(),
                 "--output", destination.toString(),
-                "--settings-json", savedScanSettingsPath(),
+                "--settings-json", settings.serializeToFile().toString(),
                 "--policy-json", savedScanPolicyPath(),
                 "--fail-if-failed");
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
@@ -80,21 +82,18 @@ class JsonAstIT extends BaseJsonIT {
     @Test
     @DisplayName("Execute AST of new project with missing dependencies")
     public void testJsonAstWithMissingDependencies() {
-        JsonSettingsTestHelper scanJavaSettings = scanPhpSettings;
-        scanJavaSettings.setProjectName(newProjectName);
-        scanJavaSettings.setIsDownloadDependencies(false);
-        scanJavaSettings.setProgrammingLanguage(Language.JAVA);
-        // As we changed programming language we need also to reset scan app type
-        scanJavaSettings.setScanAppType(JAVA);
+        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(JAVA_APP01.getSettings());
+        settings.setIsDownloadDependencies(false);
+        settings.setScanAppType(JAVA);
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
-                "--input", sourcesJavaMisc.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
+                "--input", JAVA_APP01.getCode().toString(),
                 "--output", destination.toString(),
-                "--settings-json", savedScanSettingsPath(),
+                "--settings-json", settings.serializeToFile().toString(),
                 "--fail-if-unstable");
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
@@ -103,16 +102,16 @@ class JsonAstIT extends BaseJsonIT {
     @Test
     @DisplayName("Execute AST of new project with explicit report generation")
     public void testExplicitReports() {
-        scanPhpSettings.setProjectName(newProjectName);
+        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MEDIUM.getSettings());
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
-                "--input", sourcesPhpMedium.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
+                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
                 "--output", destination.toString(),
-                "--settings-json", savedScanSettingsPath(),
+                "--settings-json", settings.serializeToFile().toString(),
                 "--report-template", "Отчет OWASP Top 10 2017",
                 "--report-file", "owasp.ru.html",
                 "--report-locale", Reports.Locale.RU.name(),
@@ -131,7 +130,7 @@ class JsonAstIT extends BaseJsonIT {
     @Test
     @DisplayName("Execute AST of new project with JSON-defined report generation")
     public void testJsonDefinedReports() {
-        scanPhpSettings.setProjectName(newProjectName);
+        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MEDIUM.getSettings());
 
         Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
         FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.1.json"), reportsJson.toFile());
@@ -140,10 +139,10 @@ class JsonAstIT extends BaseJsonIT {
                 "json-ast",
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
-                "--truststore", PEM.toString(),
-                "--input", sourcesPhpMedium.toString(),
+                "--truststore", CA_PEM_FILE.toString(),
+                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
                 "--output", destination.toString(),
-                "--settings-json", savedScanSettingsPath(),
+                "--settings-json", settings.serializeToFile().toString(),
                 "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
         Assertions.assertTrue(Paths.get(destination.toString()).resolve("report.ru.xml").toFile().exists());
