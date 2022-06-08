@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSettings;
+import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.V40ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
@@ -21,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
 
 @DisplayName("Test PT AI server REST API data structures conversion")
 public class ConverterTest extends BaseTest {
@@ -51,11 +54,38 @@ public class ConverterTest extends BaseTest {
         return genericScanResult;
     }
 
+    @SneakyThrows
+    public ScanResult generateScanResultV40(@NonNull final String fileName) {
+        ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+        String scanResultStr = getResourceString("v40/json/scanResult/" + fileName + ".json");
+        com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult scanResult = mapper.readValue(scanResultStr, com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult.class);
+        Map<Reports.Locale, InputStream> issuesModel = new HashMap<>();
+        for (Reports.Locale locale : Reports.Locale.values()) {
+            Path issuesFile = extractPackedResourceFile("v40/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
+            issuesModel.put(locale, new FileInputStream(issuesFile.toFile()));
+        }
+
+        @NonNull final V40ScanSettings scanSettings = mapper.readValue(
+                getResourceString("v40/json/scanSettings/" + fileName + ".json"),
+                V40ScanSettings.class
+        );
+        Map<ServerVersionTasks.Component, String> versions = new HashMap<>();
+        versions.put(ServerVersionTasks.Component.AIE, "3.6.4.2843");
+        versions.put(ServerVersionTasks.Component.AIC, "3.6.4.1437");
+
+        String projectName = StringUtils.substringBefore(fileName, ".");
+
+        ScanResult genericScanResult = com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.IssuesConverter.convert(projectName, scanResult, issuesModel, scanSettings, CONNECTION().getUrl(), versions);
+        for (InputStream issuesModelStream : issuesModel.values())
+            issuesModelStream.close();
+        return genericScanResult;
+    }
+
     @Test
     @DisplayName("Convert OWASP Bricks scan results")
     @SneakyThrows
     public void generateOwaspBricksResultsV36() {
-        ScanResult scanResult = generateScanResultV36("php-bricks");
+        ScanResult scanResult = generateScanResultV36(PHP_OWASP_BRICKS.getName());
         Assertions.assertTrue(scanResult.getIssues().stream()
                 .map(issue -> scanResult.getI18n().get(issue.getTypeId()).get(Reports.Locale.EN).getTitle())
                 .anyMatch(title -> title.equals("Cross-Site Scripting")));
@@ -68,7 +98,7 @@ public class ConverterTest extends BaseTest {
     @DisplayName("Convert PHP Smoke multiflow scan results")
     @SneakyThrows
     public void generatePhpSmokeMultiflowResultsV36() {
-        ScanResult scanResult = generateScanResultV36("php-smoke-multiflow");
+        ScanResult scanResult = generateScanResultV36(PHP_SMOKE_MULTIFLOW.getName());
 
         Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
@@ -78,7 +108,7 @@ public class ConverterTest extends BaseTest {
     @DisplayName("Convert OWASP Benchmark scan results")
     @SneakyThrows
     public void generateOwaspBenchmarkResultsV36() {
-        ScanResult scanResult = generateScanResultV36("java-owasp-benchmark");
+        ScanResult scanResult = generateScanResultV36(JAVA_OWASP_BENCHMARK.getName());
 
         Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
@@ -88,7 +118,7 @@ public class ConverterTest extends BaseTest {
     @DisplayName("Convert PHP Smoke scan results")
     @SneakyThrows
     public void generatePhpSmokeResultsV36() {
-        ScanResult scanResult = generateScanResultV36("php-smoke");
+        ScanResult scanResult = generateScanResultV36(PHP_SMOKE_MISC.getName());
 
         Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
@@ -98,9 +128,11 @@ public class ConverterTest extends BaseTest {
     @DisplayName("Convert App01 scan results")
     @SneakyThrows
     public void generateApp01ResultsV36() {
-        ScanResult scanResult = generateScanResultV36("java-app01");
+        ScanResult scanResult = generateScanResultV36(JAVA_APP01.getName());
 
         Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
+
+        generateScanResultV40(JAVA_APP01.getName());
     }
 }

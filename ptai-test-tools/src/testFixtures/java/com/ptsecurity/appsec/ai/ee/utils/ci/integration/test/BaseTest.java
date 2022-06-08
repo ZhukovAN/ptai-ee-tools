@@ -12,6 +12,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
 import lombok.*;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
+import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -29,6 +30,7 @@ import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.LogManager;
@@ -303,5 +305,28 @@ public abstract class BaseTest {
     public static void init() {
         InputStream stream = getResourceStream("logging.properties");
         LogManager.getLogManager().readConfiguration(stream);
+    }
+
+    @SneakyThrows
+    public static void sevenZipData(@NonNull final Path path, final byte[] data) {
+        String name = path.getFileName().toString().trim();
+        if (name.endsWith(".7z"))
+            name = name.substring(0, name.length() - ".7z".length());
+        sevenZipData(path, name, data);
+    }
+
+    @SneakyThrows
+    public static void sevenZipData(@NonNull final Path path, @NonNull final String name, final byte[] data) {
+        if (!path.toFile().exists()) Files.createFile(path);
+        try (SevenZOutputFile zip = new SevenZOutputFile(path.toFile())) {
+            SevenZArchiveEntry entry = new SevenZArchiveEntry();
+            entry.setName(name);
+            entry.setDirectory(false);
+            entry.setLastModifiedDate(new Date());
+            entry.setSize(data.length);
+            zip.putArchiveEntry(entry);
+            zip.write(data);
+            zip.closeArchiveEntry();
+        };
     }
 }

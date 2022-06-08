@@ -51,14 +51,16 @@ public abstract class BaseAstIT extends BaseClientIT {
     }
 
     public static final Project JAVA_APP01 = new Project(
-            "junit-it-java-app01",
+            "junit-java-app01",
             "code/java-app01.zip",
             "json/scan/settings/settings.java-app01.aiproj");
 
-    public static final Project PHP_SMOKE_MISC = new Project("junit-it-php-smoke-misc", "code/php-smoke-misc.zip", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_MEDIUM = new Project("junit-it-php-smoke-medium", "code/php-smoke-medium.zip", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_HIGH = new Project("junit-it-php-smoke-high", "code/php-smoke-high.zip", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_MULTIFLOW = new Project("junit-it-php-smoke-multiflow", "code/php-smoke-multiflow.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project JAVA_OWASP_BENCHMARK = new Project("junit-java-owasp-benchmark", "code/java-owasp-benchmark.7z", "json/scan/settings/settings.java-app01.aiproj");
+    public static final Project PHP_OWASP_BRICKS = new Project("junit-php-owasp-bricks", "code/php-owasp-bricks.7z", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_MISC = new Project("junit-php-smoke-misc", "code/php-smoke-misc.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_MEDIUM = new Project("junit-php-smoke-medium", "code/php-smoke-medium.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_HIGH = new Project("junit-php-smoke-high", "code/php-smoke-high.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_MULTIFLOW = new Project("junit-php-smoke-multiflow", "code/php-smoke-multiflow.zip", "json/scan/settings/settings.php-smoke.aiproj");
 
     @SneakyThrows
     public static void setupProject(@NonNull final Project project, final String policy) {
