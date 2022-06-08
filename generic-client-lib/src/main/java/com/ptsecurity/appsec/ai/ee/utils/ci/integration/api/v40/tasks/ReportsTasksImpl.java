@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.*;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.*;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.ReportGenerateModel;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.ReportTemplateModel;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.ReportType;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.UserReportParametersBaseModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.ReportsConverter;
@@ -55,7 +58,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         for (Locale locale : Locale.values()) {
             // Get all templates for given locale
             List<String> templates = call(
-                    () -> client.getLegacyReportsApi().apiReportsTemplatesGet(locale.getValue(), false),
+                    () -> client.getReportsApi().apiReportsTemplatesGet(locale.getValue(), false),
                     "PT AI report templates list read failed")
                     .stream()
                     .map(ReportTemplateModel::getName)
@@ -104,7 +107,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         for (Locale locale : Locale.values()) {
             // Get all templates for given locale
             List<String> templates = call(
-                    () -> client.getLegacyReportsApi().apiReportsTemplatesGet(locale.getValue(), false),
+                    () -> client.getReportsApi().apiReportsTemplatesGet(locale.getValue(), false),
                     "PT AI report templates list read failed")
                     .stream()
                     .map(ReportTemplateModel::getName)
@@ -202,7 +205,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
 
         log.trace("Load all report templates to find one with {} name and {} locale", report.getTemplate(), report.getLocale().getValue());
         List<ReportTemplateModel> templates = call(
-                () -> client.getLegacyReportsApi().apiReportsTemplatesGet(report.getLocale().getValue(), false),
+                () -> client.getReportsApi().apiReportsTemplatesGet(report.getLocale().getValue(), false),
                 "PT AI report templates list read failed");
         ReportTemplateModel templateModel = templates.stream().filter(t -> report.getTemplate().equalsIgnoreCase(t.getName())).findAny().orElse(null);
         if (null == templateModel || null == templateModel.getId())
@@ -214,7 +217,8 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 .parameters(new UserReportParametersBaseModel()
                         .includeDFD(report.isIncludeDfd())
                         .includeGlossary(report.isIncludeGlossary())
-                        .useFilters(null != report.getFilters())
+                        // TODO: there's no report filters support in 4.0
+                        // .useFilters(null != report.getFilters())
                         .formatType(ReportsConverter.convert(report.getFormat()))
                         .reportTemplateId(templateModel.getId()))
                 .scanResultId(scanResultId)
@@ -224,7 +228,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         // if (null != report.getFilters()) model.setFilters(ReportsConverter.convert(report.getFilters()));
         log.trace("Call report generation API");
         File file = call(
-                () -> client.getLegacyReportsApi().apiReportsGeneratePost(model),
+                () -> client.getReportsApi().apiReportsGeneratePost(model),
                 "Report generation failed");
         log.trace("Report saved to temp file {}", file.toPath());
         call(
@@ -248,7 +252,8 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 .parameters(new UserReportParametersBaseModel()
                         .includeDFD(data.isIncludeDfd())
                         .includeGlossary(data.isIncludeGlossary())
-                        .useFilters(null != data.getFilters())
+                        // TODO: there's no report filters support in 4.0
+                        // .useFilters(null != data.getFilters())
                         .formatType(ReportsConverter.convert(data.getFormat()))
                         .reportTemplateId(dummyTemplateId))
                 .scanResultId(scanResultId)
@@ -256,13 +261,9 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 .localeId(data.getLocale().getValue());
         // TODO: there's no report filters support in 4.0
         // if (null != data.getFilters()) model.setFilters(ReportsConverter.convert(data.getFilters()));
-        File result = call(
-                () -> client.getLegacyReportsApi().apiReportsGeneratePost(model),
-                "Report generation failed");
-
         log.trace("Call report generation API");
         File file = call(
-                () -> client.getLegacyReportsApi().apiReportsGeneratePost(model),
+                () -> client.getReportsApi().apiReportsGeneratePost(model),
                 "Report generation failed");
         log.trace("Report saved to temp file {}", file.toPath());
         call(
@@ -329,7 +330,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
 
     protected UUID getDummyReportTemplateId(@NonNull Locale locale) throws GenericException {
         List<ReportTemplateModel> templates = call(
-                () -> client.getLegacyReportsApi().apiReportsTemplatesGet(locale.getValue(), false),
+                () -> client.getReportsApi().apiReportsTemplatesGet(locale.getValue(), false),
                 "PT AI report templates list read failed");
         return templates.stream()
                 .filter(t -> ReportType.PLAINREPORT.equals(t.getType()))
@@ -341,7 +342,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
     @Override
     public List<String> listReportTemplates(Locale locale)  throws GenericException {
         List<ReportTemplateModel> reportTemplateModels = call(
-                () -> client.getLegacyReportsApi().apiReportsTemplatesGet(locale.getValue(), false),
+                () -> client.getReportsApi().apiReportsTemplatesGet(locale.getValue(), false),
                 "PT AI report templates list read failed");
         return reportTemplateModels.stream().map(ReportTemplateModel::getName).collect(Collectors.toList());
     }

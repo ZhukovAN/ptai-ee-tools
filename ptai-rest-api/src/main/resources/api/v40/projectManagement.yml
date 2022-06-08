@@ -204,16 +204,7 @@ paths:
       requestBody:
         description: Test mail model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/TestMailModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/TestMailModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/TestMailModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/TestMailModel'
       responses:
@@ -270,16 +261,7 @@ paths:
       requestBody:
         description: Mail profile model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/MailProfileModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/MailProfileModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/MailProfileModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/MailProfileModel'
       responses:
@@ -396,16 +378,7 @@ paths:
       requestBody:
         description: Mail profile model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/MailProfilePatchModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/MailProfilePatchModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/MailProfilePatchModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/MailProfilePatchModel'
       responses:
@@ -688,16 +661,7 @@ paths:
       summary: Create project with base settings
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/BaseProjectSettingsModel'
       responses:
@@ -782,16 +746,7 @@ paths:
       requestBody:
         description: Extended box settings model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
       responses:
@@ -867,22 +822,7 @@ paths:
       requestBody:
         description: File patterns
         content:
-          application/json-patch+json:
-            schema:
-              type: array
-              items:
-                type: string
           application/json:
-            schema:
-              type: array
-              items:
-                type: string
-          text/json:
-            schema:
-              type: array
-              items:
-                type: string
-          application/*+json:
             schema:
               type: array
               items:
@@ -972,16 +912,7 @@ paths:
       requestBody:
         description: Exclusions Model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/FileFolderExclusionsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/FileFolderExclusionsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/FileFolderExclusionsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/FileFolderExclusionsModel'
       responses:
@@ -1052,16 +983,7 @@ paths:
       requestBody:
         description: Project settings model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ProjectSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ProjectSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ProjectSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ProjectSettingsModel'
       responses:
@@ -1123,16 +1045,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/BaseProjectSettingsModel'
       responses:
@@ -1201,16 +1114,7 @@ paths:
       requestBody:
         description: Policy rules template
         content:
-          application/json-patch+json:
-            schema:
-              type: string
           application/json:
-            schema:
-              type: string
-          text/json:
-            schema:
-              type: string
-          application/*+json:
             schema:
               type: string
       responses:
@@ -1261,16 +1165,7 @@ paths:
       requestBody:
         description: Security policies model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/SecurityPoliciesModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/SecurityPoliciesModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/SecurityPoliciesModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/SecurityPoliciesModel'
       responses:
@@ -1328,16 +1223,7 @@ paths:
       requestBody:
         description: SAST rules model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/SastRulesBaseModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/SastRulesBaseModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/SastRulesBaseModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/SastRulesBaseModel'
       responses:
@@ -1388,16 +1274,7 @@ paths:
       requestBody:
         description: SAST rules model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/YaraRulesBaseModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/YaraRulesBaseModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/YaraRulesBaseModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/YaraRulesBaseModel'
       responses:
@@ -1448,16 +1325,7 @@ paths:
       requestBody:
         description: Analysis rules model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/AnalysisRulesBaseModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/AnalysisRulesBaseModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/AnalysisRulesBaseModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/AnalysisRulesBaseModel'
       responses:
@@ -1555,16 +1423,7 @@ paths:
       requestBody:
         description: Details of changing approval status
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
       responses:
@@ -1595,16 +1454,7 @@ paths:
       requestBody:
         description: Details of changing favorite status
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
       responses:
@@ -1628,16 +1478,7 @@ paths:
       requestBody:
         description: Details of changing approval statuses
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
       responses:
@@ -1688,16 +1529,7 @@ paths:
       requestBody:
         description: Project id
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
       responses:
@@ -1872,16 +1704,7 @@ paths:
       summary: Create report template
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ReportTemplateUpsertModel'
       responses:
@@ -1953,16 +1776,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ReportTemplateUpsertModel'
       responses:
@@ -2112,22 +1926,16 @@ paths:
       requestBody:
         description: Report generate model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ReportGenerateModel'
       responses:
         '200':
           description: OK
           content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
             application/octet-stream: {}
         '400':
           description: Bad Request
@@ -2155,16 +1963,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ReportTemplateModel'
       responses:
@@ -2225,16 +2024,7 @@ paths:
       requestBody:
         description: Report parameters model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/UserReportParametersModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/UserReportParametersModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UserReportParametersModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/UserReportParametersModel'
       responses:
@@ -3520,8 +3310,6 @@ components:
     UserReportParametersBaseModel:
       type: object
       properties:
-        useFilters:
-          type: boolean
         includeDFD:
           type: boolean
         includeGlossary:
@@ -3614,6 +3402,9 @@ components:
         - Solution
         - WebSite
       type: integer
+    File:
+      type: object
+      additionalProperties: false
   securitySchemes:
     Bearer:
       type: apiKey

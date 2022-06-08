@@ -72,6 +72,10 @@ public class ApiClient extends AbstractApiClient {
 
     @Getter
     @ToString.Exclude
+    protected final com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.api.ReportsApi reportsApi = new com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.api.ReportsApi(new com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.ApiClient());
+
+    @Getter
+    @ToString.Exclude
     protected final ConfigsApi configsApi = new ConfigsApi(new com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.ApiClient());
 
     @Getter
@@ -108,12 +112,12 @@ public class ApiClient extends AbstractApiClient {
 
     public ApiClient(@NonNull final ConnectionSettings connectionSettings) {
         super(connectionSettings, AdvancedSettings.getDefault());
-        apis.addAll(Arrays.asList(authApi, projectsApi, legacyProjectsApi, configsApi, legacyConfigsApi, legacyReportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
+        apis.addAll(Arrays.asList(authApi, projectsApi, legacyProjectsApi, configsApi, legacyConfigsApi, reportsApi, legacyReportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
     }
 
     public ApiClient(@NonNull final ConnectionSettings connectionSettings, @NonNull final AdvancedSettings advancedSettings) {
         super(connectionSettings, advancedSettings);
-        apis.addAll(Arrays.asList(authApi, projectsApi, legacyProjectsApi, configsApi, legacyConfigsApi, legacyReportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
+        apis.addAll(Arrays.asList(authApi, projectsApi, legacyProjectsApi, configsApi, legacyConfigsApi, reportsApi, legacyReportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
     }
 
     protected ApiResponse<AuthResultModel> initialAuthentication() throws GenericException {
@@ -165,7 +169,7 @@ public class ApiClient extends AbstractApiClient {
                                     .header("Authorization", "Bearer " + this.apiJwt.getRefreshToken())
                                     .build();
                             call = authApi.getApiClient().getHttpClient().newCall(request);
-                            final Type stringType = new TypeToken<String>() {}.getType();
+                            final Type stringType = new TypeToken<AuthResultModel>() {}.getType();
                             return authApi.getApiClient().execute(call, stringType);
                         },
                         "Refresh JWT call failed");

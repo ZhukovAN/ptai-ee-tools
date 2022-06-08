@@ -209,16 +209,7 @@ paths:
       requestBody:
         description: ''
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
       responses:
@@ -267,16 +258,7 @@ paths:
       requestBody:
         description: ''
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
       responses:
@@ -387,16 +369,7 @@ paths:
       requestBody:
         description: ''
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/SourceControlSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/SourceControlSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/SourceControlSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/SourceControlSettingsModel'
       responses:

@@ -40,16 +40,7 @@ paths:
       requestBody:
         description: Access token
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/AccessTokenCreateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/AccessTokenCreateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/AccessTokenCreateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/AccessTokenCreateModel'
       responses:
@@ -165,16 +156,7 @@ paths:
       requestBody:
         description: Model with username and password
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/UserLoginModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/UserLoginModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UserLoginModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/UserLoginModel'
       responses:
@@ -298,16 +280,7 @@ paths:
       requestBody:
         description: Auth model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ExternalLdapSignInModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ExternalLdapSignInModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ExternalLdapSignInModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ExternalLdapSignInModel'
       responses:
@@ -401,16 +374,7 @@ paths:
       requestBody:
         description: LDAP settings
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/LdapSettings'
           application/json:
-            schema:
-              $ref: '#/components/schemas/LdapSettings'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/LdapSettings'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/LdapSettings'
       responses:
@@ -434,16 +398,7 @@ paths:
       requestBody:
         description: OpenId settings
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/OpenIdSettings'
           application/json:
-            schema:
-              $ref: '#/components/schemas/OpenIdSettings'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/OpenIdSettings'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/OpenIdSettings'
       responses:
@@ -531,22 +486,7 @@ paths:
       summary: Apply project permissions changes
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ProjectPermissionsModel'
           application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ProjectPermissionsModel'
-          text/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ProjectPermissionsModel'
-          application/*+json:
             schema:
               type: array
               items:
@@ -831,16 +771,7 @@ paths:
       summary: Update user password
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              type: string
           application/json:
-            schema:
-              type: string
-          text/json:
-            schema:
-              type: string
-          application/*+json:
             schema:
               type: string
       responses:

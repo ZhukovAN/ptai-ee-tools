@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.*;
+import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.ReportFormatType;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 

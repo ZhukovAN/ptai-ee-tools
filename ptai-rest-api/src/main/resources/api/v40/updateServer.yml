@@ -155,16 +155,7 @@ paths:
       requestBody:
         description: Update parameters
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ServerUpdateRunParameters'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ServerUpdateRunParameters'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ServerUpdateRunParameters'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ServerUpdateRunParameters'
       responses:

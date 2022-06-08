@@ -1,6 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.test.scan.result;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.victools.jsonschema.generator.*;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
@@ -61,5 +63,16 @@ public class ScanResultTest extends BaseTest {
         ScanResult scanResult = mapper.readValue(inputStream, ScanResult.class);
         String json = mapper.writeValueAsString(scanResult);
         Assertions.assertFalse(json.contains("\"clazz\":"));
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Generate ScanResult JSON schema")
+    public void generateSchema() {
+        SchemaGeneratorConfigBuilder configBuilder = new SchemaGeneratorConfigBuilder(SchemaVersion.DRAFT_2019_09, OptionPreset.PLAIN_JSON);
+        SchemaGeneratorConfig config = configBuilder.build();
+        SchemaGenerator generator = new SchemaGenerator(config);
+        JsonNode jsonSchema = generator.generateSchema(ScanResult.class);
+        String schema = jsonSchema.toPrettyString();
     }
 }

@@ -34,16 +34,7 @@ paths:
       requestBody:
         description: All YARA rules
         content:
-          application/json-patch+json:
-            schema:
-              type: string
           application/json:
-            schema:
-              type: string
-          text/json:
-            schema:
-              type: string
-          application/*+json:
             schema:
               type: string
       responses:
@@ -184,16 +175,7 @@ paths:
       requestBody:
         description: All SAST rules
         content:
-          application/json-patch+json:
-            schema:
-              type: string
           application/json:
-            schema:
-              type: string
-          text/json:
-            schema:
-              type: string
-          application/*+json:
             schema:
               type: string
       responses:
@@ -418,16 +400,7 @@ paths:
       requestBody:
         description: Activity data
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ActivityData'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ActivityData'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ActivityData'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ActivityData'
       responses:
@@ -442,16 +415,7 @@ paths:
       requestBody:
         description: Activity data
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ActivityData'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ActivityData'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ActivityData'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ActivityData'
       responses:
@@ -528,16 +492,7 @@ paths:
       requestBody:
         description: Test mail model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/TestMailModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/TestMailModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/TestMailModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/TestMailModel'
       responses:
@@ -594,16 +549,7 @@ paths:
       requestBody:
         description: Mail profile model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/MailProfileModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/MailProfileModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/MailProfileModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/MailProfileModel'
       responses:
@@ -720,16 +666,7 @@ paths:
       requestBody:
         description: Mail profile model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/MailProfilePatchModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/MailProfilePatchModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/MailProfilePatchModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/MailProfilePatchModel'
       responses:
@@ -875,16 +812,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/Project'
           application/json:
-            schema:
-              $ref: '#/components/schemas/Project'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/Project'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/Project'
       responses:
@@ -1038,17 +966,7 @@ paths:
       summary: Create project
       requestBody:
         content:
-          # V.4.0 Comment that out for debug purposes
-          # application/json-patch+json:
-          #  schema:
-          #    $ref: '#/components/schemas/CreateProjectModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/CreateProjectModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/CreateProjectModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/CreateProjectModel'
       responses:
@@ -1284,16 +1202,7 @@ paths:
       requestBody:
         description: Scan settings model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ScanSettings'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ScanSettings'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ScanSettings'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ScanSettings'
       responses:
@@ -1563,16 +1472,7 @@ paths:
       requestBody:
         description: Details of changing exploit
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/UpdateIssueExploitModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateIssueExploitModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UpdateIssueExploitModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/UpdateIssueExploitModel'
       responses:
@@ -1603,22 +1503,7 @@ paths:
       requestBody:
         description: Scan errors
         content:
-          application/json-patch+json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ScanError'
           application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ScanError'
-          text/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/ScanError'
-          application/*+json:
             schema:
               type: array
               items:
@@ -1709,16 +1594,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
           application/json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
       responses:
@@ -1802,16 +1678,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
           application/json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/IssueTrackerIntegrationSettings'
       responses:
@@ -1863,16 +1730,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
           application/json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/TicketLink'
       responses:
@@ -1903,16 +1761,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
           application/json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/TicketLink'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/TicketLink'
       responses:
@@ -2071,16 +1920,7 @@ paths:
       summary: Create project with base settings
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/BaseProjectSettingsModel'
       responses:
@@ -2165,16 +2005,7 @@ paths:
       requestBody:
         description: Extended box settings model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/PatchBlackBoxSettingsModel'
       responses:
@@ -2250,22 +2081,7 @@ paths:
       requestBody:
         description: File patterns
         content:
-          application/json-patch+json:
-            schema:
-              type: array
-              items:
-                type: string
           application/json:
-            schema:
-              type: array
-              items:
-                type: string
-          text/json:
-            schema:
-              type: array
-              items:
-                type: string
-          application/*+json:
             schema:
               type: array
               items:
@@ -2355,16 +2171,7 @@ paths:
       requestBody:
         description: Exclusions Model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/FileFolderExclusionsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/FileFolderExclusionsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/FileFolderExclusionsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/FileFolderExclusionsModel'
       responses:
@@ -2435,16 +2242,7 @@ paths:
       requestBody:
         description: Project settings model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ProjectSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ProjectSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ProjectSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ProjectSettingsModel'
       responses:
@@ -2506,16 +2304,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/BaseProjectSettingsModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/BaseProjectSettingsModel'
       responses:
@@ -2584,16 +2373,7 @@ paths:
       requestBody:
         description: Policy rules template
         content:
-          application/json-patch+json:
-            schema:
-              type: string
           application/json:
-            schema:
-              type: string
-          text/json:
-            schema:
-              type: string
-          application/*+json:
             schema:
               type: string
       responses:
@@ -2644,16 +2424,7 @@ paths:
       requestBody:
         description: Security policies model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/SecurityPoliciesModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/SecurityPoliciesModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/SecurityPoliciesModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/SecurityPoliciesModel'
       responses:
@@ -2711,16 +2482,7 @@ paths:
       requestBody:
         description: SAST rules model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/SastRulesBaseModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/SastRulesBaseModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/SastRulesBaseModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/SastRulesBaseModel'
       responses:
@@ -2771,16 +2533,7 @@ paths:
       requestBody:
         description: SAST rules model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/YaraRulesBaseModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/YaraRulesBaseModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/YaraRulesBaseModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/YaraRulesBaseModel'
       responses:
@@ -2831,16 +2584,7 @@ paths:
       requestBody:
         description: Analysis rules model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/AnalysisRulesBaseModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/AnalysisRulesBaseModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/AnalysisRulesBaseModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/AnalysisRulesBaseModel'
       responses:
@@ -2938,16 +2682,7 @@ paths:
       requestBody:
         description: Details of changing approval status
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
       responses:
@@ -2978,16 +2713,7 @@ paths:
       requestBody:
         description: Details of changing favorite status
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
       responses:
@@ -3011,16 +2737,7 @@ paths:
       requestBody:
         description: Details of changing approval statuses
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
       responses:
@@ -3071,16 +2788,7 @@ paths:
       requestBody:
         description: Project id
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ExtendedIssueTrackerIntegrationSettings'
       responses:
@@ -3221,16 +2929,7 @@ paths:
       requestBody:
         description: Report generate model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/WafPatchGenerateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/WafPatchGenerateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/WafPatchGenerateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/WafPatchGenerateModel'
       responses:
@@ -3294,16 +2993,7 @@ paths:
       summary: Create report template
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ReportTemplateUpsertModel'
       responses:
@@ -3375,16 +3065,7 @@ paths:
             format: uuid
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateUpsertModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ReportTemplateUpsertModel'
       responses:
@@ -3534,16 +3215,7 @@ paths:
       requestBody:
         description: Report generate model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportGenerateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ReportGenerateModel'
       responses:
@@ -3591,16 +3263,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/ReportTemplateModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/ReportTemplateModel'
       responses:
@@ -3661,16 +3324,7 @@ paths:
       requestBody:
         description: Report parameters model
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/UserReportParametersModel'
           application/json:
-            schema:
-              $ref: '#/components/schemas/UserReportParametersModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/UserReportParametersModel'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/UserReportParametersModel'
       responses:
@@ -3697,16 +3351,7 @@ paths:
       summary: Get vulnerabilities time distribution statistic
       requestBody:
         content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/VulnTimeDistribFilter'
           application/json:
-            schema:
-              $ref: '#/components/schemas/VulnTimeDistribFilter'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/VulnTimeDistribFilter'
-          application/*+json:
             schema:
               $ref: '#/components/schemas/VulnTimeDistribFilter'
       responses:

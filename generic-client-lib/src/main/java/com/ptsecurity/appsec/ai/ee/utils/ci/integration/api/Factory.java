@@ -33,6 +33,11 @@ public class Factory {
         return onClass(className).create(client).get();
     }
 
+    public ServerVersionTasks serverVersionTasks(@NonNull final AbstractApiClient client) throws GenericException {
+        String className = client.getClass().getPackage().getName() + "." + "tasks.ServerVersionTasksImpl";
+        return onClass(className).create(client).get();
+    }
+
     public ReportsTasks reportsTasks(@NonNull final AbstractApiClient client) throws GenericException {
         String className = client.getClass().getPackage().getName() + "." + "tasks.ReportsTasksImpl";
         return onClass(className).create(client).get();
