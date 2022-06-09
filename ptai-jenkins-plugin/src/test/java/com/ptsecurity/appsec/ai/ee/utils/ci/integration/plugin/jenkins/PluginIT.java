@@ -68,6 +68,8 @@ public class PluginIT extends BaseAstIT {
     @Tag("integration")
     @DisplayName("Execute simple SAST job for PHP smoke medium")
     public void scanPhpSmokeMedium(JenkinsRule jenkins) {
+        PHP_SMOKE_MEDIUM.setup();
+
         initCredentials(jenkins);
         // Create project and set source code location
         java.net.URL sourcesPack = PHP_SMOKE_MEDIUM.getCode().toUri().toURL();;
@@ -78,7 +80,7 @@ public class PluginIT extends BaseAstIT {
         project.setScm(scm);
 
         // Create PT AI plugin settings
-        ScanSettingsUi scanSettings = new ScanSettingsUi("php-smoke-ui");
+        ScanSettingsUi scanSettings = new ScanSettingsUi(PHP_SMOKE_MEDIUM.getName());
 
         ServerSettings serverSettings = new ServerSettings(CONNECTION().getUrl(), credentials.getId(), true);
         ConfigCustom configCustom = new ConfigCustom(serverSettings);

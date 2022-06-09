@@ -3,7 +3,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36;
 import com.google.gson.reflect.TypeToken;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.ApiResponse;
@@ -15,7 +14,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
@@ -23,34 +21,25 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
-import okhttp3.Request;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.JAVA;
-import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.PHP;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
 @Slf4j
 @DisplayName("Test PT AI 3.6 REST API data structures")
-@Tag("integration")
+@Tag("development")
 public class RestApiDataStructuresIT extends BaseClientIT {
 
     @SneakyThrows
@@ -73,6 +62,7 @@ public class RestApiDataStructuresIT extends BaseClientIT {
                 .console(System.out)
                 .sources(project.getCode())
                 .destination(destination)
+                // As we directly pass scan settings there's no need to call Project's setup method
                 .jsonSettings(helper.serialize())
                 .build();
         RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);

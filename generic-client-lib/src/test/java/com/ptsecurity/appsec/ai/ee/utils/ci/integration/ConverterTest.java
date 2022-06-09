@@ -8,9 +8,11 @@ import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.V40ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -25,6 +28,7 @@ import java.util.Map;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
 
+@Slf4j
 @DisplayName("Test PT AI server REST API data structures conversion")
 public class ConverterTest extends BaseTest {
     @SneakyThrows
@@ -70,8 +74,8 @@ public class ConverterTest extends BaseTest {
                 V40ScanSettings.class
         );
         Map<ServerVersionTasks.Component, String> versions = new HashMap<>();
-        versions.put(ServerVersionTasks.Component.AIE, "3.6.4.2843");
-        versions.put(ServerVersionTasks.Component.AIC, "3.6.4.1437");
+        versions.put(ServerVersionTasks.Component.AIE, "4.0.0.9172");
+        versions.put(ServerVersionTasks.Component.AIC, "4.0.0.9172");
 
         String projectName = StringUtils.substringBefore(fileName, ".");
 
@@ -82,7 +86,7 @@ public class ConverterTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Convert OWASP Bricks scan results")
+    @DisplayName("Convert OWASP Bricks PT AI 3.6 scan results")
     @SneakyThrows
     public void generateOwaspBricksResultsV36() {
         ScanResult scanResult = generateScanResultV36(PHP_OWASP_BRICKS.getName());
@@ -95,44 +99,25 @@ public class ConverterTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Convert PHP Smoke multiflow scan results")
+    @DisplayName("Convert PT AI 3.6 and 4.0 scan results")
     @SneakyThrows
-    public void generatePhpSmokeMultiflowResultsV36() {
-        ScanResult scanResult = generateScanResultV36(PHP_SMOKE_MULTIFLOW.getName());
+    public void generateScanResults() {
+        try (TempFile destination = TempFile.createFolder()) {
+            Path scanResults36 = destination.toPath().resolve("result").resolve("v36");
+            scanResults36.toFile().mkdirs();
+            Path scanResults40 = destination.toPath().resolve("result").resolve("v40");
+            scanResults40.toFile().mkdirs();
 
-        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
-        BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
-    }
+            for (Project project : ALL) {
+                ScanResult scanResult = generateScanResultV36(project.getName());
+                String json = BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(scanResult);
+                sevenZipData(scanResults36.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
 
-    @Test
-    @DisplayName("Convert OWASP Benchmark scan results")
-    @SneakyThrows
-    public void generateOwaspBenchmarkResultsV36() {
-        ScanResult scanResult = generateScanResultV36(JAVA_OWASP_BENCHMARK.getName());
-
-        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
-        BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
-    }
-
-    @Test
-    @DisplayName("Convert PHP Smoke scan results")
-    @SneakyThrows
-    public void generatePhpSmokeResultsV36() {
-        ScanResult scanResult = generateScanResultV36(PHP_SMOKE_MISC.getName());
-
-        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
-        BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
-    }
-
-    @Test
-    @DisplayName("Convert App01 scan results")
-    @SneakyThrows
-    public void generateApp01ResultsV36() {
-        ScanResult scanResult = generateScanResultV36(JAVA_APP01.getName());
-
-        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
-        BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
-
-        generateScanResultV40(JAVA_APP01.getName());
+                scanResult = generateScanResultV40(project.getName());
+                json = BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(scanResult);
+                sevenZipData(scanResults40.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
+            }
+            log.trace("Scan results are saved to {}", scanResults36);
+        }
     }
 }

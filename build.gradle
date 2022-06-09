@@ -47,7 +47,7 @@ subprojects {
 
     test {
         useJUnitPlatform() {
-            excludeTags 'integration', 'advanced'
+            excludeTags 'integration', 'development', 'advanced'
         }
     }
 

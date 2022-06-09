@@ -10,9 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
+import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterAll;
@@ -20,10 +22,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
@@ -37,7 +36,19 @@ import java.util.logging.LogManager;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+@Slf4j
 public abstract class BaseTest {
+
+    public static final String JAVA_APP01_PROJECT_NAME = "junit-java-app01";
+    public static final String JAVA_OWASP_BENCHMARK_PROJECT_NAME = "junit-java-owasp-benchmark";
+    public static final String PHP_OWASP_BRICKS_PROJECT_NAME = "junit-php-owasp-bricks";
+    public static final String PHP_SMOKE_MISC_PROJECT_NAME = "junit-php-smoke-misc";
+    public static final String PHP_SMOKE_MEDIUM_PROJECT_NAME = "junit-php-smoke-medium";
+    public static final String PHP_SMOKE_HIGH_PROJECT_NAME = "junit-php-smoke-high";
+    public static final String PHP_SMOKE_MULTIFLOW_PROJECT_NAME = "junit-php-smoke-multiflow";
+
+    public static final String[] ALL_PROJECT_NAMES = new String[] { JAVA_APP01_PROJECT_NAME, JAVA_OWASP_BENCHMARK_PROJECT_NAME, PHP_OWASP_BRICKS_PROJECT_NAME, PHP_SMOKE_MISC_PROJECT_NAME, PHP_SMOKE_MEDIUM_PROJECT_NAME, PHP_SMOKE_HIGH_PROJECT_NAME, PHP_SMOKE_MULTIFLOW_PROJECT_NAME };
+
     @Getter
     @Setter
     @NoArgsConstructor
@@ -328,5 +339,29 @@ public abstract class BaseTest {
             zip.write(data);
             zip.closeArchiveEntry();
         };
+    }
+
+    @SneakyThrows
+    public static String extractSevenZippedSingleStringFromResource(@NonNull final String name) {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        byte[] data = IOUtils.resourceToByteArray(name, BaseTest.class.getClassLoader());
+        SevenZFile packedFile = new SevenZFile(new SeekableInMemoryByteChannel(data));
+        byte[] buffer = new byte[1024];
+
+        SevenZArchiveEntry entry = packedFile.getNextEntry();
+        while (null != entry) {
+            if (entry.isDirectory()) {
+                log.trace("Skip {} entry as is is a directory", entry.getName());
+                entry = packedFile.getNextEntry();
+                continue;
+            }
+            do {
+                int dataRead = packedFile.read(buffer);
+                if (-1 == dataRead || 0 == dataRead) break;
+                result.write(buffer, 0, dataRead);
+            } while (true);
+            return result.toString();
+        }
+        return null;
     }
 }

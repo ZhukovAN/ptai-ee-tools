@@ -35,6 +35,7 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("AST of existing project")
     void testExistingProject() {
+        PHP_SMOKE_MEDIUM.setup();
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
                 "--project", PHP_SMOKE_MEDIUM.getName(),
@@ -49,6 +50,7 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Fail AST of existing project with no source code included")
     void testNoSourcesIncluded() {
+        PHP_SMOKE_MEDIUM.setup();
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
                 "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -65,7 +67,8 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Fail AST of policy violating project")
     void testPolicyFailForExistingProject() {
-        setupProject(BaseAstIT.PHP_SMOKE_HIGH, BaseAstIT.getDefaultPolicy());
+        BaseAstIT.PHP_SMOKE_HIGH.setup(BaseAstIT.getDefaultPolicy());
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
                 "--project", BaseAstIT.PHP_SMOKE_HIGH.getName(),
@@ -95,6 +98,8 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Fail AST of existing project without custom truststore")
     void testWithoutTruststore() {
+        PHP_SMOKE_MEDIUM.setup();
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
                 "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -109,6 +114,8 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Insecure AST of existing project without custom truststore")
     void testInsecureWithoutTruststore() {
+        PHP_SMOKE_MEDIUM.setup();
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
                 "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -124,6 +131,8 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Twice AST of existing project to test report overwrite")
     void testReportRewrite() {
+        PHP_SMOKE_MEDIUM.setup();
+
         Path report = Paths.get(destination.toString()).resolve("owasp.en.html");
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
@@ -164,7 +173,8 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("AST existing project with multiple JSON-defined reports")
     void testJsonDefinedReports() {
-        setupProject(BaseAstIT.PHP_SMOKE_MEDIUM);
+        PHP_SMOKE_MEDIUM.setup();
+
         Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
         FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.1.json"), reportsJson.toFile());
 
@@ -185,6 +195,8 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Fail AST existing project with bad JSON-defined reports")
     public void testInvalidJsonDefinedReports() {
+        PHP_SMOKE_MEDIUM.setup();
+
         Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
         FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.2.json"), reportsJson.toFile());
 
@@ -204,6 +216,8 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Fail AST existing project with JSON-defined reports with missing templates")
     public void testMissingJsonDefinedReports() {
+        PHP_SMOKE_MEDIUM.setup();
+
         Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
         FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.3.json"), reportsJson.toFile());
 
@@ -222,6 +236,8 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Asynchronous AST of existing project")
     void testExistingProjectAsync() {
+        PHP_SMOKE_MEDIUM.setup();
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
                 "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
@@ -237,6 +253,8 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Asynchronous AST of missing project with custom truststore")
     void testMissingProjectAsync() {
+        PHP_SMOKE_MEDIUM.setup();
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
                 "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName() + UUID.randomUUID(),
@@ -252,6 +270,8 @@ class UiAstIT extends BaseCliAstIT {
     @Test
     @DisplayName("Asynchronous AST of existing project without custom truststore")
     void testWithoutTruststoreAsync() {
+        PHP_SMOKE_MEDIUM.setup();
+
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
                 "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),

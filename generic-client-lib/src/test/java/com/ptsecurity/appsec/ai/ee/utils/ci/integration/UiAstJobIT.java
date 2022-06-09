@@ -53,6 +53,8 @@ public class UiAstJobIT extends BaseAstIT {
     public void scanPhpSmoke() {
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
 
+        PHP_SMOKE_MEDIUM.setup();
+
         GenericAstJob astJob = UiAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
@@ -78,6 +80,8 @@ public class UiAstJobIT extends BaseAstIT {
     public void failMissingReportTemplate() {
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
 
+        PHP_SMOKE_MEDIUM.setup();
+
         GenericAstJob astJob = UiAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
@@ -102,6 +106,8 @@ public class UiAstJobIT extends BaseAstIT {
     public void scanPhpSmokeMisc() {
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
 
+        PHP_SMOKE_MISC.setup();
+
         GenericAstJob astJob = UiAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
@@ -123,6 +129,8 @@ public class UiAstJobIT extends BaseAstIT {
     @DisplayName("Test async scan duration")
     public void scanPhpSmokeAsync() {
         Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
+
+        PHP_SMOKE_MEDIUM.setup();
 
         GenericAstJob astJob = UiAstJobImpl.builder()
                 .async(false)

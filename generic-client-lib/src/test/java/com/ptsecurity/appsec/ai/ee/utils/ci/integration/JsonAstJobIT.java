@@ -72,7 +72,7 @@ public class JsonAstJobIT extends BaseAstIT {
                 .scanAppType(AbstractAiProjScanSettings.ScanAppType.PHP)
                 .isUseEntryAnalysisPoint(true)
                 .isUsePublicAnalysisMethod(true)
-                .projectName("junit-" + UUID.randomUUID())
+                .projectName(PHP_SMOKE_MEDIUM.getName())
                 .programmingLanguage(PHP)
                 .serialize();
 
