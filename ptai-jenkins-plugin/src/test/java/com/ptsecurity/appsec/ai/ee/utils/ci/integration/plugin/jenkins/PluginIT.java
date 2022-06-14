@@ -65,7 +65,7 @@ public class PluginIT extends BaseAstIT {
 
     @SneakyThrows
     @Test
-    @Tag("integration")
+    @Tag("jenkins")
     @DisplayName("Execute simple SAST job for PHP smoke medium")
     public void scanPhpSmokeMedium(JenkinsRule jenkins) {
         PHP_SMOKE_MEDIUM.setup();

@@ -4,12 +4,11 @@ import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
+import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import picocli.CommandLine;
 
 import java.nio.file.Path;
@@ -21,11 +20,13 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.
 
 @DisplayName("Check JSON-defined AST scans")
 @Tag("integration")
+@Slf4j
 class JsonAstIT extends BaseJsonIT {
     @SneakyThrows
     @Test
     @DisplayName("Execute AST of new project with no policy defined")
-    public void testMissingPolicy() {
+    public void testMissingPolicy(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MEDIUM.getSettings());
 
         int res = new CommandLine(new Plugin()).execute(
@@ -42,7 +43,8 @@ class JsonAstIT extends BaseJsonIT {
     @SneakyThrows
     @Test
     @DisplayName("Execute AST of new project ignoring policy assessment result")
-    public void testIgnorePolicy() {
+    public void testIgnorePolicy(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MEDIUM.getSettings());
 
         int res = new CommandLine(new Plugin()).execute(
@@ -53,14 +55,15 @@ class JsonAstIT extends BaseJsonIT {
                 "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
                 "--output", destination.toString(),
                 "--settings-json", settings.serializeToFile().toString(),
-                "--policy-json", savedScanPolicyPath());
+                "--policy-json", GENERIC_POLICY.getPath().toString());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
     @SneakyThrows
     @Test
     @DisplayName("Execute AST of new project with policy assessment")
-    public void testJsonAst() {
+    public void testJsonAst(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_HIGH.getSettings());
         settings.setProjectName(PHP_SMOKE_HIGH.getName());
         settings.setProgrammingLanguage(Language.PHP);
@@ -73,7 +76,7 @@ class JsonAstIT extends BaseJsonIT {
                 "--input", PHP_SMOKE_HIGH.getCode().toString(),
                 "--output", destination.toString(),
                 "--settings-json", settings.serializeToFile().toString(),
-                "--policy-json", savedScanPolicyPath(),
+                "--policy-json", GENERIC_POLICY.getPath().toString(),
                 "--fail-if-failed");
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
@@ -81,7 +84,8 @@ class JsonAstIT extends BaseJsonIT {
     @SneakyThrows
     @Test
     @DisplayName("Execute AST of new project with missing dependencies")
-    public void testJsonAstWithMissingDependencies() {
+    public void testJsonAstWithMissingDependencies(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         JsonSettingsTestHelper settings = new JsonSettingsTestHelper(JAVA_APP01.getSettings());
         settings.setIsDownloadDependencies(false);
         settings.setScanAppType(JAVA);
@@ -101,7 +105,8 @@ class JsonAstIT extends BaseJsonIT {
     @SneakyThrows
     @Test
     @DisplayName("Execute AST of new project with explicit report generation")
-    public void testExplicitReports() {
+    public void testExplicitReports(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MEDIUM.getSettings());
 
         int res = new CommandLine(new Plugin()).execute(
@@ -129,10 +134,11 @@ class JsonAstIT extends BaseJsonIT {
     @SneakyThrows
     @Test
     @DisplayName("Execute AST of new project with JSON-defined report generation")
-    public void testJsonDefinedReports() {
+    public void testJsonDefinedReports(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MEDIUM.getSettings());
 
-        Path reportsJson = TEMP_FOLDER.resolve(UUID.randomUUID().toString());
+        Path reportsJson = TEMP_FOLDER().resolve(UUID.randomUUID().toString());
         FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.1.json"), reportsJson.toFile());
 
         int res = new CommandLine(new Plugin()).execute(

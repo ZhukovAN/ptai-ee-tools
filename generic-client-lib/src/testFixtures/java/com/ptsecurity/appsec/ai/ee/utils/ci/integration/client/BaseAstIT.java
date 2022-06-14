@@ -1,8 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.client;
 
+import com.contrastsecurity.sarif.SarifSchema210;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
+import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
@@ -12,6 +15,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -24,6 +28,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
@@ -67,8 +72,6 @@ public abstract class BaseAstIT extends BaseClientIT {
         public Project setup() {
             return setup(null);
         }
-
-
     }
 
     public static final Project JAVA_APP01 = new Project(
@@ -85,11 +88,34 @@ public abstract class BaseAstIT extends BaseClientIT {
 
     public static final Project[] ALL = new Project[] { JAVA_APP01, JAVA_OWASP_BENCHMARK, PHP_OWASP_BRICKS, PHP_SMOKE_MISC, PHP_SMOKE_MEDIUM, PHP_SMOKE_HIGH, PHP_SMOKE_MULTIFLOW };
 
-    @SneakyThrows
-    public static String getDefaultPolicy() {
-        InputStream inputStream = getResourceStream("json/scan/settings/policy.generic.json");
-        return IOUtils.toString(inputStream, StandardCharsets.UTF_8);
+    @RequiredArgsConstructor
+    public static class PolicyHelper {
+        @Getter
+        protected final String json;
+        @Getter
+        protected final Policy[] policy;
+
+        @SneakyThrows
+        public static PolicyHelper fromResource(@NonNull final String name) {
+            String json = getResourceString(name);
+            Policy[] policy = createFaultTolerantObjectMapper().readValue(json, Policy[].class);
+            return new PolicyHelper(json, policy);
+        }
+
+        protected Path path = null;
+
+        @SneakyThrows
+        public Path getPath() {
+            if (null == path) {
+                path = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-policy");
+                ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+                mapper.writeValue(path.toFile(), policy);
+            }
+            return path;
+        }
     }
+
+    public static final PolicyHelper GENERIC_POLICY = PolicyHelper.fromResource("json/scan/settings/policy.generic.json");
 
     protected Reports.Report report;
     protected Reports.Data data;

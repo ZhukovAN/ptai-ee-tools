@@ -15,6 +15,6 @@ public abstract class BaseCliAstIT extends BaseCliIT {
     @Override
     public void pre() {
         super.pre();
-        destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
+        destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
     }
 }

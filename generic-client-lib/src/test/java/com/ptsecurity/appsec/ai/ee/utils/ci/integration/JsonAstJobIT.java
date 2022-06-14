@@ -15,17 +15,14 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsT
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -35,6 +32,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettin
 
 @DisplayName("Test JSON-based AST")
 @Tag("integration")
+@Slf4j
 public class JsonAstJobIT extends BaseAstIT {
     @SuperBuilder
     public static class JsonAstJobImpl extends UiAstJobIT.UiAstJobImpl {
@@ -63,8 +61,9 @@ public class JsonAstJobIT extends BaseAstIT {
     @SneakyThrows
     @Test
     @DisplayName("Scan PHP smoke project with medium level vulnerabilities using JSON settings and policy")
-    public void scanPhpSmoke() {
-        Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
+    public void scanPhpSmoke(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
+        Path destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
 
         String jsonSettings = getResourceString("json/scan/settings/settings.minimal.aiproj");
         Assertions.assertFalse(StringUtils.isEmpty(jsonSettings));
@@ -92,7 +91,7 @@ public class JsonAstJobIT extends BaseAstIT {
 
     @SneakyThrows
     public ScanResult analyseMiscScanResults(@NonNull final Consumer<JsonSettingsTestHelper> modifySettings) {
-        Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
+        Path destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
 
         JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MISC.getSettings());
         settings.setProgrammingLanguage(PHP);
@@ -121,7 +120,8 @@ public class JsonAstJobIT extends BaseAstIT {
     @SneakyThrows
     @Test
     @DisplayName("Check PHP smoke miscellaneous project scan results contain low level vulnerabilities only")
-    public void checkLowLevelVulnerabilitiesOnly() {
+    public void checkLowLevelVulnerabilitiesOnly(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         ScanResult scanResult = analyseMiscScanResults((settings) -> {
             settings.setScanAppType(CONFIGURATION);
             settings.setIsUseEntryAnalysisPoint(true);
@@ -138,7 +138,8 @@ public class JsonAstJobIT extends BaseAstIT {
     @SneakyThrows
     @Test
     @DisplayName("Check PHP smoke miscellaneous project scan results contain SCA high, medium, low and none level vulnerabilities")
-    public void checkScaVulnerabilitiesOnly() {
+    public void checkScaVulnerabilitiesOnly(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         ScanResult scanResult = analyseMiscScanResults((settings) -> {
             settings.setScanAppType(FINGERPRINT);
             settings.setIsUseEntryAnalysisPoint(true);
@@ -156,7 +157,8 @@ public class JsonAstJobIT extends BaseAstIT {
     @SneakyThrows
     @Test
     @DisplayName("Check PHP smoke miscellaneous project scan results contain PM potential level vulnerabilities only")
-    public void checkPmVulnerabilitiesOnly() {
+    public void checkPmVulnerabilitiesOnly(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         ScanResult scanResult = analyseMiscScanResults((settings) -> {
             settings.setScanAppType(PMTAINT);
             settings.setUseTaintAnalysis(false);
@@ -175,7 +177,8 @@ public class JsonAstJobIT extends BaseAstIT {
     @SneakyThrows
     @Test
     @DisplayName("Check PHP smoke miscellaneous project scan results contain public / protected vulnerabilities only")
-    public void checkPublicProtectedVulnerabilitiesOnly() {
+    public void checkPublicProtectedVulnerabilitiesOnly(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         ScanResult scanResult = analyseMiscScanResults((settings) -> {
             settings.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP);
             settings.setUseTaintAnalysis(false);
@@ -204,7 +207,8 @@ public class JsonAstJobIT extends BaseAstIT {
     @SneakyThrows
     @Test
     @DisplayName("Check PHP smoke miscellaneous project scan results contain different vulnerabilities")
-    public void checkAllVulnerabilities() {
+    public void checkAllVulnerabilities(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         ScanResult scanResult = analyseMiscScanResults((settings) -> {
             settings.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, PMTAINT, CONFIGURATION, FINGERPRINT);
             settings.setUseTaintAnalysis(false);
@@ -254,7 +258,8 @@ public class JsonAstJobIT extends BaseAstIT {
     @SneakyThrows
     @Test
     @DisplayName("Check PHP smoke miscellaneous project scan settings change")
-    public void checkScanSettingsChange() {
+    public void checkScanSettingsChange(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         ScanResult firstScanResult = analyseMiscScanResults((settings) -> {
             settings.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, PMTAINT, CONFIGURATION, FINGERPRINT);
             settings.setUseTaintAnalysis(true);
@@ -279,8 +284,9 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @SneakyThrows
     @DisplayName("Check raw report multiflow XSS representation via group Id")
-    public void checkMultiflow() {
-        Path destination = Files.createTempDirectory(TEMP_FOLDER, "ptai-");
+    public void checkMultiflow(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
+        Path destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
 
         GenericAstJob astJob = JsonAstJobImpl.builder()
                 .async(false)

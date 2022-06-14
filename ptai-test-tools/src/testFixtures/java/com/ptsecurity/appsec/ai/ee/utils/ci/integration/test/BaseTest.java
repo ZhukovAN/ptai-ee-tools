@@ -99,8 +99,11 @@ public abstract class BaseTest {
     /**
      * Temporal folder where subfolders will be created
      */
-    @TempDir
-    protected static Path TEMP_FOLDER;
+    private static Path TEMP_FOLDER;
+
+    static {
+        Assertions.assertDoesNotThrow(() -> TEMP_FOLDER = Files.createTempDirectory("ptai-"));
+    }
 
     public static Path TEMP_FOLDER() {
         Assertions.assertNotNull(TEMP_FOLDER);

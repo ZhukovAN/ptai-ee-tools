@@ -8,11 +8,14 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSetting
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.CheckServerTasks;
+import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
 @DisplayName("Test dynamic API client functions")
 @Tag("integration")
+@Slf4j
 public class VersionInfoIT extends BaseClientIT {
     protected ConnectionSettings connectionSettings = null;
 
@@ -24,7 +27,8 @@ public class VersionInfoIT extends BaseClientIT {
     @SneakyThrows
     @Test
     @DisplayName("Check PT AI server status using insecure connection without trusted CA certificates")
-    public void checkInsecureConnection() {
+    public void checkInsecureConnection(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         // As we do not know if JRE's truststore contains integration test CA certificates, let's use dummy one
         connectionSettings.setCaCertsPem(DUMMY());
         connectionSettings.setInsecure(true);
@@ -41,7 +45,8 @@ public class VersionInfoIT extends BaseClientIT {
     @SneakyThrows
     @Test
     @DisplayName("Check PT AI server status using secure connection")
-    public void checkSecureConnection() {
+    public void checkSecureConnection(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         connectionSettings.setInsecure(false);
         AbstractApiClient client = Assertions.assertDoesNotThrow(() -> Factory.client(connectionSettings));
 

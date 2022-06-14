@@ -22,9 +22,9 @@ public abstract class BaseCliIT extends BaseClientIT {
     @SneakyThrows
     @BeforeEach
     public void pre() {
-        CA_PEM_FILE = Files.createTempFile(TEMP_FOLDER, "ptai-", "-ca-pem");
+        CA_PEM_FILE = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-ca-pem");
         FileUtils.write(CA_PEM_FILE.toFile(), CONNECTION().getCaPem(), StandardCharsets.UTF_8);
-        DUMMY_CA_PEM_FILE = Files.createTempFile(TEMP_FOLDER, "ptai-", "-dummy-ca-pem");
+        DUMMY_CA_PEM_FILE = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-dummy-ca-pem");
         FileUtils.write(DUMMY_CA_PEM_FILE.toFile(), BaseIT.DUMMY_CA_PEM, StandardCharsets.UTF_8);
     }
 }

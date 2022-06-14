@@ -47,7 +47,7 @@ subprojects {
 
     test {
         useJUnitPlatform() {
-            excludeTags 'integration', 'development', 'advanced'
+            excludeTags 'integration', 'development', 'advanced', 'jenkins'
         }
     }
 
@@ -143,6 +143,17 @@ subprojects {
         }
         shouldRunAfter test
     }
+
+    def jenkinsTest = tasks.register('jenkinsTest', Test) {
+        useJUnitPlatform {
+            includeTags 'jenkins'
+        }
+        testLogging {
+            events 'passed', 'skipped', 'failed'
+        }
+        shouldRunAfter test
+    }
+
 }
 
 wrapper {

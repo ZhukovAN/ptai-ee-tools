@@ -15,24 +15,10 @@ import java.util.UUID;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.PHP;
 
 public abstract class BaseJsonIT extends BaseCliAstIT {
-    protected String scanPolicy;
-
-    @SneakyThrows
-    protected String savedScanPolicyPath() {
-        Assertions.assertNotNull(scanPolicy);
-        File scanPolicyFile = Files.createTempFile(TEMP_FOLDER, "ptai-", "-policy").toFile();
-        ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
-        mapper.writeValue(scanPolicyFile, scanPolicy);
-        return scanPolicyFile.getAbsolutePath();
-    }
-    
     @SneakyThrows
     @BeforeEach
     @Override
     public void pre() {
         super.pre();
-
-        scanPolicy = getResourceString("json/scan/settings/policy.generic.json");
-        Assertions.assertFalse(StringUtils.isEmpty(scanPolicy));
     }
 }

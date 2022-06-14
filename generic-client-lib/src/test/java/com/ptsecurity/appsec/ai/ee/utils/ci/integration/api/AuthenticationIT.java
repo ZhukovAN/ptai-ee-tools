@@ -10,6 +10,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -31,7 +32,8 @@ public class AuthenticationIT extends BaseClientIT {
     @SneakyThrows
     @Test
     @DisplayName("Check implicit JWT refresh during API calls")
-    public void checkAutoJwtRefresh() {
+    public void checkAutoJwtRefresh(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         AbstractApiClient client = Assertions.assertDoesNotThrow(() -> Factory.client(connectionSettings));
         // ApiClient client = new ApiClient(connectionSettings.validate());
         // Initialize all API clients with URL, timeouts, SSL settings etc.

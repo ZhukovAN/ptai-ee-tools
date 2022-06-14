@@ -94,7 +94,7 @@ public class ConverterTest extends BaseTest {
                 .map(issue -> scanResult.getI18n().get(issue.getTypeId()).get(Reports.Locale.EN).getTitle())
                 .anyMatch(title -> title.equals("Cross-Site Scripting")));
 
-        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
+        Path destination = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
     }
 

@@ -75,8 +75,8 @@ public class IssuesConverter {
         // Bug https://jira.ptsecurity.com/browse/AI-4866 with swapped
         // confirmed / rejected states fixed and will be included in 4.0
         POLICY_STATE_MAP.put(PolicyState.NONE, Policy.State.NONE);
-        POLICY_STATE_MAP.put(PolicyState.CONFIRMED, Policy.State.REJECTED);
         POLICY_STATE_MAP.put(PolicyState.REJECTED, Policy.State.CONFIRMED);
+        POLICY_STATE_MAP.put(PolicyState.CONFIRMED, Policy.State.REJECTED);
 
         LANGUAGE_MAP.put(V36ProgrammingLanguage.JAVA, ScanResult.ScanSettings.Language.JAVA);
         LANGUAGE_MAP.put(V36ProgrammingLanguage.PHP, ScanResult.ScanSettings.Language.PHP);

@@ -12,6 +12,7 @@ import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSet
 import com.ptsecurity.appsec.ai.ee.server.v36.scanscheduler.model.ScanType;
 import com.ptsecurity.appsec.ai.ee.server.v36.scanscheduler.model.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.ScanErrorsConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.events.ScanCompleteEvent;
@@ -19,6 +20,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericExcept
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -29,6 +31,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
 
+import static com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.Stage.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.IssuesConverter.convert;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
@@ -62,6 +65,58 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                 "Failed to get AST result URL");
     }
 
+    public static class ProjectPollingThread implements Runnable {
+        protected final ApiClient client;
+
+        protected final UUID projectId;
+        protected final UUID scanResultId;
+        protected final BlockingQueue<Stage> queue;
+
+        protected final Thread thread;
+
+        protected boolean exit = false;
+
+        public ProjectPollingThread(@NonNull final ApiClient client, @NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final BlockingQueue<Stage> queue) {
+            this.client = client;
+            this.projectId = projectId;
+            this.scanResultId = scanResultId;
+            this.queue = queue;
+
+            this.thread = new Thread(this);
+            this.thread.start();
+        }
+
+        @Override
+        public void run() {
+            while (!exit) {
+                try {
+                    Thread.sleep(5000);
+                    log.trace("Poll {} project {} scan state", projectId, scanResultId);
+                    com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult = call(
+                            () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
+                            "Get project scan result failed");
+                    // TODO: Properly process this
+                    if (null == scanResult.getProgress()) break;
+                    if (null == scanResult.getProgress().getStage()) break;
+                    Stage stage = scanResult.getProgress().getStage();
+                    if (DONE != stage && ABORTED != stage && FAILED != stage) continue;
+                    queue.add(stage);
+                    break;
+                } catch (GenericException e) {
+                    log.error("Project polling thread failed to get scan state", e);
+                    break;
+                } catch (InterruptedException e) {
+                    log.error("Project polling thread interrupted", e);
+                    break;
+                }
+            }
+        }
+
+        public void stop() {
+            exit = true;
+        }
+    }
+
     @Override
     public ScanBrief.State waitForComplete(@NonNull UUID projectId, @NonNull UUID scanResultId) throws InterruptedException {
         // Semaphore-based implementation was replaced by queue-based as
@@ -69,18 +124,20 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         // ScanCompleted and ScanProgress with aborted and failed stage values
         BlockingQueue<Stage> queue = new LinkedBlockingDeque<>();
 
+        // As sometimes notifications get lost somewhere we need to implement parallel polling thread
+        ProjectPollingThread pollingThread = new ProjectPollingThread(client, projectId, scanResultId, queue);
         HubConnection connection = client.createSignalrConnection(projectId, scanResultId, queue);
         client.wait(connection, projectId, scanResultId);
-        // connection.start().blockingAwait();
 
         Stage stage = queue.take();
         connection.stop();
+        pollingThread.stop();
 
         return Stage.FAILED == stage
                 ? ScanBrief.State.FAILED
                 : Stage.ABORTED == stage
                 ? ScanBrief.State.ABORTED
-                : Stage.DONE == stage
+                : DONE == stage
                 ? ScanBrief.State.DONE
                 : ScanBrief.State.UNKNOWN;
     }
