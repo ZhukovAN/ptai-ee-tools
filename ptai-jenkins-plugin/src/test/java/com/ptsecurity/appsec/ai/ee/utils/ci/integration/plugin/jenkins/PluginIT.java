@@ -24,6 +24,7 @@ import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.scm.SCM;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -42,6 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Execute Jenkins jobs that use PT AI plugin")
 @EnableJenkins
+@Slf4j
 public class PluginIT extends BaseAstIT {
 
     private CredentialsStore systemStore;
@@ -65,20 +67,22 @@ public class PluginIT extends BaseAstIT {
 
     @SneakyThrows
     @Test
+    @Tag("integration")
     @Tag("jenkins")
     @DisplayName("Execute simple SAST job for PHP smoke medium")
     public void scanPhpSmokeMedium(JenkinsRule jenkins) {
         PHP_SMOKE_MEDIUM.setup();
 
         initCredentials(jenkins);
-        // Create project and set source code location
-        java.net.URL sourcesPack = PHP_SMOKE_MEDIUM.getCode().toUri().toURL();;
+
+        log.trace("Create project and set source code location");
+
+        java.net.URL sourcesPack = PHP_SMOKE_MEDIUM.getZip().toUri().toURL();
         assertNotNull(sourcesPack);
         SCM scm = new ExtractResourceSCM(sourcesPack);
         String projectName = "project-" + UUID.randomUUID();
         FreeStyleProject project = jenkins.createFreeStyleProject(projectName);
         project.setScm(scm);
-
         // Create PT AI plugin settings
         ScanSettingsUi scanSettings = new ScanSettingsUi(PHP_SMOKE_MEDIUM.getName());
 

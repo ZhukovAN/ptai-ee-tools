@@ -20,6 +20,7 @@ import java.util.Map;
 
 @DisplayName("Test API client authentication")
 @Tag("integration")
+@Tag("slow")
 @Slf4j
 public class AuthenticationIT extends BaseClientIT {
     protected ConnectionSettings connectionSettings = null;

@@ -172,4 +172,9 @@
 ### 20220310
 + [Feature] Jenkins plugin now supports global- and task-scope defined advanced settings. logging.http.response.max.body.size is supported
 ### 20220312
-+ [Feature] Added logging.http.request.max.body.size, http.request.read.timeout and http.request.write.timeout for Jenkins and CLI plugins 
++ [Feature] Added logging.http.request.max.body.size, http.request.read.timeout and http.request.write.timeout for Jenkins and CLI plugins
+### 20220615
++ [Feature] PT AI 4.0 supported
++ [Feature] As sometimes notifications service connection get lost, polling thread added to generic AST task
++ [ToDo] Remove PDF report generation as PT AI 4.0 REST API no supports it more
++ [ToDo] Remove XML / JSON report generation as PT AI 4.0 REST API no supports it more

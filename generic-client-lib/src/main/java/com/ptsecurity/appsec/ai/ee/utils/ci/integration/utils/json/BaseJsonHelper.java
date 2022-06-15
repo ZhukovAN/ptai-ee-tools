@@ -5,11 +5,20 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.function.Function;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
+@Slf4j
 public class BaseJsonHelper {
     public static ObjectMapper createObjectMapper() {
         return new ObjectMapper()
@@ -40,4 +49,30 @@ public class BaseJsonHelper {
                 "JSON serialization failed");
     }
 
+    protected static void processJsonNode(final String name, @NonNull final JsonNode node, @NonNull Function<String, String> converter) {
+        if (node.isObject()) {
+            Iterator<Map.Entry<String, JsonNode>> fields = node.fields();
+            fields.forEachRemaining(field -> {
+                if (field.getValue().isTextual()) {
+                    log.trace("Process {} field", name);
+                    ObjectNode objectNode = (ObjectNode) node;
+                    objectNode.put(field.getKey(), converter.apply(field.getValue().asText()));
+                } else if (field.getValue().isObject())
+                    processJsonNode(field.getKey(), field.getValue(), converter);
+            });
+        } else if (node.isArray()) {
+            log.trace("Process JSON array nameless nodes");
+            ArrayNode arrayField = (ArrayNode) node;
+            arrayField.forEach(item -> { processJsonNode(null, item, converter); });
+        }
+    }
+
+    public static String replaceMacro(@NonNull String json, @NonNull Function<String, String> converter) throws GenericException {
+        JsonNode root = call(() -> createObjectMapper().readTree(json), "JSON read failed");
+        log.trace("Process JSON nameless root node");
+        processJsonNode(null, root, converter);
+        return call(
+                () -> new ObjectMapper().writeValueAsString(root),
+                "JSON serialization failed");
+    }
 }

@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.client;
 
-import com.contrastsecurity.sarif.SarifSchema210;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
@@ -14,20 +13,21 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AbstractFileO
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
@@ -43,6 +43,7 @@ public abstract class BaseAstIT extends BaseClientIT {
         protected final String settings;
 
         protected final String sourcesZipResourceName;
+
         @TempDir
         protected Path code = null;
 
@@ -50,6 +51,17 @@ public abstract class BaseAstIT extends BaseClientIT {
             if (null == code)
                 code = extractPackedResourceFile(sourcesZipResourceName);
             return code;
+        }
+
+
+        protected Path zip = null;
+
+        public Path getZip() {
+            if (null == zip) {
+                Path sources = getCode();
+                zip = BaseTest.zipFile(sources);
+            }
+            return zip;
         }
 
         @SneakyThrows

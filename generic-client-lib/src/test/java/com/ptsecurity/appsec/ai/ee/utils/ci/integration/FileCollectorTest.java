@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
@@ -21,6 +22,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.condition.OS.LINUX;
+
 public class FileCollectorTest extends BaseTest {
     private static class Tool extends AbstractTool {
 
@@ -28,7 +31,8 @@ public class FileCollectorTest extends BaseTest {
 
     @SneakyThrows
     @Test
-    @Tag("advanced")
+    @Tag("integration")
+    @EnabledOnOs(LINUX)
     public void createSymlink(@TempDir final Path sources) {
         // Symlink creation under Windows requires test to be executed on behalf of Administrator, so just skip
         if (!SystemUtils.IS_OS_LINUX) return;

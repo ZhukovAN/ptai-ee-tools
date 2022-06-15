@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.archivers.sevenz.SevenZArchiveEntry;
 import org.apache.commons.compress.archivers.sevenz.SevenZFile;
 import org.apache.commons.compress.archivers.sevenz.SevenZOutputFile;
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -341,7 +343,7 @@ public abstract class BaseTest {
             zip.putArchiveEntry(entry);
             zip.write(data);
             zip.closeArchiveEntry();
-        };
+        }
     }
 
     @SneakyThrows
@@ -366,5 +368,44 @@ public abstract class BaseTest {
             return result.toString();
         }
         return null;
+    }
+
+    private static void zipFile(ZipArchiveOutputStream out, File file, String name) throws IOException {
+        log.trace("Pack {} to zip", name);
+        ZipArchiveEntry zipArchiveEntry = new ZipArchiveEntry(file, name);
+        out.putArchiveEntry(zipArchiveEntry);
+        if (file.isFile()) {
+            log.trace("Pack data from file");
+            try (FileInputStream fis = new FileInputStream(file)) {
+                IOUtils.copy(fis, out);
+                out.closeArchiveEntry();
+            }
+        } else {
+            out.closeArchiveEntry();
+            log.trace("Pack children files / folders");
+            File[] files = file.listFiles();
+            if (null == files) return;
+            for (File child : files)
+                zipFile(out, child, name + "/" + child.getName());
+        }
+    }
+
+    @SneakyThrows
+    public static Path zipFile(@NonNull final Path source) {
+        Path zip = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-zip");
+        try (
+                OutputStream os = Files.newOutputStream(zip);
+                BufferedOutputStream bos = new BufferedOutputStream(os);
+                ZipArchiveOutputStream zos = new ZipArchiveOutputStream(bos)) {
+            if (source.toFile().isDirectory()) {
+                File[] files = source.toFile().listFiles();
+                if (null == files) return zip;
+                for (File file : files)
+                    zipFile(zos, file, file.getName());
+            } else {
+                zipFile(zos, source.toFile(), source.getFileName().toString());
+            }
+        }
+        return zip;
     }
 }
