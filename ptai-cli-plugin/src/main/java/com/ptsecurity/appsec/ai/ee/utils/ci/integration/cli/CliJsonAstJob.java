@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.JsonAstJobSetupOperationsImpl;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -30,8 +29,6 @@ public class CliJsonAstJob extends GenericCliAstJob {
                     log.debug("Loading JSON-defined scan settings from {}", settings);
                     return new String(Files.readAllBytes(settings), UTF_8);
         }, "JSON settings file read failed");
-        if (null != jsonSettings)
-            JsonSettingsHelper.verify(jsonSettings);
 
         String jsonPolicy = (null == policy)
                 ? null

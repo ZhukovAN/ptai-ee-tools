@@ -30,8 +30,8 @@ public class AdvancedSettings {
         /**
          * Maximum response body size to be output to log
          */
-        LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE("logging.http.response.max.body.size", SettingType.INTEGER, 1024, Resources::i18n_ast_settings_advanced_logging_http_response_max_body_size),
-        LOGGING_HTTP_REQUEST_MAX_BODY_SIZE("logging.http.request.max.body.size", SettingType.INTEGER, 512, Resources::i18n_ast_settings_advanced_logging_http_request_max_body_size),
+        LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE("logging.http.response.max.body.size", SettingType.INTEGER, 102400, Resources::i18n_ast_settings_advanced_logging_http_response_max_body_size),
+        LOGGING_HTTP_REQUEST_MAX_BODY_SIZE("logging.http.request.max.body.size", SettingType.INTEGER, 51200, Resources::i18n_ast_settings_advanced_logging_http_request_max_body_size),
         HTTP_REQUEST_READ_TIMEOUT("http.request.read.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_http_request_read_timeout),
         HTTP_REQUEST_WRITE_TIMEOUT("http.request.write.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_logging_http_response_max_body_size);
 

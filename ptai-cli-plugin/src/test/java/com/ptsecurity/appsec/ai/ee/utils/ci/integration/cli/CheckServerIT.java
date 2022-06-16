@@ -1,53 +1,52 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
+import lombok.NonNull;
 import lombok.SneakyThrows;
-import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.*;
 import picocli.CommandLine;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 @DisplayName("Server availability check tests")
 @Tag("integration")
+@Slf4j
 class CheckServerIT extends BaseCliIT {
     @SneakyThrows
     @Test
     @DisplayName("Connect with valid token")
-    public void testGoodToken() {
+    public void testGoodToken(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", URL,
-                "--truststore", PEM.toString(),
-                "--token", TOKEN);
+                "--url", CONNECTION().getUrl(),
+                "--truststore", CA_PEM_FILE.toString(),
+                "--token", CONNECTION().getToken());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
     @Test
     @DisplayName("Insecure connect with CA certificates")
-    public void testInsecureWithCaCertificate() {
+    public void testInsecureWithCaCertificate(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", URL,
-                "--truststore", PEM.toString(),
-                "--token", TOKEN,
+                "--url", CONNECTION().getUrl(),
+                "--truststore", CA_PEM_FILE.toString(),
+                "--token", CONNECTION().getToken(),
                 "--insecure");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
 
     @Test
     @DisplayName("Insecure connect with valid token")
-    public void testInsecureGoodToken() {
+    public void testInsecureGoodToken(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", URL,
-                "--token", TOKEN,
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
                 "--insecure");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
     }
@@ -55,23 +54,25 @@ class CheckServerIT extends BaseCliIT {
     @SneakyThrows
     @Test
     @DisplayName("Fail secure connect without valid CA certificates")
-    public void testWithoutCaCertificates() {
+    public void testWithoutCaCertificates(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", URL,
-                "--token", TOKEN,
-                "--truststore", DUMMY.toString());
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
+                "--truststore", DUMMY_CA_PEM_FILE.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
     @Test
     @DisplayName("Fail connect with invalid token")
-    public void testBadToken() {
+    public void testBadToken(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
         Integer res = new CommandLine(new Plugin()).execute(
                 "check-server",
-                "--url", URL,
-                "--truststore", PEM.toString(),
-                "--token", TOKEN + UUID.randomUUID());
+                "--url", CONNECTION().getUrl(),
+                "--truststore", CA_PEM_FILE.toString(),
+                "--token", CONNECTION().getToken() + UUID.randomUUID());
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 }

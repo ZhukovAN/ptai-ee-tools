@@ -33,6 +33,11 @@ public class Factory {
         return onClass(className).create(client).get();
     }
 
+    public ServerVersionTasks serverVersionTasks(@NonNull final AbstractApiClient client) throws GenericException {
+        String className = client.getClass().getPackage().getName() + "." + "tasks.ServerVersionTasksImpl";
+        return onClass(className).create(client).get();
+    }
+
     public ReportsTasks reportsTasks(@NonNull final AbstractApiClient client) throws GenericException {
         String className = client.getClass().getPackage().getName() + "." + "tasks.ReportsTasksImpl";
         return onClass(className).create(client).get();
@@ -103,8 +108,8 @@ public class Factory {
                 }
                 return client;
             } catch (GenericException e) {
-                log.debug("PT AI server API check failed", e);
-                throw e;
+                log.debug("PT AI server API check failed: {}", e.getDetailedMessage());
+                continue;
             }
         }
         throw GenericException.raise("PT AI server API client create failed", new VersionUnsupportedException());

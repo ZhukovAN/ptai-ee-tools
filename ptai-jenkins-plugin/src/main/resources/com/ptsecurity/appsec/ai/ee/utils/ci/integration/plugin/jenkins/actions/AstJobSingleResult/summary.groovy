@@ -33,8 +33,14 @@ t.summary(icon: my.getIconFileName()) {
     def scanBriefDetailed = my.getScanBriefDetailed()
     div() {
         b(Resources.i18n_ast_plugin_label() + " (")
-        a(href: "ptai://navigation/show?project=" + scanBriefDetailed.projectId) {
-            text(_("project.open.viewer.label"))
+        if (ScanBrief.ApiVersion.V36 == scanBriefDetailed.apiVersion) {
+            a(href: "ptai://navigation/show?project=" + scanBriefDetailed.projectId) {
+                text(_("project.open.viewer.label"))
+            }
+        } else {
+            a(href: scanBriefDetailed.ptaiServerUrl + "/ui/projects/" + scanBriefDetailed.projectId + "/scan/" + scanBriefDetailed.id) {
+                text(_("project.open.ui.label"))
+            }
         }
         text(")")
         if (scanBriefDetailed.getUseAsyncScan()) {

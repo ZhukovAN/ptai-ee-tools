@@ -1,9 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks;
 
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -18,7 +19,19 @@ public interface ProjectTasks {
 
     UUID getLatestCompleteAstResult(@NonNull final UUID id) throws GenericException;
 
-    UUID setupFromJson(@NonNull final AiProjScanSettings settings, final Policy[] policy) throws GenericException;
+    /**
+     * As AIPROJ contain both data for project creation (like scan settings) and for scan
+     * start (like incremental scanning) we need to return some data for later use
+     */
+    @Getter
+    @Setter
+    @Builder
+    class JsonParseBrief {
+        protected UUID projectId;
+        protected String projectName;
+        protected Boolean incremental;
+    }
+    JsonParseBrief setupFromJson(@NonNull final String jsonSettings, final String jsonPolicy) throws GenericException;
 
     void deleteProject(@NonNull final UUID id) throws GenericException;
 

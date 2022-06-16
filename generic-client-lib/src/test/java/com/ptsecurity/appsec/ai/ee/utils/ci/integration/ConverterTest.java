@@ -3,27 +3,33 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
-import com.ptsecurity.appsec.ai.ee.server.integration.rest.test.BaseIT;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSettings;
+import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.V40ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
+
+@Slf4j
 @DisplayName("Test PT AI server REST API data structures conversion")
 public class ConverterTest extends BaseTest {
     @SneakyThrows
@@ -31,10 +37,10 @@ public class ConverterTest extends BaseTest {
         ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
         String scanResultStr = getResourceString("v36/json/scanResult/" + fileName + ".json");
         com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult = mapper.readValue(scanResultStr, com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult.class);
-        Map<Reports.Locale, InputStream> issuesModel = new HashMap<>();
+        Map<Reports.Locale, File> issuesFiles = new HashMap<>();
         for (Reports.Locale locale : Reports.Locale.values()) {
-            Path issuesFile = getPackedResourceFile("v36/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
-            issuesModel.put(locale, new FileInputStream(issuesFile.toFile()));
+            Path issuesFile = extractPackedResourceFile("v36/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
+            issuesFiles.put(locale, issuesFile.toFile());
         }
 
         @NonNull final V36ScanSettings scanSettings = mapper.readValue(
@@ -47,62 +53,66 @@ public class ConverterTest extends BaseTest {
 
         String projectName = StringUtils.substringBefore(fileName, ".");
 
-        ScanResult genericScanResult = IssuesConverter.convert(projectName, scanResult, issuesModel, scanSettings, BaseIT.URL, versions);
-        for (InputStream issuesModelStream : issuesModel.values())
-            issuesModelStream.close();
-        return genericScanResult;
+        return IssuesConverter.convert(projectName, scanResult, issuesFiles, scanSettings, CONNECTION().getUrl(), versions);
+    }
+
+    @SneakyThrows
+    public ScanResult generateScanResultV40(@NonNull final String fileName) {
+        ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+        String scanResultStr = getResourceString("v40/json/scanResult/" + fileName + ".json");
+        com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult scanResult = mapper.readValue(scanResultStr, com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult.class);
+        Map<Reports.Locale, File> issuesFiles = new HashMap<>();
+        for (Reports.Locale locale : Reports.Locale.values()) {
+            Path issuesFile = extractPackedResourceFile("v40/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
+            issuesFiles.put(locale, issuesFile.toFile());
+        }
+
+        @NonNull final V40ScanSettings scanSettings = mapper.readValue(
+                getResourceString("v40/json/scanSettings/" + fileName + ".json"),
+                V40ScanSettings.class
+        );
+        Map<ServerVersionTasks.Component, String> versions = new HashMap<>();
+        versions.put(ServerVersionTasks.Component.AIE, "4.0.0.9172");
+        versions.put(ServerVersionTasks.Component.AIC, "4.0.0.9172");
+
+        String projectName = StringUtils.substringBefore(fileName, ".");
+
+        return com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.IssuesConverter.convert(projectName, scanResult, issuesFiles, scanSettings, CONNECTION().getUrl(), versions);
     }
 
     @Test
-    @DisplayName("Convert OWASP Bricks scan results")
+    @DisplayName("Convert OWASP Bricks PT AI 3.6 scan results")
     @SneakyThrows
     public void generateOwaspBricksResultsV36() {
-        ScanResult scanResult = generateScanResultV36("php-bricks");
+        ScanResult scanResult = generateScanResultV36(PHP_OWASP_BRICKS.getName());
         Assertions.assertTrue(scanResult.getIssues().stream()
                 .map(issue -> scanResult.getI18n().get(issue.getTypeId()).get(Reports.Locale.EN).getTitle())
                 .anyMatch(title -> title.equals("Cross-Site Scripting")));
 
-        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
+        Path destination = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-scanResult");
         BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
     }
 
     @Test
-    @DisplayName("Convert PHP Smoke multiflow scan results")
+    @DisplayName("Convert PT AI 3.6 and 4.0 scan results")
     @SneakyThrows
-    public void generatePhpSmokeMultiflowResultsV36() {
-        ScanResult scanResult = generateScanResultV36("php-smoke-multiflow");
+    public void generateScanResults() {
+        try (TempFile destination = TempFile.createFolder()) {
+            Path scanResults36 = destination.toPath().resolve("result").resolve("v36");
+            scanResults36.toFile().mkdirs();
+            Path scanResults40 = destination.toPath().resolve("result").resolve("v40");
+            scanResults40.toFile().mkdirs();
 
-        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
-        BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
-    }
+            for (Project project : ALL) {
+                ScanResult scanResult = generateScanResultV36(project.getName());
+                String json = BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(scanResult);
+                sevenZipData(scanResults36.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
 
-    @Test
-    @DisplayName("Convert OWASP Benchmark scan results")
-    @SneakyThrows
-    public void generateOwaspBenchmarkResultsV36() {
-        ScanResult scanResult = generateScanResultV36("java-owasp-benchmark");
-
-        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
-        BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
-    }
-
-    @Test
-    @DisplayName("Convert PHP Smoke scan results")
-    @SneakyThrows
-    public void generatePhpSmokeResultsV36() {
-        ScanResult scanResult = generateScanResultV36("php-smoke");
-
-        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
-        BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
-    }
-
-    @Test
-    @DisplayName("Convert App01 scan results")
-    @SneakyThrows
-    public void generateApp01ResultsV36() {
-        ScanResult scanResult = generateScanResultV36("java-app01");
-
-        Path destination = Files.createTempFile(TEMP_FOLDER, "ptai-", "-scanResult");
-        BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(destination.toFile(), scanResult);
+                scanResult = generateScanResultV40(project.getName());
+                json = BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(scanResult);
+                sevenZipData(scanResults40.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
+            }
+            log.trace("Scan results are saved to {}", scanResults36);
+        }
     }
 }

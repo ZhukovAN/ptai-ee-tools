@@ -18,8 +18,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 import java.nio.charset.StandardCharsets;
@@ -73,10 +72,10 @@ public class IssuesConverter {
         SCAN_MODE_MAP.put(V36VulnerabilityIssueScanMode.FromPublicProtected, VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED);
 
         // Bug https://jira.ptsecurity.com/browse/AI-4866 with swapped
-        // confirmed / rejected states fixed and will be included in 3.7
+        // confirmed / rejected states fixed and will be included in 4.0
         POLICY_STATE_MAP.put(PolicyState.NONE, Policy.State.NONE);
-        POLICY_STATE_MAP.put(PolicyState.CONFIRMED, Policy.State.REJECTED);
         POLICY_STATE_MAP.put(PolicyState.REJECTED, Policy.State.CONFIRMED);
+        POLICY_STATE_MAP.put(PolicyState.CONFIRMED, Policy.State.REJECTED);
 
         LANGUAGE_MAP.put(V36ProgrammingLanguage.JAVA, ScanResult.ScanSettings.Language.JAVA);
         LANGUAGE_MAP.put(V36ProgrammingLanguage.PHP, ScanResult.ScanSettings.Language.PHP);
@@ -135,24 +134,24 @@ public class IssuesConverter {
         List<String> scanAppTypes = parseCommaSeparatedValues(scanAppTypeString);
         if (null == scanAppTypes) return res;
         for (String scanAppType : scanAppTypes) {
-            if (ScanAppType.Configuration.name().equals(scanAppType))
+            if (ScanAppType.Configuration.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.CONFIGURATION);
-            else if (ScanAppType.Fingerprint.name().equals(scanAppType))
+            else if (ScanAppType.Fingerprint.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.FINGERPRINT);
-            else if (ScanAppType.Java.name().equals(scanAppType))
+            else if (ScanAppType.Java.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.AI);
-            else if (ScanAppType.CSharp.name().equals(scanAppType))
+            else if (ScanAppType.CSharp.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.AI);
-            else if (ScanAppType.PHP.name().equals(scanAppType))
+            else if (ScanAppType.PHP.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.AI);
-            else if (ScanAppType.PmTaint.name().equals(scanAppType)) {
+            else if (ScanAppType.PmTaint.name().equalsIgnoreCase(scanAppType)) {
                 if (Objects.requireNonNull(scanSettings.getUsePmAnalysis(), "usePmAnalysis is null"))
                     res.getEngines().add(ScanResult.ScanSettings.Engine.PM);
                 if (Objects.requireNonNull(scanSettings.getUseTaintAnalysis(), "useTaintAnalysis is null"))
                     res.getEngines().add(ScanResult.ScanSettings.Engine.TAINT);
-            } else if (ScanAppType.BlackBox.name().equals(scanAppType))
+            } else if (ScanAppType.BlackBox.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.BLACKBOX);
-            else if (ScanAppType.DependencyCheck.name().equals(scanAppType))
+            else if (ScanAppType.DependencyCheck.name().equalsIgnoreCase(scanAppType))
                 res.getEngines().add(ScanResult.ScanSettings.Engine.DC);
         }
         return res;
@@ -190,19 +189,20 @@ public class IssuesConverter {
     /**
      * Method converts PT AI v.3.6 API scan result and issues model pair to API version independent scan result
      * @param scanResult PT AI v.3.6 API scan result that contains scan statistic
-     * @param modelStreams PT AI v.3.6 API scan issues list with detailed information about vulnerabilities found
+     * @param modelFiles PT AI v.3.6 API scan issues list with detailed information about vulnerabilities found
      * @param scanSettings PT AI v.3.6 API scan settings
      * @return PT AI API version independent scan results instance
      */
     public static ScanResult convert(
             @NonNull final String projectName,
             @NonNull final com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult,
-            @NonNull final Map<Reports.Locale, InputStream> modelStreams,
+            @NonNull final Map<Reports.Locale, File> modelFiles,
             @NonNull final V36ScanSettings scanSettings,
             @NonNull final String ptaiUrl,
             @NonNull final Map<ServerVersionTasks.Component, String> versions) {
         ScanResult res = new ScanResult();
         convertInto(projectName, scanResult, scanSettings, versions, res);
+        res.setApiVersion(ScanBrief.ApiVersion.V36);
         res.setPtaiServerUrl(ptaiUrl);
 
         // As there's no localization in metadatas, use english model as source
@@ -212,8 +212,8 @@ public class IssuesConverter {
         // At this point we have ScanResult that is initialized with vulnerability list. But these
         // vulnerabilities have titleId field that points nowhere. So we need to create localized
         // descriptions for all of them
-        for (Reports.Locale locale : modelStreams.keySet()) {
-            IssuesModel localizedModel = parseIssuesModelStream(modelStreams.get(locale));
+        for (Reports.Locale locale : modelFiles.keySet()) {
+            IssuesModel localizedModel = parseIssuesModelStream(modelFiles.get(locale));
             // Save first model as a metadata source. As metadata is not i18n-ed, there's
             // no difference what locale will be used
             if (null == model) model = localizedModel;
@@ -647,13 +647,13 @@ public class IssuesConverter {
      * @return Deserialized IssuesModel instance
      */
     @SneakyThrows
-    protected static IssuesModel parseIssuesModelStream(@NonNull final InputStream data) {
+    protected static IssuesModel parseIssuesModelStream(@NonNull final File data) {
         JSON parser = new JSON();
         MemoryUsage usage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
-        try {
+        try (Reader reader = new FileReader(data)) {
             log.debug("JVM heap memory use before parse {} / {}", FileCollector.bytesToString(usage.getUsed()), FileCollector.bytesToString(usage.getMax()));
             log.debug("Parse started at {}", Instant.now());
-            IssuesModel res = parser.getGson().fromJson(new InputStreamReader(data, StandardCharsets.UTF_8), IssuesModel.class);
+            IssuesModel res = parser.getGson().fromJson(reader, IssuesModel.class);
             log.debug("Parse finished at {}", Instant.now());
             log.debug("JVM heap memory use after parse {} / {}", FileCollector.bytesToString(usage.getUsed()), FileCollector.bytesToString(usage.getMax()));
             return res;
@@ -701,6 +701,7 @@ public class IssuesConverter {
             @NonNull final Map<ServerVersionTasks.Component, String> versions) {
         ScanBrief res = new ScanBrief();
         convertInto(projectName, scanResult, scanSettings, versions, res);
+        res.setApiVersion(ScanBrief.ApiVersion.V36);
         res.setPtaiServerUrl(ptaiUrl);
         return res;
     }

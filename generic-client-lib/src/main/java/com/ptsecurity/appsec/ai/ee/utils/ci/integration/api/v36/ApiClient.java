@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.reflect.TypeToken;
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.server.v36.auth.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.server.v36.auth.api.AuthApi;
 import com.ptsecurity.appsec.ai.ee.server.v36.auth.model.AuthScopeType;
@@ -108,7 +109,7 @@ public class ApiClient extends AbstractApiClient {
         apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
     }
 
-    public ApiResponse<String> initialAuthentication() throws GenericException {
+    protected ApiResponse<String> initialAuthentication() throws GenericException {
         BaseCredentials baseCredentials = connectionSettings.getCredentials();
         if (baseCredentials instanceof TokenCredentials) {
             log.trace("Using PT AI API token-based credentials for authentication");
@@ -131,6 +132,11 @@ public class ApiClient extends AbstractApiClient {
                     () -> authApi.apiAuthUserLoginPostWithHttpInfo(AuthScopeType.WEB, model),
                     "Get initial JWT call failed");
         }
+    }
+
+    @Override
+    public ScanBrief.ApiVersion getApiVersion() {
+        return ScanBrief.ApiVersion.V36;
     }
 
     public JwtResponse authenticate() throws GenericException {
@@ -242,6 +248,8 @@ public class ApiClient extends AbstractApiClient {
         connection.on("ScanStarted", (data) -> {
             if (!projectId.equals(data.getResult().getProjectId()))
                 log.trace("Skip ScanStarted event as its projectId != {}", projectId);
+            else if (!scanResultId.equals(data.getResult().getId()))
+                log.trace("Skip ScanStarted event as its scanResultId != {}", scanResultId);
             else {
                 if (null != console)
                     console.info("Scan started. Project id: %s, scan result id: %s", data.getResult().getProjectId(), data.getResult().getId());
@@ -299,6 +307,8 @@ public class ApiClient extends AbstractApiClient {
         connection.on("ScanCompleted", (data) -> {
             if (!projectId.equals(data.getResult().getProjectId()))
                 log.trace("Skip ScanCompleted event as its projectId != {}", projectId);
+            else if (!scanResultId.equals(data.getResult().getId()))
+                log.trace("Skip ScanCompleted event as its scanResultId != {}", scanResultId);
             else
                 queue.add(Stage.DONE);
             log.trace(data.toString());

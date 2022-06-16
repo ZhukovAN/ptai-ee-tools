@@ -16,7 +16,6 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
-    // Lombok plugin is made conditional as ptai-i18n project raises duplicate classes
     apply plugin: 'io.freefair.lombok'
     apply plugin: 'maven-publish'
 
@@ -48,7 +47,7 @@ subprojects {
 
     test {
         useJUnitPlatform() {
-            excludeTags 'integration', 'advanced'
+            excludeTags 'integration', 'development'
         }
     }
 
@@ -128,6 +127,7 @@ subprojects {
     def integrationTest = tasks.register('integrationTest', Test) {
         useJUnitPlatform {
             includeTags 'integration'
+            excludeTags 'slow', 'jenkins'
         }
         testLogging {
             events 'passed', 'skipped', 'failed'
@@ -135,15 +135,26 @@ subprojects {
         shouldRunAfter test
     }
 
-    def advancedTest = tasks.register('advancedTest', Test) {
+    def jenkinsTest = tasks.register('jenkinsTest', Test) {
         useJUnitPlatform {
-            includeTags 'advanced'
+            includeTags 'jenkins'
         }
         testLogging {
             events 'passed', 'skipped', 'failed'
         }
         shouldRunAfter test
     }
+
+    def slowTest = tasks.register('slowTest', Test) {
+        useJUnitPlatform {
+            includeTags 'slow'
+        }
+        testLogging {
+            events 'passed', 'skipped', 'failed'
+        }
+        shouldRunAfter test
+    }
+
 }
 
 wrapper {

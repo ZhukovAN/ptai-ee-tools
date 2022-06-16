@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
@@ -21,6 +22,8 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.condition.OS.LINUX;
+
 public class FileCollectorTest extends BaseTest {
     private static class Tool extends AbstractTool {
 
@@ -28,12 +31,13 @@ public class FileCollectorTest extends BaseTest {
 
     @SneakyThrows
     @Test
-    @Tag("advanced")
-    public void createSymlink() {
+    @Tag("integration")
+    @EnabledOnOs(LINUX)
+    public void createSymlink(@TempDir final Path sources) {
         // Symlink creation under Windows requires test to be executed on behalf of Administrator, so just skip
         if (!SystemUtils.IS_OS_LINUX) return;
+        createSampleFileSystem(sources);
         final String testString = UUID.randomUUID().toString();
-        Path sources = getPackedResourceFile(BaseAstIT.JAVA_APP01.getCode());
         Path docs = Files.createDirectory(sources.resolve("docs"));
         Files.write(docs.resolve("DOC"), testString.getBytes(StandardCharsets.UTF_8));
         Files.createSymbolicLink(sources.resolve("DOC.link"), docs.resolve("DOC"));
@@ -53,16 +57,14 @@ public class FileCollectorTest extends BaseTest {
 
     @SneakyThrows
     @Test
-    public void createZip() {
-        Path sources = getPackedResourceFile(BaseAstIT.JAVA_APP01.getCode());
+    public void createZip(@TempDir final Path sources) {
+        createSampleFileSystem(sources);
         File zip = FileCollector.collect(null, sources.toFile(), new Tool());
         Assertions.assertTrue(zip.exists());
     }
 
     @SneakyThrows
-    @Test
-    @DisplayName("Include / exclude Ant mask")
-    public void includeAndExclude(@TempDir final Path sources) {
+    public void createSampleFileSystem(@TempDir final Path sources) {
         Path classFile = sources
                 .resolve("module").resolve("submodule")
                 .resolve("build").resolve("classes")
@@ -77,7 +79,13 @@ public class FileCollectorTest extends BaseTest {
         Files.write(classFile, UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8));
         Files.createDirectories(sourceFile.getParent());
         Files.write(sourceFile, UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8));
+    }
 
+    @SneakyThrows
+    @Test
+    @DisplayName("Include / exclude Ant mask")
+    public void includeAndExclude(@TempDir final Path sources) {
+        createSampleFileSystem(sources);
         Transfers transfers = new Transfers();
         transfers.addTransfer(Transfer.builder()
                 .excludes("./module/*/build/*/*.class")

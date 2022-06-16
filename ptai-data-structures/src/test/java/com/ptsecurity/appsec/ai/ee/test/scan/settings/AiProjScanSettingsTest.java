@@ -3,7 +3,7 @@ package com.ptsecurity.appsec.ai.ee.test.scan.settings;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.v36.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;

@@ -1,11 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.client;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
@@ -15,60 +13,121 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AbstractFileO
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
-import lombok.*;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
-import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
 
 public abstract class BaseAstIT extends BaseClientIT {
-    @RequiredArgsConstructor
-    @Getter @Setter
+    @Getter
     public static class Project {
+        @Getter
         protected final String name;
-        protected final String code;
+        @Getter
         protected final String settings;
+
+        protected final String sourcesZipResourceName;
+
+        @TempDir
+        protected Path code = null;
+
+        public Path getCode() {
+            if (null == code)
+                code = extractPackedResourceFile(sourcesZipResourceName);
+            return code;
+        }
+
+
+        protected Path zip = null;
+
+        public Path getZip() {
+            if (null == zip) {
+                Path sources = getCode();
+                zip = BaseTest.zipFile(sources);
+            }
+            return zip;
+        }
+
+        @SneakyThrows
+        private Project(@NonNull final String name, @NonNull final String sourcesZipResourceName, @NonNull final String settingsResourceName) {
+            this.name = name;
+            String genericSettings = getResourceString(settingsResourceName);
+            this.settings = new JsonSettingsHelper(genericSettings).projectName(name).verifyRequiredFields().serialize();
+            this.sourcesZipResourceName = sourcesZipResourceName;
+        }
+        @SneakyThrows
+        public Project setup(final String policy) {
+            // As projects share same set of settings there's need to modify project name in JSON
+            AbstractApiClient client = Factory.client(CONNECTION_SETTINGS());
+            ProjectTasks projectTasks = new Factory().projectTasks(client);
+            projectTasks.setupFromJson(settings, policy);
+            return this;
+        }
+
+        @SneakyThrows
+        public Project setup() {
+            return setup(null);
+        }
     }
 
-    public static final Project JAVA_APP01 = new Project("junit-it-java-app01", "code/java-app01.zip", "json/scan/settings/settings.java-app01.aiproj");
-    public static final Project PHP_SMOKE_MISC = new Project("junit-it-php-smoke-misc", "code/php-smoke-misc.zip", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_MEDIUM = new Project("junit-it-php-smoke-medium", "code/php-smoke-medium.zip", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_HIGH = new Project("junit-it-php-smoke-high", "code/php-smoke-high.zip", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_MULTIFLOW = new Project("junit-it-php-smoke-multiflow", "code/php-smoke-multiflow.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project JAVA_APP01 = new Project(
+            JAVA_APP01_PROJECT_NAME,
+            "code/java-app01.zip",
+            "json/scan/settings/settings.java-app01.aiproj");
 
-    public Path getSourcesRoot(@NonNull final Project project) {
-        return getPackedResourceFile(project.code);
+    public static final Project JAVA_OWASP_BENCHMARK = new Project(JAVA_OWASP_BENCHMARK_PROJECT_NAME, "code/java-owasp-benchmark.7z", "json/scan/settings/settings.java-app01.aiproj");
+    public static final Project PHP_OWASP_BRICKS = new Project(PHP_OWASP_BRICKS_PROJECT_NAME, "code/php-owasp-bricks.7z", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_MISC = new Project(PHP_SMOKE_MISC_PROJECT_NAME, "code/php-smoke-misc.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_MEDIUM = new Project(PHP_SMOKE_MEDIUM_PROJECT_NAME, "code/php-smoke-medium.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_HIGH = new Project(PHP_SMOKE_HIGH_PROJECT_NAME, "code/php-smoke-high.zip", "json/scan/settings/settings.php-smoke.aiproj");
+    public static final Project PHP_SMOKE_MULTIFLOW = new Project(PHP_SMOKE_MULTIFLOW_PROJECT_NAME, "code/php-smoke-multiflow.zip", "json/scan/settings/settings.php-smoke.aiproj");
+
+    public static final Project[] ALL = new Project[] { JAVA_APP01, JAVA_OWASP_BENCHMARK, PHP_OWASP_BRICKS, PHP_SMOKE_MISC, PHP_SMOKE_MEDIUM, PHP_SMOKE_HIGH, PHP_SMOKE_MULTIFLOW };
+
+    @RequiredArgsConstructor
+    public static class PolicyHelper {
+        @Getter
+        protected final String json;
+        @Getter
+        protected final Policy[] policy;
+
+        @SneakyThrows
+        public static PolicyHelper fromResource(@NonNull final String name) {
+            String json = getResourceString(name);
+            Policy[] policy = createFaultTolerantObjectMapper().readValue(json, Policy[].class);
+            return new PolicyHelper(json, policy);
+        }
+
+        protected Path path = null;
+
+        @SneakyThrows
+        public Path getPath() {
+            if (null == path) {
+                path = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-policy");
+                ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+                mapper.writeValue(path.toFile(), policy);
+            }
+            return path;
+        }
     }
 
-    @SneakyThrows
-    public static void setupProject(@NonNull final Project project, final Policy[] policy) {
-        AiProjScanSettings settings = JsonSettingsHelper.verify(getResourceString(project.getSettings()));
-        if (!JAVA_APP01.equals(project))
-            settings.setProjectName(project.getName());
-
-        AbstractApiClient client = Factory.client(CONNECTION_SETTINGS);
-        ProjectTasks projectTasks = new Factory().projectTasks(client);
-        projectTasks.setupFromJson(settings, policy);
-    }
-
-    @SneakyThrows
-    public static Policy[] getDefaultPolicy() {
-        InputStream inputStream = getResourceStream("json/scan/settings/policy.generic.json");
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
-        return mapper.readValue(inputStream, Policy[].class);
-    }
+    public static final PolicyHelper GENERIC_POLICY = PolicyHelper.fromResource("json/scan/settings/policy.generic.json");
 
     protected Reports.Report report;
     protected Reports.Data data;
