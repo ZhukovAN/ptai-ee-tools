@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api;
 
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.JwtResponse;
@@ -25,6 +26,8 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.
 @Getter
 @RequiredArgsConstructor
 public abstract class AbstractApiClient {
+    public abstract ScanBrief.ApiVersion getApiVersion();
+
     @Setter
     protected TextOutput console = null;
 

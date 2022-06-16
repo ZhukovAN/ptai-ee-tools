@@ -89,8 +89,10 @@ public class JsonSettingsHelper extends BaseJsonHelper {
     }
 
     public String serialize() {
-        return call(
+        String result = call(
                 () -> new ObjectMapper().writeValueAsString(root),
                 "JSON serialization failed");
+        log.trace("Serialized settings: {}", result);
+        return result;
     }
 }

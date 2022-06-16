@@ -20,6 +20,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScanBrief {
+    public enum ApiVersion {
+        V36, V40
+    }
+
+    @NonNull
+    @Getter
+    @Setter
+    @JsonProperty
+    @Builder.Default
+    protected ApiVersion apiVersion = ApiVersion.V36;
+
     @NonNull
     @Getter
     @Setter

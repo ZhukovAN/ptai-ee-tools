@@ -5,11 +5,14 @@ import com.ptsecurity.appsec.ai.ee.scan.errors.Error;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.*;
+import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanError;
+import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResultStatistic;
+import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.V40ScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.Stage;
 import com.ptsecurity.appsec.ai.ee.server.v40.scanscheduler.model.ScanType;
 import com.ptsecurity.appsec.ai.ee.server.v40.scanscheduler.model.StartScanModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.ScanErrorsConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
@@ -26,6 +29,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
 
+import static com.ptsecurity.appsec.ai.ee.server.v40.projectmanagement.model.Stage.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.IssuesConverter.convert;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
@@ -58,6 +62,67 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                 "Failed to get AST result URL");
     }
 
+    public static class ProjectPollingThread implements Runnable {
+        private static final Map<com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.Stage, Stage> STAGE_MAP = new HashMap<>();
+        static {
+            // There's no need to fill dictionary with all the defined enum values as we need to process these three only
+            STAGE_MAP.put(com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.Stage.DONE, DONE);
+            STAGE_MAP.put(com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.Stage.FAILED, FAILED);
+            STAGE_MAP.put(com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.Stage.ABORTED, ABORTED);
+        }
+
+        protected final ApiClient client;
+
+        protected final UUID projectId;
+        protected final UUID scanResultId;
+        protected final BlockingQueue<Stage> queue;
+
+        protected final Thread thread;
+
+        protected boolean exit = false;
+
+        public ProjectPollingThread(@NonNull final ApiClient client, @NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final BlockingQueue<Stage> queue) {
+            this.client = client;
+            this.projectId = projectId;
+            this.scanResultId = scanResultId;
+            this.queue = queue;
+
+            this.thread = new Thread(this);
+            this.thread.start();
+        }
+
+        @Override
+        public void run() {
+            while (!exit) {
+                try {
+                    Thread.sleep(5 * 60 * 1000);
+                    log.trace("Poll {} project {} scan state", projectId, scanResultId);
+                    com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult scanResult = call(
+                            () -> client.getLegacyProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
+                            "Get project scan result failed");
+                    // TODO: Properly process this
+                    if (null == scanResult.getProgress()) break;
+                    if (null == scanResult.getProgress().getStage()) break;
+                    Stage stage = STAGE_MAP.get(scanResult.getProgress().getStage());
+                    if (DONE != stage && ABORTED != stage && FAILED != stage) continue;
+                    log.trace("Stop job from polling thread");
+                    queue.add(stage);
+                    break;
+                } catch (GenericException e) {
+                    log.error("Project polling thread failed to get scan state", e);
+                    break;
+                } catch (InterruptedException e) {
+                    log.error("Project polling thread interrupted", e);
+                    break;
+                }
+            }
+        }
+
+        public void stop() {
+            exit = true;
+        }
+    }
+
     @Override
     public ScanBrief.State waitForComplete(@NonNull UUID projectId, @NonNull UUID scanResultId) throws InterruptedException {
         // Semaphore-based implementation was replaced by queue-based as
@@ -65,18 +130,20 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         // ScanCompleted and ScanProgress with aborted and failed stage values
         BlockingQueue<Stage> queue = new LinkedBlockingDeque<>();
 
+        // As sometimes notifications get lost somewhere we need to implement parallel polling thread
+        ProjectPollingThread pollingThread = new ProjectPollingThread(client, projectId, scanResultId, queue);
         HubConnection connection = client.createSignalrConnection(projectId, scanResultId, queue);
         client.wait(connection, projectId, scanResultId);
-        // connection.start().blockingAwait();
 
         Stage stage = queue.take();
         connection.stop();
+        pollingThread.stop();
 
-        return Stage.FAILED == stage
+        return FAILED == stage
                 ? ScanBrief.State.FAILED
-                : Stage.ABORTED == stage
+                : ABORTED == stage
                 ? ScanBrief.State.ABORTED
-                : Stage.DONE == stage
+                : DONE == stage
                 ? ScanBrief.State.DONE
                 : ScanBrief.State.UNKNOWN;
     }
@@ -109,6 +176,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
 
         return ScanBrief.builder()
+                .apiVersion(client.getApiVersion())
                 .ptaiServerUrl(client.getConnectionSettings().getUrl())
                 .ptaiServerVersion(versions.get(ServerVersionTasks.Component.AIE))
                 .ptaiAgentVersion(versions.get(ServerVersionTasks.Component.AIC))
@@ -185,10 +253,6 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                     "PT AI project localized scan status JSON read failed");
             log.debug("Localized ({}) issues stored to temp file {}", locale, issuesModelFile.getAbsolutePath());
             issuesModelFiles.put(locale, issuesModelFile);
-            InputStream localizedIssuesModelFileStream = call(
-                    () -> new FileInputStream(issuesModelFile),
-                    "PT AI project localized scan status temporal file read failed");
-            issuesModelStreams.put(locale, localizedIssuesModelFileStream);
         }
 
         log.trace("Loading project {} scan settings {}", projectId, scanResult.getSettingsId());
@@ -202,7 +266,8 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
 
         com.ptsecurity.appsec.ai.ee.scan.result.ScanResult res = call(
-                () -> convert(projectName, scanResult, issuesModelStreams, scanSettings, client.getConnectionSettings().getUrl(), versions), "Project scan result convert failed");
+                () -> convert(projectName, scanResult, issuesModelFiles, scanSettings, client.getConnectionSettings().getUrl(), versions), "Project scan result convert failed");
+
         log.debug("Project scan result conversion complete");
 
         log.debug("Starting temporal files deletion");

@@ -90,7 +90,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         public void run() {
             while (!exit) {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(5 * 60 * 1000);
                     log.trace("Poll {} project {} scan state", projectId, scanResultId);
                     com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult = call(
                             () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
@@ -100,6 +100,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                     if (null == scanResult.getProgress().getStage()) break;
                     Stage stage = scanResult.getProgress().getStage();
                     if (DONE != stage && ABORTED != stage && FAILED != stage) continue;
+                    log.trace("Stop job from polling thread");
                     queue.add(stage);
                     break;
                 } catch (GenericException e) {
@@ -167,9 +168,10 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         log.debug("Project {} scan result {} settings loaded", projectId, scanResultId);
 
         ServerVersionTasks serverVersionTasks = new ServerVersionTasksImpl(client);
-        Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
+        Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read failed");
 
         return ScanBrief.builder()
+                .apiVersion(client.getApiVersion())
                 .ptaiServerUrl(client.getConnectionSettings().getUrl())
                 .ptaiServerVersion(versions.get(ServerVersionTasks.Component.AIE))
                 .ptaiAgentVersion(versions.get(ServerVersionTasks.Component.AIC))
@@ -246,10 +248,6 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                     "PT AI project localized scan status JSON read failed");
             log.debug("Localized ({}) issues stored to temp file {}", locale, issuesModelFile.getAbsolutePath());
             issuesModelFiles.put(locale, issuesModelFile);
-            InputStream localizedIssuesModelFileStream = call(
-                    () -> new FileInputStream(issuesModelFile),
-                    "PT AI project localized scan status temporal file read failed");
-            issuesModelStreams.put(locale, localizedIssuesModelFileStream);
         }
 
         log.trace("Loading project {} scan settings {}", projectId, scanResult.getSettingsId());
@@ -263,7 +261,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
 
         com.ptsecurity.appsec.ai.ee.scan.result.ScanResult res = call(
-                () -> convert(projectName, scanResult, issuesModelStreams, scanSettings, client.getConnectionSettings().getUrl(), versions), "Project scan result convert failed");
+                () -> convert(projectName, scanResult, issuesModelFiles, scanSettings, client.getConnectionSettings().getUrl(), versions), "Project scan result convert failed");
         log.debug("Project scan result conversion complete");
 
         log.debug("Starting temporal files deletion");

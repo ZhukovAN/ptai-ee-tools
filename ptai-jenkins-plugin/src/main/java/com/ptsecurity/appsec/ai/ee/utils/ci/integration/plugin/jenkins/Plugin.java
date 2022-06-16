@@ -151,7 +151,9 @@ public class Plugin extends Builder implements SimpleBuildStep {
         String projectName;
         if (selectedScanSettingsUi) {
             projectName = ((ScanSettingsUi) scanSettings).getProjectName();
+            log.trace("UI-defined project name before macro replacement is {}", projectName);
             projectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
+            log.trace("UI-defined project name after macro replacement is {}", projectName);
         } else {
             check = scanSettingsManualDescriptor.doTestJsonSettings(item, jsonSettings);
             if (FormValidation.Kind.OK != check.kind)
@@ -160,19 +162,12 @@ public class Plugin extends Builder implements SimpleBuildStep {
             if (FormValidation.Kind.OK != check.kind)
                 throw new AbortException(check.getMessage());
             JsonSettingsHelper helper = new JsonSettingsHelper(jsonSettings);
+            log.trace("JSON-defined project settings before macro replacement is {}", helper.serialize());
+            jsonSettings = JsonSettingsHelper.replaceMacro(jsonSettings, (s -> Util.replaceMacro(s, buildInfo.getEnvVars())));
+            log.trace("JSON-defined project settings after macro replacement is {}", jsonSettings);
+            helper = new JsonSettingsHelper(jsonSettings);
             projectName = helper.getProjectName();
-            jsonSettings = helper.serialize();
 
-            // TODO: Add replaceMacro call
-            /*
-            AbstractAiProjScanSettings scanSettings = JsonSettingsHelper.verifyBaseSettings(jsonSettings);
-            projectName = scanSettings.getProjectName();
-            String changedProjectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
-            if (!projectName.equals(changedProjectName))
-                scanSettings.setProjectName(projectName);
-             */
-            // These lines also minimize settings and policy JSONs
-            // jsonSettings = BaseJsonHelper.serialize(scanSettings);
             if (StringUtils.isNotEmpty(jsonPolicy))
                 jsonPolicy = JsonPolicyHelper.minimize(jsonPolicy);
         }

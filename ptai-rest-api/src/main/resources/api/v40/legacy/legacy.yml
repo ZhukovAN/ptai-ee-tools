@@ -4039,10 +4039,10 @@ components:
       # V.4.0: Need to add x-enum-varnames as API returns approvalState as integer
       enum:
         - 0
-        - 10
-        - 20
-        - 30
-        - 40
+        - 1
+        - 2
+        - 3
+        - 4
       x-enum-varnames:
         - None
         - Approval

@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -36,10 +37,10 @@ public class ConverterTest extends BaseTest {
         ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
         String scanResultStr = getResourceString("v36/json/scanResult/" + fileName + ".json");
         com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult = mapper.readValue(scanResultStr, com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult.class);
-        Map<Reports.Locale, InputStream> issuesModel = new HashMap<>();
+        Map<Reports.Locale, File> issuesFiles = new HashMap<>();
         for (Reports.Locale locale : Reports.Locale.values()) {
             Path issuesFile = extractPackedResourceFile("v36/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
-            issuesModel.put(locale, new FileInputStream(issuesFile.toFile()));
+            issuesFiles.put(locale, issuesFile.toFile());
         }
 
         @NonNull final V36ScanSettings scanSettings = mapper.readValue(
@@ -52,10 +53,7 @@ public class ConverterTest extends BaseTest {
 
         String projectName = StringUtils.substringBefore(fileName, ".");
 
-        ScanResult genericScanResult = IssuesConverter.convert(projectName, scanResult, issuesModel, scanSettings, CONNECTION().getUrl(), versions);
-        for (InputStream issuesModelStream : issuesModel.values())
-            issuesModelStream.close();
-        return genericScanResult;
+        return IssuesConverter.convert(projectName, scanResult, issuesFiles, scanSettings, CONNECTION().getUrl(), versions);
     }
 
     @SneakyThrows
@@ -63,10 +61,10 @@ public class ConverterTest extends BaseTest {
         ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
         String scanResultStr = getResourceString("v40/json/scanResult/" + fileName + ".json");
         com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult scanResult = mapper.readValue(scanResultStr, com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.ScanResult.class);
-        Map<Reports.Locale, InputStream> issuesModel = new HashMap<>();
+        Map<Reports.Locale, File> issuesFiles = new HashMap<>();
         for (Reports.Locale locale : Reports.Locale.values()) {
             Path issuesFile = extractPackedResourceFile("v40/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
-            issuesModel.put(locale, new FileInputStream(issuesFile.toFile()));
+            issuesFiles.put(locale, issuesFile.toFile());
         }
 
         @NonNull final V40ScanSettings scanSettings = mapper.readValue(
@@ -79,10 +77,7 @@ public class ConverterTest extends BaseTest {
 
         String projectName = StringUtils.substringBefore(fileName, ".");
 
-        ScanResult genericScanResult = com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.IssuesConverter.convert(projectName, scanResult, issuesModel, scanSettings, CONNECTION().getUrl(), versions);
-        for (InputStream issuesModelStream : issuesModel.values())
-            issuesModelStream.close();
-        return genericScanResult;
+        return com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.IssuesConverter.convert(projectName, scanResult, issuesFiles, scanSettings, CONNECTION().getUrl(), versions);
     }
 
     @Test
