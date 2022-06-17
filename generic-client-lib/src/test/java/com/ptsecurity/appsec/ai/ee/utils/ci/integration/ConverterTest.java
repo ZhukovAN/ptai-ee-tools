@@ -53,7 +53,7 @@ public class ConverterTest extends BaseTest {
 
         String projectName = StringUtils.substringBefore(fileName, ".");
 
-        return IssuesConverter.convert(projectName, scanResult, issuesFiles, scanSettings, CONNECTION().getUrl(), versions);
+        return IssuesConverter.convert(projectName, scanResult, issuesFiles, scanSettings, "https://ptai.domain.org", versions);
     }
 
     @SneakyThrows
@@ -77,7 +77,7 @@ public class ConverterTest extends BaseTest {
 
         String projectName = StringUtils.substringBefore(fileName, ".");
 
-        return com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.IssuesConverter.convert(projectName, scanResult, issuesFiles, scanSettings, CONNECTION().getUrl(), versions);
+        return com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.IssuesConverter.convert(projectName, scanResult, issuesFiles, scanSettings, "https://ptai4.domain.org", versions);
     }
 
     @Test
