@@ -1,18 +1,17 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions;
 
 import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.I18nHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import hudson.model.Action;
 import hudson.model.Job;
 import hudson.model.Run;
-import jenkins.model.Jenkins;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +41,7 @@ public class AstJobTableResults implements Action {
         int count = 0;
         for (Run<?, ?> build : builds) {
             ScanBriefDetailed scanBriefDetailed = null;
+            // noinspection ConstantConditions
             do {
                 final AstJobSingleResult action = build.getAction(AstJobSingleResult.class);
                 if (null == action) break;
@@ -63,11 +63,6 @@ public class AstJobTableResults implements Action {
     }
 
     @SneakyThrows
-    public String getScanDurationHistoryChart(final int resultsNumber) {
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(getScanDurationHistoryChartDataModel(resultsNumber));
-    }
-
-    @SneakyThrows
     protected ChartDataModel getScanDurationHistoryChartDataModel(final int resultsNumber) {
         final List<AstJobMultipleResults.BuildScanBriefDetailed> issuesModelList = getLatestAstResults(resultsNumber);
         // Prepare X-axis
@@ -78,7 +73,7 @@ public class AstJobTableResults implements Action {
         issuesModelList.sort(Comparator.comparing(AstJobMultipleResults.BuildScanBriefDetailed::getBuildNumber));
         // Prepare series to fill with data
         List<ChartDataModel.Series> chartSeries = new ArrayList<>();
-        final String scanDurationItemCaption = "DURATION";
+        final String scanDurationItemCaption = Resources.i18n_ast_result_statistics_duration_label();
         ChartDataModel.Series valueSeries = ChartDataModel.Series.builder()
                 .name(scanDurationItemCaption)
                 .itemStyle(ChartDataModel.Series.DataItem.ItemStyle.builder()
@@ -88,6 +83,7 @@ public class AstJobTableResults implements Action {
         // Pre-fill series with zeroes
         for (AstJobMultipleResults.BuildScanBriefDetailed buildScanBriefDetailed : issuesModelList) {
             long count = 0;
+            // noinspection ConstantConditions
             do {
                 ScanBriefDetailed brief = buildScanBriefDetailed.getScanBriefDetailed();
                 if (!Optional.ofNullable(brief).map(ScanBriefDetailed::getStatistics).isPresent()) break;
@@ -114,7 +110,7 @@ public class AstJobTableResults implements Action {
     }
 
     protected ChartDataModel.Series createTotalIssuesCountSeries(@NonNull final List<AstJobMultipleResults.BuildScanBriefDetailed> issuesModelList) {
-        final String totalVulnerabilitiesItemCaption = "TOTAL";
+        final String totalVulnerabilitiesItemCaption = Resources.i18n_misc_enums_vulnerability_total();
         ChartDataModel.Series res = ChartDataModel.Series.builder()
                 .name(totalVulnerabilitiesItemCaption)
                 .itemStyle(ChartDataModel.Series.DataItem.ItemStyle.builder()
@@ -123,6 +119,7 @@ public class AstJobTableResults implements Action {
                 .build();
         for (AstJobMultipleResults.BuildScanBriefDetailed buildScanBriefDetailed : issuesModelList) {
             long count = 0;
+            // noinspection ConstantConditions
             do {
                 ScanBriefDetailed issues = buildScanBriefDetailed.getScanBriefDetailed();
                 if (null == issues) break;
@@ -164,7 +161,7 @@ public class AstJobTableResults implements Action {
         for (BaseIssue.ApprovalState value : approvalStates) {
             ChartDataModel.Series valueSeries
                     = ChartDataModel.Series.builder()
-                    .name(value.name())
+                    .name(I18nHelper.i18n(value))
                     .itemStyle(ChartDataModel.Series.DataItem.ItemStyle.builder()
                             .color("#" + Integer.toHexString(APPROVAL_COLORS.get(value)))
                             .build())
@@ -172,6 +169,7 @@ public class AstJobTableResults implements Action {
             // Prepare series to fill with data
             for (AstJobMultipleResults.BuildScanBriefDetailed buildScanBriefDetailed : issuesModelList) {
                 long count = 0;
+                // noinspection ConstantConditions
                 do {
                     ScanBriefDetailed issues = buildScanBriefDetailed.getScanBriefDetailed();
                     if (null == issues) break;
@@ -188,7 +186,7 @@ public class AstJobTableResults implements Action {
             // Skip series with no data
             if (valueSeries.getData().stream().noneMatch(i -> i.getValue() != 0)) continue;
             chartSeries.add(valueSeries);
-            legend.data.add(value.name());
+            legend.data.add(I18nHelper.i18n(value));
         }
 
         ChartDataModel chartDataModel = ChartDataModel.builder()
@@ -222,7 +220,7 @@ public class AstJobTableResults implements Action {
         for (BaseIssue.Type value : BaseIssue.Type.values()) {
             ChartDataModel.Series valueSeries
                     = ChartDataModel.Series.builder()
-                    .name(value.name())
+                    .name(I18nHelper.i18n(value))
                     .itemStyle(ChartDataModel.Series.DataItem.ItemStyle.builder()
                             .color("#" + Integer.toHexString(TYPE_COLORS.get(value)))
                             .build())
@@ -230,6 +228,7 @@ public class AstJobTableResults implements Action {
             // Prepare series to fill with data
             for (AstJobMultipleResults.BuildScanBriefDetailed buildScanBriefDetailed : issuesModelList) {
                 long count = 0;
+                // noinspection ConstantConditions
                 do {
                     ScanBriefDetailed issues = buildScanBriefDetailed.getScanBriefDetailed();
                     if (null == issues) break;
@@ -246,7 +245,7 @@ public class AstJobTableResults implements Action {
             // Skip series with no data
             if (valueSeries.getData().stream().noneMatch(i -> i.getValue() != 0)) continue;
             chartSeries.add(valueSeries);
-            legend.data.add(value.name());
+            legend.data.add(I18nHelper.i18n(value));
         }
 
         ChartDataModel chartDataModel = ChartDataModel.builder()
@@ -280,7 +279,7 @@ public class AstJobTableResults implements Action {
         for (BaseIssue.Level value : BaseIssue.Level.values()) {
             ChartDataModel.Series valueSeries
                     = ChartDataModel.Series.builder()
-                    .name(value.name())
+                    .name(I18nHelper.i18n(value))
                     .itemStyle(ChartDataModel.Series.DataItem.ItemStyle.builder()
                             .color("#" + Integer.toHexString(LEVEL_COLORS.get(value)))
                             .build())
@@ -288,6 +287,7 @@ public class AstJobTableResults implements Action {
             // Prepare series to fill with data
             for (AstJobMultipleResults.BuildScanBriefDetailed buildScanBriefDetailed : issuesModelList) {
                 long count = 0;
+                // noinspection ConstantConditions
                 do {
                     ScanBriefDetailed issues = buildScanBriefDetailed.getScanBriefDetailed();
                     if (null == issues) break;
@@ -304,7 +304,7 @@ public class AstJobTableResults implements Action {
             // Skip series with no data
             if (valueSeries.getData().stream().noneMatch(i -> i.getValue() != 0)) continue;
             chartSeries.add(valueSeries);
-            legend.data.add(value.name());
+            legend.data.add(I18nHelper.i18n(value));
         }
 
         ChartDataModel chartDataModel = ChartDataModel.builder()
@@ -317,6 +317,7 @@ public class AstJobTableResults implements Action {
     }
 
     @SneakyThrows
+    @SuppressWarnings("unused") // Called by groovy view
     public String getScanStageDurationHistoryChart(final int resultsNumber) {
         ChartDataModel chartDataModel = getScanDurationHistoryChartDataModel(resultsNumber);
         // Add stages durations
@@ -327,7 +328,7 @@ public class AstJobTableResults implements Action {
         for (Stage value : Stage.values()) {
             ChartDataModel.Series valueSeries
                     = ChartDataModel.Series.builder()
-                    .name(value.name())
+                    .name(I18nHelper.i18n(value))
                     .itemStyle(ChartDataModel.Series.DataItem.ItemStyle.builder()
                             .color("#" + Integer.toHexString(SCANSTAGE_COLORS.get(value)))
                             .build())
@@ -335,6 +336,7 @@ public class AstJobTableResults implements Action {
             // Prepare series to fill with data
             for (AstJobMultipleResults.BuildScanBriefDetailed buildScanBriefDetailed : issuesModelList) {
                 long count = 0;
+                // noinspection ConstantConditions
                 do {
                     ScanBriefDetailed issues = buildScanBriefDetailed.getScanBriefDetailed();
                     Optional<String> durationIso8601 = Optional.ofNullable(issues)
@@ -356,7 +358,7 @@ public class AstJobTableResults implements Action {
             // Skip series with no data
             if (valueSeries.getData().stream().noneMatch(i -> i.getValue() != 0)) continue;
             chartDataModel.getSeries().add(valueSeries);
-            chartDataModel.getLegend().data.add(value.name());
+            chartDataModel.getLegend().data.add(I18nHelper.i18n(value));
         }
         return BaseJsonHelper.createObjectMapper().writeValueAsString(chartDataModel);
     }
