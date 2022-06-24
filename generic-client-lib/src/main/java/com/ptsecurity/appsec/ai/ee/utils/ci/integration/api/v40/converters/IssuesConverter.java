@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.joor.Reflect.on;
 
 @Slf4j
@@ -223,10 +224,8 @@ public class IssuesConverter {
                         .description(idm.getDescriptionValue().getDescription())
                         .build());
                 // Store localized description to the same dictionary, but use different key
-                if (StringUtils.isEmpty(idm.getDescriptionValue().getDescription())) {
+                if (StringUtils.isEmpty(idm.getDescriptionValue().getDescription()))
                     log.warn("Vulnerability {} have no description", idm.getDescriptionValue().getHeader());
-                    continue;
-                }
             }
         }
 
@@ -640,7 +639,7 @@ public class IssuesConverter {
     protected static IssuesModel parseIssuesModelStream(@NonNull final File data) {
         JSON parser = new JSON();
         MemoryUsage usage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
-        try (Reader reader = new FileReader(data)) {
+        try (InputStream is = new FileInputStream(data); Reader reader = new InputStreamReader(is, UTF_8)) {
             log.debug("JVM heap memory use before parse {} / {}", FileCollector.bytesToString(usage.getUsed()), FileCollector.bytesToString(usage.getMax()));
             log.debug("Parse started at {}", Instant.now());
             IssuesModel res = parser.getGson().fromJson(reader, IssuesModel.class);
