@@ -179,3 +179,5 @@
 + [ToDo] Remove PDF report generation as PT AI 4.0 REST API no supports it more
 + [ToDo] Remove XML / JSON report generation as PT AI 4.0 REST API no supports it more
 + [Fix] Temporal file cleanup fixed
+### 20220624
++ [Fix] Gradle version fixed in Dockerfile
