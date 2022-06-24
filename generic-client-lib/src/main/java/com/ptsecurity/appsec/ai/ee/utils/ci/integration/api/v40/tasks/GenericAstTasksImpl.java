@@ -22,8 +22,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -245,7 +243,6 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
 
         log.trace("Loading issues into temporal files");
         Map<Reports.Locale, File> issuesModelFiles = new HashMap<>();
-        Map<Reports.Locale, InputStream> issuesModelStreams = new HashMap<>();
         for (Reports.Locale locale : Reports.Locale.values()) {
             log.trace("Getting issues data using {} locale", locale);
             File issuesModelFile = call(
