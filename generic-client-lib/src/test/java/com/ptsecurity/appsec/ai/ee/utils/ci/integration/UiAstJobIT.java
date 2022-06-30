@@ -5,7 +5,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericExcept
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.JsonXml;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.UiAstJobSetupOperationsImpl;
@@ -67,7 +66,6 @@ public class UiAstJobIT extends BaseAstIT {
                 .build();
 
         HtmlPdf.builder().owner(astJob).report(report).build().attach(astJob);
-        JsonXml.builder().owner(astJob).data(data).build().attach(astJob);
         RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
         FailIfAstFailed.builder().build().attach(astJob);
 

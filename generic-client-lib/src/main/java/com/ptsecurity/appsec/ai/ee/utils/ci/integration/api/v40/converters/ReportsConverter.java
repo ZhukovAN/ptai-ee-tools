@@ -24,7 +24,6 @@ public class ReportsConverter {
     private static final Map<Reports.IssuesFilter.SuppressStatus, V40IssuesFilterSuppressStatus> REVERSE_ISSUE_FILTER_SUPPRESSSTATUS_MAP = new HashMap<>();
     private static final Map<Reports.IssuesFilter.SourceType, V40IssuesFilterSourceType> REVERSE_ISSUE_FILTER_SOURCETYPE_MAP = new HashMap<>();
     private static final Map<Reports.Report.Format, ReportFormatType> REVERSE_REPORT_FORMAT_MAP = new HashMap<>();
-    private static final Map<Reports.Data.Format, ReportFormatType> REVERSE_DATA_FORMAT_MAP = new HashMap<>();
 
     static {
         REVERSE_ISSUE_FILTER_LEVEL_MAP.put(Reports.IssuesFilter.Level.NONE, V40IssuesFilterLevel.None);
@@ -67,20 +66,11 @@ public class ReportsConverter {
         REVERSE_ISSUE_FILTER_SOURCETYPE_MAP.put(Reports.IssuesFilter.SourceType.ALL, V40IssuesFilterSourceType.All);
 
         REVERSE_REPORT_FORMAT_MAP.put(Reports.Report.Format.HTML, ReportFormatType.HTML);
-        REVERSE_REPORT_FORMAT_MAP.put(Reports.Report.Format.PDF, ReportFormatType.PDF);
-
-        REVERSE_DATA_FORMAT_MAP.put(Reports.Data.Format.JSON, ReportFormatType.JSON);
-        REVERSE_DATA_FORMAT_MAP.put(Reports.Data.Format.XML, ReportFormatType.XML);
     }
 
     @NonNull
     public static ReportFormatType convert(@NonNull final Reports.Report.Format format) {
         return REVERSE_REPORT_FORMAT_MAP.get(format);
-    }
-
-    @NonNull
-    public static ReportFormatType convert(@NonNull final Reports.Data.Format format) {
-        return REVERSE_DATA_FORMAT_MAP.get(format);
     }
 
     @NonNull

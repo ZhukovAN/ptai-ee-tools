@@ -19,7 +19,7 @@ f.entry(
     )
 }
 
-f.entry(
+f.invisibleEntry(
         title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_format_label(),
         field: 'format') {
     f.select(

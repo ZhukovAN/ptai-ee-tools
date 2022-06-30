@@ -29,7 +29,7 @@ public class ReportUtils {
         if (reports.getReport().stream().map(Reports.Report::getTemplate).anyMatch(StringUtils::isEmpty))
             throw GenericException.raise("There are one or more empty templates", new IllegalArgumentException());
         // Check if all the report file names are unique
-        List<String> names = Stream.concat(reports.getReport().stream(), reports.getData().stream())
+        List<String> names = reports.getReport().stream()
                 .map(Reports.AbstractReport::getFileName).collect(Collectors.toList());
         if (null != reports.getRaw())
             names.addAll(reports.getRaw().stream().map(Reports.RawData::getFileName).collect(Collectors.toList()));

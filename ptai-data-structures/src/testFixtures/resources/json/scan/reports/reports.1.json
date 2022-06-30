@@ -1,7 +1,7 @@
 // Include critical vulnerabilities only
 {
   "report" : [ {
-    "fileName" : "report.ru.xml",
+    "fileName" : "report.ru.html",
     "locale" : "RU",
     "format" : "HTML",
     "template" : "Отчет PCI DSS 3.2",
@@ -13,18 +13,6 @@
       "confirmationStatus": "ALL",
       "sourceType": "ALL"
     }
-  } ],
-  "data" : [ {
-    "fileName" : "data.en.json",
-    "locale" : "EN",
-    "format" : "JSON",
-    "filters": {
-      "issueLevel": "HIGH"
-    }
-  }, {
-    "fileName" : "data.en.xml",
-    "locale" : "EN",
-    "format" : "XML"
   } ],
   "raw" : [ {
     "fileName" : "raw.json"

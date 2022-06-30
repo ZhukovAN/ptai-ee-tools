@@ -110,8 +110,6 @@
 <%-- Valid report format values and labels --%>
 <c:set var="REPORTING_REPORT_FORMAT_HTML" value="<%=Constants.REPORTING_REPORT_FORMAT_HTML%>"/>
 <c:set var="LABEL_REPORTING_REPORT_FORMAT_HTML" value="<%=Labels.REPORTING_REPORT_FORMAT_HTML%>"/>
-<c:set var="REPORTING_REPORT_FORMAT_PDF" value="<%=Constants.REPORTING_REPORT_FORMAT_PDF%>"/>
-<c:set var="LABEL_REPORTING_REPORT_FORMAT_PDF" value="<%=Labels.REPORTING_REPORT_FORMAT_PDF%>"/>
 
 <c:set var="REPORTING_REPORT_LOCALE" value="<%=Params.REPORTING_REPORT_LOCALE%>"/>
 <c:set var="LABEL_REPORTING_REPORT_LOCALE" value="<%=Labels.REPORTING_REPORT_LOCALE%>"/>
@@ -125,32 +123,6 @@
 <c:set var="REPORTING_REPORT_FILTER" value="<%=Params.REPORTING_REPORT_FILTER%>"/>
 <c:set var="LABEL_REPORTING_REPORT_FILTER" value="<%=Labels.REPORTING_REPORT_FILTER%>"/>
 <c:set var="HINT_REPORTING_REPORT_FILTER" value="<%=Hints.REPORTING_REPORT_FILTER%>"/>
-
-
-<c:set var="REPORTING_DATA" value="<%=Params.REPORTING_DATA%>"/>
-<c:set var="LABEL_REPORTING_DATA" value="<%=Labels.REPORTING_DATA%>"/>
-<c:set var="HINT_REPORTING_DATA" value="<%=Hints.REPORTING_DATA%>"/>
-
-<c:set var="REPORTING_DATA_FILE" value="<%=Params.REPORTING_DATA_FILE%>"/>
-<c:set var="LABEL_REPORTING_DATA_FILE" value="<%=Labels.REPORTING_DATA_FILE%>"/>
-<c:set var="HINT_REPORTING_DATA_FILE" value="<%=Hints.REPORTING_DATA_FILE%>"/>
-
-<c:set var="REPORTING_DATA_FORMAT" value="<%=Params.REPORTING_DATA_FORMAT%>"/>
-<c:set var="LABEL_REPORTING_DATA_FORMAT" value="<%=Labels.REPORTING_DATA_FORMAT%>"/>
-<c:set var="HINT_REPORTING_DATA_FORMAT" value="<%=Hints.REPORTING_DATA_FORMAT%>"/>
-<%-- Valid data export format values and labels --%>
-<c:set var="REPORTING_DATA_FORMAT_JSON" value="<%=Constants.REPORTING_DATA_FORMAT_JSON%>"/>
-<c:set var="LABEL_REPORTING_DATA_FORMAT_JSON" value="<%=Labels.REPORTING_DATA_FORMAT_JSON%>"/>
-<c:set var="REPORTING_DATA_FORMAT_XML" value="<%=Constants.REPORTING_DATA_FORMAT_XML%>"/>
-<c:set var="LABEL_REPORTING_DATA_FORMAT_XML" value="<%=Labels.REPORTING_DATA_FORMAT_XML%>"/>
-
-<c:set var="REPORTING_DATA_LOCALE" value="<%=Params.REPORTING_DATA_LOCALE%>"/>
-<c:set var="LABEL_REPORTING_DATA_LOCALE" value="<%=Labels.REPORTING_DATA_LOCALE%>"/>
-<c:set var="HINT_REPORTING_DATA_LOCALE" value="<%=Hints.REPORTING_DATA_LOCALE%>"/>
-
-<c:set var="REPORTING_DATA_FILTER" value="<%=Params.REPORTING_DATA_FILTER%>"/>
-<c:set var="LABEL_REPORTING_DATA_FILTER" value="<%=Labels.REPORTING_DATA_FILTER%>"/>
-<c:set var="HINT_REPORTING_DATA_FILTER" value="<%=Hints.REPORTING_DATA_FILTER%>"/>
 
 
 <c:set var="REPORTING_RAWDATA" value="<%=Params.REPORTING_RAWDATA%>"/>

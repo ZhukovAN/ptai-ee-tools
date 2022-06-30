@@ -14,18 +14,6 @@
       "sourceType": "ALL"
     }
   } ],
-  "data" : [ {
-    "fileName" : "data.en.json",
-    "locale" : "EN",
-    "format" : "JSON",
-    "filters": {
-      "issueLevel": "HIGH"
-    }
-  }, {
-    "fileName" : "data.en.xml",
-    "locale" : "EN",
-    "format" : "XML"
-  } ],
   "raw" : [ {
     "fileName" : "raw.json"
   } ]

@@ -137,7 +137,7 @@ public class Defaults {
     public static final String REPORTING_SARIF = FALSE;
 
     /**
-     * See {@link Params#REPORTING_GIIF}
+     * See {@link Params#REPORTING_SONARGIIF}
      */
     public static final String REPORTING_SONARGIIF = FALSE;
 
@@ -176,15 +176,6 @@ public class Defaults {
      */
     public static final String REPORTING_DATA_FILE = EMPTY;
 
-    /**
-     * See {@link Params#REPORTING_DATA_FORMAT}
-     */
-    public static final String REPORTING_DATA_FORMAT = Reports.Data.DEFAULT_FORMAT;
-
-    /**
-     * See {@link Params#REPORTING_DATA_LOCALE}
-     */
-    public static final String REPORTING_DATA_LOCALE = Reports.Data.DEFAULT_LOCALE;
 
     /**
      * See {@link Params#REPORTING_DATA_FILTER}

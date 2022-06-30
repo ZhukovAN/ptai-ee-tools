@@ -114,26 +114,6 @@ public class Hints {
     public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_filter_hint();
 
     /**
-     * See {@link Params#REPORTING_DATA_FILE}
-     */
-    public static final String REPORTING_DATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_file_hint();
-
-    /**
-     * See {@link Params#REPORTING_DATA_FORMAT}
-     */
-    public static final String REPORTING_DATA_FORMAT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_format_hint();
-
-    /**
-     * See {@link Params#REPORTING_DATA_LOCALE}
-     */
-    public static final String REPORTING_DATA_LOCALE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_locale_hint();
-
-    /**
-     * See {@link Params#REPORTING_DATA_FILTER}
-     */
-    public static final String REPORTING_DATA_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_filter_hint();
-
-    /**
      * See {@link Params#REPORTING_RAWDATA_FILE}
      */
     public static final String REPORTING_RAWDATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_file_hint();

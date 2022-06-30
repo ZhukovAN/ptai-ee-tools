@@ -121,13 +121,9 @@ class JsonAstIT extends BaseJsonIT {
                 "--report-file", "owasp.ru.html",
                 "--report-locale", Reports.Locale.RU.name(),
                 "--report-format", Reports.Report.Format.HTML.name(),
-                "--data-file", "owasp.en.json",
-                "--data-locale", Reports.Locale.EN.name(),
-                "--data-format", Reports.Data.Format.JSON.name(),
                 "--raw-data-file", "raw.json");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
         Assertions.assertTrue(Paths.get(destination.toString()).resolve("owasp.ru.html").toFile().exists());
-        Assertions.assertTrue(Paths.get(destination.toString()).resolve("owasp.en.json").toFile().exists());
         Assertions.assertTrue(Paths.get(destination.toString()).resolve("raw.json").toFile().exists());
     }
 
@@ -151,9 +147,7 @@ class JsonAstIT extends BaseJsonIT {
                 "--settings-json", settings.serializeToFile().toString(),
                 "--report-json", reportsJson.toString());
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
-        Assertions.assertTrue(Paths.get(destination.toString()).resolve("report.ru.xml").toFile().exists());
-        Assertions.assertTrue(Paths.get(destination.toString()).resolve("data.en.json").toFile().exists());
-        Assertions.assertTrue(Paths.get(destination.toString()).resolve("data.en.xml").toFile().exists());
+        Assertions.assertTrue(Paths.get(destination.toString()).resolve("report.ru.html").toFile().exists());
         Assertions.assertTrue(Paths.get(destination.toString()).resolve("raw.json").toFile().exists());
     }
 }
