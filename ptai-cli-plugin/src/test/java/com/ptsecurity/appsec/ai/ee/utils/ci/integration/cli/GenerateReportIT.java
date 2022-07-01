@@ -62,7 +62,7 @@ class GenerateReportIT extends BaseCliIT {
     }
 
     @Test
-    @DisplayName("Generate specific app01 scan results report using all possible configurations")
+    @DisplayName("Generate specific  scan results report using all possible configurations")
     public void testSpecificScanResultsReport() {
         UUID scanResultId = getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName());
         testScanResultsReport(scanResultId);
@@ -200,7 +200,7 @@ class GenerateReportIT extends BaseCliIT {
 
     @SneakyThrows
     @Test
-    @DisplayName("Generate JSON-defined reports for specific app01 scan results using extended filters")
+    @DisplayName("Generate JSON-defined reports for specific PHP smoke medium scan results using extended filters")
     public void testLatestExtendedJsonDefinedReportsGeneration(@NonNull final TestInfo testInfo) {
         log.trace(testInfo.getDisplayName());
         Path reportsJson = TEMP_FOLDER().resolve(UUID.randomUUID().toString());
