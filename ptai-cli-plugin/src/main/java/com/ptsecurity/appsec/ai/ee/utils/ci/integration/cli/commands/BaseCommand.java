@@ -10,7 +10,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -77,8 +76,6 @@ public abstract class BaseCommand {
                     reports.getReport().add(Reports.Report.builder()
                             .fileName(reporting.report.file.normalize().toString())
                             .template(reporting.report.template)
-                            .format(reporting.report.format)
-                            .locale(reporting.report.locale)
                             .includeDfd(reporting.report.includeDfd)
                             .includeGlossary(reporting.report.includeGlossary)
                             .build());
@@ -108,7 +105,7 @@ public abstract class BaseCommand {
             Reports reports = convert();
             if (null == reports) return;
             for (com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report report : reports.getReport())
-                HtmlPdf.builder().owner(owner).report(report).build().attach(owner);
+                com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Report.builder().owner(owner).report(report).build().attach(owner);
             for (Reports.RawData rawData : reports.getRaw())
                 RawJson.builder().owner(owner).rawData(rawData).build().attach(owner);
         }
@@ -160,26 +157,6 @@ public abstract class BaseCommand {
                 paramLabel = "<template>",
                 description = "Template name of report to be generated")
         public String template;
-
-        /**
-         * Exported report file format. PT AI allows report generation using HTML formats
-         */
-        @CommandLine.Option(
-                names = { "--report-format" }, order = 2,
-                required = true,
-                paramLabel = "<format>",
-                description = "Format type of report to be generated, one of: ${COMPLETION-CANDIDATES}")
-        public Reports.Report.Format format;
-
-        /**
-         * Generated report locale. PT AI allows report generation using EN and RU locales
-         */
-        @CommandLine.Option(
-                names = { "--report-locale" }, order = 3,
-                required = true,
-                paramLabel = "<locale>",
-                description = "Locale ID of report to be generated, one of ${COMPLETION-CANDIDATES}")
-        public Reports.Locale locale;
 
         /**
          * Generated report file name

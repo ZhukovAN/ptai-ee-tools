@@ -154,8 +154,6 @@ public class AstSettingsService {
         res.fill(REPORTING_REPORT, request)
                 .fill(REPORTING_REPORT_FILE, request)
                 .fill(REPORTING_REPORT_TEMPLATE, request)
-                .fill(REPORTING_REPORT_FORMAT, request)
-                .fill(REPORTING_REPORT_LOCALE, request)
                 .fill(REPORTING_REPORT_FILTER, request);
         res.fill(REPORTING_RAWDATA, request)
                 .fill(REPORTING_RAWDATA_FILE, request);
@@ -251,13 +249,13 @@ public class AstSettingsService {
 
         if (bean.isTrue(REPORTING_REPORT)) {
             if (bean.empty(REPORTING_REPORT_FILE))
-                results.add(REPORTING_REPORT_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_file_message_empty());
+                results.add(REPORTING_REPORT_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_file_message_empty());
             if (bean.empty(REPORTING_REPORT_TEMPLATE))
-                results.add(REPORTING_REPORT_TEMPLATE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_template_message_empty());
+                results.add(REPORTING_REPORT_TEMPLATE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_template_message_empty());
             if (!bean.empty(REPORTING_REPORT_FILTER)) {
                 Validator.Result result = Validator.validateJsonIssuesFilter(bean.get(REPORTING_REPORT_FILTER));
                 if (result.fail())
-                    results.add(REPORTING_REPORT_FILTER, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_filter_message_invalid_details(result.getDetails()));
+                    results.add(REPORTING_REPORT_FILTER, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_filter_message_invalid_details(result.getDetails()));
             }
         }
 

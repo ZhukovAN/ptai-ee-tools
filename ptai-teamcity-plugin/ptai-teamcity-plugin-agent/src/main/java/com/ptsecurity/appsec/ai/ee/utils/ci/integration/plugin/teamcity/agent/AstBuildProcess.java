@@ -2,13 +2,12 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Report;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Sarif;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif;
@@ -127,8 +126,8 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                 .async(async)
                 .build();
         if (null != reports) {
-            for (Report report : reports.getReport())
-                HtmlPdf.builder().owner(job).report(report).build().attach(job);
+            for (Reports.Report report : reports.getReport())
+                Report.builder().owner(job).report(report).build().attach(job);
             for (RawData rawData : reports.getRaw())
                 RawJson.builder().owner(job).rawData(rawData).build().attach(job);
             for (Reports.Sarif sarif : reports.getSarif())

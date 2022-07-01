@@ -16,10 +16,6 @@ public class ReportsHelper {
         Reports res = new Reports();
         if (TRUE.equals(data.getOrDefault(REPORTING_REPORT, Defaults.REPORTING_REPORT))) {
             Reports.Report report = new Reports.Report();
-            report.setFormat(Reports.Report.Format.valueOf(
-                    data.getOrDefault(REPORTING_REPORT_FORMAT, Defaults.REPORTING_REPORT_FORMAT)));
-            report.setLocale(Reports.Locale.from(
-                    data.getOrDefault(REPORTING_REPORT_LOCALE, Defaults.REPORTING_REPORT_LOCALE)));
             report.setFileName(data.get(REPORTING_REPORT_FILE));
             report.setTemplate(data.get(REPORTING_REPORT_TEMPLATE));
             if (StringUtils.isNotEmpty(data.get(REPORTING_REPORT_FILTER)))

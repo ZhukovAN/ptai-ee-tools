@@ -1,13 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.test.scan.reports;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
-import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
@@ -15,12 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @DisplayName("Read and parse data from report definitions JSON resource file")
 public class ReportsTest extends BaseTest {
@@ -37,7 +29,7 @@ public class ReportsTest extends BaseTest {
         Assertions.assertEquals(1, reports.getReport().size());
         Assertions.assertEquals(1, reports.getRaw().size());
 
-        Assertions.assertEquals(Reports.Report.Format.HTML, reports.getReport().get(0).getFormat());
+        Assertions.assertEquals("report.ru.html", reports.getReport().get(0).getFileName());
     }
 
     @Test

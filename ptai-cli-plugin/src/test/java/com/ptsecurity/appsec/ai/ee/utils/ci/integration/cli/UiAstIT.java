@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import lombok.NonNull;
@@ -17,7 +16,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.UUID;
 
-import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report.Format.HTML;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
 
 @DisplayName("Check UI-defined AST scans")
@@ -151,9 +149,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--token", CONNECTION().getToken(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--report-file", report.getFileName().toString(),
-                "--report-template", "OWASP top 10 2017 report",
-                "--report-format", HTML.name(),
-                "--report-locale", Reports.Locale.EN.name());
+                "--report-template", "OWASP top 10 2017 report");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
         Assertions.assertTrue(report.toFile().exists());
         BasicFileAttributes attr = Files.readAttributes(report, BasicFileAttributes.class);
@@ -168,9 +164,7 @@ class UiAstIT extends BaseCliAstIT {
                 "--token", CONNECTION().getToken(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--report-file", report.getFileName().toString(),
-                "--report-template", "OWASP top 10 2017 report",
-                "--report-format", HTML.name(),
-                "--report-locale", Reports.Locale.EN.name());
+                "--report-template", "OWASP top 10 2017 report");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
         Assertions.assertTrue(report.toFile().exists());
         attr = Files.readAttributes(report, BasicFileAttributes.class);

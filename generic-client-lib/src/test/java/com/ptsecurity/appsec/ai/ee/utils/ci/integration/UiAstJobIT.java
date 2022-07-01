@@ -4,7 +4,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Report;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.UiAstJobSetupOperationsImpl;
@@ -65,7 +65,7 @@ public class UiAstJobIT extends BaseAstIT {
                 .destination(destination)
                 .build();
 
-        HtmlPdf.builder().owner(astJob).report(report).build().attach(astJob);
+        Report.builder().owner(astJob).report(report).build().attach(astJob);
         RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
         FailIfAstFailed.builder().build().attach(astJob);
 
@@ -93,7 +93,7 @@ public class UiAstJobIT extends BaseAstIT {
                 .build();
 
         report.setTemplate(report.getTemplate() + "-" + UUID.randomUUID());
-        HtmlPdf.builder().owner(astJob).report(report).build().attach(astJob);
+        Report.builder().owner(astJob).report(report).build().attach(astJob);
         FailIfAstFailed.builder().build().attach(astJob);
 
         AbstractJob.JobExecutionResult res = astJob.execute();

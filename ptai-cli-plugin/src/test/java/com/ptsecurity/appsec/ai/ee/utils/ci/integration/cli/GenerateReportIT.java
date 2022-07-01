@@ -28,10 +28,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
-import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
-import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report.Format.HTML;
-
 @DisplayName("Report generation tests")
 @Tag("integration")
 @Slf4j
@@ -62,7 +58,7 @@ class GenerateReportIT extends BaseCliIT {
     }
 
     @Test
-    @DisplayName("Generate specific  scan results report using all possible configurations")
+    @DisplayName("Generate specific scan results report using all possible configurations")
     public void testSpecificScanResultsReport() {
         UUID scanResultId = getLatestCompleteScanResults(BaseAstIT.PHP_SMOKE_MEDIUM.getName());
         testScanResultsReport(scanResultId);
@@ -82,9 +78,7 @@ class GenerateReportIT extends BaseCliIT {
         pair = new ImmutablePair<>("report-ru.html", new ArrayList<>());
         pair.getRight().addAll(Arrays.asList(
                 "--report-file", pair.getLeft(),
-                "--report-template", "Отчет по результатам сканирования",
-                "--report-locale", RU.name(),
-                "--report-format", HTML.name()));
+                "--report-template", "Отчет по результатам сканирования"));
         cases.add(pair);
 
         for (int i = 1 ; i < 3 ; i++) {
@@ -133,9 +127,7 @@ class GenerateReportIT extends BaseCliIT {
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--report-template", "Отчет OWASP Top 10 2017",
                 "--report-file", "owasp.ru.html",
-                "--report-locale", EN.name(),
-                "--report-format", HTML.name(),
-                "--raw-data-file", "raw.json");
+                "--raw-data-file", "owasp.ru.html");
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
@@ -151,9 +143,7 @@ class GenerateReportIT extends BaseCliIT {
                 "--output", destination.toString(),
                 "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                 "--report-template", "Отчет OWASP Top 10 2017 ",
-                "--report-file", "owasp.ru.html",
-                "--report-locale", EN.name(),
-                "--report-format", HTML.name());
+                "--report-file", "owasp.ru.html");
         Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
     }
 
@@ -241,9 +231,7 @@ class GenerateReportIT extends BaseCliIT {
                     "--project-name", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
                     "--scan-result-id", scanResultId,
                     "--report-file", report.getFileName().toString(),
-                    "--report-template", "Scan results report",
-                    "--report-locale", EN.name(),
-                    "--report-format", HTML.name()));
+                    "--report-template", "Scan results report"));
             if (report.equals(reportMax) || report.equals(reportDfd)) args.add("--report-include-dfd");
             if (report.equals(reportMax) || report.equals(reportGlossary)) args.add("--report-include-glossary");
             Integer res = new CommandLine(new Plugin()).execute(args.toArray(new String[0]));

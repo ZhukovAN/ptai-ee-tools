@@ -137,9 +137,7 @@ public abstract class BaseAstIT extends BaseClientIT {
     @SneakyThrows
     public void pre() {
         report = Reports.Report.builder()
-                .format(Reports.Report.Format.HTML)
                 .fileName(UUID.randomUUID() + ".html")
-                .locale(EN)
                 .template(Reports.Report.DEFAULT_TEMPLATE_NAME.get(EN))
                 .build();
 

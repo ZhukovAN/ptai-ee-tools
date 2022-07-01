@@ -122,11 +122,6 @@ public class Defaults {
     public static final String REPORTING_REPORT = FALSE;
 
     /**
-     * See {@link Params#REPORTING_DATA}
-     */
-    public static final String REPORTING_DATA = FALSE;
-
-    /**
      * See {@link Params#REPORTING_RAWDATA}
      */
     public static final String REPORTING_RAWDATA = FALSE;
@@ -157,30 +152,9 @@ public class Defaults {
     public static final String REPORTING_REPORT_TEMPLATE = EMPTY;
 
     /**
-     * See {@link Params#REPORTING_REPORT_FORMAT}
-     */
-    public static final String REPORTING_REPORT_FORMAT = Reports.Report.DEFAULT_FORMAT;
-
-    /**
-     * See {@link Params#REPORTING_REPORT_LOCALE}
-     */
-    public static final String REPORTING_REPORT_LOCALE = Reports.Report.DEFAULT_LOCALE;
-
-    /**
      * See {@link Params#REPORTING_REPORT_FILTER}
      */
     public static final String REPORTING_REPORT_FILTER = EMPTY;
-
-    /**
-     * See {@link Params#REPORTING_DATA_FILE}
-     */
-    public static final String REPORTING_DATA_FILE = EMPTY;
-
-
-    /**
-     * See {@link Params#REPORTING_DATA_FILTER}
-     */
-    public static final String REPORTING_DATA_FILTER = EMPTY;
 
     /**
      * See {@link Params#REPORTING_RAWDATA_FILE}

@@ -64,12 +64,7 @@ public class Hints {
     /**
      * See {@link Params#REPORTING_REPORT}
      */
-    public static final String REPORTING_REPORT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_hint();
-
-    /**
-     * See {@link Params#REPORTING_DATA}
-     */
-    public static final String REPORTING_DATA = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_hint();
+    public static final String REPORTING_REPORT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_hint();
 
     /**
      * See {@link Params#REPORTING_RAWDATA}
@@ -91,27 +86,17 @@ public class Hints {
     /**
      * See {@link Params#REPORTING_REPORT_FILE}
      */
-    public static final String REPORTING_REPORT_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_file_hint();
+    public static final String REPORTING_REPORT_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_file_hint();
 
     /**
      * See {@link Params#REPORTING_REPORT_TEMPLATE}
      */
-    public static final String REPORTING_REPORT_TEMPLATE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_template_hint();
-
-    /**
-     * See {@link Params#REPORTING_REPORT_FORMAT}
-     */
-    public static final String REPORTING_REPORT_FORMAT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_format_hint();
-
-    /**
-     * See {@link Params#REPORTING_REPORT_LOCALE}
-     */
-    public static final String REPORTING_REPORT_LOCALE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_locale_hint();
+    public static final String REPORTING_REPORT_TEMPLATE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_template_hint();
 
     /**
      * See {@link Params#REPORTING_REPORT_FILTER}
      */
-    public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_filter_hint();
+    public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_filter_hint();
 
     /**
      * See {@link Params#REPORTING_RAWDATA_FILE}

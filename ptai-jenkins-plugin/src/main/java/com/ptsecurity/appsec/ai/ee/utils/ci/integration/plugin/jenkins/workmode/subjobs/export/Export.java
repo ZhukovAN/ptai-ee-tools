@@ -14,16 +14,16 @@ public abstract class Export extends Base {
     public static abstract class ExportDescriptor extends BaseDescriptor {
         @SuppressWarnings("unused")
         public FormValidation doCheckFileName(@QueryParameter("fileName") String fileName) {
-            return Validator.doCheckFieldNotEmpty(fileName, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_file_message_empty());
+            return Validator.doCheckFieldNotEmpty(fileName, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_file_message_empty());
         }
         @SuppressWarnings("unused")
         public FormValidation doCheckTemplate(@QueryParameter("template") String template) {
-            return Validator.doCheckFieldNotEmpty(template, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_template_message_empty());
+            return Validator.doCheckFieldNotEmpty(template, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_template_message_empty());
         }
         @SuppressWarnings("unused")
         public FormValidation doCheckFilter(@QueryParameter("filter") String filter) {
             if (Validator.doCheckFieldNotEmpty(filter))
-                return Validator.doCheckFieldJsonIssuesFilter(filter, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_filter_message_invalid());
+                return Validator.doCheckFieldJsonIssuesFilter(filter, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_filter_message_invalid());
             else
                 return FormValidation.ok();
         }
