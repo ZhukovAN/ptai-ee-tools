@@ -109,7 +109,7 @@ public class ScanBrief {
             JAVA("Java"),
             CSHARP("CSharp"),
             VB("VB"),
-            JS("JavaScript"),
+            JAVASCRIPT("JavaScript"),
             GO("Go"),
             CPP("CPlusPlus"),
             PYTHON("Python"),

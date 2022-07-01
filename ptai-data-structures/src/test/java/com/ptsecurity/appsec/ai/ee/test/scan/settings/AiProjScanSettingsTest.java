@@ -61,4 +61,17 @@ public class AiProjScanSettingsTest extends BaseTest {
         Assertions.assertNotNull(settings);
         Assertions.assertTrue("Test project".equalsIgnoreCase(settings.getProjectName()));
     }
+
+    @Test
+    @SneakyThrows
+    @DisplayName("Load JavaScript settings")
+    public void loadJavaScriptAiProj() {
+        InputStream inputStream = getResourceStream("json/scan/settings/settings.javascript-vnwa.aiproj");
+        Assertions.assertNotNull(inputStream);
+        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        AiProjScanSettings settings = mapper.readValue(inputStream, AiProjScanSettings.class);
+        Assertions.assertNotNull(settings);
+        Assertions.assertTrue("junit-it-javascript-smoke".equalsIgnoreCase(settings.getProjectName()));
+    }
+
 }
