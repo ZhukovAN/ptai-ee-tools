@@ -21,7 +21,6 @@ import javax.xml.bind.DatatypeConverter;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -68,6 +67,7 @@ public class IssuesConverter {
 
         SCAN_MODE_MAP.put(V40VulnerabilityIssueScanMode.FromEntryPoint, VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT);
         SCAN_MODE_MAP.put(V40VulnerabilityIssueScanMode.FromPublicProtected, VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED);
+        SCAN_MODE_MAP.put(null, VulnerabilityIssue.ScanMode.NONE);
 
         POLICY_STATE_MAP.put(PolicyState.None, Policy.State.NONE);
         POLICY_STATE_MAP.put(PolicyState.Rejected, Policy.State.REJECTED);
@@ -81,7 +81,7 @@ public class IssuesConverter {
         LANGUAGE_MAP.put(V40ProgrammingLanguage.CPLUSPLUS, ScanResult.ScanSettings.Language.CPP);
         LANGUAGE_MAP.put(V40ProgrammingLanguage.PYTHON, ScanResult.ScanSettings.Language.PYTHON);
         LANGUAGE_MAP.put(V40ProgrammingLanguage.PLSQL, ScanResult.ScanSettings.Language.SQL);
-        LANGUAGE_MAP.put(V40ProgrammingLanguage.JAVASCRIPT, ScanResult.ScanSettings.Language.JS);
+        LANGUAGE_MAP.put(V40ProgrammingLanguage.JAVASCRIPT, ScanResult.ScanSettings.Language.JAVASCRIPT);
         LANGUAGE_MAP.put(V40ProgrammingLanguage.KOTLIN, ScanResult.ScanSettings.Language.KOTLIN);
         LANGUAGE_MAP.put(V40ProgrammingLanguage.SWIFT, ScanResult.ScanSettings.Language.SWIFT);
         LANGUAGE_MAP.put(V40ProgrammingLanguage.OBJECTIVEC, ScanResult.ScanSettings.Language.OBJECTIVEC);
@@ -591,12 +591,8 @@ public class IssuesConverter {
             entries = issue.getDataTrace();
             if (null != entries && !entries.isEmpty())
                 res.setDataTrace(entries.stream().map(IssuesConverter::convert).collect(Collectors.toList()));
-            if (!SCAN_MODE_MAP.containsKey(Objects.requireNonNull(issue.getScanMode(), "Issue scan mode is null"))) {
-                log.warn("Skipping issue " + issueBase.getId() + " with unknown scan mode " + issue.getScanMode().toString());
-                log.trace(issueBase.toString());
-                return null;
-            }
-            res.setScanMode(SCAN_MODE_MAP.get(issue.getScanMode()));
+
+            res.setScanMode(SCAN_MODE_MAP.getOrDefault(issue.getScanMode(), VulnerabilityIssue.ScanMode.FROM_OTHER));
             res.setBpf(convert(issue.getBestPlaceToFix()));
             res.setConditions(issue.getAdditionalConditions());
             res.setExploit(convert(issue.getExploit()));

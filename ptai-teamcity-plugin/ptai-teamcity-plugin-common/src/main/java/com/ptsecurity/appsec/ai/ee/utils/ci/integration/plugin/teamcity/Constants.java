@@ -52,6 +52,4 @@ public class Constants {
 
     public static final String REPORTING_LOCALE_ENGLISH = Reports.Locale.EN.getValue();
     public static final String REPORTING_LOCALE_RUSSIAN = Reports.Locale.RU.getValue();
-
-    public static final String REPORTING_REPORT_FORMAT_HTML = Reports.Report.Format.HTML.name();
 }

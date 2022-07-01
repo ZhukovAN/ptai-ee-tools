@@ -75,7 +75,6 @@
         var ptaiReportingReportFieldRows = [
             'row_${REPORTING_REPORT_FILE}',
             'row_${REPORTING_REPORT_TEMPLATE}',
-            'row_${REPORTING_REPORT_LOCALE}',
             'row_${REPORTING_REPORT_FILTER}' ];
 
         ptaiReportingReportShowHide = function (show) {
@@ -390,36 +389,6 @@
         <td class="noBorder dense">
             <props:textProperty name="${REPORTING_REPORT_TEMPLATE}" className="longField"/>
             <span class="smallNote">${HINT_REPORTING_REPORT_TEMPLATE}</span>
-        </td>
-    </tr>
-    <tr id="row_${REPORTING_REPORT_FORMAT}" style="display:none;">
-        <th class="noBorder dense">
-            <label for="${REPORTING_REPORT_FORMAT}">${LABEL_REPORTING_REPORT_FORMAT}<l:star/></label>
-        </th>
-        <td class="noBorder dense">
-            <props:selectProperty
-                    name="${REPORTING_REPORT_FORMAT}" enableFilter="true" className="mediumField">
-                <props:option value="${REPORTING_REPORT_FORMAT_HTML}"
-                              currValue="${propertiesBean.properties[REPORTING_REPORT_FORMAT]}">${LABEL_REPORTING_REPORT_FORMAT_HTML}</props:option>
-            </props:selectProperty>
-            <span class="smallNote">${HINT_REPORTING_REPORT_FORMAT}</span>
-            <span class="error" id="error_${REPORTING_REPORT_FORMAT}"></span>
-        </td>
-    </tr>
-    <tr id="row_${REPORTING_REPORT_LOCALE}">
-        <th class="noBorder dense">
-            <label for="${REPORTING_REPORT_LOCALE}">${LABEL_REPORTING_REPORT_LOCALE}<l:star/></label>
-        </th>
-        <td class="noBorder dense">
-            <props:selectProperty
-                    name="${REPORTING_REPORT_LOCALE}" enableFilter="true" className="mediumField">
-                <props:option value="${REPORTING_LOCALE_ENGLISH}"
-                              currValue="${propertiesBean.properties[REPORTING_REPORT_LOCALE]}">${LABEL_REPORTING_LOCALE_ENGLISH}</props:option>
-                <props:option value="${REPORTING_LOCALE_RUSSIAN}"
-                              currValue="${propertiesBean.properties[REPORTING_REPORT_LOCALE]}">${LABEL_REPORTING_LOCALE_RUSSIAN}</props:option>
-            </props:selectProperty>
-            <span class="smallNote">${HINT_REPORTING_REPORT_LOCALE}</span>
-            <span class="error" id="error_${REPORTING_REPORT_LOCALE}"></span>
         </td>
     </tr>
     <tr id="row_${REPORTING_REPORT_FILTER}">

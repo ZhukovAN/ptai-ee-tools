@@ -2,8 +2,6 @@
 {
   "report" : [ {
     "fileName" : "report.ru.xml",
-    "locale" : "RU",
-    "format" : "HTML",
     "template" : "Отчет PCI DSS 3.2",
     "filters": {
       "issueLevel": "ALL",

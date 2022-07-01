@@ -119,8 +119,6 @@ class JsonAstIT extends BaseJsonIT {
                 "--settings-json", settings.serializeToFile().toString(),
                 "--report-template", "Отчет OWASP Top 10 2017",
                 "--report-file", "owasp.ru.html",
-                "--report-locale", Reports.Locale.RU.name(),
-                "--report-format", Reports.Report.Format.HTML.name(),
                 "--raw-data-file", "raw.json");
         Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
         Assertions.assertTrue(Paths.get(destination.toString()).resolve("owasp.ru.html").toFile().exists());

@@ -120,7 +120,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         LANGUAGE_GROUP.put(Language.JAVA, Collections.singleton(PatternLanguage.JAVA));
         LANGUAGE_GROUP.put(Language.CSHARP, Collections.singleton(PatternLanguage.CSHARP));
         LANGUAGE_GROUP.put(Language.VB, Collections.singleton(PatternLanguage.VB));
-        LANGUAGE_GROUP.put(Language.JS, Collections.singleton(PatternLanguage.JAVASCRIPT));
+        LANGUAGE_GROUP.put(Language.JAVASCRIPT, Collections.singleton(PatternLanguage.JAVASCRIPT));
         LANGUAGE_GROUP.put(Language.PYTHON, Collections.singleton(PatternLanguage.PYTHON));
         LANGUAGE_GROUP.put(Language.OBJECTIVEC, Collections.singleton(PatternLanguage.OBJECTIVEC));
         LANGUAGE_GROUP.put(Language.SWIFT, Collections.singleton(PatternLanguage.SWIFT));

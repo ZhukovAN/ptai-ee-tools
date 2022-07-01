@@ -2,6 +2,8 @@ package com.ptsecurity.appsec.ai.ee.test.scan.settings;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.v36.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
@@ -60,5 +62,25 @@ public class AiProjScanSettingsTest extends BaseTest {
         AiProjScanSettings settings = mapper.readValue(inputStream, AiProjScanSettings.class);
         Assertions.assertNotNull(settings);
         Assertions.assertTrue("Test project".equalsIgnoreCase(settings.getProjectName()));
+    }
+
+    @Test
+    @SneakyThrows
+    @DisplayName("Load JavaScript settings")
+    public void loadJavaScriptAiProj() {
+        InputStream inputStream = getResourceStream("json/scan/settings/settings.javascript-vnwa.aiproj");
+        Assertions.assertNotNull(inputStream);
+        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        AiProjScanSettings settings = mapper.readValue(inputStream, AiProjScanSettings.class);
+        Assertions.assertNotNull(settings);
+        Assertions.assertTrue("junit-it-javascript-smoke".equalsIgnoreCase(settings.getProjectName()));
+    }
+
+    @Test
+    @DisplayName("Convert enums from strings")
+    void convertEnums() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new AiProjScanSettings().setProgrammingLanguage(ScanBrief.ScanSettings.Language.valueOf(ScanBrief.ScanSettings.Engine.BLACKBOX.name()));
+        });
     }
 }

@@ -130,18 +130,6 @@ public class Params {
     public static final String REPORTING_REPORT_TEMPLATE = PARAM("ReportingReportTemplate");
 
     /**
-     * If {@link Params#REPORTING_REPORT} is on then this field is to
-     * contain format of the report file to be generated
-     */
-    public static final String REPORTING_REPORT_FORMAT = PARAM("ReportingReportFormat");
-
-    /**
-     * If {@link Params#REPORTING_REPORT} is on then this field is to
-     * contain locale of the report file to be generated
-     */
-    public static final String REPORTING_REPORT_LOCALE = PARAM("ReportingReportLocale");
-
-    /**
      * If {@link Params#REPORTING_REPORT} is on then this field may
      * contain JSON filter to define vulnerabilities to be included in the generated report file
      */
@@ -190,8 +178,7 @@ public class Params {
     public static final String REPORTING_JSON_SETTINGS = PARAM("ReportingJsonSettings");
 
     public static String PARAM(final String field) {
-        String res = PREFIX + String.valueOf(field.charAt(0)).toUpperCase() + field.substring(1);
-        return res;
+        return PREFIX + String.valueOf(field.charAt(0)).toUpperCase() + field.substring(1);
     }
 
     /**

@@ -104,16 +104,6 @@
 <c:set var="LABEL_REPORTING_REPORT_TEMPLATE" value="<%=Labels.REPORTING_REPORT_TEMPLATE%>"/>
 <c:set var="HINT_REPORTING_REPORT_TEMPLATE" value="<%=Hints.REPORTING_REPORT_TEMPLATE%>"/>
 
-<c:set var="REPORTING_REPORT_FORMAT" value="<%=Params.REPORTING_REPORT_FORMAT%>"/>
-<c:set var="LABEL_REPORTING_REPORT_FORMAT" value="<%=Labels.REPORTING_REPORT_FORMAT%>"/>
-<c:set var="HINT_REPORTING_REPORT_FORMAT" value="<%=Hints.REPORTING_REPORT_FORMAT%>"/>
-<%-- Valid report format values and labels --%>
-<c:set var="REPORTING_REPORT_FORMAT_HTML" value="<%=Constants.REPORTING_REPORT_FORMAT_HTML%>"/>
-<c:set var="LABEL_REPORTING_REPORT_FORMAT_HTML" value="<%=Labels.REPORTING_REPORT_FORMAT_HTML%>"/>
-
-<c:set var="REPORTING_REPORT_LOCALE" value="<%=Params.REPORTING_REPORT_LOCALE%>"/>
-<c:set var="LABEL_REPORTING_REPORT_LOCALE" value="<%=Labels.REPORTING_REPORT_LOCALE%>"/>
-<c:set var="HINT_REPORTING_REPORT_LOCALE" value="<%=Hints.REPORTING_REPORT_LOCALE%>"/>
 <%-- Valid locale values and labels --%>
 <c:set var="REPORTING_LOCALE_ENGLISH" value="<%=Constants.REPORTING_LOCALE_ENGLISH%>"/>
 <c:set var="LABEL_REPORTING_LOCALE_ENGLISH" value="<%=Labels.REPORTING_LOCALE_ENGLISH%>"/>

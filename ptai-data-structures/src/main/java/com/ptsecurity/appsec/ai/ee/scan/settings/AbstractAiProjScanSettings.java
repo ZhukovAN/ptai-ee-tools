@@ -184,7 +184,7 @@ public abstract class AbstractAiProjScanSettings {
                 scanAppTypes.add(ScanAppType.CSHARP);
             else if (ScanBrief.ScanSettings.Language.PHP == programmingLanguage)
                 scanAppTypes.add(ScanAppType.PHP);
-            else if (ScanBrief.ScanSettings.Language.JS == programmingLanguage)
+            else if (ScanBrief.ScanSettings.Language.JAVASCRIPT == programmingLanguage)
                 scanAppTypes.add(ScanAppType.JAVASCRIPT);
         }
         scanAppType = scanAppTypes.stream().map(ScanAppType::value).collect(Collectors.joining(", "));

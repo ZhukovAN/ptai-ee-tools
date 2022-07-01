@@ -112,7 +112,7 @@ public class ConverterTest extends BaseTest {
                 json = BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(scanResult);
                 sevenZipData(scanResults40.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
             }
-            log.trace("Scan results are saved to {}", scanResults36);
+            log.trace("Scan results are saved to {}", destination);
         }
     }
 }

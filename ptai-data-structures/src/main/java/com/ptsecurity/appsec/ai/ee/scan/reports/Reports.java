@@ -226,13 +226,6 @@ public class Reports {
         @JsonProperty
         protected String fileName;
 
-        /**
-         * Report locale
-         */
-        @NonNull
-        @JsonProperty
-        protected Locale locale;
-
         @JsonProperty
         @Builder.Default
         protected boolean includeDfd = true;
@@ -257,16 +250,6 @@ public class Reports {
     @AllArgsConstructor
     public static class Report extends AbstractReport {
 
-        /**
-         * Default report locale to be used for new reports
-         */
-        public static final String DEFAULT_LOCALE = Locale.RU.name();
-
-        /**
-         * Default report format to be used for new reports
-         */
-        public static final String DEFAULT_FORMAT = Format.HTML.name();
-
         public static Map<Locale, String> DEFAULT_TEMPLATE_NAME = new HashMap<>();
 
         static {
@@ -277,14 +260,6 @@ public class Reports {
         @NonNull
         @JsonProperty
         protected String template;
-
-        public enum Format {
-            HTML
-        }
-
-        @NonNull
-        @JsonProperty
-        protected Format format;
     }
 
     @Getter
