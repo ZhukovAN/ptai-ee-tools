@@ -176,8 +176,9 @@
 ### 20220615
 + [Feature] PT AI 4.0 supported
 + [Feature] As sometimes notifications service connection get lost, polling thread added to generic AST task
-+ [ToDo] Remove PDF report generation as PT AI 4.0 REST API no supports it more
-+ [ToDo] Remove XML / JSON report generation as PT AI 4.0 REST API no supports it more
 + [Fix] Temporal file cleanup fixed
 ### 20220624
 + [Fix] Gradle version fixed in Dockerfile
++ [Fix] Raw JSON encoding fixed
++ [Feature] Removed PDF report generation as PT AI 4.0 REST API no supports it more
++ [Feature] Removed explicit XML / JSON report generation as PT AI 4.0 supports them via report template

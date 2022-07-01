@@ -115,26 +115,6 @@ public class Labels {
     public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_filter_label();
 
     /**
-     * See {@link Params#REPORTING_DATA_FILE}
-     */
-    public static final String REPORTING_DATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_file_label();
-
-    /**
-     * See {@link Params#REPORTING_DATA_FORMAT}
-     */
-    public static final String REPORTING_DATA_FORMAT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_format_label();
-
-    /**
-     * See {@link Params#REPORTING_DATA_LOCALE}
-     */
-    public static final String REPORTING_DATA_LOCALE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_locale_label();
-
-    /**
-     * See {@link Params#REPORTING_DATA_FILTER}
-     */
-    public static final String REPORTING_DATA_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_filter_label();
-
-    /**
      * See {@link Params#REPORTING_RAWDATA_FILE}
      */
     public static final String REPORTING_RAWDATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_rawjson_file_label();
@@ -172,9 +152,5 @@ public class Labels {
     public static final String REPORTING_LOCALE_ENGLISH = Resources.i18n_misc_enums_locale_english_label();
     public static final String REPORTING_LOCALE_RUSSIAN = Resources.i18n_misc_enums_locale_russian_label();
 
-    public static final String REPORTING_DATA_FORMAT_XML = Resources.i18n_misc_enums_format_xml_label();
-    public static final String REPORTING_DATA_FORMAT_JSON = Resources.i18n_misc_enums_format_json_label();
     public static final String REPORTING_REPORT_FORMAT_HTML = Resources.i18n_misc_enums_format_html_label();
-    public static final String REPORTING_REPORT_FORMAT_PDF = Resources.i18n_misc_enums_format_pdf_label();
-
 }

@@ -1,7 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Data;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
@@ -9,7 +8,10 @@ import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.*;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Sarif;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstUnstable;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
@@ -127,8 +129,6 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
         if (null != reports) {
             for (Report report : reports.getReport())
                 HtmlPdf.builder().owner(job).report(report).build().attach(job);
-            for (Data data : reports.getData())
-                JsonXml.builder().owner(job).data(data).build().attach(job);
             for (RawData rawData : reports.getRaw())
                 RawJson.builder().owner(job).rawData(rawData).build().attach(job);
             for (Reports.Sarif sarif : reports.getSarif())

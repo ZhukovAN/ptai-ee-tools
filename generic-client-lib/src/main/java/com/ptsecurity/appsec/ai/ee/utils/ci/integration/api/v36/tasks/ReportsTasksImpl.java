@@ -136,9 +136,6 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
     }
 
     @Override
-    public void check(@NonNull Data data) throws GenericException {}
-
-    @Override
     public void check(@NonNull RawData rawData) throws GenericException {}
 
     @Override
@@ -170,7 +167,6 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
 
         // final AtomicReference<UUID> finalProjectId = new AtomicReference<>(projectId);
         List<Object> allReports = new ArrayList<>();
-        allReports.addAll(checkedReports.getData());
         allReports.addAll(checkedReports.getReport());
         allReports.addAll(checkedReports.getRaw());
         allReports.addAll(checkedReports.getSarif());
@@ -180,9 +176,6 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 if (item instanceof Report) {
                     Report report = (Report) item;
                     exportHtmlPdf(projectId, scanResultId, report, fileOps);
-                } else if (item instanceof Data) {
-                    Data data = (Data) item;
-                    exportJsonXml(projectId, scanResultId, data, fileOps);
                 } else if (item instanceof RawData) {
                     RawData rawData = (RawData) item;
                     exportRawJson(projectId, scanResultId, rawData, fileOps);
@@ -201,7 +194,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
 
     @Override
     public void exportHtmlPdf(@NonNull UUID projectId, @NonNull UUID scanResultId, @NonNull Report report, @NonNull FileOperations fileOps) throws GenericException {
-        fine("Started: HTML / PDF report generation for project id: %s, scan result id: %s, template: %s, locale: %s, type: %s", projectId, scanResultId, report.getTemplate(), report.getLocale().getValue(), report.getFormat().name());
+        fine("Started: HTML report generation for project id: %s, scan result id: %s, template: %s, locale: %s, type: %s", projectId, scanResultId, report.getTemplate(), report.getLocale().getValue(), report.getFormat().name());
 
         log.trace("Load all report templates to find one with {} name and {} locale", report.getTemplate(), report.getLocale().getValue());
         List<ReportTemplateModel> templates = call(
@@ -235,44 +228,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 "Report file save failed");
         log.debug("Deleting temp file {}", file.getAbsolutePath());
         call(file::delete, "Temporal file " + file.getAbsolutePath() + " delete failed", true);
-        fine("Finished: HTML / PDF report generation for project id: %s, scan result id: %s, template: %s, locale: %s, type: %s", projectId, scanResultId, report.getTemplate(), report.getLocale().getValue(), report.getFormat().name());
-    }
-
-    @Override
-    public void exportJsonXml(@NonNull UUID projectId, @NonNull UUID scanResultId, @NonNull Data data, @NonNull FileOperations fileOps) throws GenericException {
-        fine("Started: XML / JSON data export for project id: %s, scan result id: %s, locale: %s, type: %s", projectId, scanResultId, data.getLocale().getValue(), data.getFormat().name());
-        UUID dummyTemplateId = getDummyReportTemplateId(Locale.EN);
-        exportJsonXml(projectId, scanResultId, data, dummyTemplateId, fileOps);
-        fine("Finished: XML / JSON data export for project id: %s, scan result id: %s, locale: %s, type: %s", projectId, scanResultId, data.getLocale().getValue(), data.getFormat().name());
-    }
-
-    protected void exportJsonXml(@NonNull UUID projectId, @NonNull UUID scanResultId, @NonNull Data data, @NonNull UUID dummyTemplateId, @NonNull FileOperations fileOps) throws GenericException {
-        ReportGenerateModel model = new ReportGenerateModel()
-                .parameters(new UserReportParameters()
-                        .includeDFD(data.isIncludeDfd())
-                        .includeGlossary(data.isIncludeGlossary())
-                        .useFilters(null != data.getFilters())
-                        .formatType(ReportsConverter.convert(data.getFormat()))
-                        .reportTemplateId(dummyTemplateId)
-                        .saveAsPath(""))
-                .scanResultId(scanResultId)
-                .projectId(projectId)
-                .localeId(data.getLocale().getValue());
-        if (null != data.getFilters()) model.setFilters(ReportsConverter.convert(data.getFilters()));
-        File result = call(
-                () -> client.getReportsApi().apiReportsGeneratePost(model),
-                "Report generation failed");
-
-        log.trace("Call report generation API");
-        File file = call(
-                () -> client.getReportsApi().apiReportsGeneratePost(model),
-                "Report generation failed");
-        log.trace("Report saved to temp file {}", file.toPath());
-        call(
-                () -> fileOps.saveArtifact(data.getFileName(), file),
-                "Report file save failed");
-        log.debug("Deleting temp file {}", file.getAbsolutePath());
-        call(file::delete, "Temporal file " + file.getAbsolutePath() + " delete failed", true);
+        fine("Finished: HTML report generation for project id: %s, scan result id: %s, template: %s, locale: %s, type: %s", projectId, scanResultId, report.getTemplate(), report.getLocale().getValue(), report.getFormat().name());
     }
 
     @Override

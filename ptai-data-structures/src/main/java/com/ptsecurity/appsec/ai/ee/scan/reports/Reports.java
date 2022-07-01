@@ -249,36 +249,6 @@ public class Reports {
         protected IssuesFilter filters = null;
     }
 
-    /**
-     * Generic XML / JSON report that doesn't depend on template used
-     */
-    @Getter
-    @Setter
-    @ToString(callSuper = true)
-    @SuperBuilder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Data extends AbstractReport {
-        /**
-         * Default report locale to be used for new data exports
-         */
-        public static final String DEFAULT_LOCALE = Locale.RU.name();
-
-        /**
-         * Default report format to be used for new data exports
-         */
-        public static final String DEFAULT_FORMAT = Format.JSON.name();
-
-        public enum Format {
-            JSON, XML
-        }
-
-        @NonNull
-        @JsonProperty
-        protected Format format;
-    }
-
-
     @Getter
     @Setter
     @ToString(callSuper = true)
@@ -309,7 +279,7 @@ public class Reports {
         protected String template;
 
         public enum Format {
-            HTML, PDF
+            HTML
         }
 
         @NonNull
@@ -385,19 +355,12 @@ public class Reports {
 
     /**
      * List of human-readable reports to be generated. Such report type
-     * generation requires template name, output format (HTML or PDF),
+     * generation requires template name, output format (HTML),
      * output file name and filters
      */
     @NonNull
     @JsonProperty
     protected List<Report> report = new ArrayList<>();
-    /**
-     * List of machine-readable reports to be generated. Such report type
-     * differ from human-readable as they do not require template name
-     */
-    @NonNull
-    @JsonProperty
-    protected List<Data> data = new ArrayList<>();
 
     /**
      * Raw JSON report that is result of conversion from /api/Projects/{projectId}/scanResults/{scanResultId}/issues
@@ -420,7 +383,6 @@ public class Reports {
      */
     public Reports append(@NonNull final Reports reports) {
         getReport().addAll(reports.getReport());
-        getData().addAll(reports.getData());
         getRaw().addAll(reports.getRaw());
         getSarif().addAll(reports.getSarif());
         getSonarGiif().addAll(reports.getSonarGiif());

@@ -130,7 +130,6 @@ public abstract class BaseAstIT extends BaseClientIT {
     public static final PolicyHelper GENERIC_POLICY = PolicyHelper.fromResource("json/scan/settings/policy.generic.json");
 
     protected Reports.Report report;
-    protected Reports.Data data;
     protected Reports.RawData rawData;
 
     @BeforeEach
@@ -141,12 +140,6 @@ public abstract class BaseAstIT extends BaseClientIT {
                 .fileName(UUID.randomUUID() + ".html")
                 .locale(EN)
                 .template(Reports.Report.DEFAULT_TEMPLATE_NAME.get(EN))
-                .build();
-
-        data = Reports.Data.builder()
-                .format(Reports.Data.Format.JSON)
-                .fileName(UUID.randomUUID() + ".json")
-                .locale(EN)
                 .build();
 
         rawData = Reports.RawData.builder()
