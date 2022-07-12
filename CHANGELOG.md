@@ -182,3 +182,5 @@
 + [Fix] Raw JSON encoding fixed
 + [Feature] Removed PDF report generation as PT AI 4.0 REST API no supports it more
 + [Feature] Removed explicit XML / JSON report generation as PT AI 4.0 supports them via report template
+### 20220712
++ [Fix] Fixed out of memory error when LoggingInterceptor reads REST API responses
