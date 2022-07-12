@@ -40,13 +40,15 @@ public class LoggingInterceptor implements Interceptor {
                 response.code(), response.request().url(), (responseTime - requestTime) / 1e6d));
 
         log.trace("Response headers: {}", response.headers());
-        if (null != response.body()) {
+
+        int maxBody = advancedSettings.getInt(LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE);
+        if (0 != maxBody && null != response.body()) {
             BufferedSource source = response.body().source();
             source.request(Long.MAX_VALUE); // Buffer the entire body.
             Buffer buffer = source.getBuffer();
-            String bufferData = buffer.clone().readString(StandardCharsets.UTF_8);
+            if (buffer.size() < maxBody) maxBody = (int) buffer.size();
+            String bufferData = buffer.clone().readString(maxBody, StandardCharsets.UTF_8);
 
-            int maxBody = advancedSettings.getInt(LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE);
             if (maxBody >= bufferData.length()) {
                 log.trace("Response body: {}", StringUtils.isEmpty(bufferData) ? "[empty]" : bufferData);
             } else {
