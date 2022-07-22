@@ -83,6 +83,10 @@ public abstract class AbstractTool implements TextOutput {
         out(value);
     }
 
+    public void warning(@NonNull final String format, final Object ... values) {
+        warning(String.format(format, values));
+    }
+
     public void warning(@NonNull final GenericException e) {
         exception(e, false);
     }
