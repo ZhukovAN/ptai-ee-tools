@@ -1,7 +1,7 @@
 plugins {
     id 'java-library'
     id 'java-test-fixtures'
-    id 'org.hidetake.swagger.generator' version '2.18.2'
+    id 'org.hidetake.swagger.generator' version '2.19.2'
 }
 
 group = "${rootGroup}"
@@ -56,7 +56,7 @@ jar {
 }
 
 swaggerSources {
-    auth {
+    auth36 {
         inputFile = file('src/main/resources/api/v36/auth.yml')
         code {
             language = 'java'
@@ -70,7 +70,7 @@ swaggerSources {
         }
     }
 
-    filesstore {
+    filesstore36 {
         inputFile = file('src/main/resources/api/v36/filesstore.yml')
         code {
             language = 'java'
@@ -84,7 +84,7 @@ swaggerSources {
         }
     }
 
-    gateway {
+    gateway36 {
         inputFile = file('src/main/resources/api/v36/gateway.yml')
         code {
             language = 'java'
@@ -98,7 +98,7 @@ swaggerSources {
         }
     }
 
-    projectmanagement {
+    projectmanagement36 {
         inputFile = file('src/main/resources/api/v36/projectmanagement.yml')
         code {
             language = 'java'
@@ -112,7 +112,7 @@ swaggerSources {
         }
     }
 
-    scanscheduler {
+    scanscheduler36 {
         inputFile = file('src/main/resources/api/v36/scanscheduler.yml')
         code {
             language = 'java'
@@ -126,7 +126,7 @@ swaggerSources {
         }
     }
 
-    systemmanagement {
+    systemmanagement36 {
         inputFile = file('src/main/resources/api/v36/systemmanagement.yml')
         code {
             language = 'java'
@@ -140,7 +140,7 @@ swaggerSources {
         }
     }
 
-    updateserver {
+    updateserver36 {
         inputFile = file('src/main/resources/api/v36/updateserver.yml')
         code {
             language = 'java'
@@ -156,19 +156,19 @@ swaggerSources {
 }
 
 compileJava.dependsOn \
- swaggerSources.auth.code, \
- swaggerSources.filesstore.code, \
- swaggerSources.gateway.code, \
- swaggerSources.projectmanagement.code, \
- swaggerSources.scanscheduler.code, \
- swaggerSources.systemmanagement.code, \
- swaggerSources.updateserver.code
+ swaggerSources.auth36.code, \
+ swaggerSources.filesstore36.code, \
+ swaggerSources.gateway36.code, \
+ swaggerSources.projectmanagement36.code, \
+ swaggerSources.scanscheduler36.code, \
+ swaggerSources.systemmanagement36.code, \
+ swaggerSources.updateserver36.code
 
 sourceSets.main.java.srcDirs \
- "${swaggerSources.auth.code.outputDir}/src/main/java", \
- "${swaggerSources.filesstore.code.outputDir}/src/main/java", \
- "${swaggerSources.gateway.code.outputDir}/src/main/java", \
- "${swaggerSources.projectmanagement.code.outputDir}/src/main/java", \
- "${swaggerSources.scanscheduler.code.outputDir}/src/main/java", \
- "${swaggerSources.systemmanagement.code.outputDir}/src/main/java", \
- "${swaggerSources.updateserver.code.outputDir}/src/main/java"
+ "${swaggerSources.auth36.code.outputDir}/src/main/java", \
+ "${swaggerSources.filesstore36.code.outputDir}/src/main/java", \
+ "${swaggerSources.gateway36.code.outputDir}/src/main/java", \
+ "${swaggerSources.projectmanagement36.code.outputDir}/src/main/java", \
+ "${swaggerSources.scanscheduler36.code.outputDir}/src/main/java", \
+ "${swaggerSources.systemmanagement36.code.outputDir}/src/main/java", \
+ "${swaggerSources.updateserver36.code.outputDir}/src/main/java"

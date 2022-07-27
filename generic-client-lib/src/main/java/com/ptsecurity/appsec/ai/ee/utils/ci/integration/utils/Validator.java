@@ -2,8 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -69,16 +67,6 @@ public class Validator {
     @NonNull
     public static Result validateRegEx(String value) {
         return validateViaException(() -> Pattern.compile(value));
-    }
-
-    @NonNull
-    public static Result validateJsonSettings(String value) {
-        return validateViaException(() -> JsonSettingsHelper.verify(value));
-    }
-
-    @NonNull
-    public static Result validateJsonPolicy(String value) {
-        return validateViaException(() -> { if (validateNotEmpty(value).ok()) JsonPolicyHelper.verify(value); });
     }
 
     @NonNull

@@ -5,8 +5,9 @@ package ptai-test-tools <<Frame>> {
         +{static} InputStream getResourceStream(name)
         +{static} String getResourceString(name)
         +Path getPackedResourceFile(name)
-        +Path getPackedResourceFile(name, tempFolder)
-        +Path getSevenZippedResourceFile(name, tempFolder)
+        +{static} Path getPackedResourceFile(name, destinationFolder)
+        +Path getSevenZippedResourceFile(name)
+        +{static} Path getSevenZippedResourceFile(name, destinationFolder)
         ..JSON tools..
         +{static} ObjectMapper createFaultTolerantObjectMapper()
         ..Temp folder tools..

@@ -77,7 +77,7 @@ public class HtmlPdf extends Export {
         @Override
         @NonNull
         public String getDisplayName() {
-            return Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_label();
+            return Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_label();
         }
 
         @SuppressWarnings("unused")

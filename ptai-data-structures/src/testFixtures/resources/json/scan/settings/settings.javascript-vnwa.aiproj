@@ -1,0 +1,7 @@
+{
+    "ProjectName": "junit-it-javascript-smoke",
+    "ProgrammingLanguage": "JavaScript",
+    "ScanAppType": "JavaScript, Configuration, Fingerprint, PmTaint",
+    "UseTaintAnalysis": true,
+    "UsePmAnalysis": true
+}

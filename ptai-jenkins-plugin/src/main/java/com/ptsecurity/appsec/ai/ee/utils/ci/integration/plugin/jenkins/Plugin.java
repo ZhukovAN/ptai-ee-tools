@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
+import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
@@ -23,8 +24,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Bui
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeAsync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.AbortException;
@@ -146,7 +147,9 @@ public class Plugin extends Builder implements SimpleBuildStep {
         String projectName;
         if (selectedScanSettingsUi) {
             projectName = ((ScanSettingsUi) scanSettings).getProjectName();
+            log.trace("UI-defined project name before macro replacement is {}", projectName);
             projectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
+            log.trace("UI-defined project name after macro replacement is {}", projectName);
         } else {
             check = scanSettingsManualDescriptor.doTestJsonSettings(item, jsonSettings);
             if (FormValidation.Kind.OK != check.kind)
@@ -154,13 +157,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
             check = scanSettingsManualDescriptor.doTestJsonPolicy(item, jsonPolicy);
             if (FormValidation.Kind.OK != check.kind)
                 throw new AbortException(check.getMessage());
-            AiProjScanSettings scanSettings = JsonSettingsHelper.verify(jsonSettings);
-            projectName = scanSettings.getProjectName();
-            String changedProjectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
-            if (!projectName.equals(changedProjectName))
-                scanSettings.setProjectName(projectName);
-            // These lines also minimize settings and policy JSONs
-            jsonSettings = JsonSettingsHelper.serialize(scanSettings);
+            JsonSettingsHelper helper = new JsonSettingsHelper(jsonSettings);
+            log.trace("JSON-defined project settings before macro replacement is {}", helper.serialize());
+            jsonSettings = JsonSettingsHelper.replaceMacro(jsonSettings, (s -> Util.replaceMacro(s, buildInfo.getEnvVars())));
+            log.trace("JSON-defined project settings after macro replacement is {}", jsonSettings);
+            helper = new JsonSettingsHelper(jsonSettings);
+            projectName = helper.getProjectName();
+
             if (StringUtils.isNotEmpty(jsonPolicy))
                 jsonPolicy = JsonPolicyHelper.minimize(jsonPolicy);
         }

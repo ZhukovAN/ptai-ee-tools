@@ -1,25 +1,18 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Data;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstUnstable;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.Params;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.ReportsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import jetbrains.buildServer.RunBuildException;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildFinishedStatus;
@@ -76,14 +69,12 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
         Map<String, String> globals = agentRunningBuild.getSharedConfigParameters();
 
         boolean selectedScanSettingsUi = AST_SETTINGS_UI.equals(params.get(Params.AST_SETTINGS));
-        String projectName;
+        String projectName = null;
         String settings = null;
         String policy = null;
         if (!selectedScanSettingsUi) {
-            AiProjScanSettings scanSettings = JsonSettingsHelper.verify(params.get(Params.JSON_SETTINGS));
-            projectName = scanSettings.getProjectName();
-            settings = JsonSettingsHelper.minimize(params.get(Params.JSON_SETTINGS));
-            policy = JsonPolicyHelper.minimize(params.get(Params.JSON_POLICY));
+            settings = BaseJsonHelper.minimize(params.get(Params.JSON_SETTINGS));
+            policy = BaseJsonHelper.minimize(params.get(Params.JSON_POLICY));
         } else
             projectName = params.get(Params.PROJECT_NAME);
 
@@ -132,9 +123,9 @@ public class AstBuildProcess implements BuildProcess, Callable<BuildFinishedStat
                 .async(async)
                 .build();
         if (null != reports) {
-            for (Report report : reports.getReport())
+            for (Reports.Report report : reports.getReport())
                 HtmlPdf.builder().owner(job).report(report).build().attach(job);
-            for (Data data : reports.getData())
+            for (Reports.Data data : reports.getData())
                 JsonXml.builder().owner(job).data(data).build().attach(job);
             for (RawData rawData : reports.getRaw())
                 RawJson.builder().owner(job).rawData(rawData).build().attach(job);

@@ -47,8 +47,7 @@ public abstract class AbstractJob extends AbstractTool {
         try {
             init();
             validate();
-            client = Factory.client(connectionSettings);
-            client.setConsole(this);
+            client = Factory.client(this);
 
             unsafeExecute();
             return JobExecutionResult.SUCCESS;

@@ -23,6 +23,7 @@ import hudson.model.FreeStyleProject;
 import hudson.model.Result;
 import hudson.scm.SCM;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -37,9 +38,11 @@ import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool.DEFAULT_LOG_PREFIX;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob.DEFAULT_OUTPUT_FOLDER;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Execute Jenkins jobs that use PT AI plugin")
 @EnableJenkins
+@Slf4j
 public class PluginIT extends BaseAstIT {
 
     private CredentialsStore systemStore;
@@ -48,9 +51,10 @@ public class PluginIT extends BaseAstIT {
     @SneakyThrows
     protected void initCredentials(JenkinsRule jenkins) {
         SystemCredentialsProvider.ProviderImpl system = ExtensionList.lookup(CredentialsProvider.class).get(SystemCredentialsProvider.ProviderImpl.class);
+        assertNotNull(system);
         systemStore = system.getStore(jenkins.getInstance());
         // Create PT AI credentials
-        credentials = new CredentialsImpl(CredentialsScope.GLOBAL, UUID.randomUUID().toString(), "", BaseAstIT.TOKEN, "");
+        credentials = new CredentialsImpl(CredentialsScope.GLOBAL, UUID.randomUUID().toString(), "", CONNECTION().getToken(), "");
         systemStore.addCredentials(Domain.global(), credentials);
     }
 
@@ -63,20 +67,25 @@ public class PluginIT extends BaseAstIT {
     @SneakyThrows
     @Test
     @Tag("integration")
+    @Tag("jenkins")
     @DisplayName("Execute simple SAST job for PHP smoke medium")
     public void scanPhpSmokeMedium(JenkinsRule jenkins) {
+        PHP_SMOKE_MEDIUM.setup();
+
         initCredentials(jenkins);
-        // Create project and set source code location
-        java.net.URL sourcesPack = getClass().getClassLoader().getResource(BaseAstIT.PHP_SMOKE_MEDIUM.getCode());
+
+        log.trace("Create project and set source code location");
+
+        java.net.URL sourcesPack = PHP_SMOKE_MEDIUM.getZip().toUri().toURL();
+        assertNotNull(sourcesPack);
         SCM scm = new ExtractResourceSCM(sourcesPack);
         String projectName = "project-" + UUID.randomUUID();
         FreeStyleProject project = jenkins.createFreeStyleProject(projectName);
         project.setScm(scm);
-
         // Create PT AI plugin settings
-        ScanSettingsUi scanSettings = new ScanSettingsUi("php-smoke-ui");
+        ScanSettingsUi scanSettings = new ScanSettingsUi(PHP_SMOKE_MEDIUM.getName());
 
-        ServerSettings serverSettings = new ServerSettings(BaseAstIT.URL, credentials.getId(), true);
+        ServerSettings serverSettings = new ServerSettings(CONNECTION().getUrl(), credentials.getId(), true);
         ConfigCustom configCustom = new ConfigCustom(serverSettings);
 
         ArrayList<Base> subJobs = new ArrayList<>();
@@ -95,6 +104,8 @@ public class PluginIT extends BaseAstIT {
         // As we don't set AST policy assessment step in plugin settings, build is to succeed
         Assertions.assertEquals(Result.SUCCESS, build.getResult());
         // Check if report was generated
+        assertNotNull(build.getWorkspace());
+        assertNotNull(build.getWorkspace().child(DEFAULT_OUTPUT_FOLDER));
         FilePath rawJsonFile = build.getWorkspace().child(DEFAULT_OUTPUT_FOLDER).child(rawJsonSubJob.getFileName());
         Assertions.assertTrue(rawJsonFile.exists());
         ObjectMapper mapper = createFaultTolerantObjectMapper();

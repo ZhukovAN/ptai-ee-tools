@@ -20,12 +20,6 @@ public class Validator {
         return !StringUtils.isEmpty(value);
     }
 
-    private static final String[] GENERIC_TLDS_PLUS = new String[] { "corp", "local" };
-
-    static {
-        DomainValidator.updateTLDOverride(DomainValidator.ArrayType.GENERIC_PLUS, GENERIC_TLDS_PLUS);
-    }
-
     protected static boolean checkViaException(@NonNull final Runnable call) {
         try { call.run(); return true; } catch (Exception e) { return false; }
     }
@@ -48,7 +42,7 @@ public class Validator {
     }
 
     public static boolean doCheckFieldJsonSettings(String value) {
-        return checkViaException(() -> JsonSettingsHelper.verify(value));
+        return checkViaException(() -> new JsonSettingsHelper(value).verifyRequiredFields());
     }
 
     public static boolean doCheckFieldJsonPolicy(String value) {
