@@ -6,19 +6,19 @@ import lib.FormTagLib
 def f = namespace(FormTagLib)
 
 f.entry(
-        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_file_label(),
+        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_file_label(),
         field: 'fileName') {
     f.textbox()
 }
 
 f.entry(
-        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_format_label(),
+        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_format_label(),
         field: 'format') {
     f.select(style: 'width: 120px;', default: descriptor.getDefaultFormat().name())
 }
 
 f.entry(
-        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_locale_label(),
+        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_locale_label(),
         field: 'locale') {
     f.select(
             style: 'width: 120px;',
@@ -27,14 +27,14 @@ f.entry(
 }
 
 f.entry(
-        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_includedfd_label(),
+        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_includedfd_label(),
         field: 'includeDfd',
         default: 'true') {
     f.checkbox()
 }
 
 f.entry(
-        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_includeglossary_label(),
+        title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_includeglossary_label(),
         field: 'includeGlossary',
         default: 'true') {
     f.checkbox()
@@ -42,7 +42,7 @@ f.entry(
 
 f.advanced() {
     f.entry(
-            title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_filter_label(),
+            title: Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_filter_label(),
             field: 'filter') {
         f.textarea(
                 style: 'height:100px',

@@ -185,7 +185,7 @@ l.layout(title: "PT AI AST report") {
         def scanSettings = [:]
         scanSettings[_("scan.settings.project")] = "${scanBriefDetailed.projectName}"
         scanSettings[_("scan.settings.url")] = "${scanBriefDetailed.scanSettings.url}"
-        scanSettings["${Resources.i18n_ast_settings_language_label()}"] = "${scanBriefDetailed.scanSettings.language}"
+        scanSettings["${Resources.i18n_ast_settings_base_programminglanguage_label()}"] = "${scanBriefDetailed.scanSettings.language}"
         scanSettings["${Resources.i18n_ast_settings_mode_label()}"] = scanBriefDetailed.getUseAsyncScan()
                 ? Resources.i18n_ast_settings_mode_asynchronous_label()
                 : Resources.i18n_ast_settings_mode_synchronous_label()

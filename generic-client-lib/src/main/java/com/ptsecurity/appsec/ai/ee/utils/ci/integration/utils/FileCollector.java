@@ -23,7 +23,6 @@ import org.apache.tools.ant.types.FileSet;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +51,11 @@ public class FileCollector {
 
     @AllArgsConstructor
     @Getter
-    public static class FileEntry {
-        private final String fileName;
-        private final String name;
+    public static class Entry {
+        @NonNull
+        private final Path path;
+        @NonNull
+        private final String entryName;
     }
 
     private final Transfers transfers;
@@ -62,7 +63,7 @@ public class FileCollector {
     private final AbstractTool owner;
 
     public void collect(@NonNull final File dir, @NonNull final File zip) throws GenericException {
-        List<FileEntry> fileEntries = collectFiles(dir);
+        List<Entry> fileEntries = collectFiles(dir);
         call(
                 () -> packCollectedFiles(zip, fileEntries),
                 "Collected files pack error");
@@ -94,7 +95,7 @@ public class FileCollector {
             } else
                 owner.info("Folder to collect files from is %s", dir.getAbsolutePath());
             owner.info("Sources will be zipped to %s", zip.getAbsolutePath());
-            List<FileEntry> fileEntries = collector.collectFiles(dir);
+            List<Entry> fileEntries = collector.collectFiles(dir);
             if (fileEntries.isEmpty())
                 throw new IllegalArgumentException("No files are match defined transfer settings");
             collector.packCollectedFiles(zip, fileEntries);
@@ -128,9 +129,9 @@ public class FileCollector {
         if (null != owner) owner.fine(format, data);
     }
 
-    public List<FileEntry> collectFiles(@NonNull final File dir) throws GenericException {
+    public List<Entry> collectFiles(@NonNull final File dir) throws GenericException {
         verbose("collectFiles called for %s", dir.getAbsolutePath());
-        List<FileEntry> res = new ArrayList<>();
+        List<Entry> res = new ArrayList<>();
 
         Transfers transfers = this.transfers;
         if (null == transfers) {
@@ -169,6 +170,7 @@ public class FileCollector {
                     verbose("Exclude pattern = %s", pattern);
                 }
             fileSet.setDefaultexcludes(transfer.isUseDefaultExcludes());
+            String[] dirs = fileSet.getDirectoryScanner().getIncludedDirectories();
             String[] files = fileSet.getDirectoryScanner().getIncludedFiles();
             verboseCollectionDetails(files, "Included files");
             verboseCollectionDetails(getScannedDirs(fileSet.getDirectoryScanner()), "Scanned dirs");
@@ -177,21 +179,26 @@ public class FileCollector {
             verboseCollectionDetails(fileSet.getDirectoryScanner().getExcludedFiles(), "Excluded files");
             // files is an array of this.srcDir - relative paths to files
             Path parentFolder = dir.isDirectory() ? dir.toPath() : dir.getParentFile().toPath();
-            for (String file : files) {
+            for (int i = 0 ; i < 2 ; i++) {
+                // Add all the folders then files
+                String[] items = 0 == i ? dirs : files;
+                for (String item : items) {
                 // Normalize relative path
-                Path filePath = parentFolder.resolve(file);
-                String relativePath = filePath.toUri().normalize().getPath();
+                    Path itemPath = parentFolder.resolve(item);
+                    String relativePath = itemPath.toUri().normalize().getPath();
                 relativePath = StringUtils.removeStart(relativePath, parentFolder.toUri().normalize().getPath());
                 String entryName;
-                if (transfer.isFlatten())
-                    entryName = filePath.getFileName().toString();
-                else {
+                    if (transfer.isFlatten()) {
+                        if (0 == i) continue;
+                        entryName = itemPath.getFileName().toString();
+                    } else {
                     if (!relativePath.startsWith(removePrefix))
-                        throw GenericException.raise("File collect failed", new IllegalArgumentException(String.format("File's %s does not starts with prefix %s", file, removePrefix)));
+                            throw GenericException.raise("File collect failed", new IllegalArgumentException(String.format("File's %s does not starts with prefix %s", item, removePrefix)));
                     entryName = StringUtils.removeStart(relativePath, removePrefix);
                 }
-                verbose("File %s will be added as %s", filePath.toString(), entryName);
-                res.add(new FileEntry(filePath.toString(), entryName));
+                    verbose("File %s will be added as %s", itemPath.toString(), entryName);
+                    res.add(new Entry(itemPath, entryName));
+                }
             }
         }
         return res;
@@ -208,7 +215,7 @@ public class FileCollector {
     ZipParameter.setFileNameInZip, but there's no way to pass array of ZipParameters into createSplitZipFile
     method.
      */
-    private void packCollectedFiles(@NonNull final File zip, final List<FileEntry> files) throws IOException, ArchiveException {
+    private void packCollectedFiles(@NonNull final File zip, final List<Entry> files) throws IOException, ArchiveException {
         verbose("Pack collected files to %s", zip.getAbsolutePath());
         File destDir = zip.getParentFile();
 
@@ -220,25 +227,26 @@ public class FileCollector {
         ArchiveOutputStream as = new ArchiveStreamFactory().createArchiveOutputStream(ZIP, zfs);
         verbose("Zip stream created");
 
-        for (FileEntry entry : files) {
-            verbose("Add %s file as %s to zip stream", entry.fileName, entry.name);
+        for (Entry entry : files) {
+            verbose("Add %s file as %s to zip stream", entry.path, entry.entryName);
             // Check if this is symlink with missing destination
-            if (Files.isSymbolicLink(Paths.get(entry.fileName))) {
-                verbose("%s is a symbolic link, let's check if its destination exist", entry.fileName);
-                if (!Files.readSymbolicLink(Paths.get(entry.fileName)).toFile().exists()) {
-                    verbose("Skip %s as there's no target file exist", entry.fileName);
+            if (Files.isSymbolicLink(entry.path)) {
+                verbose("%s is a symbolic link, let's check if its destination exist", entry.path);
+                if (!Files.readSymbolicLink(entry.path).toFile().exists()) {
+                    verbose("Skip %s as there's no target file exist", entry.path);
                     continue;
                 }
             }
 
-            as.putArchiveEntry(new ZipArchiveEntry(entry.name));
-
-            BufferedInputStream is = new BufferedInputStream(new FileInputStream(entry.fileName));
+            as.putArchiveEntry(new ZipArchiveEntry(entry.entryName));
+            if (!Files.isDirectory(entry.path)) {
+                BufferedInputStream is = new BufferedInputStream(new FileInputStream(entry.path.toFile()));
             int size = IOUtils.copy(is, as);
             verbose("%s zipped", bytesToString(size));
             is.close();
+            }
             as.closeArchiveEntry();
-            verbose("File %s added as %s", entry.fileName, entry.name);
+            verbose("File %s added as %s", entry.path, entry.entryName);
         }
         verbose("Closing zip stream");
         as.finish();

@@ -6,6 +6,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericExcept
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.NonNull;
 import lombok.ToString;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -74,5 +75,11 @@ public class ReportUtils {
         return call(
                 () -> BaseJsonHelper.createObjectMapper().readValue(json, Reports.class),
                 Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_invalid());
+    }
+
+    public static String setFilenameExtension(@NonNull final String name, @NonNull final String extension) {
+        int idx = FilenameUtils.indexOfExtension(name);
+        String result = (-1 == idx) ? name : StringUtils.left(name, idx);
+        return result + FilenameUtils.EXTENSION_SEPARATOR + extension;
     }
 }

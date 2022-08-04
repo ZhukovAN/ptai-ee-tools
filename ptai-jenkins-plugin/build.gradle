@@ -326,11 +326,13 @@ def processJenkinsVersion() {
         gitVersion = '4.2.2'
     logger.info("Using Git plugin version: $gitVersion")
 
-    boolean newUi = (-1 == compareVersion('2.277.1', versionString))
+    // Starting with 2.264 (https://www.jenkins.io/blog/2020/11/10/major-changes-in-weekly-releases/)
+    // need to use different UI
+    boolean newUi = (1 != compareVersion('2.264', versionString))
     if (newUi)
-        sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-277+' ]
+        sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-264+' ]
     else
-        sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-277-' ]
+        sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-264-' ]
     return versionString
 }
 

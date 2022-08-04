@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.tasks;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.v36.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
@@ -107,12 +107,13 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
      * See Messages.DataContracts.LanguageExtensions::LangGroupToLangMapping
      */
     public static Map<Language, Set<PatternLanguage>> LANGUAGE_GROUP = new HashMap<>();
+
     static {
         LANGUAGE_GROUP.put(Language.PHP, Collections.singleton(PatternLanguage.PHP));
         LANGUAGE_GROUP.put(Language.JAVA, Collections.singleton(PatternLanguage.JAVA));
         LANGUAGE_GROUP.put(Language.CSHARP, Collections.singleton(PatternLanguage.CSHARP));
         LANGUAGE_GROUP.put(Language.VB, Collections.singleton(PatternLanguage.VB));
-        LANGUAGE_GROUP.put(Language.JS, Collections.singleton(PatternLanguage.JAVASCRIPT));
+        LANGUAGE_GROUP.put(Language.JAVASCRIPT, Collections.singleton(PatternLanguage.JAVASCRIPT));
         LANGUAGE_GROUP.put(Language.PYTHON, Collections.singleton(PatternLanguage.PYTHON));
         LANGUAGE_GROUP.put(Language.OBJECTIVEC, Collections.singleton(PatternLanguage.OBJECTIVEC));
         LANGUAGE_GROUP.put(Language.SWIFT, Collections.singleton(PatternLanguage.SWIFT));
@@ -171,15 +172,27 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                 () -> client.getProjectsApi().apiProjectsProjectIdScanResultsGet(id, AuthScopeType.ACCESSTOKEN),
                 "PT AI project scan results load failed");
         ScanResult result = scanResults.stream()
-                .filter(r -> r.getProgress().getStage().equals(Stage.DONE))
+                .filter(r -> null != r.getProgress())
+                .filter(r -> Stage.DONE.equals(r.getProgress().getStage()))
                 .findAny()
                 .orElseThrow(() -> GenericException.raise("Project finished scan results are not found", new IllegalArgumentException(id.toString())));
         return result.getId();
     }
 
-    public UUID setupFromJson(@NonNull final AiProjScanSettings settings, final Policy[] policy) throws GenericException {
+    public JsonParseBrief setupFromJson(@NonNull final String jsonSettings, final String jsonPolicy) throws GenericException {
+        log.trace("Parse settings and policy");
+        // Check if JSON settings and policy are defined correctly. Throw an exception if there are problems
+        AiProjScanSettings settings = (StringUtils.isEmpty(jsonSettings))
+                ? null
+                : AiProjConverter.verify(jsonSettings);
+        if (null == settings)
+            throw GenericException.raise("JSON settings must not be empty", new IllegalArgumentException());
         if (StringUtils.isEmpty(settings.getProjectName()))
             throw GenericException.raise("Project name in JSON settings must not be empty", new IllegalArgumentException());
+
+        Policy[] policy = (StringUtils.isEmpty(jsonPolicy))
+                ? null
+                : JsonPolicyHelper.verify(jsonPolicy);
 
         // PT AI server API doesn't create project if DisabledPatterms and EnabledPatterns
         // are missing even if scanAppType have no PmTaint. So we need at least pass empty
@@ -234,7 +247,11 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         call(
                 () -> client.getProjectsApi().apiProjectsProjectIdPoliciesRulesPut(projectId, policyJson),
                 "PT AI project policy assignment failed");
-        return projectId;
+        return JsonParseBrief.builder()
+                .projectId(projectId)
+                .projectName(settings.getProjectName())
+                .incremental(settings.getUseIncrementalScan())
+                .build();
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -14,10 +15,12 @@ class ChartDataModelTest extends BaseTest {
     @Test
     @SneakyThrows
     public void testJsonConversion() {
-        ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
-        InputStream inputStream = getResourceStream("json/scan/result/php-bricks.json");
-        Assertions.assertNotNull(inputStream);
-        ScanResult scanResult = mapper.readValue(inputStream, ScanResult.class);
+        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        for (Connection.Version version : Connection.Version.values()) {
+            String json = extractSevenZippedSingleStringFromResource("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_OWASP_BRICKS_PROJECT_NAME + ".json.7z");
+            Assertions.assertFalse(StringUtils.isEmpty(json));
+            ScanResult scanResult = mapper.readValue(json, ScanResult.class);
+        }
         // StackedAreaChartDataModel model = StackedAreaChartDataModel.create(issuesModelList);
         /*
         TypeReference<Map<String,IssuesModel>> typeRef = new TypeReference<Map<String,IssuesModel>>() {};

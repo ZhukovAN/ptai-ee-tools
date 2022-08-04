@@ -21,6 +21,7 @@ import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.PHP_SMOKE_MULTIFLOW;
 
 @DisplayName("Test SARIF report generation")
 public class SarifTest extends ConverterTest {
@@ -32,8 +33,7 @@ public class SarifTest extends ConverterTest {
     @DisplayName("Generate multiflow SARIF report")
     public void generateMultiflowReport() {
         boolean processGroups = false;
-        // ScanResult scanResult = generateScanResultV36("php-bricks");
-        ScanResult scanResult = generateScanResultV36("php-smoke-multiflow");
+        ScanResult scanResult = generateScanResultV36(PHP_SMOKE_MULTIFLOW.getName());
 
         SarifSchema210 sarif = Sarif.convert(scanResult, true);
 

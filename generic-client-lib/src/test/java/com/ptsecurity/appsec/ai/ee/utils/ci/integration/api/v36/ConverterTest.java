@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.v36.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ProgrammingLanguage;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.AiProjConverter;

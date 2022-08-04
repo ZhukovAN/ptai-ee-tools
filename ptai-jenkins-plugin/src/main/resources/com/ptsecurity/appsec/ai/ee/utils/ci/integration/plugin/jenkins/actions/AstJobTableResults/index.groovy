@@ -86,7 +86,7 @@ l.layout(title: "PT AI AST report") {
                     }
                 }
                 div(style: "grid-area: 3 / 1 / 4 / 3; ") {
-                    h3("${Resources.i18n_ast_result_statistics_duration()}")
+                    h3("${Resources.i18n_ast_result_statistics_duration_label()}")
                     div(
                             id: "${my.urlName}-scan-stage-duration-history-chart",
                             class: 'graph-cursor-pointer') {}
@@ -169,7 +169,7 @@ l.layout(title: "PT AI AST report") {
                 // Map vulnerability class to its localized title
                 var scanStageAttrs = {
                     DURATION: {
-                        title: '${Resources.i18n_ast_result_statistics_duration_sec()}'
+                        title: '${Resources.i18n_ast_result_statistics_duration_sec_label()}'
                     },
                     ${Stage.ABORTED.name()}: {
                         title: '${Resources.i18n_misc_enums_progress_stage_aborted()}'
@@ -228,8 +228,8 @@ l.layout(title: "PT AI AST report") {
                     ${my.getTypeHistoryChart(historyLength)}, typeAttrs, false);
     
                 var option = ${my.getScanStageDurationHistoryChart(historyLength)};
-                // option.legend.data[0] = "${Resources.i18n_ast_result_statistics_duration_sec()}"
-                // option.series[0].name = "${Resources.i18n_ast_result_statistics_duration_sec()}"
+                // option.legend.data[0] = "${Resources.i18n_ast_result_statistics_duration_sec_label()}"
+                // option.series[0].name = "${Resources.i18n_ast_result_statistics_duration_sec_label()}"
                 createBuildHistoryChart(
                     "${my.urlName}-scan-stage-duration-history-chart", 
                     option, scanStageAttrs, false);
