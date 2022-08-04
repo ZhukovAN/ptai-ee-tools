@@ -1,5 +1,13 @@
 connections:
-  ptai40: &current
+  ptai41: &current
+    version: V41
+    url: https://ptai41.domain.org:443/
+    token: TOKEN_GOES_HERE
+    user: Administrator
+    password: PASSWORD
+    ca: keys/domain.org.pem
+    insecure: false
+  ptai40:
     version: V40
     url: https://ptai4.domain.org:443/
     token: TOKEN_GOES_HERE
