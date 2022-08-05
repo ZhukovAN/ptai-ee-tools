@@ -251,6 +251,104 @@ swaggerSources {
             ]
         }
     }
+
+    auth41 {
+        inputFile = file('src/main/resources/api/v41/authService.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.auth.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.auth.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
+    filesstore41 {
+        inputFile = file('src/main/resources/api/v41/filesStore.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.filesstore.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.filesstore.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
+    projectmanagement41 {
+        inputFile = file('src/main/resources/api/v41/projectManagement.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.projectmanagement.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.projectmanagement.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
+    scanscheduler41 {
+        inputFile = file('src/main/resources/api/v41/scanScheduler.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.scanscheduler.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.scanscheduler.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
+    systemmanagement41 {
+        inputFile = file('src/main/resources/api/v41/systemManagement.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.systemmanagement.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.systemmanagement.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
+    updateserver41 {
+        inputFile = file('src/main/resources/api/v41/updateServer.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.updateserver.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.updateserver.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
+    legacy41 {
+        inputFile = file('src/main/resources/api/v41/legacy/legacy.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.legacy.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v41.legacy.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
 }
 
 compileJava.dependsOn \
@@ -268,8 +366,15 @@ compileJava.dependsOn \
  swaggerSources.scanscheduler40.code, \
  swaggerSources.systemmanagement40.code, \
  swaggerSources.updateserver40.code, \
+ swaggerSources.legacy40.code, \
 
- swaggerSources.legacy40.code
+ swaggerSources.auth41.code, \
+ swaggerSources.filesstore41.code, \
+ swaggerSources.projectmanagement41.code, \
+ swaggerSources.scanscheduler41.code, \
+ swaggerSources.systemmanagement41.code, \
+ swaggerSources.updateserver41.code, \
+ swaggerSources.legacy41.code
 
 
 sourceSets.main.java.srcDirs \
@@ -287,6 +392,14 @@ sourceSets.main.java.srcDirs \
  "${swaggerSources.scanscheduler40.code.outputDir}/src/main/java", \
  "${swaggerSources.systemmanagement40.code.outputDir}/src/main/java", \
  "${swaggerSources.updateserver40.code.outputDir}/src/main/java", \
+ "${swaggerSources.legacy40.code.outputDir}/src/main/java", \
 
- "${swaggerSources.legacy40.code.outputDir}/src/main/java"
+ "${swaggerSources.auth41.code.outputDir}/src/main/java", \
+ "${swaggerSources.filesstore41.code.outputDir}/src/main/java", \
+ "${swaggerSources.projectmanagement41.code.outputDir}/src/main/java", \
+ "${swaggerSources.scanscheduler41.code.outputDir}/src/main/java", \
+ "${swaggerSources.systemmanagement41.code.outputDir}/src/main/java", \
+ "${swaggerSources.updateserver41.code.outputDir}/src/main/java", \
+ "${swaggerSources.legacy41.code.outputDir}/src/main/java"
+
 
