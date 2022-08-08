@@ -118,6 +118,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         process(Stage.UPLOAD);
         GenericAstTasks genericAstTasks = new Factory().genericAstTasks(client);
         genericAstTasks.upload(projectId, sources);
+        if (!sources.delete()) warning("File %s delete failed", sources.getName());
 
         // Start scan
         process(Stage.ENQUEUED);

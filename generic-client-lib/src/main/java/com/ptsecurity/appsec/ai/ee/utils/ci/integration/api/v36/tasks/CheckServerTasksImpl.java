@@ -43,10 +43,10 @@ public class CheckServerTasksImpl extends AbstractTaskImpl implements CheckServe
         }
         EnterpriseLicenseData licenseData = call(client.getLicenseApi()::apiLicenseGet, "PT AI license information retrieve failed");
         if (null == licenseData) {
-            result.add(Resources.i18n_ast_settings_server_check_license_empty());
+            result.add(Resources.i18n_ast_settings_server_check_license_sentinel_empty());
             error = true;
         } else {
-            result.add(Resources.i18n_ast_settings_server_check_license_success(
+            result.add(Resources.i18n_ast_settings_server_check_license_sentinel_success(
                     licenseData.getLicenseNumber(),
                     licenseData.getStartDate(), licenseData.getEndDate()));
             if (Boolean.FALSE.equals(licenseData.getIsValid())) warning = true;

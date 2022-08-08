@@ -1,13 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
+import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
@@ -23,8 +23,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Bui
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeAsync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.Base;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.AbortException;
@@ -64,6 +64,9 @@ public class Plugin extends Builder implements SimpleBuildStep {
     private final WorkMode workMode;
 
     @Getter
+    private final String advancedSettings;
+
+    @Getter
     private final boolean verbose;
 
     @Getter
@@ -83,12 +86,14 @@ public class Plugin extends Builder implements SimpleBuildStep {
     public Plugin(final com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings scanSettings,
                   final ConfigBase config,
                   final WorkMode workMode,
+                  final String advancedSettings,
                   final boolean verbose,
                   final boolean fullScanMode,
                   final ArrayList<Transfer> transfers) {
         this.scanSettings = scanSettings;
         this.config = config;
         this.workMode = workMode;
+        this.advancedSettings = advancedSettings;
         this.verbose = verbose;
         this.fullScanMode = fullScanMode;
         this.transfers = transfers;
@@ -146,7 +151,9 @@ public class Plugin extends Builder implements SimpleBuildStep {
         String projectName;
         if (selectedScanSettingsUi) {
             projectName = ((ScanSettingsUi) scanSettings).getProjectName();
+            log.trace("UI-defined project name before macro replacement is {}", projectName);
             projectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
+            log.trace("UI-defined project name after macro replacement is {}", projectName);
         } else {
             check = scanSettingsManualDescriptor.doTestJsonSettings(item, jsonSettings);
             if (FormValidation.Kind.OK != check.kind)
@@ -154,13 +161,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
             check = scanSettingsManualDescriptor.doTestJsonPolicy(item, jsonPolicy);
             if (FormValidation.Kind.OK != check.kind)
                 throw new AbortException(check.getMessage());
-            AiProjScanSettings scanSettings = JsonSettingsHelper.verify(jsonSettings);
-            projectName = scanSettings.getProjectName();
-            String changedProjectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
-            if (!projectName.equals(changedProjectName))
-                scanSettings.setProjectName(projectName);
-            // These lines also minimize settings and policy JSONs
-            jsonSettings = JsonSettingsHelper.serialize(scanSettings);
+            JsonSettingsHelper helper = new JsonSettingsHelper(jsonSettings);
+            log.trace("JSON-defined project settings before macro replacement is {}", helper.serialize());
+            jsonSettings = JsonSettingsHelper.replaceMacro(jsonSettings, (s -> Util.replaceMacro(s, buildInfo.getEnvVars())));
+            log.trace("JSON-defined project settings after macro replacement is {}", jsonSettings);
+            helper = new JsonSettingsHelper(jsonSettings);
+            projectName = helper.getProjectName();
+
             if (StringUtils.isNotEmpty(jsonPolicy))
                 jsonPolicy = JsonPolicyHelper.minimize(jsonPolicy);
         }
@@ -188,6 +195,10 @@ public class Plugin extends Builder implements SimpleBuildStep {
             serverUrl = configCustom.getServerSettings().getServerUrl();
             serverInsecure = configCustom.getServerSettings().isServerInsecure();
         }
+
+        AdvancedSettings advancedSettings = new AdvancedSettings();
+        advancedSettings.apply(descriptor.getAdvancedSettings());
+        advancedSettings.apply(this.advancedSettings);
 
         check = descriptor.doTestProjectFields(
                 selectedScanSettings,
@@ -221,6 +232,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .buildInfo(buildInfo)
                 .transfers(transfers)
                 .fullScanMode(fullScanMode)
+                .advancedSettings(advancedSettings)
                 .build();
         if (workMode instanceof WorkModeSync) {
             WorkModeSync workModeSync = (WorkModeSync) workMode;

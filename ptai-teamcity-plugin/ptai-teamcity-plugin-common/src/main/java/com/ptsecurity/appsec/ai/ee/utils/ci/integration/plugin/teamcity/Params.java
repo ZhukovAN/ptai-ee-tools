@@ -88,16 +88,10 @@ public class Params {
     public static final String FLATTEN = PARAM("Flatten");
 
     /**
-     * If this field value equals to {@link Constants#TRUE} then generic HTML or PDF report
+     * If this field value equals to {@link Constants#TRUE} then generic HTML report
      * will be generated. User also need to provide report file name, template, format, locale and optional filters
      */
     public static final String REPORTING_REPORT = PARAM("ReportingReport");
-
-    /**
-     * If this field value equals to {@link Constants#TRUE} then generic data will be exported as
-     * XML or JSON file. User also need to provide output file name, format, locale and optional filters
-     */
-    public static final String REPORTING_DATA = PARAM("ReportingData");
 
     /**
      * If this field value equals to {@link Constants#TRUE} then raw vulnerabilities data will be exported as
@@ -136,46 +130,10 @@ public class Params {
     public static final String REPORTING_REPORT_TEMPLATE = PARAM("ReportingReportTemplate");
 
     /**
-     * If {@link Params#REPORTING_REPORT} is on then this field is to
-     * contain format of the report file to be generated
-     */
-    public static final String REPORTING_REPORT_FORMAT = PARAM("ReportingReportFormat");
-
-    /**
-     * If {@link Params#REPORTING_REPORT} is on then this field is to
-     * contain locale of the report file to be generated
-     */
-    public static final String REPORTING_REPORT_LOCALE = PARAM("ReportingReportLocale");
-
-    /**
      * If {@link Params#REPORTING_REPORT} is on then this field may
      * contain JSON filter to define vulnerabilities to be included in the generated report file
      */
     public static final String REPORTING_REPORT_FILTER = PARAM("ReportingReportFilter");
-
-    /**
-     * If {@link Params#REPORTING_DATA} is on then this field is to
-     * contain name of the file where AST data will be saved to
-     */
-    public static final String REPORTING_DATA_FILE = PARAM("ReportingDataFile");
-
-    /**
-     * If {@link Params#REPORTING_DATA} is on then this field is to
-     * contain format of the data export file to be generated
-     */
-    public static final String REPORTING_DATA_FORMAT = PARAM("ReportingDataFormat");
-
-    /**
-     * If {@link Params#REPORTING_DATA} is on then this field is to
-     * contain locale of the data export file to be generated
-     */
-    public static final String REPORTING_DATA_LOCALE = PARAM("ReportingDataLocale");
-
-    /**
-     * If {@link Params#REPORTING_DATA} is on then this field may
-     * contain JSON filter to define vulnerabilities to be included in the generated data export file
-     */
-    public static final String REPORTING_DATA_FILTER = PARAM("ReportingDataFilter");
 
     /**
      * If {@link Params#REPORTING_RAWDATA} is on then this field is to
@@ -220,8 +178,7 @@ public class Params {
     public static final String REPORTING_JSON_SETTINGS = PARAM("ReportingJsonSettings");
 
     public static String PARAM(final String field) {
-        String res = PREFIX + String.valueOf(field.charAt(0)).toUpperCase() + field.substring(1);
-        return res;
+        return PREFIX + String.valueOf(field.charAt(0)).toUpperCase() + field.substring(1);
     }
 
     /**

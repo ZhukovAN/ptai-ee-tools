@@ -1,11 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import lombok.NonNull;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 /**
  * Class contains constants that are used as a labels in UI
@@ -65,12 +60,7 @@ public class Labels {
     /**
      * See {@link Params#REPORTING_REPORT}
      */
-    public static final String REPORTING_REPORT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_label();
-
-    /**
-     * See {@link Params#REPORTING_DATA}
-     */
-    public static final String REPORTING_DATA = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_label();
+    public static final String REPORTING_REPORT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_label();
 
     /**
      * See {@link Params#REPORTING_RAWDATA}
@@ -92,47 +82,17 @@ public class Labels {
     /**
      * See {@link Params#REPORTING_REPORT_FILE}
      */
-    public static final String REPORTING_REPORT_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_file_label();
+    public static final String REPORTING_REPORT_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_file_label();
 
     /**
      * See {@link Params#REPORTING_REPORT_TEMPLATE}
      */
-    public static final String REPORTING_REPORT_TEMPLATE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_template_label();
-
-    /**
-     * See {@link Params#REPORTING_REPORT_FORMAT}
-     */
-    public static final String REPORTING_REPORT_FORMAT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_format_label();
-
-    /**
-     * See {@link Params#REPORTING_REPORT_LOCALE}
-     */
-    public static final String REPORTING_REPORT_LOCALE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_locale_label();
+    public static final String REPORTING_REPORT_TEMPLATE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_template_label();
 
     /**
      * See {@link Params#REPORTING_REPORT_FILTER}
      */
-    public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_filter_label();
-
-    /**
-     * See {@link Params#REPORTING_DATA_FILE}
-     */
-    public static final String REPORTING_DATA_FILE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_file_label();
-
-    /**
-     * See {@link Params#REPORTING_DATA_FORMAT}
-     */
-    public static final String REPORTING_DATA_FORMAT = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_format_label();
-
-    /**
-     * See {@link Params#REPORTING_DATA_LOCALE}
-     */
-    public static final String REPORTING_DATA_LOCALE = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_locale_label();
-
-    /**
-     * See {@link Params#REPORTING_DATA_FILTER}
-     */
-    public static final String REPORTING_DATA_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_filter_label();
+    public static final String REPORTING_REPORT_FILTER = Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_filter_label();
 
     /**
      * See {@link Params#REPORTING_RAWDATA_FILE}
@@ -171,10 +131,4 @@ public class Labels {
 
     public static final String REPORTING_LOCALE_ENGLISH = Resources.i18n_misc_enums_locale_english_label();
     public static final String REPORTING_LOCALE_RUSSIAN = Resources.i18n_misc_enums_locale_russian_label();
-
-    public static final String REPORTING_DATA_FORMAT_XML = Resources.i18n_misc_enums_format_xml_label();
-    public static final String REPORTING_DATA_FORMAT_JSON = Resources.i18n_misc_enums_format_json_label();
-    public static final String REPORTING_REPORT_FORMAT_HTML = Resources.i18n_misc_enums_format_html_label();
-    public static final String REPORTING_REPORT_FORMAT_PDF = Resources.i18n_misc_enums_format_pdf_label();
-
 }

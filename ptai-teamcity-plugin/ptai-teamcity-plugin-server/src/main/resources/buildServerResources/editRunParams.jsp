@@ -75,8 +75,6 @@
         var ptaiReportingReportFieldRows = [
             'row_${REPORTING_REPORT_FILE}',
             'row_${REPORTING_REPORT_TEMPLATE}',
-            'row_${REPORTING_REPORT_FORMAT}',
-            'row_${REPORTING_REPORT_LOCALE}',
             'row_${REPORTING_REPORT_FILTER}' ];
 
         ptaiReportingReportShowHide = function (show) {
@@ -84,21 +82,6 @@
                 BS.Util.show(...ptaiReportingReportFieldRows);
             else
                 BS.Util.hide(...ptaiReportingReportFieldRows);
-            BS.MultilineProperties.updateVisible();
-        };
-
-        // Array of table row identifiers that are to be shown if data export option is checked
-        var ptaiReportingDataFieldRows = [
-            'row_${REPORTING_DATA_FILE}',
-            'row_${REPORTING_DATA_FORMAT}',
-            'row_${REPORTING_DATA_LOCALE}',
-            'row_${REPORTING_DATA_FILTER}' ];
-
-        ptaiReportingDataShowHide = function (show) {
-            if (true == show)
-                BS.Util.show(...ptaiReportingDataFieldRows);
-            else
-                BS.Util.hide(...ptaiReportingDataFieldRows);
             BS.MultilineProperties.updateVisible();
         };
 
@@ -153,10 +136,6 @@
             ptaiReportingReportShowHide($('${REPORTING_REPORT}').checked)
         };
 
-        ptaiReportingDataClick = function () {
-            ptaiReportingDataShowHide($('${REPORTING_DATA}').checked)
-        };
-
         ptaiReportingRawDataClick = function () {
             ptaiReportingRawDataShowHide($('${REPORTING_RAWDATA}').checked)
         };
@@ -177,7 +156,6 @@
         var ptaiAstWorkModeSyncFieldRows = [
             'row_ptaiStepFailConditions',
             'row_${REPORTING_REPORT}',
-            'row_${REPORTING_DATA}',
             'row_${REPORTING_RAWDATA}',
             'row_${REPORTING_SARIF}',
             'row_${REPORTING_SONARGIIF}',
@@ -188,7 +166,6 @@
             if (mode === '${AST_MODE_ASYNC}') {
                 BS.Util.hide(...ptaiAstWorkModeSyncFieldRows);
                 ptaiReportingReportShowHide(false);
-                ptaiReportingDataShowHide(false);
                 ptaiReportingRawDataShowHide(false);
                 ptaiReportingSarifShowHide(false);
                 ptaiReportingSonarGiifShowHide(false);
@@ -197,7 +174,6 @@
             if (mode === '${AST_MODE_SYNC}') {
                 BS.Util.show(...ptaiAstWorkModeSyncFieldRows);
                 ptaiReportingReportClick();
-                ptaiReportingDataClick();
                 ptaiReportingRawDataClick();
                 ptaiReportingSarifClick();
                 ptaiReportingSonarGiifClick();
@@ -415,38 +391,6 @@
             <span class="smallNote">${HINT_REPORTING_REPORT_TEMPLATE}</span>
         </td>
     </tr>
-    <tr id="row_${REPORTING_REPORT_FORMAT}">
-        <th class="noBorder dense">
-            <label for="${REPORTING_REPORT_FORMAT}">${LABEL_REPORTING_REPORT_FORMAT}<l:star/></label>
-        </th>
-        <td class="noBorder dense">
-            <props:selectProperty
-                    name="${REPORTING_REPORT_FORMAT}" enableFilter="true" className="mediumField">
-                <props:option value="${REPORTING_REPORT_FORMAT_HTML}"
-                              currValue="${propertiesBean.properties[REPORTING_REPORT_FORMAT]}">${LABEL_REPORTING_REPORT_FORMAT_HTML}</props:option>
-                <props:option value="${REPORTING_REPORT_FORMAT_PDF}"
-                              currValue="${propertiesBean.properties[REPORTING_REPORT_FORMAT]}">${LABEL_REPORTING_REPORT_FORMAT_PDF}</props:option>
-            </props:selectProperty>
-            <span class="smallNote">${HINT_REPORTING_REPORT_FORMAT}</span>
-            <span class="error" id="error_${REPORTING_REPORT_FORMAT}"></span>
-        </td>
-    </tr>
-    <tr id="row_${REPORTING_REPORT_LOCALE}">
-        <th class="noBorder dense">
-            <label for="${REPORTING_REPORT_LOCALE}">${LABEL_REPORTING_REPORT_LOCALE}<l:star/></label>
-        </th>
-        <td class="noBorder dense">
-            <props:selectProperty
-                    name="${REPORTING_REPORT_LOCALE}" enableFilter="true" className="mediumField">
-                <props:option value="${REPORTING_LOCALE_ENGLISH}"
-                              currValue="${propertiesBean.properties[REPORTING_REPORT_LOCALE]}">${LABEL_REPORTING_LOCALE_ENGLISH}</props:option>
-                <props:option value="${REPORTING_LOCALE_RUSSIAN}"
-                              currValue="${propertiesBean.properties[REPORTING_REPORT_LOCALE]}">${LABEL_REPORTING_LOCALE_RUSSIAN}</props:option>
-            </props:selectProperty>
-            <span class="smallNote">${HINT_REPORTING_REPORT_LOCALE}</span>
-            <span class="error" id="error_${REPORTING_REPORT_LOCALE}"></span>
-        </td>
-    </tr>
     <tr id="row_${REPORTING_REPORT_FILTER}">
         <th class="noBorder dense">
             <label for="${REPORTING_REPORT_FILTER}">${LABEL_REPORTING_REPORT_FILTER}</label>
@@ -461,73 +405,6 @@
                     expanded="${true}"
                     note="${HINT_REPORTING_REPORT_FILTER}"/>
             <span class="error" id="error_${REPORTING_REPORT_FILTER}"></span>
-        </td>
-    </tr>
-
-    <tr id="row_${REPORTING_DATA}">
-        <th class="noBorder dense">
-            <label for="${REPORTING_DATA}">${LABEL_REPORTING_DATA}</label>
-        </th>
-        <td>
-            <props:checkboxProperty name="${REPORTING_DATA}" onclick="ptaiReportingDataClick()"/>
-            <span class="smallNote">${HINT_REPORTING_DATA}</span>
-        </td>
-    </tr>
-    <tr id="row_${REPORTING_DATA_FILE}">
-        <th class="noBorder dense">
-            <label for="${REPORTING_DATA_FILE}">${LABEL_REPORTING_DATA_FILE}<l:star/></label>
-        </th>
-        <td class="noBorder dense">
-            <props:textProperty name="${REPORTING_DATA_FILE}" className="longField"/>
-            <span class="smallNote">${HINT_REPORTING_DATA_FILE}</span>
-        </td>
-    </tr>
-    <tr id="row_${REPORTING_DATA_FORMAT}">
-        <th class="noBorder dense">
-            <label for="${REPORTING_DATA_FORMAT}">${LABEL_REPORTING_DATA_FORMAT}<l:star/></label>
-        </th>
-        <td class="noBorder dense">
-            <props:selectProperty
-                    name="${REPORTING_DATA_FORMAT}" enableFilter="true" className="mediumField">
-                <props:option value="${REPORTING_DATA_FORMAT_JSON}"
-                              currValue="${propertiesBean.properties[REPORTING_DATA_FORMAT]}">${LABEL_REPORTING_DATA_FORMAT_JSON}</props:option>
-                <props:option value="${REPORTING_DATA_FORMAT_XML}"
-                              currValue="${propertiesBean.properties[REPORTING_DATA_FORMAT]}">${LABEL_REPORTING_DATA_FORMAT_XML}</props:option>
-            </props:selectProperty>
-            <span class="smallNote">${HINT_REPORTING_DATA_FORMAT}</span>
-            <span class="error" id="error_${REPORTING_DATA_FORMAT}"></span>
-        </td>
-    </tr>
-    <tr id="row_${REPORTING_DATA_LOCALE}">
-        <th class="noBorder dense">
-            <label for="${REPORTING_DATA_LOCALE}">${LABEL_REPORTING_DATA_LOCALE}<l:star/></label>
-        </th>
-        <td class="noBorder dense">
-            <props:selectProperty
-                    name="${REPORTING_DATA_LOCALE}" enableFilter="true" className="mediumField">
-                <props:option value="${REPORTING_LOCALE_ENGLISH}"
-                              currValue="${propertiesBean.properties[REPORTING_DATA_LOCALE]}">${LABEL_REPORTING_LOCALE_ENGLISH}</props:option>
-                <props:option value="${REPORTING_LOCALE_RUSSIAN}"
-                              currValue="${propertiesBean.properties[REPORTING_DATA_LOCALE]}">${LABEL_REPORTING_LOCALE_RUSSIAN}</props:option>
-            </props:selectProperty>
-            <span class="smallNote">${HINT_REPORTING_DATA_LOCALE}</span>
-            <span class="error" id="error_${REPORTING_DATA_LOCALE}"></span>
-        </td>
-    </tr>
-    <tr id="row_${REPORTING_DATA_FILTER}">
-        <th class="noBorder dense">
-            <label for="${REPORTING_DATA_FILTER}">${LABEL_REPORTING_DATA_FILTER}</label>
-        </th>
-        <td class="noBorder dense">
-            <props:multilineProperty
-                    name="${REPORTING_DATA_FILTER}"
-                    className="longField"
-                    linkTitle=""
-                    rows="3"
-                    cols="49"
-                    expanded="${true}"
-                    note="${HINT_REPORTING_DATA_FILTER}"/>
-            <span class="error" id="error_${REPORTING_DATA_FILTER}"></span>
         </td>
     </tr>
 

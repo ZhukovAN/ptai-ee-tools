@@ -1,10 +1,12 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import okio.Buffer;
+import okio.BufferedSink;
 import okio.BufferedSource;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -12,14 +14,14 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.HTTP_RESPONSE_MAX_BODY_SIZE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.LOGGING_HTTP_REQUEST_MAX_BODY_SIZE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE;
 
 @Slf4j
+@AllArgsConstructor
 public class LoggingInterceptor implements Interceptor {
-    /**
-     * Maximum response body size to be output to log
-     */
-    protected static int HTTP_RESPONSE_MAX_BODY_SIZE_VALUE = 10 * 1024;
+    @NonNull
+    protected AdvancedSettings advancedSettings = AdvancedSettings.getDefault();
 
     @NotNull
     @Override
@@ -38,13 +40,15 @@ public class LoggingInterceptor implements Interceptor {
                 response.code(), response.request().url(), (responseTime - requestTime) / 1e6d));
 
         log.trace("Response headers: {}", response.headers());
-        if (null != response.body()) {
+
+        int maxBody = advancedSettings.getInt(LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE);
+        if (0 != maxBody && null != response.body()) {
             BufferedSource source = response.body().source();
             source.request(Long.MAX_VALUE); // Buffer the entire body.
             Buffer buffer = source.getBuffer();
-            String bufferData = buffer.clone().readString(StandardCharsets.UTF_8);
+            if (buffer.size() < maxBody) maxBody = (int) buffer.size();
+            String bufferData = buffer.clone().readString(maxBody, StandardCharsets.UTF_8);
 
-            int maxBody = AdvancedSettings.getInt(HTTP_RESPONSE_MAX_BODY_SIZE, HTTP_RESPONSE_MAX_BODY_SIZE_VALUE);
             if (maxBody >= bufferData.length()) {
                 log.trace("Response body: {}", StringUtils.isEmpty(bufferData) ? "[empty]" : bufferData);
             } else {
@@ -64,13 +68,25 @@ public class LoggingInterceptor implements Interceptor {
             @NonNull final Headers headers,
             @NonNull final RequestBody body) throws IOException {
         long contentLength = body.contentLength();
-        String bodySize = -1L != body.contentLength() ? contentLength + " byte" : "unknown";
+        String bodySize = -1L != contentLength ? contentLength + " byte" : "unknown";
         log.trace("Request body size: {}", bodySize);
 
-        if (!"application/json".equalsIgnoreCase(headers.get("Content-Type"))) return;
+        if (!"application/json".equalsIgnoreCase(headers.get("Content-Type"))) {
+            log.trace("Non-JSON request body skipped");
+            return;
+        }
 
         Buffer buffer = new Buffer();
         body.writeTo(buffer);
-        log.trace("Request body: {}", buffer.readString(StandardCharsets.UTF_8));
+        int maxBody = advancedSettings.getInt(LOGGING_HTTP_REQUEST_MAX_BODY_SIZE);
+
+        if (maxBody >= contentLength) {
+            String stringBody = buffer.readString(StandardCharsets.UTF_8);
+            log.trace("Request body: {}", StringUtils.isEmpty(stringBody) ? "[empty]" : stringBody);
+        } else {
+            log.trace("Request body trimmed to first {} bytes as it {} bytes long", maxBody, contentLength);
+            String stringBody = buffer.readString(maxBody, StandardCharsets.UTF_8);
+            log.trace("Trimmed request body: {}", StringUtils.isEmpty(stringBody) ? "[empty]" : stringBody);
+        }
     }
 }

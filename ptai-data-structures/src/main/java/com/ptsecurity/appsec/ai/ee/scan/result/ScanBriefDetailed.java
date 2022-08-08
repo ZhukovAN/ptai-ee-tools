@@ -138,6 +138,7 @@ public class ScanBriefDetailed extends ScanBrief {
     public static ScanBriefDetailed create(@NonNull final ScanBrief scanResult, @NonNull final Performance performance) {
         return ScanBriefDetailed.builder()
                 .id(scanResult.id)
+                .apiVersion(scanResult.apiVersion)
                 .ptaiServerUrl(scanResult.ptaiServerUrl)
                 .projectId(scanResult.projectId)
                 .projectName(scanResult.projectName)
@@ -155,6 +156,7 @@ public class ScanBriefDetailed extends ScanBrief {
     public static ScanBriefDetailed create(@NonNull final ScanResult scanResult, @NonNull final Performance performance) {
         return ScanBriefDetailed.builder()
                 .id(scanResult.id)
+                .apiVersion(scanResult.apiVersion)
                 .ptaiServerUrl(scanResult.ptaiServerUrl)
                 .projectId(scanResult.projectId)
                 .projectName(scanResult.projectName)

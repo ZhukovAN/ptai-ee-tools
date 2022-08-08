@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.TextOutput;
 import lombok.*;
@@ -29,6 +30,10 @@ public abstract class AbstractTool implements TextOutput {
 
     @Builder.Default
     protected boolean verbose = false;
+
+    @Builder.Default
+    @NonNull
+    protected AdvancedSettings advancedSettings = AdvancedSettings.getDefault();
 
     protected void out(final String value) {
         if (null == value) return;
@@ -81,6 +86,10 @@ public abstract class AbstractTool implements TextOutput {
     public void warning(final String value) {
         log.warn(value);
         out(value);
+    }
+
+    public void warning(@NonNull final String format, final Object ... values) {
+        warning(String.format(format, values));
     }
 
     public void warning(@NonNull final GenericException e) {

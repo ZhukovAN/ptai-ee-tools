@@ -12,5 +12,6 @@ public abstract class AbstractTaskImpl extends AbstractTool {
 
     public AbstractTaskImpl(@NonNull final AbstractApiClient client) {
         this.client = (ApiClient) client;
+        advancedSettings = client.getAdvancedSettings();
     }
 }

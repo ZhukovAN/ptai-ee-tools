@@ -165,3 +165,22 @@
 + [Feature] Jenkins plugin integration tests implemented
 + [Fix] ClassGraph library replaced with Reflections
 + [Fix] 7z-packed sources are replaced with zip-packed ones as ExtractResourceSCM supports zip archives
+### 20220215
++ [Fix] Fixed FileCollector bug where it doesn't add folder entries to zipped file. Processing of such zip files sometimes fails on a PT AI server
+### 20220228
++ [Feature] CLI plugin may now use -Dptai.logging.http.response.max.body.size=10 Java option to restrict logged HTTP body size
+### 20220310
++ [Feature] Jenkins plugin now supports global- and task-scope defined advanced settings. logging.http.response.max.body.size is supported
+### 20220312
++ [Feature] Added logging.http.request.max.body.size, http.request.read.timeout and http.request.write.timeout for Jenkins and CLI plugins
+### 20220615
++ [Feature] PT AI 4.0 supported
++ [Feature] As sometimes notifications service connection get lost, polling thread added to generic AST task
++ [Fix] Temporal file cleanup fixed
+### 20220624
++ [Fix] Gradle version fixed in Dockerfile
++ [Fix] Raw JSON encoding fixed
++ [Feature] Removed PDF report generation as PT AI 4.0 REST API no supports it more
++ [Feature] Removed explicit XML / JSON report generation as PT AI 4.0 supports them via report template
+### 20220712
++ [Fix] Fixed out of memory error when LoggingInterceptor reads REST API responses

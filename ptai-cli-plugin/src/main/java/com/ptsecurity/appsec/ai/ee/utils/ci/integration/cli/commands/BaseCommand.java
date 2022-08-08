@@ -9,9 +9,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentia
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.JsonXml;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.HtmlPdf;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -74,20 +72,10 @@ public abstract class BaseCommand {
             if (null != reporting) {
                 Reports reports = new Reports();
                 // Convert CLI-defined report / export data to generic Reports instance
-                if (null != reporting.data)
-                    reports.getData().add(Reports.Data.builder()
-                            .fileName(reporting.data.file.normalize().toString())
-                            .format(reporting.data.format)
-                            .locale(reporting.data.locale)
-                            .includeDfd(reporting.data.includeDfd)
-                            .includeGlossary(reporting.data.includeGlossary)
-                            .build());
                 if (null != reporting.report)
                     reports.getReport().add(Reports.Report.builder()
                             .fileName(reporting.report.file.normalize().toString())
                             .template(reporting.report.template)
-                            .format(reporting.report.format)
-                            .locale(reporting.report.locale)
                             .includeDfd(reporting.report.includeDfd)
                             .includeGlossary(reporting.report.includeGlossary)
                             .build());
@@ -117,9 +105,7 @@ public abstract class BaseCommand {
             Reports reports = convert();
             if (null == reports) return;
             for (com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Report report : reports.getReport())
-                HtmlPdf.builder().owner(owner).report(report).build().attach(owner);
-            for (Reports.Data data : reports.getData())
-                JsonXml.builder().owner(owner).data(data).build().attach(owner);
+                com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Report.builder().owner(owner).report(report).build().attach(owner);
             for (Reports.RawData rawData : reports.getRaw())
                 RawJson.builder().owner(owner).rawData(rawData).build().attach(owner);
         }
@@ -131,16 +117,10 @@ public abstract class BaseCommand {
      * define its format, template and locale using @report field
      */
     public static class ExplicitReporting {
-        /**
-         * Machine-readable data export file definition that
-         * includes format (XML or JSON), locate and optional filters
-         */
-        @CommandLine.ArgGroup(exclusive = false)
-        public Data data = null;
 
         /**
          * Human-readable report definition that includes
-         * format (html or PDF), template name, locale and
+         * format (html), template name, locale and
          * optional filters
          */
         @CommandLine.ArgGroup(exclusive = false)
@@ -164,55 +144,6 @@ public abstract class BaseCommand {
     }
 
     /**
-     * Class defines group of CLI parameters to define single exported
-     * data file. As those files aren't template-dependent, we need
-     * to define only locale and format
-     */
-    @Getter @Setter
-    @NoArgsConstructor
-    public static class Data {
-        /**
-         * Exported data file format. PT AI allows data export using XML and JSON formats
-         */
-        @CommandLine.Option(
-                names = { "--data-format" }, order = 2,
-                required = true,
-                paramLabel = "<format>",
-                description = "Format type of data to be exported, one of: ${COMPLETION-CANDIDATES}")
-        public Reports.Data.Format format;
-
-        /**
-         * Exported data locale. PT AI allows data export using EN and RU locales
-         */
-        @CommandLine.Option(
-                names = { "--data-locale" }, order = 3,
-                required = true,
-                paramLabel = "<locale>",
-                description = "Locale ID of data to be exported, one of ${COMPLETION-CANDIDATES}")
-        public Reports.Locale locale;
-
-        /**
-         * Generated report file name
-         */
-        @CommandLine.Option(
-                names = { "--data-file" }, order = 4,
-                required = true,
-                paramLabel = "<file>",
-                description = "File name where exported data is to be saved")
-        public Path file;
-
-        @CommandLine.Option(
-                names = {"--data-include-dfd"}, order = 5,
-                description = "Enable this option if you want to add the dataflow diagram to the report")
-        protected boolean includeDfd = false;
-
-        @CommandLine.Option(
-                names = {"--data-include-glossary"}, order = 6,
-                description = "Enable this option if you want to add reference information about vulnerabilities to the report")
-        protected boolean includeGlossary = false;
-    }
-
-    /**
      * Class defines group of CLI parameters to define single
      * generated report file. As those files are template-dependent,
      * we need to define template name, locale and format
@@ -226,26 +157,6 @@ public abstract class BaseCommand {
                 paramLabel = "<template>",
                 description = "Template name of report to be generated")
         public String template;
-
-        /**
-         * Exported report file format. PT AI allows report generation using PDF and HTML formats
-         */
-        @CommandLine.Option(
-                names = { "--report-format" }, order = 2,
-                required = true,
-                paramLabel = "<format>",
-                description = "Format type of report to be generated, one of: ${COMPLETION-CANDIDATES}")
-        public Reports.Report.Format format;
-
-        /**
-         * Generated report locale. PT AI allows report generation using EN and RU locales
-         */
-        @CommandLine.Option(
-                names = { "--report-locale" }, order = 3,
-                required = true,
-                paramLabel = "<locale>",
-                description = "Locale ID of report to be generated, one of ${COMPLETION-CANDIDATES}")
-        public Reports.Locale locale;
 
         /**
          * Generated report file name

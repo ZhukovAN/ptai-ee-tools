@@ -13,7 +13,6 @@ public class LicenseData {
     @NonNull
     protected Integer number;
 
-    @NonNull
     protected OffsetDateTime startDate;
 
     @NonNull

@@ -1,28 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobSingleResult
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobSingleResult
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper
-import jenkins.model.Jenkins
 import lib.FormTagLib
 import lib.LayoutTagLib
-import org.apache.commons.lang3.time.DurationFormatUtils
-
-import java.awt.Color
-import java.time.Duration
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.util.jar.Attributes
-import java.util.jar.Manifest
-
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel.LEVEL_COLORS
 
 def f = namespace(FormTagLib)
 def l = namespace(LayoutTagLib)
@@ -30,11 +12,17 @@ def t = namespace('/lib/hudson')
 def st = namespace("jelly:stapler")
 
 t.summary(icon: my.getIconFileName()) {
-    def scanBriefDetailed = my.getScanBriefDetailed()
+    def scanBriefDetailed = my.loadScanBriefDetailed()
     div() {
         b(Resources.i18n_ast_plugin_label() + " (")
-        a(href: "ptai://navigation/show?project=" + scanBriefDetailed.projectId) {
-            text(_("project.open.viewer.label"))
+        if (ScanBrief.ApiVersion.V36 == scanBriefDetailed.apiVersion) {
+            a(href: "ptai://navigation/show?project=" + scanBriefDetailed.projectId) {
+                text(_("project.open.viewer.label"))
+            }
+        } else {
+            a(href: scanBriefDetailed.ptaiServerUrl + "/ui/projects/" + scanBriefDetailed.projectId + "/scan/" + scanBriefDetailed.id) {
+                text(_("project.open.ui.label"))
+            }
         }
         text(")")
         if (scanBriefDetailed.getUseAsyncScan()) {

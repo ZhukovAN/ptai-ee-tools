@@ -16,11 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 @SuperBuilder
 public class ConnectionSettings {
     /**
-     * Default API call timeout duration in milliseconds
-     */
-    protected static final int TIMEOUT = 3600 * 1000;
-
-    /**
      * PT AI server URL
      */
     @NonNull
@@ -28,14 +23,6 @@ public class ConnectionSettings {
 
     @NonNull
     protected BaseCredentials credentials;
-
-    /**
-     * PT AI API client timeout
-     */
-    @Getter
-    @Setter
-    @Builder.Default
-    protected int timeout = TIMEOUT;
 
     /**
      * PEM-encoded CA certificate chain. If null or empty then

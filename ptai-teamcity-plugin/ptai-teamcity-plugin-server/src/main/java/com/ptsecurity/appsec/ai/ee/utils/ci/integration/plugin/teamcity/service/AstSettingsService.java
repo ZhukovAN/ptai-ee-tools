@@ -2,17 +2,16 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service
 
 import com.ptsecurity.appsec.ai.ee.ServerCheckResult;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.AstAdminSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CertificateHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
@@ -155,14 +154,7 @@ public class AstSettingsService {
         res.fill(REPORTING_REPORT, request)
                 .fill(REPORTING_REPORT_FILE, request)
                 .fill(REPORTING_REPORT_TEMPLATE, request)
-                .fill(REPORTING_REPORT_FORMAT, request)
-                .fill(REPORTING_REPORT_LOCALE, request)
                 .fill(REPORTING_REPORT_FILTER, request);
-        res.fill(REPORTING_DATA, request)
-                .fill(REPORTING_DATA_FILE, request)
-                .fill(REPORTING_DATA_FORMAT, request)
-                .fill(REPORTING_DATA_LOCALE, request)
-                .fill(REPORTING_DATA_FILTER, request);
         res.fill(REPORTING_RAWDATA, request)
                 .fill(REPORTING_RAWDATA_FILE, request);
         res.fill(REPORTING_JSON, request)
@@ -228,7 +220,7 @@ public class AstSettingsService {
                 results.add(JSON_SETTINGS, MESSAGE_JSON_SETTINGS_EMPTY);
             else {
                 try {
-                    JsonSettingsHelper.verify(bean.get(JSON_SETTINGS));
+                    new JsonSettingsHelper(bean.get(JSON_SETTINGS)).verifyRequiredFields();
                 } catch (GenericException e) {
                     results.add(JSON_SETTINGS, e.getDetailedMessage());
                     log.warn(e.getDetailedMessage(), e);
@@ -257,23 +249,13 @@ public class AstSettingsService {
 
         if (bean.isTrue(REPORTING_REPORT)) {
             if (bean.empty(REPORTING_REPORT_FILE))
-                results.add(REPORTING_REPORT_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_file_message_empty());
+                results.add(REPORTING_REPORT_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_file_message_empty());
             if (bean.empty(REPORTING_REPORT_TEMPLATE))
-                results.add(REPORTING_REPORT_TEMPLATE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_template_message_empty());
+                results.add(REPORTING_REPORT_TEMPLATE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_template_message_empty());
             if (!bean.empty(REPORTING_REPORT_FILTER)) {
                 Validator.Result result = Validator.validateJsonIssuesFilter(bean.get(REPORTING_REPORT_FILTER));
                 if (result.fail())
-                    results.add(REPORTING_REPORT_FILTER, Resources.i18n_ast_settings_mode_synchronous_subjob_export_htmlpdf_filter_message_invalid_details(result.getDetails()));
-            }
-        }
-
-        if (bean.isTrue(REPORTING_DATA)) {
-            if (bean.empty(REPORTING_DATA_FILE))
-                results.add(REPORTING_DATA_FILE, Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_file_message_empty());
-            if (!bean.empty(REPORTING_DATA_FILTER)) {
-                Validator.Result result = Validator.validateJsonIssuesFilter(bean.get(REPORTING_DATA_FILTER));
-                if (result.fail())
-                    results.add(REPORTING_DATA_FILTER, Resources.i18n_ast_settings_mode_synchronous_subjob_export_jsonxml_filter_message_invalid_details(result.getDetails()));
+                    results.add(REPORTING_REPORT_FILTER, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_filter_message_invalid_details(result.getDetails()));
             }
         }
 
@@ -316,7 +298,7 @@ public class AstSettingsService {
         try {
             AbstractApiClient client = createApiClient(bean);
             ServerCheckResult res = new Factory().checkServerTasks(client).check();
-            res.stream().forEach(r -> results.add(r));
+            res.forEach(results::add);
             log.info(res.text());
             results.setResult(res.getState().equals(ERROR) ? FAILURE : SUCCESS);
         } catch (GenericException e) {
@@ -343,8 +325,8 @@ public class AstSettingsService {
                     results.failure();
                 }
             } else {
-                AiProjScanSettings settingsJson = JsonSettingsHelper.verify(bean.getProperties().get(JSON_SETTINGS));
-                results.add("JSON settings are verified, project name is " + settingsJson.getProjectName());
+                JsonSettingsHelper helper = new JsonSettingsHelper(bean.getProperties().get(JSON_SETTINGS)).verifyRequiredFields();
+                results.add("JSON settings are verified, project name is " + helper.getProjectName());
                 Policy[] policyJson = JsonPolicyHelper.verify(bean.getProperties().get(JSON_POLICY));
                 results.add("JSON policy is verified, number of rule sets is " + policyJson.length);
             }

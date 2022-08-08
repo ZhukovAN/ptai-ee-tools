@@ -7,7 +7,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import lombok.NonNull;
 
-import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,7 +14,6 @@ public interface ReportsTasks {
     void check(@NonNull final Reports reports);
 
     void check(@NonNull final Report report) throws GenericException;
-    void check(@NonNull final Data data) throws GenericException;
     void check(@NonNull final RawData rawData) throws GenericException;
     void check(@NonNull final Sarif sarif) throws GenericException;
     void check(@NonNull final SonarGiif sonarGiif) throws GenericException;
@@ -34,8 +32,7 @@ public interface ReportsTasks {
      */
     void exportAdvanced(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Reports reports, @NonNull final FileOperations fileOps) throws GenericException;
 
-    void exportHtmlPdf(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Report report, @NonNull final FileOperations fileOps) throws GenericException;
-    void exportJsonXml(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Data data, @NonNull final FileOperations fileOps) throws GenericException;
+    void exportReport(@NonNull final UUID projectId, @NonNull final UUID scanResultId, @NonNull final Report report, @NonNull final FileOperations fileOps) throws GenericException;
 
     /**
      * Method saves "raw JSON" issues to file using task-specific file operations

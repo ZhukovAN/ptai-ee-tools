@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.UrlHelper;
@@ -18,12 +19,6 @@ import java.util.regex.Pattern;
 public class Validator {
     public static boolean doCheckFieldNotEmpty(String value) {
         return !StringUtils.isEmpty(value);
-    }
-
-    private static final String[] GENERIC_TLDS_PLUS = new String[] { "corp", "local" };
-
-    static {
-        DomainValidator.updateTLDOverride(DomainValidator.ArrayType.GENERIC_PLUS, GENERIC_TLDS_PLUS);
     }
 
     protected static boolean checkViaException(@NonNull final Runnable call) {
@@ -48,7 +43,7 @@ public class Validator {
     }
 
     public static boolean doCheckFieldJsonSettings(String value) {
-        return checkViaException(() -> JsonSettingsHelper.verify(value));
+        return checkViaException(() -> new JsonSettingsHelper(value).verifyRequiredFields());
     }
 
     public static boolean doCheckFieldJsonPolicy(String value) {
@@ -61,6 +56,10 @@ public class Validator {
 
     public static boolean doCheckFieldJsonReports(String value) {
         return checkViaException(() -> ReportUtils.validateJsonReports(value));
+    }
+
+    public static boolean doCheckFieldAdvancedSettings(String value) {
+        return checkViaException(() -> AdvancedSettings.validate(value));
     }
 
     public static FormValidation doCheckFieldNotEmpty(String value, String errorMessage) {
@@ -97,6 +96,10 @@ public class Validator {
 
     public static FormValidation doCheckFieldJsonReports(String value, String errorMessage) {
         return doCheckFieldJsonReports(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
+    }
+
+    public static FormValidation doCheckFieldAdvancedSettings(String value, String errorMessage) {
+        return doCheckFieldAdvancedSettings(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
     }
 
     public static FormValidation error(Exception e) {

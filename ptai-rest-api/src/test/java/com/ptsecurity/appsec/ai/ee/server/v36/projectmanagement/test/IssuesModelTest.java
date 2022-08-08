@@ -19,7 +19,7 @@ public class IssuesModelTest extends BaseTest {
     @Test
     @DisplayName("Read and parse data from raw OWASP Bricks issues model 7zip-packed JSON resource file")
     public void parseRawBricksIssuesModel() {
-        Path packedFileContents = getPackedResourceFile("v36/json/issuesModel/php-bricks.en.json.7z");
+        Path packedFileContents = extractPackedResourceFile("v36/json/issuesModel/" + PHP_OWASP_BRICKS_PROJECT_NAME + ".en.json.7z");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile jsonFile = new TempFile(packedFileContents)) {
             Assertions.assertTrue(jsonFile.toFile().isFile());
@@ -42,7 +42,7 @@ public class IssuesModelTest extends BaseTest {
     @Test
     @DisplayName("Read and parse data from raw PHP Smoke issues model 7zip-packed JSON resource file")
     public void parseRawPhpSmokeIssuesModel() {
-        Path packedFileContents = getPackedResourceFile("v36/json/issuesModel/php-smoke.en.json.7z");
+        Path packedFileContents = extractPackedResourceFile("v36/json/issuesModel/" + PHP_SMOKE_MEDIUM_PROJECT_NAME + ".en.json.7z");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile jsonFile = new TempFile(packedFileContents)) {
             Assertions.assertTrue(jsonFile.toFile().isFile());
@@ -74,7 +74,7 @@ public class IssuesModelTest extends BaseTest {
     @Test
     @DisplayName("Read and parse data from raw OWASP Benchmark issues model 7zip-packed JSON resource file")
     public void parseRawOwaspBenchmarkIssuesModel() {
-        Path packedFileContents = getPackedResourceFile("v36/json/issuesModel/java-owasp-benchmark.en.json.7z");
+        Path packedFileContents = extractPackedResourceFile("v36/json/issuesModel/" + JAVA_OWASP_BENCHMARK_PROJECT_NAME + ".en.json.7z");
         Assertions.assertNotNull(packedFileContents);
         try (TempFile jsonFile = new TempFile(packedFileContents)) {
             Assertions.assertTrue(jsonFile.toFile().isFile());

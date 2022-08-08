@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.*;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ReportGenerateModel;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ReportTemplateModel;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ReportType;
-import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.UserReportParameters;
+import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.ReportsConverter;
@@ -27,6 +24,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.text.similarity.CosineDistance;
 
@@ -51,9 +49,9 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
 
     public void check(@NonNull final Reports reports)  {
         // Check what templates defined in reports are missing on server
-        List<ImmutablePair<Locale, String>> missingTemplates = new ArrayList<>();
+        List<String> missingTemplates = new ArrayList<>();
         // We will download all the templates for supported locales to give hint to user in case of typo in template name
-        List<ImmutablePair<Locale, String>> existingTemplates = new ArrayList<>();
+        List<String> existingTemplates = new ArrayList<>();
         fine("Checking report templates existence");
         for (Locale locale : Locale.values()) {
             // Get all templates for given locale
@@ -63,46 +61,42 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                     .stream()
                     .map(ReportTemplateModel::getName)
                     .collect(Collectors.toList());
-            for (String template : templates) existingTemplates.add(new ImmutablePair<>(locale, template));
-            // Check if all the required report templates are present in list
-            reports.getReport().stream()
-                    .filter(r -> locale.equals(r.getLocale()))
-                    .map(Report::getTemplate)
-                    .forEach(t -> {
-                        if (!templates.contains(t)) missingTemplates.add(new ImmutablePair<>(locale, t));
-                    });
+            existingTemplates.addAll(templates);
         }
+        // Check if all the required report templates are present in list
+        reports.getReport().stream()
+                .map(Report::getTemplate)
+                .forEach(t -> {
+                    if (!existingTemplates.contains(t)) missingTemplates.add(t);
+                });
         if (missingTemplates.isEmpty()) return;
 
         // Let's give user a hint about most similar template names. To do that
         // we will calculate cosine distance between each of existing templates
         // and user value
-        for (ImmutablePair<Locale, String> missing : missingTemplates) {
-            List<Triple<Double, Locale, String>> distances = new ArrayList<>();
-            for (ImmutablePair<Locale, String> existing : existingTemplates)
-                distances.add(new ImmutableTriple<>(
-                        new CosineDistance().apply(missing.right, existing.right), existing.left, existing.right));
-            distances.sort(Comparator.comparing(Triple::getLeft));
+        for (String missing : missingTemplates) {
+            List<ImmutablePair<Double, String>> distances = new ArrayList<>();
+            for (String existing : existingTemplates)
+                distances.add(new ImmutablePair<>(
+                        new CosineDistance().apply(missing, existing),
+                        existing));
+            distances.sort(Comparator.comparing(Pair::getLeft));
             info(
-                    "No '%s' [%s] template name found. Most similar existing template is '%s' [%s] with %.1f%% similarity",
-                    missing.right, missing.left, distances.get(0).getRight(), distances.get(0).getMiddle(),
+                    "No '%s' template name found. Most similar existing template is '%s' [%s] with %.1f%% similarity",
+                    missing, distances.get(0).getRight(), distances.get(0).getLeft(),
                     100 - distances.get(0).getLeft() * 100);
         }
 
-        List<String> missingTemplateNames = missingTemplates.stream()
-                .map(ImmutablePair::getRight)
-                .collect(Collectors.toList());
-
         throw GenericException.raise(
                 "Not all report templates are exist on server",
-                new IllegalArgumentException("Missing reports are " + StringHelper.joinListGrammatically(missingTemplateNames)));
+                new IllegalArgumentException("Missing reports are " + StringHelper.joinListGrammatically(missingTemplates)));
     }
 
     @Override
     public void check(@NonNull Report report) throws GenericException {
         // Check what templates defined in reports are missing on server
         // We will download all the templates for supported locales to give hint to user in case of typo in template name
-        List<ImmutablePair<Locale, String>> existingTemplates = new ArrayList<>();
+        List<String> existingTemplates = new ArrayList<>();
         fine("Checking report templates existence");
         for (Locale locale : Locale.values()) {
             // Get all templates for given locale
@@ -112,7 +106,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                     .stream()
                     .map(ReportTemplateModel::getName)
                     .collect(Collectors.toList());
-            for (String template : templates) existingTemplates.add(new ImmutablePair<>(locale, template));
+            existingTemplates.addAll(templates);
             // Check if report template is present in list
             if (templates.contains(report.getTemplate())) return;
         }
@@ -120,23 +114,20 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         // Let's give user a hint about most similar template names. To do that
         // we will calculate cosine distance between each of existing templates
         // and user value
-        List<Triple<Double, Locale, String>> distances = new ArrayList<>();
-        for (ImmutablePair<Locale, String> existing : existingTemplates)
-            distances.add(new ImmutableTriple<>(
-                    new CosineDistance().apply(report.getTemplate(), existing.right), existing.left, existing.right));
-        distances.sort(Comparator.comparing(Triple::getLeft));
+        List<Pair<Double, String>> distances = new ArrayList<>();
+        for (String existing : existingTemplates)
+            distances.add(new ImmutablePair<>(
+                    new CosineDistance().apply(report.getTemplate(), existing), existing));
+        distances.sort(Comparator.comparing(Pair::getLeft));
         info(
-                "No '%s' [%s] template name found. Most similar existing template is '%s' [%s] with %.1f%% similarity",
-                report.getTemplate(), report.getLocale(), distances.get(0).getRight(), distances.get(0).getMiddle(),
+                "No '%s' template name found. Most similar existing template is '%s' with %.1f%% similarity",
+                report.getTemplate(), distances.get(0).getRight(),
                 100 - distances.get(0).getLeft() * 100);
 
         throw GenericException.raise(
                 "Report template does not exist on server",
                 new IllegalArgumentException("Missing template: " + report.getTemplate()));
     }
-
-    @Override
-    public void check(@NonNull Data data) throws GenericException {}
 
     @Override
     public void check(@NonNull RawData rawData) throws GenericException {}
@@ -170,7 +161,6 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
 
         // final AtomicReference<UUID> finalProjectId = new AtomicReference<>(projectId);
         List<Object> allReports = new ArrayList<>();
-        allReports.addAll(checkedReports.getData());
         allReports.addAll(checkedReports.getReport());
         allReports.addAll(checkedReports.getRaw());
         allReports.addAll(checkedReports.getSarif());
@@ -179,10 +169,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
             try {
                 if (item instanceof Report) {
                     Report report = (Report) item;
-                    exportHtmlPdf(projectId, scanResultId, report, fileOps);
-                } else if (item instanceof Data) {
-                    Data data = (Data) item;
-                    exportJsonXml(projectId, scanResultId, data, fileOps);
+                    exportReport(projectId, scanResultId, report, fileOps);
                 } else if (item instanceof RawData) {
                     RawData rawData = (RawData) item;
                     exportRawJson(projectId, scanResultId, rawData, fileOps);
@@ -200,17 +187,26 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
     }
 
     @Override
-    public void exportHtmlPdf(@NonNull UUID projectId, @NonNull UUID scanResultId, @NonNull Report report, @NonNull FileOperations fileOps) throws GenericException {
-        fine("Started: HTML / PDF report generation for project id: %s, scan result id: %s, template: %s, locale: %s, type: %s", projectId, scanResultId, report.getTemplate(), report.getLocale().getValue(), report.getFormat().name());
+    public void exportReport(@NonNull UUID projectId, @NonNull UUID scanResultId, @NonNull Report report, @NonNull FileOperations fileOps) throws GenericException {
+        fine("Started: Report generation for project id: %s, scan result id: %s, template: %s", projectId, scanResultId, report.getTemplate());
 
-        log.trace("Load all report templates to find one with {} name and {} locale", report.getTemplate(), report.getLocale().getValue());
-        List<ReportTemplateModel> templates = call(
-                () -> client.getReportsApi().apiReportsTemplatesGet(report.getLocale().getValue(), false),
-                "PT AI report templates list read failed");
-        ReportTemplateModel templateModel = templates.stream().filter(t -> report.getTemplate().equalsIgnoreCase(t.getName())).findAny().orElse(null);
-        if (null == templateModel || null == templateModel.getId())
+        log.trace("Load all report templates to find one with {} name", report.getTemplate());
+
+        ReportTemplateModel templateModel = null;
+        Locale templateLocale = null;
+
+        for (Locale locale : Locale.values()) {
+            List<ReportTemplateModel> templates = call(
+                    () -> client.getReportsApi().apiReportsTemplatesGet(locale.getValue(), false),
+                    "PT AI report templates list read failed");
+            templateModel = templates.stream().filter(t -> report.getTemplate().equalsIgnoreCase(t.getName())).findAny().orElse(null);
+            if (null == templateModel || null == templateModel.getId()) continue;
+            templateLocale = locale;
+            log.trace("Template {} found, id is {}, locale {}", report.getTemplate(), templateModel.getId(), locale);
+            break;
+        }
+        if (null == templateModel || null == templateLocale)
             throw GenericException.raise("Report generation failed", new IllegalArgumentException("PT AI template " + report.getTemplate() + " not found"));
-        log.trace("Template {} found, id is {}", report.getTemplate(), templateModel.getId());
 
         log.trace("Create report generation model and apply filters");
         ReportGenerateModel model = new ReportGenerateModel()
@@ -218,12 +214,13 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                         .includeDFD(report.isIncludeDfd())
                         .includeGlossary(report.isIncludeGlossary())
                         .useFilters(null != report.getFilters())
-                        .formatType(ReportsConverter.convert(report.getFormat()))
+                        // Generate PT AI 3.6 HTML reports
+                        .formatType(ReportFormatType.HTML)
                         .reportTemplateId(templateModel.getId())
                         .saveAsPath(""))
                 .scanResultId(scanResultId)
                 .projectId(projectId)
-                .localeId(report.getLocale().getValue());
+                .localeId(templateLocale.getValue());
         if (null != report.getFilters()) model.setFilters(ReportsConverter.convert(report.getFilters()));
         log.trace("Call report generation API");
         File file = call(
@@ -235,44 +232,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 "Report file save failed");
         log.debug("Deleting temp file {}", file.getAbsolutePath());
         call(file::delete, "Temporal file " + file.getAbsolutePath() + " delete failed", true);
-        fine("Finished: HTML / PDF report generation for project id: %s, scan result id: %s, template: %s, locale: %s, type: %s", projectId, scanResultId, report.getTemplate(), report.getLocale().getValue(), report.getFormat().name());
-    }
-
-    @Override
-    public void exportJsonXml(@NonNull UUID projectId, @NonNull UUID scanResultId, @NonNull Data data, @NonNull FileOperations fileOps) throws GenericException {
-        fine("Started: XML / JSON data export for project id: %s, scan result id: %s, locale: %s, type: %s", projectId, scanResultId, data.getLocale().getValue(), data.getFormat().name());
-        UUID dummyTemplateId = getDummyReportTemplateId(Locale.EN);
-        exportJsonXml(projectId, scanResultId, data, dummyTemplateId, fileOps);
-        fine("Finished: XML / JSON data export for project id: %s, scan result id: %s, locale: %s, type: %s", projectId, scanResultId, data.getLocale().getValue(), data.getFormat().name());
-    }
-
-    protected void exportJsonXml(@NonNull UUID projectId, @NonNull UUID scanResultId, @NonNull Data data, @NonNull UUID dummyTemplateId, @NonNull FileOperations fileOps) throws GenericException {
-        ReportGenerateModel model = new ReportGenerateModel()
-                .parameters(new UserReportParameters()
-                        .includeDFD(data.isIncludeDfd())
-                        .includeGlossary(data.isIncludeGlossary())
-                        .useFilters(null != data.getFilters())
-                        .formatType(ReportsConverter.convert(data.getFormat()))
-                        .reportTemplateId(dummyTemplateId)
-                        .saveAsPath(""))
-                .scanResultId(scanResultId)
-                .projectId(projectId)
-                .localeId(data.getLocale().getValue());
-        if (null != data.getFilters()) model.setFilters(ReportsConverter.convert(data.getFilters()));
-        File result = call(
-                () -> client.getReportsApi().apiReportsGeneratePost(model),
-                "Report generation failed");
-
-        log.trace("Call report generation API");
-        File file = call(
-                () -> client.getReportsApi().apiReportsGeneratePost(model),
-                "Report generation failed");
-        log.trace("Report saved to temp file {}", file.toPath());
-        call(
-                () -> fileOps.saveArtifact(data.getFileName(), file),
-                "Report file save failed");
-        log.debug("Deleting temp file {}", file.getAbsolutePath());
-        call(file::delete, "Temporal file " + file.getAbsolutePath() + " delete failed", true);
+        fine("Finished: Report generation for project id: %s, scan result id: %s, template: %s", projectId, scanResultId, report.getTemplate());
     }
 
     @Override

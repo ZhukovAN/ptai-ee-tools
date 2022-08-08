@@ -17,7 +17,7 @@ public class ScanResultTest extends BaseTest {
     @Test
     @DisplayName("Read and parse data from base OWASP Bricks scan results JSON resource file")
     public void parseRawBricksScanResults() {
-        InputStream inputStream = getResourceStream("v36/json/scanResult/php-bricks.json");
+        InputStream inputStream = getResourceStream("v36/json/scanResult/" + PHP_OWASP_BRICKS_PROJECT_NAME + ".json");
         Assertions.assertNotNull(inputStream);
         try (InputStreamReader reader = new InputStreamReader(inputStream)) {
             ScanResult scanResult = new JSON().getGson().fromJson(reader, ScanResult.class);
@@ -31,7 +31,7 @@ public class ScanResultTest extends BaseTest {
     @Test
     @DisplayName("Read and parse data from base PHP Smoke scan results JSON resource file")
     public void parseRawPhpSmokeScanResults() {
-        InputStream inputStream = getResourceStream("v36/json/scanResult/php-smoke.json");
+        InputStream inputStream = getResourceStream("v36/json/scanResult/" + PHP_SMOKE_MEDIUM_PROJECT_NAME + ".json");
         Assertions.assertNotNull(inputStream);
         try (InputStreamReader reader = new InputStreamReader(inputStream)) {
             ScanResult scanResult = new JSON().getGson().fromJson(reader, ScanResult.class);

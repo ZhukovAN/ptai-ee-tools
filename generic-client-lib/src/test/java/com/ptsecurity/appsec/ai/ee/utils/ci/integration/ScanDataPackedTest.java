@@ -16,22 +16,27 @@ import java.io.File;
 public class ScanDataPackedTest extends BaseTest {
     @SneakyThrows
     @Test
-    @DisplayName("Packing OWASP Benchmarks detailed scan brief")
+    @DisplayName("Packing detailed scan briefs")
     public void packOwaspBenchmarksScanBriefDetailed() {
-        File scanBriefDetailedFile = getPackedResourceFile("json/scan/brief/detailed/java-owasp-benchmark.json.7z").toFile();
-        ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
-        ScanBriefDetailed scanBriefDetailed = mapper.readValue(scanBriefDetailedFile, ScanBriefDetailed.class);
-        String unpackedData = mapper.writeValueAsString(scanBriefDetailed);
-        ScanDataPacked packedData = ScanDataPacked.builder()
-                .type(ScanDataPacked.Type.SCAN_BRIEF_DETAILED)
-                .data(ScanDataPacked.packData(scanBriefDetailed))
-                .build();
-        Assertions.assertTrue(packedData.getData().length() < unpackedData.length());
+        for (Connection.Version version : Connection.Version.values()) {
+            for (String projectName : ALL_PROJECT_NAMES) {
+                File scanBriefDetailedFile = extractPackedResourceFile("json/scan/brief/detailed/" + version.name().toLowerCase() + "/" + projectName + ".json.7z").toFile();
+                ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+                ScanBriefDetailed scanBriefDetailed = mapper.readValue(scanBriefDetailedFile, ScanBriefDetailed.class);
+                String unpackedData = mapper.writeValueAsString(scanBriefDetailed);
+                ScanDataPacked packedData = ScanDataPacked.builder()
+                        .type(ScanDataPacked.Type.SCAN_BRIEF_DETAILED)
+                        .data(ScanDataPacked.packData(scanBriefDetailed))
+                        .build();
+                Assertions.assertTrue(packedData.getData().length() < unpackedData.length());
 
-        ScanBriefDetailed scanBriefDetailedExtracted = ScanDataPacked.unpackData(packedData.getData(), ScanBriefDetailed.class);
+                ScanBriefDetailed scanBriefDetailedExtracted = ScanDataPacked.unpackData(packedData.getData(), ScanBriefDetailed.class);
 
-        Assertions.assertEquals(
-                scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().size(),
-                scanBriefDetailedExtracted.getDetails().getChartData().getBaseIssueDistributionData().size());
+                Assertions.assertEquals(
+                        scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().size(),
+                        scanBriefDetailedExtracted.getDetails().getChartData().getBaseIssueDistributionData().size());
+
+            }
+        }
     }
 }
