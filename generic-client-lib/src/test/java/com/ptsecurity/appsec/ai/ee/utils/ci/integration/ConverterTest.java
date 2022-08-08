@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.V36ScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v40.legacy.model.V40ScanSettings;
+import com.ptsecurity.appsec.ai.ee.server.v41.legacy.model.V41ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
@@ -80,6 +81,30 @@ public class ConverterTest extends BaseTest {
         return com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v40.converters.IssuesConverter.convert(projectName, scanResult, issuesFiles, scanSettings, "https://ptai4.domain.org", versions);
     }
 
+    @SneakyThrows
+    public ScanResult generateScanResultV41(@NonNull final String fileName) {
+        ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+        String scanResultStr = getResourceString("v41/json/scanResult/" + fileName + ".json");
+        com.ptsecurity.appsec.ai.ee.server.v41.legacy.model.ScanResult scanResult = mapper.readValue(scanResultStr, com.ptsecurity.appsec.ai.ee.server.v41.legacy.model.ScanResult.class);
+        Map<Reports.Locale, File> issuesFiles = new HashMap<>();
+        for (Reports.Locale locale : Reports.Locale.values()) {
+            Path issuesFile = extractPackedResourceFile("v41/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
+            issuesFiles.put(locale, issuesFile.toFile());
+        }
+
+        @NonNull final V41ScanSettings scanSettings = mapper.readValue(
+                getResourceString("v41/json/scanSettings/" + fileName + ".json"),
+                V41ScanSettings.class
+        );
+        Map<ServerVersionTasks.Component, String> versions = new HashMap<>();
+        versions.put(ServerVersionTasks.Component.AIE, "4.1.0.11293");
+        versions.put(ServerVersionTasks.Component.AIC, "4.1.0.11293");
+
+        String projectName = StringUtils.substringBefore(fileName, ".");
+
+        return com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v41.converters.IssuesConverter.convert(projectName, scanResult, issuesFiles, scanSettings, "https://ptai41.domain.org", versions);
+    }
+
     @Test
     @DisplayName("Convert OWASP Bricks PT AI 3.6 scan results")
     @SneakyThrows
@@ -94,7 +119,7 @@ public class ConverterTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Convert PT AI 3.6 and 4.0 scan results")
+    @DisplayName("Convert PT AI 3.6, 4.0 and 4.1 scan results")
     @SneakyThrows
     public void generateScanResults() {
         try (TempFile destination = TempFile.createFolder()) {
@@ -102,6 +127,8 @@ public class ConverterTest extends BaseTest {
             scanResults36.toFile().mkdirs();
             Path scanResults40 = destination.toPath().resolve("result").resolve("v40");
             scanResults40.toFile().mkdirs();
+            Path scanResults41 = destination.toPath().resolve("result").resolve("v41");
+            scanResults41.toFile().mkdirs();
 
             for (Project project : ALL) {
                 ScanResult scanResult = generateScanResultV36(project.getName());
@@ -111,6 +138,10 @@ public class ConverterTest extends BaseTest {
                 scanResult = generateScanResultV40(project.getName());
                 json = BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(scanResult);
                 sevenZipData(scanResults40.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
+
+                scanResult = generateScanResultV41(project.getName());
+                json = BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(scanResult);
+                sevenZipData(scanResults41.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
             }
             log.trace("Scan results are saved to {}", destination);
         }

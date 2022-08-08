@@ -89,7 +89,7 @@ public class ScanBriefDetailedTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Convert PT AI 3.6 and 4.0 scan results")
+    @DisplayName("Convert PT AI 3.6, 4.0 and 4.1 scan results")
     @SneakyThrows
     public void generateScanResults() {
         try (TempFile temp = TempFile.createFolder()) {

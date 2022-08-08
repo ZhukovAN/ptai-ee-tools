@@ -21,7 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ScanBrief {
     public enum ApiVersion {
-        V36, V40
+        V36, V40, V41
     }
 
     @NonNull
