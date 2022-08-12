@@ -184,3 +184,8 @@
 + [Feature] Removed explicit XML / JSON report generation as PT AI 4.0 supports them via report template
 ### 20220712
 + [Fix] Fixed out of memory error when LoggingInterceptor reads REST API responses
+### 20220812
++ [Feature] WebGoat.NET source code added
++ [Fix] PT AI 4.0 and 4.1 both require C# solution file name started with "./" while 3.6 doesn't. Checks and fixes are added to AiProjConverters
++ [Fix] Sources upload step moved from GenericAstJob to SetupOperations and ProjectTasks implementations. This is done because C# projects require solution file to be uploaded already before project setup. Otherwise we'll get error {"errorCode":"INVALID_JSON_FIELDS","details":{"additionalParams.solutionFile":"NotExist"}} while calling https://{url}/api/projects/{projectId}/settings
++ [Fix] Removed x-enum-varnames from DotNetProjectType as both 4.0 and 4.1 use string enums 

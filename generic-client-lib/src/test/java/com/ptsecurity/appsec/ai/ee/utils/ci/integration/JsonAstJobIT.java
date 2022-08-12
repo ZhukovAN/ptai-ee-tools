@@ -308,4 +308,25 @@ public class JsonAstJobIT extends BaseAstIT {
                  .collect(Collectors.groupingBy(BaseIssue::getGroupId, Collectors.counting()));
         Assertions.assertTrue(groups.values().stream().anyMatch(l -> l > 1));
     }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Scan WebGoat.NET project using JSON settings and policy")
+    public void scanWebGoatNet(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
+        Path destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
+
+        GenericAstJob astJob = JsonAstJobImpl.builder()
+                .async(false)
+                .fullScanMode(true)
+                .connectionSettings(CONNECTION_SETTINGS())
+                .console(System.out)
+                .sources(CSHARP_WEBGOAT.getCode())
+                .destination(destination)
+                .jsonSettings(CSHARP_WEBGOAT.getSettings())
+                .build();
+
+        AbstractJob.JobExecutionResult res = astJob.execute();
+        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+    }
 }

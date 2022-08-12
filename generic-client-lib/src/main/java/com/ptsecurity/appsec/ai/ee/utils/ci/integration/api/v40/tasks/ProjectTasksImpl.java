@@ -25,6 +25,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
@@ -206,7 +207,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         return result.getId();
     }
 
-    public JsonParseBrief setupFromJson(@NonNull final String jsonSettings, final String jsonPolicy) throws GenericException {
+    public JsonParseBrief setupFromJson(@NonNull final String jsonSettings, final String jsonPolicy, @NonNull final Consumer<UUID> uploader) throws GenericException {
         log.trace("Parse settings and policy");
         // Check if JSON settings and policy are defined correctly. Throw an exception if there are problems
         AiProjScanSettings settings = (StringUtils.isEmpty(jsonSettings))
@@ -234,6 +235,8 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
             log.debug("Project {} created, ID = {}", settings.getProjectName(), projectId);
         } else
             projectId = projectLight.getId();
+
+        uploader.accept(projectId);
 
         log.trace("Get existing PT AI project generic settings");
         ProjectSettingsModel projectSettingsModel = call(
