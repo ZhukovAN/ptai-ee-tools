@@ -14,7 +14,7 @@ $ ./gradlew build -P jenkinsVersion=2.150.2 -P teamcityVersion=2020.1
 ### Build plugins using Docker Gradle image
 Execute ```docker run``` command in project root:
 ```
-docker run --rm -u root -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:6.8.3-jdk8 gradle build --no-daemon
+docker run --rm -u root -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:7.1.1-jdk8 gradle build --no-daemon
 ```
 ### Build executable Docker container with CLI plugin
 Execute ```docker build``` command in project root:
