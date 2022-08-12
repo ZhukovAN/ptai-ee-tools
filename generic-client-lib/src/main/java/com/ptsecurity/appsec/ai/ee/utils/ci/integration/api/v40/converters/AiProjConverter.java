@@ -243,12 +243,22 @@ public class AiProjConverter {
         model.setJdkVersion(0 == settings.getJavaVersion() ? JavaVersions.v1_8 : JavaVersions.v1_11);
         // Set projectType
         model.setProjectType(
-                DotNetProjectType.Solution.name().equalsIgnoreCase(settings.getProjectType())
-                        ? DotNetProjectType.Solution
-                        : DotNetProjectType.WebSite.name().equalsIgnoreCase(settings.getProjectType())
-                        ? DotNetProjectType.WebSite : DotNetProjectType.None);
-        // Set solutionFile
-        model.setSolutionFile(settings.getSolutionFile());
+                DotNetProjectType.SOLUTION.getValue().equalsIgnoreCase(settings.getProjectType())
+                        ? DotNetProjectType.SOLUTION
+                        : DotNetProjectType.WEBSITE.getValue().equalsIgnoreCase(settings.getProjectType())
+                        ? DotNetProjectType.WEBSITE : DotNetProjectType.NONE);
+
+        // In PT AI v.4.0 solution file is to be defined as "./solution.sln" instead of "solution.sln"
+        String solutionFile = settings.getSolutionFile();
+        do {
+            if (StringUtils.isEmpty(solutionFile)) break;
+            solutionFile = solutionFile.trim();
+            if (solutionFile.startsWith("./")) break;
+            log.trace("Fix solution file name {}", solutionFile);
+            solutionFile = "./" + solutionFile;
+            log.trace("Fixed solution file name is {}", solutionFile);
+        } while (false);
+        model.setSolutionFile(solutionFile);
         return model;
     }
 

@@ -14,10 +14,7 @@ import java.util.UUID;
 
 @Slf4j
 @SuperBuilder
-public class JsonAstJobSetupOperationsImpl implements SetupOperations {
-    @NonNull
-    protected GenericAstJob owner;
-
+public class JsonAstJobSetupOperationsImpl extends AbstractSetupOperations implements SetupOperations {
     @Setter
     @NonNull
     protected String jsonSettings;
@@ -30,7 +27,7 @@ public class JsonAstJobSetupOperationsImpl implements SetupOperations {
         log.trace("Check JSON settings");
         jsonSettings = new JsonSettingsHelper(jsonSettings).verifyRequiredFields().serialize();
         ProjectTasks projectTasks = new Factory().projectTasks(owner.getClient());
-        ProjectTasks.JsonParseBrief brief = projectTasks.setupFromJson(jsonSettings, jsonPolicy);
+        ProjectTasks.JsonParseBrief brief = projectTasks.setupFromJson(jsonSettings, jsonPolicy, this::uploadSources);
         owner.setProjectName(brief.getProjectName());
 
         // If fullScanMode is false, but incremental scan is disabled, use fullScanMode indeed

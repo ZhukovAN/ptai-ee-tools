@@ -7,7 +7,6 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v41.projectmanagement.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.JsonAstJobIT;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v41.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseClientIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
@@ -39,7 +38,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettin
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
 
 @Slf4j
-@DisplayName("Test PT AI 4.0 REST API data structures")
+@DisplayName("Test PT AI 4.1 REST API data structures")
 @Tag("development")
 public class RestApiDataStructuresIT extends BaseClientIT {
 
@@ -81,7 +80,7 @@ public class RestApiDataStructuresIT extends BaseClientIT {
         client.init();
         client.authenticate();
 
-        Path jsons = destination.resolve("v40").resolve("json");
+        Path jsons = destination.resolve("v41").resolve("json");
         jsons.toFile().mkdirs();
         Path scanSettingsDir = jsons.resolve("scanSettings");
         scanSettingsDir.toFile().mkdirs();
@@ -112,6 +111,13 @@ public class RestApiDataStructuresIT extends BaseClientIT {
     @Test
     public void generateRestApiDataStructures() {
         try (TempFile destination = TempFile.createFolder()) {
+            generateData(destination.toPath(), CSHARP_WEBGOAT, (helper) -> {
+                helper.setScanAppType(CSHARP, CONFIGURATION, FINGERPRINT, PMTAINT);
+                helper.isUseEntryAnalysisPoint(true);
+                helper.isUsePublicAnalysisMethod(true);
+                helper.setIsDownloadDependencies(true);
+            });
+
             generateData(destination.toPath(), JAVASCRIPT_VNWA, (helper) -> {
                 helper.setScanAppType(JAVASCRIPT, CONFIGURATION, FINGERPRINT, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);
