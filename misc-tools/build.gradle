@@ -1,0 +1,6 @@
+group = "${rootGroup}"
+
+subprojects {
+    dependencies {
+    }
+}

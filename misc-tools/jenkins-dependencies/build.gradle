@@ -1,0 +1,24 @@
+plugins {
+    id 'java-library'
+    id 'java-test-fixtures'
+}
+
+group = "${rootGroup}"
+
+dependencies {
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation "commons-io:commons-io:$commonsIoVersion"
+    // Need this to write tests that use data stored in 7zip-packed resource files
+    // like issues model, scan settings etc.
+    testFixturesApi(testFixtures(project(":ptai-test-tools")))
+    testImplementation(testFixtures(project(":ptai-test-tools")))
+}
+
+jar {
+    // See https://www.jenkins.io/blog/2018/01/13/jep-200/
+    manifest {
+        attributes 'Jenkins-ClassFilter-Whitelisted': 'true'
+    }
+}

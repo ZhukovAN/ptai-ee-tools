@@ -13,6 +13,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/generic-client-lib" />
+            <option value="$PROJECT_DIR$/misc-tools" />
+            <option value="$PROJECT_DIR$/misc-tools/jenkins-dependencies" />
             <option value="$PROJECT_DIR$/ptai-cli-plugin" />
             <option value="$PROJECT_DIR$/ptai-data-structures" />
             <option value="$PROJECT_DIR$/ptai-i18n" />

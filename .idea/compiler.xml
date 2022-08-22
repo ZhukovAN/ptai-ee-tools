@@ -14,6 +14,7 @@
         <module name="ptai-ee-tools.ptai-report-tools.test" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-agent.main" />
         <module name="ptai-ee-tools.ptai-i18n.main" />
+        <module name="ptai-ee-tools.misc-tools.jenkins-dependencies.testFixtures" />
         <module name="ptai-ee-tools.ptai-data-structures.main" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.main" />
         <module name="ptai-ee-tools.ptai-data-structures.test" />
@@ -21,6 +22,8 @@
         <module name="ptai-ee-tools.generic-client-lib.testFixtures" />
         <module name="ptai-ee-tools.ptai-report-tools.main" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-agent.test" />
+        <module name="ptai-ee-tools.misc-tools.main" />
+        <module name="ptai-ee-tools.misc-tools.jenkins-dependencies.test" />
         <module name="ptai-ee-tools.ptai-report-tools.testFixtures" />
         <module name="ptai-ee-tools.generic-client-lib.main" />
         <module name="ptai-ee-tools.ptai-cli-plugin.test" />
@@ -35,6 +38,8 @@
         <module name="ptai-ee-tools.ptai-rest-api.test" />
         <module name="ptai-ee-tools.generic-client-lib.test" />
         <module name="ptai-ee-tools.ptai-cli-plugin.main" />
+        <module name="ptai-ee-tools.misc-tools.test" />
+        <module name="ptai-ee-tools.misc-tools.jenkins-dependencies.main" />
       </profile>
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
@@ -49,11 +54,11 @@
         <outputRelativeToContentRoot value="true" />
         <option name="sezpoz.quiet" value="true" />
         <processorPath useClasspath="false">
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/jenkins-core/2.303.1/a46ec11f6233243a8bafa3f66cc1dbb7e23937ce/jenkins-core-2.303.1.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/jenkins-core/2.303.3/ab6ffb1e8adb139627018069e0886cb7630c7791/jenkins-core-2.303.3.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/javax.servlet/javax.servlet-api/3.1.0/3cd63d075497751784b2fa84be59432f4905bf7c/javax.servlet-api-3.1.0.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.20/18bcea7d5df4d49227b4a0743a536208ce4825bb/lombok-1.18.20.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/remoting/4.10/c9016b2501e2a3849e8bd14aa7866b3a5385b330/remoting-4.10.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/cli/2.303.1/198968d1bf2178adcd2844fb63214efac045ad5a/cli-2.303.1.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/remoting/4.10.1/9126621315cd5aeeeb7d9a0967677eb4a244ade4/remoting-4.10.1.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci.main/cli/2.303.3/b79710086d1335b1918ef08f71c9de6271c9d99/cli-2.303.3.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci/version-number/1.7/e2cb3f1d3e296adf74463b046bf79f498cc9b937/version-number-1.7.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci/crypto-util/1.5/432ba8058e9a653fa191cdda3ed5fe4bb4fc4e53/crypto-util-1.5.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.google.inject/guice/4.0/f990a43d3725781b6db7cd0acf0a8b62dfd1649/guice-4.0.jar" />
@@ -75,7 +80,7 @@
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.jenkins.stapler/jenkins-stapler-support/1.1/95127e05b589288439684304a75474bb1261a11c/jenkins-stapler-support-1.1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.infradna.tool/bridge-method-annotation/1.21/f380b42653f21c503036a31ff87c6970eeaad080/bridge-method-annotation-1.21.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke.stapler/json-lib/2.4-jenkins-2/7f4f9016d8c8b316ecbe68afe7c26df06d301366/json-lib-2.4-jenkins-2.jar" />
-          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-httpclient/commons-httpclient/3.1-jenkins-2/acf81ddf47f33b13ee9eda153a87517d8f5fa784/commons-httpclient-3.1-jenkins-2.jar" />
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/commons-httpclient/commons-httpclient/3.1-jenkins-3/56110dc7f655c56c4e2ae8ae2bb055bf2282ba99/commons-httpclient-3.1-jenkins-3.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/args4j/args4j/2.33/bd87a75374a6d6523de82fef51fc3cfe9baf9fc9/args4j-2.33.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jenkins-ci/symbol-annotation/1.1/14fe06e7287a8aff81434a2fe8226744183fe955/symbol-annotation-1.1.jar" />
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.kohsuke/access-modifier-annotation/1.21/cd24dafbbd8a002a9410aed9bdd2c44a02892da6/access-modifier-annotation-1.21.jar" />
