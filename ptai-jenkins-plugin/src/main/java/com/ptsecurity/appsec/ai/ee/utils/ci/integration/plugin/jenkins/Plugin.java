@@ -1,14 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
-import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor;
@@ -25,7 +22,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeAsync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.Base;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.AbortException;
@@ -68,7 +64,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
     private final boolean verbose;
 
     @Getter
-    private final boolean fullScanMode;
+    private final boolean fullscanMode;
 
     @Getter
     private ArrayList<Transfer> transfers;
@@ -85,13 +81,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
                   final ConfigBase config,
                   final WorkMode workMode,
                   final boolean verbose,
-                  final boolean fullScanMode,
+                  final boolean fullscanMode,
                   final ArrayList<Transfer> transfers) {
         this.scanSettings = scanSettings;
         this.config = config;
         this.workMode = workMode;
         this.verbose = verbose;
-        this.fullScanMode = fullScanMode;
+        this.fullscanMode = fullscanMode;
         this.transfers = transfers;
     }
 
@@ -223,7 +219,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 .listener(listener)
                 .buildInfo(buildInfo)
                 .transfers(transfers)
-                .fullScanMode(fullScanMode)
+                .fullScanMode(fullscanMode)
                 .build();
         if (workMode instanceof WorkModeSync) {
             WorkModeSync workModeSync = (WorkModeSync) workMode;

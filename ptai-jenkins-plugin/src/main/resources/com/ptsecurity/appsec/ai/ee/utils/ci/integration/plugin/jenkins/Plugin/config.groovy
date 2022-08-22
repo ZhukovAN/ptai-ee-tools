@@ -169,7 +169,7 @@ f.entry(
 // f.advanced() {
 f.entry(
         title: _('fullScanMode'),
-        field: 'fullScanMode',
+        field: 'fullscanMode',
         default: 'false') {
     f.checkbox()
 }
