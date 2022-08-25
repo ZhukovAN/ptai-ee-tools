@@ -189,3 +189,5 @@
 + [Fix] PT AI 4.0 and 4.1 both require C# solution file name started with "./" while 3.6 doesn't. Checks and fixes are added to AiProjConverters
 + [Fix] Sources upload step moved from GenericAstJob to SetupOperations and ProjectTasks implementations. This is done because C# projects require solution file to be uploaded already before project setup. Otherwise we'll get error {"errorCode":"INVALID_JSON_FIELDS","details":{"additionalParams.solutionFile":"NotExist"}} while calling https://{url}/api/projects/{projectId}/settings
 + [Fix] Removed x-enum-varnames from DotNetProjectType as both 4.0 and 4.1 use string enums 
+### 20220825
++ [Feature] Advanced setting ast.result.rest.url.filename added. If its value is defined then AST result URL will be saved to corresponding file

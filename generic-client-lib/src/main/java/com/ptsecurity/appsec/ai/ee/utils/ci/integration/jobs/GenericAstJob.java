@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.EventConsumer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.Base;
@@ -16,6 +17,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -25,6 +27,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.State.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.AST_RESULT_REST_URL_FILENAME;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
 @Slf4j
@@ -124,13 +127,16 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         // Notify descendants about scan started event
         astOps.scanStartedCallback(projectId, scanResultId);
 
-        // Save result URL to artifacts
-        final String url = genericAstTasks.getScanResultUrl(projectId, scanResultId);
-        log.debug("Save AST result REST API URL {} to file", url);
-        call(
-                () -> fileOps.saveArtifact("rest.url", url.getBytes()),
-                "AST result REST API URL save failed");
-        info("AST result REST API URL: " + url);
+        String restUrlFileName = client.getAdvancedSettings().getString(AST_RESULT_REST_URL_FILENAME);
+        if (StringUtils.isNotEmpty(restUrlFileName)) {
+            // Save result URL to artifacts
+            final String url = genericAstTasks.getScanResultUrl(projectId, scanResultId);
+            log.debug("Save AST result REST API URL {} to file", url);
+            call(
+                    () -> fileOps.saveArtifact(restUrlFileName, url.getBytes()),
+                    "AST result REST API URL save failed");
+            info("AST result REST API URL: " + url);
+        }
 
         if (async) {
             // Asynchronous mode means that we aren't need to wait AST job
