@@ -1,13 +1,17 @@
 package com.ptsecurity.appsec.tools.jenkins.dependencies.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
+
+import java.util.Map;
 
 @Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class PluginVersions {
     @NonNull
-    protected final String generationTimestamp;
+    protected String generationTimestamp;
 
+    @NonNull
+    protected Map<String, Map<String, Plugin>> plugins;
 }

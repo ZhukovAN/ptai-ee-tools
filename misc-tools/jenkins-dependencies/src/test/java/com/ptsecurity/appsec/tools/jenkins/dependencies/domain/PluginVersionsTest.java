@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.tools.jenkins.dependencies.domain;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
 import lombok.NonNull;
@@ -21,6 +22,13 @@ class PluginVersionsTest extends BaseTest {
         try (TempFile destination = TempFile.createFolder()) {
             Path path = extractPackedResourceFile("plugin-versions.json.7z");
             log.trace("JSON extracted to temp file {}", path);
+            ObjectMapper mapper = createFaultTolerantObjectMapper();
+            // mapper = new ObjectMapper();
+            PluginVersions pluginVersions = mapper.readValue(path.toFile(), PluginVersions.class);
+            log.trace("Plugin versions JSON parsed");
+
+            Plugin tokenMacro = pluginVersions.getPlugins().get("token-macro").get("2.12");
+            log.trace("Plugin {} found", tokenMacro);
         }
     }
 }

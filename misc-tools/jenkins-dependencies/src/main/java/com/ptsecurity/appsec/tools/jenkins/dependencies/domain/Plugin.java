@@ -1,32 +1,32 @@
 package com.ptsecurity.appsec.tools.jenkins.dependencies.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
+@Setter
+@NoArgsConstructor
 public class Plugin {
-    protected final String buildDate;
+    protected String buildDate;
 
     @Getter
-    @AllArgsConstructor
+    @Setter
+    @NoArgsConstructor
     public static class Dependency {
         @NonNull
-        protected final String name;
-        protected final boolean optional;
+        protected String name;
+        protected boolean optional;
         @NonNull
-        protected final String version;
+        protected String version;
     }
 
-    protected final List<Dependency> dependencies;
+    protected List<Dependency> dependencies;
 
-    protected final String name;
-    protected final String requiredCore;
-    protected final String sha1;
-    protected final String sha256;
-    protected final String url;
-    protected final String version;
+    protected String name;
+    protected String requiredCore;
+    protected String sha1;
+    protected String sha256;
+    protected String url;
+    protected String version;
 }
