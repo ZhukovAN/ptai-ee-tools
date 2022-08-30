@@ -1,0 +1,25 @@
+[{
+		"CountToActualize": 1,
+		"Scopes": [{
+				"Rules": [{
+						"Field": "Level",
+						"Value": "High",
+						"IsRegex": false
+					}, {
+						"Field": "Exploit",
+						"Value": ".",
+						"IsRegex": true
+					}, {
+						"Field": "IsSuspected",
+						"Value": "false",
+						"IsRegex": false
+					}, {
+						"Field": "ApprovalState",
+						"Value": "[^2]",
+						"IsRegex": true
+					}
+				]
+			}
+		]
+	}
+]

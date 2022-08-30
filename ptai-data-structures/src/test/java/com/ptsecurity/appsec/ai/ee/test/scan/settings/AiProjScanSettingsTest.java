@@ -73,7 +73,7 @@ public class AiProjScanSettingsTest extends BaseTest {
         ObjectMapper mapper = createFaultTolerantObjectMapper();
         AiProjScanSettings settings = mapper.readValue(inputStream, AiProjScanSettings.class);
         Assertions.assertNotNull(settings);
-        Assertions.assertTrue("junit-it-javascript-smoke".equalsIgnoreCase(settings.getProjectName()));
+        Assertions.assertTrue("junit-javascript-smoke".equalsIgnoreCase(settings.getProjectName()));
     }
 
     @Test
