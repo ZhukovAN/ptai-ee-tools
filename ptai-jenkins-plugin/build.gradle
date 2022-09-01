@@ -176,7 +176,7 @@ dependencies {
     testImplementation(testFixtures(project(":generic-client-lib")))
 }
 
-// Retuns -1 if version a is before b, 0 if those are equal and 1 if a is after b
+// Returns -1 if version a is before b, 0 if those are equal and 1 if a is after b
 def compareVersion(a, b) {
     List versionA = a.tokenize('.')
     List versionB = b.tokenize('.')
