@@ -193,3 +193,4 @@
 + [Feature] Advanced setting ast.result.rest.url.filename added. If its value is defined then AST result URL will be saved to corresponding file
 ### 20220902
 + [Fix] Added test that creates project with "/" character in its name
++ [Fix] Workaround implemented to fix "/"-containing project name issua
