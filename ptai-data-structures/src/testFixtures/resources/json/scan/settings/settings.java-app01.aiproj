@@ -1,5 +1,5 @@
 {
-    "ProjectName": "junit-it-java-app01",
+    "ProjectName": "junit-java-app01",
     "ProgrammingLanguage": "Java",
     "ScanAppType": "Java, Configuration, Fingerprint, PmTaint",
     "UseTaintAnalysis": true,
