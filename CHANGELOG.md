@@ -191,3 +191,5 @@
 + [Fix] Removed x-enum-varnames from DotNetProjectType as both 4.0 and 4.1 use string enums 
 ### 20220825
 + [Feature] Advanced setting ast.result.rest.url.filename added. If its value is defined then AST result URL will be saved to corresponding file
+### 20220902
++ [Fix] Added test that creates project with "/" character in its name
