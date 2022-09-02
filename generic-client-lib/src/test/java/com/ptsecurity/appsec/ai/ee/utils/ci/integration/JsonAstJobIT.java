@@ -23,6 +23,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -329,4 +330,79 @@ public class JsonAstJobIT extends BaseAstIT {
         AbstractJob.JobExecutionResult res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
     }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Scan App01 project twice using same JSON settings")
+    public void scanApp01Twice(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
+        Path destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
+
+        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(getResourceString("json/scan/settings/settings.java-app01.scan-twice.aiproj"));
+        settings.setProjectName("junit-" + UUID.randomUUID());
+
+        GenericAstJob astJob = JsonAstJobImpl.builder()
+                .async(false)
+                .fullScanMode(true)
+                .connectionSettings(CONNECTION_SETTINGS())
+                .console(System.out)
+                .sources(JAVA_APP01.getCode())
+                .destination(destination)
+                .jsonSettings(settings.serialize())
+                .jsonPolicy(getResourceString("json/scan/settings/policy.java-app01.scan-twice.json"))
+                .build();
+        AbstractJob.JobExecutionResult res = astJob.execute();
+        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+
+        astJob = JsonAstJobImpl.builder()
+                .async(false)
+                .fullScanMode(true)
+                .connectionSettings(CONNECTION_SETTINGS())
+                .console(System.out)
+                .sources(JAVA_APP01.getCode())
+                .destination(destination)
+                .jsonSettings(settings.serialize())
+                .jsonPolicy(getResourceString("json/scan/settings/policy.java-app01.scan-twice.json"))
+                .build();
+        res = astJob.execute();
+        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Scan project with slash in its name twice using same JSON settings")
+    public void scanProjectWithBadCharacter(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
+        Path destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
+
+        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(getResourceString("json/scan/settings/settings.java-app01.scan-twice.aiproj"));
+        settings.setProjectName("junit-" + UUID.randomUUID() + "-origin/master");
+
+        GenericAstJob astJob = JsonAstJobImpl.builder()
+                .async(false)
+                .fullScanMode(true)
+                .connectionSettings(CONNECTION_SETTINGS())
+                .console(System.out)
+                .sources(JAVA_APP01.getCode())
+                .destination(destination)
+                .jsonSettings(settings.serialize())
+                .jsonPolicy(getResourceString("json/scan/settings/policy.java-app01.scan-twice.json"))
+                .build();
+        AbstractJob.JobExecutionResult res = astJob.execute();
+        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+
+        astJob = JsonAstJobImpl.builder()
+                .async(false)
+                .fullScanMode(true)
+                .connectionSettings(CONNECTION_SETTINGS())
+                .console(System.out)
+                .sources(JAVA_APP01.getCode())
+                .destination(destination)
+                .jsonSettings(settings.serialize())
+                .jsonPolicy(getResourceString("json/scan/settings/policy.java-app01.scan-twice.json"))
+                .build();
+        res = astJob.execute();
+        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+    }
+
 }
