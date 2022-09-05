@@ -18,6 +18,14 @@ import java.nio.file.Files;
 @SuperBuilder
 @RequiredArgsConstructor
 public class JenkinsFileOperations extends AbstractFileOperations implements FileOperations {
+    @Override
+    @SneakyThrows
+    public void saveArtifact(@NonNull String name, @NonNull File file) {
+        log.trace("Started: save {} file contents as build artifact {}", file.getAbsolutePath(), name);
+        RemoteFileUtils.saveReport(owner.getLauncher(), owner.getListener(), owner.getWorkspace().getRemote(), name, file, owner.isVerbose());
+        log.trace("Finished: save {} file contents as build artifact {}", file.getAbsolutePath(), name);
+    }
+
     /**
      * Jenkins AST job that provides Jenkins tools for AST to work. These
      * tools include event log listener, remote workspace etc.

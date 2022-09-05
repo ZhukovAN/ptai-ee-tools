@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -11,6 +12,7 @@ import java.nio.file.Path;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
+@Slf4j
 @AllArgsConstructor
 public class TempFile implements AutoCloseable {
     public static final String PREFIX = "ptai-";
@@ -49,8 +51,14 @@ public class TempFile implements AutoCloseable {
     @Override
     public void close() throws GenericException {
         if (path.toFile().isDirectory())
-            call(() -> FileUtils.deleteDirectory(path.toFile()), "Temporal folder delete on close failed");
+            call(() -> {
+                FileUtils.deleteDirectory(path.toFile());
+                log.trace("Temporary folder {} deleted", path);
+            }, "Temporal folder delete on close failed");
         else
-            call(() -> FileUtils.forceDelete(path.toFile()), "Temporal file delete on close failed");
+            call(() -> {
+                FileUtils.forceDelete(path.toFile());
+                log.trace("Temporary file {} deleted", path);
+            }, "Temporal file delete on close failed");
     }
 }
