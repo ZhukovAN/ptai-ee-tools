@@ -90,7 +90,7 @@ public class RemoteFileUtils extends MasterToSlaveCallable<FilePath, GenericExce
 
                 final int maxChunkSize = jenkinsAstJob.getAdvancedSettings().getInt(AdvancedSettings.SettingInfo.JENKINS_DATA_CHUNK_SIZE);
                 byte[] buffer = new byte[maxChunkSize];
-                jenkinsAstJob.fine("Split %s file data into %s bytes chunks", archive.toFile().getName(), maxChunkSize);
+                jenkinsAstJob.fine("Split %s file data into %s chunks", archive.toFile().getName(), bytesToString(maxChunkSize));
                 long totalChunksNumber = archive.toFile().length() / maxChunkSize;
                 if (archive.toFile().length() > maxChunkSize * totalChunksNumber) totalChunksNumber++;
                 int digitsInChunkNumber = (int)(Math.ceil(Math.log10(totalChunksNumber)));
