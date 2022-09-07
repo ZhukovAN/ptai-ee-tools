@@ -9,6 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public interface ProjectTasks {
     UUID searchProject(@NonNull final String name) throws GenericException;
@@ -31,7 +32,18 @@ public interface ProjectTasks {
         protected String projectName;
         protected Boolean incremental;
     }
-    JsonParseBrief setupFromJson(@NonNull final String jsonSettings, final String jsonPolicy) throws GenericException;
+
+    /**
+     * Setup new or existing project on PT AI server. Currently (2022.08.12) C# solution-based
+     * projects require sources to be uploaded before solution file set so we need to pass
+     * uploader lambda that will be executed between project creation and setting scan parameters
+     * @param jsonSettings
+     * @param jsonPolicy
+     * @param uploader
+     * @return
+     * @throws GenericException
+     */
+    JsonParseBrief setupFromJson(@NonNull final String jsonSettings, final String jsonPolicy, @NonNull final Consumer<UUID> uploader) throws GenericException;
 
     void deleteProject(@NonNull final UUID id) throws GenericException;
 

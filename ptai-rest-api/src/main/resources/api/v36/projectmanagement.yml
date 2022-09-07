@@ -5767,7 +5767,7 @@ components:
           # $ref: '#/components/schemas/ProgrammingLanguage'
           $ref: '#/components/schemas/V36ProgrammingLanguage'
         scanAppType:
-          # As for v.3.6 scanApptype is returned as comma-separated string
+          # As for v.3.6 scanAppType is returned as comma-separated string
           # $ref: '#/components/schemas/ScanAppType'
           type: string
         rootFolder:

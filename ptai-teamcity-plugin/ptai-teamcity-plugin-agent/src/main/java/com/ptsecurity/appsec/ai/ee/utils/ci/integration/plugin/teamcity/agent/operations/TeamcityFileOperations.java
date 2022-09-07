@@ -23,6 +23,27 @@ public class TeamcityFileOperations extends AbstractFileOperations implements Fi
 
     @Override
     @SneakyThrows
+    public void saveArtifact(@NonNull String name, @NonNull File file) {
+        Path out = owner.getAgent().getBuildTempDirectory().toPath()
+                .resolve(owner.getAgent().getProjectName())
+                .resolve(owner.getAgent().getBuildTypeName());
+        if (!out.toFile().exists())
+            Files.createDirectories(out);
+        out = out.resolve(name);
+
+        if (out.toFile().exists()) {
+            owner.warning("Existing file " + name + " will be overwritten");
+            if (!out.toFile().delete()) {
+                owner.severe("Existing file " + name + " delete failed");
+                return;
+            }
+        }
+        FileUtils.copyFile(file, out.toFile());
+        owner.getArtifactsWatcher().addNewArtifactsPath(out.toString() + "=>" + AbstractJob.DEFAULT_OUTPUT_FOLDER);
+    }
+
+    @Override
+    @SneakyThrows
     protected void saveInMemoryData(@NonNull String name, byte[] data) {
         Path out = owner.getAgent().getBuildTempDirectory().toPath()
                 .resolve(owner.getAgent().getProjectName())

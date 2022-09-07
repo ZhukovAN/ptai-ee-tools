@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
@@ -12,6 +13,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AbstractFileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
@@ -76,7 +78,10 @@ public abstract class BaseAstIT extends BaseClientIT {
             // As projects share same set of settings there's need to modify project name in JSON
             AbstractApiClient client = Factory.client(CONNECTION_SETTINGS());
             ProjectTasks projectTasks = new Factory().projectTasks(client);
-            projectTasks.setupFromJson(settings, policy);
+            projectTasks.setupFromJson(settings, policy, (projectId) -> {
+                GenericAstTasks genericAstTasks = new Factory().genericAstTasks(client);
+                genericAstTasks.upload(projectId, getZip().toFile());
+            });
             return this;
         }
 
@@ -98,8 +103,9 @@ public abstract class BaseAstIT extends BaseClientIT {
     public static final Project PHP_SMOKE_HIGH = new Project(PHP_SMOKE_HIGH_PROJECT_NAME, "code/php-smoke-high.zip", "json/scan/settings/settings.php-smoke.aiproj");
     public static final Project PHP_SMOKE_MULTIFLOW = new Project(PHP_SMOKE_MULTIFLOW_PROJECT_NAME, "code/php-smoke-multiflow.zip", "json/scan/settings/settings.php-smoke.aiproj");
     public static final Project JAVASCRIPT_VNWA = new Project(JAVASCRIPT_VNWA_PROJECT_NAME, "code/javascript-vnwa.7z", "json/scan/settings/settings.javascript-vnwa.aiproj");
+    public static final Project CSHARP_WEBGOAT = new Project(CSHARP_WEBGOAT_PROJECT_NAME, "code/csharp-webgoat.zip", "json/scan/settings/settings.csharp-webgoat.aiproj");
 
-    public static final Project[] ALL = new Project[] { JAVA_APP01, JAVA_OWASP_BENCHMARK, PHP_OWASP_BRICKS, PHP_SMOKE_MISC, PHP_SMOKE_MEDIUM, PHP_SMOKE_HIGH, PHP_SMOKE_MULTIFLOW, JAVASCRIPT_VNWA };
+    public static final Project[] ALL = new Project[] { JAVA_APP01, JAVA_OWASP_BENCHMARK, PHP_OWASP_BRICKS, PHP_SMOKE_MISC, PHP_SMOKE_MEDIUM, PHP_SMOKE_HIGH, PHP_SMOKE_MULTIFLOW, JAVASCRIPT_VNWA, CSHARP_WEBGOAT };
 
     @RequiredArgsConstructor
     public static class PolicyHelper {
@@ -182,6 +188,11 @@ public abstract class BaseAstIT extends BaseClientIT {
         protected GenericAstJob owner;
 
         protected Path destination;
+
+        @Override
+        public void saveArtifact(@NonNull String name, @NonNull File file) {
+            Assertions.assertDoesNotThrow(() -> FileUtils.copyFile(file, destination.resolve(name).toFile()));
+        }
 
         @Override
         protected void saveInMemoryData(@NonNull String name, byte[] data) {

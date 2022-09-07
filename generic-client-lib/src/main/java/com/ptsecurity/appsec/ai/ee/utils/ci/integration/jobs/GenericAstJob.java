@@ -16,6 +16,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -25,6 +26,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.State.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.AST_RESULT_REST_URL_FILENAME;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
 @Slf4j

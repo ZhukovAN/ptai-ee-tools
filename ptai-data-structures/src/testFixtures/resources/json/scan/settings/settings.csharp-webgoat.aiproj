@@ -1,0 +1,17 @@
+{
+    "ProjectName": "junit-csharp-webgoat",
+    "ProgrammingLanguage": "Csharp",
+    "ScanAppType": "Configuration, Fingerprint, Csharp, PmTaint, DependencyCheck",
+    "UseTaintAnalysis": true,
+    "UsePmAnalysis": true,
+    "IsUsePublicAnalysisMethod": true,
+    "IsDownloadDependencies": true,
+    "CustomParameters": null,
+    "ProjectType": "Solution",
+    "SolutionFile": "./WebGoat.NET.sln",
+    "UseTaintAnalysis": true,
+    "UsePmAnalysis": true,
+    "UseSecurityPolicies": false,
+    "UseCustomYaraRules": false,
+    "UseSastRules": false
+}
