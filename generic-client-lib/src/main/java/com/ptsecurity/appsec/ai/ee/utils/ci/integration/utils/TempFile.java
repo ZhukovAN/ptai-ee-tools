@@ -37,15 +37,19 @@ public class TempFile implements AutoCloseable {
     }
 
     public static TempFile createFile(final Path folder) throws GenericException {
-        return call(() -> (null == folder)
+        TempFile result = call(() -> (null == folder)
                 ? new TempFile(Files.createTempFile(PREFIX, SUFFIX))
                 : new TempFile(Files.createTempFile(folder, PREFIX, SUFFIX)), "Temporal file create failed");
+        log.trace("Temporal file {} created", result.path);
+        return result;
     }
 
     public static TempFile createFolder(final Path folder) throws GenericException {
-        return call(() -> (null == folder)
+        TempFile result = call(() -> (null == folder)
                 ? new TempFile(Files.createTempDirectory(PREFIX))
                 : new TempFile(Files.createTempDirectory(folder, PREFIX)), "Temporal folder create failed");
+        log.trace("Temporal folder {} created", result.path);
+        return result;
     }
 
     @Override

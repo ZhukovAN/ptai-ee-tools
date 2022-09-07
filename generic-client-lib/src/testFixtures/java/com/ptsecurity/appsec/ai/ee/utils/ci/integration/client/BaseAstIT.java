@@ -181,6 +181,11 @@ public abstract class BaseAstIT extends BaseClientIT {
         protected Path destination;
 
         @Override
+        public void saveArtifact(@NonNull String name, @NonNull File file) {
+            Assertions.assertDoesNotThrow(() -> FileUtils.copyFile(file, destination.resolve(name).toFile()));
+        }
+
+        @Override
         protected void saveInMemoryData(@NonNull String name, byte[] data) {
             Assertions.assertDoesNotThrow(() -> FileUtils.writeByteArrayToFile(destination.resolve(name).toFile(), data));
         }

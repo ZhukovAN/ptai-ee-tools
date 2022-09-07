@@ -14,14 +14,7 @@ import java.nio.file.Files;
 @SuperBuilder
 @RequiredArgsConstructor
 public abstract class AbstractFileOperations implements FileOperations {
-    @SneakyThrows
-    public void saveArtifact(@NonNull String name, @NonNull File file) {
-        log.trace("Started: save {} file contents as build artifact {}", file.getAbsolutePath(), name);
-        byte[] data = Files.readAllBytes(file.toPath());
-        log.trace("File {} data load complete", file.getAbsolutePath());
-        saveInMemoryData(name, data);
-        log.trace("Finished: save {} file contents as build artifact {}", file.getAbsolutePath(), name);
-    }
+    public abstract void saveArtifact(@NonNull String name, @NonNull File file);
 
     @SneakyThrows
     public void saveArtifact(@NonNull String name, byte[] data) {
@@ -32,6 +25,7 @@ public abstract class AbstractFileOperations implements FileOperations {
     }
 
     @SneakyThrows
+    @Deprecated
     public void saveArtifact(@NonNull String name, @NonNull final String data) {
         byte[] safeData = data.getBytes(StandardCharsets.UTF_8);
         log.trace("Started: save in-memory data as build artifact {}. Data is {} bytes long", name, safeData.length);

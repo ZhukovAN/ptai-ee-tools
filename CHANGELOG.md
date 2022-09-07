@@ -194,3 +194,6 @@
 ### 20220902
 + [Fix] Added test that creates project with "/" character in its name
 + [Fix] Workaround implemented to fix "/"-containing project name issua
+### 20220906
++ [Fix] RemoteFileUtils now uses multipart file upload that fixes OutOfMemory error when Jenkins attempts to deliver really big reports to agent workspace using serialization
++ [Feature] Remote Jenkins agent console logging support added
