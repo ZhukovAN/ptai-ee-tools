@@ -13,6 +13,8 @@ import org.junit.jupiter.api.*;
 import java.io.FileInputStream;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 @Slf4j
@@ -84,7 +86,7 @@ class PluginVersionsTest extends BaseTest {
             PluginVersions pluginVersions = Assertions.assertDoesNotThrow(() -> PluginVersions.load(new FileInputStream(path.toFile())));
             log.trace("Plugin versions JSON parsed");
 
-            for (String pluginName : new String[] { "token-macro", "workflow-aggregator" }) {
+            for (String pluginName : new String[] { "token-macro", "git", "workflow-aggregator" }) {
                 Set<Plugin> plugins = pluginVersions.requiredPlugins(pluginName, "2.150.3");
                 try (TempFile tempFolder = TempFile.createFolder()) {
                     for (Plugin plugin : plugins) {
@@ -95,6 +97,32 @@ class PluginVersionsTest extends BaseTest {
                     }
                     log.trace("All {} plugin dependencies are saved to {}", pluginName, tempFolder);
                 }
+            }
+        }
+    }
+    @SneakyThrows
+    @Test
+    @Tag("development")
+    @DisplayName("Download plugin set and all the required HPIs")
+    public void downloadPluginSetWithDependencies(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
+        try (TempFile ignored = TempFile.createFolder()) {
+            Path path = extractPackedResourceFile("plugin-versions.json.7z");
+            log.trace("JSON extracted to temp file {}", path);
+            PluginVersions pluginVersions = Assertions.assertDoesNotThrow(() -> PluginVersions.load(new FileInputStream(path.toFile())));
+            log.trace("Plugin versions JSON parsed");
+
+            // Set<Plugin> plugins = pluginVersions.requiredPlugins(new HashSet<>(Arrays.asList("git", "token-macro", "credentials", "workflow-aggregator")), "2.332.1");
+            Set<Plugin> plugins = pluginVersions.requiredPlugins(new HashSet<>(Arrays.asList("caffeine-api", "snakeyaml-api", "git", "token-macro", "credentials", "workflow-aggregator")), "2.150.3");
+            try (TempFile tempFolder = TempFile.createFolder()) {
+                for (Plugin plugin : plugins) {
+                    System.out.println(plugin.getUrl());
+                    String fileName = FilenameUtils.getName(plugin.getUrl());
+                    FileUtils.copyURLToFile(
+                            new URL(plugin.getUrl()),
+                            tempFolder.toPath().resolve(fileName).toFile());
+                }
+                log.trace("All plugins dependencies are saved to {}", tempFolder);
             }
         }
     }

@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.tools.jenkins.dependencies.domain;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -14,6 +15,7 @@ public class Plugin {
     @Getter
     @Setter
     @NoArgsConstructor
+    @AllArgsConstructor
     @ToString
     public static class Dependency {
         @NonNull
@@ -24,7 +26,7 @@ public class Plugin {
     }
 
     @ToString.Exclude
-    protected List<Dependency> dependencies;
+    protected List<Dependency> dependencies = new ArrayList<>();
 
     protected String name;
     protected String requiredCore;

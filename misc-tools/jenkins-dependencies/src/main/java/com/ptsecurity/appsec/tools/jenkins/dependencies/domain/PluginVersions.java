@@ -121,6 +121,65 @@ public class PluginVersions {
         return null;
     }
 
+    public Set<Plugin> requiredPlugins(@NonNull final Set<String> names, @NonNull final String jenkinsVersion) {
+        Plugin dummyPlugin = new Plugin();
+        dummyPlugin.setName(UUID.randomUUID().toString());
+        dummyPlugin.setVersion(UUID.randomUUID().toString());
+        for (String name : names) {
+            log.debug("Collect {} plugin requirements for Jenkins {}", name, jenkinsVersion);
+            log.trace("Get all {} plugin versions and sort those descendant", name);
+            @NonNull Map<String, Plugin> pluginVersionsMap = plugins.get(name);
+            List<String> versions = new ArrayList<>(pluginVersionsMap.keySet());
+            versions.sort((String v1, String v2) -> - compareVersion(v1, v2));
+            for (String version : versions) {
+                Plugin plugin = pluginVersionsMap.get(version);
+                log.trace("Process {} plugin", plugin);
+                if (1 == compareVersion(plugin.getRequiredCore(), jenkinsVersion)) {
+                    log.trace("Skip {} version as ir requires Jenkins {}", version, plugin.getVersion());
+                    continue;
+                }
+                dummyPlugin.getDependencies().add(new Plugin.Dependency(plugin.getName(), false, plugin.getVersion()));
+                break;
+            }
+        }
+        try {
+            PluginTreeNode rootPluginNode = new PluginTreeNode(dummyPlugin);
+            rootPluginNode.setMostRecentVersion(true);
+            collectPluginDependencies(dummyPlugin, jenkinsVersion, rootPluginNode);
+            log.trace("{} plugin dependencies resolved", rootPluginNode);
+            // As there may be plugin duplicates let's collect unique plugin names and remove subtrees that aren't the most recent ones
+            List<PluginTreeNode> childNodes = new ArrayList<>();
+            rootPluginNode.collectChildNodes(childNodes, (n) -> true);
+            childNodes.removeIf(pluginTreeNode -> dummyPlugin.getName().equals(pluginTreeNode.getName()));
+            Map<String, TreeSet<String>> childNodesByName = childNodes
+                    .stream()
+                    .collect(
+                            Collectors.groupingBy(
+                                    PluginTreeNode::getName,
+                                    Collectors.mapping(PluginTreeNode::getVersion, Collectors.toCollection(() -> new TreeSet<>(PluginVersions::compareVersion)))));
+            // Iterate through plugin names and mark most recent plugin versions in dependency tree
+            for (String pluginName : childNodesByName.keySet()) {
+                @NonNull TreeSet<String> pluginVersions = childNodesByName.get(pluginName);
+                if (0 == pluginVersions.size()) continue;
+                Iterator<String> iterator = pluginVersions.descendingIterator();
+                // Get most recent plugin version...
+                String mostRecentVersionNumber = iterator.next();
+                rootPluginNode.setAsMostRecentVersion(pluginName, mostRecentVersionNumber);
+            }
+            childNodes.clear();
+            rootPluginNode.collectChildNodes(childNodes, PluginTreeNode::isMostRecentVersion);
+
+            return childNodes
+                    .stream()
+                    .filter(n -> !dummyPlugin.getName().equals(n.getName()))
+                    .map(PluginTreeNode::getPlugin)
+                    .collect(Collectors.toSet());
+        } catch (Exception e) {
+            log.trace(e.getMessage());
+        }
+        return null;
+    }
+
     @Getter
     @Setter
     @ToString
@@ -168,11 +227,20 @@ public class PluginVersions {
     }
 
     protected void collectPluginDependencies(@NonNull final Plugin plugin, @NonNull final String jenkinsVersion, @NonNull final PluginTreeNode parentPlugin) throws Exception {
+        if (null == plugin.getDependencies()) return;
         for (Plugin.Dependency dependency : plugin.getDependencies()) {
-            if (dependency.isOptional()) continue;
+            // Line uncommented as if other plugin also uses this dependency as arbitrary
+            // and dependency version less than required optional one then this plugin will
+            // fail to load despite dependency's "optional" attribute
+            // if (dependency.isOptional()) continue;
             final Plugin requiredPlugin = pluginVersionsMap.get(new ImmutablePair<>(dependency.getName(), dependency.getVersion()));
+            if (null == requiredPlugin) {
+                log.warn("No plugin found for {} dependency", dependency);
+                continue;
+            }
             // Terminate plugin dependencies processing if there's unsupported Jenkins version
-            if (1 == compareVersion(requiredPlugin.getRequiredCore(), jenkinsVersion)) throw new Exception("Plugin " + requiredPlugin + " doesn't supports Jenkins " + jenkinsVersion);
+            if (1 == compareVersion(requiredPlugin.getRequiredCore(), jenkinsVersion))
+                throw new Exception("Plugin " + requiredPlugin + " doesn't supports Jenkins " + jenkinsVersion);
             // Add plugin to dependency tree
             PluginTreeNode childPluginNode = new PluginTreeNode(requiredPlugin);
             parentPlugin.getChildren().add(childPluginNode);
