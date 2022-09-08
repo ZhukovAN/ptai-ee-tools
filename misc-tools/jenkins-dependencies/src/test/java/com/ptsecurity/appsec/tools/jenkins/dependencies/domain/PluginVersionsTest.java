@@ -112,8 +112,8 @@ class PluginVersionsTest extends BaseTest {
             PluginVersions pluginVersions = Assertions.assertDoesNotThrow(() -> PluginVersions.load(new FileInputStream(path.toFile())));
             log.trace("Plugin versions JSON parsed");
 
-            // Set<Plugin> plugins = pluginVersions.requiredPlugins(new HashSet<>(Arrays.asList("git", "token-macro", "credentials", "workflow-aggregator")), "2.332.1");
-            Set<Plugin> plugins = pluginVersions.requiredPlugins(new HashSet<>(Arrays.asList("caffeine-api", "snakeyaml-api", "git", "token-macro", "credentials", "workflow-aggregator")), "2.150.3");
+            Set<Plugin> plugins = pluginVersions.requiredPlugins(new HashSet<>(Arrays.asList("git", "token-macro", "credentials", "workflow-aggregator")), "2.332.1");
+            // Set<Plugin> plugins = pluginVersions.requiredPlugins(new HashSet<>(Arrays.asList("git", "token-macro", "credentials", "workflow-aggregator")), "2.150.3");
             try (TempFile tempFolder = TempFile.createFolder()) {
                 for (Plugin plugin : plugins) {
                     System.out.println(plugin.getUrl());
