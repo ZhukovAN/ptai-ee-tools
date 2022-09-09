@@ -11,6 +11,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJ
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.JsonAstJobSetupOperationsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.PHP;
 import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level.*;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest.Connection.Version.*;
 
 @DisplayName("Test JSON-based AST")
 @Tag("integration")
@@ -57,37 +59,6 @@ public class JsonAstJobIT extends BaseAstIT {
                     .jsonSettings(jsonSettings)
                     .build();
         }
-    }
-
-    @SneakyThrows
-    @Test
-    @DisplayName("Scan PHP smoke project with medium level vulnerabilities using JSON settings and policy")
-    public void scanPhpSmoke(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        Path destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
-
-        String jsonSettings = getResourceString("json/scan/settings/settings.minimal.aiproj");
-        Assertions.assertFalse(StringUtils.isEmpty(jsonSettings));
-        jsonSettings = new JsonSettingsTestHelper(jsonSettings)
-                .scanAppType(AbstractAiProjScanSettings.ScanAppType.PHP)
-                .isUseEntryAnalysisPoint(true)
-                .isUsePublicAnalysisMethod(true)
-                .projectName(PHP_SMOKE_MEDIUM.getName())
-                .programmingLanguage(PHP)
-                .serialize();
-
-        GenericAstJob astJob = JsonAstJobImpl.builder()
-                .async(false)
-                .fullScanMode(true)
-                .connectionSettings(CONNECTION_SETTINGS())
-                .console(System.out)
-                .sources(PHP_SMOKE_MEDIUM.getCode())
-                .destination(destination)
-                .jsonSettings(jsonSettings)
-                .build();
-
-        AbstractJob.JobExecutionResult res = astJob.execute();
-        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
     }
 
     @SneakyThrows
@@ -189,14 +160,14 @@ public class JsonAstJobIT extends BaseAstIT {
         });
         Assertions.assertNotNull(scanResult);
         Assertions.assertNotEquals(0, scanResult.getIssues().size());
-        // There's no way to disable entry point analysis in 4.0 so results will always contain these issues
-        if (CONNECTION().getVersion().equals(Connection.Version.V36)) {
+        // There's no way to disable entry point analysis in 4.0+ so results will always contain these issues
+        if (CONNECTION().getVersion().equals(V36)) {
             long publicProtectedCount = scanResult.getIssues().stream()
                     .filter(i -> i instanceof VulnerabilityIssue)
                     .map(i -> (VulnerabilityIssue) i)
                     .filter(c -> VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED == c.getScanMode()).count();
             Assertions.assertEquals(scanResult.getIssues().size(), publicProtectedCount);
-        } else if (CONNECTION().getVersion().equals(Connection.Version.V40)) {
+        } else if (CONNECTION().getVersion().equals(V40) || CONNECTION().getVersion().equals(V41)) {
             long publicProtectedCount = scanResult.getIssues().stream()
                     .filter(i -> i instanceof VulnerabilityIssue)
                     .map(i -> (VulnerabilityIssue) i)
@@ -312,60 +283,34 @@ public class JsonAstJobIT extends BaseAstIT {
 
     @SneakyThrows
     @Test
-    @DisplayName("Scan WebGoat.NET project using JSON settings and policy")
-    public void scanWebGoatNet(@NonNull final TestInfo testInfo) {
+    @DisplayName("Scan every project twice: first time as a new project, second time as existing")
+    public void scanEveryProjectTwice(@NonNull final TestInfo testInfo) {
         log.trace(testInfo.getDisplayName());
-        Path destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
+        for (Project project : ALL) {
+            if (JAVA_OWASP_BENCHMARK == project) continue;
+            Path destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
 
-        GenericAstJob astJob = JsonAstJobImpl.builder()
-                .async(false)
-                .fullScanMode(true)
-                .connectionSettings(CONNECTION_SETTINGS())
-                .console(System.out)
-                .sources(CSHARP_WEBGOAT.getCode())
-                .destination(destination)
-                .jsonSettings(CSHARP_WEBGOAT.getSettings())
-                .build();
+            GenericAstJob astJob = JsonAstJobImpl.builder()
+                    .async(false)
+                    .fullScanMode(true)
+                    .connectionSettings(CONNECTION_SETTINGS())
+                    .console(System.out)
+                    .sources(project.getCode())
+                    .destination(destination)
+                    .jsonSettings(new JsonSettingsTestHelper(project.getSettings())
+                            .isUseEntryAnalysisPoint(true)
+                            .isUsePublicAnalysisMethod(true)
+                            .projectName("junit-" + UUID.randomUUID())
+                            .serialize())
+                    .jsonPolicy(getResourceString("json/scan/settings/policy.generic.json"))
+                    .build();
 
-        AbstractJob.JobExecutionResult res = astJob.execute();
-        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
-    }
+            AbstractJob.JobExecutionResult res = astJob.execute();
+            Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
 
-    @SneakyThrows
-    @Test
-    @DisplayName("Scan App01 project twice using same JSON settings")
-    public void scanApp01Twice(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        Path destination = Files.createTempDirectory(TEMP_FOLDER(), "ptai-");
-
-        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(getResourceString("json/scan/settings/settings.java-app01.scan-twice.aiproj"));
-        settings.setProjectName("junit-" + UUID.randomUUID());
-
-        GenericAstJob astJob = JsonAstJobImpl.builder()
-                .async(false)
-                .fullScanMode(true)
-                .connectionSettings(CONNECTION_SETTINGS())
-                .console(System.out)
-                .sources(JAVA_APP01.getCode())
-                .destination(destination)
-                .jsonSettings(settings.serialize())
-                .jsonPolicy(getResourceString("json/scan/settings/policy.java-app01.scan-twice.json"))
-                .build();
-        AbstractJob.JobExecutionResult res = astJob.execute();
-        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
-
-        astJob = JsonAstJobImpl.builder()
-                .async(false)
-                .fullScanMode(true)
-                .connectionSettings(CONNECTION_SETTINGS())
-                .console(System.out)
-                .sources(JAVA_APP01.getCode())
-                .destination(destination)
-                .jsonSettings(settings.serialize())
-                .jsonPolicy(getResourceString("json/scan/settings/policy.java-app01.scan-twice.json"))
-                .build();
-        res = astJob.execute();
-        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+            res = astJob.execute();
+            Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+        }
     }
 
     @SneakyThrows
@@ -386,7 +331,7 @@ public class JsonAstJobIT extends BaseAstIT {
                 .sources(JAVA_APP01.getCode())
                 .destination(destination)
                 .jsonSettings(settings.serialize())
-                .jsonPolicy(getResourceString("json/scan/settings/policy.java-app01.scan-twice.json"))
+                .jsonPolicy(getResourceString("json/scan/settings/policy.generic.json"))
                 .build();
         AbstractJob.JobExecutionResult res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
@@ -399,7 +344,7 @@ public class JsonAstJobIT extends BaseAstIT {
                 .sources(JAVA_APP01.getCode())
                 .destination(destination)
                 .jsonSettings(settings.serialize())
-                .jsonPolicy(getResourceString("json/scan/settings/policy.java-app01.scan-twice.json"))
+                .jsonPolicy(getResourceString("json/scan/settings/policy.generic.json"))
                 .build();
         res = astJob.execute();
         Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
