@@ -147,7 +147,9 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         ProjectLight projectLight = call(
                 () -> {
                     try {
-                        return client.getProjectsApi().apiProjectsLightNameGet(name);
+                        // TODO: Replace with apiProjectsLightNameGet when PT AI issue will be fixed
+                        return client.getProjectsApi().apiProjectsGet(true).stream().filter(p -> Objects.requireNonNull(p.getName()).equals(name)).findAny().orElse(null);
+                        // return client.getProjectsApi().apiProjectsLightNameGet(name);
                     } catch (ApiException e) {
                         log.trace("PT AI v.4.0 API returns HTTP status 204 if there's no project with given name {}", name);
                         if (HttpStatus.SC_NO_CONTENT == e.getCode()) return null;

@@ -19,6 +19,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.DEPENDENCYCHECK;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.FINGERPRINT;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper.createObjectMapper;
 
@@ -29,6 +31,24 @@ public class AiProjConverter {
     private static final Map<AiProjScanSettings.Authentication.Item.Credentials.Type, AuthType> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
     private static final Map<AiProjScanSettings.ProxySettings.Type, ProxyType> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
     private static final Map<ScanResult.ScanSettings.Language, ProgrammingLanguageGroup> REVERSE_LANGUAGE_GROUP_MAP = new HashMap<>();
+
+    /**
+     * Set of ScanAppType values that support abstract interpretation
+     */
+    private static final Set<AiProjScanSettings.ScanAppType> SCAN_APP_TYPE_AI = new HashSet<>(Arrays.asList(
+            AiProjScanSettings.ScanAppType.PHP,
+            AiProjScanSettings.ScanAppType.JAVA,
+            AiProjScanSettings.ScanAppType.CSHARP,
+            AiProjScanSettings.ScanAppType.JAVASCRIPT));
+    /**
+     * Set of programming languages values that support abstract interpretation
+     */
+    private static final Set<ScanBrief.ScanSettings.Language> LANGUAGE_AI = new HashSet<>(Arrays.asList(
+            ScanBrief.ScanSettings.Language.PHP,
+            ScanBrief.ScanSettings.Language.JAVA,
+            ScanBrief.ScanSettings.Language.CSHARP,
+            ScanBrief.ScanSettings.Language.VB,
+            ScanBrief.ScanSettings.Language.JAVASCRIPT));
 
     static {
         BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NONE, BlackBoxScanLevel.NONE);
@@ -73,13 +93,17 @@ public class AiProjConverter {
                 .collect(Collectors.toSet());
 
         log.trace("Set base project whitebox settings");
-        // Check if PHP / Java / C# / JavaScript modules are to be engaged
-        final Set<AiProjScanSettings.ScanAppType> abstractInterpretationEngines = new HashSet<>(Arrays.asList(AiProjScanSettings.ScanAppType.PHP, AiProjScanSettings.ScanAppType.JAVA, AiProjScanSettings.ScanAppType.CSHARP, AiProjScanSettings.ScanAppType.JAVASCRIPT));
-        model.setSearchForVulnerableSourceCodeEnabled(scanAppTypes.stream().anyMatch(abstractInterpretationEngines::contains));
+        // "Vulnerable source code" checkbox means that we either enabled AI-supported PHP / Java / C# / JS scan mode ...
+        boolean checkScanAppTypeResult = scanAppTypes.stream().anyMatch(SCAN_APP_TYPE_AI::contains);
+        // ... or all other languages with PmTaint / UseTaintAnalysis enabled
+        boolean checkTaintOnlyLanguage = !LANGUAGE_AI.contains(settings.getProgrammingLanguage()) &&
+                scanAppTypes.contains(AiProjScanSettings.ScanAppType.PMTAINT) &&
+                null != settings.getUseTaintAnalysis() && settings.getUseTaintAnalysis();
+        model.setSearchForVulnerableSourceCodeEnabled(checkScanAppTypeResult || checkTaintOnlyLanguage);
         model.setDataFlowAnalysisEnabled(null != settings.getUseTaintAnalysis() && settings.getUseTaintAnalysis() && scanAppTypes.contains(AiProjScanSettings.ScanAppType.PMTAINT));
         model.setPatternMatchingEnabled(null != settings.getUsePmAnalysis() && settings.getUsePmAnalysis() && scanAppTypes.contains(AiProjScanSettings.ScanAppType.PMTAINT));
         model.setSearchForConfigurationFlawsEnabled(scanAppTypes.contains(AiProjScanSettings.ScanAppType.CONFIGURATION));
-        model.setSearchForVulnerableComponentsEnabled(scanAppTypes.contains(AiProjScanSettings.ScanAppType.FINGERPRINT));
+        model.setSearchForVulnerableComponentsEnabled(scanAppTypes.contains(FINGERPRINT) || scanAppTypes.contains(DEPENDENCYCHECK));
 
         return model;
     }
