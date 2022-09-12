@@ -197,3 +197,7 @@
 ### 20220907
 + [Fix] RemoteFileUtils now uses multipart file upload that fixes OutOfMemory error when Jenkins attempts to deliver really big reports to agent workspace using serialization
 + [Feature] Remote Jenkins agent console logging support added
+### 20220912
++ [Fix] Non-abstract-interpretation language (Python etc.) project creation fixed
++ [Fix] Project name with slash workaround applied to 3.6 and 4.0 API clients
++ [Feature] Python DSVW test code added
