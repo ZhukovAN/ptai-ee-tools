@@ -38,6 +38,7 @@ public abstract class AbstractAiProjScanSettings {
         CSHARP("CSharp"),
         CONFIGURATION("Configuration"),
         FINGERPRINT("Fingerprint"),
+        DEPENDENCYCHECK("DependencyCheck"),
         PMTAINT("PmTaint"),
         BLACKBOX("BlackBox"),
         JAVASCRIPT("JavaScript");

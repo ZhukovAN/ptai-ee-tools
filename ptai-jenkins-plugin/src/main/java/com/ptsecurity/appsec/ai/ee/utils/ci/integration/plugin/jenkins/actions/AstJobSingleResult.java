@@ -10,6 +10,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.PieChartDataModel;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.I18nHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.export.Export;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
@@ -58,18 +59,13 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
 
     protected transient ScanBriefDetailed scanBriefDetailed = null;
 
-    public ScanBriefDetailed getScanBriefDetailed() {
+    public ScanBriefDetailed loadScanBriefDetailed() {
         if (null != scanBriefDetailed) return scanBriefDetailed;
 
         if (null == scanDataPacked) return null;
         if (SCAN_BRIEF_DETAILED != scanDataPacked.getType()) return null;
         scanBriefDetailed = scanDataPacked.unpackData(ScanBriefDetailed.class);
 
-        Reports.Locale locale = Export.ExportDescriptor.getDefaultLocale();
-        Comparator<ScanBriefDetailed.Details.ChartData.BaseIssueCount> compareLevelTypeAndCount = Comparator
-                .comparing(ScanBriefDetailed.Details.ChartData.BaseIssueCount::getLevel, Comparator.comparingInt(BaseIssue.Level::getValue).reversed())
-                .thenComparing(ScanBriefDetailed.Details.ChartData.BaseIssueCount::getCount, Comparator.reverseOrder())
-                .thenComparing(brief -> brief.getTitle().get(locale), Comparator.reverseOrder());
         return scanBriefDetailed;
     }
 
@@ -101,7 +97,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
     }
 
     public boolean isEmpty() {
-        getScanBriefDetailed();
+        loadScanBriefDetailed();
         return Optional.ofNullable(scanBriefDetailed)
                 .map(ScanBriefDetailed::getDetails)
                 .map(ScanBriefDetailed.Details::getChartData)
@@ -112,7 +108,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityLevelDistribution() {
-        getScanBriefDetailed();
+        loadScanBriefDetailed();
         if (isEmpty()) return null;
 
         List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
@@ -131,7 +127,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
         Comparator<Couple> c = Comparator
                 .comparing(Couple::getLevel, Comparator.comparingInt(BaseIssue.Level::getValue));
         levelCount.stream().sorted(c).forEach(t -> {
-            dataModel.getYaxis().get(0).getData().add(t.level.name());
+            dataModel.getYaxis().get(0).getData().add(I18nHelper.i18n(t.level));
             dataModel.getSeries().get(0).getData().add(ChartDataModel.Series.DataItem.builder()
                     .value(levelCountMap.get(t.level))
                     .itemStyle(ChartDataModel.Series.DataItem.ItemStyle.builder()
@@ -145,7 +141,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityTypeDistribution() {
-        getScanBriefDetailed();
+        loadScanBriefDetailed();
         if (isEmpty()) return null;
         Reports.Locale locale = Export.ExportDescriptor.getDefaultLocale();
         List<BaseIssueCount> baseIssues = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData();
@@ -184,7 +180,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
 
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityTypePie() throws JsonProcessingException {
-        getScanBriefDetailed();
+        loadScanBriefDetailed();
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
@@ -196,7 +192,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
                     .filter(issue -> type == issue.getClazz()).count();
             if (0 == count) continue;
             PieChartDataModel.Series.DataItem typeItem = PieChartDataModel.Series.DataItem.builder()
-                    .name(type.name())
+                    .name(I18nHelper.i18n(type))
                     .itemStyle(PieChartDataModel.Series.DataItem.ItemStyle.builder()
                             .color("#" + Integer.toHexString(TYPE_COLORS.get(type)))
                             .build())
@@ -210,7 +206,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityApprovalStatePie() {
-        getScanBriefDetailed();
+        loadScanBriefDetailed();
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
@@ -222,7 +218,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
                     .filter(issue -> approvalState == issue.getApprovalState()).count();
             if (0 == count) continue;
             PieChartDataModel.Series.DataItem typeItem = PieChartDataModel.Series.DataItem.builder()
-                    .name(approvalState.name())
+                    .name(I18nHelper.i18n(approvalState))
                     .itemStyle(PieChartDataModel.Series.DataItem.ItemStyle.builder()
                             .color("#" + Integer.toHexString(APPROVAL_COLORS.get(approvalState)))
                             .build())
@@ -236,7 +232,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilitySuspectedPie() {
-        getScanBriefDetailed();
+        loadScanBriefDetailed();
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
@@ -248,7 +244,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
                     .filter(issue -> suspected == issue.getSuspected()).count();
             if (0 == count) continue;
             PieChartDataModel.Series.DataItem typeItem = PieChartDataModel.Series.DataItem.builder()
-                    .name(suspected.toString())
+                    .name(I18nHelper.i18n(suspected))
                     .itemStyle(PieChartDataModel.Series.DataItem.ItemStyle.builder()
                             .color("#" + Integer.toHexString(SUSPECTED_COLORS.get(suspected)))
                             .build())
@@ -262,7 +258,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
     @SneakyThrows
     @SuppressWarnings("unused") // Called by groovy view
     public String getVulnerabilityScanModePie() {
-        getScanBriefDetailed();
+        loadScanBriefDetailed();
         if (isEmpty()) return null;
         PieChartDataModel dataModel = PieChartDataModel.builder()
                 .series(Collections.singletonList(PieChartDataModel.Series.builder().build()))
@@ -274,7 +270,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
                     .filter(issue -> scanMode == issue.getScanMode()).count();
             if (0 == count) continue;
             PieChartDataModel.Series.DataItem typeItem = PieChartDataModel.Series.DataItem.builder()
-                    .name(scanMode.toString())
+                    .name(I18nHelper.i18n(scanMode))
                     .itemStyle(PieChartDataModel.Series.DataItem.ItemStyle.builder()
                             .color("#" + Integer.toHexString(SCANMODE_COLORS.get(scanMode)))
                             .build())

@@ -1,239 +1,94 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults
 
-import com.ptsecurity.appsec.ai.ee.scan.progress.Stage
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
-import lib.FormTagLib
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobTableResults
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.Utils.AbstractUI
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.Utils.Chart
 import lib.LayoutTagLib
 
-def f = namespace(FormTagLib)
 def l = namespace(LayoutTagLib)
 def st = namespace("jelly:stapler")
 
-def widthOffset = 100;
-def smallChartHeight = 200;
-def smallChartMinWidth = 450;
-def smallChartGap = 16;
-def bigChartMinWidth = smallChartMinWidth * 2 + smallChartGap;
-def smallChartStyle = "min-width: ${smallChartMinWidth}px; background-color: #f8f8f8f8; ";
-def bigChartStyle = "min-width: " + bigChartMinWidth + "px; background-color: #f8f8f8f8; ";
-def bigDivStyle = "width: ${widthOffset}%; margin: 0 auto; min-width: " + bigChartMinWidth + "px; display: grid; grid-template-columns: 50% 50%; ";
-def tableStyle = "width: ${widthOffset}%; margin: 0 auto; min-width: ${bigChartMinWidth}px; border-collapse: collapse; margin-top: 10px; "
+def historyLength = 10
 
-def historyLength = 10;
-
-// Make groovy values available for JavaScript
-script """
-    const smallChartHeight = ${smallChartHeight};
-    const smallChartMinWidth = ${smallChartMinWidth};
-    const smallChartGap = ${smallChartGap};
-    const bigChartMinWidth = ${bigChartMinWidth};
-    const smallChartStyle = '${smallChartStyle}';
-    const bigChartStyle = '${bigChartStyle}';
-"""
-
+link(rel: 'stylesheet', href: "${rootURL}/plugin/ptai-jenkins-plugin/css/plugin.css")
 script(src: "${rootURL}/plugin/ptai-jenkins-plugin/webjars/echarts/echarts.min.js")
 script(src: "${rootURL}/plugin/ptai-jenkins-plugin/js/charts.js")
+
+def createChartPlaceholder(int col, int row, int width, String prefix, String name, String title) {
+    String style = "grid-area: ${row} / ${col} / span 1 / span ${width}; "
+
+    // Need to add grid cells spacing if we have multiple charts in row
+    String clazz = ""
+    if (1 == width)
+        clazz = 1 == col ? "ptai-chart-left" : "ptai-chart-right"
+    div(style: style, class: clazz) {
+        h3(title)
+        div(
+                id: "${prefix}-${name}",
+                class: "graph-cursor-pointer ptai-chart ${1 == width ? "ptai-small-chart" : "ptai-big-chart"} ") {
+        }
+        div(id : "${prefix}-${name}-no-data", class: "h3 ptai-no-data") {
+            text(Resources.i18n_ast_result_charts_message_nodata_label().toUpperCase())
+        }
+    }
+}
+
+def createChartPlaceholder(AstJobTableResults owner, Chart chart) {
+    createChartPlaceholder(chart.col, chart.row, chart.width, owner.urlName, chart.name, chart.title)
+}
+
+class UI extends AbstractUI {
+    UI(String prefix) {
+        super(prefix)
+    }
+
+    @Override
+    def addCharts(String prefix) {
+        charts.add(new Chart(Chart.Type.LEVELS_HISTORY_BAR, 1, 1, 1, prefix, "levels-history-bar-chart", Resources.i18n_ast_result_charts_by_severity_label()))
+        charts.add(new Chart(Chart.Type.APPROVAL_HISTORY_BAR, 2, 1, 1, prefix, "approval-history-bar-chart", Resources.i18n_ast_result_charts_by_approvalstatus_label()))
+        charts.add(new Chart(Chart.Type.ISSUE_TYPE_HISTORY_BAR, 1, 2, 2, prefix, "issue-type-history-bar-chart", Resources.i18n_ast_result_charts_by_issuetype_no_rejected_label()))
+        charts.add(new Chart(Chart.Type.SCAN_DURATION_HISTORY_BAR, 1, 3, 2, prefix, "scan-duration-history-bar-chart", Resources.i18n_ast_result_charts_by_scanduration_label()))
+    }
+}
+
+UI ui = new UI((my as AstJobTableResults).urlName)
 
 l.layout(title: "PT AI AST report") {
     l.side_panel() {
         st.include(page: "sidepanel.jelly", it: my.project)
     }
     l.main_panel() {
-        h1(_("statistics.label"))
-        h2(id: "h2", _("statistics.breakdown.label"))
+        h1(Resources.i18n_ast_result_charts_statistics_label())
         def latestResults = my.getLatestAstResults(historyLength)
         if (null == latestResults || latestResults.isEmpty()) {
-            div(id : "${my.urlName}-no-data") {
+            div(id: "${my.urlName}-no-data", class: "h2 ptai-no-data") {
                 text("${Resources.i18n_ast_result_charts_message_noscans_label().toUpperCase()}")
             }
-            script """
-                var fontSize = \$("h2").getStyle('fontSize');
-                var messageNoDataStyle = {  
-                    'fontSize' : fontSize,
-                    'fontWeight' : 'bold',
-                    'fontStyle' : 'italic',
-                    'color' : 'lightgray',
-                    'textAlign' : 'center',
-                    'display' : 'flex',
-                    'justifyContent' : 'center',
-                    'alignItems' : 'center'
-                };
-                \$("${my.urlName}-no-data").setStyle(messageNoDataStyle);
-                setupDivFrame(36, "${my.urlName}-no-data", false);
-            """
-        } else {
-            // text(BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(my.getScanStageDurationHistoryChart(historyLength)))
-            div(style: "${bigDivStyle}") {
-                div(style: "grid-area: 1 / 1 / 2 / 2; padding-right: 8px; ") {
-                    h3(_("statistics.by.level.label"))
-                    div(
-                            id: "${my.urlName}-level-history-chart",
-                            class: 'graph-cursor-pointer') {}
-                }
-                div(style: "grid-area: 1 / 2 / 2 / 3; padding-left: 8px; ") {
-                    h3(_("statistics.by.approval.label"))
-                    div(
-                            id: "${my.urlName}-approval-history-chart",
-                            class: 'graph-cursor-pointer') {}
-                }
-                div(style: "grid-area: 2 / 1 / 3 / 3; ") {
-                    td(style: "padding-right: 8px; padding-left: 0px; ") {
-                        h3(_("statistics.by.type.label"))
-                        div(
-                                id: "${my.urlName}-type-history-chart",
-                                class: 'graph-cursor-pointer') {}
-                    }
-                }
-                div(style: "grid-area: 3 / 1 / 4 / 3; ") {
-                    h3("${Resources.i18n_ast_result_statistics_duration_label()}")
-                    div(
-                            id: "${my.urlName}-scan-stage-duration-history-chart",
-                            class: 'graph-cursor-pointer') {}
-                }
-            }
-
-            script """
-                // Map vulnerability level to its localized title
-                var levelAttrs = {
-                    TOTAL: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_total()}'
-                    },
-                    ${BaseIssue.Level.HIGH.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_severity_high()}'
-                    },
-                    ${BaseIssue.Level.MEDIUM.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_severity_medium()}'
-                    },
-                    ${BaseIssue.Level.LOW.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_severity_low()}' 
-                    },
-                    ${BaseIssue.Level.POTENTIAL.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_severity_potential()}' 
-                    },
-                    ${BaseIssue.Level.NONE.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_severity_none()}' 
-                    }
-                };
-        
-                // Map vulnerability class to its localized title
-                var approvalStateAttrs = {
-                    TOTAL: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_total()}'
-                    },
-                    ${BaseIssue.ApprovalState.NONE.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_approval_none()}'
-                    },
-                    ${BaseIssue.ApprovalState.APPROVAL.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_approval_confirmed()}'
-                    },
-                    ${BaseIssue.ApprovalState.AUTO_APPROVAL.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_approval_auto()}'
-                    },
-                    ${BaseIssue.ApprovalState.DISCARD.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_approval_rejected()}'
-                    },
-                    ${BaseIssue.ApprovalState.NOT_EXIST.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_approval_missing()}'
-                    }
-                };
-                
-                // Map vulnerability class to its localized title
-                var typeAttrs = {
-                    TOTAL: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_total()}'
-                    },
-                    ${BaseIssue.Type.BLACKBOX.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_blackbox()}'
-                    },
-                    ${BaseIssue.Type.CONFIGURATION.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_configuration()}'
-                    },
-                    ${BaseIssue.Type.SCA.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_sca()}'
-                    },
-                    ${BaseIssue.Type.UNKNOWN.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_unknown()}'
-                    },
-                    ${BaseIssue.Type.VULNERABILITY.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_vulnerability()}'
-                    },
-                    ${BaseIssue.Type.WEAKNESS.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_weakness()}'
-                    },
-                    ${BaseIssue.Type.YARAMATCH.name()}: {
-                        title: '${Resources.i18n_misc_enums_vulnerability_clazz_yaramatch()}'
-                    }
-                };
-                
-                // Map vulnerability class to its localized title
-                var scanStageAttrs = {
-                    DURATION: {
-                        title: '${Resources.i18n_ast_result_statistics_duration_sec_label()}'
-                    },
-                    ${Stage.ABORTED.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_aborted()}'
-                    },
-                    ${Stage.AUTOCHECK.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_autocheck()}'
-                    },
-                    ${Stage.DONE.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_done()}'
-                    },
-                    ${Stage.ENQUEUED.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_enqueued()}'
-                    },
-                    ${Stage.FAILED.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_failed()}'
-                    },
-                    ${Stage.FINALIZE.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_finalize()}'
-                    },
-                    ${Stage.INITIALIZE.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_initialize()}'
-                    },
-                    ${Stage.PRECHECK.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_precheck()}'
-                    },
-                    ${Stage.SCAN.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_scan()}'
-                    },
-                    ${Stage.SETUP.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_setup()}'
-                    },
-                    ${Stage.UNKNOWN.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_unknown()}'
-                    },
-                    ${Stage.UPLOAD.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_upload()}'
-                    },
-                    ${Stage.VFSSETUP.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_vfssetup()}'
-                    },
-                    ${Stage.ZIP.name()}: {
-                        title: '${Resources.i18n_misc_enums_progress_stage_zip()}'
-                    }
-                };
-                
-                createBuildHistoryChart(
-                    "${my.urlName}-level-history-chart", 
-                    ${my.getLevelHistoryChart(historyLength)}, levelAttrs);
-                
-                createBuildHistoryChart(
-                    "${my.urlName}-approval-history-chart", 
-                    ${my.getApprovalHistoryChart(historyLength)}, approvalStateAttrs);
-                
-                createBuildHistoryChart(
-                    "${my.urlName}-type-history-chart", 
-                    ${my.getTypeHistoryChart(historyLength)}, typeAttrs, false);
-    
-                var option = ${my.getScanStageDurationHistoryChart(historyLength)};
-                // option.legend.data[0] = "${Resources.i18n_ast_result_statistics_duration_sec_label()}"
-                // option.series[0].name = "${Resources.i18n_ast_result_statistics_duration_sec_label()}"
-                createBuildHistoryChart(
-                    "${my.urlName}-scan-stage-duration-history-chart", 
-                    option, scanStageAttrs, false);
-            """
+            return
         }
+        h2(id: "h2", Resources.i18n_ast_result_charts_title_breakdown_label())
+        div(class: "ptai-main-content ptai-charts-div") {
+            for (Chart chart : ui.charts) createChartPlaceholder(my, chart)
+        }
+        script """
+            createBuildHistoryChart(
+                "${ui.chartsMap[Chart.Type.LEVELS_HISTORY_BAR].divId}", 
+                ${my.getLevelHistoryChart(historyLength)}, null);
+            
+            createBuildHistoryChart(
+                "${ui.chartsMap[Chart.Type.APPROVAL_HISTORY_BAR].divId}", 
+                ${my.getApprovalHistoryChart(historyLength)}, null);
+            
+            createBuildHistoryChart(
+                "${ui.chartsMap[Chart.Type.ISSUE_TYPE_HISTORY_BAR].divId}", 
+                ${my.getTypeHistoryChart(historyLength)}, null);
+
+            createBuildHistoryChart(
+                "${ui.chartsMap[Chart.Type.SCAN_DURATION_HISTORY_BAR].divId}", 
+                ${my.getScanStageDurationHistoryChart(historyLength)}, null);
+            
+        """
     }
 }
+

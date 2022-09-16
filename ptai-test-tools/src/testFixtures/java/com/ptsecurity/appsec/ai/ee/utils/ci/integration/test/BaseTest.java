@@ -40,18 +40,20 @@ import java.util.zip.ZipInputStream;
 
 @Slf4j
 public abstract class BaseTest {
+    private static final String JUNIT_PROJECT_PREFIX = "junit-";  
+    
+    public static final String JAVA_APP01_PROJECT_NAME = JUNIT_PROJECT_PREFIX + "java-app01";
+    public static final String JAVA_OWASP_BENCHMARK_PROJECT_NAME = JUNIT_PROJECT_PREFIX + "java-owasp-benchmark";
+    public static final String PHP_OWASP_BRICKS_PROJECT_NAME = JUNIT_PROJECT_PREFIX + "php-owasp-bricks";
+    public static final String PHP_SMOKE_MISC_PROJECT_NAME = JUNIT_PROJECT_PREFIX + "php-smoke-misc";
+    public static final String PHP_SMOKE_MEDIUM_PROJECT_NAME = JUNIT_PROJECT_PREFIX + "php-smoke-medium";
+    public static final String PHP_SMOKE_HIGH_PROJECT_NAME = JUNIT_PROJECT_PREFIX + "php-smoke-high";
+    public static final String PHP_SMOKE_MULTIFLOW_PROJECT_NAME = JUNIT_PROJECT_PREFIX + "php-smoke-multiflow";
+    public static final String JAVASCRIPT_VNWA_PROJECT_NAME = JUNIT_PROJECT_PREFIX + "javascript-vnwa";
+    public static final String CSHARP_WEBGOAT_PROJECT_NAME = JUNIT_PROJECT_PREFIX + "csharp-webgoat";
+    public static final String PYTHON_DSVW_PROJECT_NAME = JUNIT_PROJECT_PREFIX + "python-dsvw";
 
-    public static final String JAVA_APP01_PROJECT_NAME = "junit-java-app01";
-    public static final String JAVA_OWASP_BENCHMARK_PROJECT_NAME = "junit-java-owasp-benchmark";
-    public static final String PHP_OWASP_BRICKS_PROJECT_NAME = "junit-php-owasp-bricks";
-    public static final String PHP_SMOKE_MISC_PROJECT_NAME = "junit-php-smoke-misc";
-    public static final String PHP_SMOKE_MEDIUM_PROJECT_NAME = "junit-php-smoke-medium";
-    public static final String PHP_SMOKE_HIGH_PROJECT_NAME = "junit-php-smoke-high";
-    public static final String PHP_SMOKE_MULTIFLOW_PROJECT_NAME = "junit-php-smoke-multiflow";
-    public static final String JAVASCRIPT_VNWA_PROJECT_NAME = "junit-javascript-vnwa";
-    public static final String CSHARP_WEBGOAT_PROJECT_NAME = "junit-csharp-webgoat";
-
-    public static final String[] ALL_PROJECT_NAMES = new String[] { JAVA_APP01_PROJECT_NAME, JAVA_OWASP_BENCHMARK_PROJECT_NAME, PHP_OWASP_BRICKS_PROJECT_NAME, PHP_SMOKE_MISC_PROJECT_NAME, PHP_SMOKE_MEDIUM_PROJECT_NAME, PHP_SMOKE_HIGH_PROJECT_NAME, PHP_SMOKE_MULTIFLOW_PROJECT_NAME, JAVASCRIPT_VNWA_PROJECT_NAME, CSHARP_WEBGOAT_PROJECT_NAME };
+    public static final String[] ALL_PROJECT_NAMES = new String[] { JAVA_APP01_PROJECT_NAME, JAVA_OWASP_BENCHMARK_PROJECT_NAME, PHP_OWASP_BRICKS_PROJECT_NAME, PHP_SMOKE_MISC_PROJECT_NAME, PHP_SMOKE_MEDIUM_PROJECT_NAME, PHP_SMOKE_HIGH_PROJECT_NAME, PHP_SMOKE_MULTIFLOW_PROJECT_NAME, JAVASCRIPT_VNWA_PROJECT_NAME, CSHARP_WEBGOAT_PROJECT_NAME , PYTHON_DSVW_PROJECT_NAME };
 
     @Getter
     @Setter

@@ -1,5 +1,5 @@
 {
-    "ProjectName": "junit-php-owasp-bricks",
+    "ProjectName": "junit-php-smoke",
     "ProgrammingLanguage": "PHP",
     "ScanAppType": "Php, Configuration, Fingerprint, PmTaint",
     "UseTaintAnalysis": true,
