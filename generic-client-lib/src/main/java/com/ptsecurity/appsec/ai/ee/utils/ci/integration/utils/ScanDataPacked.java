@@ -20,14 +20,12 @@ import org.apache.commons.io.IOUtils;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 import java.util.zip.Deflater;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
-import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 @SuperBuilder
@@ -77,8 +75,10 @@ public class ScanDataPacked extends com.ptsecurity.appsec.ai.ee.scan.ScanDataPac
                 if (null == entry) break;
                 if (entry.isDirectory()) continue;
                 if (!DATA_FILE_NAME.equals(entry.getName())) continue;
+                log.debug("Allocating {}-byte array to read data", entry.getSize());
+                byte[] jsonData = new byte[(int) entry.getSize()];
                 log.debug("Reading packed data");
-                String jsonData = call(() -> IOUtils.toString(inputStream, UTF_8), "Packed data read failed");
+                call(() -> IOUtils.read(inputStream, jsonData), "Packed data read failed");
                 ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
                 return call(() -> (T) mapper.readValue(jsonData, clazz), "Packed object deserialization failed");
             } while (true);

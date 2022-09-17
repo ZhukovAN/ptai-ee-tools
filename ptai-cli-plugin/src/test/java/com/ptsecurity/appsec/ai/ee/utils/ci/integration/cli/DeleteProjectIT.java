@@ -30,7 +30,9 @@ class DeleteProjectIT extends BaseJsonIT {
         JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MEDIUM.getSettings()).randomizeProjectName();
         AbstractApiClient client = Assertions.assertDoesNotThrow(() -> Factory.client(CONNECTION_SETTINGS()));
         ProjectTasks projectTasks = new Factory().projectTasks(client);
-        projectTasks.setupFromJson(settings.serialize(), GENERIC_POLICY.getJson());
+        // As we do not actually need to scan this project there's no need to upload sources. And we are
+        // creating PHP project that doesn't require sources to be uploaded before scan settings are set up
+        projectTasks.setupFromJson(settings.serialize(), GENERIC_POLICY.getJson(), (projectId) -> {});
         Assertions.assertNotNull(projectTasks.searchProject(settings.getProjectName()));
         Integer res = new CommandLine(new Plugin()).execute(
                 "delete-project",
@@ -50,7 +52,9 @@ class DeleteProjectIT extends BaseJsonIT {
         JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE_MEDIUM.getSettings()).randomizeProjectName();
         AbstractApiClient client = Assertions.assertDoesNotThrow(() -> Factory.client(CONNECTION_SETTINGS()));
         ProjectTasks projectTasks = new Factory().projectTasks(client);
-        projectTasks.setupFromJson(settings.serialize(), GENERIC_POLICY.getJson());
+        // As we do not actually need to scan this project there's no need to upload sources. And we are
+        // creating PHP project that doesn't require sources to be uploaded before scan settings are set up
+        projectTasks.setupFromJson(settings.serialize(), GENERIC_POLICY.getJson(), (projectId) -> {});
         UUID projectId = projectTasks.searchProject(settings.getProjectName());
         Assertions.assertNotNull(projectId);
         Integer res = new CommandLine(new Plugin()).execute(
@@ -76,7 +80,9 @@ class DeleteProjectIT extends BaseJsonIT {
         String projectNamePrefix = settings.getProjectName();
         for (int i = 1; i <= 5 ; i++) {
             settings.setProjectName(projectNamePrefix + "-" + i);
-            projectTasks.setupFromJson(settings.serialize(), GENERIC_POLICY.getJson());
+            // As we do not actually need to scan this project there's no need to upload sources. And we are
+            // creating PHP project that doesn't require sources to be uploaded before scan settings are set up
+            projectTasks.setupFromJson(settings.serialize(), GENERIC_POLICY.getJson(), (projectId) -> {});
             UUID projectId = projectTasks.searchProject(settings.getProjectName());
             Assertions.assertNotNull(projectId);
             projects.add(Pair.of(settings.getProjectName(), projectId));
@@ -104,7 +110,9 @@ class DeleteProjectIT extends BaseJsonIT {
         String projectNamePrefix = settings.getProjectName();
         for (int i = 1; i <= 5 ; i++) {
             settings.setProjectName(projectNamePrefix + "-" + i);
-            projectTasks.setupFromJson(settings.serialize(), GENERIC_POLICY.getJson());
+            // As we do not actually need to scan this project there's no need to upload sources. And we are
+            // creating PHP project that doesn't require sources to be uploaded before scan settings are set up
+            projectTasks.setupFromJson(settings.serialize(), GENERIC_POLICY.getJson(), (projectId) -> {});
         }
         Integer res = new CommandLine(new Plugin()).execute(
                 "delete-project",

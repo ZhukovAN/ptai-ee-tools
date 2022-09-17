@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.DEPENDENCYCHECK;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.FINGERPRINT;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ConverterHelper.initRemainingSettingsFields;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper.createObjectMapper;
@@ -121,9 +123,19 @@ public class AiProjConverter {
 
         if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.CSHARP)) {
             fillCommonFields(res, settings);
+            // In PT AI v.3.6 solution file is to be defined as "solution.sln" instead of "./solution.sln"
+            String solutionFile = settings.getSolutionFile();
+            do {
+                if (StringUtils.isEmpty(solutionFile)) break;
+                solutionFile = solutionFile.trim();
+                if (!solutionFile.startsWith("./")) break;
+                log.trace("Fix solution file name {}", solutionFile);
+                solutionFile = solutionFile.substring("./".length());
+                log.trace("Fixed solution file name is {}", solutionFile);
+            } while (false);
             res
                     .projectType("Solution".equalsIgnoreCase(settings.getProjectType()) ? DotNetProjectType.Solution : DotNetProjectType.WebSite)
-                    .solutionFile(settings.getSolutionFile())
+                    .solutionFile(solutionFile)
                     .webSiteFolder(settings.getWebSiteFolder());
         }
 
@@ -132,7 +144,7 @@ public class AiProjConverter {
             // TODO: Check ignored configurationFiles as there's now such setting in aiproj JSON
         }
 
-        if (scanAppTypes.contains(AiProjScanSettings.ScanAppType.FINGERPRINT)) {
+        if (scanAppTypes.contains(FINGERPRINT) || scanAppTypes.contains(DEPENDENCYCHECK)) {
             fillCommonFields(res, settings);
             res
                     .useDefaultFingerprints(settings.getUseDefaultFingerprints())

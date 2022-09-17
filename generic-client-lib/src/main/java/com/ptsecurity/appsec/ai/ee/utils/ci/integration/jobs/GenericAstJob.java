@@ -16,6 +16,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -25,6 +26,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.State.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.AST_RESULT_REST_URL_FILENAME;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
 @Slf4j
@@ -108,20 +110,13 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         for (Base job : subJobs)
             job.validate();
 
+        // Setup project
         projectId = setupOps.setupProject();
         info("PT AI project ID is " + projectId);
 
-        // Zip sources and upload to server. Throw an exception if there are problems
-        process(Stage.ZIP);
-        File sources = astOps.createZip();
-
-        process(Stage.UPLOAD);
-        GenericAstTasks genericAstTasks = new Factory().genericAstTasks(client);
-        genericAstTasks.upload(projectId, sources);
-        if (!sources.delete()) warning("File %s delete failed", sources.getName());
-
         // Start scan
         process(Stage.ENQUEUED);
+        GenericAstTasks genericAstTasks = new Factory().genericAstTasks(client);
         scanResultId = genericAstTasks.startScan(projectId, fullScanMode);
         info("Scan enqueued, project name: %s, id: %s, result id: %s", projectName, projectId, scanResultId);
         // Now we know scan result ID, so create initial scan brief with ID's and scan settings

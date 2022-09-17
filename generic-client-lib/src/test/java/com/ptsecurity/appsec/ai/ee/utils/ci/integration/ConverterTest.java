@@ -75,8 +75,6 @@ public class ConverterTest extends BaseTest {
         try (TempFile destination = TempFile.createFolder()) {
             Path scanResults36 = destination.toPath().resolve("result").resolve("v36");
             scanResults36.toFile().mkdirs();
-            Path scanResults40 = destination.toPath().resolve("result").resolve("v40");
-            scanResults40.toFile().mkdirs();
 
             for (Project project : ALL) {
                 ScanResult scanResult = generateScanResultV36(project.getName());

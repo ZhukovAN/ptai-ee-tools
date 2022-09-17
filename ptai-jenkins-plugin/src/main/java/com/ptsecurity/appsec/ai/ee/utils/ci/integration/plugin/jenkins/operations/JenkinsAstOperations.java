@@ -55,7 +55,7 @@ public class JenkinsAstOperations implements AstOperations {
                     .removePrefix(owner.replaceMacro(transfer.getRemovePrefix()))
                     .build());
         // Upload project sources
-        FilePath remoteZip = RemoteFileUtils.collect(owner.getLauncher(), owner.getListener(), transfers, owner.getWorkspace().getRemote(), owner.isVerbose());
+        FilePath remoteZip = RemoteFileUtils.collect(owner);
         File zip = FileCollector.createTempFile();
         try (OutputStream fos = new FileOutputStream(zip)) {
             remoteZip.copyTo(fos);

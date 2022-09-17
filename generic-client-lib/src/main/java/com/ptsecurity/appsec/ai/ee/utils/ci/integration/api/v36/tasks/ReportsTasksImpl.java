@@ -18,10 +18,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Sona
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanResultHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.StringHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -305,11 +302,13 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         ScanResultHelper.apply(scanResult, sarif.getFilters());
 
         SarifSchema210 sarifSchema = com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Sarif.convert(scanResult, true);
-        String sarifStr = CallHelper.call(
-                () -> BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(sarifSchema),
-                "SARIF report serialization failed");
+        try (TempFile temporalReportFile = TempFile.createFile()) {
+            CallHelper.call(
+                    () -> BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(temporalReportFile.toFile(), sarifSchema),
+                    "SARIF report serialization failed");
 
-        call(() -> fileOps.saveArtifact(sarif.getFileName(), sarifStr), "SARIF report save failed");
+            call(() -> fileOps.saveArtifact(sarif.getFileName(), temporalReportFile.toFile()), "SARIF report save failed");
+        }
         fine("Finished: SARIF report generation for project id: %s, scan result id: %s", projectId, scanResultId);
     }
 
@@ -322,11 +321,13 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         ScanResultHelper.apply(scanResult, sonarGiif.getFilters());
 
         SonarGiifReport giifReport = com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif.convert(scanResult);
-        String giifStr = CallHelper.call(
-                () -> BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(giifReport),
-                "SonarQube GIIF report serialization failed");
+        try (TempFile temporalReportFile = TempFile.createFile()) {
+            CallHelper.call(
+                    () -> BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(temporalReportFile.toFile(), giifReport),
+                    "SonarQube GIIF report serialization failed");
 
-        call(() -> fileOps.saveArtifact(sonarGiif.getFileName(), giifStr), "SonarQube GIIF report save failed");
+            call(() -> fileOps.saveArtifact(sonarGiif.getFileName(), temporalReportFile.toFile()), "SonarQube GIIF report save failed");
+        }
         fine("Finished: SonarQube GIIF report generation for project id: %s, scan result id: %s", projectId, scanResultId);
     }
 

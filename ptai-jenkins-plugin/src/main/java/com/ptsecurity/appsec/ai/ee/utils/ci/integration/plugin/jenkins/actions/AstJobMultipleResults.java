@@ -2,7 +2,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
@@ -42,10 +41,6 @@ public class AstJobMultipleResults implements Action {
         return "ptaiTrend";
     }
 
-    public String getChartCaption() {
-        return Resources.i18n_ast_result_charts_trend_label();
-    }
-
     @Getter
     @Setter
     @SuperBuilder
@@ -65,6 +60,7 @@ public class AstJobMultipleResults implements Action {
         int count = 0;
         for (Run<?, ?> build : builds) {
             ScanBriefDetailed scanBriefDetailed = null;
+            // noinspection ConstantConditions
             do {
                 final AstJobSingleResult action = build.getAction(AstJobSingleResult.class);
                 if (null == action) break;
@@ -91,7 +87,7 @@ public class AstJobMultipleResults implements Action {
      */
     @JavaScriptMethod
     @SuppressWarnings("unused") // Called by groovy view
-    public JSONObject getVulnerabilityLevelDistributionChart(final int resultsNumber) {
+    public JSONObject getVulnerabilityLevelTrendChart(final int resultsNumber) {
         final List<BuildScanBriefDetailed> issuesModelList = getLatestAstResults(resultsNumber);
         return BaseJsonChartDataModel.convertObject(ChartDataModel.create(issuesModelList));
     }

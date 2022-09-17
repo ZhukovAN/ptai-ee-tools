@@ -8,13 +8,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class AdvancedSettings {
+public class AdvancedSettings implements Serializable {
     protected static final String SYSTEM_PREFIX = "ptai.";
     private static AdvancedSettings DEFAULT;
 
@@ -33,7 +34,9 @@ public class AdvancedSettings {
         LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE("logging.http.response.max.body.size", SettingType.INTEGER, 102400, Resources::i18n_ast_settings_advanced_logging_http_response_max_body_size),
         LOGGING_HTTP_REQUEST_MAX_BODY_SIZE("logging.http.request.max.body.size", SettingType.INTEGER, 51200, Resources::i18n_ast_settings_advanced_logging_http_request_max_body_size),
         HTTP_REQUEST_READ_TIMEOUT("http.request.read.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_http_request_read_timeout),
-        HTTP_REQUEST_WRITE_TIMEOUT("http.request.write.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_logging_http_response_max_body_size);
+        HTTP_REQUEST_WRITE_TIMEOUT("http.request.write.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_http_request_write_timeout),
+        AST_RESULT_REST_URL_FILENAME("ast.result.rest.url.filename", SettingType.STRING, "", Resources::i18n_ast_settings_advanced_ast_result_rest_url_filename),
+        JENKINS_DATA_CHUNK_SIZE("jenkins.data.chunk.size", SettingType.INTEGER, 10 * 1024 * 1024, Resources::i18n_ast_settings_advanced_jenkins_data_chunk_size);
 
         private final String name;
         private final SettingType type;

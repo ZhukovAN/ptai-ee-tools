@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.tasks;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language;
 import com.ptsecurity.appsec.ai.ee.scan.settings.v36.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
+import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.ApiException;
 import com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v36.converters.AiProjConverter;
@@ -15,8 +16,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.http.HttpStatus;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
 
@@ -130,9 +133,20 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
     public UUID searchProject(
             @NonNull final String name) throws GenericException {
         log.debug("Looking for project with name {}", name);
-        ProjectLight projectLight = call(
-                () -> client.getProjectsApi().apiProjectsLightNameGet(name),
+        // TODO: Replace with apiProjectsLightNameGet when PT AI issue will be fixed
+        boolean withoutDetails = client.getConnectionSettings().getCredentials() instanceof TokenCredentials;
+        Project project = call(
+                () -> client.getProjectsApi().apiProjectsGet(withoutDetails).stream().filter(p -> Objects.requireNonNull(p.getName()).equals(name)).findAny().orElse(null),
                 "PT AI project search failed");
+        if (null == project) {
+            log.debug("Project not found");
+            return null;
+        } else {
+            log.debug("Project found, id is {}", project.getId());
+            return project.getId();
+        }
+        /*
+        ProjectLight projectLight = call(() -> client.getProjectsApi().apiProjectsLightNameGet(name), "PT AI project search failed");
         if (null == projectLight) {
             log.debug("Project not found");
             return null;
@@ -140,7 +154,35 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
             log.debug("Project found, id is {}", projectLight.getId());
             return projectLight.getId();
         }
+         */
     }
+    protected ProjectLight searchProjectLight(
+            @NonNull final String name) throws GenericException {
+        log.debug("Looking for project with name {}", name);
+        Project project = call(
+                () -> {
+                    try {
+                        // TODO: Replace with apiProjectsLightNameGet when PT AI issue will be fixed
+                        boolean withoutDetails = client.getConnectionSettings().getCredentials() instanceof TokenCredentials;
+                        return client.getProjectsApi().apiProjectsGet(withoutDetails).stream().filter(p -> Objects.requireNonNull(p.getName()).equals(name)).findAny().orElse(null);
+                        // return client.getProjectsApi().apiProjectsLightNameGet(name);
+                    } catch (ApiException e) {
+                        log.trace("PT AI v.4.0 API returns HTTP status 204 if there's no project with given name {}", name);
+                        if (HttpStatus.SC_NO_CONTENT == e.getCode()) return null;
+                        throw e;
+                    }
+                },
+                "PT AI project search failed");
+        if (null == project) {
+            log.debug("Project not found");
+            return null;
+        } else {
+            log.debug("Project found, id is {}", project.getId());
+            return new ProjectLight().id(project.getId()).name(project.getName()).settingsId(project.getSettingsId());
+        }
+    }
+
+
 
     public String searchProject(
             @NonNull final UUID id) throws GenericException {
@@ -179,7 +221,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         return result.getId();
     }
 
-    public JsonParseBrief setupFromJson(@NonNull final String jsonSettings, final String jsonPolicy) throws GenericException {
+    public JsonParseBrief setupFromJson(@NonNull final String jsonSettings, final String jsonPolicy, @NonNull final Consumer<UUID> uploader) throws GenericException {
         log.trace("Parse settings and policy");
         // Check if JSON settings and policy are defined correctly. Throw an exception if there are problems
         AiProjScanSettings settings = (StringUtils.isEmpty(jsonSettings))
@@ -224,7 +266,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
 
         final UUID projectId;
         ProjectLight projectInfo = call(
-                () -> client.getProjectsApi().apiProjectsLightNameGet(settings.getProjectName()),
+                () -> searchProjectLight(settings.getProjectName()),
                 "PT AI project search failed");
         if (null == projectInfo) {
             CreateProjectModel createProjectModel = new CreateProjectModel();
@@ -242,6 +284,8 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                     () -> client.getProjectsApi().apiProjectsProjectIdScanSettingsPut(projectId, scanSettings),
                     "PT AI project settings update failed");
         }
+
+        uploader.accept(projectId);
 
         String policyJson = (null == policy) ? "" : JsonPolicyHelper.serialize(policy);
         call(
@@ -266,7 +310,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         // without details - if API token authentication used
         // with details - if login / password authentication used
         boolean withoutDetails = client.getConnectionSettings().getCredentials() instanceof TokenCredentials;
-        List<Project> projects = call(() -> client.getProjectsApi().apiProjectsGet(false), "PT AI project list read failed");
+        List<Project> projects = call(() -> client.getProjectsApi().apiProjectsGet(withoutDetails), "PT AI project list read failed");
         List<Pair<UUID, String>> res = new ArrayList<>();
         for (Project project : projects)
             res.add(Pair.of(project.getId(), project.getName()));

@@ -183,19 +183,19 @@ public class FileCollector {
                 // Add all the folders then files
                 String[] items = 0 == i ? dirs : files;
                 for (String item : items) {
-                // Normalize relative path
+                    // Normalize relative path
                     Path itemPath = parentFolder.resolve(item);
                     String relativePath = itemPath.toUri().normalize().getPath();
-                relativePath = StringUtils.removeStart(relativePath, parentFolder.toUri().normalize().getPath());
-                String entryName;
+                    relativePath = StringUtils.removeStart(relativePath, parentFolder.toUri().normalize().getPath());
+                    String entryName;
                     if (transfer.isFlatten()) {
                         if (0 == i) continue;
                         entryName = itemPath.getFileName().toString();
                     } else {
-                    if (!relativePath.startsWith(removePrefix))
+                        if (!relativePath.startsWith(removePrefix))
                             throw GenericException.raise("File collect failed", new IllegalArgumentException(String.format("File's %s does not starts with prefix %s", item, removePrefix)));
-                    entryName = StringUtils.removeStart(relativePath, removePrefix);
-                }
+                        entryName = StringUtils.removeStart(relativePath, removePrefix);
+                    }
                     verbose("File %s will be added as %s", itemPath.toString(), entryName);
                     res.add(new Entry(itemPath, entryName));
                 }
@@ -241,9 +241,9 @@ public class FileCollector {
             as.putArchiveEntry(new ZipArchiveEntry(entry.entryName));
             if (!Files.isDirectory(entry.path)) {
                 BufferedInputStream is = new BufferedInputStream(new FileInputStream(entry.path.toFile()));
-            int size = IOUtils.copy(is, as);
-            verbose("%s zipped", bytesToString(size));
-            is.close();
+                int size = IOUtils.copy(is, as);
+                verbose("%s zipped", bytesToString(size));
+                is.close();
             }
             as.closeArchiveEntry();
             verbose("File %s added as %s", entry.path, entry.entryName);

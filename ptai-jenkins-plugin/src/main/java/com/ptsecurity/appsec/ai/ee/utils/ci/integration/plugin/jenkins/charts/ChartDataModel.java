@@ -6,6 +6,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobMultipleResults;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.I18nHelper;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -112,9 +113,9 @@ public class ChartDataModel extends BaseJsonChartDataModel {
         for (Level level : Level.values()) {
             // SCA isues may have NONE vulnerability level so we can't ignore them
             // if (Level.NONE.equals(level)) continue;
-            legend.data.add(level.name());
+            legend.data.add(I18nHelper.i18n(level));
             ChartDataModel.Series series = Series.builder()
-                    .name(level.name())
+                    .name(I18nHelper.i18n(level))
                     .itemStyle(Series.DataItem.ItemStyle.builder()
                             .color("#" + Integer.toHexString(LEVEL_COLORS.get(level)))
                             .build())

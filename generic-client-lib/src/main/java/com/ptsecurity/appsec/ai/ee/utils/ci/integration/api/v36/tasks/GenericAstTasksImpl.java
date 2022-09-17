@@ -88,9 +88,13 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
 
         @Override
         public void run() {
-            while (!exit) {
+            do {
                 try {
                     Thread.sleep(5 * 60 * 1000);
+                    if (exit) {
+                        log.trace("Project {} polliing thread terminated", projectId);
+                        break;
+                    }
                     log.trace("Poll {} project {} scan state", projectId, scanResultId);
                     com.ptsecurity.appsec.ai.ee.server.v36.projectmanagement.model.ScanResult scanResult = call(
                             () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
@@ -110,7 +114,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                     log.error("Project polling thread interrupted", e);
                     break;
                 }
-            }
+            } while (true);
         }
 
         public void stop() {

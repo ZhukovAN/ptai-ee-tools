@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 
 @Slf4j
 @Getter
@@ -17,7 +18,7 @@ import java.io.PrintStream;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public abstract class AbstractTool implements TextOutput {
+public abstract class AbstractTool implements TextOutput, Serializable {
     public static final String DEFAULT_LOG_PREFIX = "[PT AI] ";
 
     @Builder.Default
