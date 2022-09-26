@@ -2,7 +2,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings
-import org.parboiled.common.StringUtils
+import org.apache.commons.lang3.StringUtils
 
 text(Resources.i18n_ast_settings_advanced_hint())
 ul() {
