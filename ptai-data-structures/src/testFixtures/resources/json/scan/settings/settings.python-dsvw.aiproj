@@ -1,0 +1,8 @@
+{
+    "ProjectName": "junit-python-dsvw",
+    "ProgrammingLanguage": "Python",
+    "ScanAppType": "Configuration, Fingerprint, PmTaint, DependencyCheck",
+    "UseTaintAnalysis": true,
+    "UsePmAnalysis": true,
+    "IsUsePublicAnalysisMethod": true
+}

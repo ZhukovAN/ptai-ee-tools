@@ -27,12 +27,18 @@ docker run --rm -it ptai-ee-tools:latest
 ```
 ## Jenkins and Teamcity plugins debugging
 Both Jenkins and Teamcity Gradle plugins are support starting CI server in debug mode that allows plugin developer to connect to server using IDE tools and debug plugin code. 
-### Jenkins plugin debugging 
+### Jenkins plugin debugging
+#### Server-side debugging
 To start Jenkins with debug port 8000, execute ```server``` Gradle task with `--debug-jvm` flag:
 ```
 $ ./gradlew server --debug-jvm
 ```
 See additional info on gradle-jpi-plugin [page](https://github.com/jenkinsci/gradle-jpi-plugin).
+#### Jenkins build agent debugging
+As part of plugin functions may be executed on build agents, sometimes we need to run build agent in debug mode. To do so start Jenkins agent JAR using following command:
+```
+java -jar -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8765 agent.jar -jnlpUrl http://localhost:8080/computer/ast%2Dagent/jenkins-agent.jnlp -workDir "C:\DATA\DEVEL\TEST"
+```
 ### Teamcity plugin debugging
 To start Teamcity server and agents with debug ports 10111 and 10112 accordingly, execute ```startTeamcity``` Gradle task:
 ```

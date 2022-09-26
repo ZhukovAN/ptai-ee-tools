@@ -193,4 +193,11 @@
 + [Feature] Advanced setting ast.result.rest.url.filename added. If its value is defined then AST result URL will be saved to corresponding file
 ### 20220902
 + [Fix] Added test that creates project with "/" character in its name
-+ [Fix] Workaround implemented to fix "/"-containing project name issua
++ [Fix] Workaround implemented to fix "/"-containing project name issue
+### 20220907
++ [Fix] RemoteFileUtils now uses multipart file upload that fixes OutOfMemory error when Jenkins attempts to deliver really big reports to agent workspace using serialization
++ [Feature] Remote Jenkins agent console logging support added
+### 20220912
++ [Fix] Non-abstract-interpretation language (Python etc.) project creation fixed
++ [Fix] Project name with slash workaround applied to 3.6 and 4.0 API clients
++ [Feature] Python DSVW test code added
