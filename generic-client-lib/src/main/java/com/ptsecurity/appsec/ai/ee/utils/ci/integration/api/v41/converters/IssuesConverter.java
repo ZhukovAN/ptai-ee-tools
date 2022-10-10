@@ -280,30 +280,6 @@ public class IssuesConverter {
                 .build();
     }
 
-    public static VulnerabilityIssue.Exploit convert(final V41Exploit exploit) {
-        if (null == exploit) return null;
-        VulnerabilityIssue.Exploit res = VulnerabilityIssue.Exploit.builder()
-                .url(exploit.getUrl())
-                .text(exploit.getText())
-                .type(exploit.getType())
-                .build();
-        if (null != exploit.getParameters() && !exploit.getParameters().isEmpty())
-            res.setParameter(exploit.getParameters().stream().map(IssuesConverter::convert).collect(Collectors.toList()));
-        return res;
-    }
-
-    public static VulnerabilityIssue.Exploit.Parameter convert(final V41ExploitParameter parameter) {
-        if (null == parameter) return null;
-        return VulnerabilityIssue.Exploit.Parameter.builder()
-                .name(parameter.getName())
-                .value(parameter.getValue())
-                .source(parameter.getSource())
-                .dependency(parameter.getDependency())
-                .payload(parameter.getPayload())
-                .vulnerable(parameter.getVulnerable())
-                .build();
-    }
-
     public static VulnerabilityIssue.BestPlaceToFix convert(final V41BestPlaceToFix bpf) {
         if (null == bpf) return null;
         return VulnerabilityIssue.BestPlaceToFix.builder()
@@ -595,8 +571,6 @@ public class IssuesConverter {
             res.setScanMode(SCAN_MODE_MAP.getOrDefault(issue.getScanMode(), VulnerabilityIssue.ScanMode.FROM_OTHER));
             res.setBpf(convert(issue.getBestPlaceToFix()));
             res.setConditions(issue.getAdditionalConditions());
-            res.setExploit(convert(issue.getExploit()));
-            res.setAutocheckExploit(convert(issue.getAutocheckExploit()));
 
             return Collections.singletonList(res);
         } else if (IssueType.Weakness == issueType) {
