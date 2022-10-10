@@ -1,100 +1,17 @@
 openapi: 3.0.1
 info:
-  title: filesStore
+  title: updateServer
   version: 1.0.0
 paths:
-  /api/directoryContent/{projectId}:
+  /api/distributions/{product}/latest:
     get:
       tags:
-        - DirectoryContent
-      summary: Get project`s directory content information
-      operationId: RootDirectoryContent
+        - Distributions
+      summary: Get latest product`s installator
       parameters:
-        - name: projectId
+        - name: product
           in: path
-          description: Project id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: depth
-          in: query
-          description: Depth of expanding of elements
-          schema:
-            type: integer
-            format: int32
-      responses:
-        '200':
-          description: Returns the directory content information
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DirectoryContent'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-        '401':
-          description: Unauthorized
-  /api/directoryContent/{projectId}/{path}:
-    get:
-      tags:
-        - DirectoryContent
-      summary: Get project`s directory content information
-      operationId: DirectoryContent
-      parameters:
-        - name: projectId
-          in: path
-          description: Project id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: path
-          in: path
-          description: Subdirectory path. For root set empty
-          required: true
-          schema:
-            type: string
-        - name: depth
-          in: query
-          description: Depth of expanding of elements
-          schema:
-            type: integer
-            format: int32
-      responses:
-        '200':
-          description: Returns the directory content information
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DirectoryContent'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema: {}
-        '401':
-          description: Unauthorized
-  /api/fileContent/{projectId}/{file}:
-    get:
-      tags:
-        - FileContent
-      summary: File content
-      operationId: GetFileContent
-      parameters:
-        - name: projectId
-          in: path
-          description: Project id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: file
-          in: path
-          description: Relative file path in project
+          description: product code
           required: true
           schema:
             type: string
@@ -115,83 +32,29 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
-        '401':
-          description: Unauthorized
-  /api/fileContent/{projectId}/scanResults/{scanResultId}/VfsNode:
+  /api/distributions/{product}/{version}:
     get:
       tags:
-        - FileContent
-      summary: File content by Node path
+        - Distributions
+      summary: Get product`s installator by version
       parameters:
-        - name: projectId
+        - name: product
           in: path
-          description: Project id
+          description: product code
           required: true
           schema:
             type: string
-            format: uuid
-        - name: scanResultId
+        - name: version
           in: path
-          description: Scan result id
+          description: product version
           required: true
           schema:
             type: string
-            format: uuid
-        - name: nodePath
-          in: query
-          description: Node path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/octet-stream: {}
-        '400':
-          description: Bad Request
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-        '401':
-          description: Unauthorized
-  /api/sourceControl/supportedCredentials/{vcsType}:
-    get:
-      tags:
-        - SourceControl
-      summary: Get supported credentials types
-      parameters:
-        - name: vcsType
-          in: path
-          description: Repostory type
-          required: true
-          schema:
-            $ref: '#/components/schemas/RepositoryType'
       responses:
         '200':
           description: Success
           content:
-            text/plain:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SourceControlCredentalsType'
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SourceControlCredentalsType'
-            text/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SourceControlCredentalsType'
+            application/octet-stream: {}
         '400':
           description: Bad Request
           content:
@@ -206,42 +69,101 @@ paths:
                 $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
-  /api/sourceControl/project:
+  /api/distributions/notes/{lang}/latest:
+    get:
+      tags:
+        - Distributions
+      summary: Get latest release notes
+      parameters:
+        - name: lang
+          in: path
+          description: language code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/octet-stream: {}
+        '401':
+          description: Unauthorized
+  /api/distributions/notes/{lang}:
+    get:
+      tags:
+        - Distributions
+      summary: Get current release notes
+      parameters:
+        - name: lang
+          in: path
+          description: language code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/octet-stream: {}
+        '401':
+          description: Unauthorized
+  /api/distributions/package/upload:
     post:
       tags:
-        - SourceControl
-      summary: Create temp project.
+        - Distributions
+      summary: "Manual upload update package\r\nPass file in body"
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/distributions/package/upload/stop:
+    post:
+      tags:
+        - Distributions
+      summary: Stop downloading package. Only if the user started.
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/update/start:
+    post:
+      tags:
+        - ServerUpdate
+      summary: Start server update
+      parameters:
+        - name: isHardUpdate
+          in: query
+          description: Stop all scans and hard update
+          schema:
+            type: boolean
       requestBody:
-        description: ''
+        description: Update parameters
         content:
           application/json-patch+json:
             schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
+              $ref: '#/components/schemas/ServerUpdateRunParameters'
           application/json:
             schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
+              $ref: '#/components/schemas/ServerUpdateRunParameters'
           text/json:
             schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
+              $ref: '#/components/schemas/ServerUpdateRunParameters'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
+              $ref: '#/components/schemas/ServerUpdateRunParameters'
       responses:
-        '200':
-          description: Success
-          content:
-            text/plain:
-              schema:
-                type: string
-                format: uuid
-            application/json:
-              schema:
-                type: string
-                format: uuid
-            text/json:
-              schema:
-                type: string
-                format: uuid
         '400':
           description: Bad Request
           content:
@@ -256,34 +178,142 @@ paths:
                 $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
-  /api/sourceControl/project/{projectId}:
-    patch:
+  /api/update/status:
+    get:
       tags:
-        - SourceControl
-      summary: Update projects source control connection settings.
+        - ServerUpdate
+      summary: Get current update status
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UpdateStatusType'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateStatusType'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UpdateStatusType'
+  /api/versions/{product}/latest:
+    get:
+      tags:
+        - Version
+      summary: Get latest product version number (current or candidate)
       parameters:
-        - name: projectId
+        - name: product
+          in: path
+          description: product code
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/versions/package/latest:
+    get:
+      tags:
+        - Version
+      summary: Get latest package version number (current or candidate)
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/versions/required:
+    get:
+      tags:
+        - Version
+      summary: Get minimal required product version
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: integer
+                format: int32
+            application/json:
+              schema:
+                type: integer
+                format: int32
+            text/json:
+              schema:
+                type: integer
+                format: int32
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/versions/{product}/current:
+    get:
+      tags:
+        - Version
+      summary: Get current product version number
+      parameters:
+        - name: product
           in: path
           description: ''
           required: true
           schema:
             type: string
-            format: uuid
-      requestBody:
-        description: ''
-        content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/SourceControlConnectionSettingsModel'
       responses:
         '200':
           description: Success
@@ -291,15 +321,12 @@ paths:
             text/plain:
               schema:
                 type: string
-                format: uuid
             application/json:
               schema:
                 type: string
-                format: uuid
             text/json:
               schema:
                 type: string
-                format: uuid
         '400':
           description: Bad Request
           content:
@@ -314,44 +341,24 @@ paths:
                 $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
-  /api/sourceControl/{projectId}/branches:
+  /api/versions/package/current:
     get:
       tags:
-        - SourceControl
-      summary: Read branches from project`s repository.
-      operationId: Branches
-      parameters:
-        - name: project
-          in: query
-          description: Selected project. TFS only.
-          schema:
-            type: string
-        - name: projectId
-          in: path
-          description: Project id
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - Version
+      summary: Get current package version number
       responses:
         '200':
           description: Success
           content:
             text/plain:
               schema:
-                type: array
-                items:
-                  type: string
+                type: string
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                type: string
             text/json:
               schema:
-                type: array
-                items:
-                  type: string
+                type: string
         '400':
           description: Bad Request
           content:
@@ -366,89 +373,24 @@ paths:
                 $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
-  /api/sourceControl/{projectId}/checkout:
-    post:
-      tags:
-        - SourceControl
-      summary: Checkout project`s repository. Pass settings in body. Progress send in the background in notifications
-      parameters:
-        - name: projectId
-          in: path
-          description: Project id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: isNew
-          in: query
-          description: Flag of not stored settings
-          schema:
-            type: boolean
-      requestBody:
-        description: If null is passed null previous settings will be used
-        content:
-          application/json-patch+json:
-            schema:
-              $ref: '#/components/schemas/SourceControlSettingsModel'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SourceControlSettingsModel'
-          text/json:
-            schema:
-              $ref: '#/components/schemas/SourceControlSettingsModel'
-          application/*+json:
-            schema:
-              $ref: '#/components/schemas/SourceControlSettingsModel'
-      responses:
-        '200':
-          description: Success
-        '400':
-          description: Bad Request
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-        '401':
-          description: Unauthorized
-  /api/sourceControl/{projectId}/projects:
+  /api/versions/package/deployed:
     get:
       tags:
-        - SourceControl
-      summary: Get projects
-      operationId: Projects
-      parameters:
-        - name: projectId
-          in: path
-          description: Project id
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - Version
+      summary: Gets deploy time
       responses:
         '200':
           description: Success
           content:
             text/plain:
               schema:
-                type: array
-                items:
-                  type: string
+                type: string
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
+                type: string
             text/json:
               schema:
-                type: array
-                items:
-                  type: string
+                type: string
         '400':
           description: Bad Request
           content:
@@ -463,108 +405,36 @@ paths:
                 $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
-  /api/store/project:
-    post:
+  /api/versions/{product}/hasNew:
+    get:
       tags:
-        - Store
-      summary: Create project with sources and default settings. Uploading sources in the background after returning project Id. Pass files in Form
-      responses:
-        '400':
-          description: Bad Request
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-        '401':
-          description: Unauthorized
-        '404':
-          description: Not Found
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-  /api/store/{projectId}/sources:
-    post:
-      tags:
-        - Store
-      summary: Upload sources using files collection
+        - Version
+      summary: Check product has new version
       parameters:
-        - name: projectId
+        - name: product
           in: path
-          description: Project id
+          description: product code
           required: true
           schema:
             type: string
-            format: uuid
-        - name: archived
+        - name: version
           in: query
-          description: Sources in archive
+          description: current installed version number
           schema:
-            type: boolean
-        - name: noNeedToActualize
-          in: query
-          description: Disable actualize settings by sources
-          schema:
-            type: boolean
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                files:
-                  type: array
-                  items:
-                    type: string
-                    format: binary
-            encoding:
-              files:
-                style: form
+            type: string
       responses:
-        '401':
-          description: Unauthorized
-        '404':
-          description: Not Found
+        '200':
+          description: Success
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/ApiErrorModel'
+                type: boolean
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorModel'
+                type: boolean
             text/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-    get:
-      tags:
-        - Store
-      summary: Saved sources
-      operationId: DownloadSources
-      parameters:
-        - name: projectId
-          in: path
-          description: project id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          description: OK
-          content:
-            application/zip: {}
+                type: boolean
         '400':
           description: Bad Request
           content:
@@ -579,122 +449,26 @@ paths:
                 $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
-        '404':
-          description: Not Found
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-  /api/store/{projectId}/logs/{scanResultId}:
+  /api/versions/package/hasCandidate:
     get:
       tags:
-        - Store
-      summary: Saved scan logs
-      operationId: DownloadLogs
-      parameters:
-        - name: projectId
-          in: path
-          description: project id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: scanResultId
-          in: path
-          description: Scan result id
-          required: true
-          schema:
-            type: string
-            format: uuid
+        - Version
+      summary: Check has package candidate
       responses:
         '200':
-          description: OK
-          content:
-            application/zip: {}
-        '400':
-          description: Bad Request
+          description: Success
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/ApiErrorModel'
+                type: boolean
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorModel'
+                type: boolean
             text/json:
               schema:
-                $ref: '#/components/schemas/ApiErrorModel'
+                type: boolean
         '401':
           description: Unauthorized
-        '404':
-          description: Not Found
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-  /api/store/{projectId}/reports/{scanResultId}:
-    get:
-      tags:
-        - Store
-      summary: Saved scan reports
-      operationId: DownloadReports
-      parameters:
-        - name: projectId
-          in: path
-          description: Project id
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: scanResultId
-          in: path
-          description: Scan result id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '200':
-          description: OK
-          content:
-            application/zip: {}
-        '400':
-          description: Bad Request
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-        '401':
-          description: Unauthorized
-        '404':
-          description: Not Found
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
 components:
   schemas:
     ApiErrorModel:
@@ -720,6 +494,7 @@ components:
         - PASSWORD_IS_INCORRECT
         - USER_IS_INCORRECT
         - INITIATOR_NOT_FOUND
+        - ROOT_LOGIN_VIA_VIEWER_IS_NOT_ALLOWED
         - CREDENTIAL_STORE_IS_UNVAILABLE_OR_TAINTED
         - USER_BLOCKED
         - EXT_AUTH_PROVIDERS_GET_ERROR
@@ -808,12 +583,11 @@ components:
         - PROJECT_WITH_SAME_NAME_ALREADY_EXISTS
         - UNEXPECTED_SCAN_STAGE
         - PROJECT_NOT_FOUND
-        - SCANRESULT_NOT_FOUND
         - INVALID_JSON_FIELDS
         - INCORRECT_SAST_RULES
         - UNEXPECTED_LANGUAGE
+        - MAIL_PROFILES_NOT_EXISTS
         - MAIL_PROFILE_NOT_FOUND
-        - UPDATER_NOT_SET
         - ISSUE_TRACKER_CONNECTION_NOT_FOUND
         - ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET
         - ISSUE_TRACKER_SETTINGS_ID_NOT_SET
@@ -887,77 +661,32 @@ components:
         - INVALID_UPLOAD_PATH
         - INVALID_PATH_PARAMETER
         - COULD_NOT_CHECKOUT_PROJECT
-        - COULD_NOT_UPDATE_PROJECT_SOURCES_FROM_SOURCE_CONTROL
         - USER_ID_IS_INCORRECT
       type: string
       format: ''
-    DirectoryContent:
+    ServerUpdateRunParameters:
       type: object
       properties:
-        _directories:
-          type: array
-          items:
-            $ref: '#/components/schemas/DirectoryContent'
-        _files:
-          type: array
-          items:
+        newParameters:
+          type: object
+          additionalProperties:
             type: string
-        _hasContent:
-          type: boolean
-        name:
-          type: string
           nullable: true
+        updateRequestId:
+          type: string
+          format: uuid
       additionalProperties: false
-    RepositoryType:
+    UpdateStatusType:
       enum:
         - None
-        - Git
-        - TFS
+        - Started
+        - WaitingForStarted
+        - Finished
+        - Aborted
+        - UploadPackage
+        - UploadPackageFinished
       type: string
       format: ''
-    SourceControlConnectionSettingsModel:
-      type: object
-      properties:
-        repositoryType:
-          $ref: '#/components/schemas/RepositoryType'
-        repositoryUrl:
-          type: string
-          nullable: true
-        sourceControlCredentialsType:
-          $ref: '#/components/schemas/SourceControlCredentalsType'
-        login:
-          type: string
-          nullable: true
-        password:
-          type: string
-          nullable: true
-        authenticationToken:
-          type: string
-          nullable: true
-      additionalProperties: false
-    SourceControlCredentalsType:
-      enum:
-        - None
-        - Anonymous
-        - Password
-        - AuthenticationToken
-      type: string
-      format: ''
-    SourceControlSettingsModel:
-      type: object
-      properties:
-        projectCollection:
-          type: string
-          nullable: true
-        project:
-          type: string
-          nullable: true
-        branch:
-          type: string
-          nullable: true
-        includesSubmodules:
-          type: boolean
-      additionalProperties: false
   securitySchemes:
     Bearer:
       type: apiKey

@@ -419,6 +419,21 @@ swaggerSources {
             ]
         }
     }
+
+    legacy411 {
+        inputFile = file('src/main/resources/api/v411/legacy/updateServer.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v411.legacy.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v411.legacy.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
 }
 
 compileJava.dependsOn \
@@ -450,7 +465,8 @@ compileJava.dependsOn \
  swaggerSources.filesstore411.code, \
  swaggerSources.projectmanagement411.code, \
  swaggerSources.scanscheduler411.code, \
- swaggerSources.systemmanagement411.code
+ swaggerSources.systemmanagement411.code, \
+ swaggerSources.legacy411.code
 
 sourceSets.main.java.srcDirs \
  "${swaggerSources.auth36.code.outputDir}/src/main/java", \
@@ -481,6 +497,7 @@ sourceSets.main.java.srcDirs \
  "${swaggerSources.filesstore411.code.outputDir}/src/main/java", \
  "${swaggerSources.projectmanagement411.code.outputDir}/src/main/java", \
  "${swaggerSources.scanscheduler411.code.outputDir}/src/main/java", \
- "${swaggerSources.systemmanagement411.code.outputDir}/src/main/java"
+ "${swaggerSources.systemmanagement411.code.outputDir}/src/main/java", \
+ "${swaggerSources.legacy411.code.outputDir}/src/main/java"
 
 

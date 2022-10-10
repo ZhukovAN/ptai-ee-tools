@@ -522,6 +522,20 @@ paths:
           description: Disable actualize settings by sources
           schema:
             type: boolean
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+            encoding:
+              files:
+                style: form
       responses:
         '401':
           description: Unauthorized
