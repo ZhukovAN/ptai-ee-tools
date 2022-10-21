@@ -4356,6 +4356,9 @@ components:
       additionalProperties: false
     VulnerabilityModel:
       type: object
+      required:
+        - id
+        - issueType
       properties:
         id:
           type: string

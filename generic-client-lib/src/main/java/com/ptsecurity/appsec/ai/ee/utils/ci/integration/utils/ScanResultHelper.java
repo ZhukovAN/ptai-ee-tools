@@ -141,8 +141,8 @@ public class ScanResultHelper {
             Iterator<BaseIssue> iterator = scanResult.getIssues().iterator();
             while (iterator.hasNext()) {
                 BaseIssue issue = iterator.next();
-                if (scanResult.getId().equals(issue.getNewInScanResultId()) && actualStatuses.contains(Reports.IssuesFilter.ActualStatus.ISNEW)) continue;
-                if (!scanResult.getId().equals(issue.getNewInScanResultId()) && actualStatuses.contains(Reports.IssuesFilter.ActualStatus.NOTISNEW)) continue;
+                if (issue.getIsNew() && actualStatuses.contains(Reports.IssuesFilter.ActualStatus.ISNEW)) continue;
+                if (!issue.getIsNew() && actualStatuses.contains(Reports.IssuesFilter.ActualStatus.NOTISNEW)) continue;
                 iterator.remove();
             }
         }

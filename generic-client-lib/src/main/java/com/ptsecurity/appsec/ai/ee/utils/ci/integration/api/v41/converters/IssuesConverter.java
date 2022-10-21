@@ -239,7 +239,7 @@ public class IssuesConverter {
                 metadataMap.put(metadata.getKey(), metadata);
         if (null != model.getIssues()) {
             for (IssueBase issue : model.getIssues()) {
-                List<BaseIssue> issues = convert(issue, metadataMap, dictionary);
+                List<BaseIssue> issues = convert(scanResult.getId(), issue, metadataMap, dictionary);
                 if (null != issues && !issues.isEmpty())
                     res.getIssues().addAll(issues);
                 else
@@ -318,6 +318,7 @@ public class IssuesConverter {
      * @param destination PT AI API version independent base issue
      */
     protected static void setBaseFields(
+            @NonNull final UUID scanResultId,
             @NonNull final IssueBase source,
             @NonNull final BaseIssue destination,
             @NonNull final Map<String, Map<Reports.Locale, ScanResult.Strings>> dictionary) {
@@ -329,7 +330,7 @@ public class IssuesConverter {
         destination.setFavorite(source.getIsFavorite());
         destination.setSuppressed(source.getIsSuppressed());
         destination.setSuspected(source.getIsSuspected());
-        destination.setNewInScanResultId(source.getIsNewInScanResultId());
+        destination.setIsNew(scanResultId.equals(source.getIsNewInScanResultId()));
 
         destination.setTypeId(source.getType());
     }
@@ -437,6 +438,7 @@ public class IssuesConverter {
      * @return PT AI API version independent vulnerability instance
      */
     protected static List<BaseIssue> convert(
+            @NonNull final UUID scanResultId,
             @NonNull final IssueBase issueBase,
             @NonNull final Map<String, IssueBaseMetadata> metadataMap,
             @NonNull final Map<String, Map<Reports.Locale, ScanResult.Strings>> dictionary) {
@@ -467,7 +469,7 @@ public class IssuesConverter {
                 V41BlackBoxIssue issue = (V41BlackBoxIssue) issueBase;
 
                 BlackBoxIssue res = new BlackBoxIssue();
-                setBaseFields(issue, res, dictionary);
+                setBaseFields(scanResultId, issue, res, dictionary);
                 applyMetadata(baseMetadata, res);
 
                 return Collections.singletonList(res);
@@ -475,7 +477,7 @@ public class IssuesConverter {
             V41ConfigurationIssue issue = (V41ConfigurationIssue) issueBase;
 
             ConfigurationIssue res = new ConfigurationIssue();
-            setBaseFields(issue, res, dictionary);
+            setBaseFields(scanResultId, issue, res, dictionary);
             applyMetadata(baseMetadata, res);
 
             res.setVulnerableExpression(convert(issue.getVulnerableExpression()));
@@ -507,7 +509,7 @@ public class IssuesConverter {
                 // type field and linked using fingerprintId instead. Let's init it with fingerprintId
                 // to avoid setBaseFields change
                 issue.setType(fingerprintId);
-                setBaseFields(issue, res, dictionary);
+                setBaseFields(scanResultId, issue, res, dictionary);
                 // As single v41FingerprintIssue may have multiple fingerprint IDs
                 // PT AI looks these IDs for maximum severity level and assigns it
                 // to issue. But as we decide to create individual ScaIssue for
@@ -537,13 +539,13 @@ public class IssuesConverter {
             V41UnknownIssue issue = (V41UnknownIssue) issueBase;
 
             UnknownIssue res = new UnknownIssue();
-            setBaseFields(issue, res, dictionary);
+            setBaseFields(scanResultId, issue, res, dictionary);
             return Collections.singletonList(res);
         } else if (IssueType.Vulnerability == issueType) {
             V41VulnerabilityIssue issue = (V41VulnerabilityIssue) issueBase;
 
             VulnerabilityIssue res = new VulnerabilityIssue();
-            setBaseFields(issue, res, dictionary);
+            setBaseFields(scanResultId, issue, res, dictionary);
             applyMetadata(baseMetadata, res);
 
             res.setSecondOrder(issue.getIsSecondOrder());
@@ -567,7 +569,7 @@ public class IssuesConverter {
             V41WeaknessIssue issue = (V41WeaknessIssue) issueBase;
 
             WeaknessIssue res = new WeaknessIssue();
-            setBaseFields(issue, res, dictionary);
+            setBaseFields(scanResultId, issue, res, dictionary);
             applyMetadata(baseMetadata, res);
             res.setVulnerableExpression(convert(issue.getVulnerableExpression()));
 
@@ -576,7 +578,7 @@ public class IssuesConverter {
             V41YaraMatchIssue issue = (V41YaraMatchIssue) issueBase;
 
             YaraMatchIssue res = new YaraMatchIssue();
-            setBaseFields(issue, res, dictionary);
+            setBaseFields(scanResultId, issue, res, dictionary);
             return Collections.singletonList(res);
         } else
             return null;

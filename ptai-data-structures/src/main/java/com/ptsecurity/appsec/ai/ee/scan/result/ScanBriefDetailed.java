@@ -79,10 +79,10 @@ public class ScanBriefDetailed extends ScanBrief {
                 protected BaseIssue.ApprovalState approvalState;
 
                 /**
-                 * See {@link BaseIssue#getNewInScanResultId()} description
+                 * See {@link BaseIssue#getIsNew()} description
                  */
-                @JsonProperty("newInScanResultId")
-                protected UUID newInScanResultId;
+                @JsonProperty("isNew")
+                protected Boolean isNew;
 
                 /**
                  * See {@link VulnerabilityIssue#getScanMode()} description
@@ -192,7 +192,7 @@ public class ScanBriefDetailed extends ScanBrief {
                                     .title(title)
                                     .favorite(issue.getFavorite())
                                     .level(issue.getLevel())
-                                    .newInScanResultId(issue.getNewInScanResultId())
+                                    .isNew(issue.getIsNew())
                                     .suppressed(issue.getSuppressed())
                                     .suspected(issue.getSuspected())
                                     .suppressed(issue.getSuppressed())
@@ -213,7 +213,7 @@ public class ScanBriefDetailed extends ScanBrief {
                     .clazz(key.getClazz())
                     .favorite(key.getFavorite())
                     .level(key.getLevel())
-                    .newInScanResultId(key.getNewInScanResultId())
+                    .isNew(key.getIsNew())
                     .title(key.getTitle())
                     .suspected(key.getSuspected())
                     .suppressed(key.getSuppressed())

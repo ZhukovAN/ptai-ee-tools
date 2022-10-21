@@ -157,9 +157,8 @@ public abstract class BaseIssue {
     @JsonProperty("approvalState")
     protected ApprovalState approvalState;
 
-    // TODO: Migrate to isNew property
-    @JsonProperty("newInScanResultId")
-    protected UUID newInScanResultId;
+    @JsonProperty("isNew")
+    protected Boolean isNew;
 
     /**
      * Unique vulnerability type identifier in the CWE classifier

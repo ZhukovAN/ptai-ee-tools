@@ -204,3 +204,5 @@
 ### 20221021
 + [Feature] PT AI v.4.1.1 support added
 + [Fix] Fixed PT AI 3.6 issue title / descriptions international encodings
++ [Fix] BaseIssue's isNew implemented instead of isNewInScanResultId
++ [Fix] SCA issue title fixed

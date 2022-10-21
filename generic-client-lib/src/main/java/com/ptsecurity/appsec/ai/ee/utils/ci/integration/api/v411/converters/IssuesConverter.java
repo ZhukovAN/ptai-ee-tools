@@ -240,8 +240,9 @@ public class IssuesConverter {
         destination.setFavorite(source.getIsFavorite());
         destination.setSuppressed(source.getIsSuppressed());
         destination.setSuspected(source.getIsSuspected());
-        // TODO: Migrate to isNew property
-        // destination.setNewInScanResultId(source.getIsNewInScanResultId());
+        destination.setIsNew(source.getIsNew());
+        // Do not set SCA issue type Id as there's "IssueDetected" in source type field
+        if (destination instanceof ScaIssue) return;
         destination.setTypeId(source.getType());
     }
 
@@ -255,24 +256,25 @@ public class IssuesConverter {
         Map<Reports.Locale, ScanResult.Strings> i18n = new HashMap<>();
         for (Reports.Locale locale : Reports.Locale.values()) {
             Map<String, String> localizedHeader = localizedIssuesHeaders.get(locale);
-            if (null == localizedHeader || !localizedHeader.containsKey(nativeIssueTypeKey)) {
-                log.trace("There's no localized headers for issue {}", issue);
-                i18n.put(locale, ScanResult.Strings.builder().title(issue.getType()).build());
-            } else {
-                String localizedTitle = localizedHeader.get(nativeIssueTypeKey);
+            String localizedTitle;
+            if (IssueType.FINGERPRINT == issue.getIssueType()) {
                 // PT AI 4.1.1 SCA issues have no headers mapping
-                if (IssueType.FINGERPRINT == issue.getIssueType()) {
-                    localizedTitle = (RU == locale) ? "Уязвимый компонент" : "Vulnerable component";
-                    if (null != issue.getVulnerableComponent()) {
-                        if (StringUtils.isNotEmpty(issue.getVulnerableComponent().getComponent())) {
-                            localizedTitle += " " + issue.getVulnerableComponent().getComponent();
-                            if (StringUtils.isNotEmpty(issue.getVulnerableComponent().getVersion()))
-                                localizedTitle += " " + issue.getVulnerableComponent().getVersion();
-                        }
+                localizedTitle = (RU == locale) ? "Уязвимый компонент" : "Vulnerable component";
+                if (null != issue.getVulnerableComponent()) {
+                    if (StringUtils.isNotEmpty(issue.getVulnerableComponent().getComponent())) {
+                        localizedTitle += " " + issue.getVulnerableComponent().getComponent();
+                        if (StringUtils.isNotEmpty(issue.getVulnerableComponent().getVersion()))
+                            localizedTitle += " " + issue.getVulnerableComponent().getVersion();
                     }
                 }
-                i18n.put(locale, ScanResult.Strings.builder().title(localizedTitle).build());
+            } else {
+                if (null == localizedHeader || !localizedHeader.containsKey(nativeIssueTypeKey)) {
+                    log.trace("There's no localized headers for issue {}", issue);
+                    localizedTitle = issue.getType();
+                } else
+                    localizedTitle = localizedHeader.get(nativeIssueTypeKey);
             }
+            i18n.put(locale, ScanResult.Strings.builder().title(localizedTitle).build());
         }
         scanResult.getI18n().put(baseIssue.getIssueTypeKey(), i18n);
     }

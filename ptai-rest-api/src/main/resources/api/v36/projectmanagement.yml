@@ -4246,6 +4246,10 @@ components:
       additionalProperties: false
     ScanResult:
       type: object
+      required:
+        - id
+        - projectId
+        - settingsId
       properties:
         id:
           type: string
