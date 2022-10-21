@@ -12,7 +12,6 @@ import java.util.UUID;
 public class Error {
     private String type;
     private String message;
-    private String file;
 
     private boolean critical;
 

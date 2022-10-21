@@ -1,13 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -21,19 +24,22 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.
 @Slf4j
 public class BaseJsonHelper {
     public static ObjectMapper createObjectMapper() {
-        return new ObjectMapper()
+        return JsonMapper.builder()
+                .addModule(new JavaTimeModule())
+                .build()
                 // Need this as JSONs like aiproj settings may contain comments
                 .enable(JsonParser.Feature.ALLOW_COMMENTS)
                 // Need this as JSON report contains "Descriptions" while IssuesModel have "descriptions"
                 .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
                 .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
                 // Need this as IssuesModel JSON report contains fields like "link" that are missing from IssueDescriptionModel
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     public static String serialize(Object data) throws GenericException {
         return call(
-                () -> new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(data),
+                () -> createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(data),
                 "JSON settings serialization failed");
     }
 
@@ -43,9 +49,10 @@ public class BaseJsonHelper {
      * @throws GenericException
      */
     public static String minimize(@NonNull String json) throws GenericException {
-        JsonNode root = call(() -> createObjectMapper().readTree(json), "JSON read failed");
+        final ObjectMapper mapper = createObjectMapper();
+        JsonNode root = call(() -> mapper.readTree(json), "JSON read failed");
         return call(
-                () -> new ObjectMapper().writeValueAsString(root),
+                () -> mapper.writeValueAsString(root),
                 "JSON serialization failed");
     }
 
@@ -68,11 +75,12 @@ public class BaseJsonHelper {
     }
 
     public static String replaceMacro(@NonNull String json, @NonNull Function<String, String> converter) throws GenericException {
-        JsonNode root = call(() -> createObjectMapper().readTree(json), "JSON read failed");
+        final ObjectMapper mapper = createObjectMapper();
+        JsonNode root = call(() -> mapper.readTree(json), "JSON read failed");
         log.trace("Process JSON nameless root node");
         processJsonNode(null, root, converter);
         return call(
-                () -> new ObjectMapper().writeValueAsString(root),
+                () -> mapper.writeValueAsString(root),
                 "JSON serialization failed");
     }
 }

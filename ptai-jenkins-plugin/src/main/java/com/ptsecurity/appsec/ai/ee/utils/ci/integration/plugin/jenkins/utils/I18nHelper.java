@@ -50,7 +50,9 @@ public class I18nHelper {
         SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT, Resources::i18n_misc_enums_vulnerability_scanmode_entrypoint);
         SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.FROM_OTHER, Resources::i18n_misc_enums_vulnerability_scanmode_other);
         SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED, Resources::i18n_misc_enums_vulnerability_scanmode_publicprotected);
+        SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.TAINT, Resources::i18n_misc_enums_vulnerability_scanmode_taint);
         SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.NONE, Resources::i18n_misc_enums_vulnerability_scanmode_none);
+        SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.UNKNOWN, Resources::i18n_misc_enums_vulnerability_scanmode_unknown);
 
         STAGE_SUPPLIER_MAP.put(Stage.ABORTED, Resources::i18n_misc_enums_progress_stage_aborted);
         STAGE_SUPPLIER_MAP.put(Stage.FAILED, Resources::i18n_misc_enums_progress_stage_failed);

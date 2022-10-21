@@ -6,6 +6,7 @@ plugins {
 group = "${rootGroup}"
 
 dependencies {
+    api project(':pt-misc-tools')
     api project(':ptai-i18n')
 
     // https://mvnrepository.com/artifact/org.jsoup/jsoup

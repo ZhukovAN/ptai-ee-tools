@@ -3,7 +3,7 @@ info:
   title: projectManagement
   version: 1.0.0
 servers:
-  - url: https://ptai4.domain.org:443/
+  - url: https://ptai40.domain.org:443/
 security:
   - Bearer: []
 paths:
@@ -5950,44 +5950,6 @@ components:
         BeginColumn:
           type: integer
           nullable: false
-    V40ExploitParameter:
-      type: object
-      properties:
-        Name:
-          type: string
-          nullable: false
-        Value:
-          type: string
-          nullable: false
-        Source:
-          type: string
-          nullable: false
-        Payload:
-          type: string
-          nullable: true
-        Dependency:
-          type: string
-          nullable: false
-        Vulnerable:
-          type: boolean
-          nullable: false
-    V40Exploit:
-      type: object
-      properties:
-        Url:
-          type: string
-          nullable: false
-        Text:
-          type: string
-          nullable: true
-        Type:
-          type: string
-          nullable: false
-        Parameters:
-          type: array
-          items:
-            $ref: '#/components/schemas/V40ExploitParameter'
-          nullable: true
     # V.4.0: Had to add IssueBase descendant classes to support specific fields like taint data entries etc.
     V40FingerprintIssue:
       allOf:
@@ -6041,10 +6003,6 @@ components:
             VulnerableCode:
               type: string
               nullable: true
-            AutocheckExploit:
-              $ref: '#/components/schemas/V40Exploit'
-            Exploit:
-              $ref: '#/components/schemas/V40Exploit'
             # V.4.0 Always null
             AfXml:
               type: object
@@ -6135,12 +6093,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/V40BlackBoxItem'
-            Request:
-              $ref: '#/components/schemas/V40Exploit'
-            Response:
-              $ref: '#/components/schemas/V40Exploit'
-            PrimordialRequest:
-              $ref: '#/components/schemas/V40Exploit'
             HttpResponse:
               type: string
               nullable: true

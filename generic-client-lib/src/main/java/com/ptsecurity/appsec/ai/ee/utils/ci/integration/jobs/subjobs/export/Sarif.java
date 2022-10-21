@@ -96,7 +96,7 @@ public class Sarif extends Export {
             // Check if issue's title and descriptions are added to rules / translations already
             if (!ruleIds.contains(issue.getTypeId())) {
                 for (Reports.Locale locale : Reports.Locale.values()) {
-                    com.ptsecurity.appsec.ai.ee.scan.result.ScanResult.Strings title = scanResult.getI18n().get(issue.getTypeId()).get(locale);
+                    com.ptsecurity.appsec.ai.ee.scan.result.ScanResult.Strings title = scanResult.getI18n().get(issue.getIssueTypeKey()).get(locale);
                     ReportingDescriptor rule = new ReportingDescriptor()
                             .withId(issue.getTypeId())
                             .withName(title.getTitle())
@@ -114,7 +114,7 @@ public class Sarif extends Export {
             Set<String> tags = new HashSet<>();
             Result result = new Result()
                     .withRuleId(issue.getTypeId())
-                    .withMessage(new Message().withText(scanResult.getI18n().get(issue.getTypeId()).get(EN).getTitle()))
+                    .withMessage(new Message().withText(scanResult.getI18n().get(issue.getIssueTypeKey()).get(EN).getTitle()))
                     .withLevel(ISSUE_LEVEL_MAP.get(issue.getLevel()))
                     .withKind(ISSUE_KIND_MAP.get(issue.getApprovalState()))
                     .withLocations(Collections.singletonList(location))

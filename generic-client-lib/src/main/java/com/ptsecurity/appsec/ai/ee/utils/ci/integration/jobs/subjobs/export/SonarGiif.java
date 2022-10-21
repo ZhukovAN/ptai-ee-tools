@@ -219,7 +219,7 @@ public class SonarGiif extends Export {
         SonarGiifReport result = SonarGiifReport.builder().build();
 
         for (BaseIssue issue : scanResult.getIssues()) {
-            String message = scanResult.getI18n().get(issue.getTypeId()).get(EN).getTitle();
+            String message = scanResult.getI18n().get(issue.getIssueTypeKey()).get(EN).getTitle();
             SonarGiifReport.Issue.PrimaryLocation primaryLocation;
             BaseIssue.Type clazz = issue.getClazz();
             if (BaseIssue.Type.SCA == clazz) {

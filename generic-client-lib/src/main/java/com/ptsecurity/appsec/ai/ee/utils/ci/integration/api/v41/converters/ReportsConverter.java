@@ -15,6 +15,7 @@ import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 @Slf4j
+@Deprecated
 public class ReportsConverter {
     private static final Map<Reports.IssuesFilter.Level, V41IssuesFilterLevel> REVERSE_ISSUE_FILTER_LEVEL_MAP = new HashMap<>();
     private static final Map<Reports.IssuesFilter.Condition, V41IssuesFilterExploitationCondition> REVERSE_ISSUE_FILTER_CONDITION_MAP = new HashMap<>();

@@ -8,11 +8,12 @@
         <option name="testRunner" value="PLATFORM" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$PROJECT_DIR$/../../../../TOOLS/DEVEL/GRADLE/7.0" />
+        <option name="gradleJvm" value="1.8" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/generic-client-lib" />
+            <option value="$PROJECT_DIR$/pt-misc-tools" />
             <option value="$PROJECT_DIR$/ptai-cli-plugin" />
             <option value="$PROJECT_DIR$/ptai-data-structures" />
             <option value="$PROJECT_DIR$/ptai-i18n" />

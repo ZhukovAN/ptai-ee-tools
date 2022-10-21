@@ -8,7 +8,7 @@ info:
   title: projectManagement
   version: "3.6"
 servers:
-  - url: https://ptai.domain.org:443/
+  - url: https://ptai36.domain.org:443/
 security:
   - Bearer: []
 paths:
@@ -4246,6 +4246,10 @@ components:
       additionalProperties: false
     ScanResult:
       type: object
+      required:
+        - id
+        - projectId
+        - settingsId
       properties:
         id:
           type: string
@@ -4498,44 +4502,6 @@ components:
         BeginColumn:
           type: integer
           nullable: false
-    V36ExploitParameter:
-      type: object
-      properties:
-        Name:
-          type: string
-          nullable: false
-        Value:
-          type: string
-          nullable: false
-        Source:
-          type: string
-          nullable: false
-        Payload:
-          type: string
-          nullable: true
-        Dependency:
-          type: string
-          nullable: false
-        Vulnerable:
-          type: boolean
-          nullable: false
-    V36Exploit:
-      type: object
-      properties:
-        Url:
-          type: string
-          nullable: false
-        Text:
-          type: string
-          nullable: true
-        Type:
-          type: string
-          nullable: false
-        Parameters:
-          type: array
-          items:
-            $ref: '#/components/schemas/V36ExploitParameter'
-          nullable: true
     # V.3.6: Had to add IssueBase descendant classes to support specific fields like taint data entries etc.
     V36FingerprintIssue:
       allOf:
@@ -4589,10 +4555,6 @@ components:
             VulnerableCode:
               type: string
               nullable: true
-            AutocheckExploit:
-              $ref: '#/components/schemas/V36Exploit'
-            Exploit:
-              $ref: '#/components/schemas/V36Exploit'
             # V.3.6 Always null
             AfXml:
               type: object
@@ -4683,12 +4645,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/V36BlackBoxItem'
-            Request:
-              $ref: '#/components/schemas/V36Exploit'
-            Response:
-              $ref: '#/components/schemas/V36Exploit'
-            PrimordialRequest:
-              $ref: '#/components/schemas/V36Exploit'
             HttpResponse:
               type: string
               nullable: true
