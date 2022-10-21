@@ -26,7 +26,6 @@ public class ScanErrorsConverter {
         return Error.builder()
                 .type(error.getErrorType())
                 .message(error.getMessage())
-                .file(error.getPrimaryFile())
                 .critical(error.getIsCritical())
                 .level(ERROR_LEVEL_MAP.get(error.getLevel()))
                 .build();

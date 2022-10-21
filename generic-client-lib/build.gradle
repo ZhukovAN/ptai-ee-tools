@@ -6,6 +6,7 @@ plugins {
 group = "${rootGroup}"
 
 dependencies {
+    api project(':pt-misc-tools')
     api project(':ptai-data-structures')
     api project(':ptai-rest-api')
 
@@ -35,7 +36,7 @@ dependencies {
     implementation 'io.reactivex.rxjava3:rxjava:3.1.2'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
-    implementation 'org.apache.commons:commons-text:1.9'
+    implementation 'org.apache.commons:commons-text:1.10.0'
     // Need this to search for VersionRange-annotated classes
     // https://mvnrepository.com/artifact/io.github.classgraph/classgraph
     // implementation 'io.github.classgraph:classgraph:4.8.138'

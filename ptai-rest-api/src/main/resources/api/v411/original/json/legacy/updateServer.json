@@ -1,0 +1,1012 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "updateServer",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/distributions/{product}/latest": {
+      "get": {
+        "tags": [
+          "Distributions"
+        ],
+        "summary": "Get latest product`s installator",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "path",
+            "description": "product code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/octet-stream": { }
+            }
+          }
+        }
+      }
+    },
+    "/api/distributions/{product}/{version}": {
+      "get": {
+        "tags": [
+          "Distributions"
+        ],
+        "summary": "Get product`s installator by version",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "path",
+            "description": "product code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "path",
+            "description": "product version",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/octet-stream": { }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/distributions/notes/{lang}/latest": {
+      "get": {
+        "tags": [
+          "Distributions"
+        ],
+        "summary": "Get latest release notes",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "path",
+            "description": "language code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/octet-stream": { }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/distributions/notes/{lang}": {
+      "get": {
+        "tags": [
+          "Distributions"
+        ],
+        "summary": "Get current release notes",
+        "parameters": [
+          {
+            "name": "lang",
+            "in": "path",
+            "description": "language code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/octet-stream": { }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/distributions/package/upload": {
+      "post": {
+        "tags": [
+          "Distributions"
+        ],
+        "summary": "Manual upload update package\r\nPass file in body",
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/distributions/package/upload/stop": {
+      "post": {
+        "tags": [
+          "Distributions"
+        ],
+        "summary": "Stop downloading package. Only if the user started.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/update/start": {
+      "post": {
+        "tags": [
+          "ServerUpdate"
+        ],
+        "summary": "Start server update",
+        "parameters": [
+          {
+            "name": "isHardUpdate",
+            "in": "query",
+            "description": "Stop all scans and hard update",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update parameters",
+          "content": {
+            "application/json-patch+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServerUpdateRunParameters"
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServerUpdateRunParameters"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServerUpdateRunParameters"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServerUpdateRunParameters"
+              }
+            }
+          }
+        },
+        "responses": {
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/update/status": {
+      "get": {
+        "tags": [
+          "ServerUpdate"
+        ],
+        "summary": "Get current update status",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateStatusType"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateStatusType"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateStatusType"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/versions/{product}/latest": {
+      "get": {
+        "tags": [
+          "Version"
+        ],
+        "summary": "Get latest product version number (current or candidate)",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "path",
+            "description": "product code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/versions/package/latest": {
+      "get": {
+        "tags": [
+          "Version"
+        ],
+        "summary": "Get latest package version number (current or candidate)",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/versions/required": {
+      "get": {
+        "tags": [
+          "Version"
+        ],
+        "summary": "Get minimal required product version",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/versions/{product}/current": {
+      "get": {
+        "tags": [
+          "Version"
+        ],
+        "summary": "Get current product version number",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/versions/package/current": {
+      "get": {
+        "tags": [
+          "Version"
+        ],
+        "summary": "Get current package version number",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/versions/package/deployed": {
+      "get": {
+        "tags": [
+          "Version"
+        ],
+        "summary": "Gets deploy time",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/versions/{product}/hasNew": {
+      "get": {
+        "tags": [
+          "Version"
+        ],
+        "summary": "Check product has new version",
+        "parameters": [
+          {
+            "name": "product",
+            "in": "path",
+            "description": "product code",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "description": "current installed version number",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/versions/package/hasCandidate": {
+      "get": {
+        "tags": [
+          "Version"
+        ],
+        "summary": "Check has package candidate",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiErrorModel": {
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "$ref": "#/components/schemas/ApiErrorType"
+          },
+          "details": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ApiErrorType": {
+        "enum": [
+          "None",
+          "INCORRECT_USER_AND_PASSWORD",
+          "USER_ID_IS_EMPTY",
+          "MEMBER_ALREADY_EXISTS",
+          "PROJECT_ROLE_PERMISSIONS_ALREADY_EXISTS",
+          "ACCESS_TOKEN_IS_INCORRECT",
+          "ACCESS_TOKEN_WITH_SAME_NAME_ALREADY_EXISTS",
+          "PASSWORD_IS_INCORRECT",
+          "USER_IS_INCORRECT",
+          "INITIATOR_NOT_FOUND",
+          "ROOT_LOGIN_VIA_VIEWER_IS_NOT_ALLOWED",
+          "CREDENTIAL_STORE_IS_UNVAILABLE_OR_TAINTED",
+          "USER_BLOCKED",
+          "EXT_AUTH_PROVIDERS_GET_ERROR",
+          "EXT_AUTH_PROVIDERS_BY_SAME_SCHEME_LIMIT_ERROR",
+          "EXT_AUTH_PROVIDERS_AT_LEAST_ONE_ENABLED_LIMIT_ERROR",
+          "EXT_AUTH_PROVIDER_GET_NOT_FOUND",
+          "EXT_AUTH_PROVIDER_GET_ERROR",
+          "EXT_AUTH_PROVIDER_UPDATE_ERROR",
+          "EXT_AUTH_PROVIDER_DELETE_ERROR",
+          "EXT_AUTH_PROVIDER_IS_INCORRECT",
+          "EXT_AUTH_PROVIDER_NAME_IS_EMPTY",
+          "EXT_AUTH_PROVIDER_NAME_LENGTH_LIMIT",
+          "EXT_AUTH_PROVIDER_WITH_SAME_NAME_ALREADY_EXISTS",
+          "EXT_AUTH_SETTINGS_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_OPENID_AUTHORITY_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_OPENID_CLIENT_ID_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_OPENID_CLIENT_SECRET_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_SAML2_ISSUER_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_SAML2_ALLOWED_ISSUER_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_SAML2_ACS_URL_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_SAML2_LOGOUT_URL_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_SAML2_SIGN_VALIDATION_CERT_IS_EMPTY",
+          "EXT_AUTH_SETTINGS_SAML2_SIGN_VALIDATION_CERT_SIZE_LIMIT",
+          "EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_IS_EMPTY",
+          "EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_SIZE_LIMIT",
+          "EXT_AUTH_SETTINGS_SAML2_NAMEID_POLICY_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_EMPTY",
+          "EXT_AUTH_SETTINGS_LDAP_HOST_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_LDAP_HOST_HAS_SCHEMA",
+          "EXT_AUTH_SETTINGS_LDAP_PORT_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_LDAP_SSL_PORT_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_LDAP_BASE_DN_IS_INCORRECT",
+          "EXT_AUTH_SETTINGS_TEST_CONNECTION_FAILED",
+          "EXT_AUTH_ROLE_MAPPINGS_EMPTY_FIELDS",
+          "EXT_AUTH_ROLE_MAPPINGS_NO_GLOBAL_ROLES",
+          "EXT_AUTH_SIGNIN_ERROR",
+          "EXT_AUTH_SIGNIN_CALLBACK_ERROR",
+          "EXT_AUTH_SIGNIN_PROVIDER_IS_EMPTY",
+          "EXT_AUTH_SIGNIN_PROVIDER_IS_EMPTY_OR_DISABLED",
+          "EXT_AUTH_SIGNIN_SCOPE_TYPE_IS_INCORRECT",
+          "EXT_AUTH_SIGNIN_PROVIDER_IS_NOT_AUTHENTICATED",
+          "EXT_AUTH_SIGNIN_INVALID_CREDENTIALS",
+          "EXT_AUTH_SIGNIN_INVALID_SESSION_ID",
+          "EXT_AUTH_SIGNIN_SCHEME_IS_INCORRECT",
+          "EXT_AUTH_SIGNIN_OPENID_INVALID_CONFIGURATION",
+          "EXT_AUTH_SIGNIN_OPENID_TOKEN_EXPIRED",
+          "EXT_AUTH_SIGNIN_OPENID_INCONSISTENT_RESPONSE_MODE_AND_TYPE",
+          "EXT_AUTH_SIGNIN_SAML2_SETTINGS_IS_EMPTY",
+          "EXT_AUTH_SIGNIN_SAML2_RESPONSE_STATUS_ERROR",
+          "EXT_AUTH_SIGNIN_SAML2_INVALID_SIGNATURE",
+          "EXT_AUTH_SIGNIN_LDAP_SSL_REQUIRED",
+          "EXT_AUTH_SIGNIN_LDAP_SETTINGS_IS_EMPTY",
+          "EXT_AUTH_SIGN_OUT_ERROR",
+          "EXT_AUTH_SIGN_OUT_PROVIDER_IS_EMPTY",
+          "EXT_AUTH_SIGN_OUT_TOKEN_NOT_FOUND",
+          "EXT_AUTH_SIGN_OUT_SCHEME_IS_INCORRECT",
+          "EXT_AUTH_SIGN_OUT_OPENID_ERROR",
+          "EXT_AUTH_SIGN_OUT_SAML2_ERROR",
+          "EXT_AUTH_SIGN_OUT_SAML2_EMPTY_LOGOUT_URL_ERROR",
+          "EXT_AUTH_SESSION_GET_ERROR",
+          "EXT_AUTH_SESSION_CLAIMS_NOT_DEFINED",
+          "EXT_AUTH_SESSION_NOT_FOUND",
+          "EXT_AUTH_SESSION_EXPIRED",
+          "EXT_AUTH_SESSION_PROVIDER_NOT_FOUND",
+          "EXT_AUTH_SESSION_USER_NOT_EQUAL",
+          "EXT_AUTH_METADATA_SAML2_ERROR",
+          "EXT_AUTH_USER_PROVISION_ERROR",
+          "EXT_AUTH_USER_PROVISION_USER_IS_NOT_DEFINED",
+          "EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_NOT_MAPPED",
+          "EXT_AUTH_USER_PROVISION_NAME_FIELD_IS_NOT_MAPPED",
+          "UPDATE_PACKAGE_VERSION_IS_ALREADY_UPLOADED",
+          "UPDATE_PACKAGE_UPLOADED_IS_ALREADY_STARTED",
+          "UPDATE_PACKAGE_UNKNOWN_PRODUCT",
+          "UPDATE_PACKAGE_VERSION_INVALID",
+          "UPDATE_PACKAGE_VERSION_IS_NOT_UPLOADED",
+          "UPDATE_SERVER_PROCESS_RUN_TIMEOUT",
+          "UPDATE_SERVER_PARAMETERS_INVALID",
+          "UPDATE_SERVER_INSTALLER_EXIT_WITH_ERROR",
+          "UPDATE_SERVER_PACKAGE_IS_INCORRECT",
+          "UPDATE_SERVER_NOT_ENOUGH_SPACE",
+          "CERTIFICATE_FILE_IS_EMPTY",
+          "CERTIFICATE_IS_ALREADY_INSTALLED",
+          "CERTIFICATE_IS_NOT_VALID",
+          "URI_IS_NOT_VALID",
+          "PROJECT_WITH_SAME_NAME_ALREADY_EXISTS",
+          "UNEXPECTED_SCAN_STAGE",
+          "PROJECT_NOT_FOUND",
+          "INVALID_JSON_FIELDS",
+          "INCORRECT_SAST_RULES",
+          "UNEXPECTED_LANGUAGE",
+          "MAIL_PROFILES_NOT_EXISTS",
+          "MAIL_PROFILE_NOT_FOUND",
+          "ISSUE_TRACKER_CONNECTION_NOT_FOUND",
+          "ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET",
+          "ISSUE_TRACKER_SETTINGS_ID_NOT_SET",
+          "ISSUE_TRACKER_CREDENTIALS_NOT_SET",
+          "ISSUE_TRACKER_HOST_IS_INCORRECT",
+          "ISSUE_TRACKER_OAUTH_DATA_NOT_SET",
+          "ISSUE_TRACKER_TRACKER_NOT_FOUND",
+          "ISSUE_TRACKER_TRACKER_NOT_FOUND_WITH_OAUTH",
+          "ISSUE_TRACKER_INVALID_TICKET_LINK",
+          "ISSUE_TRACKER_IMPOSSIBLE_SKIP_UPDATE_CREDENTIALS",
+          "ISSUE_TRACKER_UNSUPPORTED_FIELDS_COFIGURATION",
+          "ISSUE_TRACKER_TICKET_CREATION_FAILED",
+          "ISSUE_TRACKER_PRIORITIES_GETTING_FAILED",
+          "ISSUE_TRACKER_USERS_GETTING_FAILED",
+          "ISSUE_TRACKER_STATUSES_GETTING_FAILED",
+          "ISSUE_TRACKER_FIELDS_GETTING_FAILED",
+          "ISSUE_TRACKER_OPTIONS_GETTING_FAILED",
+          "ISSUE_TRACKER_EXISTING_TICKETS_GETTING_FAILED",
+          "ISSUE_TRACKER_COMPONENTS_GETTING_FAILED",
+          "ISSUE_TRACKER_CAPTCHA_CHALLENGE",
+          "ISSUE_TRACKER_AUTHENTICATION_DENIED_DETAILED",
+          "ISSUE_TRACKER_AUTHENTICATION_DENIED",
+          "ISSUE_TRACKER_AUTHENTICATION_FAILED",
+          "ISSUE_TRACKER_OAUTH_SETTINGS_INVALID",
+          "ISSUE_TRACKER_OAUTH_AUTHENTICATION_GETTING_ACCESS_TOKEN_FAILED",
+          "ISSUE_TRACKER_OAUTH_AUTHENTICATION_INVALID_ACCESS_TOKEN_RETURNED",
+          "ISSUE_TRACKER_OAUTH_AUTHENTICATION_GETTING_REQUEST_TOKEN_FAILED",
+          "ISSUE_TRACKER_OAUTH_AUTHENTICATION_INVALID_REQUEST_TOKEN_RETURNED",
+          "FS_SOURCE_IS_BUSY",
+          "DIRECTORY_NOT_FOUND",
+          "ISSUE_ATTACH_TICKET_LINK_FAILED",
+          "COMMENT_POLICY_FAILED_COMMENT_IS_EMPTY",
+          "PROJECTS_COUNT_LIMITED_BY_LICENSE",
+          "LICENSE_FILE_IS_INVALID",
+          "LICENSE_EXPIRED",
+          "LICENSE_FINGERPRINT_ERROR",
+          "LICENSE_WITHOUT_FINGERPRINT",
+          "LANGUAGE_NOT_ALLOWED_BY_LICENCE",
+          "LICENSED_AGENTS_LIMIT_EXCEED",
+          "COULD_NOT_STORE_LICENSE",
+          "LICENSE_SERVICE_NOT_AVAILABLE",
+          "LICENSE_UNLICENSED_USAGE",
+          "UNKNOWN_SOURCE_VERSION_CONTROL_SYSTEM",
+          "SOURCE_VERSION_CONTROL_SYSTEM_ERROR",
+          "INVALID_VERSION_CONTROL_SYSTEM_SETTINGS",
+          "SCAN_AGENT_NOT_FOUND",
+          "SCAN_ALREADY_SCHEDULED",
+          "INCORRECT_AGENT_STATUS",
+          "SCAN_AGENT_WAS_SUSPENDED",
+          "SCAN_AGENT_IS_SCANNING",
+          "SCAN_NOT_FOUND",
+          "ACTIVE_SCAN_AGENTS_NOT_FOUND",
+          "SCAN_AGENT_IS_ACTIVE",
+          "SCHEDULING_IS_LOCKED",
+          "SCAN_AGENT_NUMBER_EXCEED",
+          "SERVER_CERTIFICATE_NOT_FOUND",
+          "FILESYSTEM_ERROR_ACCESS_DENIED",
+          "VAULT_CREDENTIALS_NOT_FOUND",
+          "REPORT_TEMPLATE_NOT_FOUND",
+          "REPORT_GENERATE_FAILED",
+          "REPORT_TEMPLATE_INVALID",
+          "REPORT_TEMPLATE_UNKNOWN_FORMAT",
+          "REPORT_INCORRECT_PARAMETERS",
+          "REPORT_TEMPLATE_WITH_SAME_NAME_ALREADY_EXISTS",
+          "REPORT_TEMPLATE_FILE_NAME_INCORRECT_MACROS",
+          "INVALID_VERSION_CONTROL_SYSTEM_CONNECTION_SETTINGS",
+          "COULD_NOT_STORE_PROJECT",
+          "COULD_NOT_STORE_SCAN_SETTINGS",
+          "FILES_FOR_DOWNLOAD_NOT_FOUND",
+          "PROJECTS_FILES_NOT_FOUND",
+          "INVALID_UPLOAD_PATH",
+          "INVALID_PATH_PARAMETER",
+          "COULD_NOT_CHECKOUT_PROJECT",
+          "USER_ID_IS_INCORRECT"
+        ],
+        "type": "string",
+        "format": ""
+      },
+      "ServerUpdateRunParameters": {
+        "type": "object",
+        "properties": {
+          "newParameters": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "updateRequestId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateStatusType": {
+        "enum": [
+          "None",
+          "Started",
+          "WaitingForStarted",
+          "Finished",
+          "Aborted",
+          "UploadPackage",
+          "UploadPackageFinished"
+        ],
+        "type": "string",
+        "format": ""
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "apiKey",
+        "description": "Please insert JWT with Bearer into field",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}

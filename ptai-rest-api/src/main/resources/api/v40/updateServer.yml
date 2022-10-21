@@ -3,7 +3,7 @@ info:
   title: updateServer
   version: 1.0.0
 servers:
-  - url: https://ptai4.domain.org:443/
+  - url: https://ptai40.domain.org:443/
 security:
   - Bearer: []
 paths:

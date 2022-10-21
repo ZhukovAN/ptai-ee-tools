@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.joor.Reflect.on;
 
 @Slf4j
@@ -121,7 +122,6 @@ public class IssuesConverter {
 
         res.setAutocheckAfterScan(scanSettings.getRunAutocheckAfterScan());
         res.setDownloadDependencies(scanSettings.getIsDownloadDependencies());
-        res.setUseIncrementalScan(scanSettings.getUseIncrementalScan());
         res.setUseEntryAnalysisPoint(scanSettings.getIsUseEntryAnalysisPoint());
         res.setUsePublicAnalysisMethod(scanSettings.getIsUsePublicAnalysisMethod());
         res.setUnpackUserPackages(scanSettings.getIsUnpackUserPackages());
@@ -246,7 +246,7 @@ public class IssuesConverter {
                 metadataMap.put(metadata.getKey(), metadata);
         if (null != model.getIssues()) {
             for (IssueBase issue : model.getIssues()) {
-                List<BaseIssue> issues = convert(issue, metadataMap, dictionary);
+                List<BaseIssue> issues = convert(scanResult.getId(), issue, metadataMap, dictionary);
                 if (null != issues && !issues.isEmpty())
                     res.getIssues().addAll(issues);
                 else
@@ -256,8 +256,7 @@ public class IssuesConverter {
         // Issue format conversion sets type field to value that can be safely mapped to localized description
         for (BaseIssue issue : res.getIssues()) {
             String key = issue.getTypeId();
-            // issue.setTypeId("ptai-" + md5(issue.getTypeId()));
-            res.getI18n().put(issue.getTypeId(), dictionary.get(key));
+            res.getI18n().put(issue.getIssueTypeKey(), dictionary.get(key));
         }
         res.setIssuesParseOk(model != EMPTY_ISSUES_MODEL);
         return res;
@@ -283,30 +282,6 @@ public class IssuesConverter {
                 .scannedUrlCount(Objects.requireNonNull(statistic.getScannedUrlCount(), "Get scanned URL count statistic is null"))
                 .totalFileCount(Objects.requireNonNull(statistic.getTotalFileCount(), "Get total file count statistic is null"))
                 .totalUrlCount(Objects.requireNonNull(statistic.getTotalUrlCount(), "Get total URL count statistic is null"))
-                .build();
-    }
-
-    public static VulnerabilityIssue.Exploit convert(final V36Exploit exploit) {
-        if (null == exploit) return null;
-        VulnerabilityIssue.Exploit res = VulnerabilityIssue.Exploit.builder()
-                .url(exploit.getUrl())
-                .text(exploit.getText())
-                .type(exploit.getType())
-                .build();
-        if (null != exploit.getParameters() && !exploit.getParameters().isEmpty())
-            res.setParameter(exploit.getParameters().stream().map(IssuesConverter::convert).collect(Collectors.toList()));
-        return res;
-    }
-
-    public static VulnerabilityIssue.Exploit.Parameter convert(final V36ExploitParameter parameter) {
-        if (null == parameter) return null;
-        return VulnerabilityIssue.Exploit.Parameter.builder()
-                .name(parameter.getName())
-                .value(parameter.getValue())
-                .source(parameter.getSource())
-                .dependency(parameter.getDependency())
-                .payload(parameter.getPayload())
-                .vulnerable(parameter.getVulnerable())
                 .build();
     }
 
@@ -344,32 +319,25 @@ public class IssuesConverter {
                 .build();
     }
 
-    protected static String md5(@NonNull final String value) throws GenericException {
-        MessageDigest md5 = call(() -> MessageDigest.getInstance("MD5"), "MD5 hash algorithm not available");
-        md5.update(value.getBytes());
-        return DatatypeConverter.printHexBinary(md5.digest()).toUpperCase();
-    }
-
     /**
      * Method copies generic fields data from PT AI v.3.6 issue to version-independent issue
      * @param source PT AI v.3.6 base issue where fields data is copied from
      * @param destination PT AI API version independent base issue
      */
     protected static void setBaseFields(
+            @NonNull final UUID scanResultId,
             @NonNull final IssueBase source,
             @NonNull final BaseIssue destination,
             @NonNull final Map<String, Map<Reports.Locale, ScanResult.Strings>> dictionary) {
         destination.setId(source.getId());
         destination.setGroupId(source.getGroupId());
-        destination.setScanResultId(Objects.requireNonNull(source.getScanResultId()));
         destination.setLevel(ISSUE_LEVEL_MAP.get(source.getLevel()));
 
         destination.setApprovalState(ISSUE_APPROVAL_STATE_MAP.get(source.getApprovalState()));
         destination.setFavorite(source.getIsFavorite());
         destination.setSuppressed(source.getIsSuppressed());
         destination.setSuspected(source.getIsSuspected());
-        destination.setNewInScanResultId(source.getIsNewInScanResultId());
-        destination.setOldInScanResultId(source.getIsOldInScanResultId());
+        destination.setIsNew(scanResultId.equals(source.getIsNewInScanResultId()));
 
         destination.setTypeId(source.getType());
     }
@@ -477,6 +445,7 @@ public class IssuesConverter {
      * @return PT AI API version independent vulnerability instance
      */
     protected static List<BaseIssue> convert(
+            @NonNull final UUID scanResultId,
             @NonNull final IssueBase issueBase,
             @NonNull final Map<String, IssueBaseMetadata> metadataMap,
             @NonNull final Map<String, Map<Reports.Locale, ScanResult.Strings>> dictionary) {
@@ -507,7 +476,7 @@ public class IssuesConverter {
                 V36BlackBoxIssue issue = (V36BlackBoxIssue) issueBase;
 
                 BlackBoxIssue res = new BlackBoxIssue();
-                setBaseFields(issue, res, dictionary);
+                setBaseFields(scanResultId, issue, res, dictionary);
                 applyMetadata(baseMetadata, res);
 
                 return Collections.singletonList(res);
@@ -515,7 +484,7 @@ public class IssuesConverter {
             V36ConfigurationIssue issue = (V36ConfigurationIssue) issueBase;
 
             ConfigurationIssue res = new ConfigurationIssue();
-            setBaseFields(issue, res, dictionary);
+            setBaseFields(scanResultId, issue, res, dictionary);
             applyMetadata(baseMetadata, res);
 
             res.setVulnerableExpression(convert(issue.getVulnerableExpression()));
@@ -547,7 +516,7 @@ public class IssuesConverter {
                 // type field and linked using fingerprintId instead. Let's init it with fingerprintId
                 // to avoid setBaseFields change
                 issue.setType(fingerprintId);
-                setBaseFields(issue, res, dictionary);
+                setBaseFields(scanResultId, issue, res, dictionary);
                 // As single V36FingerprintIssue may have multiple fingerprint IDs
                 // PT AI looks these IDs for maximum severity level and assigns it
                 // to issue. But as we decide to create individual ScaIssue for
@@ -577,13 +546,13 @@ public class IssuesConverter {
             V36UnknownIssue issue = (V36UnknownIssue) issueBase;
 
             UnknownIssue res = new UnknownIssue();
-            setBaseFields(issue, res, dictionary);
+            setBaseFields(scanResultId, issue, res, dictionary);
             return Collections.singletonList(res);
         } else if (IssueType.Vulnerability == issueType) {
             V36VulnerabilityIssue issue = (V36VulnerabilityIssue) issueBase;
 
             VulnerabilityIssue res = new VulnerabilityIssue();
-            setBaseFields(issue, res, dictionary);
+            setBaseFields(scanResultId, issue, res, dictionary);
             applyMetadata(baseMetadata, res);
 
             res.setSecondOrder(issue.getIsSecondOrder());
@@ -601,15 +570,13 @@ public class IssuesConverter {
             res.setScanMode(SCAN_MODE_MAP.getOrDefault(issue.getScanMode(), VulnerabilityIssue.ScanMode.FROM_OTHER));
             res.setBpf(convert(issue.getBestPlaceToFix()));
             res.setConditions(issue.getAdditionalConditions());
-            res.setExploit(convert(issue.getExploit()));
-            res.setAutocheckExploit(convert(issue.getAutocheckExploit()));
 
             return Collections.singletonList(res);
         } else if (IssueType.Weakness == issueType) {
             V36WeaknessIssue issue = (V36WeaknessIssue) issueBase;
 
             WeaknessIssue res = new WeaknessIssue();
-            setBaseFields(issue, res, dictionary);
+            setBaseFields(scanResultId, issue, res, dictionary);
             applyMetadata(baseMetadata, res);
             res.setVulnerableExpression(convert(issue.getVulnerableExpression()));
 
@@ -618,7 +585,7 @@ public class IssuesConverter {
             V36YaraMatchIssue issue = (V36YaraMatchIssue) issueBase;
 
             YaraMatchIssue res = new YaraMatchIssue();
-            setBaseFields(issue, res, dictionary);
+            setBaseFields(scanResultId, issue, res, dictionary);
             return Collections.singletonList(res);
         } else
             return null;
@@ -646,7 +613,7 @@ public class IssuesConverter {
     protected static IssuesModel parseIssuesModelStream(@NonNull final File data) {
         JSON parser = new JSON();
         MemoryUsage usage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
-        try (Reader reader = new FileReader(data)) {
+        try (InputStream is = new FileInputStream(data); Reader reader = new InputStreamReader(is, UTF_8)) {
             log.debug("JVM heap memory use before parse {} / {}", FileCollector.bytesToString(usage.getUsed()), FileCollector.bytesToString(usage.getMax()));
             log.debug("Parse started at {}", Instant.now());
             IssuesModel res = parser.getGson().fromJson(reader, IssuesModel.class);
