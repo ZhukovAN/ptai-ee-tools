@@ -21,7 +21,7 @@ public interface GenericAstTasks {
     String getScanResultUrl(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws GenericException;
 
     ScanBrief.State waitForComplete(@NonNull UUID projectId, @NonNull final UUID scanResultId) throws InterruptedException;
-    void stop(@NonNull UUID projectId, @NonNull UUID scanResultId) throws GenericException;
+    void stop(@NonNull UUID scanResultId) throws GenericException;
 
 
     /**

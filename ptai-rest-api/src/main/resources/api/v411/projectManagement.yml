@@ -525,6 +525,40 @@ paths:
           content:
             text/plain:
               schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectModel'
+        '401':
+          description: Unauthorized
+  /api/projects/{projectId}:
+    get:
+      tags:
+        - Projects
+      summary: Get project
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
                 $ref: '#/components/schemas/ProjectModel'
             application/json:
               schema:
@@ -532,6 +566,33 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ProjectModel'
+        '401':
+          description: Unauthorized
+    delete:
+      tags:
+        - Projects
+      summary: Delete project
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/projects/name/{name}:
@@ -692,34 +753,6 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ScanResultModel'
-        '401':
-          description: Unauthorized
-  /api/projects/{projectId}:
-    delete:
-      tags:
-        - Projects
-      summary: Delete project
-      parameters:
-        - name: projectId
-          in: path
-          description: Project id
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '400':
-          description: Bad Request
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/projects/base:
@@ -1980,7 +2013,7 @@ paths:
     get:
       tags:
         - Projects
-      summary: Обновить ошибки сканирования
+      summary: Update scan errors
       parameters:
         - name: projectId
           in: path
@@ -2789,6 +2822,7 @@ components:
         - UNEXPECTED_LANGUAGE
         - MAIL_PROFILE_NOT_FOUND
         - UPDATER_NOT_SET
+        - INVALID_QUERY_PARAMETER
         - ISSUE_TRACKER_CONNECTION_NOT_FOUND
         - ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET
         - ISSUE_TRACKER_SETTINGS_ID_NOT_SET
@@ -3192,9 +3226,6 @@ components:
         currentDate:
           type: string
           format: date-time
-        startDate:
-          type: string
-          format: date-time
         endDate:
           type: string
           format: date-time
@@ -3384,6 +3415,10 @@ components:
       enum:
         - v1_8
         - v1_11
+      # V.4.1.1: Needed to fix that to avoid enum name generation like _8 and _11
+      x-enum-varnames:
+        - v1_8
+        - v1_11
       type: string
       format: ''
     JiraTicketLinkModel:
@@ -3457,6 +3492,13 @@ components:
       properties:
         authentication:
           $ref: '#/components/schemas/MailAuthentication'
+        id:
+          type: string
+          format: uuid
+        credentialsId:
+          type: string
+          format: uuid
+          nullable: true
         profileName:
           type: string
           nullable: true
@@ -3487,6 +3529,10 @@ components:
           format: uuid
         authentication:
           $ref: '#/components/schemas/MailAuthentication'
+        credentialsId:
+          type: string
+          format: uuid
+          nullable: true
         profileName:
           type: string
           nullable: true
@@ -3684,7 +3730,8 @@ components:
           $ref: '#/components/schemas/SourceType'
         lastDateTimeUpdate:
           type: string
-          format: date-time
+          # V.4.1.1: Had to remove date-time specification as value returned doesn't conform to RFC 3339
+          # format: date-time
         updaterInfo:
           $ref: '#/components/schemas/UpdaterInfoModel'
         hidePathAndUserName:
@@ -3965,6 +4012,7 @@ components:
           format: uuid
         scanDate:
           type: string
+          # V.4.1.1: Had to remove date-time specification as value returned doesn't conform to RFC 3339
           format: date-time
         progress:
           $ref: '#/components/schemas/ScanProgressModel'

@@ -134,9 +134,6 @@ public class ScanBrief {
         protected String url;
 
         @JsonProperty
-        protected Boolean useIncrementalScan;
-
-        @JsonProperty
         protected Boolean autocheckAfterScan;
 
         @JsonProperty

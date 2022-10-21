@@ -385,15 +385,14 @@ paths:
           description: Success
         '401':
           description: Unauthorized
-  /api/auth/external/test/ldap/{providerId}:
+  /api/auth/external/test/ldap:
     post:
       tags:
         - ExternalAuth
       summary: Test connection for LDAP settings
       parameters:
         - name: providerId
-          in: path
-          required: true
+          in: query
           description: Provider identifier if needed
           schema:
             type: string
@@ -418,6 +417,71 @@ paths:
           description: Success
         '401':
           description: Unauthorized
+  /api/auth/external/test/ldap/{providerId}:
+    post:
+      tags:
+        - ExternalAuth
+      summary: Test connection for LDAP settings
+      parameters:
+        - name: providerId
+          in: path
+          description: Provider identifier if needed
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: LDAP settings
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/LdapSettings'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LdapSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LdapSettings'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/LdapSettings'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/external/test/openid:
+    post:
+      tags:
+        - ExternalAuth
+      summary: Test connection for OpenId settings
+      parameters:
+        - name: providerId
+          in: query
+          description: Provider identifier if needed
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: OpenId settings
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettings'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettings'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettings'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
   /api/auth/external/test/openid/{providerId}:
     post:
       tags:
@@ -426,8 +490,8 @@ paths:
       parameters:
         - name: providerId
           in: path
-          required: true
           description: Provider identifier if needed
+          required: true
           schema:
             type: string
             format: uuid
@@ -1019,6 +1083,7 @@ components:
         - UNEXPECTED_LANGUAGE
         - MAIL_PROFILE_NOT_FOUND
         - UPDATER_NOT_SET
+        - INVALID_QUERY_PARAMETER
         - ISSUE_TRACKER_CONNECTION_NOT_FOUND
         - ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET
         - ISSUE_TRACKER_SETTINGS_ID_NOT_SET

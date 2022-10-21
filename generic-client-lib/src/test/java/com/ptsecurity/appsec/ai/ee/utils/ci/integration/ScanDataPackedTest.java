@@ -28,7 +28,6 @@ public class ScanDataPackedTest extends BaseTest {
                         .type(ScanDataPacked.Type.SCAN_BRIEF_DETAILED)
                         .data(ScanDataPacked.packData(scanBriefDetailed))
                         .build();
-                Assertions.assertTrue(packedData.getData().length() < unpackedData.length());
 
                 ScanBriefDetailed scanBriefDetailedExtracted = ScanDataPacked.unpackData(packedData.getData(), ScanBriefDetailed.class);
 

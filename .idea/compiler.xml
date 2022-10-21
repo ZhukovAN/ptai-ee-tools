@@ -14,8 +14,10 @@
         <module name="ptai-ee-tools.ptai-report-tools.test" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-agent.main" />
         <module name="ptai-ee-tools.ptai-i18n.main" />
+        <module name="ptai-ee-tools.pt-misc-tools.test" />
         <module name="ptai-ee-tools.ptai-data-structures.main" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.main" />
+        <module name="ptai-ee-tools.pt-misc-tools.main" />
         <module name="ptai-ee-tools.ptai-data-structures.test" />
         <module name="ptai-ee-tools.ptai-test-tools.main" />
         <module name="ptai-ee-tools.generic-client-lib.testFixtures" />
@@ -23,6 +25,7 @@
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-agent.test" />
         <module name="ptai-ee-tools.ptai-report-tools.testFixtures" />
         <module name="ptai-ee-tools.generic-client-lib.main" />
+        <module name="ptai-ee-tools.pt-misc-tools.testFixtures" />
         <module name="ptai-ee-tools.ptai-cli-plugin.test" />
         <module name="ptai-ee-tools.ptai-rest-api.main" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-server.test" />

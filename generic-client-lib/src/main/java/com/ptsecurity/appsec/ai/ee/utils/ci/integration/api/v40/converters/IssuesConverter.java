@@ -117,7 +117,6 @@ public class IssuesConverter {
 
         res.setAutocheckAfterScan(scanSettings.getRunAutocheckAfterScan());
         res.setDownloadDependencies(scanSettings.getIsDownloadDependencies());
-        res.setUseIncrementalScan(scanSettings.getUseIncrementalScan());
         res.setUseEntryAnalysisPoint(scanSettings.getIsUseEntryAnalysisPoint());
         res.setUsePublicAnalysisMethod(scanSettings.getIsUsePublicAnalysisMethod());
         res.setUnpackUserPackages(scanSettings.getIsUnpackUserPackages());
@@ -250,8 +249,7 @@ public class IssuesConverter {
         // Issue format conversion sets type field to value that can be safely mapped to localized description
         for (BaseIssue issue : res.getIssues()) {
             String key = issue.getTypeId();
-            // issue.setTypeId("ptai-" + md5(issue.getTypeId()));
-            res.getI18n().put(issue.getTypeId(), dictionary.get(key));
+            res.getI18n().put(issue.getIssueTypeKey(), dictionary.get(key));
         }
         res.setIssuesParseOk(model != EMPTY_ISSUES_MODEL);
         return res;
@@ -314,12 +312,6 @@ public class IssuesConverter {
                 .build();
     }
 
-    protected static String md5(@NonNull final String value) throws GenericException {
-        MessageDigest md5 = call(() -> MessageDigest.getInstance("MD5"), "MD5 hash algorithm not available");
-        md5.update(value.getBytes());
-        return DatatypeConverter.printHexBinary(md5.digest()).toUpperCase();
-    }
-
     /**
      * Method copies generic fields data from PT AI v.3.6 issue to version-independent issue
      * @param source PT AI v.3.6 base issue where fields data is copied from
@@ -331,7 +323,6 @@ public class IssuesConverter {
             @NonNull final Map<String, Map<Reports.Locale, ScanResult.Strings>> dictionary) {
         destination.setId(source.getId());
         destination.setGroupId(source.getGroupId());
-        destination.setScanResultId(Objects.requireNonNull(source.getScanResultId()));
         destination.setLevel(ISSUE_LEVEL_MAP.get(source.getLevel()));
 
         destination.setApprovalState(ISSUE_APPROVAL_STATE_MAP.get(source.getApprovalState()));
@@ -339,7 +330,6 @@ public class IssuesConverter {
         destination.setSuppressed(source.getIsSuppressed());
         destination.setSuspected(source.getIsSuspected());
         destination.setNewInScanResultId(source.getIsNewInScanResultId());
-        destination.setOldInScanResultId(source.getIsOldInScanResultId());
 
         destination.setTypeId(source.getType());
     }

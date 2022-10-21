@@ -2,6 +2,7 @@ package com.ptsecurity.appsec.ai.ee.scan.result.issue.types;
 
 import com.fasterxml.jackson.annotation.*;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
+import com.ptsecurity.misc.tools.crypro.Hash;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -63,16 +64,21 @@ public abstract class BaseIssue {
     @JsonProperty("typeId")
     protected String typeId;
 
-    /**
-     * Scan result this issue belongs to
-     * TODO: Check if we may get rid of this
-     */
-    @NonNull
-    @JsonProperty("scanResultId")
-    protected UUID scanResultId;
-
     public enum Type {
         VULNERABILITY, WEAKNESS, SCA, CONFIGURATION, BLACKBOX, YARAMATCH, UNKNOWN
+    }
+
+    public static String getIssueTypeKey(@NonNull final BaseIssue issue) {
+        return Hash.md5(issue.getClazz().name() + "::" + issue.getTypeId());
+    }
+
+    private transient String issueTypeKey = null;
+
+    @JsonProperty("issueTypeKey")
+    public String getIssueTypeKey() {
+        if (null == issueTypeKey) issueTypeKey = getIssueTypeKey(this);
+        // return getIssueTypeKey(this);
+        return issueTypeKey;
     }
 
     /**
@@ -151,11 +157,9 @@ public abstract class BaseIssue {
     @JsonProperty("approvalState")
     protected ApprovalState approvalState;
 
+    // TODO: Migrate to isNew property
     @JsonProperty("newInScanResultId")
     protected UUID newInScanResultId;
-
-    @JsonProperty("oldInScanResultId")
-    protected UUID oldInScanResultId;
 
     /**
      * Unique vulnerability type identifier in the CWE classifier

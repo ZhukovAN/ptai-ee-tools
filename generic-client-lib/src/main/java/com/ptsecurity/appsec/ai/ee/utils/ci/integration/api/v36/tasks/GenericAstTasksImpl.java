@@ -147,7 +147,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                 : ScanBrief.State.UNKNOWN;
     }
 
-    public void stop(@NonNull UUID projectId, @NonNull UUID scanResultId) throws GenericException {
+    public void stop(@NonNull UUID scanResultId) throws GenericException {
         log.debug("Calling scan stop for scan result ID {}", scanResultId);
         // TODO: Implement different approach to stop task that is enqueued but not
         //  started yet. PT AI 3.6 doesn't stop these jobs, so we need to delete scan

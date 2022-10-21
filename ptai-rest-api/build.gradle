@@ -9,11 +9,15 @@ group = "${rootGroup}"
 dependencies {
     // swaggerCodegen 'org.openapitools:openapi-generator-cli:4.3.1'
     swaggerCodegen 'org.openapitools:openapi-generator-cli:5.1.1'
+    // swaggerCodegen 'org.openapitools:openapi-generator-cli:6.2.0'
 
     // https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp
     api 'com.squareup.okhttp3:okhttp:4.2.2'
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
     api 'com.google.code.gson:gson:2.8.6'
+
+    // https://mvnrepository.com/artifact/org.openapitools/jackson-databind-nullable
+    // implementation 'org.openapitools:jackson-databind-nullable:0.2.3'
 
     // Need this as generated code uses annotations like @Nullable etc.
     // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
@@ -434,6 +438,19 @@ swaggerSources {
         }
     }
 
+    notifications411 {
+        inputFile = file('src/main/resources/api/v411/legacy/notifications.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v411.notifications.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v411.notifications.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
 }
 
 compileJava.dependsOn \
@@ -466,7 +483,8 @@ compileJava.dependsOn \
  swaggerSources.projectmanagement411.code, \
  swaggerSources.scanscheduler411.code, \
  swaggerSources.systemmanagement411.code, \
- swaggerSources.legacy411.code
+ swaggerSources.legacy411.code, \
+swaggerSources.notifications411.code
 
 sourceSets.main.java.srcDirs \
  "${swaggerSources.auth36.code.outputDir}/src/main/java", \
@@ -498,6 +516,7 @@ sourceSets.main.java.srcDirs \
  "${swaggerSources.projectmanagement411.code.outputDir}/src/main/java", \
  "${swaggerSources.scanscheduler411.code.outputDir}/src/main/java", \
  "${swaggerSources.systemmanagement411.code.outputDir}/src/main/java", \
+ "${swaggerSources.notifications411.code.outputDir}/src/main/java", \
  "${swaggerSources.legacy411.code.outputDir}/src/main/java"
 
 

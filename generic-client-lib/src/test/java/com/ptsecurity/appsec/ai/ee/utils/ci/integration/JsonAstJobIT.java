@@ -27,6 +27,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -239,11 +240,13 @@ public class JsonAstJobIT extends BaseAstIT {
                 .filter(i -> HIGH == i.getLevel())
                 .filter(i -> i instanceof ScaIssue)
                 .count());
-        Assertions.assertNotEquals(0, scanResult.getIssues().stream()
-                .filter(i -> HIGH == i.getLevel())
-                .filter(i -> i instanceof ScaIssue)
-                .filter(s -> ((ScaIssue) s).getCveId().contains("CVE-2016-10033"))
-                .count());
+        log.trace("Skip CVE sheck as 4.1.1 doesn't provide that info");
+        if (V411 != CONNECTION().getVersion())
+            Assertions.assertNotEquals(0, scanResult.getIssues().stream()
+                    .filter(i -> HIGH == i.getLevel())
+                    .filter(i -> i instanceof ScaIssue)
+                    .filter(s -> ((ScaIssue) s).getCveId().contains("CVE-2016-10033"))
+                    .count());
         Assertions.assertNotEquals(0, scanResult.getIssues().stream()
                 .filter(i -> i instanceof VulnerabilityIssue)
                 .map(i -> (VulnerabilityIssue) i)
@@ -305,9 +308,11 @@ public class JsonAstJobIT extends BaseAstIT {
 
         Path rawPath = destination.resolve(rawData.getFileName());
         ScanResult scanResult = createFaultTolerantObjectMapper().readValue(rawPath.toFile(), ScanResult.class);
-        Map<String, Long> groups = scanResult.getIssues().stream()
-                 .collect(Collectors.groupingBy(BaseIssue::getGroupId, Collectors.counting()));
-        Assertions.assertTrue(groups.values().stream().anyMatch(l -> l > 1));
+        Map<Optional<String>, Long> groups = scanResult.getIssues().stream()
+                 .collect(Collectors.groupingBy(issue -> Optional.ofNullable(issue.getGroupId()), Collectors.counting()));
+        log.trace("Skip issues group test as 4.1.1 doesn't provide group Id data");
+        if (V411 != CONNECTION().getVersion())
+            Assertions.assertTrue(groups.values().stream().anyMatch(l -> l > 1));
     }
 
     @SneakyThrows

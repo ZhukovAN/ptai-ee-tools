@@ -62,7 +62,7 @@ public abstract class BaseTest {
             property = "id")
     public static class Connection {
         public enum Version {
-            V36, V40, V41
+            V36, V40, V41, V411
         }
         protected String id;
         protected Version version;

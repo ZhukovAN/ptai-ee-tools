@@ -183,7 +183,7 @@ public class ScanBriefDetailed extends ScanBrief {
                         issue -> {
                             Map<Reports.Locale, String> title = new HashMap<>();
                             for (Reports.Locale locale : Reports.Locale.values()) {
-                                String titleStr = scanResult.getI18n().get(issue.getTypeId()).get(locale).getTitle();
+                                String titleStr = scanResult.getI18n().get(issue.getIssueTypeKey()).get(locale).getTitle();
                                 title.put(locale, titleStr);
                             }
                             return Details.ChartData.BaseIssueCountFields.builder()

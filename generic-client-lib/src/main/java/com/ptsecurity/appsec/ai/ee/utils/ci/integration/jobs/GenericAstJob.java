@@ -208,7 +208,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
 
     public void stop() throws GenericException {
         GenericAstTasks projectTasks = new Factory().genericAstTasks(client);
-        call(() -> projectTasks.stop(projectId, scanResultId), "PT AI project scan stop failed");
+        call(() -> projectTasks.stop(scanResultId), "PT AI project scan stop failed");
     }
 
     /**

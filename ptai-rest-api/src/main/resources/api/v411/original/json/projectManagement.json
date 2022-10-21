@@ -3159,7 +3159,7 @@
         "tags": [
           "Projects"
         ],
-        "summary": "Обновить ошибки сканирования",
+        "summary": "Update scan errors",
         "parameters": [
           {
             "name": "projectId",
@@ -4400,6 +4400,7 @@
           "UNEXPECTED_LANGUAGE",
           "MAIL_PROFILE_NOT_FOUND",
           "UPDATER_NOT_SET",
+          "INVALID_QUERY_PARAMETER",
           "ISSUE_TRACKER_CONNECTION_NOT_FOUND",
           "ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET",
           "ISSUE_TRACKER_SETTINGS_ID_NOT_SET",
@@ -5296,6 +5297,15 @@
           "authentication": {
             "$ref": "#/components/schemas/MailAuthentication"
           },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "credentialsId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
           "profileName": {
             "type": "string",
             "nullable": true
@@ -5337,6 +5347,11 @@
           },
           "authentication": {
             "$ref": "#/components/schemas/MailAuthentication"
+          },
+          "credentialsId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
           },
           "profileName": {
             "type": "string",

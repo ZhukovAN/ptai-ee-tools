@@ -406,35 +406,6 @@
             }
           }
         ],
-        "requestBody": {
-          "description": "Project id.Guid",
-          "content": {
-            "application/json-patch+json": {
-              "schema": {
-                "type": "string",
-                "format": "uuid"
-              }
-            },
-            "application/json": {
-              "schema": {
-                "type": "string",
-                "format": "uuid"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "type": "string",
-                "format": "uuid"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "type": "string",
-                "format": "uuid"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Success"
@@ -586,6 +557,7 @@
           "UNEXPECTED_LANGUAGE",
           "MAIL_PROFILE_NOT_FOUND",
           "UPDATER_NOT_SET",
+          "INVALID_QUERY_PARAMETER",
           "ISSUE_TRACKER_CONNECTION_NOT_FOUND",
           "ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET",
           "ISSUE_TRACKER_SETTINGS_ID_NOT_SET",

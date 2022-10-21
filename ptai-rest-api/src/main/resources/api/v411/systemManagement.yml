@@ -49,22 +49,22 @@ components:
     HealthCheckServiceResult:
       type: object
       properties:
-        service:
+        Service:
           type: string
           nullable: true
-        status:
+        Status:
           $ref: '#/components/schemas/HealthStatus'
-        responseTime:
+        ResponseTime:
           type: number
           format: double
       additionalProperties: false
     HealthCheckSummaryResult:
       type: object
       properties:
-        totalResponseTime:
+        TotalResponseTime:
           type: number
           format: double
-        services:
+        Services:
           type: array
           items:
             $ref: '#/components/schemas/HealthCheckServiceResult'

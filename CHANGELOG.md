@@ -201,3 +201,5 @@
 + [Fix] Non-abstract-interpretation language (Python etc.) project creation fixed
 + [Fix] Project name with slash workaround applied to 3.6 and 4.0 API clients
 + [Feature] Python DSVW test code added
+### 20221021
++ [Feature] PT AI v.4.1.1 support added

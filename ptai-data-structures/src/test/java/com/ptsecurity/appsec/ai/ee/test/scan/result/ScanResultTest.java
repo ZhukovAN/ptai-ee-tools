@@ -32,7 +32,7 @@ public class ScanResultTest extends BaseTest {
             long sqliCount = scanResult.getIssues().stream()
                     .filter(baseIssue -> baseIssue instanceof VulnerabilityIssue)
                     .filter(baseIssue -> BaseIssue.Level.HIGH == baseIssue.getLevel())
-                    .filter(baseIssue -> "SQL Injection".equalsIgnoreCase(scanResult.getI18n().get(baseIssue.getTypeId()).get(Reports.Locale.EN).getTitle()))
+                    .filter(baseIssue -> "SQL Injection".equalsIgnoreCase(scanResult.getI18n().get(baseIssue.getIssueTypeKey()).get(Reports.Locale.EN).getTitle()))
                     .count();
             Assertions.assertNotEquals(0, sqliCount);
         }
@@ -52,7 +52,7 @@ public class ScanResultTest extends BaseTest {
             long xssCount = scanResult.getIssues().stream()
                     .filter(baseIssue -> baseIssue instanceof VulnerabilityIssue)
                     .filter(baseIssue -> BaseIssue.Level.MEDIUM == baseIssue.getLevel())
-                    .filter(baseIssue -> "Cross-Site Scripting".equalsIgnoreCase(scanResult.getI18n().get(baseIssue.getTypeId()).get(Reports.Locale.EN).getTitle()))
+                    .filter(baseIssue -> "Cross-Site Scripting".equalsIgnoreCase(scanResult.getI18n().get(baseIssue.getIssueTypeKey()).get(Reports.Locale.EN).getTitle()))
                     .count();
             Assertions.assertNotEquals(0, xssCount);
         }
