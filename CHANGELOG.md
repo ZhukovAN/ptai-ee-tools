@@ -203,3 +203,4 @@
 + [Feature] Python DSVW test code added
 ### 20221021
 + [Feature] PT AI v.4.1.1 support added
++ [Fix] Fixed PT AI 3.6 issue title / descriptions international encodings
