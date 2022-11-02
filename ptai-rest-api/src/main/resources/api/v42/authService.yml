@@ -1,0 +1,1837 @@
+openapi: 3.0.1
+info:
+  title: authService
+  version: 1.0.0
+servers:
+  - url: https://ptai42.domain.org:443/
+security:
+  - Bearer: []
+paths:
+  /api/auth/accessToken:
+    get:
+      tags:
+        - AccessToken
+      summary: All access tokens
+      responses:
+        '200':
+          description: Returns tokens
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccessTokenModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccessTokenModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccessTokenModel'
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - AccessToken
+      summary: Create access key
+      requestBody:
+        description: Access token
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+      responses:
+        '200':
+          description: Return created key
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AccessTokenCreatedModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenCreatedModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenCreatedModel'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/accessToken/{id}:
+    get:
+      tags:
+        - AccessToken
+      summary: Access token by id
+      parameters:
+        - name: id
+          in: path
+          description: Token`s id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Returns tokens
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AccessTokenModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenModel'
+        '401':
+          description: Unauthorized
+  /api/auth/accessToken/revoke:
+    put:
+      tags:
+        - AccessToken
+      summary: Revoke access token
+      parameters:
+        - name: id
+          in: query
+          description: Token`s id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/signin:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Auth
+      summary: "Login by access token in request headers.\r\nSend access token in header with name \"Access-Token\""
+      parameters:
+        - name: scopeType
+          in: query
+          schema:
+            $ref: '#/components/schemas/AuthScopeType'
+      responses:
+        '200':
+          description: Returns the created JWT token
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+        '401':
+          description: Unauthorized
+  /api/auth/userLogin:
+    post:
+      tags:
+        - Auth
+      summary: Login local user by credentials
+      parameters:
+        - name: scopeType
+          in: query
+          description: Scope type
+          schema:
+            $ref: '#/components/schemas/AuthScopeType'
+      requestBody:
+        description: Model with username and password
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/UserLoginModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserLoginModel'
+      responses:
+        '200':
+          description: Returns JWT token or pair of access and refresh tokes for Web scope
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/refreshToken:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Auth
+      summary: Refresh token
+      responses:
+        '200':
+          description: Returns the created JWT token
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResultModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResultModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResultModel'
+        '401':
+          description: Unauthorized
+  /api/auth/signout:
+    post:
+      tags:
+        - Auth
+      summary: Local signout via Authorization token in Bearer header
+      responses:
+        '200':
+          description: Returns the created JWT token
+        '401':
+          description: Unauthorized
+  /api/auth/external/providers:
+    get:
+      tags:
+        - ExternalAuth
+      summary: Get available auth providers
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+  /api/auth/external/signin:
+    get:
+      tags:
+        - ExternalAuth
+      summary: Sign in via external auth scheme
+      parameters:
+        - name: ProviderId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: ReturnUrl
+          in: query
+          schema:
+            type: string
+        - name: ScopeType
+          in: query
+          schema:
+            $ref: '#/components/schemas/AuthScopeType'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+  /api/auth/external/signin/ldap:
+    post:
+      tags:
+        - ExternalAuth
+      summary: Sign in via external ldap auth scheme
+      requestBody:
+        description: Auth model
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ExternalLdapSignInModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalLdapSignInModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ExternalLdapSignInModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ExternalLdapSignInModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+  /api/auth/external/sessions:
+    get:
+      tags:
+        - ExternalAuth
+      summary: Get session info for external auth
+      parameters:
+        - name: ProviderId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: SessionId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: ScopeType
+          in: query
+          schema:
+            $ref: '#/components/schemas/AuthScopeType'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+            text/json:
+              schema:
+                type: string
+        '401':
+          description: Unauthorized
+  /api/auth/external/signout:
+    post:
+      tags:
+        - ExternalAuth
+      summary: Sign out via external auth scheme
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                AuthToken:
+                  type: string
+                ReturnUrl:
+                  type: string
+            encoding:
+              AuthToken:
+                style: form
+              ReturnUrl:
+                style: form
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/external/test/ldap:
+    post:
+      tags:
+        - ExternalAuth
+      summary: Test connection for LDAP settings
+      parameters:
+        - name: providerId
+          in: query
+          description: Provider identifier if needed
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: LDAP settings
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/LdapSettingsModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LdapSettingsModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LdapSettingsModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/LdapSettingsModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/external/test/ldap/{providerId}:
+    post:
+      tags:
+        - ExternalAuth
+      summary: Test connection for LDAP settings
+      parameters:
+        - name: providerId
+          in: path
+          description: Provider identifier if needed
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: LDAP settings
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/LdapSettingsModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LdapSettingsModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/LdapSettingsModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/LdapSettingsModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/external/test/openid:
+    post:
+      tags:
+        - ExternalAuth
+      summary: Test connection for OpenId settings
+      parameters:
+        - name: providerId
+          in: query
+          description: Provider identifier if needed
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: OpenId settings
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettingsModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettingsModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettingsModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettingsModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/external/test/openid/{providerId}:
+    post:
+      tags:
+        - ExternalAuth
+      summary: Test connection for OpenId settings
+      parameters:
+        - name: providerId
+          in: path
+          description: Provider identifier if needed
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        description: OpenId settings
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettingsModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettingsModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettingsModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/OpenIdSettingsModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/external/metadata/saml2:
+    post:
+      tags:
+        - ExternalAuth
+      summary: Generate Saml2 metadata by settings
+      parameters:
+        - name: Settings
+          in: query
+          schema:
+            $ref: '#/components/schemas/Saml2SettingsModel'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                SigningCertificateFile:
+                  type: string
+                  format: binary
+            encoding:
+              SigningCertificateFile:
+                style: form
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/membership:
+    get:
+      tags:
+        - Membership
+      summary: Gets all project and global members together
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserInfoModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserInfoModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserInfoModel'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Membership
+      summary: Updates user membership (request body contains UserInfo structure that have all user's membership - global and project)
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/UserInfoModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserInfoModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserInfoModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserInfoModel'
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UserInfoModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoModel'
+        '401':
+          description: Unauthorized
+  /api/auth/membership/{userId}:
+    get:
+      tags:
+        - Membership
+      summary: Gets a user project and global membership
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UserInfoModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoModel'
+        '401':
+          description: Unauthorized
+  /api/auth/membership/project/{projectId}:
+    get:
+      tags:
+        - Membership
+      summary: Gets project members
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectMemberModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectMemberModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectMemberModel'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - Membership
+      summary: Adds project members
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectMember'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectMember'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectMember'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectMember'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Membership
+      summary: Updates project member
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/ProjectMember'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectMember'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/ProjectMember'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/ProjectMember'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/membership/project/{projectId}/{id}:
+    delete:
+      tags:
+        - Membership
+      summary: Deletes one project member
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/projectPermissions/{projectId}:
+    get:
+      tags:
+        - ProjectPermissions
+      summary: Get project permissions
+      parameters:
+        - name: projectId
+          in: path
+          description: Project Id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectPermissionsModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectPermissionsModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectPermissionsModel'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/projectPermissions:
+    put:
+      tags:
+        - ProjectPermissions
+      summary: Apply project permissions changes
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectPermissionsModel'
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectPermissionsModel'
+          text/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectPermissionsModel'
+          application/*+json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProjectPermissionsModel'
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/users/current:
+    get:
+      tags:
+        - User
+      summary: User from current jwt token
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UserModel'
+        '401':
+          description: Unauthorized
+  /api/auth/users/{userId}/roles:
+    get:
+      tags:
+        - User
+      summary: User`s global roles
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleModel'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/users/{userId}/roles/{projectId}:
+    get:
+      tags:
+        - User
+      summary: User`s project roles
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleModel'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/users/{userId}/permissions:
+    get:
+      tags:
+        - User
+      summary: User`s global permissions
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionType'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionType'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionType'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/users/{userId}/permissions/{projectId}:
+    get:
+      tags:
+        - User
+      summary: User`s permissions on project
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionType'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionType'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PermissionType'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/users/{userId}/permissions/projects:
+    get:
+      tags:
+        - User
+      summary: User`s permissions by UserId
+      parameters:
+        - name: userId
+          in: path
+          description: User identifier
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectPermissions'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectPermissions'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectPermissions'
+        '400':
+          description: Bad Request
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/users/current/password:
+    put:
+      tags:
+        - User
+      summary: Update user password
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              type: string
+          application/json:
+            schema:
+              type: string
+          text/json:
+            schema:
+              type: string
+          application/*+json:
+            schema:
+              type: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/users/{userId}/delete:
+    delete:
+      tags:
+        - User
+      summary: Block member. It just made user inactive but not deletes it from DB
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/users/{userId}/restore:
+    put:
+      tags:
+        - User
+      summary: Unblock member. Makes an user active again
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+components:
+  schemas:
+    AccessTokenCreatedModel:
+      type: object
+      properties:
+        token:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AccessTokenCreateModel:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        expiresDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessTokenScopeType'
+          nullable: true
+      additionalProperties: false
+    AccessTokenModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        expiresDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        createdDateTime:
+          type: string
+          format: date-time
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessTokenScopeType'
+          nullable: true
+        creator:
+          $ref: '#/components/schemas/UserModel'
+      additionalProperties: false
+    AccessTokenScopeType:
+      enum:
+        - None
+        - ScanAgent
+        - LightClientAndPlugins
+      type: string
+      format: ''
+    ApiErrorModel:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ApiErrorType'
+        details:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+      additionalProperties: false
+    ApiErrorType:
+      enum:
+        - None
+        - INCORRECT_USER_AND_PASSWORD
+        - USER_ID_IS_EMPTY
+        - MEMBER_ALREADY_EXISTS
+        - PROJECT_ROLE_PERMISSIONS_ALREADY_EXISTS
+        - ACCESS_TOKEN_IS_INCORRECT
+        - ACCESS_TOKEN_WITH_SAME_NAME_ALREADY_EXISTS
+        - PASSWORD_IS_INCORRECT
+        - USER_IS_INCORRECT
+        - INITIATOR_NOT_FOUND
+        - CREDENTIAL_STORE_IS_UNVAILABLE_OR_TAINTED
+        - USER_BLOCKED
+        - CANNOT_ASSIGN_PROJECT_ROLE_TO_ADMINISTRATOR
+        - EXT_AUTH_PROVIDERS_GET_ERROR
+        - EXT_AUTH_PROVIDERS_BY_SAME_SCHEME_LIMIT_ERROR
+        - EXT_AUTH_PROVIDERS_AT_LEAST_ONE_ENABLED_LIMIT_ERROR
+        - EXT_AUTH_PROVIDER_GET_NOT_FOUND
+        - EXT_AUTH_PROVIDER_GET_ERROR
+        - EXT_AUTH_PROVIDER_UPDATE_ERROR
+        - EXT_AUTH_PROVIDER_DELETE_ERROR
+        - EXT_AUTH_PROVIDER_IS_INCORRECT
+        - EXT_AUTH_PROVIDER_NAME_IS_EMPTY
+        - EXT_AUTH_PROVIDER_NAME_LENGTH_LIMIT
+        - EXT_AUTH_PROVIDER_WITH_SAME_NAME_ALREADY_EXISTS
+        - EXT_AUTH_SETTINGS_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_OPENID_AUTHORITY_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_OPENID_CLIENT_ID_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_OPENID_CLIENT_SECRET_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_ISSUER_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_ALLOWED_ISSUER_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_ACS_URL_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_LOGOUT_URL_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_SIGN_VALIDATION_CERT_IS_EMPTY
+        - EXT_AUTH_SETTINGS_SAML2_SIGN_VALIDATION_CERT_SIZE_LIMIT
+        - EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_IS_EMPTY
+        - EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_SIZE_LIMIT
+        - EXT_AUTH_SETTINGS_SAML2_NAMEID_POLICY_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_EMPTY
+        - EXT_AUTH_SETTINGS_LDAP_HOST_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_LDAP_HOST_HAS_SCHEMA
+        - EXT_AUTH_SETTINGS_LDAP_PORT_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_LDAP_SSL_PORT_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_LDAP_BASE_DN_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_TEST_CONNECTION_FAILED
+        - EXT_AUTH_ROLE_MAPPINGS_EMPTY_FIELDS
+        - EXT_AUTH_ROLE_MAPPINGS_NO_GLOBAL_ROLES
+        - EXT_AUTH_SIGNIN_ERROR
+        - EXT_AUTH_SIGNIN_CALLBACK_ERROR
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_EMPTY
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_EMPTY_OR_DISABLED
+        - EXT_AUTH_SIGNIN_SCOPE_TYPE_IS_INCORRECT
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_NOT_AUTHENTICATED
+        - EXT_AUTH_SIGNIN_INVALID_CREDENTIALS
+        - EXT_AUTH_SIGNIN_INVALID_SESSION_ID
+        - EXT_AUTH_SIGNIN_SCHEME_IS_INCORRECT
+        - EXT_AUTH_SIGNIN_OPENID_INVALID_CONFIGURATION
+        - EXT_AUTH_SIGNIN_OPENID_TOKEN_EXPIRED
+        - EXT_AUTH_SIGNIN_OPENID_INCONSISTENT_RESPONSE_MODE_AND_TYPE
+        - EXT_AUTH_SIGNIN_SAML2_SETTINGS_IS_EMPTY
+        - EXT_AUTH_SIGNIN_SAML2_RESPONSE_STATUS_ERROR
+        - EXT_AUTH_SIGNIN_SAML2_INVALID_SIGNATURE
+        - EXT_AUTH_SIGNIN_LDAP_SSL_REQUIRED
+        - EXT_AUTH_SIGNIN_LDAP_SETTINGS_IS_EMPTY
+        - EXT_AUTH_SIGN_OUT_ERROR
+        - EXT_AUTH_SIGN_OUT_PROVIDER_IS_EMPTY
+        - EXT_AUTH_SIGN_OUT_TOKEN_NOT_FOUND
+        - EXT_AUTH_SIGN_OUT_SCHEME_IS_INCORRECT
+        - EXT_AUTH_SIGN_OUT_OPENID_ERROR
+        - EXT_AUTH_SIGN_OUT_SAML2_ERROR
+        - EXT_AUTH_SIGN_OUT_SAML2_EMPTY_LOGOUT_URL_ERROR
+        - EXT_AUTH_SESSION_GET_ERROR
+        - EXT_AUTH_SESSION_CLAIMS_NOT_DEFINED
+        - EXT_AUTH_SESSION_NOT_FOUND
+        - EXT_AUTH_SESSION_EXPIRED
+        - EXT_AUTH_SESSION_PROVIDER_NOT_FOUND
+        - EXT_AUTH_SESSION_USER_NOT_EQUAL
+        - EXT_AUTH_METADATA_SAML2_ERROR
+        - EXT_AUTH_USER_PROVISION_ERROR
+        - EXT_AUTH_USER_PROVISION_USER_IS_NOT_DEFINED
+        - EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_NOT_MAPPED
+        - EXT_AUTH_USER_PROVISION_NAME_FIELD_IS_NOT_MAPPED
+        - UPDATE_PACKAGE_VERSION_IS_ALREADY_UPLOADED
+        - UPDATE_PACKAGE_UPLOADED_IS_ALREADY_STARTED
+        - UPDATE_PACKAGE_UNKNOWN_PRODUCT
+        - UPDATE_PACKAGE_VERSION_INVALID
+        - UPDATE_PACKAGE_VERSION_IS_NOT_UPLOADED
+        - UPDATE_SERVER_PROCESS_RUN_TIMEOUT
+        - UPDATE_SERVER_PARAMETERS_INVALID
+        - UPDATE_SERVER_INSTALLER_EXIT_WITH_ERROR
+        - UPDATE_SERVER_PACKAGE_IS_INCORRECT
+        - UPDATE_SERVER_NOT_ENOUGH_SPACE
+        - CERTIFICATE_FILE_IS_EMPTY
+        - CERTIFICATE_IS_ALREADY_INSTALLED
+        - CERTIFICATE_IS_NOT_VALID
+        - URI_IS_NOT_VALID
+        - PORT_IS_NOT_SPECIFIED
+        - PROJECT_WITH_SAME_NAME_ALREADY_EXISTS
+        - UNEXPECTED_SCAN_STAGE
+        - PROJECT_NOT_FOUND
+        - SCANRESULT_NOT_FOUND
+        - INVALID_JSON_FIELDS
+        - INCORRECT_SAST_RULES
+        - UNEXPECTED_LANGUAGE
+        - MAIL_PROFILE_NOT_FOUND
+        - UPDATER_NOT_SET
+        - ISSUE_NOT_FOUND
+        - SCANSETTINGS_NOT_FOUND
+        - INVALID_QUERY_PARAMETER
+        - ISSUE_TRACKER_CONNECTION_NOT_FOUND
+        - ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET
+        - ISSUE_TRACKER_SETTINGS_ID_NOT_SET
+        - ISSUE_TRACKER_CREDENTIALS_NOT_SET
+        - ISSUE_TRACKER_HOST_IS_INCORRECT
+        - ISSUE_TRACKER_OAUTH_DATA_NOT_SET
+        - ISSUE_TRACKER_TRACKER_NOT_FOUND
+        - ISSUE_TRACKER_TRACKER_NOT_FOUND_WITH_OAUTH
+        - ISSUE_TRACKER_INVALID_TICKET_LINK
+        - ISSUE_TRACKER_UNSUPPORTED_FIELDS_COFIGURATION
+        - ISSUE_TRACKER_TICKET_CREATION_FAILED
+        - ISSUE_TRACKER_PRIORITIES_GETTING_FAILED
+        - ISSUE_TRACKER_USERS_GETTING_FAILED
+        - ISSUE_TRACKER_STATUSES_GETTING_FAILED
+        - ISSUE_TRACKER_FIELDS_GETTING_FAILED
+        - ISSUE_TRACKER_OPTIONS_GETTING_FAILED
+        - ISSUE_TRACKER_EXISTING_TICKETS_GETTING_FAILED
+        - ISSUE_TRACKER_COMPONENTS_GETTING_FAILED
+        - ISSUE_TRACKER_CAPTCHA_CHALLENGE
+        - ISSUE_TRACKER_AUTHENTICATION_DENIED_DETAILED
+        - ISSUE_TRACKER_AUTHENTICATION_DENIED
+        - ISSUE_TRACKER_AUTHENTICATION_FAILED
+        - ISSUE_TRACKER_OAUTH_SETTINGS_INVALID
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_GETTING_ACCESS_TOKEN_FAILED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_INVALID_ACCESS_TOKEN_RETURNED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_GETTING_REQUEST_TOKEN_FAILED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_INVALID_REQUEST_TOKEN_RETURNED
+        - FS_SOURCE_IS_BUSY
+        - DIRECTORY_NOT_FOUND
+        - ISSUE_ATTACH_TICKET_LINK_FAILED
+        - COMMENT_POLICY_FAILED_COMMENT_IS_EMPTY
+        - PROJECTS_COUNT_LIMITED_BY_LICENSE
+        - LICENSE_FILE_IS_INVALID
+        - LICENSE_EXPIRED
+        - LICENSE_FINGERPRINT_ERROR
+        - LICENSE_WITHOUT_FINGERPRINT
+        - LANGUAGE_NOT_ALLOWED_BY_LICENCE
+        - LICENSED_AGENTS_LIMIT_EXCEED
+        - COULD_NOT_STORE_LICENSE
+        - LICENSE_SERVICE_NOT_AVAILABLE
+        - LICENSE_UNLICENSED_USAGE
+        - UNKNOWN_SOURCE_VERSION_CONTROL_SYSTEM
+        - SOURCE_VERSION_CONTROL_SYSTEM_ERROR
+        - INVALID_VERSION_CONTROL_SYSTEM_SETTINGS
+        - SCAN_AGENT_NOT_FOUND
+        - SCAN_ALREADY_SCHEDULED
+        - INCORRECT_AGENT_STATUS
+        - SCAN_AGENT_WAS_SUSPENDED
+        - SCAN_AGENT_IS_SCANNING
+        - SCAN_NOT_FOUND
+        - ACTIVE_SCAN_AGENTS_NOT_FOUND
+        - SCAN_AGENT_IS_ACTIVE
+        - SCHEDULING_IS_LOCKED
+        - SCAN_AGENT_NUMBER_EXCEED
+        - SERVER_CERTIFICATE_NOT_FOUND
+        - FILESYSTEM_ERROR_ACCESS_DENIED
+        - VAULT_CREDENTIALS_NOT_FOUND
+        - REPORT_TEMPLATE_NOT_FOUND
+        - REPORT_GENERATE_FAILED
+        - REPORT_TEMPLATE_INVALID
+        - REPORT_TEMPLATE_UNKNOWN_FORMAT
+        - REPORT_INCORRECT_PARAMETERS
+        - REPORT_TEMPLATE_WITH_SAME_NAME_ALREADY_EXISTS
+        - REPORT_TEMPLATE_FILE_NAME_INCORRECT_MACROS
+        - INVALID_VERSION_CONTROL_SYSTEM_CONNECTION_SETTINGS
+        - COULD_NOT_STORE_PROJECT
+        - COULD_NOT_STORE_SCAN_SETTINGS
+        - FILES_FOR_DOWNLOAD_NOT_FOUND
+        - PROJECTS_FILES_NOT_FOUND
+        - INVALID_UPLOAD_PATH
+        - INVALID_PATH_PARAMETER
+        - COULD_NOT_CHECKOUT_PROJECT
+        - COULD_NOT_UPDATE_PROJECT_SOURCES_FROM_SOURCE_CONTROL
+        - USER_ID_IS_INCORRECT
+      type: string
+      format: ''
+    AuthProviderModel:
+      type: object
+      properties:
+        Id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        scheme:
+          $ref: '#/components/schemas/AuthProviderScheme'
+        enabled:
+          type: boolean
+      additionalProperties: false
+    AuthProviderScheme:
+      enum:
+        - OpenIdConnect
+        - Saml2
+        - Ldap
+      type: string
+      format: ''
+    AuthResultModel:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          nullable: true
+        refreshToken:
+          type: string
+          nullable: true
+        expiredAt:
+          type: string
+          format: date-time
+        needChangePassword:
+          type: boolean
+      additionalProperties: false
+    AuthScopeType:
+      enum:
+        - None
+        - Agent
+        - Internal
+        - Web
+        - WebRefresh
+        - WebLongRefresh
+        - AccessToken
+        - AccessTokenRefresh
+      type: string
+      format: ''
+    ExternalLdapSignInModel:
+      type: object
+      properties:
+        providerId:
+          type: string
+          format: uuid
+          nullable: true
+        user:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        scopeType:
+          $ref: '#/components/schemas/AuthScopeType'
+        rememberMe:
+          type: boolean
+      additionalProperties: false
+    GlobalMemberInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        roleId:
+          type: integer
+          format: int64
+      additionalProperties: false
+    LdapSettingsModel:
+      type: object
+      properties:
+        host:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+        sslPort:
+          type: integer
+          format: int32
+        useSsl:
+          type: boolean
+        baseDn:
+          type: string
+          nullable: true
+        rootUserDn:
+          type: string
+          nullable: true
+        rootUserPassword:
+          type: string
+          nullable: true
+        searchFilter:
+          type: string
+          nullable: true
+        syncUsersInterval:
+          type: string
+          format: date-span
+      additionalProperties: false
+    OpenIdResponseMode:
+      enum:
+        - Query
+        - FormPost
+        - Fragment
+      type: string
+      format: ''
+    OpenIdResponseType:
+      enum:
+        - Code
+        - CodeIdToken
+        - CodeIdTokenToken
+        - CodeToken
+        - IdToken
+        - IdTokenToken
+        - None
+        - Token
+      type: string
+      format: ''
+    OpenIdSettingsModel:
+      type: object
+      properties:
+        authority:
+          type: string
+          nullable: true
+        clientId:
+          type: string
+          nullable: true
+        clientSecret:
+          type: string
+          nullable: true
+        responseMode:
+          $ref: '#/components/schemas/OpenIdResponseMode'
+        responseType:
+          $ref: '#/components/schemas/OpenIdResponseType'
+        externalLogout:
+          type: boolean
+      additionalProperties: false
+    PermissionType:
+      enum:
+        - None
+        - ManageIssueTrackerTicket
+        - ManagePermissions
+        - ViewProject
+        - CreateProject
+        - DeleteProject
+        - ChangeIssueStatus
+        - ManageScan
+        - ManageGlobalParams
+        - DeleteScanResult
+        - UpdateProject
+        - ManageUpdate
+        - ManageIssueTracker
+        - DiscardIssueWithoutComment
+        - ApproveIssueWithoutComment
+        - ManageIssueTrackerIntegration
+        - ManageLicense
+        - DeleteIssueTrackerTicket
+        - WorkWithScanScheduler
+        - ReadSettings
+      type: string
+      format: ''
+    ProjectMember:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        projectId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        roleId:
+          type: integer
+          format: int64
+        assignedBy:
+          $ref: '#/components/schemas/RoleAssignedBy'
+      additionalProperties: false
+    ProjectMemberInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        roleId:
+          type: integer
+          format: int64
+        projectId:
+          type: string
+          format: uuid
+        projectName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ProjectMemberModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        user:
+          $ref: '#/components/schemas/UserModel'
+        roleId:
+          type: integer
+          format: int64
+        projectId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    ProjectPermissions:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        projectId:
+          type: string
+          format: uuid
+        roleId:
+          type: integer
+          format: int64
+        permissions:
+          $ref: '#/components/schemas/PermissionType'
+      additionalProperties: false
+    ProjectPermissionsModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        projectId:
+          type: string
+          format: uuid
+        roleId:
+          type: integer
+          format: int64
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionType'
+          nullable: true
+      additionalProperties: false
+    RefreshTokenResultModel:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          nullable: true
+        expiredAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+    RoleAssignedBy:
+      enum:
+        - User
+        - System
+      type: string
+      format: ''
+    RoleModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          nullable: true
+        isAdmin:
+          type: boolean
+        isGlobal:
+          type: boolean
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/PermissionType'
+          nullable: true
+      additionalProperties: false
+    Saml2NameIdPolicy:
+      enum:
+        - Unspecified
+        - Persistent
+        - Transient
+        - Email
+      type: string
+      format: ''
+    Saml2SettingsModel:
+      type: object
+      properties:
+        issuer:
+          type: string
+          nullable: true
+        allowedIssuer:
+          type: string
+          nullable: true
+        singleSignOnDestination:
+          type: string
+          nullable: true
+        singleLogoutDestination:
+          type: string
+          nullable: true
+        signatureAlgorithm:
+          $ref: '#/components/schemas/Saml2SignatureAlgorithm'
+        signingCertificateFileName:
+          type: string
+          nullable: true
+        signingCertificatePassword:
+          type: string
+          nullable: true
+        signatureValidationCertificateFileName:
+          type: string
+          nullable: true
+        validateResponse:
+          type: boolean
+        nameIdPolicy:
+          $ref: '#/components/schemas/Saml2NameIdPolicy'
+        signAuthnRequest:
+          type: boolean
+        externalLogout:
+          type: boolean
+      additionalProperties: false
+    Saml2SignatureAlgorithm:
+      enum:
+        - RsaSha1
+        - RsaSha256
+        - RsaSha512
+        - DsaSha1
+      type: string
+      format: ''
+    UserInfoModel:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        authentication:
+          type: string
+          nullable: true
+        isActive:
+          type: boolean
+        globalMemberInfo:
+          $ref: '#/components/schemas/GlobalMemberInfo'
+        projectMemberInfos:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectMemberInfo'
+          nullable: true
+      additionalProperties: false
+    UserLoginModel:
+      type: object
+      properties:
+        login:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        rememberMe:
+          type: boolean
+      additionalProperties: false
+    UserModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        login:
+          type: string
+          nullable: true
+        isRoot:
+          type: boolean
+        isExternal:
+          type: boolean
+        isActive:
+          type: boolean
+        needChangePassword:
+          type: boolean
+        authProvider:
+          $ref: '#/components/schemas/AuthProviderModel'
+        lastLoginDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      description: Please insert JWT with Bearer into field
+      name: Authorization
+      in: header
+    ApiKeyAuth:
+      type: apiKey
+      name: Access-Token
+      in: header
