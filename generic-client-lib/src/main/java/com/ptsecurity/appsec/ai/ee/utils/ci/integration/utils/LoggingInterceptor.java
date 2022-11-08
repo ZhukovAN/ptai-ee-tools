@@ -14,14 +14,30 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.LOGGING_HTTP_REQUEST_MAX_BODY_SIZE;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.*;
 
 @Slf4j
 @AllArgsConstructor
 public class LoggingInterceptor implements Interceptor {
     @NonNull
     protected AdvancedSettings advancedSettings = AdvancedSettings.getDefault();
+
+    protected static boolean isCredentialsHeader(@NonNull final String headerName) {
+        return
+                headerName.equalsIgnoreCase("Access-Token") ||
+                headerName.equalsIgnoreCase("Authorization");
+    }
+
+    protected void traceHeaders(@NonNull final String caption, @NonNull final Headers headers) {
+        log.trace(caption);
+        boolean secure = !advancedSettings.getBoolean(LOGGING_HTTP_CREDENTIALS);
+        for (String name : headers.names()) {
+            if (secure && isCredentialsHeader(name))
+                log.trace("{}: ${apiToken}", name);
+            else
+                log.trace("{}: {}", name, headers.get(name));
+        }
+    }
 
     @NotNull
     @Override
@@ -30,7 +46,7 @@ public class LoggingInterceptor implements Interceptor {
 
         long requestTime = System.nanoTime();
         log.trace("Sending {} request to {}", request.method(), request.url());
-        log.trace("Request headers: {}", request.headers());
+        traceHeaders("Request headers:", request.headers());
         if (null != request.body())
             traceBody(request.headers(), request.body());
 
@@ -38,24 +54,40 @@ public class LoggingInterceptor implements Interceptor {
         long responseTime = System.nanoTime();
         log.trace(String.format("Received %d response for %s in %.1fms",
                 response.code(), response.request().url(), (responseTime - requestTime) / 1e6d));
+        traceHeaders("Response headers:", response.headers());
 
-        log.trace("Response headers: {}", response.headers());
-
-        int maxBody = advancedSettings.getInt(LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE);
-        if (0 != maxBody && null != response.body()) {
-            BufferedSource source = response.body().source();
-            source.request(Long.MAX_VALUE); // Buffer the entire body.
-            Buffer buffer = source.getBuffer();
-            if (buffer.size() < maxBody) maxBody = (int) buffer.size();
-            String bufferData = buffer.clone().readString(maxBody, StandardCharsets.UTF_8);
-
-            if (maxBody >= bufferData.length()) {
-                log.trace("Response body: {}", StringUtils.isEmpty(bufferData) ? "[empty]" : bufferData);
-            } else {
-                log.trace("Response body trimmed to first {} bytes as it {} bytes long", maxBody, bufferData.length());
-                log.trace("Trimmed response body: {}", bufferData.substring(0, maxBody));
+        boolean secure = !advancedSettings.getBoolean(LOGGING_HTTP_CREDENTIALS);
+        boolean logBody = true;
+        if (secure) {
+            // Need to check if we are in authentication call
+            StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+            for (StackTraceElement element : elements) {
+                if (element.getClassName().matches("^com.ptsecurity.appsec.[a-zA-Z0-9.]+.ApiClient$") && "authenticate".equals(element.getMethodName())) {
+                    logBody = false;
+                    break;
+                }
             }
         }
+
+        if (logBody) {
+            int maxBody = advancedSettings.getInt(LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE);
+            if (0 != maxBody && null != response.body()) {
+                BufferedSource source = response.body().source();
+                source.request(Long.MAX_VALUE); // Buffer the entire body.
+                Buffer buffer = source.getBuffer();
+                if (buffer.size() < maxBody) maxBody = (int) buffer.size();
+                String bufferData = buffer.clone().readString(maxBody, StandardCharsets.UTF_8);
+
+                if (maxBody >= bufferData.length()) {
+                    log.trace("Response body: {}", StringUtils.isEmpty(bufferData) ? "[empty]" : bufferData);
+                } else {
+                    log.trace("Response body trimmed to first {} bytes as it {} bytes long", maxBody, bufferData.length());
+                    log.trace("Trimmed response body: {}", bufferData.substring(0, maxBody));
+                }
+            }
+        } else
+            log.trace("Response body skipped for authentication call");
+
         return response;
     }
 

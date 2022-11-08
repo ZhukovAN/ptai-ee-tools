@@ -22,7 +22,7 @@ public class AdvancedSettings implements Serializable {
     private final Map<SettingInfo, Object> settings = new HashMap<>();
 
     public enum SettingType {
-        STRING, INTEGER
+        STRING, INTEGER, BOOLEAN
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -33,6 +33,7 @@ public class AdvancedSettings implements Serializable {
          */
         LOGGING_HTTP_RESPONSE_MAX_BODY_SIZE("logging.http.response.max.body.size", SettingType.INTEGER, 102400, Resources::i18n_ast_settings_advanced_logging_http_response_max_body_size),
         LOGGING_HTTP_REQUEST_MAX_BODY_SIZE("logging.http.request.max.body.size", SettingType.INTEGER, 51200, Resources::i18n_ast_settings_advanced_logging_http_request_max_body_size),
+        LOGGING_HTTP_CREDENTIALS("logging.http.credentials", SettingType.BOOLEAN, Boolean.FALSE, Resources::i18n_ast_settings_advanced_logging_http_credentials),
         HTTP_REQUEST_READ_TIMEOUT("http.request.read.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_http_request_read_timeout),
         HTTP_REQUEST_WRITE_TIMEOUT("http.request.write.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_http_request_write_timeout),
         AST_RESULT_REST_URL_FILENAME("ast.result.rest.url.filename", SettingType.STRING, "", Resources::i18n_ast_settings_advanced_ast_result_rest_url_filename),
@@ -72,6 +73,14 @@ public class AdvancedSettings implements Serializable {
                 } catch (NumberFormatException e) {
                     log.warn("Skip {} = {} as string to number conversion failed", setting.getName(), stringValue);
                 }
+            } else if (SettingType.BOOLEAN == setting.getType()) {
+                try {
+                    boolean value = Boolean.parseBoolean(stringValue);
+                    log.trace("Set {} = {}", setting.getName(), stringValue);
+                    settings.put(setting, value);
+                } catch (NumberFormatException e) {
+                    log.warn("Skip {} = {} as string to boolean conversion failed", setting.getName(), stringValue);
+                }
             } else
                 log.trace("Skip {} = {} as parameter of unknown type", setting.getName(), stringValue);
         }
@@ -104,8 +113,14 @@ public class AdvancedSettings implements Serializable {
 
     public String getString(@NonNull final SettingInfo info) {
         if (SettingType.STRING != info.getType())
-            throw GenericException.raise("Can't get advanced setting integer value", new ClassCastException());
+            throw GenericException.raise("Can't get advanced setting string value", new ClassCastException());
         return (String) settings.get(info);
+    }
+
+    public boolean getBoolean(@NonNull final SettingInfo info) {
+        if (SettingType.BOOLEAN != info.getType())
+            throw GenericException.raise("Can't get advanced setting boolean value", new ClassCastException());
+        return (Boolean) settings.get(info);
     }
 
     @Override
