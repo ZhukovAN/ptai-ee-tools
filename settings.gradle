@@ -4,6 +4,9 @@
 // that isn't accessible now
 pluginManagement {
     repositories {
+        maven {
+            url 'https://repo.jenkins-ci.org/releases/'
+        }
         gradlePluginPortal() // Include public Gradle plugin portal
     }
 }
