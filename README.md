@@ -89,3 +89,8 @@ Jenkins' integration tests use embedded Jenkins server to create AST jos and lau
 ```
 $ ./gradlew clean build jenkinsTest
 ```
+## Use advanced settings
+Some parts of plugin internal behaviour aren't accessible from UI or via CLI parameters. Those advanced settings are to be defined as key / value pairs (see AdvancedSettings.java for possible values). For example, plugins remove JWT and API tokens data from trace logs but you may override that using `logging.http.credentials` advanced setting:
+```
+java -Dptai.logging.http.credentials=true -jar ptai-cli-plugin.jar check-server --url https://ptai.domain.org --token TOKEN_GOES_HERE
+```
