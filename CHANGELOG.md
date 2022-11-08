@@ -206,3 +206,5 @@
 + [Fix] Fixed PT AI 3.6 issue title / descriptions international encodings
 + [Fix] BaseIssue's isNew implemented instead of isNewInScanResultId
 + [Fix] SCA issue title fixed
+### 20221108
++ [Fix] JWT and API tokens are masked in trace logs by default. To override this behaviour set `ptai.logging.http.credentials` advanced setting to `true`

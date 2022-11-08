@@ -185,14 +185,17 @@ public class ApiClient extends AbstractApiClient {
                 jwtData.getAccessToken(),
                 jwtData.getRefreshToken(),
                 Objects.requireNonNull(jwtData.getExpiredAt()).toString());
-        log.trace("JWT parse result: {}", res);
+        boolean insecure = advancedSettings.getBoolean(AdvancedSettings.SettingInfo.LOGGING_HTTP_CREDENTIALS);
+        if (insecure)
+            log.trace("JWT parse result: {}", res);
         // JwtResponse's refreshToken field is null after refresh, let's fill it
         // to avoid multiple parsing calls
         if (StringUtils.isEmpty(res.getRefreshToken()))
             res.setRefreshToken(this.apiJwt.getRefreshToken());
         // Store new JWT and set it as Bearer API key to all APIs
         setApiJwt(res);
-        log.trace("JWT: " + res);
+        if (insecure)
+            log.trace("JWT: " + res);
 
         return res;
     }
