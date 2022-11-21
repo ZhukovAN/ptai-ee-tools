@@ -4012,7 +4012,6 @@ components:
           format: uuid
         scanDate:
           type: string
-          # V.4.1.1: Had to remove date-time specification as value returned doesn't conform to RFC 3339
           format: date-time
         progress:
           $ref: '#/components/schemas/ScanProgressModel'
