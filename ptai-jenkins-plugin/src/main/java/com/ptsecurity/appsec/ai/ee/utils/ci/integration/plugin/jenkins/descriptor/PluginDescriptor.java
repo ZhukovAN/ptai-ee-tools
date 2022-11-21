@@ -72,13 +72,6 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         load();
     }
 
-    private int lastElementId = 0;
-
-    @JavaScriptMethod
-    public synchronized String createElementId() {
-        return "ptaiJenkinsPlugin_" + lastElementId++;
-    }
-
     @Override
     public boolean isApplicable(Class<? extends AbstractProject> jobType) {
         return true;
