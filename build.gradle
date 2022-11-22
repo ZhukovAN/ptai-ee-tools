@@ -31,7 +31,6 @@ subprojects {
         mavenCentral()
         maven { url 'https://repo.jenkins-ci.org/releases/' }
         maven { url 'https://download.jetbrains.com/teamcity-repository/' }
-        maven { url 'https://nexus.pentaho.org/content/groups/omni/' }
     }
 
     dependencies {
