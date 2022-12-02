@@ -452,75 +452,33 @@ swaggerSources {
         }
     }
 
-    auth42 {
-        inputFile = file('src/main/resources/api/v42/authService.yml')
+    api42 {
+        inputFile = file('src/main/resources/api/v42/swagger.yaml')
         code {
             language = 'java'
             library = 'okhttp-gson'
             additionalProperties = [
-                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.auth.model',
-                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.auth.api',
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.api.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.api.api',
                     'dateLibrary': 'java8',
                     'hideGenerationTimestamp': 'true'
             ]
         }
     }
 
-    filesstore42 {
-        inputFile = file('src/main/resources/api/v42/filesStore.yml')
+    notifications42 {
+        inputFile = file('src/main/resources/api/v42/notifications.yml')
         code {
             language = 'java'
             library = 'okhttp-gson'
             additionalProperties = [
-                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.filesstore.model',
-                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.filesstore.api',
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.notifications.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.notifications.api',
                     'dateLibrary': 'java8',
                     'hideGenerationTimestamp': 'true'
             ]
         }
     }
-
-    projectmanagement42 {
-        inputFile = file('src/main/resources/api/v42/projectManagement.yml')
-        code {
-            language = 'java'
-            library = 'okhttp-gson'
-            additionalProperties = [
-                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.projectmanagement.model',
-                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.projectmanagement.api',
-                    'dateLibrary': 'java8',
-                    'hideGenerationTimestamp': 'true'
-            ]
-        }
-    }
-
-    scanscheduler42 {
-        inputFile = file('src/main/resources/api/v42/scanScheduler.yml')
-        code {
-            language = 'java'
-            library = 'okhttp-gson'
-            additionalProperties = [
-                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.scanscheduler.model',
-                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.scanscheduler.api',
-                    'dateLibrary': 'java8',
-                    'hideGenerationTimestamp': 'true'
-            ]
-        }
-    }
-
-    systemmanagement42 {
-        inputFile = file('src/main/resources/api/v42/systemManagement.yml')
-        code {
-            language = 'java'
-            library = 'okhttp-gson'
-            additionalProperties = [
-                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.systemmanagement.model',
-                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v42.systemmanagement.api',
-                    'dateLibrary': 'java8',
-                    'hideGenerationTimestamp': 'true'
-            ]
-        }
-    }    
 }
 
 compileJava.dependsOn \
@@ -554,7 +512,9 @@ compileJava.dependsOn \
  swaggerSources.scanscheduler411.code, \
  swaggerSources.systemmanagement411.code, \
  swaggerSources.legacy411.code, \
-swaggerSources.notifications411.code
+ swaggerSources.notifications411.code, \
+ swaggerSources.api42.code, \
+ swaggerSources.notifications42.code
 
 sourceSets.main.java.srcDirs \
  "${swaggerSources.auth36.code.outputDir}/src/main/java", \
@@ -587,6 +547,7 @@ sourceSets.main.java.srcDirs \
  "${swaggerSources.scanscheduler411.code.outputDir}/src/main/java", \
  "${swaggerSources.systemmanagement411.code.outputDir}/src/main/java", \
  "${swaggerSources.notifications411.code.outputDir}/src/main/java", \
- "${swaggerSources.legacy411.code.outputDir}/src/main/java"
-
+ "${swaggerSources.legacy411.code.outputDir}/src/main/java", \
+ "${swaggerSources.api42.code.outputDir}/src/main/java", \
+ "${swaggerSources.notifications42.code.outputDir}/src/main/java"
 

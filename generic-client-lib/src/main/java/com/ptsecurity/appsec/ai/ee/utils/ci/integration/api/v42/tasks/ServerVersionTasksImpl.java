@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v41.tasks;
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v42.tasks;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
@@ -23,8 +23,8 @@ public class ServerVersionTasksImpl extends AbstractTaskImpl implements ServerVe
         for (Component component : Component.values()) {
             log.debug("Getting current {} component version", component.getValue());
             String version = call(
-                    () -> client.getVersionApi().apiVersionsProductCurrentGet(component.getValue()),
-                    "PT AI server component API current version get failed");
+                    () -> client.getLegacyVersionApi().apiVersionsPackageCurrentGet(),
+                    "PT AI server API current version get failed");
             log.debug("Current version: {}", version);
             res.put(component, version);
         }
