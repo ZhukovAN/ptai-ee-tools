@@ -17,6 +17,7 @@ class ChartDataModelTest extends BaseTest {
     public void testJsonConversion() {
         ObjectMapper mapper = createFaultTolerantObjectMapper();
         for (Connection.Version version : Connection.Version.values()) {
+            if (version == Connection.Version.V42) continue;
             String json = extractSevenZippedSingleStringFromResource("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_OWASP_BRICKS_PROJECT_NAME + ".json.7z");
             Assertions.assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);

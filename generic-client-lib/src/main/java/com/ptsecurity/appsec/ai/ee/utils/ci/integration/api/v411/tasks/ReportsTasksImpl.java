@@ -207,14 +207,14 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 .parameters(new UserReportParametersModel()
                         .includeDFD(report.isIncludeDfd())
                         .includeGlossary(report.isIncludeGlossary())
-                        // TODO: there's no report filters support in 4.0
+                        // TODO: there's no report filters support in 4.1.1
                         // .useFilters(null != report.getFilters())
                         .formatType(ReportFormatType.CUSTOM)
                         .reportTemplateId(templateModel.getId()))
                 .scanResultId(scanResultId)
                 .projectId(projectId)
                 .localeId(templateLocale.getValue());
-        // TODO: there's no report filters support in 4.0
+        // TODO: there's no report filters support in 4.1.1
         // if (null != report.getFilters()) model.setFilters(ReportsConverter.convert(report.getFilters()));
         log.trace("Call report generation API");
         File file = call(

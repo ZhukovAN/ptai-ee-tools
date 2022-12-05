@@ -1,12 +1,13 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v41;
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v42;
 
 import com.google.gson.reflect.TypeToken;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.server.v41.projectmanagement.ApiResponse;
+import com.ptsecurity.appsec.ai.ee.server.v42.api.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.JsonAstJobIT;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v42.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseClientIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
@@ -38,13 +39,13 @@ import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettin
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
 
 @Slf4j
-@DisplayName("Test PT AI 4.1 REST API data structures")
+@DisplayName("Test PT AI 4.2 REST API data structures")
 @Tag("development")
 public class RestApiDataStructuresIT extends BaseClientIT {
 
     @SneakyThrows
     protected void generateData(@NonNull final Path destination, @NonNull final BaseAstIT.Project project, @NonNull final Consumer<JsonSettingsTestHelper> modifySettings) {
-        if (Connection.Version.V41 != CONNECTION().getVersion()) return;
+        if (Connection.Version.V42 != CONNECTION().getVersion()) return;
 
         RawData rawData = RawData.builder()
                 .fileName(UUID.randomUUID() + ".json")
@@ -75,12 +76,12 @@ public class RestApiDataStructuresIT extends BaseClientIT {
         ScanResult scanResult = BaseJsonHelper.createObjectMapper().readValue(json, ScanResult.class);
 
         ConnectionSettings connectionSettings = CONNECTION_SETTINGS().validate();
-        com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v41.ApiClient client = new ApiClient(connectionSettings);
+        ApiClient client = new ApiClient(connectionSettings);
         // Initialize all API clients with URL, timeouts, SSL settings etc.
         client.init();
         client.authenticate();
 
-        Path jsons = destination.resolve("v41").resolve("json");
+        Path jsons = destination.resolve("v42").resolve("json");
         jsons.toFile().mkdirs();
         Path scanSettingsDir = jsons.resolve("scanSettings");
         scanSettingsDir.toFile().mkdirs();
@@ -89,21 +90,29 @@ public class RestApiDataStructuresIT extends BaseClientIT {
         Path issuesModelDir = jsons.resolve("issuesModel");
         issuesModelDir.toFile().mkdirs();
 
-        Call call = client.getLegacyProjectsApi().apiProjectsProjectIdScanSettingsScanSettingsIdGetCall(scanResult.getProjectId(), scanResult.getScanSettings().getId(), null);
+        Call call = client.getProjectsApi().apiProjectsProjectIdScanSettingsScanSettingsIdGetCall(scanResult.getProjectId(), scanResult.getScanSettings().getId(), null);
         final Type stringType = new TypeToken<String>() {}.getType();
         ApiResponse<String> scanSettingsResponse = client.getProjectsApi().getApiClient().execute(call, stringType);
         FileUtils.writeStringToFile(scanSettingsDir.resolve(project.getName() + ".json").toFile(), scanSettingsResponse.getData(), StandardCharsets.UTF_8);
 
-        call = client.getLegacyProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGetCall(scanResult.getProjectId(), scanResult.getId(), null);
+        call = client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGetCall(scanResult.getProjectId(), scanResult.getId(), null);
         ApiResponse<String> scanResultResponse = client.getProjectsApi().getApiClient().execute(call, stringType);
         FileUtils.writeStringToFile(scanResultDir.resolve(project.getName() + ".json").toFile(), scanResultResponse.getData(), StandardCharsets.UTF_8);
 
+        call = client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdIssuesGetCall(scanResult.getProjectId(), scanResult.getId(), null);
+        ApiResponse<String> scanIssuesResponse = client.getProjectsApi().getApiClient().execute(call, stringType);
+        FileUtils.writeStringToFile(issuesModelDir.resolve(project.getName() + ".json").toFile(), scanIssuesResponse.getData(), StandardCharsets.UTF_8);
+
         for (Reports.Locale locale : Reports.Locale.values()) {
             log.trace("Getting issues data using {} locale", locale);
-            File issuesModelFile = client.getLegacyProjectsApi().apiProjectsProjectIdScanResultsScanResultIdIssuesGet(scanResult.getProjectId(), scanResult.getId(), locale.getCode());
-            log.debug("Localized ({}) issues stored to temp file {}", locale, issuesModelFile.getAbsolutePath());
-            Path sevenZip = issuesModelDir.resolve(project.getName() + "." + locale.getLocale().getLanguage() + ".json.7z");
-            sevenZipData(sevenZip, FileUtils.readFileToByteArray(issuesModelFile));
+            call = client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdIssuesHeadersGetCall(scanResult.getProjectId(), scanResult.getId(), locale.getValue(), null);
+            ApiResponse<String> scanIssuesHeadersResponse = client.getProjectsApi().getApiClient().execute(call, stringType);
+            try (TempFile tempFile = TempFile.createFile()) {
+                FileUtils.writeStringToFile(tempFile.toFile(), scanIssuesHeadersResponse.getData(), StandardCharsets.UTF_8);
+                log.debug("Localized ({}) issue headers stored to temp file {}", locale, tempFile.toFile().getAbsolutePath());
+                Path sevenZip = issuesModelDir.resolve(project.getName() + "." + locale.getLocale().getLanguage() + ".json.7z");
+                sevenZipData(sevenZip, FileUtils.readFileToByteArray(tempFile.toFile()));
+            };
         }
     }
 

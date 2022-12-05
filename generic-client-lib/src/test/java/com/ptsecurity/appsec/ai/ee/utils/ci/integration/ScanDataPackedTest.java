@@ -19,6 +19,7 @@ public class ScanDataPackedTest extends BaseTest {
     @DisplayName("Packing detailed scan briefs")
     public void packOwaspBenchmarksScanBriefDetailed() {
         for (Connection.Version version : Connection.Version.values()) {
+            if (version == Connection.Version.V42) continue;
             for (String projectName : ALL_PROJECT_NAMES) {
                 File scanBriefDetailedFile = extractPackedResourceFile("json/scan/brief/detailed/" + version.name().toLowerCase() + "/" + projectName + ".json.7z").toFile();
                 ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
@@ -34,7 +35,6 @@ public class ScanDataPackedTest extends BaseTest {
                 Assertions.assertEquals(
                         scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().size(),
                         scanBriefDetailedExtracted.getDetails().getChartData().getBaseIssueDistributionData().size());
-
             }
         }
     }

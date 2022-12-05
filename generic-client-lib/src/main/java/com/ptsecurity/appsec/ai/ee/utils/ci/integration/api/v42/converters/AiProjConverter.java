@@ -35,11 +35,11 @@ public class AiProjConverter {
     /**
      * Set of ScanAppType values that support abstract interpretation
      */
-    private static final Set<com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings.ScanAppType> SCAN_APP_TYPE_AI = new HashSet<>(Arrays.asList(
-            com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings.ScanAppType.PHP,
-            com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings.ScanAppType.JAVA,
-            com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings.ScanAppType.CSHARP,
-            com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings.ScanAppType.JAVASCRIPT));
+    private static final Set<com.ptsecurity.appsec.ai.ee.scan.settings.v42.AiProjScanSettings.ScanAppType> SCAN_APP_TYPE_AI = new HashSet<>(Arrays.asList(
+            com.ptsecurity.appsec.ai.ee.scan.settings.v42.AiProjScanSettings.ScanAppType.PHP,
+            com.ptsecurity.appsec.ai.ee.scan.settings.v42.AiProjScanSettings.ScanAppType.JAVA,
+            com.ptsecurity.appsec.ai.ee.scan.settings.v42.AiProjScanSettings.ScanAppType.CSHARP,
+            com.ptsecurity.appsec.ai.ee.scan.settings.v42.AiProjScanSettings.ScanAppType.JAVASCRIPT));
     /**
      * Set of programming languages values that support abstract interpretation
      */
@@ -145,9 +145,9 @@ public class AiProjConverter {
     }
 
     /**
-     * Method converts PT AI API version independent language to PT AI v.4.0 API programming language group
+     * Method converts PT AI API version independent language to PT AI v.4.2 API programming language group
      * @param language PT AI API version independent language
-     * @return PT AI v.4.0 API programming language group
+     * @return PT AI v.4.2 API programming language group
      */
     @NonNull
     public static ProgrammingLanguageGroup convertLanguageGroup(@NonNull final ScanResult.ScanSettings.Language language) {

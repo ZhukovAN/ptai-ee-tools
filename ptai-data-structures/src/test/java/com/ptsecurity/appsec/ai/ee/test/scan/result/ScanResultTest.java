@@ -24,6 +24,7 @@ public class ScanResultTest extends BaseTest {
     public void parseBricksScanResults() {
         ObjectMapper mapper = createFaultTolerantObjectMapper();
         for (Connection.Version version : Connection.Version.values()) {
+            if (version == Connection.Version.V42) continue;
             String json = extractSevenZippedSingleStringFromResource("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_OWASP_BRICKS_PROJECT_NAME + ".json.7z");
             Assertions.assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);
@@ -44,6 +45,7 @@ public class ScanResultTest extends BaseTest {
     public void parsePhpSmokeScanResults() {
         ObjectMapper mapper = createFaultTolerantObjectMapper();
         for (Connection.Version version : Connection.Version.values()) {
+            if (version == Connection.Version.V42) continue;
             String json = extractSevenZippedSingleStringFromResource("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_SMOKE_MEDIUM_PROJECT_NAME + ".json.7z");
             Assertions.assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);
@@ -64,6 +66,7 @@ public class ScanResultTest extends BaseTest {
     public void serializeScanResults() {
         ObjectMapper mapper = createFaultTolerantObjectMapper();
         for (Connection.Version version : Connection.Version.values()) {
+            if (version == Connection.Version.V42) continue;
             String json = extractSevenZippedSingleStringFromResource("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_SMOKE_MEDIUM_PROJECT_NAME + ".json.7z");
             Assertions.assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);
