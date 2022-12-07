@@ -21,7 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ScanBrief {
     public enum ApiVersion {
-        V36, V40, V41, V411
+        V411
     }
 
     @NonNull
@@ -29,7 +29,7 @@ public class ScanBrief {
     @Setter
     @JsonProperty
     @Builder.Default
-    protected ApiVersion apiVersion = ApiVersion.V36;
+    protected ApiVersion apiVersion = ApiVersion.V411;
 
     @NonNull
     @Getter
