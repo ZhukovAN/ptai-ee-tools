@@ -72,6 +72,7 @@ public abstract class BaseIssue {
         return Hash.md5(issue.getClazz().name() + "::" + issue.getTypeId());
     }
 
+    @Builder.Default
     private transient String issueTypeKey = null;
 
     @JsonProperty("issueTypeKey")

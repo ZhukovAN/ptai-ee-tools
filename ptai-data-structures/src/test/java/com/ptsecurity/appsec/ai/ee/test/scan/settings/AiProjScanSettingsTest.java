@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.scan.settings.v36.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;

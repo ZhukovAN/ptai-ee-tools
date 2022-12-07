@@ -17,7 +17,5 @@ public interface ServerVersionTasks {
         private final String value;
     }
 
-
     Map<Component, String> current() throws GenericException;
-    Map<Component, String> latest() throws GenericException;
 }

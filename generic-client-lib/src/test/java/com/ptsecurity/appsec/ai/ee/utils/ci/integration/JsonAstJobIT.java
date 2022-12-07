@@ -3,8 +3,6 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.*;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
@@ -12,15 +10,12 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.JsonAstJobSetupOperationsImpl;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -35,7 +30,7 @@ import java.util.stream.Collectors;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.PHP;
 import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level.*;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest.Connection.Version.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest.Connection.Version.V411;
 
 @DisplayName("Test JSON-based AST")
 @Tag("integration")
@@ -191,19 +186,11 @@ public class JsonAstJobIT extends BaseAstIT {
         Assertions.assertNotNull(scanResult);
         Assertions.assertNotEquals(0, scanResult.getIssues().size());
         // There's no way to disable entry point analysis in 4.0+ so results will always contain these issues
-        if (CONNECTION().getVersion().equals(V36)) {
-            long publicProtectedCount = scanResult.getIssues().stream()
-                    .filter(i -> i instanceof VulnerabilityIssue)
-                    .map(i -> (VulnerabilityIssue) i)
-                    .filter(c -> VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED == c.getScanMode()).count();
-            Assertions.assertEquals(scanResult.getIssues().size(), publicProtectedCount);
-        } else if (CONNECTION().getVersion().equals(V40) || CONNECTION().getVersion().equals(V41)) {
-            long publicProtectedCount = scanResult.getIssues().stream()
-                    .filter(i -> i instanceof VulnerabilityIssue)
-                    .map(i -> (VulnerabilityIssue) i)
-                    .filter(c -> VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED == c.getScanMode()).count();
-            Assertions.assertNotEquals(0, publicProtectedCount);
-        }
+        long publicProtectedCount = scanResult.getIssues().stream()
+                .filter(i -> i instanceof VulnerabilityIssue)
+                .map(i -> (VulnerabilityIssue) i)
+                .filter(c -> VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED == c.getScanMode()).count();
+        Assertions.assertNotEquals(0, publicProtectedCount);
     }
 
     @SneakyThrows

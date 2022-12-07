@@ -34,7 +34,6 @@ public class ScanDataPackedTest extends BaseTest {
                 Assertions.assertEquals(
                         scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().size(),
                         scanBriefDetailedExtracted.getDetails().getChartData().getBaseIssueDistributionData().size());
-
             }
         }
     }
