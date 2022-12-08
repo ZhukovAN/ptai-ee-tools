@@ -105,8 +105,9 @@ public abstract class BaseAstIT extends BaseClientIT {
     public static final Project JAVASCRIPT_VNWA = new Project(JAVASCRIPT_VNWA_PROJECT_NAME, "code/javascript-vnwa.7z", "json/scan/settings/settings.javascript-vnwa.aiproj");
     public static final Project CSHARP_WEBGOAT = new Project(CSHARP_WEBGOAT_PROJECT_NAME, "code/csharp-webgoat.zip", "json/scan/settings/settings.csharp-webgoat.aiproj");
     public static final Project PYTHON_DSVW = new Project(PYTHON_DSVW_PROJECT_NAME, "code/python-dsvw.7z", "json/scan/settings/settings.python-dsvw.aiproj");
+    public static final Project C_SARD_101_000_149_064 = new Project(C_SARD_101_000_149_064_PROJECT_NAME, "code/c-sard-testsuite-101-000-149-064.zip", "json/scan/settings/settings.c-sard-testsuite-101-000-149-064.aiproj");
 
-    public static final Project[] ALL = new Project[] { JAVA_APP01, JAVA_OWASP_BENCHMARK, PHP_OWASP_BRICKS, PHP_SMOKE_MISC, PHP_SMOKE_MEDIUM, PHP_SMOKE_HIGH, PHP_SMOKE_MULTIFLOW, JAVASCRIPT_VNWA, CSHARP_WEBGOAT, PYTHON_DSVW };
+    public static final Project[] ALL = new Project[] { JAVA_APP01, JAVA_OWASP_BENCHMARK, PHP_OWASP_BRICKS, PHP_SMOKE_MISC, PHP_SMOKE_MEDIUM, PHP_SMOKE_HIGH, PHP_SMOKE_MULTIFLOW, JAVASCRIPT_VNWA, CSHARP_WEBGOAT, PYTHON_DSVW, C_SARD_101_000_149_064 };
 
     @RequiredArgsConstructor
     public static class PolicyHelper {
