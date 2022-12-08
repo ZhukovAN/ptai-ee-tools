@@ -122,6 +122,12 @@ public class RestApiDataStructuresIT extends BaseClientIT {
     @Test
     public void generateRestApiDataStructures() {
         try (TempFile destination = TempFile.createFolder()) {
+            generateData(destination.toPath(), C_SARD_101_000_149_064, (helper) -> {
+                helper.setScanAppType(CONFIGURATION, FINGERPRINT, PMTAINT);
+                helper.isUseEntryAnalysisPoint(true);
+                helper.isUsePublicAnalysisMethod(true);
+            });
+
             generateData(destination.toPath(), PYTHON_DSVW, (helper) -> {
                 helper.setScanAppType(CONFIGURATION, FINGERPRINT, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);

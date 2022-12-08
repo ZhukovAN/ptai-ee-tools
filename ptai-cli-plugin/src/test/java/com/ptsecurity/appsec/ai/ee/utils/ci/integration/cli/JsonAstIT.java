@@ -148,4 +148,22 @@ class JsonAstIT extends BaseJsonIT {
         Assertions.assertTrue(Paths.get(destination.toString()).resolve("report.ru.html").toFile().exists());
         Assertions.assertTrue(Paths.get(destination.toString()).resolve("raw.json").toFile().exists());
     }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Execute AST of SARD C code using AIPROJ-defined scan settings")
+    public void testSard(@NonNull final TestInfo testInfo) {
+        log.trace(testInfo.getDisplayName());
+        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(C_SARD_101_000_149_064.getSettings());
+
+        int res = new CommandLine(new Plugin()).execute(
+                "json-ast",
+                "--url", CONNECTION().getUrl(),
+                "--token", CONNECTION().getToken(),
+                "--truststore", CA_PEM_FILE.toString(),
+                "--input", C_SARD_101_000_149_064.getCode().toString(),
+                "--output", destination.toString(),
+                "--settings-json", settings.serializeToFile().toString());
+        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+    }
 }
