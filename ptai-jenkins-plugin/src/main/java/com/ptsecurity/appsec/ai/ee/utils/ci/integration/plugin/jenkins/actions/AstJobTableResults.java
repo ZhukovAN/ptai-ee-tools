@@ -8,7 +8,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.ChartDataModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.I18nHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import hudson.model.Action;
 import hudson.model.Job;
 import hudson.model.Run;
@@ -25,6 +24,7 @@ import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.ScanDataPacked.Type.SCAN_BRIEF_DETAILED;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel.*;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -195,7 +195,7 @@ public class AstJobTableResults implements Action {
                 .yaxis(Collections.singletonList(yAxis))
                 .series(chartSeries)
                 .build();
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(chartDataModel);
+        return createObjectMapper().writeValueAsString(chartDataModel);
     }
 
     @SneakyThrows
@@ -254,7 +254,7 @@ public class AstJobTableResults implements Action {
                 .yaxis(Collections.singletonList(yAxis))
                 .series(chartSeries)
                 .build();
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(chartDataModel);
+        return createObjectMapper().writeValueAsString(chartDataModel);
     }
 
     @SneakyThrows
@@ -313,7 +313,7 @@ public class AstJobTableResults implements Action {
                 .yaxis(Collections.singletonList(yAxis))
                 .series(chartSeries)
                 .build();
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(chartDataModel);
+        return createObjectMapper().writeValueAsString(chartDataModel);
     }
 
     @SneakyThrows
@@ -360,7 +360,7 @@ public class AstJobTableResults implements Action {
             chartDataModel.getSeries().add(valueSeries);
             chartDataModel.getLegend().data.add(I18nHelper.i18n(value));
         }
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(chartDataModel);
+        return createObjectMapper().writeValueAsString(chartDataModel);
     }
 
     @Override

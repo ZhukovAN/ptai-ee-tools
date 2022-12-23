@@ -13,7 +13,6 @@ pluginManagement {
 
 rootProject.name = 'ptai-ee-tools'
 
-include ':ptai-test-tools'
 include ':pt-misc-tools'
 include ':ptai-i18n'
 include ':ptai-data-structures'

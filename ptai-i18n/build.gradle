@@ -10,6 +10,7 @@ buildscript {
 
 plugins {
     id 'java-library'
+    id 'java-test-fixtures'
 }
 
 group = "${rootGroup}"
@@ -17,6 +18,9 @@ group = "${rootGroup}"
 dependencies {
     // https://mvnrepository.com/artifact/org.jvnet.localizer/localizer
     implementation "org.jvnet.localizer:localizer:${localizerVersion}"
+    // Need this to write tests that use some common functions like
+    // logging, zipped data processing, JSON parse etc.
+    testFixturesApi(testFixtures(project(":pt-misc-tools")))
 }
 
 import org.jvnet.localizer.GeneratorTask

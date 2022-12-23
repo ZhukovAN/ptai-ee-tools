@@ -1,15 +1,13 @@
 package com.ptsecurity.appsec.ai.ee.scan.result.issue.types;
 
 import com.fasterxml.jackson.annotation.*;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
-import com.ptsecurity.misc.tools.crypro.Hash;
+import com.ptsecurity.misc.tools.helpers.HashHelper;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Common base parent class for all issues. As it is base it does
@@ -69,7 +67,7 @@ public abstract class BaseIssue {
     }
 
     public static String getIssueTypeKey(@NonNull final BaseIssue issue) {
-        return Hash.md5(issue.getClazz().name() + "::" + issue.getTypeId());
+        return HashHelper.md5(issue.getClazz().name() + "::" + issue.getTypeId());
     }
 
     @Builder.Default

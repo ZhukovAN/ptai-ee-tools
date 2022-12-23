@@ -8,7 +8,7 @@ import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.AiProjConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import lombok.NonNull;
@@ -21,7 +21,7 @@ import org.apache.http.HttpStatus;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
 public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {

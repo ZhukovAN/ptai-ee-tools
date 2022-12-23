@@ -1,293 +1,289 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
-import lombok.NonNull;
+import com.ptsecurity.misc.tools.TempFile;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.UUID;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
+import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.PHP_SMOKE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.ExitCode.FAILED;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.ExitCode.SUCCESS;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.GENERIC_POLICY;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.setup;
+import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStream;
+import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 
 @DisplayName("Check UI-defined AST scans")
-@Tag("integration")
 @Slf4j
-class UiAstIT extends BaseCliAstIT {
+class UiAstIT extends BaseCliIT {
     @Test
     @DisplayName("Show usage of UI-defined AST")
-    void testUiAstShowUsage(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    void showUiAstUsage() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast");
         Assertions.assertEquals(BaseCommand.ExitCode.INVALID_INPUT.getCode(), res);
     }
 
     @Test
+    @Tag("scan")
+    @Tag("integration")
     @DisplayName("AST of existing project")
-    void testExistingProject(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
+    void scanExistingProject() {
+        setup(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
+                "--project", PHP_SMOKE.getName(),
+                "--input", PHP_SMOKE.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken());
-        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+        Assertions.assertEquals(SUCCESS.getCode(), res);
     }
 
     @Test
+    @Tag("integration")
     @DisplayName("Fail AST of existing project with no source code included")
-    void testNoSourcesIncluded(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
+    void failIfNoSourcesIncluded() {
+        setup(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
+                "--project", PHP_SMOKE.getName(),
+                "--input", PHP_SMOKE.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--includes", "**/*.java",
                 "--excludes", "**/*");
-        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(FAILED.getCode(), res);
     }
 
     @Test
+    @Tag("scan")
+    @Tag("integration")
     @DisplayName("Fail AST of policy violating project")
-    void testPolicyFailForExistingProject(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        BaseAstIT.PHP_SMOKE_HIGH.setup(GENERIC_POLICY.getJson());
-
+    void failIfPolicyViolated() {
+        setup(PHP_SMOKE, GENERIC_POLICY.getJson());
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_HIGH.getName(),
-                "--input", PHP_SMOKE_HIGH.getCode().toString(),
-                "--output", destination.toString(),
+                "--project", PHP_SMOKE.getName(),
+                "--input", PHP_SMOKE.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--fail-if-failed");
-        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(FAILED.getCode(), res);
     }
 
     @Test
-    @DisplayName("Fail AST of missing project with custom truststore")
-    void testMissingProject(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    @Tag("integration")
+    @DisplayName("Fail AST of missing project")
+    void failIfProjectMissing() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName() + UUID.randomUUID(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
+                "--project", PHP_SMOKE.getName() + UUID.randomUUID(),
+                "--input", PHP_SMOKE.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken());
-        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(FAILED.getCode(), res);
     }
 
     @Test
+    @Tag("integration")
     @DisplayName("Fail AST of existing project without custom truststore")
-    void testWithoutTruststore(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
-
+    void failWithoutTruststore() {
+        setup(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
+                "--project", PHP_SMOKE.getName(),
+                "--input", PHP_SMOKE.getCode().toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--truststore", DUMMY_CA_PEM_FILE.toString());
-        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(FAILED.getCode(), res);
     }
 
     @Test
+    @Tag("scan")
+    @Tag("integration")
     @DisplayName("Insecure AST of existing project without custom truststore")
-    void testInsecureWithoutTruststore(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
-
+    void scanInsecureWithoutTruststore() {
+        setup(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
+                "--project", PHP_SMOKE.getName(),
+                "--input", PHP_SMOKE.getCode().toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--insecure");
-        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+        Assertions.assertEquals(SUCCESS.getCode(), res);
     }
 
     @SneakyThrows
     @Test
+    @Tag("scan")
+    @Tag("integration")
     @DisplayName("Twice AST of existing project to test report overwrite")
-    void testReportRewrite(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
+    void rewriteExistingReport() {
+        try (TempFile reportsFolder = TempFile.createFolder()) {
+            setup(PHP_SMOKE);
+            Path report = reportsFolder.toPath().resolve("owasp.en.html");
+            Integer res = new CommandLine(new Plugin()).execute(
+                    "ui-ast",
+                    "--project", PHP_SMOKE.getName(),
+                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--output", reportsFolder.toString(),
+                    "--url", CONNECTION().getUrl(),
+                    "--token", CONNECTION().getToken(),
+                    "--truststore", CA_PEM_FILE.toString(),
+                    "--report-file", report.getFileName().toString(),
+                    "--report-template", "OWASP top 10 2017 report");
+            Assertions.assertEquals(SUCCESS.getCode(), res);
+            Assertions.assertTrue(report.toFile().exists());
+            BasicFileAttributes attr = Files.readAttributes(report, BasicFileAttributes.class);
+            FileTime fileTime = attr.creationTime();
 
-        Path report = Paths.get(destination.toString()).resolve("owasp.en.html");
-        Integer res = new CommandLine(new Plugin()).execute(
-                "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
-                "--url", CONNECTION().getUrl(),
-                "--token", CONNECTION().getToken(),
-                "--truststore", CA_PEM_FILE.toString(),
-                "--report-file", report.getFileName().toString(),
-                "--report-template", "OWASP top 10 2017 report");
-        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
-        Assertions.assertTrue(report.toFile().exists());
-        BasicFileAttributes attr = Files.readAttributes(report, BasicFileAttributes.class);
-        FileTime fileTime = attr.creationTime();
-
-        res = new CommandLine(new Plugin()).execute(
-                "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
-                "--url", CONNECTION().getUrl(),
-                "--token", CONNECTION().getToken(),
-                "--truststore", CA_PEM_FILE.toString(),
-                "--report-file", report.getFileName().toString(),
-                "--report-template", "OWASP top 10 2017 report");
-        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
-        Assertions.assertTrue(report.toFile().exists());
-        attr = Files.readAttributes(report, BasicFileAttributes.class);
-        Assertions.assertNotEquals(fileTime, attr.lastModifiedTime());
+            res = new CommandLine(new Plugin()).execute(
+                    "ui-ast",
+                    "--project", PHP_SMOKE.getName(),
+                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--output", reportsFolder.toString(),
+                    "--url", CONNECTION().getUrl(),
+                    "--token", CONNECTION().getToken(),
+                    "--truststore", CA_PEM_FILE.toString(),
+                    "--report-file", report.getFileName().toString(),
+                    "--report-template", "OWASP top 10 2017 report");
+            Assertions.assertEquals(SUCCESS.getCode(), res);
+            Assertions.assertTrue(report.toFile().exists());
+            attr = Files.readAttributes(report, BasicFileAttributes.class);
+            Assertions.assertNotEquals(fileTime, attr.lastModifiedTime());
+        }
     }
 
     @SneakyThrows
     @Test
+    @Tag("scan")
+    @Tag("integration")
     @DisplayName("AST existing project with multiple JSON-defined reports")
-    void testJsonDefinedReports(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
+    void generateJsonDefinedReports() {
+        try (TempFile reportsFolder = TempFile.createFolder();
+             TempFile reportsJson = TempFile.createFile()) {
+            setup(PHP_SMOKE);
+            copyInputStreamToFile(getResourceStream("json/scan/reports/reports.1.json"), reportsJson.toFile());
 
-        Path reportsJson = TEMP_FOLDER().resolve(UUID.randomUUID().toString());
-        FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.1.json"), reportsJson.toFile());
-
-        Integer res = new CommandLine(new Plugin()).execute(
-                "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
-                "--url", CONNECTION().getUrl(),
-                "--token", CONNECTION().getToken(),
-                "--truststore", CA_PEM_FILE.toString(),
-                "--report-json", reportsJson.toString());
-        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
-        GenerateReportIT.checkReports(reportsJson, destination);
+            Integer res = new CommandLine(new Plugin()).execute(
+                    "ui-ast",
+                    "--project", PHP_SMOKE.getName(),
+                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--output", reportsFolder.toString(),
+                    "--url", CONNECTION().getUrl(),
+                    "--token", CONNECTION().getToken(),
+                    "--truststore", CA_PEM_FILE.toString(),
+                    "--report-json", reportsJson.toString());
+            Assertions.assertEquals(SUCCESS.getCode(), res);
+            GenerateReportIT.checkReports(reportsJson.toPath(), reportsFolder.toPath());
+        }
     }
 
     @SneakyThrows
     @Test
+    @Tag("integration")
     @DisplayName("Fail AST existing project with bad JSON-defined reports")
-    public void testInvalidJsonDefinedReports(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
-
-        Path reportsJson = TEMP_FOLDER().resolve(UUID.randomUUID().toString());
-        FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.2.json"), reportsJson.toFile());
-
-        Integer res = new CommandLine(new Plugin()).execute(
-                "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
-                "--url", CONNECTION().getUrl(),
-                "--token", CONNECTION().getToken(),
-                "--truststore", CA_PEM_FILE.toString(),
-                "--report-json", reportsJson.toString());
-        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
+    public void failInvalidReportsJson() {
+        try (TempFile reportsJson = TempFile.createFile()) {
+            setup(PHP_SMOKE);
+            copyInputStreamToFile(getResourceStream("json/scan/reports/reports.2.json"), reportsJson.toFile());
+            Integer res = new CommandLine(new Plugin()).execute(
+                    "ui-ast",
+                    "--project", PHP_SMOKE.getName(),
+                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--url", CONNECTION().getUrl(),
+                    "--token", CONNECTION().getToken(),
+                    "--truststore", CA_PEM_FILE.toString(),
+                    "--report-json", reportsJson.toString());
+            Assertions.assertEquals(FAILED.getCode(), res);
+        }
     }
 
     @SneakyThrows
     @Test
+    @Tag("scan")
+    @Tag("integration")
     @DisplayName("Fail AST existing project with JSON-defined reports with missing templates")
-    public void testMissingJsonDefinedReports(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
-
-        Path reportsJson = TEMP_FOLDER().resolve(UUID.randomUUID().toString());
-        FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.3.json"), reportsJson.toFile());
-
-        Integer res = new CommandLine(new Plugin()).execute(
-                "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
-                "--url", CONNECTION().getUrl(),
-                "--token", CONNECTION().getToken(),
-                "--truststore", CA_PEM_FILE.toString(),
-                "--report-json", reportsJson.toString());
-        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
+    public void failMissingJsonDefinedReportTemplates() {
+        try (TempFile reportsJson = TempFile.createFile()) {
+            setup(PHP_SMOKE);
+            copyInputStreamToFile(getResourceStream("json/scan/reports/reports.3.json"), reportsJson.toFile());
+            Integer res = new CommandLine(new Plugin()).execute(
+                    "ui-ast",
+                    "--project", PHP_SMOKE.getName(),
+                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--url", CONNECTION().getUrl(),
+                    "--token", CONNECTION().getToken(),
+                    "--truststore", CA_PEM_FILE.toString(),
+                    "--report-json", reportsJson.toString());
+            Assertions.assertEquals(FAILED.getCode(), res);
+        }
     }
 
     @Test
+    @Tag("integration")
     @DisplayName("Asynchronous AST of existing project")
-    void testExistingProjectAsync(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
-
+    void scanProjectAsync() {
+        Project phpSmokeClone = PHP_SMOKE.randomClone();
+        setup(phpSmokeClone);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
+                "--project", phpSmokeClone.getName(),
+                "--input", phpSmokeClone.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--async");
-        Assertions.assertEquals(BaseCommand.ExitCode.SUCCESS.getCode(), res);
+        Assertions.assertEquals(SUCCESS.getCode(), res);
     }
 
     @Test
+    @Tag("integration")
     @DisplayName("Asynchronous AST of missing project with custom truststore")
-    void testMissingProjectAsync(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
-
+    void failMissingProjectAsync() {
+        setup(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName() + UUID.randomUUID(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
+                "--project", PHP_SMOKE.getName() + UUID.randomUUID(),
+                "--input", PHP_SMOKE.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--async");
-        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(FAILED.getCode(), res);
     }
 
     @Test
+    @Tag("integration")
     @DisplayName("Asynchronous AST of existing project without custom truststore")
-    void testWithoutTruststoreAsync(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-        PHP_SMOKE_MEDIUM.setup();
-
+    void failWithoutTruststoreAsync() {
+        setup(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", BaseAstIT.PHP_SMOKE_MEDIUM.getName(),
-                "--input", PHP_SMOKE_MEDIUM.getCode().toString(),
-                "--output", destination.toString(),
+                "--project", PHP_SMOKE.getName(),
+                "--input", PHP_SMOKE.getCode().toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--truststore", DUMMY_CA_PEM_FILE.toString());
-        Assertions.assertEquals(BaseCommand.ExitCode.FAILED.getCode(), res);
+        Assertions.assertEquals(FAILED.getCode(), res);
     }
 }

@@ -30,21 +30,18 @@ dependencies {
     // Used inside generated code
     // https://mvnrepository.com/artifact/io.swagger/swagger-annotations
     implementation 'io.swagger:swagger-annotations:1.6.2'
-
     // Used inside generated code
     // https://mvnrepository.com/artifact/io.gsonfire/gson-fire
     implementation 'io.gsonfire:gson-fire:1.8.5'
-
     // Need this as generated code uses annotations like @Nullable etc.
     // https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api
     implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
-    // Need this to write tests that use data stored in 7zip-packed resource files
-    // like issues model, scan settings etc.
-    // Make test-tools fixtures available to descendants
-    testFixturesApi(testFixtures(project(":ptai-test-tools")))
-    testImplementation(testFixtures(project(":ptai-test-tools")))
-    // testFixturesImplementation(testFixtures(project(":ptai-test-tools")))
+    testImplementation(testFixtures(project(":ptai-data-structures")))
+    // Need this to write tests that use some common functions like
+    // logging, zipped data processing, JSON parse etc.
+    testFixturesApi(testFixtures(project(":pt-misc-tools")))
+    testFixturesImplementation(testFixtures(project(":ptai-data-structures")))
 }
 
 javadoc {

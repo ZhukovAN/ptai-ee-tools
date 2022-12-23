@@ -1,47 +1,32 @@
 plugins {
     id 'java-library'
-    id 'java-test-fixtures'
 }
 
 group = "${rootGroup}"
 
 dependencies {
+    // Support zip archives
     // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
-    implementation 'org.apache.commons:commons-compress:1.21'
-    // Need this to work with 7zip compression
+    api 'org.apache.commons:commons-compress:1.21'
+    // 7zip archives support
     // https://mvnrepository.com/artifact/org.tukaani/xz
-    implementation 'org.tukaani:xz:1.9'
-
+    api 'org.tukaani:xz:1.9'
     // https://mvnrepository.com/artifact/commons-io/commons-io
-    implementation 'commons-io:commons-io:2.6'
+    api 'commons-io:commons-io:2.6'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    api 'org.apache.commons:commons-lang3:3.8.1'
     // https://mvnrepository.com/artifact/commons-validator/commons-validator
-    implementation 'commons-validator:commons-validator:1.6'
-    // https://mvnrepository.com/artifact/org.apache.ant/ant
-    implementation 'org.apache.ant:ant:1.10.9'
+    api 'commons-validator:commons-validator:1.6'
     // https://mvnrepository.com/artifact/org.jooq/joor-java-8
-    implementation 'org.jooq:joor-java-8:0.9.13'
+    api 'org.jooq:joor-java-8:0.9.13'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
-    implementation 'org.apache.commons:commons-text:1.10.0'
-
+    api 'org.apache.commons:commons-text:1.10.0'
+    // Get HTTP error codes descriptions
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    api 'org.apache.httpcomponents:httpclient:4.5.10'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml
-    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
+    api "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
+    // Java 8 date / time API
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
-    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
-
-    testFixturesApi("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testFixturesImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14
-    testFixturesApi "org.slf4j:slf4j-jdk14:$slf4jVersion"
-
-    // Need this to write tests that use data stored in 7zip-packed resource files
-    // like issues model, scan settings etc.
-    // testImplementation(testFixtures(project(":ptai-data-structures")))
-    // testImplementation(testFixtures(project(":ptai-rest-api")))
-
-    // testFixturesImplementation(testFixtures(project(":ptai-data-structures")))
-    // testFixturesImplementation(testFixtures(project(":ptai-rest-api")))
-    testFixturesImplementation(testFixtures(project(":ptai-test-tools")))
+    api "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
 }
