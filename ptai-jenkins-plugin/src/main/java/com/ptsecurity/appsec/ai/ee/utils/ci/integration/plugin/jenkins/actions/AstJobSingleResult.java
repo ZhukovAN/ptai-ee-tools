@@ -13,7 +13,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.Pi
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.I18nHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.export.Export;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import hudson.model.Action;
 import hudson.model.Run;
 import jenkins.model.RunAction2;
@@ -27,6 +26,7 @@ import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.ScanDataPacked.Type.SCAN_BRIEF_DETAILED;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts.BaseJsonChartDataModel.*;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 
 @RequiredArgsConstructor
 public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuildAction {
@@ -135,7 +135,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
                             .build())
                     .build());
         });
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
+        return createObjectMapper().writeValueAsString(dataModel);
     }
 
     @SneakyThrows
@@ -175,7 +175,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
                             .build())
                     .build());
         });
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
+        return createObjectMapper().writeValueAsString(dataModel);
     }
 
     @SuppressWarnings("unused") // Called by groovy view
@@ -200,7 +200,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
+        return createObjectMapper().writeValueAsString(dataModel);
     }
 
     @SneakyThrows
@@ -226,7 +226,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
+        return createObjectMapper().writeValueAsString(dataModel);
     }
 
     @SneakyThrows
@@ -252,7 +252,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
+        return createObjectMapper().writeValueAsString(dataModel);
     }
 
     @SneakyThrows
@@ -278,7 +278,7 @@ public class AstJobSingleResult implements RunAction2, SimpleBuildStep.LastBuild
                     .build();
             dataModel.getSeries().get(0).getData().add(typeItem);
         }
-        return BaseJsonHelper.createObjectMapper().writeValueAsString(dataModel);
+        return createObjectMapper().writeValueAsString(dataModel);
     }
 
     protected List<Action> projectActions;

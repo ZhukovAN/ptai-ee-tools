@@ -4,7 +4,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.FileSaver;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.TextOutput;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AbstractFileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper;
+import com.ptsecurity.misc.tools.helpers.CallHelper;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

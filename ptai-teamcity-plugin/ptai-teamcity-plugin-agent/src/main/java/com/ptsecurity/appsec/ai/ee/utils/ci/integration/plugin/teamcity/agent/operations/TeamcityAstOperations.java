@@ -4,7 +4,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.agent.TeamcityAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
@@ -13,7 +13,6 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 
 import java.io.File;
-import java.util.Map;
 import java.util.UUID;
 
 @Builder

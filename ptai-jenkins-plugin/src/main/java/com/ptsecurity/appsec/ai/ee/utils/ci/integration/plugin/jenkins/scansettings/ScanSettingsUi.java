@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Val
 import hudson.Extension;
 import hudson.util.FormValidation;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -24,6 +25,7 @@ public class ScanSettingsUi extends ScanSettings {
     @Symbol("scanSettingsUi")
     public static class Descriptor extends ScanSettingsDescriptor {
         @Override
+        @NonNull
         public String getDisplayName() {
             return Resources.i18n_ast_settings_type_ui_label();
         }

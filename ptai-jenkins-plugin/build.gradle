@@ -328,8 +328,9 @@ def processJenkinsVersion() {
 
     // Starting with 2.264 (https://www.jenkins.io/blog/2020/11/10/major-changes-in-weekly-releases/)
     // need to use different UI
-    boolean newUi = (1 != compareVersion('2.264', versionString))
-    if (newUi)
+    if (1 != compareVersion('2.355', versionString))
+        sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-355+' ]
+    else if (1 != compareVersion('2.264', versionString))
         sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-264+' ]
     else
         sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-264-' ]

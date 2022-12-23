@@ -6,7 +6,7 @@ import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.GenericCliAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.utils.GracefulShutdown;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
 import lombok.Builder;
@@ -15,7 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Map;
 import java.util.UUID;
 
 @Builder

@@ -2,11 +2,12 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
+import com.ptsecurity.misc.tools.TempFile;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,9 +17,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest.TEMP_FOLDER;
-
 public class JsonSettingsTestHelper extends JsonSettingsHelper {
+    public JsonSettingsTestHelper(@NonNull Project project) throws GenericException {
+        super(project.getSettings());
+    }
+
     public JsonSettingsTestHelper(@NonNull String json) throws GenericException {
         super(json);
     }
@@ -118,11 +121,16 @@ public class JsonSettingsTestHelper extends JsonSettingsHelper {
     }
 
     @SneakyThrows
+    public Path toPath() {
+        return serializeToFile();
+    }
+
+    @SneakyThrows
     public Path serializeToFile() {
         String data = this.serialize();
-        File file = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-settings").toFile();
-        Files.write(file.toPath(), data.getBytes(StandardCharsets.UTF_8));
-        return file.toPath();
+        Path file = TempFile.createFile().toPath();
+        Files.write(file, data.getBytes(StandardCharsets.UTF_8));
+        return file;
     }
 
     public JsonSettingsTestHelper randomizeProjectName() {

@@ -2,8 +2,9 @@ package com.ptsecurity.appsec.ai.ee.test.scan.settings;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
+import com.ptsecurity.misc.tools.BaseTest;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,10 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStream;
+
+@Slf4j
 @DisplayName("Read and parse data from policy JSON resource file")
 public class PolicyTest extends BaseTest {
     @Test
@@ -21,7 +26,7 @@ public class PolicyTest extends BaseTest {
     public void loadGenericPolicy() {
         InputStream inputStream = getResourceStream("json/scan/settings/policy.generic.json");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         Policy[] policy = mapper.readValue(inputStream, Policy[].class);
 
         Assertions.assertNotNull(policy);

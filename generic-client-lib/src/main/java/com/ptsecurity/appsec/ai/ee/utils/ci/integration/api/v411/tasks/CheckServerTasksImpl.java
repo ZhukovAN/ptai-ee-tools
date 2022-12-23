@@ -5,14 +5,14 @@ import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.Enterpris
 import com.ptsecurity.appsec.ai.ee.server.v411.systemmanagement.model.HealthCheckSummaryResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.CheckServerTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.UrlHelper;
+import com.ptsecurity.misc.tools.helpers.UrlHelper;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
 import static com.ptsecurity.appsec.ai.ee.server.v411.systemmanagement.model.HealthStatus.HEALTHY;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 public class CheckServerTasksImpl extends AbstractTaskImpl implements CheckServerTasks {
     public CheckServerTasksImpl(@NonNull final AbstractApiClient client) {

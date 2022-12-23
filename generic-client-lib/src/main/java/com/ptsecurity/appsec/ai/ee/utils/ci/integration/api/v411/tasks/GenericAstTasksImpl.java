@@ -14,7 +14,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.EnumsConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.ScanErrorsConverter;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import lombok.NonNull;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.progress.Stage.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.IssuesConverter.convert;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
 public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstTasks {
@@ -84,6 +84,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         public void run() {
             while (!exit) {
                 try {
+                    // TODO: Add configuration parameter
                     Thread.sleep(5 * 60 * 1000);
                     log.trace("Poll {} project {} scan state", projectId, scanResultId);
                     ScanResultModel scanResult = call(

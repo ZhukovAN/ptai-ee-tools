@@ -1,31 +1,26 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
-import lombok.AllArgsConstructor;
+import com.ptsecurity.misc.tools.TempFile;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.compress.archivers.ArchiveOutputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
-import org.apache.commons.compress.archivers.zip.ZipFile;
-import org.apache.commons.compress.utils.SeekableInMemoryByteChannel;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Base64;
-import java.util.Date;
 import java.util.zip.Deflater;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
 @SuperBuilder
@@ -39,7 +34,7 @@ public class ScanDataPacked extends com.ptsecurity.appsec.ai.ee.scan.ScanDataPac
         try (
                 TempFile jsonFile = TempFile.createFile();
                 TempFile packedFile = TempFile.createFile();
-                ZipArchiveOutputStream outputStream = new ZipArchiveOutputStream(packedFile.toFile());) {
+                ZipArchiveOutputStream outputStream = new ZipArchiveOutputStream(packedFile.toFile())) {
             outputStream.setLevel(Deflater.BEST_COMPRESSION);
             log.debug("Storing data as JSON to file {}", jsonFile.toPath());
             call(() -> new ObjectMapper().writeValue(jsonFile.toFile(), data), "Object data serialization failed");

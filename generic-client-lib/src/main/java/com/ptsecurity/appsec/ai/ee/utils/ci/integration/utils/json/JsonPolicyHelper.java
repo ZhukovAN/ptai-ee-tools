@@ -2,11 +2,13 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
+import com.ptsecurity.misc.tools.helpers.CallHelper;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 public class JsonPolicyHelper extends BaseJsonHelper {
     public static Policy[] verify(final String json) throws GenericException {
@@ -18,8 +20,8 @@ public class JsonPolicyHelper extends BaseJsonHelper {
     }
 
     public static String serialize(@NonNull final Policy[] policy) throws GenericException {
-        return call(
-                () -> new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(policy),
+        return CallHelper.call(
+                () -> BaseJsonHelper.serialize(policy),
                 "JSON policy serialization failed");
     }
 

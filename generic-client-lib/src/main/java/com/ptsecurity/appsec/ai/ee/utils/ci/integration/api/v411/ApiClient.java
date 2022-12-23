@@ -13,11 +13,9 @@ import com.ptsecurity.appsec.ai.ee.server.v411.auth.model.UserLoginModel;
 import com.ptsecurity.appsec.ai.ee.server.v411.filesstore.api.StoreApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.legacy.api.VersionApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.notifications.model.ScanProgress;
-import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.api.ConfigsApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.api.LicenseApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.api.ProjectsApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.api.ReportsApi;
-import com.ptsecurity.appsec.ai.ee.server.v411.scanscheduler.api.ScanAgentApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.scanscheduler.api.ScanQueueApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.systemmanagement.api.HealthCheckApi;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
@@ -29,7 +27,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.events.ScanResu
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.events.ScanStartedEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.tasks.ServerVersionTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.*;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.Jwt;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ApiClientHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.LoggingInterceptor;
@@ -53,7 +52,7 @@ import java.util.concurrent.BlockingQueue;
 
 import static com.ptsecurity.appsec.ai.ee.server.v411.notifications.model.Stage.ABORTED;
 import static com.ptsecurity.appsec.ai.ee.server.v411.notifications.model.Stage.FAILED;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
 @VersionRange(min = { 4, 1, 1, 0 }, max = { 4, 1, 1, 99999 })
@@ -75,19 +74,11 @@ public class ApiClient extends AbstractApiClient {
 
     @Getter
     @ToString.Exclude
-    protected final ConfigsApi configsApi = new ConfigsApi(new com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.ApiClient());
-
-    @Getter
-    @ToString.Exclude
     protected final LicenseApi licenseApi = new LicenseApi(new com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.ApiClient());
 
     @Getter
     @ToString.Exclude
     protected final ScanQueueApi scanQueueApi = new ScanQueueApi(new com.ptsecurity.appsec.ai.ee.server.v411.scanscheduler.ApiClient());
-
-    @Getter
-    @ToString.Exclude
-    protected final ScanAgentApi scanAgentApi = new ScanAgentApi(new com.ptsecurity.appsec.ai.ee.server.v411.scanscheduler.ApiClient());
 
     @Getter
     @ToString.Exclude
@@ -103,12 +94,12 @@ public class ApiClient extends AbstractApiClient {
 
     public ApiClient(@NonNull final ConnectionSettings connectionSettings) {
         super(connectionSettings, AdvancedSettings.getDefault());
-        apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, legacyVersionApi));
+        apis.addAll(Arrays.asList(authApi, projectsApi, reportsApi, licenseApi, scanQueueApi, storeApi, healthCheckApi, legacyVersionApi));
     }
 
     public ApiClient(@NonNull final ConnectionSettings connectionSettings, @NonNull final AdvancedSettings advancedSettings) {
         super(connectionSettings, advancedSettings);
-        apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, legacyVersionApi));
+        apis.addAll(Arrays.asList(authApi, projectsApi, reportsApi, licenseApi, scanQueueApi, storeApi, healthCheckApi, legacyVersionApi));
     }
 
     protected ApiResponse<AuthResultModel> initialAuthentication() throws GenericException {
@@ -141,7 +132,7 @@ public class ApiClient extends AbstractApiClient {
         return ScanBrief.ApiVersion.V411;
     }
 
-    public JwtResponse authenticate() throws GenericException {
+    public Jwt authenticate() throws GenericException {
         @NonNull
         ApiResponse<AuthResultModel> jwtResponse;
 
@@ -181,18 +172,21 @@ public class ApiClient extends AbstractApiClient {
         // Parse JWT from response string
         final AuthResultModel jwtData = jwtResponse.getData();
         @NonNull
-        JwtResponse res = new JwtResponse(
+        Jwt res = new Jwt(
                 jwtData.getAccessToken(),
                 jwtData.getRefreshToken(),
-                Objects.requireNonNull(jwtData.getExpiredAt()).toString());
-        log.trace("JWT parse result: {}", res);
+                jwtData.getExpiredAt());
+        boolean insecure = advancedSettings.getBoolean(AdvancedSettings.SettingInfo.LOGGING_HTTP_CREDENTIALS);
+        if (insecure)
+            log.trace("JWT parse result: {}", res);
         // JwtResponse's refreshToken field is null after refresh, let's fill it
         // to avoid multiple parsing calls
         if (StringUtils.isEmpty(res.getRefreshToken()))
             res.setRefreshToken(this.apiJwt.getRefreshToken());
         // Store new JWT and set it as Bearer API key to all APIs
         setApiJwt(res);
-        log.trace("JWT: " + res);
+        if (insecure)
+            log.trace("JWT: " + res);
 
         return res;
     }
@@ -347,7 +341,6 @@ public class ApiClient extends AbstractApiClient {
             @NonNull final UUID scanResultId) {
         SubscriptionOnNotification subscription = new SubscriptionOnNotification();
         subscription.ClientId = id;
-        // subscription.Ids.add(scanResultId);
 
         subscription.NotificationTypeName = "ScanStarted";
         connection.send("SubscribeOnNotification", subscription);

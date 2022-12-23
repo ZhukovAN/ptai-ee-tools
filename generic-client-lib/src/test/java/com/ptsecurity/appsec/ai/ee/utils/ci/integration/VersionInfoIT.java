@@ -5,13 +5,13 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseClientIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.CheckServerTasks;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
+
+import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
 
 @DisplayName("Test dynamic API client functions")
 @Tag("integration")
@@ -24,7 +24,6 @@ public class VersionInfoIT extends BaseClientIT {
         connectionSettings = CONNECTION_SETTINGS();
     }
 
-    @SneakyThrows
     @Test
     @DisplayName("Check PT AI server status using insecure connection without trusted CA certificates")
     public void checkInsecureConnection(@NonNull final TestInfo testInfo) {
@@ -42,7 +41,6 @@ public class VersionInfoIT extends BaseClientIT {
         Assertions.assertThrows(GenericException.class, () -> Factory.client(connectionSettings));
     }
 
-    @SneakyThrows
     @Test
     @DisplayName("Check PT AI server status using secure connection")
     public void checkSecureConnection(@NonNull final TestInfo testInfo) {
@@ -57,5 +55,4 @@ public class VersionInfoIT extends BaseClientIT {
         connectionSettings.setCaCertsPem(getResourceString("keys/root-ca.dummy.org.pem"));
         Assertions.assertThrows(GenericException.class, () -> Factory.client(connectionSettings));
     }
-
 }

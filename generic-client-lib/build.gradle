@@ -64,12 +64,13 @@ dependencies {
 
     // Need this to write tests that use data stored in 7zip-packed resource files
     // like issues model, scan settings etc.
+    testImplementation(testFixtures(project(":pt-misc-tools")))
     testImplementation(testFixtures(project(":ptai-data-structures")))
     testImplementation(testFixtures(project(":ptai-rest-api")))
 
+    testFixturesImplementation(testFixtures(project(":pt-misc-tools")))
     testFixturesImplementation(testFixtures(project(":ptai-data-structures")))
     testFixturesImplementation(testFixtures(project(":ptai-rest-api")))
-    testFixturesImplementation(testFixtures(project(":ptai-test-tools")))
 }
 
 processResources {

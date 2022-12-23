@@ -20,7 +20,7 @@ with currently selected item and than call validateButton script
  */
 
 // Generate unique element id
-scanSettingsId = descriptor.createElementId()
+scanSettingsId = "ptai-scanSettings-" + UUID.randomUUID()
 
 pt.dropdownDescriptorSelector(
         // OOB dropdownDescriptorSelector lacks ID attribute, need to add it
@@ -41,7 +41,7 @@ f.invisibleEntry() {
             value: "")
 }
 
-configId = descriptor.createElementId()
+configId = "ptai-config-" + UUID.randomUUID()
 
 pt.dropdownDescriptorSelector(
         id: configId,
@@ -61,65 +61,21 @@ f.invisibleEntry() {
             value: "")
 }
 
-/*
-Want to use native validateButton code. Unfortunately it does not allows us to pass parameter values. So we search for
-combobox (now it may be done as we've added ID to dropdownDescriptorSelector), read selected item and save value
-as hidden element that can be processed by validateButton
- */
-script("""
-    function testPt(button) { 
-        var e = document.getElementById("${scanSettingsId}");
-        document.getElementById("${scanSettingsId}_value").value = e.options[e.selectedIndex].text;
-        e = document.getElementById("${configId}");
-        document.getElementById("${configId}_value").value = e.options[e.selectedIndex].text;
-        validateButton('${descriptor.descriptorFullUrl}/testProject','selectedScanSettings,selectedConfig,jsonSettings,jsonPolicy,projectName,serverUrl,serverCredentialsId,serverInsecure,configName',button);
-    };
-    
-    function triggerEvent(element, event){
-        if (document.createEventObject) {
-            // dispatch for IE
-            var evt = document.createEventObject();
-            return element.fireEvent('on'+event,evt);
-        } else {
-            // dispatch for firefox + others
-            var evt = document.createEvent("HTMLEvents");
-            evt.initEvent(event, true, true ); // event type,bubbling,cancelable
-            return !element.dispatchEvent(evt);
-        }
-    };
-    
-    function saveSelectedItem(e) {
-        var cb = e.target;
-        // As dropdownDescriptorSelector have no its own readable property to store
-        // currently selected item, we need to create corresponding hidden field 
-        // and add event handler to read selected item and store it there
-        // And as hidden fields do not automatically fire change event, we need to 
-        // trigger it explicitly
-        var selected = \$(cb.id + "_value"); 
-        selected.value = cb.options[cb.selectedIndex].text;
-        triggerEvent(selected, "change");
-    };
-    
-    function init(e) {
-        \$(e.id + "_value").value = e.options[e.selectedIndex].text;    
-        // Need to add event handlers to store currently selected descriptor's displayName
-        e.observe("change", saveSelectedItem);      
-    };
-""")
-
-// Customized validateButton that allows to use custom validation script
 f.block() {
-    pt.validateButton(
+    f.validateButton(
             title: _('testProject'),
             progress: _('testProjectProgress'),
             method: 'testProject',
-            with: 'jsonSettings,jsonPolicy,projectName,serverUrl,serverCredentialsId,configName',
+            with: 'selectedScanSettings,selectedConfig,jsonSettings,jsonPolicy,projectName,serverUrl,serverCredentialsId,serverInsecure,configName',
             customScript: 'testPt(this)'
     )
 }
 
-workModeId = descriptor.createElementId()
+workModeId = "ptai-workMode-" + UUID.randomUUID()
 
+// Had to extend OOB dropdownDescriptorSelector as it lacks ID attribute
+// thus making impossible to add event listener that stores currently
+// selected item to hidden fields that can be processed by validateButton
 pt.dropdownDescriptorSelector(
         id: workModeId,
         title: _('workMode'),
@@ -136,6 +92,47 @@ f.invisibleEntry() {
             name: "selectedWorkMode",
             value: "")
 }
+
+/*
+Want to use native validateButton code. Unfortunately it does not allows us to pass parameter values. So we search for
+combobox (now it may be done as we've added ID to dropdownDescriptorSelector), read selected item and save value
+as hidden element that can be processed by validateButton
+ */
+script("""
+    function triggerEvent(element, event){
+        if (document.createEventObject) {
+            // dispatch for IE
+            var evt = document.createEventObject();
+            return element.fireEvent('on'+event,evt);
+        } else {
+            // dispatch for firefox + others
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent(event, true, true ); // event type,bubbling,cancelable
+            return !element.dispatchEvent(evt);
+        }
+    };
+
+    function storeSelectedValue(e) {
+        var cb = e.target;
+        // As dropdownDescriptorSelector have no its own readable property to store
+        // currently selected item, we need to create corresponding hidden field 
+        // and add event handler to read selected item and store it there
+        \$(cb.id + "_value").value = cb.options[cb.selectedIndex].text;
+        // And as hidden fields do not automatically fire change event, we need to 
+        // trigger it explicitly
+        triggerEvent(\$(cb.id + "_value"), "change");
+    };
+
+    function init() {
+        ["${scanSettingsId}", "${configId}", "${workModeId}"].forEach(function (item, index) {
+            var cb = document.getElementById(item);
+            console.log(item);
+            console.log(cb);
+            cb.addEventListener("change", storeSelectedValue);
+            triggerEvent(cb, "change");
+        });
+    }
+""")
 
 f.entry(
         title: _('transfers')) {
@@ -191,4 +188,29 @@ f.advanced() {
     }
 }
 
+script("""
+    function waitForElm(selector) {
+        return new Promise(function(resolve) {
+            if (document.querySelector(selector)) {
+                return resolve(document.querySelector(selector));
+            }
+    
+            const observer = new MutationObserver(function(mutations) {
+                if (document.querySelector(selector)) {
+                    resolve(document.querySelector(selector));
+                    observer.disconnect();
+                }
+            });
+    
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        });
+    }
+
+    waitForElm("div[descriptorid='com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin']").then(function(pluginBody) {
+        init();
+    });
+""")
 

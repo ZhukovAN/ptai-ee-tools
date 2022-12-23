@@ -8,35 +8,35 @@ import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.ScanResul
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.ScanSettingsModel;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.VulnerabilityModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
+import com.ptsecurity.misc.tools.BaseTest;
+import com.ptsecurity.misc.tools.TempFile;
+import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.ALL;
+import static com.ptsecurity.misc.tools.helpers.ArchiveHelper.extractResourceFile;
+import static com.ptsecurity.misc.tools.helpers.ArchiveHelper.packData7Zip;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 @DisplayName("Test PT AI server REST API data structures conversion")
 public class ConverterTest extends BaseTest {
     @SneakyThrows
     public ScanResult generateScanResultV411(@NonNull final String fileName) {
-        ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         log.trace("Read scan results");
         String scanResultStr = getResourceString("v411/json/scanResult/" + fileName + ".json");
         ScanResultModel scanResult = mapper.readValue(scanResultStr, com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.ScanResultModel.class);
@@ -47,7 +47,7 @@ public class ConverterTest extends BaseTest {
         log.trace("Read localized scan issues headers");
         Map<Reports.Locale, Map<String, String>> issuesHeadersFiles = new HashMap<>();
         for (Reports.Locale locale : Reports.Locale.values()) {
-            Path issuesFile = extractPackedResourceFile("v411/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
+            Path issuesFile = extractResourceFile("v411/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
             TypeReference<Map<String, String>> mapTypeRef = new TypeReference<Map<String, String>>() {};
             Map<String, String> localizedIssuesHeaders = mapper.readValue(issuesFile.toFile(), mapTypeRef);
             issuesHeadersFiles.put(locale, localizedIssuesHeaders);
@@ -72,12 +72,12 @@ public class ConverterTest extends BaseTest {
     public void generateScanResults() {
         try (TempFile destination = TempFile.createFolder()) {
             Path scanResults411 = destination.toPath().resolve("result").resolve("v411");
-            scanResults411.toFile().mkdirs();
+            assertTrue(scanResults411.toFile().mkdirs());
 
             for (Project project : ALL) {
                 ScanResult scanResult = generateScanResultV411(project.getName());
-                String json = BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(scanResult);
-                sevenZipData(scanResults411.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
+                String json = BaseJsonHelper.minimize(scanResult);
+                packData7Zip(scanResults411.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
             }
             log.trace("Scan results are saved to {}", destination);
         }

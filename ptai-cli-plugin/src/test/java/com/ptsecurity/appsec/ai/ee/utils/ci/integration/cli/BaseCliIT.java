@@ -1,14 +1,18 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
-import com.ptsecurity.appsec.ai.ee.server.integration.rest.test.BaseIT;
+import com.ptsecurity.appsec.ai.ee.server.integration.rest.BaseIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseClientIT;
+import com.ptsecurity.misc.tools.TempFile;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
+
+import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
 
 public abstract class BaseCliIT extends BaseClientIT {
     /**
@@ -21,10 +25,11 @@ public abstract class BaseCliIT extends BaseClientIT {
 
     @SneakyThrows
     @BeforeEach
-    public void pre() {
-        CA_PEM_FILE = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-ca-pem");
+    public void pre(@NonNull final TestInfo testInfo) {
+        super.pre(testInfo);
+        CA_PEM_FILE = TempFile.createFile().toPath();
         FileUtils.write(CA_PEM_FILE.toFile(), CONNECTION().getCaPem(), StandardCharsets.UTF_8);
-        DUMMY_CA_PEM_FILE = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-dummy-ca-pem");
+        DUMMY_CA_PEM_FILE = TempFile.createFile().toPath();
         FileUtils.write(DUMMY_CA_PEM_FILE.toFile(), BaseIT.DUMMY_CA_PEM, StandardCharsets.UTF_8);
     }
 }

@@ -17,7 +17,7 @@ ul() {
             def defaultValue = settingInfo.getDefaultValue()
             if (null == defaultValue || (AdvancedSettings.SettingType.STRING == settingInfo.type && StringUtils.isEmpty(defaultValue.toString())))
                 defaultValue = Resources.i18n_misc_strings_empty()
-            text("Default value: " + defaultValue)
+            text(Resources.i18n_ast_settings_advanced_default() + defaultValue)
         }
     }
 }
