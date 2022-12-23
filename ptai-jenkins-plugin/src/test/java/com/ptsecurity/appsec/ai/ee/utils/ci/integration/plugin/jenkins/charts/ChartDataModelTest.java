@@ -1,23 +1,25 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.charts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
+import com.ptsecurity.misc.tools.BaseTest;
+import com.ptsecurity.misc.tools.helpers.ResourcesHelper;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.InputStream;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 
 class ChartDataModelTest extends BaseTest {
     @Test
     @SneakyThrows
     public void testJsonConversion() {
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
-        for (Connection.Version version : Connection.Version.values()) {
-            String json = extractSevenZippedSingleStringFromResource("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_OWASP_BRICKS_PROJECT_NAME + ".json.7z");
+        ObjectMapper mapper = createObjectMapper();
+        for (ApiVersion version : ApiVersion.values()) {
+            String json = ResourcesHelper.getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + Project.PHP_OWASP_BRICKS.getName() + ".json.7z");
             Assertions.assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);
         }

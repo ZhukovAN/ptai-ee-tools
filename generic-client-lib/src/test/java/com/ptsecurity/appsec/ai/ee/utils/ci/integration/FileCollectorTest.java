@@ -2,15 +2,13 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
+import com.ptsecurity.misc.tools.BaseTest;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.io.TempDir;
@@ -31,7 +29,6 @@ public class FileCollectorTest extends BaseTest {
 
     @SneakyThrows
     @Test
-    @Tag("integration")
     @EnabledOnOs(LINUX)
     public void createSymlink(@TempDir final Path sources) {
         // Symlink creation under Windows requires test to be executed on behalf of Administrator, so just skip

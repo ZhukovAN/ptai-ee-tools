@@ -1,9 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CertificateHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.*;
 import org.apache.commons.lang3.StringUtils;
 

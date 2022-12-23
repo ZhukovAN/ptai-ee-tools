@@ -2,11 +2,10 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.NonNull;
 
 import java.io.File;
-import java.util.Map;
 import java.util.UUID;
 
 /**

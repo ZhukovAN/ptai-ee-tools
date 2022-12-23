@@ -5,7 +5,6 @@ import com.cloudbees.plugins.credentials.CredentialsScope;
 import com.cloudbees.plugins.credentials.CredentialsStore;
 import com.cloudbees.plugins.credentials.SystemCredentialsProvider;
 import com.cloudbees.plugins.credentials.domains.Domain;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
@@ -37,8 +36,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool.DEFAULT_LOG_PREFIX;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.PHP_SMOKE;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob.DEFAULT_OUTPUT_FOLDER;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Execute Jenkins jobs that use PT AI plugin")
@@ -71,20 +73,20 @@ public class PluginIT extends BaseAstIT {
     @Tag("jenkins")
     @DisplayName("Execute simple SAST job for PHP smoke medium")
     public void scanPhpSmokeMedium(JenkinsRule jenkins) {
-        PHP_SMOKE_MEDIUM.setup();
+        setup(PHP_SMOKE);
 
         initCredentials(jenkins);
 
         log.trace("Create project and set source code location");
 
-        java.net.URL sourcesPack = PHP_SMOKE_MEDIUM.getZip().toUri().toURL();
+        java.net.URL sourcesPack = PHP_SMOKE.getZip().toUri().toURL();
         assertNotNull(sourcesPack);
         SCM scm = new ExtractResourceSCM(sourcesPack);
         String projectName = "project-" + UUID.randomUUID();
         FreeStyleProject project = jenkins.createFreeStyleProject(projectName);
         project.setScm(scm);
         // Create PT AI plugin settings
-        ScanSettingsUi scanSettings = new ScanSettingsUi(PHP_SMOKE_MEDIUM.getName());
+        ScanSettingsUi scanSettings = new ScanSettingsUi(PHP_SMOKE.getName());
 
         ServerSettings serverSettings = new ServerSettings(CONNECTION().getUrl(), credentials.getId(), true);
         ConfigCustom configCustom = new ConfigCustom(serverSettings);
@@ -109,8 +111,7 @@ public class PluginIT extends BaseAstIT {
         assertNotNull(build.getWorkspace().child(DEFAULT_OUTPUT_FOLDER));
         FilePath rawJsonFile = build.getWorkspace().child(DEFAULT_OUTPUT_FOLDER).child(rawJsonSubJob.getFileName());
         Assertions.assertTrue(rawJsonFile.exists());
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
-        ScanResult scanResult = mapper.readValue(rawJsonFile.read(), ScanResult.class);
+        ScanResult scanResult = createObjectMapper().readValue(rawJsonFile.read(), ScanResult.class);
 
         // Check log entries
         List<String> log = build.getLog(100);

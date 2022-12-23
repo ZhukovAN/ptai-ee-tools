@@ -3,7 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks;
 import com.ptsecurity.appsec.ai.ee.scan.errors.Error;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.NonNull;
 
 import java.io.File;

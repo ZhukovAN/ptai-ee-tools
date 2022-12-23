@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.TextOutput;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

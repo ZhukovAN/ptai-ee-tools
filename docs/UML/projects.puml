@@ -1,0 +1,40 @@
+@startuml
+
+class pt-misc-tools
+class ptai-test-tools
+class ptai-i18n
+class ptai-rest-api
+class ptai-data-structures
+class generic-client-lib
+class ptai-cli-plugin
+class ptai-jenkins-plugin
+class ptai-report-tools
+
+package ptai-teamcity-plugin {
+    class ptai-teamcity-plugin-common
+    class ptai-teamcity-plugin-agent
+    class ptai-teamcity-plugin-server
+
+    "ptai-teamcity-plugin-common" -up-> "generic-client-lib"
+    "ptai-teamcity-plugin-agent" -up-> "ptai-teamcity-plugin-common"
+    "ptai-teamcity-plugin-server" -up-> "ptai-teamcity-plugin-common"
+    "ptai-teamcity-plugin-server" -> "ptai-teamcity-plugin-agent"
+}
+
+"ptai-test-tools" --> "ptai-test-tools" : test
+"ptai-rest-api" -up-> "ptai-test-tools" : test
+
+"ptai-data-structures" -> "ptai-i18n" : api
+"ptai-data-structures" -> "pt-misc-tools" : api
+"ptai-data-structures" -up-> "ptai-test-tools" : test
+
+"ptai-cli-plugin" -up-> "generic-client-lib"
+"ptai-cli-plugin" -up-> "ptai-data-structureb"
+"ptai-cli-plugin" -up-> "ptai-rest-api"
+
+"generic-client-lib" -up-> "pt-misc-tools"
+"generic-client-lib" -up-> "ptai-data-structureb"
+"generic-client-lib" -up-> "ptai-rest-api"
+"generic-client-lib" -up-> "ptai-test-tools" : test
+
+@enduml

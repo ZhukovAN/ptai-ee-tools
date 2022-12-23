@@ -26,7 +26,7 @@ dependencies {
     testImplementation(testFixtures(project(":ptai-data-structures")))
     testImplementation(testFixtures(project(":ptai-rest-api")))
 
+    testFixturesImplementation(testFixtures(project(":pt-misc-tools")))
     testFixturesImplementation(testFixtures(project(":ptai-data-structures")))
     testFixturesImplementation(testFixtures(project(":ptai-rest-api")))
-    testFixturesImplementation(testFixtures(project(":ptai-test-tools")))
 }

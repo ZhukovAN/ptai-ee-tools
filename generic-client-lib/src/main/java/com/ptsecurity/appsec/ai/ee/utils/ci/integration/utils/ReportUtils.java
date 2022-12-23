@@ -2,8 +2,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.StringHelper;
 import lombok.NonNull;
 import lombok.ToString;
 import org.apache.commons.io.FilenameUtils;
@@ -13,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @ToString(callSuper = true)
 public class ReportUtils {
@@ -50,7 +50,7 @@ public class ReportUtils {
 
     public static Reports.IssuesFilter validateJsonFilter(String json) throws GenericException {
         return call(
-                () -> BaseJsonHelper.createObjectMapper().readValue(json, Reports.IssuesFilter.class),
+                () -> createObjectMapper().readValue(json, Reports.IssuesFilter.class),
                 "JSON filter settings parse failed");
     }
 
@@ -73,7 +73,7 @@ public class ReportUtils {
      */
     public static Reports load(String json) throws GenericException {
         return call(
-                () -> BaseJsonHelper.createObjectMapper().readValue(json, Reports.class),
+                () -> createObjectMapper().readValue(json, Reports.class),
                 Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_invalid());
     }
 

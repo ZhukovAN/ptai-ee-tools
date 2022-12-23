@@ -25,4 +25,4 @@ gradle-app.setting
 
 out/
 # Do not store API tokens to repository
-ptai-test-tools/src/testFixtures/resources/configuration.yml
+ptai-data-structures/src/testFixtures/resources/configuration.yml
