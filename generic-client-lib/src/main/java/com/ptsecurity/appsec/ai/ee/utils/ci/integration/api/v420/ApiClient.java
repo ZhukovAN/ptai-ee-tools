@@ -5,12 +5,12 @@ import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
-import com.ptsecurity.appsec.ai.ee.server.v420.api.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.api.*;
-import com.ptsecurity.appsec.ai.ee.server.v420.api.model.AuthResultModel;
-import com.ptsecurity.appsec.ai.ee.server.v420.api.model.AuthScopeType;
-import com.ptsecurity.appsec.ai.ee.server.v420.api.model.UserLoginModel;
-import com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.ScanProgress;
+import com.ptsecurity.appsec.ai.ee.server.v420.api.model.ScanProgressModel;
+import com.ptsecurity.appsec.ai.ee.server.v420.auth.ApiResponse;
+import com.ptsecurity.appsec.ai.ee.server.v420.auth.api.AuthApi;
+import com.ptsecurity.appsec.ai.ee.server.v420.auth.model.AuthResultModel;
+import com.ptsecurity.appsec.ai.ee.server.v420.auth.model.UserLoginModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.VersionRange;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.converters.EnumsConverter;
@@ -43,8 +43,10 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
-import static com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.Stage.ABORTED;
-import static com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.Stage.FAILED;
+import static com.ptsecurity.appsec.ai.ee.server.v420.api.model.Stage.ABORTED;
+import static com.ptsecurity.appsec.ai.ee.server.v420.api.model.Stage.FAILED;
+import static com.ptsecurity.appsec.ai.ee.server.v420.auth.model.AuthScopeType.ACCESSTOKEN;
+import static com.ptsecurity.appsec.ai.ee.server.v420.auth.model.AuthScopeType.WEB;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
@@ -55,7 +57,7 @@ public class ApiClient extends AbstractApiClient {
 
     @Getter
     @ToString.Exclude
-    protected final AuthApi authApi = new AuthApi(new com.ptsecurity.appsec.ai.ee.server.v420.api.ApiClient());
+    protected final AuthApi authApi = new AuthApi(new com.ptsecurity.appsec.ai.ee.server.v420.auth.ApiClient());
 
     @Getter
     @ToString.Exclude
@@ -112,7 +114,7 @@ public class ApiClient extends AbstractApiClient {
             authApi.getApiClient().setApiKeyPrefix(null);
             log.trace("Calling auth/signin endpoint with API token");
             return call(
-                    () -> authApi.apiAuthSigninGetWithHttpInfo(AuthScopeType.ACCESSTOKEN),
+                    () -> authApi.apiAuthSigninGetWithHttpInfo(ACCESSTOKEN),
                     "Get initial JWT call failed");
         } else {
             log.trace("Using PT AI API password-based credentials for authentication");
@@ -123,7 +125,7 @@ public class ApiClient extends AbstractApiClient {
             model.setPassword(passwordCredentials.getPassword());
             log.trace("Calling auth/userLogin endpoint with user name and password");
             return call(
-                    () -> authApi.apiAuthUserLoginPostWithHttpInfo(AuthScopeType.WEB, model),
+                    () -> authApi.apiAuthUserLoginPostWithHttpInfo(WEB, model),
                     "Get initial JWT call failed");
         }
     }
@@ -272,21 +274,21 @@ public class ApiClient extends AbstractApiClient {
                 StringBuilder builder = new StringBuilder();
                 builder.append(Optional.of(data)
                         .map(ScanProgressEvent::getProgress)
-                        .map(ScanProgress::getStage)
-                        .map(com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.Stage::getValue)
+                        .map(ScanProgressModel::getStage)
+                        .map(com.ptsecurity.appsec.ai.ee.server.v420.api.model.Stage::getValue)
                         .orElse("data.progress.stage missing"));
                 Optional.of(data)
                         .map(ScanProgressEvent::getProgress)
-                        .map(ScanProgress::getSubStage)
+                        .map(ScanProgressModel::getSubStage)
                         .ifPresent(s -> builder.append(" -> ").append(s));
                 Optional.of(data)
                         .map(ScanProgressEvent::getProgress)
-                        .map(ScanProgress::getValue)
+                        .map(ScanProgressModel::getValue)
                         .ifPresent(s -> builder.append(" ").append(s).append("%"));
                 if (null != console) console.info(builder.toString());
                 // Failed or aborted scans do not generate ScanCompleted event but
                 // send ScanProgress event with stage failed or aborted
-                Optional<com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.Stage> stage = Optional.of(data).map(ScanProgressEvent::getProgress).map(ScanProgress::getStage);
+                Optional<com.ptsecurity.appsec.ai.ee.server.v420.api.model.Stage> stage = Optional.of(data).map(ScanProgressEvent::getProgress).map(ScanProgressModel::getStage);
                 if (stage.isPresent()) {
                     if (null != eventConsumer) eventConsumer.process(EnumsConverter.convert(stage.get()));
                     if (null != queue && (ABORTED == stage.get() || FAILED == stage.get())) {
@@ -300,9 +302,9 @@ public class ApiClient extends AbstractApiClient {
         }, ScanProgressEvent.class);
 
         connection.on("ScanCompleted", (data) -> {
-            if (!projectId.equals(data.getResult().getProjectId()))
+            if (!projectId.equals(data.getProjectId()))
                 log.trace("Skip ScanCompleted event as its projectId != {}", projectId);
-            else if (!scanResultId.equals(data.getResult().getId()))
+            else if (!scanResultId.equals(data.getScanResultId()))
                 log.trace("Skip ScanCompleted event as its scanResultId != {}", scanResultId);
             else
                 queue.add(Stage.DONE);

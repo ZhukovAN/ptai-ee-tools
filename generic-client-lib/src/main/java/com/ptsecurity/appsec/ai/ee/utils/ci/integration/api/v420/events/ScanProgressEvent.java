@@ -1,5 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.events;
 
+import com.ptsecurity.appsec.ai.ee.server.v420.api.model.ScanProgressModel;
+import com.ptsecurity.appsec.ai.ee.server.v420.api.model.ScanStatisticModel;
 import com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.ScanProgress;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +14,7 @@ import java.util.UUID;
 @ToString
 public class ScanProgressEvent {
     protected UUID scanResultId;
-    protected ScanProgress progress;
-    protected UUID Id;
+    protected ScanProgressModel progress;
+    protected ScanStatisticModel statistic;
+    protected UUID projectId;
 }

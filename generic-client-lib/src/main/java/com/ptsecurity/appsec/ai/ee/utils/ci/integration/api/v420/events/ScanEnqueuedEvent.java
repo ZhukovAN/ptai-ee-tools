@@ -11,6 +11,6 @@ import java.util.UUID;
 @Setter
 @ToString
 public class ScanEnqueuedEvent {
-    protected ScanResult scanResult;
-    protected UUID id;
+    protected UUID scanResultId;
+    protected UUID projectId;
 }
