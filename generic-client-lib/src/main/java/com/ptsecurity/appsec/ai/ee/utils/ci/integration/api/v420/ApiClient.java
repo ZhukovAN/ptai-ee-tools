@@ -243,13 +243,13 @@ public class ApiClient extends AbstractApiClient {
         });
 
         connection.on("ScanStarted", (data) -> {
-            if (!projectId.equals(data.getResult().getProjectId()))
+            if (!projectId.equals(data.getProjectId()))
                 log.trace("Skip ScanStarted event as its projectId != {}", projectId);
-            else if (!scanResultId.equals(data.getResult().getId()))
+            else if (!scanResultId.equals(data.getScanResultId()))
                 log.trace("Skip ScanStarted event as its scanResultId != {}", scanResultId);
             else {
                 if (null != console)
-                    console.info("Scan started. Project id: %s, scan result id: %s", data.getResult().getProjectId(), data.getResult().getId());
+                    console.info("Scan started. Project id: %s, scan result id: %s", data.getProjectId(), data.getScanResultId());
                 if (null != eventConsumer) eventConsumer.process(data);
             }
             log.trace(data.toString());

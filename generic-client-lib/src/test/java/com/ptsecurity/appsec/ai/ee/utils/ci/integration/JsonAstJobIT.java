@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V411;
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V420;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.PHP;
 import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level.*;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
@@ -230,8 +231,8 @@ public class JsonAstJobIT extends BaseAstIT {
                 .filter(i -> HIGH == i.getLevel())
                 .filter(i -> i instanceof ScaIssue)
                 .count());
-        log.trace("Skip CVE sheck as 4.1.1 doesn't provide that info");
-        if (V411 != CONNECTION().getVersion())
+        log.trace("Skip CVE sheck as 4.1.1 and 4.2 doesn't provide that info");
+        if (V411 != CONNECTION().getVersion() && V420 != CONNECTION().getVersion())
             Assertions.assertNotEquals(0, scanResult.getIssues().stream()
                     .filter(i -> HIGH == i.getLevel())
                     .filter(i -> i instanceof ScaIssue)

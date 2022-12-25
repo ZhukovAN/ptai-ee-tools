@@ -4,7 +4,7 @@ import com.contrastsecurity.sarif.SarifSchema210;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ConverterTest;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.ConverterTest;
 import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;

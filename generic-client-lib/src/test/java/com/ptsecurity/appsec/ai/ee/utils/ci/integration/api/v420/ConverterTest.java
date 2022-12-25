@@ -1,12 +1,13 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.ScanResultModel;
-import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.ScanSettingsModel;
-import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.VulnerabilityModel;
+import com.ptsecurity.appsec.ai.ee.server.v420.api.model.ScanResultModel;
+import com.ptsecurity.appsec.ai.ee.server.v420.api.model.ScanSettingsModel;
+import com.ptsecurity.appsec.ai.ee.server.v420.api.model.VulnerabilityModel;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.misc.tools.BaseTest;
 import com.ptsecurity.misc.tools.TempFile;
@@ -35,49 +36,49 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("Test PT AI server REST API data structures conversion")
 public class ConverterTest extends BaseTest {
     @SneakyThrows
-    public ScanResult generateScanResultV411(@NonNull final String fileName) {
+    public ScanResult generateScanResultV420(@NonNull final String fileName) {
         ObjectMapper mapper = createObjectMapper();
         log.trace("Read scan results");
-        String scanResultStr = getResourceString("v411/json/scanResult/" + fileName + ".json");
-        ScanResultModel scanResult = mapper.readValue(scanResultStr, com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.ScanResultModel.class);
+        String scanResultStr = getResourceString("v420/json/scanResult/" + fileName + ".json");
+        ScanResultModel scanResult = mapper.readValue(scanResultStr, ScanResultModel.class);
         log.trace("Read scan issues");
-        String scanIssuesStr = getResourceString("v411/json/issuesModel/" + fileName + ".json");
+        String scanIssuesStr = getResourceString("v420/json/issuesModel/" + fileName + ".json");
         TypeReference<List<VulnerabilityModel>> typeRef = new TypeReference<List<VulnerabilityModel>>() {};
         List<VulnerabilityModel> issues = mapper.readValue(scanIssuesStr, typeRef);
         log.trace("Read localized scan issues headers");
         Map<Reports.Locale, Map<String, String>> issuesHeadersFiles = new HashMap<>();
         for (Reports.Locale locale : Reports.Locale.values()) {
-            Path issuesFile = extractResourceFile("v411/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
+            Path issuesFile = extractResourceFile("v420/json/issuesModel/" + fileName + "." + locale.getLocale().getLanguage() + ".json.7z");
             TypeReference<Map<String, String>> mapTypeRef = new TypeReference<Map<String, String>>() {};
             Map<String, String> localizedIssuesHeaders = mapper.readValue(issuesFile.toFile(), mapTypeRef);
             issuesHeadersFiles.put(locale, localizedIssuesHeaders);
         }
 
         @NonNull final ScanSettingsModel scanSettings = mapper.readValue(
-                getResourceString("v411/json/scanSettings/" + fileName + ".json"),
+                getResourceString("v420/json/scanSettings/" + fileName + ".json"),
                 ScanSettingsModel.class
         );
         Map<ServerVersionTasks.Component, String> versions = new HashMap<>();
-        versions.put(ServerVersionTasks.Component.AIE, "4.1.1.14411");
-        versions.put(ServerVersionTasks.Component.AIC, "4.1.1.14411");
+        versions.put(ServerVersionTasks.Component.AIE, "4.2.0.17489");
+        versions.put(ServerVersionTasks.Component.AIC, "4.2.0.17489");
 
         String projectName = StringUtils.substringBefore(fileName, ".");
 
-        return com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.IssuesConverter.convert(projectName, scanResult, issues, issuesHeadersFiles, scanSettings, "https://ptai411.domain.org", versions);
+        return com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.converters.IssuesConverter.convert(projectName, scanResult, issues, issuesHeadersFiles, scanSettings, "https://ptai420.domain.org", versions);
     }
 
     @Test
-    @DisplayName("Convert PT AI 4.1.1 and 4.2 scan results")
+    @DisplayName("Convert PT AI 4.2 scan results")
     @SneakyThrows
     public void generateScanResults() {
         try (TempFile destination = TempFile.createFolder()) {
-            Path scanResults411 = destination.toPath().resolve("result").resolve("v411");
-            assertTrue(scanResults411.toFile().mkdirs());
+            Path scanResults420 = destination.toPath().resolve("result").resolve("v420");
+            assertTrue(scanResults420.toFile().mkdirs());
 
             for (Project project : ALL) {
-                ScanResult scanResult = generateScanResultV411(project.getName());
+                ScanResult scanResult = generateScanResultV420(project.getName());
                 String json = BaseJsonHelper.minimize(scanResult);
-                packData7Zip(scanResults411.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
+                packData7Zip(scanResults420.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
             }
             log.trace("Scan results are saved to {}", destination);
         }
