@@ -6,18 +6,14 @@ import com.microsoft.signalr.HubConnectionBuilder;
 import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.api.*;
-import com.ptsecurity.appsec.ai.ee.server.v420.api.model.ScanProgressModel;
 import com.ptsecurity.appsec.ai.ee.server.v420.auth.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.server.v420.auth.api.AuthApi;
 import com.ptsecurity.appsec.ai.ee.server.v420.auth.model.AuthResultModel;
 import com.ptsecurity.appsec.ai.ee.server.v420.auth.model.UserLoginModel;
+import com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.VersionRange;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.converters.EnumsConverter;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.events.ScanCompleteEvent;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.events.ScanProgressEvent;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.events.ScanResultRemovedEvent;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.events.ScanStartedEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.tasks.ServerVersionTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
@@ -43,8 +39,8 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
-import static com.ptsecurity.appsec.ai.ee.server.v420.api.model.Stage.ABORTED;
-import static com.ptsecurity.appsec.ai.ee.server.v420.api.model.Stage.FAILED;
+import static com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.Stage.ABORTED;
+import static com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.Stage.FAILED;
 import static com.ptsecurity.appsec.ai.ee.server.v420.auth.model.AuthScopeType.ACCESSTOKEN;
 import static com.ptsecurity.appsec.ai.ee.server.v420.auth.model.AuthScopeType.WEB;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
@@ -275,7 +271,7 @@ public class ApiClient extends AbstractApiClient {
                 builder.append(Optional.of(data)
                         .map(ScanProgressEvent::getProgress)
                         .map(ScanProgressModel::getStage)
-                        .map(com.ptsecurity.appsec.ai.ee.server.v420.api.model.Stage::getValue)
+                        .map(com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.Stage::getValue)
                         .orElse("data.progress.stage missing"));
                 Optional.of(data)
                         .map(ScanProgressEvent::getProgress)
@@ -288,7 +284,7 @@ public class ApiClient extends AbstractApiClient {
                 if (null != console) console.info(builder.toString());
                 // Failed or aborted scans do not generate ScanCompleted event but
                 // send ScanProgress event with stage failed or aborted
-                Optional<com.ptsecurity.appsec.ai.ee.server.v420.api.model.Stage> stage = Optional.of(data).map(ScanProgressEvent::getProgress).map(ScanProgressModel::getStage);
+                Optional<com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.Stage> stage = Optional.of(data).map(ScanProgressEvent::getProgress).map(ScanProgressModel::getStage);
                 if (stage.isPresent()) {
                     if (null != eventConsumer) eventConsumer.process(EnumsConverter.convert(stage.get()));
                     if (null != queue && (ABORTED == stage.get() || FAILED == stage.get())) {

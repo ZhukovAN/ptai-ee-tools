@@ -14,155 +14,8 @@ paths:
             application/octet-stream: {}
 components:
   schemas:
-    AuthenticationCredentials:
-      type: object
-      properties:
-        cookie:
-          type: string
-          nullable: true
-        cookies:
-          type: array
-          items:
-            type: array
-            items:
-              type: string
-          nullable: true
-        type:
-          $ref: '#/components/schemas/AuthType'
-        login:
-          $ref: '#/components/schemas/MappedAuthenticationObject'
-        password:
-          $ref: '#/components/schemas/MappedAuthenticationObject'
-        credentials_id:
-          type: string
-          format: uuid
-          nullable: true
-      additionalProperties: false
-    AuthenticationItem:
-      type: object
-      properties:
-        domain:
-          type: string
-          nullable: true
-        credentials:
-          $ref: '#/components/schemas/AuthenticationCredentials'
-        test_url:
-          type: string
-          nullable: true
-        form_url:
-          type: string
-          nullable: true
-        form_xpath:
-          type: string
-          nullable: true
-        regexp_of_success:
-          type: string
-          nullable: true
-      additionalProperties: false
-    AuthType:
-      # V.4.1: Need to add x-enum-varnames as API returns authType as integer
-      enum:
-        - 0
-        - 1
-        - 2
-        - 3
-      x-enum-varnames:
-        - Form
-        - Http
-        - None
-        - RawCookie
-      type: integer
-    BlackBoxAuthentication:
-      type: object
-      properties:
-        auth_item:
-          $ref: '#/components/schemas/AuthenticationItem'
-      additionalProperties: false
-    BlackBoxProxySettings:
-      type: object
-      properties:
-        isEnabled:
-          type: boolean
-        host:
-          type: string
-          nullable: true
-        port:
-          type: integer
-          format: int32
-          nullable: true
-        type:
-          $ref: '#/components/schemas/ProxyType'
-        username:
-          type: string
-          nullable: true
-        password:
-          type: string
-          nullable: true
-        credentialsId:
-          type: string
-          format: uuid
-          nullable: true
-      additionalProperties: false
-    BlackBoxScanLevel:
-      # V.4.1: Need to add x-enum-varnames as API returns scanLevel as integer
-      enum:
-        - 0
-        - 1
-        - 2
-        - 3
-      x-enum-varnames:
-        - None
-        - Fast
-        - Normal
-        - Full
-      type: integer
-    ComponentVersion:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        version:
-          type: string
-          nullable: true
-      additionalProperties: false
-    DotNetProjectType:
-      # V.4.1: Had to add x-enum-varnames as API returns projectType as an integer value
-      enum:
-        - 0
-        - 1
-        - 2
-      x-enum-varnames:
-        - None
-        - Solution
-        - WebSite
-      type: integer
-    JavaVersions:
-      # V.4.1: Needed to fix that as API returns enum as integer instead of string
-      enum:
-        - 0
-        - 1
-      x-enum-varnames:
-        - v1_8
-        - v1_11
-      type: integer
-    MappedAuthenticationObject:
-      type: object
-      properties:
-        name:
-          type: string
-          nullable: true
-        value:
-          type: string
-          nullable: true
-        regexp:
-          type: string
-          nullable: true
-        is_regexp:
-          type: boolean
-      additionalProperties: false
     PolicyState:
-      # V.4.1: Had to add x-enum-varnames as API returns ineger value instead of enum
+      # V.4.2: Had to add x-enum-varnames as API returns integer value instead of enum
       enum:
         - 0
         - 1
@@ -171,539 +24,6 @@ components:
         - None
         - Rejected
         - Confirmed
-      type: integer
-    ProgrammingLanguage:
-      enum:
-        - DotNet
-        - Php
-        - Java
-        - Html
-        - JavaScript
-        - All
-        - SandBox
-        - Binary
-        - PlSql
-        - TSql
-        - Aspx
-        - C
-        - CPlusPlus
-        - ObjectiveC
-        - Swift
-        - MySql
-        - Python
-        - CSharp
-        - VB
-        - Go
-        - Kotlin
-        - None
-      type: string
-      format: ''
-    ProxyType:
-      # V.4.1: Had to add x-enum-varnames as API returns integer value instead of enum
-      enum:
-        - 0
-        - 1
-        - 2
-        - 3
-      x-enum-varnames:
-        - Http
-        - HttpNoConnect
-        - Socks4
-        - Socks5
-      type: integer
-    ReportMailSenderParameters:
-      type: object
-      properties:
-        mailProfileId:
-          type: string
-          format: uuid
-          nullable: true
-        smtpServerAddress:
-          type: string
-          nullable: true
-        userName:
-          type: string
-          nullable: true
-        password:
-          type: string
-          nullable: true
-        useDefaultSettings:
-          type: boolean
-        emailRecipients:
-          type: string
-          nullable: true
-        enableSsl:
-          type: boolean
-        subject:
-          type: string
-          nullable: true
-        considerCertificateErrors:
-          type: boolean
-        senderEmail:
-          type: string
-          nullable: true
-        credentialsId:
-          type: string
-          format: uuid
-          nullable: true
-      additionalProperties: false
-    RepositoryType:
-      enum:
-        - None
-        - Git
-        - TFS
-      type: string
-      format: ''
-    ScanEnvironment:
-      type: object
-      properties:
-        infrastructureVersion:
-          $ref: '#/components/schemas/ComponentVersion'
-        componentVersions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ComponentVersion'
-          nullable: true
-        installatorVersion:
-          $ref: '#/components/schemas/ComponentVersion'
-        clientVersion:
-          $ref: '#/components/schemas/ComponentVersion'
-        yaraHash:
-          type: string
-          format: byte
-          nullable: true
-        sastHashes:
-          type: object
-          properties:
-            None:
-              type: string
-              format: byte
-            Binary:
-              type: string
-              format: byte
-            Configuration:
-              type: string
-              format: byte
-            Fingerprint:
-              type: string
-              format: byte
-            Java:
-              type: string
-              format: byte
-            CSharp:
-              type: string
-              format: byte
-            PHP:
-              type: string
-              format: byte
-            PmTaint:
-              type: string
-              format: byte
-            BlackBox:
-              type: string
-              format: byte
-            JavaScript:
-              type: string
-              format: byte
-            DependencyCheck:
-              type: string
-              format: byte
-          additionalProperties: false
-          nullable: true
-        extraOptions:
-          $ref: '#/components/schemas/ScanExtraOptions'
-      additionalProperties: false
-    ScanExtraOptions:
-      type: object
-      properties:
-        fullRescanOnNewFilesAdded:
-          type: boolean
-      additionalProperties: false
-    ScanProgress:
-      type: object
-      properties:
-        stage:
-          $ref: '#/components/schemas/Stage'
-        subStage:
-          type: string
-          nullable: true
-        value:
-          type: integer
-          format: int32
-      additionalProperties: false
-    ScanResult:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          # V.4.1 Non-nullable constraint added
-          nullable: false
-        projectId:
-          type: string
-          format: uuid
-        settingsId:
-          type: string
-          format: uuid
-        version:
-          type: integer
-          format: int32
-        scanDate:
-          type: string
-          # V.4.1: Had to remove date-time specification as value returned doesn't conform to RFC 3339
-          # format: date-time
-        progress:
-          $ref: '#/components/schemas/ScanProgress'
-        statistic:
-          $ref: '#/components/schemas/ScanResultStatistic'
-        scanEnvironment:
-          $ref: '#/components/schemas/ScanEnvironment'
-        previousScanResultId:
-          type: string
-          format: uuid
-          nullable: true
-        isRunFromQueue:
-          type: boolean
-        hasSources:
-          type: boolean
-        # V.4.1: Had to comment this out as API returns comma-separated string instead of single enum
-        # value. BTW, API should return set of enum values instead
-        scanAppType:
-          #   $ref: '#/components/schemas/ScanAppType'
-          type: string
-      additionalProperties: false
-    ScanResultState:
-      # V.4.1: Had to add x-enum-varnames as API returns ineger value instead of enum
-      enum:
-        - 0
-        - 1
-        - 2
-        - 3
-      x-enum-varnames:
-        - None
-        - Inaccurate
-        - Incremental
-        - Incorrect
-      type: integer
-    ScanResultStatistic:
-      type: object
-      properties:
-        highLevelVulnerabilityCount:
-          type: integer
-          format: int32
-        mediumLevelVulnerabilityCount:
-          type: integer
-          format: int32
-        lowLevelVulnerabilityCount:
-          type: integer
-          format: int32
-        potentialVulnerabilityCount:
-          type: integer
-          format: int32
-        totalBlackBoxVulnerabilityCount:
-          type: integer
-          format: int32
-        totalStaticVulnerabilityCount:
-          type: integer
-          format: int32
-        totalVulnerabilityCount:
-          type: integer
-          format: int32
-        totalFileCount:
-          type: integer
-          format: int32
-        totalUrlCount:
-          type: integer
-          format: int32
-        scannedUrlCount:
-          type: integer
-          format: int32
-        scannedFileCount:
-          type: integer
-          format: int32
-        scanDuration:
-          type: string
-          format: date-span
-        state:
-          $ref: '#/components/schemas/ScanResultState'
-        policyState:
-          $ref: '#/components/schemas/PolicyState'
-      additionalProperties: false
-    ScanScope:
-      # V.4.1: Had to add x-enum-varnames as API returns ineger value instead of enum
-      enum:
-        - 0
-        - 1
-        - 2
-      x-enum-varnames:
-        - Folder
-        - Domain
-        - Path
-      type: integer
-    ScanSettings:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-          nullable: true
-        scope:
-          type: string
-          nullable: true
-        programmingLanguage:
-          $ref: '#/components/schemas/ProgrammingLanguage'
-        # V.4.1.1: Had to comment this out as API returns comma-separated string instead of single enum
-        # value. BTW, API should return set of enum values instead
-        scanAppType:
-          #   $ref: '#/components/schemas/ScanAppType'
-          type: string
-        rootFolder:
-          type: string
-          nullable: true
-        scanTarget:
-          type: string
-          nullable: true
-        actualScanTarget:
-          type: string
-          nullable: true
-        site:
-          type: string
-          nullable: true
-        javaParameters:
-          type: string
-          nullable: true
-        userPackagePrefixes:
-          type: string
-          nullable: true
-        isUnpackUserPackages:
-          type: boolean
-        isDownloadDependencies:
-          type: boolean
-        isUsePublicAnalysisMethod:
-          type: boolean
-        isUseEntryAnalysisPoint:
-          type: boolean
-        customParameters:
-          type: string
-          nullable: true
-        isUseIssueScan:
-          type: boolean
-        isUseTaintScan:
-          type: boolean
-        isUsePatternmatchingScan:
-          type: boolean
-        skipFileFormats:
-          type: array
-          items:
-            type: string
-          nullable: true
-        skipFilesFolders:
-          type: array
-          items:
-            type: string
-          nullable: true
-        configurationFiles:
-          type: array
-          items:
-            type: string
-          nullable: true
-        disabledPatterns:
-          type: array
-          items:
-            type: string
-          nullable: true
-        enabledPatterns:
-          type: array
-          items:
-            type: string
-          nullable: true
-        disabledTypes:
-          type: array
-          items:
-            type: string
-          nullable: true
-        customYaraRules:
-          type: string
-          nullable: true
-        useDefaultFingerprints:
-          type: boolean
-        useCustomYaraRules:
-          type: boolean
-        hideSuspectedVulnerabilities:
-          type: boolean
-        level:
-          $ref: '#/components/schemas/BlackBoxScanLevel'
-        autocheckSite:
-          type: string
-          nullable: true
-        autocheckCustomHeaders:
-          type: array
-          items:
-            type: array
-            items:
-              type: string
-          nullable: true
-        customHeaders:
-          type: array
-          items:
-            type: array
-            items:
-              type: string
-          nullable: true
-        authentication:
-          $ref: '#/components/schemas/BlackBoxAuthentication'
-        autocheckAuthentication:
-          $ref: '#/components/schemas/BlackBoxAuthentication'
-        configurationPath:
-          type: string
-          nullable: true
-        projectType:
-          $ref: '#/components/schemas/DotNetProjectType'
-        solutionFile:
-          type: string
-          nullable: true
-        webSiteFolder:
-          type: string
-          nullable: true
-        isGraphEnabled:
-          type: boolean
-        proxySettings:
-          $ref: '#/components/schemas/BlackBoxProxySettings'
-        autocheckProxySettings:
-          $ref: '#/components/schemas/BlackBoxProxySettings'
-        sourceControlSettings:
-          $ref: '#/components/schemas/SourceControlSettings'
-        preprocessingTimeout:
-          type: integer
-          format: int32
-        useIncrementalScan:
-          type: boolean
-        sendEmailWithReportsAfterScan:
-          type: boolean
-        compressReport:
-          type: boolean
-        considerPreviousScan:
-          type: boolean
-          nullable: true
-        fullRescanOnNewFilesAdded:
-          type: boolean
-        useTaintAnalysis:
-          type: boolean
-        usePmAnalysis:
-          type: boolean
-          nullable: true
-        disableInterpretCores:
-          type: boolean
-        tempDir:
-          type: string
-          nullable: true
-        javaVersion:
-          $ref: '#/components/schemas/JavaVersions'
-        bindAddress:
-          type: string
-          nullable: true
-        runAutocheckAfterScan:
-          type: boolean
-        reportMailSenderParameters:
-          $ref: '#/components/schemas/ReportMailSenderParameters'
-        useIssueTrackerIntegration:
-          type: boolean
-        scanScope:
-          $ref: '#/components/schemas/ScanScope'
-        useSecurityPolicies:
-          type: boolean
-        fileFolderExclusions:
-          type: string
-          nullable: true
-        useSastRules:
-          type: boolean
-        sourceSettings:
-          $ref: '#/components/schemas/SourceSettings'
-        skipGitIgnoreFiles:
-          type: boolean
-        isStaticScanEnabled:
-          type: boolean
-          readOnly: true
-        isBlackBoxScanEnabled:
-          type: boolean
-          readOnly: true
-      additionalProperties: false
-    SourceControlCredentalsType:
-      enum:
-        - None
-        - Anonymous
-        - Password
-        - AuthenticationToken
-      type: string
-      format: ''
-    SourceControlSettings:
-      type: object
-      properties:
-        repositoryType:
-          $ref: '#/components/schemas/RepositoryType'
-        repositoryUrl:
-          type: string
-          nullable: true
-        checkoutDir:
-          type: string
-          nullable: true
-        sourceControlCredentalsType:
-          $ref: '#/components/schemas/SourceControlCredentalsType'
-        user:
-          type: string
-          nullable: true
-        password:
-          type: string
-          nullable: true
-        catalog:
-          type: string
-          nullable: true
-        project:
-          type: string
-          nullable: true
-        branch:
-          type: string
-          nullable: true
-        includeSubmodules:
-          type: boolean
-        updateSourcesBeforeScan:
-          type: boolean
-        credentialsId:
-          type: string
-          format: uuid
-          nullable: true
-      additionalProperties: false
-    SourceSettings:
-      type: object
-      properties:
-        sourceType:
-          $ref: '#/components/schemas/SourceType'
-        lastDateTimeUpdate:
-          type: string
-          # V.4.1: Had to remove date-time specification as value returned doesn't conform to RFC 3339
-          # format: date-time
-        updaterInfo:
-          $ref: '#/components/schemas/UpdaterInfo'
-        isHidePathAndUser:
-          type: boolean
-        scanTargetName:
-          type: string
-          nullable: true
-      additionalProperties: false
-    SourceType:
-      # V.4.1: Need to add x-enum-varnames as API returns scanLevel as integer
-      enum:
-        - 0
-        - 1
-        - 2
-        - 3
-      x-enum-varnames:
-        - Empty
-        - File
-        - Folder
-        - SourceControl
       type: integer
     Stage:
       enum:
@@ -719,23 +39,114 @@ components:
         - Enqueued
         - Autocheck
       type: string
-      format: ''
-    UpdaterInfo:
+    ScanCompleteEvent:
       type: object
       properties:
-        tokenName:
+        projectId:
+          type: string
+          format: uuid
+          nullable: false
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: false
+        stage:
+          $ref: '#/components/schemas/Stage'
+    ScanEnqueuedEvent:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+          nullable: false
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: false
+    ScanStartedEvent:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+          nullable: false
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: false
+    ScanProgressModel:
+      type: object
+      properties:
+        stage:
+          $ref: '#/components/schemas/Stage'
+        subStage:
           type: string
           nullable: true
-        email:
-          type: string
-          nullable: true
-        username:
-          type: string
-          nullable: true
+        value:
+          type: integer
+          format: int32
       additionalProperties: false
-  securitySchemes:
-    Bearer:
-      type: apiKey
-      description: Please insert JWT with Bearer into field
-      name: Authorization
-      in: header
+    ScanStatisticModel:
+      type: object
+      properties:
+        high:
+          type: integer
+          format: int32
+        medium:
+          type: integer
+          format: int32
+        low:
+          type: integer
+          format: int32
+        potential:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        filesTotal:
+          type: integer
+          format: int32
+        filesScanned:
+          type: integer
+          format: int32
+        urlsScanned:
+          type: integer
+          format: int32
+        urlsTotal:
+          type: integer
+          format: int32
+        scanDuration:
+          type: string
+          format: date-span
+        policyState:
+          $ref: '#/components/schemas/PolicyState'
+      additionalProperties: false
+    ScanProgressEvent:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+          nullable: false
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: false
+        progress:
+          $ref: '#/components/schemas/ScanProgressModel'
+        statistic:
+          $ref: '#/components/schemas/ScanStatisticModel'
+    ScanResultRemovedEvent:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+          nullable: false
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: false
+        deleteGroup:
+          type: boolean
