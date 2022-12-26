@@ -6,6 +6,7 @@ import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.server.integration.rest.Environment;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.JsonAstJobIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
@@ -35,6 +36,7 @@ import java.nio.file.Path;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V420;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
 import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.*;
@@ -43,12 +45,11 @@ import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMappe
 @Slf4j
 @DisplayName("Test PT AI 4.2 REST API data structures")
 @Tag("development")
+@Environment(enabledFor = { V420 })
 public class RestApiDataStructuresIT extends BaseClientIT {
 
     @SneakyThrows
     protected void generateData(@NonNull final Path destination, @NonNull final Project project, @NonNull final Consumer<JsonSettingsTestHelper> modifySettings) {
-        if (ApiVersion.V420 != CONNECTION().getVersion()) return;
-
         RawData rawData = RawData.builder()
                 .fileName(UUID.randomUUID() + ".json")
                 .build();

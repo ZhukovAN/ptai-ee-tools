@@ -135,7 +135,7 @@ subprojects {
 
     task integrationScanTest(type: Test) {
         useJUnitPlatform {
-            includeTags 'integration'
+            includeTags 'integration & scan'
             excludeTags 'slow', 'jenkins'
         }
         shouldRunAfter test

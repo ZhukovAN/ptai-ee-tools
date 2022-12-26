@@ -1,5 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.server.v420;
 
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.server.integration.rest.Environment;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.*;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.ScanType;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.StartScanModel;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V420;
 import static com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.TokenType.CI;
 import static com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.checkApiCall;
 import static com.ptsecurity.appsec.ai.ee.server.v420.helpers.ApiHelper.*;
@@ -24,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Test PT AI 4.1.1 REST API calls that require scan")
 @Tag("integration")
 @Tag("scan")
+@Environment(enabledFor = { V420 })
 public class ScanTest extends AbstractTest {
     protected static UUID SCAN_RESULT_ID;
 
@@ -58,9 +62,7 @@ public class ScanTest extends AbstractTest {
 
     @Test
     @DisplayName("Reporting API calls")
-    public void reportingApiCalls(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
-
+    public void reportingApiCalls() {
         log.trace("Load report templates");
         List<ReportTemplateModel> templates = checkApiCall(() -> REPORTS.apiReportsTemplatesGet("en-US", false));
         assertNotNull(templates);

@@ -26,8 +26,7 @@ public class VersionInfoIT extends BaseClientIT {
 
     @Test
     @DisplayName("Check PT AI server status using insecure connection without trusted CA certificates")
-    public void checkInsecureConnection(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void checkInsecureConnection() {
         // As we do not know if JRE's truststore contains integration test CA certificates, let's use dummy one
         connectionSettings.setCaCertsPem(DUMMY());
         connectionSettings.setInsecure(true);
@@ -43,8 +42,7 @@ public class VersionInfoIT extends BaseClientIT {
 
     @Test
     @DisplayName("Check PT AI server status using secure connection")
-    public void checkSecureConnection(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void checkSecureConnection() {
         connectionSettings.setInsecure(false);
         AbstractApiClient client = Assertions.assertDoesNotThrow(() -> Factory.client(connectionSettings));
 

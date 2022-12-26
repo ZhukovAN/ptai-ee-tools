@@ -1,7 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.server.v420;
 
 import com.google.gson.reflect.TypeToken;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.TokenType;
+import com.ptsecurity.appsec.ai.ee.server.integration.rest.Environment;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.*;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.HealthCheckSummaryResult;
 import com.ptsecurity.appsec.ai.ee.server.v420.auth.ApiResponse;
@@ -17,6 +19,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.UUID;
 
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V420;
 import static com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.JWT;
 import static com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.checkApiCall;
 import static com.ptsecurity.appsec.ai.ee.server.v420.helpers.ApiHelper.*;
@@ -25,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @DisplayName("Test PT AI 4.2.0 REST API calls that do not require scan")
 @Tag("integration")
+@Environment(enabledFor = { V420 })
 public class FastTest extends AbstractTest {
     @BeforeAll
     public static void init() {
