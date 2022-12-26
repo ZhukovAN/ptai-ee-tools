@@ -31,8 +31,7 @@ public class AuthenticationIT extends BaseClientIT {
     @Test
     @Tag("slow")
     @DisplayName("Check implicit JWT refresh during API calls")
-    public void checkAutoJwtRefresh(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void checkAutoJwtRefresh() {
         AbstractApiClient client = Assertions.assertDoesNotThrow(() -> Factory.client(connectionSettings));
         // ApiClient client = new ApiClient(connectionSettings.validate());
         // Initialize all API clients with URL, timeouts, SSL settings etc.

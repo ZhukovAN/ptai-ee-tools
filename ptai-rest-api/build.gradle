@@ -154,6 +154,48 @@ swaggerSources {
             ]
         }
     }
+
+    auth420 {
+        inputFile = file('src/main/resources/api/v420/auth.yaml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v420.auth.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v420.auth.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
+    api420 {
+        inputFile = file('src/main/resources/api/v420/swagger.yaml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v420.api.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v420.api.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
+    notifications420 {
+        inputFile = file('src/main/resources/api/v420/notifications.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v420.notifications.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v420.notifications.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
 }
 
 compileJava.dependsOn \
@@ -163,7 +205,10 @@ compileJava.dependsOn \
  swaggerSources.scanscheduler411.code, \
  swaggerSources.systemmanagement411.code, \
  swaggerSources.legacy411.code, \
- swaggerSources.notifications411.code
+ swaggerSources.notifications411.code, \
+ swaggerSources.auth420.code, \
+ swaggerSources.api420.code, \
+ swaggerSources.notifications420.code
 
 sourceSets.main.java.srcDirs \
  "${swaggerSources.auth411.code.outputDir}/src/main/java", \
@@ -172,6 +217,8 @@ sourceSets.main.java.srcDirs \
  "${swaggerSources.scanscheduler411.code.outputDir}/src/main/java", \
  "${swaggerSources.systemmanagement411.code.outputDir}/src/main/java", \
  "${swaggerSources.notifications411.code.outputDir}/src/main/java", \
- "${swaggerSources.legacy411.code.outputDir}/src/main/java"
-
+ "${swaggerSources.legacy411.code.outputDir}/src/main/java", \
+ "${swaggerSources.auth420.code.outputDir}/src/main/java", \
+ "${swaggerSources.api420.code.outputDir}/src/main/java", \
+ "${swaggerSources.notifications420.code.outputDir}/src/main/java"
 

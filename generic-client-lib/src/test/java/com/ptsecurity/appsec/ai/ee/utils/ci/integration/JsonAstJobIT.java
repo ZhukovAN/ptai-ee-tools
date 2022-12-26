@@ -27,6 +27,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V411;
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V420;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.PHP;
 import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level.*;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
@@ -120,8 +121,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @Tag("scan")
     @DisplayName("Check PHP smoke miscellaneous project scan results contain low level vulnerabilities only")
-    public void checkLowLevelVulnerabilitiesOnly(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void checkLowLevelVulnerabilitiesOnly() {
         ScanResult scanResult = scanPhpSmokeMisc((settings) -> {
             settings.setScanAppType(CONFIGURATION);
             settings.setIsUseEntryAnalysisPoint(true);
@@ -138,8 +138,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @Tag("scan")
     @DisplayName("Check PHP smoke miscellaneous project scan results contain SCA high, medium, low and none level vulnerabilities")
-    public void checkScaVulnerabilitiesOnly(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void checkScaVulnerabilitiesOnly() {
         ScanResult scanResult = scanPhpSmokeMisc((settings) -> {
             settings.setScanAppType(FINGERPRINT);
             settings.setIsUseEntryAnalysisPoint(true);
@@ -157,8 +156,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @Tag("scan")
     @DisplayName("Check PHP smoke miscellaneous project scan results contain PM potential level vulnerabilities only")
-    public void checkPmVulnerabilitiesOnly(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void checkPmVulnerabilitiesOnly() {
         ScanResult scanResult = scanPhpSmokeMisc((settings) -> {
             settings.setScanAppType(PMTAINT);
             settings.setUseTaintAnalysis(false);
@@ -177,8 +175,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @Tag("scan")
     @DisplayName("Check PHP smoke miscellaneous project scan results contain public / protected vulnerabilities only")
-    public void checkPublicProtectedVulnerabilitiesOnly(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void checkPublicProtectedVulnerabilitiesOnly() {
         ScanResult scanResult = scanPhpSmokeMisc((settings) -> {
             settings.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP);
             settings.setUseTaintAnalysis(false);
@@ -199,8 +196,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @Tag("scan")
     @DisplayName("Check PHP smoke miscellaneous project scan results contain different vulnerabilities")
-    public void checkAllVulnerabilities(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void checkAllVulnerabilities() {
         ScanResult scanResult = scanPhpSmokeMisc((settings) -> {
             settings.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, PMTAINT, CONFIGURATION, FINGERPRINT);
             settings.setUseTaintAnalysis(false);
@@ -230,8 +226,8 @@ public class JsonAstJobIT extends BaseAstIT {
                 .filter(i -> HIGH == i.getLevel())
                 .filter(i -> i instanceof ScaIssue)
                 .count());
-        log.trace("Skip CVE sheck as 4.1.1 doesn't provide that info");
-        if (V411 != CONNECTION().getVersion())
+        log.trace("Skip CVE sheck as 4.1.1 and 4.2 doesn't provide that info");
+        if (V411 != CONNECTION().getVersion() && V420 != CONNECTION().getVersion())
             Assertions.assertNotEquals(0, scanResult.getIssues().stream()
                     .filter(i -> HIGH == i.getLevel())
                     .filter(i -> i instanceof ScaIssue)
@@ -252,8 +248,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @Tag("scan")
     @DisplayName("Check PHP smoke miscellaneous project scan settings change")
-    public void checkScanSettingsChange(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void checkScanSettingsChange() {
         ScanResult firstScanResult = scanPhpSmokeMisc((settings) -> {
             settings.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, PMTAINT, CONFIGURATION, FINGERPRINT);
             settings.setUseTaintAnalysis(true);
@@ -279,8 +274,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @Tag("scan")
     @DisplayName("Check raw report multiflow XSS representation via group Id")
-    public void checkMultiflow(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void checkMultiflow() {
         try (TempFile destination = TempFile.createFolder()) {
             GenericAstJob astJob = JsonAstJobImpl.builder()
                     .async(false)
@@ -309,8 +303,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @Tag("scan")
     @DisplayName("Scan every (except OWASP Benchmark) project twice: first time as a new project, second time as existing")
-    public void scanEveryProjectTwice(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void scanEveryProjectTwice() {
         for (Project project : ALL) {
             if (JAVA_OWASP_BENCHMARK == project) continue;
             scanProjectTwice(project);
@@ -321,8 +314,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Test
     @Tag("scan")
     @DisplayName("Scan project with slash in its name twice using same JSON settings")
-    public void scanProjectWithBadCharacter(@NonNull final TestInfo testInfo) {
-        log.trace(testInfo.getDisplayName());
+    public void scanProjectWithBadCharacter() {
         try (TempFile destination = TempFile.createFolder()) {
             JsonSettingsTestHelper settings = new JsonSettingsTestHelper(getResourceString("json/scan/settings/settings.java-app01.aiproj"));
             settings.setProjectName("junit-" + UUID.randomUUID() + "-origin/master");

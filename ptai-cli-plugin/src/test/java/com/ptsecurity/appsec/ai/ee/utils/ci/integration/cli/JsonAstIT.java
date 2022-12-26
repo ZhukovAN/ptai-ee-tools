@@ -113,11 +113,11 @@ class JsonAstIT extends BaseCliIT {
                     "--input", PHP_SMOKE.getCode().toString(),
                     "--output", reportsFolder.toString(),
                     "--settings-json", settings.serializeToFile().toString(),
-                    "--report-template", "Отчет OWASP Top 10 2017",
-                    "--report-file", "owasp.ru.html",
+                    "--report-template", "Scan results report",
+                    "--report-file", "results.en.html",
                     "--raw-data-file", "raw.json");
             Assertions.assertEquals(SUCCESS.getCode(), res);
-            Assertions.assertTrue(reportsFolder.toPath().resolve("owasp.ru.html").toFile().exists());
+            Assertions.assertTrue(reportsFolder.toPath().resolve("results.en.html").toFile().exists());
             Assertions.assertTrue(reportsFolder.toPath().resolve("raw.json").toFile().exists());
         }
     }
