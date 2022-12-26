@@ -28,15 +28,8 @@ import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 
 @DisplayName("Check UI-defined AST scans")
 @Slf4j
+@Tag("integration")
 class UiAstIT extends BaseCliIT {
-    @Test
-    @DisplayName("Show usage of UI-defined AST")
-    void showUiAstUsage() {
-        Integer res = new CommandLine(new Plugin()).execute(
-                "ui-ast");
-        Assertions.assertEquals(BaseCommand.ExitCode.INVALID_INPUT.getCode(), res);
-    }
-
     @Test
     @Tag("scan")
     @Tag("integration")
