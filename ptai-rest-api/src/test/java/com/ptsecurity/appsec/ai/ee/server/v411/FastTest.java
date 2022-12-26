@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 @DisplayName("Test PT AI 4.1.1 REST API calls that do not require scan")
 @Tag("integration")
+@Disabled
 public class FastTest extends AbstractTest {
     @BeforeAll
     public static void init() {

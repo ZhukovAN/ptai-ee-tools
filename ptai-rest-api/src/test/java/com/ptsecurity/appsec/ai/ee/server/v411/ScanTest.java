@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Test PT AI 4.1.1 REST API calls that require scan")
 @Tag("integration")
 @Tag("scan")
+@Disabled
 public class ScanTest extends AbstractTest {
     protected static UUID SCAN_RESULT_ID;
 

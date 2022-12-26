@@ -12,6 +12,7 @@ gradle-app.setting
 .gradletasknamecache
 
 **/ptai-jenkins-plugin/work/**
+**/ptai-jenkins-plugin/**/webapp/webjars/**
 **/ptai-jenkins-plugin/target/jenkins-for-test/**
 **/ptai-teamcity-plugin/ptai-teamcity-plugin-server/data/**
 **/ptai-teamcity-plugin/ptai-teamcity-plugin-server/downloads/**
@@ -25,4 +26,4 @@ gradle-app.setting
 
 out/
 # Do not store API tokens to repository
-ptai-data-structures/src/testFixtures/resources/configuration.yml
+ptai-rest-api/**/configuration.yml

@@ -1,7 +1,7 @@
 plugins {
     id 'io.freefair.lombok' version '6.1.0' apply false
     id 'com.github.johnrengelman.shadow' version '5.2.0' apply false
-    id 'org.jenkins-ci.jpi' version '0.43.0' apply false
+    id 'org.jenkins-ci.jpi' version '0.47.0' apply false
     id 'com.palantir.git-version' version '0.12.3' apply false
 }
 
@@ -20,8 +20,8 @@ subprojects {
     apply plugin: 'io.freefair.lombok'
     apply plugin: 'maven-publish'
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
 
@@ -149,17 +149,14 @@ subprojects {
         shouldRunAfter = [ "test" ]
     }
 
-    def jenkinsTest = tasks.register('jenkinsTest', Test) {
+    task integrationJenkinsTest(type: Test) {
         useJUnitPlatform {
             includeTags 'jenkins'
-        }
-        testLogging {
-            events 'passed', 'skipped', 'failed'
         }
         shouldRunAfter = [ "test" ]
     }
 
-    def slowIntegrationTest = tasks.register('slowIntegrationTest', Test) {
+    task integrationSlowTest(type: Test) {
         useJUnitPlatform {
             includeTags 'slow'
         }

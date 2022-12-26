@@ -150,7 +150,7 @@ class UiAstIT extends BaseCliIT {
                     "--token", CONNECTION().getToken(),
                     "--truststore", CA_PEM_FILE.toString(),
                     "--report-file", report.getFileName().toString(),
-                    "--report-template", "OWASP top 10 2017 report");
+                    "--report-template", "Scan results report");
             Assertions.assertEquals(SUCCESS.getCode(), res);
             Assertions.assertTrue(report.toFile().exists());
             BasicFileAttributes attr = Files.readAttributes(report, BasicFileAttributes.class);
@@ -165,7 +165,7 @@ class UiAstIT extends BaseCliIT {
                     "--token", CONNECTION().getToken(),
                     "--truststore", CA_PEM_FILE.toString(),
                     "--report-file", report.getFileName().toString(),
-                    "--report-template", "OWASP top 10 2017 report");
+                    "--report-template", "Scan results report");
             Assertions.assertEquals(SUCCESS.getCode(), res);
             Assertions.assertTrue(report.toFile().exists());
             attr = Files.readAttributes(report, BasicFileAttributes.class);
