@@ -167,9 +167,7 @@ dependencies {
 
     // Need this to execute Jenkins plugin integration tests
     // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-test-harness
-    // testImplementation group: 'org.jenkins-ci.main', name: 'jenkins-test-harness', version: '1690.vfcb_959006c07'
-    // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-test-harness
-    testImplementation 'org.jenkins-ci.main:jenkins-test-harness:1914.vb_f6ede536686'
+    testImplementation 'org.jenkins-ci.main:jenkins-test-harness:1903.vf505ecb_63589'
     // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-war
     testImplementation "org.jenkins-ci.main:jenkins-war:${jenkinsVersion}"
 
