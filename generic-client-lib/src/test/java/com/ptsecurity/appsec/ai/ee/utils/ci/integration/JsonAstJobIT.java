@@ -85,6 +85,7 @@ public class JsonAstJobIT extends BaseAstIT {
             for (int i = 0 ; i < 2 ; i++) {
                 AbstractJob.JobExecutionResult res = astJob.execute();
                 Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+                Thread.sleep(15000);
             }
         }
     }
@@ -313,25 +314,23 @@ public class JsonAstJobIT extends BaseAstIT {
     @SneakyThrows
     @Test
     @Tag("scan")
-    @DisplayName("Scan project with slash in its name twice using same JSON settings")
+    @DisplayName("Scan project with slash in its name")
     public void scanProjectWithBadCharacter() {
         try (TempFile destination = TempFile.createFolder()) {
             JsonSettingsTestHelper settings = new JsonSettingsTestHelper(getResourceString("json/scan/settings/settings.java-app01.aiproj"));
             settings.setProjectName("junit-" + UUID.randomUUID() + "-origin/master");
-            for (int i = 0 ; i < 2 ; i++) {
-                GenericAstJob astJob = JsonAstJobImpl.builder()
-                        .async(false)
-                        .fullScanMode(true)
-                        .connectionSettings(CONNECTION_SETTINGS())
-                        .console(System.out)
-                        .sources(JAVA_APP01.getCode())
-                        .destination(destination.toPath())
-                        .jsonSettings(settings.serialize())
-                        .jsonPolicy(getResourceString("json/scan/settings/policy.generic.json"))
-                        .build();
-                AbstractJob.JobExecutionResult res = astJob.execute();
-                Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
-            }
+            GenericAstJob astJob = JsonAstJobImpl.builder()
+                    .async(false)
+                    .fullScanMode(true)
+                    .connectionSettings(CONNECTION_SETTINGS())
+                    .console(System.out)
+                    .sources(JAVA_APP01.getCode())
+                    .destination(destination.toPath())
+                    .jsonSettings(settings.serialize())
+                    .jsonPolicy(getResourceString("json/scan/settings/policy.generic.json"))
+                    .build();
+            AbstractJob.JobExecutionResult res = astJob.execute();
+            Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
         }
     }
 }

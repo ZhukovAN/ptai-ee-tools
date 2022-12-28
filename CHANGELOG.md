@@ -209,4 +209,8 @@
 ### 20221108
 + [Fix] JWT and API tokens are masked in trace logs by default. To override this behaviour set `ptai.logging.http.credentials` advanced setting to `true`
 ### 20221121
-+ [Fix] Project validation button fixed for Jenkins 2.355+ 
++ [Fix] Project validation button fixed for Jenkins 2.355+
+### 20221227
++ [Feature] PT AI v.4.2.0 support added
++ [Feature] Avanced setting ast.job.poll.interval added. Its value defines time interval in seconds between two sequential AST job status REST API calls to prevent task freeze because of lost events
++ 

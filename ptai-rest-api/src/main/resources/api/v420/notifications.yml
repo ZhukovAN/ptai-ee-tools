@@ -15,16 +15,11 @@ paths:
 components:
   schemas:
     PolicyState:
-      # V.4.2: Had to add x-enum-varnames as API returns integer value instead of enum
       enum:
-        - 0
-        - 1
-        - 2
-      x-enum-varnames:
         - None
         - Rejected
         - Confirmed
-      type: integer
+      type: string
     Stage:
       enum:
         - Unknown

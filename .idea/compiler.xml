@@ -10,7 +10,6 @@
         </processorPath>
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-common.test" />
         <module name="ptai-ee-tools.ptai-report-tools.test" />
-        <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-agent.testFixtures" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-agent.main" />
         <module name="ptai-ee-tools.ptai-i18n.main" />
         <module name="ptai-ee-tools.pt-misc-tools.test" />
@@ -20,14 +19,9 @@
         <module name="ptai-ee-tools.ptai-jenkins-plugin.generatedJenkinsTest" />
         <module name="ptai-ee-tools.ptai-data-structures.test" />
         <module name="ptai-ee-tools.generic-client-lib.testFixtures" />
-        <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-common.testFixtures" />
-        <module name="ptai-ee-tools.ptai-jenkins-plugin.testFixtures" />
         <module name="ptai-ee-tools.ptai-report-tools.main" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-agent.test" />
-        <module name="ptai-ee-tools.ptai-report-tools.testFixtures" />
         <module name="ptai-ee-tools.generic-client-lib.main" />
-        <module name="ptai-ee-tools.ptai-teamcity-plugin.testFixtures" />
-        <module name="ptai-ee-tools.ptai-i18n.testFixtures" />
         <module name="ptai-ee-tools.ptai-jenkins-plugin.test" />
         <module name="ptai-ee-tools.pt-misc-tools.testFixtures" />
         <module name="ptai-ee-tools.ptai-cli-plugin.test" />
@@ -35,12 +29,10 @@
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-server.test" />
         <module name="ptai-ee-tools.ptai-data-structures.testFixtures" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-common.main" />
-        <module name="ptai-ee-tools.ptai-cli-plugin.testFixtures" />
         <module name="ptai-ee-tools.ptai-i18n.test" />
         <module name="ptai-ee-tools.ptai-rest-api.testFixtures" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-server.main" />
         <module name="ptai-ee-tools.ptai-teamcity-plugin.test" />
-        <module name="ptai-ee-tools.ptai-teamcity-plugin.ptai-teamcity-plugin-server.testFixtures" />
         <module name="ptai-ee-tools.ptai-rest-api.test" />
         <module name="ptai-ee-tools.generic-client-lib.test" />
         <module name="ptai-ee-tools.ptai-cli-plugin.main" />

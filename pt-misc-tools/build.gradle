@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'
+    id 'java-test-fixtures'
 }
 
 group = "${rootGroup}"
@@ -29,4 +30,12 @@ dependencies {
     // Java 8 date / time API
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310
     api "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+
+    // Use JUnit 5 for test fixtures
+    testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testFixturesImplementation('org.junit.jupiter:junit-jupiter')
+    // Enable Slf4J log for test fixtures
+    testFixturesImplementation "org.slf4j:slf4j-api:$slf4jVersion"
+    // ... and use JUL provider for them
+    testFixturesImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
 }

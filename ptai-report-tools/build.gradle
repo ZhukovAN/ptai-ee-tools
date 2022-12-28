@@ -1,6 +1,5 @@
 plugins {
     id 'java-library'
-    id 'java-test-fixtures'
 }
 
 group = "${rootGroup}"
@@ -12,21 +11,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.8.1'
 
-
-    testFixturesApi("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testFixturesImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14
-    testFixturesApi "org.slf4j:slf4j-jdk14:$slf4jVersion"
-    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
-    testFixturesApi 'io.jsonwebtoken:jjwt:0.9.1'
-
     // Need this to write tests that use data stored in 7zip-packed resource files
     // like issues model, scan settings etc.
+    testImplementation(testFixtures(project(":pt-misc-tools")))
     testImplementation(testFixtures(project(":ptai-data-structures")))
-    testImplementation(testFixtures(project(":ptai-rest-api")))
-
-    testFixturesImplementation(testFixtures(project(":pt-misc-tools")))
-    testFixturesImplementation(testFixtures(project(":ptai-data-structures")))
-    testFixturesImplementation(testFixtures(project(":ptai-rest-api")))
 }

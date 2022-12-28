@@ -15,7 +15,6 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'java-test-fixtures'
     apply plugin: 'idea'
     apply plugin: 'io.freefair.lombok'
     apply plugin: 'maven-publish'
@@ -40,18 +39,13 @@ subprojects {
         // Enable Slf4J log facade
         implementation "org.slf4j:slf4j-api:$slf4jVersion"
 
-        // Use JUnit 5 for tests and fixtures
+        // Use JUnit 5 for tests
         testImplementation(platform("org.junit:junit-bom:$junitVersion"))
-        testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
         testImplementation('org.junit.jupiter:junit-jupiter')
-        testFixturesImplementation('org.junit.jupiter:junit-jupiter')
-
-        // Enable Slf4J log for tests and test fixtures
+        // Enable Slf4J log for tests
         testImplementation "org.slf4j:slf4j-api:$slf4jVersion"
-        testFixturesImplementation "org.slf4j:slf4j-api:$slf4jVersion"
         // ... and use JUL provider for them
         testImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
-        testFixturesImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {

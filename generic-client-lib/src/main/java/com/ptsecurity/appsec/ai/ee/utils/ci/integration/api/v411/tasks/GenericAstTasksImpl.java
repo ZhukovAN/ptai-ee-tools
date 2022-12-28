@@ -14,6 +14,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.EnumsConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.ScanErrorsConverter;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
@@ -84,8 +85,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         public void run() {
             while (!exit) {
                 try {
-                    // TODO: Add configuration parameter
-                    Thread.sleep(5 * 60 * 1000);
+                    Thread.sleep(this.client.getAdvancedSettings().getInt(AdvancedSettings.SettingInfo.AST_JOB_POLL_INTERVAL) * 1000L);
                     log.trace("Poll {} project {} scan state", projectId, scanResultId);
                     ScanResultModel scanResult = call(
                             () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),

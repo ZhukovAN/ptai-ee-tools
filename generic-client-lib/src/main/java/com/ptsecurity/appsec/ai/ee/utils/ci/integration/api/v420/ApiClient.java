@@ -248,7 +248,7 @@ public class ApiClient extends AbstractApiClient {
                     console.info("Scan started. Project id: %s, scan result id: %s", data.getProjectId(), data.getScanResultId());
                 if (null != eventConsumer) eventConsumer.process(data);
             }
-            log.trace(data.toString());
+            log.trace("ScanStartedEvent: {}", data);
         }, ScanStartedEvent.class);
 
         // Currently PT AI viewer have no stop scan feature but deletes scan result
@@ -256,7 +256,7 @@ public class ApiClient extends AbstractApiClient {
             if (!scanResultId.equals(data.getScanResultId())) return;
             if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI viewer");
             if (null != eventConsumer) eventConsumer.process(com.ptsecurity.appsec.ai.ee.scan.progress.Stage.ABORTED);
-            log.trace(data.toString());
+            log.trace("ScanResultRemovedEvent: {}", data);
             if (null != queue) {
                 log.debug("Scan result {} removed", scanResultId);
                 queue.add(Stage.ABORTED);
@@ -294,7 +294,7 @@ public class ApiClient extends AbstractApiClient {
                     }
                 }
             }
-            log.trace(data.toString());
+            log.trace("ScanProgressEvent: {}", data);
         }, ScanProgressEvent.class);
 
         connection.on("ScanCompleted", (data) -> {
@@ -304,7 +304,7 @@ public class ApiClient extends AbstractApiClient {
                 log.trace("Skip ScanCompleted event as its scanResultId != {}", scanResultId);
             else
                 queue.add(Stage.DONE);
-            log.trace(data.toString());
+            log.trace("ScanCompleteEvent: {}", data);
         }, ScanCompleteEvent.class);
 
         return connection;
@@ -318,16 +318,14 @@ public class ApiClient extends AbstractApiClient {
     @Setter
     @RequiredArgsConstructor
     private static final class SubscriptionOnNotification {
-        private String ClientId;
+        private String notificationTypeName;
 
-        private String NotificationTypeName;
+        private Set<UUID> ids = new HashSet<>();
 
-        private Set<UUID> Ids = new HashSet<>();
-
-        private final Date CreatedDate;
+        private final Date createdDate;
 
         SubscriptionOnNotification() {
-            this.CreatedDate = new Date();
+            this.createdDate = new Date();
         }
     }
 
@@ -336,22 +334,21 @@ public class ApiClient extends AbstractApiClient {
             @NonNull UUID projectId,
             @NonNull final UUID scanResultId) {
         SubscriptionOnNotification subscription = new SubscriptionOnNotification();
-        subscription.ClientId = id;
         // subscription.Ids.add(scanResultId);
 
-        subscription.NotificationTypeName = "ScanStarted";
+        subscription.notificationTypeName = "ScanStarted";
         connection.send("SubscribeOnNotification", subscription);
 
-        subscription.NotificationTypeName = "ScanProgress";
+        subscription.notificationTypeName = "ScanProgress";
         connection.send("SubscribeOnNotification", subscription);
 
-        subscription.NotificationTypeName = "ScanCompleted";
+        subscription.notificationTypeName = "ScanCompleted";
         connection.send("SubscribeOnNotification", subscription);
 
         // ScanResultRemoved event subscription uses projectId-based filtering
-        subscription.Ids.clear();
-        subscription.Ids.add(projectId);
-        subscription.NotificationTypeName = "ScanResultRemoved";
+        subscription.ids.clear();
+        subscription.ids.add(projectId);
+        subscription.notificationTypeName = "ScanResultRemoved";
         connection.send("SubscribeOnNotification", subscription);
     }
 }

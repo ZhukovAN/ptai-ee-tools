@@ -252,7 +252,7 @@ public class ApiClient extends AbstractApiClient {
                     console.info("Scan started. Project id: %s, scan result id: %s", data.getResult().getProjectId(), data.getResult().getId());
                 if (null != eventConsumer) eventConsumer.process(data);
             }
-            log.trace(data.toString());
+            log.trace("ScanStartedEvent: {}", data);
         }, ScanStartedEvent.class);
 
         // Currently PT AI viewer have no stop scan feature but deletes scan result
@@ -260,7 +260,7 @@ public class ApiClient extends AbstractApiClient {
             if (!scanResultId.equals(data.getScanResultId())) return;
             if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI viewer");
             if (null != eventConsumer) eventConsumer.process(com.ptsecurity.appsec.ai.ee.scan.progress.Stage.ABORTED);
-            log.trace(data.toString());
+            log.trace("ScanResultRemovedEvent: {}", data);
             if (null != queue) {
                 log.debug("Scan result {} removed", scanResultId);
                 queue.add(Stage.ABORTED);
@@ -298,7 +298,7 @@ public class ApiClient extends AbstractApiClient {
                     }
                 }
             }
-            log.trace(data.toString());
+            log.trace("ScanProgressEvent: {}", data);
         }, ScanProgressEvent.class);
 
         connection.on("ScanCompleted", (data) -> {
@@ -308,7 +308,7 @@ public class ApiClient extends AbstractApiClient {
                 log.trace("Skip ScanCompleted event as its scanResultId != {}", scanResultId);
             else
                 queue.add(Stage.DONE);
-            log.trace(data.toString());
+            log.trace("ScanCompleteEvent: {}", data);
         }, ScanCompleteEvent.class);
 
         return connection;

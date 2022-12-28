@@ -37,7 +37,8 @@ public class AdvancedSettings implements Serializable {
         HTTP_REQUEST_READ_TIMEOUT("http.request.read.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_http_request_read_timeout),
         HTTP_REQUEST_WRITE_TIMEOUT("http.request.write.timeout", SettingType.INTEGER, 3600, Resources::i18n_ast_settings_advanced_http_request_write_timeout),
         AST_RESULT_REST_URL_FILENAME("ast.result.rest.url.filename", SettingType.STRING, "", Resources::i18n_ast_settings_advanced_ast_result_rest_url_filename),
-        JENKINS_DATA_CHUNK_SIZE("jenkins.data.chunk.size", SettingType.INTEGER, 10 * 1024 * 1024, Resources::i18n_ast_settings_advanced_jenkins_data_chunk_size);
+        JENKINS_DATA_CHUNK_SIZE("jenkins.data.chunk.size", SettingType.INTEGER, 10 * 1024 * 1024, Resources::i18n_ast_settings_advanced_jenkins_data_chunk_size),
+        AST_JOB_POLL_INTERVAL("ast.job.poll.interval", SettingType.INTEGER, 15, Resources::i18n_ast_settings_advanced_ast_job_poll_interval);
 
         private final String name;
         private final SettingType type;
