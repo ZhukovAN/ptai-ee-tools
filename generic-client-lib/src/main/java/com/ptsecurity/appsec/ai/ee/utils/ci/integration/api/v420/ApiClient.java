@@ -14,6 +14,7 @@ import com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.VersionRange;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.converters.EnumsConverter;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.tasks.GenericAstTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.tasks.ServerVersionTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
@@ -21,6 +22,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ApiClientHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.LoggingInterceptor;
 import com.ptsecurity.misc.tools.Jwt;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.CallHelper;
 import io.reactivex.rxjava3.core.Single;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.lang.reflect.Type;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
@@ -195,7 +198,11 @@ public class ApiClient extends AbstractApiClient {
     @ToString.Exclude
     protected String connectedDate = "";
 
-    public HubConnection createSignalrConnection(@NonNull UUID projectId, @NonNull final UUID scanResultId, final BlockingQueue<Stage> queue) throws GenericException {
+    public HubConnection createSignalrConnection(
+            @NonNull UUID projectId,
+            @NonNull final UUID scanResultId,
+            final BlockingQueue<Stage> queue,
+            @NonNull GenericAstTasksImpl.ProjectPollingThread pollingThread) throws GenericException {
         // Create accessTokenProvider to provide SignalR connection
         // with jwt
         Single<String> accessTokenProvider = Single.defer(() -> Single.just(apiJwt.getAccessToken()));
@@ -247,6 +254,7 @@ public class ApiClient extends AbstractApiClient {
                 if (null != console)
                     console.info("Scan started. Project id: %s, scan result id: %s", data.getProjectId(), data.getScanResultId());
                 if (null != eventConsumer) eventConsumer.process(data);
+                pollingThread.reset();
             }
             log.trace("ScanStartedEvent: {}", data);
         }, ScanStartedEvent.class);
@@ -257,6 +265,7 @@ public class ApiClient extends AbstractApiClient {
             if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI viewer");
             if (null != eventConsumer) eventConsumer.process(com.ptsecurity.appsec.ai.ee.scan.progress.Stage.ABORTED);
             log.trace("ScanResultRemovedEvent: {}", data);
+            pollingThread.reset();
             if (null != queue) {
                 log.debug("Scan result {} removed", scanResultId);
                 queue.add(Stage.ABORTED);
@@ -293,6 +302,7 @@ public class ApiClient extends AbstractApiClient {
                         queue.add(EnumsConverter.convert(stage.get()));
                     }
                 }
+                pollingThread.reset();
             }
             log.trace("ScanProgressEvent: {}", data);
         }, ScanProgressEvent.class);
@@ -302,8 +312,10 @@ public class ApiClient extends AbstractApiClient {
                 log.trace("Skip ScanCompleted event as its projectId != {}", projectId);
             else if (!scanResultId.equals(data.getScanResultId()))
                 log.trace("Skip ScanCompleted event as its scanResultId != {}", scanResultId);
-            else
+            else {
+                pollingThread.reset();
                 queue.add(Stage.DONE);
+            }
             log.trace("ScanCompleteEvent: {}", data);
         }, ScanCompleteEvent.class);
 

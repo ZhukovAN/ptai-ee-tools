@@ -8,6 +8,7 @@ import com.ptsecurity.appsec.ai.ee.scan.settings.v420.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -423,7 +424,7 @@ public class AiProjConverter {
 
     private static String serialize(AiProjScanSettings settings) throws GenericException {
         return call(
-                () -> new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(settings.fix()),
+                () -> BaseJsonHelper.serialize(settings.fix()),
                 "JSON settings serialization failed");
     }
 

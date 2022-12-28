@@ -25,13 +25,14 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.events.ScanComp
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.events.ScanProgressEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.events.ScanResultRemovedEvent;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.events.ScanStartedEvent;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.tasks.GenericAstTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.tasks.ServerVersionTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.*;
-import com.ptsecurity.misc.tools.Jwt;
-import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ApiClientHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.LoggingInterceptor;
+import com.ptsecurity.misc.tools.Jwt;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import io.reactivex.rxjava3.core.Single;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -199,7 +200,11 @@ public class ApiClient extends AbstractApiClient {
     @ToString.Exclude
     protected String connectedDate = "";
 
-    public HubConnection createSignalrConnection(@NonNull UUID projectId, @NonNull final UUID scanResultId, final BlockingQueue<Stage> queue) throws GenericException {
+    public HubConnection createSignalrConnection(
+            @NonNull UUID projectId,
+            @NonNull final UUID scanResultId,
+            final BlockingQueue<Stage> queue,
+            @NonNull GenericAstTasksImpl.ProjectPollingThread pollingThread) throws GenericException {
         // Create accessTokenProvider to provide SignalR connection
         // with jwt
         Single<String> accessTokenProvider = Single.defer(() -> Single.just(apiJwt.getAccessToken()));
@@ -251,6 +256,7 @@ public class ApiClient extends AbstractApiClient {
                 if (null != console)
                     console.info("Scan started. Project id: %s, scan result id: %s", data.getResult().getProjectId(), data.getResult().getId());
                 if (null != eventConsumer) eventConsumer.process(data);
+                pollingThread.reset();
             }
             log.trace("ScanStartedEvent: {}", data);
         }, ScanStartedEvent.class);
@@ -261,6 +267,7 @@ public class ApiClient extends AbstractApiClient {
             if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI viewer");
             if (null != eventConsumer) eventConsumer.process(com.ptsecurity.appsec.ai.ee.scan.progress.Stage.ABORTED);
             log.trace("ScanResultRemovedEvent: {}", data);
+            pollingThread.reset();
             if (null != queue) {
                 log.debug("Scan result {} removed", scanResultId);
                 queue.add(Stage.ABORTED);
@@ -297,6 +304,7 @@ public class ApiClient extends AbstractApiClient {
                         queue.add(EnumsConverter.convert(stage.get()));
                     }
                 }
+                pollingThread.reset();
             }
             log.trace("ScanProgressEvent: {}", data);
         }, ScanProgressEvent.class);
@@ -306,8 +314,10 @@ public class ApiClient extends AbstractApiClient {
                 log.trace("Skip ScanCompleted event as its projectId != {}", projectId);
             else if (!scanResultId.equals(data.getResult().getId()))
                 log.trace("Skip ScanCompleted event as its scanResultId != {}", scanResultId);
-            else
+            else {
+                pollingThread.reset();
                 queue.add(Stage.DONE);
+            }
             log.trace("ScanCompleteEvent: {}", data);
         }, ScanCompleteEvent.class);
 
