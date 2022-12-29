@@ -20,7 +20,8 @@ public class VersionInfoIT extends BaseClientIT {
     protected ConnectionSettings connectionSettings = null;
 
     @BeforeEach
-    public void pre() {
+    public void pre(@NonNull final TestInfo testInfo) {
+        super.pre(testInfo);
         connectionSettings = CONNECTION_SETTINGS();
     }
 

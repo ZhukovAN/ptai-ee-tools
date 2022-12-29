@@ -14,6 +14,7 @@ import com.ptsecurity.appsec.ai.ee.server.v420.notifications.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.VersionRange;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.converters.EnumsConverter;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.tasks.GenericAstTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.tasks.ServerVersionTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
@@ -21,6 +22,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ApiClientHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.LoggingInterceptor;
 import com.ptsecurity.misc.tools.Jwt;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.CallHelper;
 import io.reactivex.rxjava3.core.Single;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.lang.reflect.Type;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
@@ -195,7 +198,11 @@ public class ApiClient extends AbstractApiClient {
     @ToString.Exclude
     protected String connectedDate = "";
 
-    public HubConnection createSignalrConnection(@NonNull UUID projectId, @NonNull final UUID scanResultId, final BlockingQueue<Stage> queue) throws GenericException {
+    public HubConnection createSignalrConnection(
+            @NonNull UUID projectId,
+            @NonNull final UUID scanResultId,
+            final BlockingQueue<Stage> queue,
+            @NonNull GenericAstTasksImpl.ProjectPollingThread pollingThread) throws GenericException {
         // Create accessTokenProvider to provide SignalR connection
         // with jwt
         Single<String> accessTokenProvider = Single.defer(() -> Single.just(apiJwt.getAccessToken()));
@@ -247,8 +254,9 @@ public class ApiClient extends AbstractApiClient {
                 if (null != console)
                     console.info("Scan started. Project id: %s, scan result id: %s", data.getProjectId(), data.getScanResultId());
                 if (null != eventConsumer) eventConsumer.process(data);
+                pollingThread.reset();
             }
-            log.trace(data.toString());
+            log.trace("ScanStartedEvent: {}", data);
         }, ScanStartedEvent.class);
 
         // Currently PT AI viewer have no stop scan feature but deletes scan result
@@ -256,7 +264,8 @@ public class ApiClient extends AbstractApiClient {
             if (!scanResultId.equals(data.getScanResultId())) return;
             if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI viewer");
             if (null != eventConsumer) eventConsumer.process(com.ptsecurity.appsec.ai.ee.scan.progress.Stage.ABORTED);
-            log.trace(data.toString());
+            log.trace("ScanResultRemovedEvent: {}", data);
+            pollingThread.reset();
             if (null != queue) {
                 log.debug("Scan result {} removed", scanResultId);
                 queue.add(Stage.ABORTED);
@@ -293,8 +302,9 @@ public class ApiClient extends AbstractApiClient {
                         queue.add(EnumsConverter.convert(stage.get()));
                     }
                 }
+                pollingThread.reset();
             }
-            log.trace(data.toString());
+            log.trace("ScanProgressEvent: {}", data);
         }, ScanProgressEvent.class);
 
         connection.on("ScanCompleted", (data) -> {
@@ -302,9 +312,11 @@ public class ApiClient extends AbstractApiClient {
                 log.trace("Skip ScanCompleted event as its projectId != {}", projectId);
             else if (!scanResultId.equals(data.getScanResultId()))
                 log.trace("Skip ScanCompleted event as its scanResultId != {}", scanResultId);
-            else
+            else {
+                pollingThread.reset();
                 queue.add(Stage.DONE);
-            log.trace(data.toString());
+            }
+            log.trace("ScanCompleteEvent: {}", data);
         }, ScanCompleteEvent.class);
 
         return connection;
@@ -318,16 +330,14 @@ public class ApiClient extends AbstractApiClient {
     @Setter
     @RequiredArgsConstructor
     private static final class SubscriptionOnNotification {
-        private String ClientId;
+        private String notificationTypeName;
 
-        private String NotificationTypeName;
+        private Set<UUID> ids = new HashSet<>();
 
-        private Set<UUID> Ids = new HashSet<>();
-
-        private final Date CreatedDate;
+        private final Date createdDate;
 
         SubscriptionOnNotification() {
-            this.CreatedDate = new Date();
+            this.createdDate = new Date();
         }
     }
 
@@ -336,22 +346,21 @@ public class ApiClient extends AbstractApiClient {
             @NonNull UUID projectId,
             @NonNull final UUID scanResultId) {
         SubscriptionOnNotification subscription = new SubscriptionOnNotification();
-        subscription.ClientId = id;
         // subscription.Ids.add(scanResultId);
 
-        subscription.NotificationTypeName = "ScanStarted";
+        subscription.notificationTypeName = "ScanStarted";
         connection.send("SubscribeOnNotification", subscription);
 
-        subscription.NotificationTypeName = "ScanProgress";
+        subscription.notificationTypeName = "ScanProgress";
         connection.send("SubscribeOnNotification", subscription);
 
-        subscription.NotificationTypeName = "ScanCompleted";
+        subscription.notificationTypeName = "ScanCompleted";
         connection.send("SubscribeOnNotification", subscription);
 
         // ScanResultRemoved event subscription uses projectId-based filtering
-        subscription.Ids.clear();
-        subscription.Ids.add(projectId);
-        subscription.NotificationTypeName = "ScanResultRemoved";
+        subscription.ids.clear();
+        subscription.ids.add(projectId);
+        subscription.notificationTypeName = "ScanResultRemoved";
         connection.send("SubscribeOnNotification", subscription);
     }
 }
