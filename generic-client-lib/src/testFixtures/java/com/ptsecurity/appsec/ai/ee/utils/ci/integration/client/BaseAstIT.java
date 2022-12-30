@@ -1,112 +1,59 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AbstractFileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
+import com.ptsecurity.misc.tools.TempFile;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.TestInfo;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
 
+@Slf4j
 public abstract class BaseAstIT extends BaseClientIT {
-    @Getter
-    public static class Project {
-        @Getter
-        protected final String name;
-        @Getter
-        protected final String settings;
-
-        protected final String sourcesZipResourceName;
-
-        @TempDir
-        protected Path code = null;
-
-        public Path getCode() {
-            if (null == code)
-                code = extractPackedResourceFile(sourcesZipResourceName);
-            return code;
-        }
-
-
-        protected Path zip = null;
-
-        public Path getZip() {
-            if (null == zip) {
-                Path sources = getCode();
-                zip = BaseTest.zipFile(sources);
-            }
-            return zip;
-        }
-
-        @SneakyThrows
-        private Project(@NonNull final String name, @NonNull final String sourcesZipResourceName, @NonNull final String settingsResourceName) {
-            this.name = name;
-            String genericSettings = getResourceString(settingsResourceName);
-            this.settings = new JsonSettingsHelper(genericSettings).projectName(name).verifyRequiredFields().serialize();
-            this.sourcesZipResourceName = sourcesZipResourceName;
-        }
-        @SneakyThrows
-        public Project setup(final String policy) {
-            // As projects share same set of settings there's need to modify project name in JSON
-            AbstractApiClient client = Factory.client(CONNECTION_SETTINGS());
-            ProjectTasks projectTasks = new Factory().projectTasks(client);
-            projectTasks.setupFromJson(settings, policy, (projectId) -> {
-                GenericAstTasks genericAstTasks = new Factory().genericAstTasks(client);
-                genericAstTasks.upload(projectId, getZip().toFile());
-            });
-            return this;
-        }
-
-        @SneakyThrows
-        public Project setup() {
-            return setup(null);
-        }
+    @SneakyThrows
+    @NonNull
+    public static UUID setup(@NonNull final Project project) {
+        return setup(project, null);
     }
 
-    public static final Project JAVA_APP01 = new Project(
-            JAVA_APP01_PROJECT_NAME,
-            "code/java-app01.zip",
-            "json/scan/settings/settings.java-app01.aiproj");
-
-    public static final Project JAVA_OWASP_BENCHMARK = new Project(JAVA_OWASP_BENCHMARK_PROJECT_NAME, "code/java-owasp-benchmark.7z", "json/scan/settings/settings.java-owasp-benchmark.aiproj");
-    public static final Project PHP_OWASP_BRICKS = new Project(PHP_OWASP_BRICKS_PROJECT_NAME, "code/php-owasp-bricks.7z", "json/scan/settings/settings.php-owasp-bricks.aiproj");
-    public static final Project PHP_SMOKE_MISC = new Project(PHP_SMOKE_MISC_PROJECT_NAME, "code/php-smoke-misc.zip", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_MEDIUM = new Project(PHP_SMOKE_MEDIUM_PROJECT_NAME, "code/php-smoke-medium.zip", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_HIGH = new Project(PHP_SMOKE_HIGH_PROJECT_NAME, "code/php-smoke-high.zip", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project PHP_SMOKE_MULTIFLOW = new Project(PHP_SMOKE_MULTIFLOW_PROJECT_NAME, "code/php-smoke-multiflow.zip", "json/scan/settings/settings.php-smoke.aiproj");
-    public static final Project JAVASCRIPT_VNWA = new Project(JAVASCRIPT_VNWA_PROJECT_NAME, "code/javascript-vnwa.7z", "json/scan/settings/settings.javascript-vnwa.aiproj");
-    public static final Project CSHARP_WEBGOAT = new Project(CSHARP_WEBGOAT_PROJECT_NAME, "code/csharp-webgoat.zip", "json/scan/settings/settings.csharp-webgoat.aiproj");
-    public static final Project PYTHON_DSVW = new Project(PYTHON_DSVW_PROJECT_NAME, "code/python-dsvw.7z", "json/scan/settings/settings.python-dsvw.aiproj");
-
-    public static final Project[] ALL = new Project[] { JAVA_APP01, JAVA_OWASP_BENCHMARK, PHP_OWASP_BRICKS, PHP_SMOKE_MISC, PHP_SMOKE_MEDIUM, PHP_SMOKE_HIGH, PHP_SMOKE_MULTIFLOW, JAVASCRIPT_VNWA, CSHARP_WEBGOAT, PYTHON_DSVW };
+    @NonNull
+    public static UUID setup(@NonNull final Project project, final String policy) {
+        AbstractApiClient client = Factory.client(CONNECTION_SETTINGS());
+        ProjectTasks projectTasks = new Factory().projectTasks(client);
+        log.trace("Setup {} project from JSON-defined settings", project.getName());
+        return projectTasks.setupFromJson(project.getSettings(), policy, (projectId) -> {
+            GenericAstTasks genericAstTasks = new Factory().genericAstTasks(client);
+            genericAstTasks.upload(projectId, project.getZip().toFile());
+        }).getProjectId();
+    }
 
     @RequiredArgsConstructor
     public static class PolicyHelper {
@@ -118,7 +65,7 @@ public abstract class BaseAstIT extends BaseClientIT {
         @SneakyThrows
         public static PolicyHelper fromResource(@NonNull final String name) {
             String json = getResourceString(name);
-            Policy[] policy = createFaultTolerantObjectMapper().readValue(json, Policy[].class);
+            Policy[] policy = createObjectMapper().readValue(json, Policy[].class);
             return new PolicyHelper(json, policy);
         }
 
@@ -127,8 +74,8 @@ public abstract class BaseAstIT extends BaseClientIT {
         @SneakyThrows
         public Path getPath() {
             if (null == path) {
-                path = Files.createTempFile(TEMP_FOLDER(), "ptai-", "-policy");
-                ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+                path = TempFile.createFile().toPath();
+                ObjectMapper mapper = createObjectMapper();
                 mapper.writeValue(path.toFile(), policy);
             }
             return path;
@@ -142,7 +89,8 @@ public abstract class BaseAstIT extends BaseClientIT {
 
     @BeforeEach
     @SneakyThrows
-    public void pre() {
+    public void pre(@NonNull final TestInfo testInfo) {
+        super.pre(testInfo);
         report = Reports.Report.builder()
                 .fileName(UUID.randomUUID() + ".html")
                 .template(Reports.Report.DEFAULT_TEMPLATE_NAME.get(EN))

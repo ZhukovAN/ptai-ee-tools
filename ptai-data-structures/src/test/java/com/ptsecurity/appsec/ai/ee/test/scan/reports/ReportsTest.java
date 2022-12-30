@@ -4,8 +4,9 @@ import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
+import com.ptsecurity.misc.tools.BaseTest;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,10 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStream;
+
+@Slf4j
 @DisplayName("Read and parse data from report definitions JSON resource file")
 public class ReportsTest extends BaseTest {
     @Test
@@ -22,7 +27,7 @@ public class ReportsTest extends BaseTest {
     public void loadGenericReportDefinition() {
         InputStream inputStream = getResourceStream("json/scan/reports/reports.1.json");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         Reports reports = mapper.readValue(inputStream, Reports.class);
 
         Assertions.assertNotNull(reports);
@@ -38,7 +43,7 @@ public class ReportsTest extends BaseTest {
     public void failInvalidReportDefinition() {
         InputStream inputStream = getResourceStream("json/scan/reports/reports.2.json");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         Assertions.assertThrows(JsonEOFException.class, () -> mapper.readValue(inputStream, Reports.class));
     }
 
@@ -48,7 +53,7 @@ public class ReportsTest extends BaseTest {
     public void ignoreMissingReportTemplateReportDefinition() {
         InputStream inputStream = getResourceStream("json/scan/reports/reports.3.json");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         Assertions.assertDoesNotThrow(() -> mapper.readValue(inputStream, Reports.class));
     }
 
@@ -58,7 +63,7 @@ public class ReportsTest extends BaseTest {
     public void failTypoInReportDefinition() {
         InputStream inputStream = getResourceStream("json/scan/reports/reports.4.json");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         Assertions.assertThrows(MismatchedInputException.class, () -> mapper.readValue(inputStream, Reports.class));
     }
 
@@ -68,7 +73,7 @@ public class ReportsTest extends BaseTest {
     public void loadFilteredReportDefinition() {
         InputStream inputStream = getResourceStream("json/scan/reports/reports.5.json");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         Reports reports = mapper.readValue(inputStream, Reports.class);
 
         Assertions.assertNotNull(reports);
@@ -79,5 +84,4 @@ public class ReportsTest extends BaseTest {
         Assertions.assertTrue(levels.contains(Reports.IssuesFilter.Level.MEDIUM));
         Assertions.assertTrue(levels.contains(Reports.IssuesFilter.Level.HIGH));
     }
-
 }

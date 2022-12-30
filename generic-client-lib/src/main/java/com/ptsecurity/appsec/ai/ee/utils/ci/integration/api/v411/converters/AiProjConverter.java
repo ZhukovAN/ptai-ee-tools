@@ -6,8 +6,9 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.*;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
+import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -21,8 +22,8 @@ import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.DEPENDENCYCHECK;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.FINGERPRINT;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
 public class AiProjConverter {
@@ -35,11 +36,11 @@ public class AiProjConverter {
     /**
      * Set of ScanAppType values that support abstract interpretation
      */
-    private static final Set<com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings.ScanAppType> SCAN_APP_TYPE_AI = new HashSet<>(Arrays.asList(
-            com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings.ScanAppType.PHP,
-            com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings.ScanAppType.JAVA,
-            com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings.ScanAppType.CSHARP,
-            com.ptsecurity.appsec.ai.ee.scan.settings.v40.AiProjScanSettings.ScanAppType.JAVASCRIPT));
+    private static final Set<com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings.ScanAppType> SCAN_APP_TYPE_AI = new HashSet<>(Arrays.asList(
+            com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings.ScanAppType.PHP,
+            com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings.ScanAppType.JAVA,
+            com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings.ScanAppType.CSHARP,
+            com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings.ScanAppType.JAVASCRIPT));
     /**
      * Set of programming languages values that support abstract interpretation
      */
@@ -145,9 +146,9 @@ public class AiProjConverter {
     }
 
     /**
-     * Method converts PT AI API version independent language to PT AI v.4.0 API programming language group
+     * Method converts PT AI API version independent language to PT AI v.4.1.1 API programming language group
      * @param language PT AI API version independent language
-     * @return PT AI v.4.0 API programming language group
+     * @return PT AI v.4.1.1 API programming language group
      */
     @NonNull
     public static ProgrammingLanguageGroup convertLanguageGroup(@NonNull final ScanResult.ScanSettings.Language language) {
@@ -423,7 +424,7 @@ public class AiProjConverter {
 
     private static String serialize(AiProjScanSettings settings) throws GenericException {
         return call(
-                () -> new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(settings.fix()),
+                () -> BaseJsonHelper.serialize(settings.fix()),
                 "JSON settings serialization failed");
     }
 

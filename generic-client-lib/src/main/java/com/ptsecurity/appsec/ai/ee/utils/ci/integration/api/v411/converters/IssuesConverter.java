@@ -105,8 +105,8 @@ public class IssuesConverter {
     }
 
     /**
-     * Method converts PT AI v.4.0 API scan settings to API version independent scan settings
-     * @param scanSettings PT AI v.4.0 API scan settings
+     * Method converts PT AI v.4.1.1 API scan settings to API version independent scan settings
+     * @param scanSettings PT AI v.4.1.1 API scan settings
      * @return PT AI API version independent scan settings
      */
     public static ScanResult.ScanSettings convert(@NonNull final ScanSettingsModel scanSettings) {
@@ -169,10 +169,10 @@ public class IssuesConverter {
     }
 
     /**
-     * Method converts PT AI v.3.6 API scan result and issues model pair to API version independent scan result
-     * @param scanResult PT AI v.3.6 API scan result that contains scan statistic
+     * Method converts PT AI v.4.1.1 API scan result and issues model pair to API version independent scan result
+     * @param scanResult PT AI v.4.1.1 API scan result that contains scan statistic
      * @param issues PT AI v.4.1.1 API scan issues list with NO detailed information about vulnerabilities found
-     * @param scanSettings PT AI v.3.6 API scan settings
+     * @param scanSettings PT AI v.4.1.1 API scan settings
      * @return PT AI API version independent scan results instance
      */
     public static ScanResult convert(

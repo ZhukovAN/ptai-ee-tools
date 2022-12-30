@@ -9,24 +9,18 @@ dependencies {
     api project(':pt-misc-tools')
     api project(':ptai-i18n')
 
-    // https://mvnrepository.com/artifact/org.jsoup/jsoup
-    implementation 'org.jsoup:jsoup:1.12.1'
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation 'org.apache.commons:commons-lang3:3.8.1'
-    // https://mvnrepository.com/artifact/commons-io/commons-io
-    implementation "commons-io:commons-io:$commonsIoVersion"
-    // Need this to write tests that use data stored in 7zip-packed resource files
-    // like issues model, scan settings etc.
-    testFixturesApi(testFixtures(project(":ptai-test-tools")))
-    testImplementation(testFixtures(project(":ptai-test-tools")))
-
-    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
-    testImplementation 'org.apache.httpcomponents:httpclient:4.5.10'
-    // https://mvnrepository.com/artifact/org.jooq/joor-java-8
-    testImplementation 'org.jooq:joor-java-8:0.9.13'
+    // Use JUnit 5 for test fixtures
+    testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testFixturesImplementation('org.junit.jupiter:junit-jupiter')
+    // Enable Slf4J log for test fixtures
+    testFixturesImplementation "org.slf4j:slf4j-api:$slf4jVersion"
+    // ... and use JUL provider for them
+    testFixturesImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
+    // Need this to write tests that use some common functions like
+    // logging, zipped data processing, JSON parse etc.
+    testFixturesApi(testFixtures(project(":pt-misc-tools")))
     // https://mvnrepository.com/artifact/com.github.victools/jsonschema-generator
     testImplementation 'com.github.victools:jsonschema-generator:4.24.3'
-
 }
 
 jar {

@@ -1,7 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.UrlHelper;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

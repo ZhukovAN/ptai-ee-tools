@@ -3,8 +3,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.JwtResponse;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.Jwt;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.EventConsumer;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions.TextOutput;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
 @Getter
@@ -49,9 +49,9 @@ public abstract class AbstractApiClient {
     /**
      * Currently owned JWT. This jwt token shared by all the APIs and managed by their JwtAuthenticators
      */
-    protected JwtResponse apiJwt = null;
+    protected Jwt apiJwt = null;
 
-    protected void setApiJwt(@NonNull final JwtResponse apiJwt) {
+    protected void setApiJwt(@NonNull final Jwt apiJwt) {
         boolean insecure = advancedSettings.getBoolean(AdvancedSettings.SettingInfo.LOGGING_HTTP_CREDENTIALS);
         for (Object api : apis) {
             log.trace("Set JWT {} for {} API", insecure ? apiJwt.getAccessToken() : "${JWT}", api.getClass().toString());
@@ -62,7 +62,7 @@ public abstract class AbstractApiClient {
         this.apiJwt = apiJwt;
     }
 
-    public abstract JwtResponse authenticate() throws GenericException;
+    public abstract Jwt authenticate() throws GenericException;
 
     public abstract Map<ServerVersionTasks.Component, String> getCurrentApiVersion() throws GenericException;
 

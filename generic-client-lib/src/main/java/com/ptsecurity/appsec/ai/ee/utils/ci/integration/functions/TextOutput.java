@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.functions;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.NonNull;
 
 public interface TextOutput {

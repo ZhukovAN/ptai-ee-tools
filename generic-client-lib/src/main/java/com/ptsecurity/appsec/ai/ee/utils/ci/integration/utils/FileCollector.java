@@ -3,7 +3,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.TempFile;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 import static org.apache.commons.compress.archivers.ArchiveStreamFactory.ZIP;
 import static org.joor.Reflect.on;
 
@@ -70,14 +71,8 @@ public class FileCollector {
     }
 
     public static File collect(Transfers transfers, final File dir, @NonNull AbstractTool owner) throws GenericException {
-        File zip = createTempFile();
+        File zip = TempFile.createFile().toFile();
         return collect(transfers, dir, zip, owner);
-    }
-
-    public static File createTempFile() throws GenericException {
-        return call(
-                () -> File.createTempFile("ptai-", ".zip"),
-                "Temp file create error");
     }
 
     public static File collect(Transfers transfers, @NonNull final File dir, @NonNull final File zip, @NonNull AbstractTool owner) throws GenericException {

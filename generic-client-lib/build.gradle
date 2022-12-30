@@ -51,12 +51,13 @@ dependencies {
     // https://mvnrepository.com/artifact/com.contrastsecurity/java-sarif
     implementation 'com.contrastsecurity:java-sarif:2.0'
 
-
-    testFixturesApi("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testFixturesImplementation("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-
-    // https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14
-    testFixturesApi "org.slf4j:slf4j-jdk14:$slf4jVersion"
+    // Use JUnit 5 for test fixtures
+    testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testFixturesImplementation('org.junit.jupiter:junit-jupiter')
+    // Enable Slf4J log for test fixtures
+    testFixturesImplementation "org.slf4j:slf4j-api:$slf4jVersion"
+    // ... and use JUL provider for them
+    testFixturesImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
     // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
     testFixturesApi 'io.jsonwebtoken:jjwt:0.9.1'
     // https://mvnrepository.com/artifact/com.contrastsecurity/java-sarif
@@ -64,12 +65,13 @@ dependencies {
 
     // Need this to write tests that use data stored in 7zip-packed resource files
     // like issues model, scan settings etc.
+    testImplementation(testFixtures(project(":pt-misc-tools")))
     testImplementation(testFixtures(project(":ptai-data-structures")))
     testImplementation(testFixtures(project(":ptai-rest-api")))
 
+    testFixturesImplementation(testFixtures(project(":pt-misc-tools")))
     testFixturesImplementation(testFixtures(project(":ptai-data-structures")))
     testFixturesImplementation(testFixtures(project(":ptai-rest-api")))
-    testFixturesImplementation(testFixtures(project(":ptai-test-tools")))
 }
 
 processResources {

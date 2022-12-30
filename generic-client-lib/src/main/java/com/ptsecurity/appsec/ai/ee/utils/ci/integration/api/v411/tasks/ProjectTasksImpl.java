@@ -8,7 +8,7 @@ import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.AiProjConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import lombok.NonNull;
@@ -21,7 +21,7 @@ import org.apache.http.HttpStatus;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
 public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
@@ -144,7 +144,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                         if (!client.getProjectsApi().apiProjectsNameExistsGet(name)) return null;
                         return client.getProjectsApi().apiProjectsNameNameGet(name);
                     } catch (ApiException e) {
-                        log.trace("PT AI v.4.0 API returns HTTP status 204 if there's no project with given name {}", name);
+                        log.trace("PT AI v.4.1.1 API returns HTTP status 204 if there's no project with given name {}", name);
                         if (HttpStatus.SC_NO_CONTENT == e.getCode()) return null;
                         throw e;
                     }
@@ -279,7 +279,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
     @Override
     @NonNull
     public List<Pair<UUID, String>> listProjects() throws GenericException {
-        // PT AI v.3.6 supports project list load:
+        // PT AI v.4.1.1 supports project list load:
         // without details - if API token authentication used
         // with details - if login / password authentication used
         boolean withoutDetails = client.getConnectionSettings().getCredentials() instanceof TokenCredentials;

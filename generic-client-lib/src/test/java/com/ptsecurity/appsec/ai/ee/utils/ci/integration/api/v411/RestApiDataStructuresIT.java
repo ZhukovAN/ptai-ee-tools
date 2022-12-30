@@ -5,20 +5,18 @@ import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.server.integration.rest.Environment;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.ApiResponse;
-import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.VulnerabilityModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.JsonAstJobIT;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.ApiClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseClientIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.utils.TempFile;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
+import com.ptsecurity.misc.tools.TempFile;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -33,22 +31,24 @@ import java.io.File;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V411;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.*;
+import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.*;
+import static com.ptsecurity.misc.tools.helpers.ArchiveHelper.packData7Zip;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 
 @Slf4j
 @DisplayName("Test PT AI 4.1.1 REST API data structures")
 @Tag("development")
+@Environment(enabledFor = { V411 })
 public class RestApiDataStructuresIT extends BaseClientIT {
 
     @SneakyThrows
-    protected void generateData(@NonNull final Path destination, @NonNull final BaseAstIT.Project project, @NonNull final Consumer<JsonSettingsTestHelper> modifySettings) {
-        if (Connection.Version.V411 != CONNECTION().getVersion()) return;
-
+    protected void generateData(@NonNull final Path destination, @NonNull final Project project, @NonNull final Consumer<JsonSettingsTestHelper> modifySettings) {
         RawData rawData = RawData.builder()
                 .fileName(UUID.randomUUID() + ".json")
                 .build();
@@ -75,7 +75,7 @@ public class RestApiDataStructuresIT extends BaseClientIT {
 
         File json = destination.resolve(rawData.getFileName()).toFile();
         Assertions.assertTrue(json.exists());
-        ScanResult scanResult = BaseJsonHelper.createObjectMapper().readValue(json, ScanResult.class);
+        ScanResult scanResult = createObjectMapper().readValue(json, ScanResult.class);
 
         ConnectionSettings connectionSettings = CONNECTION_SETTINGS().validate();
         com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.ApiClient client = new ApiClient(connectionSettings);
@@ -113,8 +113,8 @@ public class RestApiDataStructuresIT extends BaseClientIT {
                 FileUtils.writeStringToFile(tempFile.toFile(), scanIssuesHeadersResponse.getData(), StandardCharsets.UTF_8);
                 log.debug("Localized ({}) issue headers stored to temp file {}", locale, tempFile.toFile().getAbsolutePath());
                 Path sevenZip = issuesModelDir.resolve(project.getName() + "." + locale.getLocale().getLanguage() + ".json.7z");
-                sevenZipData(sevenZip, FileUtils.readFileToByteArray(tempFile.toFile()));
-            };
+                packData7Zip(sevenZip, FileUtils.readFileToByteArray(tempFile.toFile()));
+            }
         }
     }
 
@@ -122,6 +122,12 @@ public class RestApiDataStructuresIT extends BaseClientIT {
     @Test
     public void generateRestApiDataStructures() {
         try (TempFile destination = TempFile.createFolder()) {
+            generateData(destination.toPath(), C_SARD_101_000_149_064, (helper) -> {
+                helper.setScanAppType(CONFIGURATION, FINGERPRINT, PMTAINT);
+                helper.isUseEntryAnalysisPoint(true);
+                helper.isUsePublicAnalysisMethod(true);
+            });
+
             generateData(destination.toPath(), PYTHON_DSVW, (helper) -> {
                 helper.setScanAppType(CONFIGURATION, FINGERPRINT, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);
@@ -168,25 +174,25 @@ public class RestApiDataStructuresIT extends BaseClientIT {
                 helper.setIsDownloadDependencies(false);
             });
 
-            generateData(destination.toPath(), PHP_SMOKE_MULTIFLOW, (helper) -> {
+            generateData(destination.toPath(), PHP_SMOKE, (helper) -> {
                 helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(false);
             });
 
-            generateData(destination.toPath(), PHP_SMOKE_HIGH, (helper) -> {
+            generateData(destination.toPath(), PHP_SMOKE, (helper) -> {
                 helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(false);
             });
 
-            generateData(destination.toPath(), PHP_SMOKE_MEDIUM, (helper) -> {
+            generateData(destination.toPath(), PHP_SMOKE, (helper) -> {
                 helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(false);
             });
 
-            generateData(destination.toPath(), PHP_SMOKE_MISC, (helper) -> {
+            generateData(destination.toPath(), PHP_SMOKE, (helper) -> {
                 helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, CONFIGURATION, FINGERPRINT, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(true);

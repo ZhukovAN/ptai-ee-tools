@@ -2,18 +2,22 @@ package com.ptsecurity.appsec.ai.ee.test.scan.settings;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.scan.settings.v36.AiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.test.BaseTest;
+import com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings;
+import com.ptsecurity.misc.tools.BaseTest;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStream;
+
+@Slf4j
 @DisplayName("Read and parse data from scan settings (aiproj) JSON resource file")
 public class AiProjScanSettingsTest extends BaseTest {
     @Test
@@ -22,7 +26,7 @@ public class AiProjScanSettingsTest extends BaseTest {
     public void failIncorrectAiProj() {
         InputStream inputStream = getResourceStream("json/scan/settings/settings.incorrect.aiproj");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         Assertions.assertThrows(JsonParseException.class, () -> mapper.readValue(inputStream, AiProjScanSettings.class));
     }
 
@@ -32,7 +36,7 @@ public class AiProjScanSettingsTest extends BaseTest {
     public void loadMinimalAiProj() {
         InputStream inputStream = getResourceStream("json/scan/settings/settings.minimal.aiproj");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         AiProjScanSettings settings = mapper.readValue(inputStream, AiProjScanSettings.class);
         Assertions.assertNotNull(settings);
         Assertions.assertTrue("Test Project".equalsIgnoreCase(settings.getProjectName()));
@@ -45,7 +49,7 @@ public class AiProjScanSettingsTest extends BaseTest {
     public void loadGenericAiProj() {
         InputStream inputStream = getResourceStream("json/scan/settings/settings.generic.aiproj");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         AiProjScanSettings settings = mapper.readValue(inputStream, AiProjScanSettings.class);
         Assertions.assertNotNull(settings);
         Assertions.assertTrue("JSON-based Maven project".equalsIgnoreCase(settings.getProjectName()));
@@ -58,7 +62,7 @@ public class AiProjScanSettingsTest extends BaseTest {
     public void loadDastOnlyAiProj() {
         InputStream inputStream = getResourceStream("json/scan/settings/settings.dast.aiproj");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         AiProjScanSettings settings = mapper.readValue(inputStream, AiProjScanSettings.class);
         Assertions.assertNotNull(settings);
         Assertions.assertTrue("Test project".equalsIgnoreCase(settings.getProjectName()));
@@ -70,10 +74,10 @@ public class AiProjScanSettingsTest extends BaseTest {
     public void loadJavaScriptAiProj() {
         InputStream inputStream = getResourceStream("json/scan/settings/settings.javascript-vnwa.aiproj");
         Assertions.assertNotNull(inputStream);
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
+        ObjectMapper mapper = createObjectMapper();
         AiProjScanSettings settings = mapper.readValue(inputStream, AiProjScanSettings.class);
         Assertions.assertNotNull(settings);
-        Assertions.assertTrue("junit-javascript-smoke".equalsIgnoreCase(settings.getProjectName()));
+        Assertions.assertTrue("junit-javascript-vnwa".equalsIgnoreCase(settings.getProjectName()));
     }
 
     @Test

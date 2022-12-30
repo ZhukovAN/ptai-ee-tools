@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.scan.result;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ScanBrief {
     public enum ApiVersion {
-        V36, V40, V41, V411
+        V411, V420
     }
 
     @NonNull
@@ -29,7 +30,7 @@ public class ScanBrief {
     @Setter
     @JsonProperty
     @Builder.Default
-    protected ApiVersion apiVersion = ApiVersion.V36;
+    protected ApiVersion apiVersion = ApiVersion.V411;
 
     @NonNull
     @Getter
@@ -124,6 +125,7 @@ public class ScanBrief {
             }
 
             @NonNull
+            @JsonValue
             private final String value;
         }
 

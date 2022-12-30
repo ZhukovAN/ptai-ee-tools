@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks;
 
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,5 @@ public interface ServerVersionTasks {
         private final String value;
     }
 
-
     Map<Component, String> current() throws GenericException;
-    Map<Component, String> latest() throws GenericException;
 }

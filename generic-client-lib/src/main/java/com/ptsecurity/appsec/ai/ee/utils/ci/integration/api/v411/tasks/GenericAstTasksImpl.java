@@ -14,13 +14,17 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.EnumsConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.ScanErrorsConverter;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -28,7 +32,7 @@ import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.progress.Stage.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v411.converters.IssuesConverter.convert;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
 public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstTasks {
@@ -71,6 +75,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         protected boolean exit = false;
 
         public ProjectPollingThread(@NonNull final ApiClient client, @NonNull final UUID projectId, @NonNull final UUID scanResultId, final BlockingQueue<com.ptsecurity.appsec.ai.ee.scan.progress.@NonNull Stage> queue) {
+            log.trace("AST job state polling thread created for project {}, scan result {}", projectId, scanResultId);
             this.client = client;
             this.projectId = projectId;
             this.scanResultId = scanResultId;
@@ -82,13 +87,17 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
 
         @Override
         public void run() {
-            while (!exit) {
+            final int interval = client.getAdvancedSettings().getInt(AdvancedSettings.SettingInfo.AST_JOB_POLL_INTERVAL);
+            while (true) {
                 try {
-                    Thread.sleep(5 * 60 * 1000);
+                    Thread.sleep(1000);
+                    if (exit) break;
+                    if (interval > Duration.between(lastResetTime, LocalDateTime.now()).getSeconds()) continue;
                     log.trace("Poll {} project {} scan state", projectId, scanResultId);
                     ScanResultModel scanResult = call(
                             () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
                             "Get project scan result failed");
+                    reset();
                     // TODO: Properly process this
                     if (null == scanResult.getProgress()) break;
                     if (null == scanResult.getProgress().getStage()) break;
@@ -110,6 +119,15 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         public void stop() {
             exit = true;
         }
+
+        @ToString.Exclude
+        @NonNull
+        protected LocalDateTime lastResetTime = LocalDateTime.now();
+
+        public synchronized void reset() {
+            lastResetTime = LocalDateTime.now();
+            log.trace("Reset polling thread last activity time to {}", lastResetTime);
+        }
     }
 
     @Override
@@ -121,11 +139,11 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
 
         // As sometimes notifications get lost somewhere we need to implement parallel polling thread
         ProjectPollingThread pollingThread = new ProjectPollingThread(client, projectId, scanResultId, queue);
-        HubConnection connection = client.createSignalrConnection(projectId, scanResultId, queue);
+        HubConnection connection = client.createSignalrConnection(projectId, scanResultId, queue, pollingThread);
         client.wait(connection, projectId, scanResultId);
 
         com.ptsecurity.appsec.ai.ee.scan.progress.Stage stage = queue.take();
-        connection.stop();
+        connection.stop().blockingAwait();
         pollingThread.stop();
 
         return FAILED == stage
@@ -140,7 +158,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
     public void stop(@NonNull UUID scanResultId) throws GenericException {
         log.debug("Calling scan stop for scan result ID {}", scanResultId);
         // TODO: Implement different approach to stop task that is enqueued but not
-        //  started yet. PT AI 4.0 doesn't stop these jobs, so we need to delete scan
+        //  started yet. PT AI 4.1.1 doesn't stop these jobs, so we need to delete scan
         //  result as PT AI viewer does
         call(
                 () -> client.getScanQueueApi().apiScansScanResultIdStopPost(scanResultId),
@@ -193,7 +211,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         ScanStatisticModel statistic = call(
                 () -> Objects.requireNonNull(scanResult.getStatistic(), "Scan result statistics is null"),
                 "Get scan result statistics failed");
-        log.trace("Converting v.4.0 scan result statistics to version-independent data");
+        log.trace("Converting v.4.1.1 scan result statistics to version-independent data");
         call(
                 () -> scanBrief.setStatistics(convert(statistic, scanResult)),
                 "Scan result statistics conversion failed");

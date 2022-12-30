@@ -24,7 +24,6 @@
             <option value="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-agent" />
             <option value="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-common" />
             <option value="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-server" />
-            <option value="$PROJECT_DIR$/ptai-test-tools" />
           </set>
         </option>
       </GradleProjectSettings>

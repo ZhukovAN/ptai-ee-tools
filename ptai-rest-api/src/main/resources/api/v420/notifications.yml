@@ -1,0 +1,147 @@
+openapi: 3.0.1
+info:
+  title: legacyNotifications
+  version: 1.0.0
+servers:
+  - url: https://ptai420.domain.org:443
+paths:
+  /dummy:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream: {}
+components:
+  schemas:
+    PolicyState:
+      enum:
+        - None
+        - Rejected
+        - Confirmed
+      type: string
+    Stage:
+      enum:
+        - Unknown
+        - VFSSetup
+        - Initialize
+        - Precheck
+        - Scan
+        - Finalize
+        - Done
+        - Failed
+        - Aborted
+        - Enqueued
+        - Autocheck
+      type: string
+    ScanCompleteEvent:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+          nullable: false
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: false
+        stage:
+          $ref: '#/components/schemas/Stage'
+    ScanEnqueuedEvent:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+          nullable: false
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: false
+    ScanStartedEvent:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+          nullable: false
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: false
+    ScanProgressModel:
+      type: object
+      properties:
+        stage:
+          $ref: '#/components/schemas/Stage'
+        subStage:
+          type: string
+          nullable: true
+        value:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ScanStatisticModel:
+      type: object
+      properties:
+        high:
+          type: integer
+          format: int32
+        medium:
+          type: integer
+          format: int32
+        low:
+          type: integer
+          format: int32
+        potential:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        filesTotal:
+          type: integer
+          format: int32
+        filesScanned:
+          type: integer
+          format: int32
+        urlsScanned:
+          type: integer
+          format: int32
+        urlsTotal:
+          type: integer
+          format: int32
+        scanDuration:
+          type: string
+          format: date-span
+        policyState:
+          $ref: '#/components/schemas/PolicyState'
+      additionalProperties: false
+    ScanProgressEvent:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+          nullable: false
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: false
+        progress:
+          $ref: '#/components/schemas/ScanProgressModel'
+        statistic:
+          $ref: '#/components/schemas/ScanStatisticModel'
+    ScanResultRemovedEvent:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+          nullable: false
+        scanResultId:
+          type: string
+          format: uuid
+          nullable: false
+        deleteGroup:
+          type: boolean

@@ -5,7 +5,6 @@ import com.cloudbees.plugins.credentials.CredentialsScope;
 import com.cloudbees.plugins.credentials.CredentialsStore;
 import com.cloudbees.plugins.credentials.SystemCredentialsProvider;
 import com.cloudbees.plugins.credentials.domains.Domain;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
@@ -25,24 +24,28 @@ import hudson.model.Result;
 import hudson.scm.SCM;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.jvnet.hudson.test.ExtractResourceSCM;
 import org.jvnet.hudson.test.JenkinsRule;
-import org.jvnet.hudson.test.junit.jupiter.EnableJenkins;
+import org.jvnet.hudson.test.junit.jupiter.WithJenkins;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool.DEFAULT_LOG_PREFIX;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.PHP_SMOKE;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob.DEFAULT_OUTPUT_FOLDER;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@WithJenkins
 @DisplayName("Execute Jenkins jobs that use PT AI plugin")
-@EnableJenkins
 @Slf4j
 public class PluginIT extends BaseAstIT {
 
@@ -50,10 +53,12 @@ public class PluginIT extends BaseAstIT {
     private Credentials credentials;
 
     @SneakyThrows
-    protected void initCredentials(JenkinsRule jenkins) {
+    protected void initCredentials(JenkinsRule jenkinsRule) {
+        CredentialsStore store =
+                new SystemCredentialsProvider.ProviderImpl().getStore(jenkinsRule.jenkins);
         SystemCredentialsProvider.ProviderImpl system = ExtensionList.lookup(CredentialsProvider.class).get(SystemCredentialsProvider.ProviderImpl.class);
         assertNotNull(system);
-        systemStore = system.getStore(jenkins.getInstance());
+        systemStore = system.getStore(jenkinsRule.getInstance());
         // Create PT AI credentials
         credentials = new CredentialsImpl(CredentialsScope.GLOBAL, UUID.randomUUID().toString(), "", CONNECTION().getToken(), "");
         systemStore.addCredentials(Domain.global(), credentials);
@@ -70,21 +75,21 @@ public class PluginIT extends BaseAstIT {
     @Tag("integration")
     @Tag("jenkins")
     @DisplayName("Execute simple SAST job for PHP smoke medium")
-    public void scanPhpSmokeMedium(JenkinsRule jenkins) {
-        PHP_SMOKE_MEDIUM.setup();
+    public void scanPhpSmokeMedium(JenkinsRule jenkinsRule) {
+        setup(PHP_SMOKE);
 
-        initCredentials(jenkins);
+        initCredentials(jenkinsRule);
 
         log.trace("Create project and set source code location");
 
-        java.net.URL sourcesPack = PHP_SMOKE_MEDIUM.getZip().toUri().toURL();
+        java.net.URL sourcesPack = PHP_SMOKE.getZip().toUri().toURL();
         assertNotNull(sourcesPack);
         SCM scm = new ExtractResourceSCM(sourcesPack);
         String projectName = "project-" + UUID.randomUUID();
-        FreeStyleProject project = jenkins.createFreeStyleProject(projectName);
+        FreeStyleProject project = jenkinsRule.createFreeStyleProject(projectName);
         project.setScm(scm);
         // Create PT AI plugin settings
-        ScanSettingsUi scanSettings = new ScanSettingsUi(PHP_SMOKE_MEDIUM.getName());
+        ScanSettingsUi scanSettings = new ScanSettingsUi(PHP_SMOKE.getName());
 
         ServerSettings serverSettings = new ServerSettings(CONNECTION().getUrl(), credentials.getId(), true);
         ConfigCustom configCustom = new ConfigCustom(serverSettings);
@@ -109,8 +114,7 @@ public class PluginIT extends BaseAstIT {
         assertNotNull(build.getWorkspace().child(DEFAULT_OUTPUT_FOLDER));
         FilePath rawJsonFile = build.getWorkspace().child(DEFAULT_OUTPUT_FOLDER).child(rawJsonSubJob.getFileName());
         Assertions.assertTrue(rawJsonFile.exists());
-        ObjectMapper mapper = createFaultTolerantObjectMapper();
-        ScanResult scanResult = mapper.readValue(rawJsonFile.read(), ScanResult.class);
+        ScanResult scanResult = createObjectMapper().readValue(rawJsonFile.read(), ScanResult.class);
 
         // Check log entries
         List<String> log = build.getLog(100);

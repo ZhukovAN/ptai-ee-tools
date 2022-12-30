@@ -103,7 +103,8 @@ public class LoggingInterceptor implements Interceptor {
         String bodySize = -1L != contentLength ? contentLength + " byte" : "unknown";
         log.trace("Request body size: {}", bodySize);
 
-        if (!"application/json".equalsIgnoreCase(headers.get("Content-Type"))) {
+        String contentType = headers.get("Content-Type");
+        if (!"application/json-patch+json".equals(contentType) && !"application/json".equals(contentType)) {
             log.trace("Non-JSON request body skipped");
             return;
         }

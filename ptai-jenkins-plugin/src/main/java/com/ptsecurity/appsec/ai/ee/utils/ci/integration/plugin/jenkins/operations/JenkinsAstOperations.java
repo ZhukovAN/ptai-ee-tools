@@ -6,7 +6,8 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfer;
 import com.ptsecurity.appsec.ai.ee.scan.sources.Transfers;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
+import com.ptsecurity.misc.tools.TempFile;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.JenkinsAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.actions.AstJobSingleResult;
@@ -15,7 +16,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.FileCollector;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanDataPacked;
 import hudson.FilePath;
-import hudson.Util;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -24,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.Map;
 import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.scan.ScanDataPacked.Type.SCAN_BRIEF_DETAILED;
@@ -56,7 +55,7 @@ public class JenkinsAstOperations implements AstOperations {
                     .build());
         // Upload project sources
         FilePath remoteZip = RemoteFileUtils.collect(owner);
-        File zip = FileCollector.createTempFile();
+        File zip = TempFile.createFile().toFile();
         try (OutputStream fos = new FileOutputStream(zip)) {
             remoteZip.copyTo(fos);
             remoteZip.delete();

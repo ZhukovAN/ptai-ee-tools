@@ -51,7 +51,7 @@ $ ./gradlew installTeamcity
 ```
 See additional info on gradle-teamcity-plugin [page](https://github.com/rodm/gradle-teamcity-plugin).
 ## Launch integration tests
-All integration tests are marked as "slow", "integration", "development" and "jenkins". These tests interact with PT AI instance that is to be available via HTTPS REST API. PT AI server connection settings aren't stored in repository but are to be defined in ptai-test-tools/src/testFixtures/resources/configuration.yml file as follows:
+All integration tests are marked as "slow", "scan", "development" and "jenkins". These tests interact with PT AI instance that is to be available via HTTPS REST API. PT AI server connection settings aren't stored in repository but are to be defined in ptai-rest-api/src/testFixtures/resources/configuration.yml file as follows:
 ```yaml
 connections:
   ptai40: &current

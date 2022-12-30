@@ -1,7 +1,7 @@
 plugins {
     id 'io.freefair.lombok' version '6.1.0' apply false
     id 'com.github.johnrengelman.shadow' version '5.2.0' apply false
-    id 'org.jenkins-ci.jpi' version '0.43.0' apply false
+    id 'org.jenkins-ci.jpi' version '0.47.0' apply false
     id 'com.palantir.git-version' version '0.12.3' apply false
 }
 
@@ -19,8 +19,8 @@ subprojects {
     apply plugin: 'io.freefair.lombok'
     apply plugin: 'maven-publish'
 
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
     compileJava.options.encoding = 'UTF-8'
     compileTestJava.options.encoding = 'UTF-8'
 
@@ -36,18 +36,16 @@ subprojects {
     dependencies {
         // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
         implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:${jacksonVersion}"
-        // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+        // Enable Slf4J log facade
         implementation "org.slf4j:slf4j-api:$slf4jVersion"
-        // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-        testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
-        // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
-        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
-    }
 
-    test {
-        useJUnitPlatform() {
-            excludeTags 'integration', 'development'
-        }
+        // Use JUnit 5 for tests
+        testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+        testImplementation('org.junit.jupiter:junit-jupiter')
+        // Enable Slf4J log for tests
+        testImplementation "org.slf4j:slf4j-api:$slf4jVersion"
+        // ... and use JUL provider for them
+        testImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {
@@ -123,37 +121,41 @@ subprojects {
         }
     }
 
-    def integrationTest = tasks.register('integrationTest', Test) {
-        useJUnitPlatform {
-            includeTags 'integration'
-            excludeTags 'slow', 'jenkins'
+    test {
+        useJUnitPlatform() {
+            excludeTags 'integration', 'development'
         }
-        testLogging {
-            events 'passed', 'skipped', 'failed'
+    }
+
+    task integrationScanTest(type: Test) {
+        useJUnitPlatform {
+            includeTags 'integration & scan'
+            excludeTags 'slow', 'jenkins'
         }
         shouldRunAfter test
     }
 
-    def jenkinsTest = tasks.register('jenkinsTest', Test) {
+    task integrationFastTest(type: Test) {
+        useJUnitPlatform {
+            includeTags 'integration'
+            excludeTags 'slow', 'scan', 'jenkins'
+        }
+        shouldRunAfter = [ "test" ]
+    }
+
+    task integrationJenkinsTest(type: Test) {
         useJUnitPlatform {
             includeTags 'jenkins'
         }
-        testLogging {
-            events 'passed', 'skipped', 'failed'
-        }
-        shouldRunAfter test
+        shouldRunAfter = [ "test" ]
     }
 
-    def slowTest = tasks.register('slowTest', Test) {
+    task integrationSlowTest(type: Test) {
         useJUnitPlatform {
             includeTags 'slow'
         }
-        testLogging {
-            events 'passed', 'skipped', 'failed'
-        }
-        shouldRunAfter test
+        shouldRunAfter = [ "test" ]
     }
-
 }
 
 wrapper {

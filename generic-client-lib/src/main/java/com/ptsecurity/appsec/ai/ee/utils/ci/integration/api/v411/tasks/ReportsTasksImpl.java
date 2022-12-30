@@ -8,14 +8,18 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif.SonarGiifReport;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.*;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.BaseJsonHelper;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ScanResultHelper;
+import com.ptsecurity.misc.tools.TempFile;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
+import com.ptsecurity.misc.tools.helpers.CallHelper;
+import com.ptsecurity.misc.tools.helpers.StringHelper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -23,7 +27,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.text.similarity.CosineDistance;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -31,7 +34,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
 @SuppressWarnings("unused")
@@ -207,14 +211,14 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 .parameters(new UserReportParametersModel()
                         .includeDFD(report.isIncludeDfd())
                         .includeGlossary(report.isIncludeGlossary())
-                        // TODO: there's no report filters support in 4.0
+                        // TODO: there's no report filters support in 4.1.1
                         // .useFilters(null != report.getFilters())
                         .formatType(ReportFormatType.CUSTOM)
                         .reportTemplateId(templateModel.getId()))
                 .scanResultId(scanResultId)
                 .projectId(projectId)
                 .localeId(templateLocale.getValue());
-        // TODO: there's no report filters support in 4.0
+        // TODO: there's no report filters support in 4.1.1
         // if (null != report.getFilters()) model.setFilters(ReportsConverter.convert(report.getFilters()));
         log.trace("Call report generation API");
         File file = call(
@@ -225,7 +229,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 () -> fileOps.saveArtifact(report.getFileName(), file),
                 "Report file save failed");
         log.debug("Deleting temp file {}", file.getAbsolutePath());
-        call(file::delete, "Temporal file " + file.getAbsolutePath() + " delete failed", true);
+        call(file::delete, "Temporary file " + file.getAbsolutePath() + " delete failed", true);
         fine("Finished: HTML report generation for project id: %s, scan result id: %s, template: %s", projectId, scanResultId, report.getTemplate());
     }
 
@@ -235,10 +239,10 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         GenericAstTasks genericAstTasks = new Factory().genericAstTasks(client);
         ScanResult scanResult = genericAstTasks.getScanResult(projectId, scanResultId);
         ScanResultHelper.apply(scanResult, rawData.getFilters());
-        final ObjectMapper mapper = BaseJsonHelper.createObjectMapper();
+        final ObjectMapper mapper = createObjectMapper();
         File json = call(
                 () -> {
-                    Path temp = Files.createTempFile("ptai-", "-scanresult");
+                    Path temp = TempFile.createFile().toPath();
                     log.debug("Created file {} for temporal raw scan result store", temp);
                     mapper.writeValue(temp.toFile(), scanResult);
                     log.debug("Raw scan result data saved to {}", temp);
@@ -246,7 +250,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 }, "Raw scan result save failed");
         call(() -> fileOps.saveArtifact(rawData.getFileName(), json), "Raw JSON result save failed");
         log.debug("Deleting temporal raw scan results file {}", json.getAbsolutePath());
-        call(json::delete, "Temporal file " + json.getAbsolutePath() + " delete failed", true);
+        call(json::delete, "Temporary file " + json.getAbsolutePath() + " delete failed", true);
         fine("Finished: raw JSON data export for project id: %s, scan result id: %s", projectId, scanResultId);
     }
 
@@ -261,7 +265,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         SarifSchema210 sarifSchema = com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Sarif.convert(scanResult, true);
         try (TempFile temporalReportFile = TempFile.createFile()) {
             CallHelper.call(
-                    () -> BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(temporalReportFile.toFile(), sarifSchema),
+                    () -> createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(temporalReportFile.toFile(), sarifSchema),
                     "SARIF report serialization failed");
             call(() -> fileOps.saveArtifact(sarif.getFileName(), temporalReportFile.toFile()), "SARIF report save failed");
         }
@@ -279,7 +283,7 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
         SonarGiifReport giifReport = com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif.convert(scanResult);
         try (TempFile temporalReportFile = TempFile.createFile()) {
             CallHelper.call(
-                    () -> BaseJsonHelper.createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(temporalReportFile.toFile(), giifReport),
+                    () -> createObjectMapper().writerWithDefaultPrettyPrinter().writeValue(temporalReportFile.toFile(), giifReport),
                     "SonarQube GIIF report serialization failed");
             call(() -> fileOps.saveArtifact(sonarGiif.getFileName(), temporalReportFile.toFile()), "SonarQube GIIF report save failed");
         }
