@@ -231,40 +231,41 @@ public class ApiClient extends AbstractApiClient {
 
         // Register subscriptions
         connection.on("NeedUpdateConnectedDate", (message) -> {
-            log.trace("Event:NeedUpdateConnectedDate: " + message);
+            log.trace("Message of type NeedUpdateConnectedDate: " + message);
             connectedDate = message;
+            log.trace("Connected date updated");
         }, String.class);
 
         connection.on("NeedRefreshToken", () -> {
-            log.trace("Event:NeedRefreshToken");
+            log.trace("Message of type NeedRefreshToken");
             authenticate();
         });
 
         connection.on("NeedSyncClientState", () -> {
-            log.trace("Event:NeedSyncClientState");
+            log.trace("Message of type NeedSyncClientState");
             subscribe(connection, projectId, scanResultId);
         });
 
         connection.on("ScanStarted", (data) -> {
+            log.trace("Message of type ScanStartedEvent: {}", data);
             if (!projectId.equals(data.getProjectId()))
-                log.trace("Skip ScanStarted event as its projectId != {}", projectId);
+                log.trace("Skip ScanStarted message as its projectId != {}", projectId);
             else if (!scanResultId.equals(data.getScanResultId()))
-                log.trace("Skip ScanStarted event as its scanResultId != {}", scanResultId);
+                log.trace("Skip ScanStarted message as its scanResultId != {}", scanResultId);
             else {
                 if (null != console)
                     console.info("Scan started. Project id: %s, scan result id: %s", data.getProjectId(), data.getScanResultId());
                 if (null != eventConsumer) eventConsumer.process(data);
                 pollingThread.reset();
             }
-            log.trace("ScanStartedEvent: {}", data);
         }, ScanStartedEvent.class);
 
         // Currently PT AI viewer have no stop scan feature but deletes scan result
         connection.on("ScanResultRemoved", (data) -> {
+            log.trace("Message of type ScanResultRemovedEvent: {}", data);
             if (!scanResultId.equals(data.getScanResultId())) return;
             if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI viewer");
             if (null != eventConsumer) eventConsumer.process(com.ptsecurity.appsec.ai.ee.scan.progress.Stage.ABORTED);
-            log.trace("ScanResultRemovedEvent: {}", data);
             pollingThread.reset();
             if (null != queue) {
                 log.debug("Scan result {} removed", scanResultId);
@@ -273,8 +274,9 @@ public class ApiClient extends AbstractApiClient {
         }, ScanResultRemovedEvent.class);
 
         connection.on("ScanProgress", (data) -> {
+            log.trace("Message of type ScanProgressEvent: {}", data);
             if (!scanResultId.equals(data.getScanResultId()))
-                log.trace("Skip ScanProgress event as its projectId != {}", projectId);
+                log.trace("Skip ScanProgress message as its projectId != {}", projectId);
             else {
                 StringBuilder builder = new StringBuilder();
                 builder.append(Optional.of(data)
@@ -304,19 +306,18 @@ public class ApiClient extends AbstractApiClient {
                 }
                 pollingThread.reset();
             }
-            log.trace("ScanProgressEvent: {}", data);
         }, ScanProgressEvent.class);
 
         connection.on("ScanCompleted", (data) -> {
+            log.trace("Message of type ScanCompleteEvent: {}", data);
             if (!projectId.equals(data.getProjectId()))
-                log.trace("Skip ScanCompleted event as its projectId != {}", projectId);
+                log.trace("Skip ScanCompleted message as its projectId != {}", projectId);
             else if (!scanResultId.equals(data.getScanResultId()))
-                log.trace("Skip ScanCompleted event as its scanResultId != {}", scanResultId);
+                log.trace("Skip ScanCompleted message as its scanResultId != {}", scanResultId);
             else {
                 pollingThread.reset();
                 queue.add(Stage.DONE);
             }
-            log.trace("ScanCompleteEvent: {}", data);
         }, ScanCompleteEvent.class);
 
         return connection;

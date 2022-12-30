@@ -145,10 +145,7 @@ public class FastTest extends AbstractTest {
                 .downloadDependencies(settings.getDownloadDependencies())
                 .javaSettings(settings.getJavaSettings())
                 .dotNetSettings(settings.getDotNetSettings())
-                .componentsSettings(settings.getComponentsSettings())
                 .reportAfterScan(settings.getReportAfterScan())
-                .useSastRules(settings.getUseSastRules())
-                .useSecurityPolicies(settings.getUseSecurityPolicies())
                 .skipGitIgnoreFiles(settings.getSkipGitIgnoreFiles())
                 .sourceType(settings.getSourceType())
                 .localFilesSource(settings.getLocalFilesSource())
@@ -185,11 +182,11 @@ public class FastTest extends AbstractTest {
         SecurityPoliciesModel securityPolicies = checkApiCall(() -> PROJECTS.apiProjectsProjectIdSecurityPoliciesGet(PROJECT_ID));
         assertNull(securityPolicies.getSecurityPolicies());
         log.trace("Set project security policy");
-        ProjectSettingsModel settings = checkApiCall(() -> PROJECTS.apiProjectsProjectIdSettingsGet(PROJECT_ID));
-        settings.setUseSecurityPolicies(true);
+        securityPolicies.setCheckSecurityPoliciesAccordance(true);
         securityPolicies.setSecurityPolicies("[]");
         checkApiCall(() -> PROJECTS.apiProjectsProjectIdSecurityPoliciesPut(PROJECT_ID, securityPolicies));
         SecurityPoliciesModel changedSecurityPolicies = checkApiCall(() -> PROJECTS.apiProjectsProjectIdSecurityPoliciesGet(PROJECT_ID));
         assertNotNull(changedSecurityPolicies.getSecurityPolicies());
+        assertTrue(Boolean.TRUE.equals(changedSecurityPolicies.getCheckSecurityPoliciesAccordance()));
     }
 }

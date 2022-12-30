@@ -8,55 +8,6 @@ servers:
 security:
   - Bearer: []
 paths:
-  /api/configs/yara:
-    get:
-      tags:
-        - Configs
-      summary: Get YARA rules
-      responses:
-        '200':
-          description: Success
-          content:
-            text/plain:
-              schema:
-                type: string
-            application/json:
-              schema:
-                type: string
-            text/json:
-              schema:
-                type: string
-        '401':
-          description: Unauthorized
-    put:
-      tags:
-        - Configs
-      summary: Update YARA rules
-      responses:
-        '200':
-          description: Success
-        '401':
-          description: Unauthorized
-  /api/configs/yaraRulesTemplate:
-    get:
-      tags:
-        - Configs
-      summary: Get YARA rules template
-      responses:
-        '200':
-          description: Success
-          content:
-            text/plain:
-              schema:
-                type: string
-            application/json:
-              schema:
-                type: string
-            text/json:
-              schema:
-                type: string
-        '401':
-          description: Unauthorized
   /api/configs/securityPoliciesTemplate:
     get:
       tags:
@@ -87,6 +38,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             $ref: '#/components/schemas/ProgrammingLanguageGroup'
       responses:
@@ -126,6 +78,7 @@ paths:
           in: path
           description: Programming language group
           required: true
+          style: simple
           schema:
             $ref: '#/components/schemas/ProgrammingLanguageGroup'
       responses:
@@ -164,8 +117,127 @@ paths:
           in: path
           description: Programming language group
           required: true
+          style: simple
           schema:
             $ref: '#/components/schemas/ProgrammingLanguageGroup'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/configs/pmRules:
+    get:
+      tags:
+        - Configs
+      summary: Get pattern matching patterns
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PmRuleModel'
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PmRuleModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PmRuleModel'
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - Configs
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PmRuleModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PmRuleModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PmRuleModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PmRuleModel'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  '/api/configs/pmRules/{id}':
+    delete:
+      tags:
+        - Configs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+    get:
+      tags:
+        - Configs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/PmRuleModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PmRuleModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/PmRuleModel'
+        '401':
+          description: Unauthorized
+    put:
+      tags:
+        - Configs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/PmRuleModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PmRuleModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/PmRuleModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/PmRuleModel'
       responses:
         '200':
           description: Success
@@ -181,12 +253,14 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: depth
           in: query
           description: Depth of expanding of elements
+          style: form
           schema:
             type: integer
             format: int32
@@ -215,6 +289,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -222,11 +297,13 @@ paths:
           in: path
           description: Subdirectory path. For root set empty
           required: true
+          style: simple
           schema:
             type: string
         - name: depth
           in: query
           description: Depth of expanding of elements
+          style: form
           schema:
             type: integer
             format: int32
@@ -241,7 +318,8 @@ paths:
           description: Bad Request
           content:
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/auth/external/providers:
@@ -252,16 +330,6 @@ paths:
       responses:
         '401':
           description: Unauthorized
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
         '200':
           description: Success
           content:
@@ -282,30 +350,23 @@ paths:
       parameters:
         - name: ProviderId
           in: query
+          style: form
           schema:
             type: string
             format: uuid
         - name: ReturnUrl
           in: query
+          style: form
           schema:
             type: string
         - name: ScopeType
           in: query
+          style: form
           schema:
             $ref: '#/components/schemas/AuthScopeType'
       responses:
         '401':
           description: Unauthorized
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
         '200':
           description: Success
           content:
@@ -341,16 +402,6 @@ paths:
       responses:
         '401':
           description: Unauthorized
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
         '200':
           description: Success
           content:
@@ -371,31 +422,24 @@ paths:
       parameters:
         - name: ProviderId
           in: query
+          style: form
           schema:
             type: string
             format: uuid
         - name: SessionId
           in: query
+          style: form
           schema:
             type: string
             format: uuid
         - name: ScopeType
           in: query
+          style: form
           schema:
             $ref: '#/components/schemas/AuthScopeType'
       responses:
         '401':
           description: Unauthorized
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetails'
         '200':
           description: Success
           content:
@@ -424,8 +468,10 @@ paths:
                 ReturnUrl:
                   type: string
             encoding:
-              AuthToken: { }
-              ReturnUrl: { }
+              AuthToken:
+                style: form
+              ReturnUrl:
+                style: form
       responses:
         '200':
           description: Success
@@ -466,6 +512,7 @@ paths:
           in: path
           description: Provider identifier
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -524,6 +571,7 @@ paths:
           in: path
           description: Provider identifier
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -555,6 +603,7 @@ paths:
       parameters:
         - name: Settings
           in: query
+          style: form
           schema:
             $ref: '#/components/schemas/Saml2SettingsModel'
       requestBody:
@@ -567,7 +616,8 @@ paths:
                   type: string
                   format: binary
             encoding:
-              SigningCertificateFile: { }
+              SigningCertificateFile:
+                style: form
       responses:
         '200':
           description: Success
@@ -583,6 +633,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -590,6 +641,7 @@ paths:
           in: path
           description: Relative file path in project
           required: true
+          style: simple
           schema:
             type: string
       responses:
@@ -618,6 +670,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -625,12 +678,14 @@ paths:
           in: path
           description: Scan result id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: nodePath
           in: query
           description: Node path
+          style: form
           schema:
             type: string
       responses:
@@ -719,6 +774,7 @@ paths:
         - name: id
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -734,6 +790,7 @@ paths:
         - name: id
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -759,11 +816,13 @@ paths:
         - name: id
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: skipUpdateCredentials
           in: query
+          style: form
           schema:
             type: boolean
       requestBody:
@@ -816,6 +875,7 @@ paths:
         - name: connectionId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -848,12 +908,14 @@ paths:
         - name: connectionId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: key
           in: path
           required: true
+          style: simple
           schema:
             type: string
       responses:
@@ -879,6 +941,7 @@ paths:
         - name: connectionId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -919,12 +982,14 @@ paths:
         - name: connectionId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: project
           in: path
           required: true
+          style: simple
           schema:
             type: string
       responses:
@@ -956,6 +1021,7 @@ paths:
         - name: connectionId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -988,11 +1054,13 @@ paths:
         - name: connectionId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: query
           in: query
+          style: form
           schema:
             type: string
       responses:
@@ -1024,17 +1092,20 @@ paths:
         - name: connectionId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: project
           in: path
           required: true
+          style: simple
           schema:
             type: string
         - name: ticketType
           in: path
           required: true
+          style: simple
           schema:
             type: string
       responses:
@@ -1066,21 +1137,25 @@ paths:
         - name: connectionId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: project
           in: path
           required: true
+          style: simple
           schema:
             type: string
         - name: ticketType
           in: path
           required: true
+          style: simple
           schema:
             type: string
         - name: fieldName
           in: query
+          style: form
           schema:
             type: string
       responses:
@@ -1112,11 +1187,13 @@ paths:
         - name: connectionId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: ticketType
           in: query
+          style: form
           schema:
             type: string
       responses:
@@ -1147,10 +1224,12 @@ paths:
       parameters:
         - name: providerKey
           in: query
+          style: form
           schema:
             type: string
         - name: host
           in: query
+          style: form
           schema:
             type: string
       requestBody:
@@ -1189,14 +1268,17 @@ paths:
       parameters:
         - name: providerKey
           in: query
+          style: form
           schema:
             type: string
         - name: host
           in: query
+          style: form
           schema:
             type: string
         - name: requestToken
           in: query
+          style: form
           schema:
             type: string
       requestBody:
@@ -1262,7 +1344,8 @@ paths:
                   type: string
                   format: binary
             encoding:
-              file: { }
+              file:
+                style: form
       responses:
         '200':
           description: Success
@@ -1347,12 +1430,14 @@ paths:
         - name: dateFrom
           in: query
           description: Date from
+          style: form
           schema:
             type: string
             format: date-time
         - name: dateTo
           in: query
           description: Date to
+          style: form
           schema:
             type: string
             format: date-time
@@ -1375,6 +1460,7 @@ paths:
         - name: localeId
           in: query
           description: Locale id
+          style: form
           schema:
             type: string
       requestBody:
@@ -1397,11 +1483,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/mailing/mailProfiles:
@@ -1432,11 +1521,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     post:
@@ -1478,11 +1570,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/mailing/mailProfiles/light:
@@ -1513,11 +1608,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/mailing/mailProfiles/{mailProfileId}':
@@ -1530,6 +1628,7 @@ paths:
           in: path
           description: Mail profile id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -1565,11 +1664,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     get:
@@ -1581,6 +1683,7 @@ paths:
           in: path
           description: Mail profile id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -1601,11 +1704,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     patch:
@@ -1617,6 +1723,7 @@ paths:
           in: path
           description: Mail profile id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -1640,11 +1747,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/mailing/mailProfiles/{mailProfileId}/usedInProjects':
@@ -1657,6 +1767,7 @@ paths:
           in: path
           description: Mail profile id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -1683,11 +1794,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/auth/membership:
@@ -1758,6 +1872,7 @@ paths:
         - name: userId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -1785,6 +1900,7 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -1829,6 +1945,7 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -1867,6 +1984,7 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -1898,12 +2016,14 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: id
           in: path
           required: true
+          style: simple
           schema:
             type: integer
             format: int64
@@ -1922,12 +2042,14 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: entityId
           in: query
           description: Related entity id
+          style: form
           schema:
             type: string
       responses:
@@ -1961,6 +2083,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -1968,6 +2091,7 @@ paths:
           in: path
           description: Row id
           required: true
+          style: simple
           schema:
             type: integer
             format: int64
@@ -1996,6 +2120,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2003,11 +2128,13 @@ paths:
           in: path
           description: Related entity type
           required: true
+          style: simple
           schema:
             $ref: '#/components/schemas/ChangeObjectType'
         - name: entityId
           in: query
           description: Related entity id
+          style: form
           schema:
             type: string
       responses:
@@ -2041,6 +2168,7 @@ paths:
           in: path
           description: Project Id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2155,6 +2283,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2182,6 +2311,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2209,6 +2339,7 @@ paths:
         - name: name
           in: path
           required: true
+          style: simple
           schema:
             type: string
       responses:
@@ -2236,6 +2367,7 @@ paths:
           in: path
           description: ''
           required: true
+          style: simple
           schema:
             type: string
       responses:
@@ -2263,6 +2395,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2296,6 +2429,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2342,6 +2476,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2467,6 +2602,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2487,11 +2623,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     put:
@@ -2503,6 +2642,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2538,11 +2678,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/projects/withScans:
@@ -2573,11 +2716,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/withScans/{projectId}':
@@ -2589,6 +2735,7 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2609,11 +2756,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/scanResults/{scanResultId}/issues':
@@ -2626,6 +2776,7 @@ paths:
           in: path
           description: Project`s id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2633,6 +2784,7 @@ paths:
           in: path
           description: Scan result` id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2659,11 +2811,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/scanResults/{scanResultId}/issues/headers':
@@ -2676,6 +2831,7 @@ paths:
           in: path
           description: Project`s id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2683,12 +2839,14 @@ paths:
           in: path
           description: Scan result id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: localeId
           in: query
           description: locale to localize headers
+          style: form
           schema:
             type: string
       responses:
@@ -2714,11 +2872,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/issues/{issueId}':
@@ -2731,6 +2892,7 @@ paths:
           in: path
           description: Project`s id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2738,6 +2900,7 @@ paths:
           in: path
           description: Issue id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2758,11 +2921,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/filePatterns':
@@ -2775,6 +2941,7 @@ paths:
           in: path
           description: Project Id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2808,6 +2975,7 @@ paths:
           in: path
           description: Project Id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2858,6 +3026,7 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2886,6 +3055,7 @@ paths:
           in: path
           description: Project Id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2913,6 +3083,7 @@ paths:
           in: path
           description: Project Id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2966,6 +3137,7 @@ paths:
           in: path
           description: Project Id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -2993,6 +3165,7 @@ paths:
           in: path
           description: Project Id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3026,6 +3199,7 @@ paths:
           in: path
           description: Project Id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3059,6 +3233,7 @@ paths:
           in: path
           description: Project Id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3082,11 +3257,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/completeConfiguration':
@@ -3098,6 +3276,7 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3122,20 +3301,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
-        '404':
-          description: Not Found
-          content:
-            text/plain:
-              schema: { }
-            application/json:
-              schema: { }
-            text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/scanSettings/{scanSettingsId}':
@@ -3148,6 +3321,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3155,6 +3329,7 @@ paths:
           in: path
           description: Scan settings id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3175,11 +3350,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/scanSettings/{scanSettingsId}/aiproj':
@@ -3192,6 +3370,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3199,6 +3378,7 @@ paths:
           in: path
           description: Scan settings id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3222,6 +3402,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3249,6 +3430,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3272,11 +3454,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/sastRules':
@@ -3289,6 +3474,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3316,6 +3502,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3339,16 +3526,17 @@ paths:
           description: Success
         '401':
           description: Unauthorized
-  '/api/projects/{projectId}/yaraRules':
+  '/api/projects/{projectId}/pmRules':
     get:
       tags:
         - Projects
-      summary: Get YARA rules
+      summary: Get PM rules
       parameters:
         - name: projectId
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3358,42 +3546,43 @@ paths:
           content:
             text/plain:
               schema:
-                $ref: '#/components/schemas/YaraRulesModel'
+                $ref: '#/components/schemas/PmRulesBaseModel'
             application/json:
               schema:
-                $ref: '#/components/schemas/YaraRulesModel'
+                $ref: '#/components/schemas/PmRulesBaseModel'
             text/json:
               schema:
-                $ref: '#/components/schemas/YaraRulesModel'
+                $ref: '#/components/schemas/PmRulesBaseModel'
         '401':
           description: Unauthorized
     put:
       tags:
         - Projects
-      summary: Update YARA rules
+      summary: Update PM rules
       parameters:
         - name: projectId
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
       requestBody:
-        description: SAST rules model
+        description: PM rules model
         content:
           application/json-patch+json:
             schema:
-              $ref: '#/components/schemas/YaraRulesBaseModel'
+              $ref: '#/components/schemas/PmRulesBaseModel'
           application/json:
             schema:
-              $ref: '#/components/schemas/YaraRulesBaseModel'
+              $ref: '#/components/schemas/PmRulesBaseModel'
           text/json:
             schema:
-              $ref: '#/components/schemas/YaraRulesBaseModel'
+              $ref: '#/components/schemas/PmRulesBaseModel'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/YaraRulesBaseModel'
+              $ref: '#/components/schemas/PmRulesBaseModel'
       responses:
         '200':
           description: Success
@@ -3409,6 +3598,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3436,6 +3626,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3469,6 +3660,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3476,6 +3668,7 @@ paths:
           in: path
           description: ScanResult id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3504,6 +3697,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3511,6 +3705,7 @@ paths:
           in: path
           description: Vulnerability id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3544,6 +3739,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3551,6 +3747,7 @@ paths:
           in: path
           description: Vulnerability id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3584,6 +3781,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3617,6 +3815,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3650,6 +3849,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3657,6 +3857,7 @@ paths:
           in: path
           description: Scan result id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3691,6 +3892,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3718,6 +3920,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3741,11 +3944,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/tracker/links/{issueId}/jira':
@@ -3758,6 +3964,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3765,6 +3972,7 @@ paths:
           in: path
           description: Issue id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3788,11 +3996,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/tracker/links/{issueId}/jira/unlink':
@@ -3805,6 +4016,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3812,6 +4024,7 @@ paths:
           in: path
           description: Issue id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3820,11 +4033,14 @@ paths:
           description: Bad Request
           content:
             text/plain:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             application/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
             text/json:
-              schema: { }
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/projects/activeScans:
@@ -3862,17 +4078,20 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: issueId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: localeId
           in: query
+          style: form
           schema:
             type: string
       responses:
@@ -3899,6 +4118,7 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3926,6 +4146,7 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -3952,10 +4173,12 @@ paths:
       parameters:
         - name: localeId
           in: query
+          style: form
           schema:
             type: string
         - name: withContent
           in: query
+          style: form
           schema:
             type: boolean
             default: false
@@ -4038,6 +4261,7 @@ paths:
           in: path
           description: Report id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -4067,17 +4291,20 @@ paths:
           in: path
           description: Report id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: localeId
           in: query
           description: Locale id
+          style: form
           schema:
             type: string
         - name: needAddCss
           in: query
           description: Add CSS styles?
+          style: form
           schema:
             type: boolean
             default: true
@@ -4104,6 +4331,7 @@ paths:
         - name: id
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -4147,10 +4375,12 @@ paths:
         - name: type
           in: path
           required: true
+          style: simple
           schema:
             $ref: '#/components/schemas/ReportType'
         - name: localeId
           in: query
+          style: form
           schema:
             type: string
       responses:
@@ -4177,10 +4407,12 @@ paths:
         - name: name
           in: path
           required: true
+          style: simple
           schema:
             type: string
         - name: localeId
           in: query
+          style: form
           schema:
             type: string
       responses:
@@ -4274,6 +4506,7 @@ paths:
       parameters:
         - name: localeId
           in: query
+          style: form
           schema:
             type: string
       requestBody:
@@ -4409,11 +4642,13 @@ paths:
         - name: scanAgentId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: stopScan
           in: query
+          style: form
           schema:
             type: boolean
       responses:
@@ -4440,6 +4675,7 @@ paths:
         - name: scanAgentId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -4487,6 +4723,7 @@ paths:
         - name: scanAgentId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -4563,6 +4800,7 @@ paths:
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -4620,6 +4858,7 @@ paths:
           in: path
           description: Scan result id.Guid
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -4851,6 +5090,7 @@ paths:
       parameters:
         - name: Provider
           in: query
+          style: form
           schema:
             $ref: '#/components/schemas/AuthProviderSettingsBaseModel'
       requestBody:
@@ -4866,8 +5106,10 @@ paths:
                   type: string
                   format: binary
             encoding:
-              SigningCertificateFile: { }
-              SignatureValidationCertificateFile: { }
+              SigningCertificateFile:
+                style: form
+              SignatureValidationCertificateFile:
+                style: form
       responses:
         '200':
           description: Success
@@ -4908,6 +5150,7 @@ paths:
           in: path
           description: Provider`s id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -4936,6 +5179,7 @@ paths:
         - name: providerId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -4975,11 +5219,13 @@ paths:
           in: path
           description: Provider identifier
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: Provider
           in: query
+          style: form
           schema:
             $ref: '#/components/schemas/AuthProviderSettingsBaseModel'
       requestBody:
@@ -4995,8 +5241,10 @@ paths:
                   type: string
                   format: binary
             encoding:
-              SigningCertificateFile: { }
-              SignatureValidationCertificateFile: { }
+              SigningCertificateFile:
+                style: form
+              SignatureValidationCertificateFile:
+                style: form
       responses:
         '200':
           description: Success
@@ -5120,6 +5368,7 @@ paths:
           in: path
           description: Repostory type
           required: true
+          style: simple
           schema:
             $ref: '#/components/schemas/RepositoryType'
       responses:
@@ -5215,6 +5464,7 @@ paths:
           in: path
           description: ''
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5272,12 +5522,14 @@ paths:
         - name: project
           in: query
           description: Selected project. TFS only.
+          style: form
           schema:
             type: string
         - name: projectId
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5324,12 +5576,14 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: isNew
           in: query
           description: Flag of not stored settings
+          style: form
           schema:
             type: boolean
       requestBody:
@@ -5374,6 +5628,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5419,6 +5674,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5497,6 +5753,7 @@ paths:
           in: path
           description: project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5531,17 +5788,20 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: archived
           in: query
           description: Sources in archive
+          style: form
           schema:
             type: boolean
         - name: noNeedToActualize
           in: query
           description: Disable actualize settings by sources
+          style: form
           schema:
             type: boolean
       requestBody:
@@ -5581,6 +5841,7 @@ paths:
           in: path
           description: project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5588,6 +5849,7 @@ paths:
           in: path
           description: Scan result id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5623,6 +5885,7 @@ paths:
           in: path
           description: Project id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5630,6 +5893,7 @@ paths:
           in: path
           description: Scan result id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5683,10 +5947,12 @@ paths:
       parameters:
         - name: searchValue
           in: query
+          style: form
           schema:
             type: string
         - name: exceptDefined
           in: query
+          style: form
           schema:
             type: boolean
       responses:
@@ -5731,6 +5997,7 @@ paths:
         - name: userId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5776,12 +6043,14 @@ paths:
         - name: userId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5827,6 +6096,7 @@ paths:
         - name: userId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5872,12 +6142,14 @@ paths:
         - name: userId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
         - name: projectId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5924,6 +6196,7 @@ paths:
           in: path
           description: User identifier
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -5993,6 +6266,7 @@ paths:
         - name: userId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -6020,6 +6294,7 @@ paths:
         - name: userId
           in: path
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -6091,16 +6366,16 @@ components:
       properties:
         sastRules:
           $ref: '#/components/schemas/SastRulesBaseModel'
-        yaraRules:
-          $ref: '#/components/schemas/YaraRulesBaseModel'
+        pmRules:
+          $ref: '#/components/schemas/PmRulesBaseModel'
       additionalProperties: false
     AnalysisRulesModel:
       type: object
       properties:
         sastRules:
           $ref: '#/components/schemas/SastRulesModel'
-        yaraRules:
-          $ref: '#/components/schemas/YaraRulesModel'
+        pmRules:
+          $ref: '#/components/schemas/PmRulesBaseModel'
       additionalProperties: false
     ApiErrorModel:
       type: object
@@ -6174,6 +6449,7 @@ components:
         - EXT_AUTH_SIGNIN_OPENID_INVALID_CONFIGURATION
         - EXT_AUTH_SIGNIN_OPENID_TOKEN_EXPIRED
         - EXT_AUTH_SIGNIN_OPENID_INCONSISTENT_RESPONSE_MODE_AND_TYPE
+        - EXT_AUTH_SIGNIN_OPENID_INVALID_CLIENT_SECRET
         - EXT_AUTH_SIGNIN_SAML2_SETTINGS_IS_EMPTY
         - EXT_AUTH_SIGNIN_SAML2_RESPONSE_STATUS_ERROR
         - EXT_AUTH_SIGNIN_SAML2_INVALID_SIGNATURE
@@ -6220,12 +6496,14 @@ components:
         - INVALID_JSON_FIELDS
         - INVALID_BLACKBOX_SETTINGS
         - INCORRECT_SAST_RULES
+        - INCORRECT_PM_RULE
         - UNEXPECTED_LANGUAGE
         - MAIL_PROFILE_NOT_FOUND
         - UPDATER_NOT_SET
         - ISSUE_NOT_FOUND
         - SCANSETTINGS_NOT_FOUND
         - INVALID_QUERY_PARAMETER
+        - INVALID_PM_RULE
         - ISSUE_TRACKER_CONNECTION_NOT_FOUND
         - ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET
         - ISSUE_TRACKER_SETTINGS_ID_NOT_SET
@@ -6578,9 +6856,9 @@ components:
             $ref: '#/components/schemas/BlackBoxAddressModel'
           nullable: true
         additionalHttpHeaders:
-          type: object
-          additionalProperties:
-            type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/HttpHeaderModel'
           nullable: true
         authentication:
           $ref: '#/components/schemas/BlackBoxAuthenticationFullModel'
@@ -6614,9 +6892,9 @@ components:
             $ref: '#/components/schemas/BlackBoxAddressModel'
           nullable: true
         additionalHttpHeaders:
-          type: object
-          additionalProperties:
-            type: string
+          type: array
+          items:
+            $ref: '#/components/schemas/HttpHeaderModel'
           nullable: true
         authentication:
           $ref: '#/components/schemas/BlackBoxAuthenticationFullModel'
@@ -6764,12 +7042,6 @@ components:
           type: integer
           format: int32
       additionalProperties: false
-    ComponentsSettingsModel:
-      type: object
-      properties:
-        useCustomYaraRules:
-          type: boolean
-      additionalProperties: false
     ComponentVersionModel:
       type: object
       properties:
@@ -6804,6 +7076,11 @@ components:
         oAuth:
           $ref: '#/components/schemas/OAuthCredentialsModel'
       additionalProperties: false
+    DataFormat:
+      enum:
+        - Regex
+        - Dsl
+      type: string
     DirectoryContent:
       type: object
       properties:
@@ -6923,6 +7200,8 @@ components:
           $ref: '#/components/schemas/ScanProgressModel'
         threatLevel:
           $ref: '#/components/schemas/ThreatLevel'
+        hasErrors:
+          type: boolean
         high:
           type: integer
           format: int32
@@ -7054,22 +7333,22 @@ components:
     HealthCheckServiceResult:
       type: object
       properties:
-        Service:
+        service:
           type: string
           nullable: true
-        Status:
+        status:
           $ref: '#/components/schemas/HealthStatus'
-        ResponseTime:
+        responseTime:
           type: number
           format: double
       additionalProperties: false
     HealthCheckSummaryResult:
       type: object
       properties:
-        TotalResponseTime:
+        totalResponseTime:
           type: number
           format: double
-        Services:
+        services:
           type: array
           items:
             $ref: '#/components/schemas/HealthCheckServiceResult'
@@ -7081,6 +7360,16 @@ components:
         - Degraded
         - Healthy
       type: string
+    HttpHeaderModel:
+      type: object
+      properties:
+        key:
+          type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
+      additionalProperties: false
     InitiatorModel:
       type: object
       properties:
@@ -7138,8 +7427,6 @@ components:
       properties:
         type:
           $ref: '#/components/schemas/IssueExploitDataType'
-        isBinaryContent:
-          type: boolean
         text:
           type: string
           nullable: true
@@ -7443,7 +7730,7 @@ components:
         projectMemberInfos:
           type: array
           items:
-            $ref: '#/components/schemas/ProjectMemberModel'
+            $ref: '#/components/schemas/ProjectMemberInfoModel'
           nullable: true
       additionalProperties: false
     Nullable:
@@ -7563,6 +7850,48 @@ components:
         - WorkWithScanScheduler
         - ReadSettings
       type: string
+    PmRuleModel:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        version:
+          type: integer
+          format: int32
+        programmingLanguages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProgrammingLanguages'
+          nullable: true
+        dataFormat:
+          $ref: '#/components/schemas/DataFormat'
+        filenameWildcard:
+          type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
+        level:
+          $ref: '#/components/schemas/IssueLevel'
+        modifiedDate:
+          type: string
+          format: date-time
+        modifiedBy:
+          $ref: '#/components/schemas/UserModel'
+      additionalProperties: false
+    PmRulesBaseModel:
+      type: object
+      properties:
+        useRules:
+          type: boolean
+      additionalProperties: false
     PolicyState:
       enum:
         - None
@@ -7579,26 +7908,6 @@ components:
           type: string
           nullable: true
       additionalProperties: false
-    ProblemDetails:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        title:
-          type: string
-          nullable: true
-        status:
-          type: integer
-          format: int32
-          nullable: true
-        detail:
-          type: string
-          nullable: true
-        instance:
-          type: string
-          nullable: true
-      additionalProperties: { }
     ProgrammingLanguage:
       enum:
         - DotNet
@@ -7622,6 +7931,7 @@ components:
         - VB
         - Go
         - Kotlin
+        - TypeScript
         - None
       type: string
     ProgrammingLanguageGroup:
@@ -7650,6 +7960,31 @@ components:
         isSupportsDependenciesDownloading:
           type: boolean
       additionalProperties: false
+    ProgrammingLanguages:
+      enum:
+        - None
+        - DotNet
+        - Php
+        - Java
+        - Html
+        - JavaScript
+        - SandBox
+        - Binary
+        - PlSql
+        - TSql
+        - Aspx
+        - C
+        - CPlusPlus
+        - ObjectiveC
+        - Swift
+        - MySql
+        - Python
+        - CSharp
+        - VB
+        - Go
+        - Kotlin
+        - TypeScript
+      type: string
     ProjectChangeHistoryRowModel:
       type: object
       properties:
@@ -7696,7 +8031,7 @@ components:
           type: string
           nullable: true
       additionalProperties: false
-    ProjectMemberModel:
+    ProjectMemberInfoModel:
       type: object
       properties:
         id:
@@ -7711,6 +8046,22 @@ components:
         projectName:
           type: string
           nullable: true
+      additionalProperties: false
+    ProjectMemberModel:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        roleId:
+          type: integer
+          format: int64
+        projectId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
       additionalProperties: false
     ProjectMemberWithUserModel:
       type: object
@@ -7799,14 +8150,8 @@ components:
           $ref: '#/components/schemas/JavaSettingsModel'
         dotNetSettings:
           $ref: '#/components/schemas/DotNetSettingsModel'
-        componentsSettings:
-          $ref: '#/components/schemas/ComponentsSettingsModel'
         reportAfterScan:
           $ref: '#/components/schemas/MailingProjectSettingsModel'
-        useSastRules:
-          type: boolean
-        useSecurityPolicies:
-          type: boolean
         skipGitIgnoreFiles:
           type: boolean
         sourceType:
@@ -7839,14 +8184,8 @@ components:
           $ref: '#/components/schemas/JavaSettingsModel'
         dotNetSettings:
           $ref: '#/components/schemas/DotNetSettingsModel'
-        componentsSettings:
-          $ref: '#/components/schemas/ComponentsSettingsModel'
         reportAfterScan:
           $ref: '#/components/schemas/MailingProjectSettingsModel'
-        useSastRules:
-          type: boolean
-        useSecurityPolicies:
-          type: boolean
         skipGitIgnoreFiles:
           type: boolean
         sourceType:
@@ -7925,8 +8264,6 @@ components:
           items:
             $ref: '#/components/schemas/PermissionType'
           nullable: true
-        hasErrors:
-          type: boolean
         id:
           type: string
           format: uuid
@@ -8404,6 +8741,8 @@ components:
           nullable: true
         useSastRules:
           type: boolean
+        useCustomPmRules:
+          type: boolean
         useSecurityPolicies:
           type: boolean
         skipGitIgnoreFiles:
@@ -8418,8 +8757,6 @@ components:
           $ref: '#/components/schemas/JavaSettingsModel'
         dotNetSettings:
           $ref: '#/components/schemas/DotNetSettingsModel'
-        componentsSettings:
-          $ref: '#/components/schemas/ComponentsSettingsModel'
         sourceSettings:
           $ref: '#/components/schemas/SourceScanSettingsModel'
         emailRecipients:
@@ -8594,6 +8931,9 @@ components:
           format: date-span
         blockUsersAfterInactiveIntervalExpires:
           type: boolean
+        userInactivateCheckInterval:
+          type: string
+          format: date-span
       additionalProperties: false
     Stage:
       enum:
@@ -9049,21 +9389,6 @@ components:
         ruleName:
           type: string
           nullable: true
-      additionalProperties: false
-    YaraRulesBaseModel:
-      type: object
-      properties:
-        useRules:
-          type: boolean
-      additionalProperties: false
-    YaraRulesModel:
-      type: object
-      properties:
-        rules:
-          type: string
-          nullable: true
-        useRules:
-          type: boolean
       additionalProperties: false
   securitySchemes:
     Bearer:

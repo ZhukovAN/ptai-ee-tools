@@ -88,6 +88,7 @@ paths:
           in: path
           description: Token`s id
           required: true
+          style: simple
           schema:
             type: string
             format: uuid
@@ -115,12 +116,41 @@ paths:
         - name: id
           in: query
           description: Token`s id
+          style: form
           schema:
             type: string
             format: uuid
       responses:
         '200':
           description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/signin:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Auth
+      summary: "Login by access token in request headers.\r\nSend access token in header with name \"Access-Token\""
+      parameters:
+        - name: scopeType
+          in: query
+          style: form
+          schema:
+            $ref: '#/components/schemas/AuthScopeType'
+      responses:
+        '200':
+          description: Returns the created JWT token
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
         '401':
           description: Unauthorized
   /api/auth/userLogin:
@@ -132,6 +162,7 @@ paths:
         - name: scopeType
           in: query
           description: Scope type
+          style: form
           schema:
             $ref: '#/components/schemas/AuthScopeType'
       requestBody:
@@ -176,43 +207,6 @@ paths:
                 $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
-  /api/auth/signout:
-    post:
-      tags:
-        - Auth
-      summary: Local signout via Authorization token in Bearer header
-      responses:
-        '200':
-          description: Returns the created JWT token
-        '401':
-          description: Unauthorized
-  /api/auth/signin:
-    get:
-      security:
-        - ApiKeyAuth: []
-      tags:
-        - Auth
-      summary: "Login by access token in request headers.\r\nSend access token in header with name \"Access-Token\""
-      parameters:
-        - name: scopeType
-          in: query
-          schema:
-            $ref: '#/components/schemas/AuthScopeType'
-      responses:
-        '200':
-          description: Returns the created JWT token
-          content:
-            text/plain:
-              schema:
-                $ref: '#/components/schemas/AuthResultModel'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AuthResultModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/AuthResultModel'
-        '401':
-          description: Unauthorized
   /api/auth/refreshToken:
     get:
       security:
@@ -235,60 +229,40 @@ paths:
                 $ref: '#/components/schemas/RefreshTokenResultModel'
         '401':
           description: Unauthorized
+  /api/auth/signout:
+    post:
+      tags:
+        - Auth
+      summary: Local signout via Authorization token in Bearer header
+      responses:
+        '200':
+          description: Returns the created JWT token
+        '401':
+          description: Unauthorized
 components:
   schemas:
-    AuthResultModel:
+    AccessTokenCreatedModel:
       type: object
       properties:
-        accessToken:
+        token:
           type: string
           nullable: true
-        refreshToken:
-          type: string
-          nullable: true
-        expiredAt:
-          type: string
-          format: date-time
-        needChangePassword:
-          type: boolean
       additionalProperties: false
-    AuthScopeType:
-      enum:
-        - None
-        - Agent
-        - Internal
-        - Web
-        - WebRefresh
-        - WebLongRefresh
-        - AccessToken
-        - AccessTokenRefresh
-      type: string
-    DirectoryContent:
+    AccessTokenCreateModel:
       type: object
       properties:
-        _directories:
-          type: array
-          items:
-            $ref: '#/components/schemas/DirectoryContent'
-        _files:
-          type: array
-          items:
-            type: string
-        _hasContent:
-          type: boolean
         name:
           type: string
           nullable: true
-      additionalProperties: false
-    RefreshTokenResultModel:
-      type: object
-      properties:
-        accessToken:
-          type: string
-          nullable: true
-        expiredAt:
+        expiresDateTime:
           type: string
           format: date-time
+          nullable: true
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessTokenScopeType'
+          nullable: true
       additionalProperties: false
     AccessTokenModel:
       type: object
@@ -320,29 +294,6 @@ components:
         - ScanAgent
         - LightClientAndPlugins
       type: string
-    AccessTokenCreateModel:
-      type: object
-      properties:
-        name:
-          type: string
-          nullable: true
-        expiresDateTime:
-          type: string
-          format: date-time
-          nullable: true
-        scopes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessTokenScopeType'
-          nullable: true
-      additionalProperties: false
-    AccessTokenCreatedModel:
-      type: object
-      properties:
-        token:
-          type: string
-          nullable: true
-      additionalProperties: false
     ApiErrorModel:
       type: object
       properties:
@@ -415,6 +366,7 @@ components:
         - EXT_AUTH_SIGNIN_OPENID_INVALID_CONFIGURATION
         - EXT_AUTH_SIGNIN_OPENID_TOKEN_EXPIRED
         - EXT_AUTH_SIGNIN_OPENID_INCONSISTENT_RESPONSE_MODE_AND_TYPE
+        - EXT_AUTH_SIGNIN_OPENID_INVALID_CLIENT_SECRET
         - EXT_AUTH_SIGNIN_SAML2_SETTINGS_IS_EMPTY
         - EXT_AUTH_SIGNIN_SAML2_RESPONSE_STATUS_ERROR
         - EXT_AUTH_SIGNIN_SAML2_INVALID_SIGNATURE
@@ -461,12 +413,14 @@ components:
         - INVALID_JSON_FIELDS
         - INVALID_BLACKBOX_SETTINGS
         - INCORRECT_SAST_RULES
+        - INCORRECT_PM_RULE
         - UNEXPECTED_LANGUAGE
         - MAIL_PROFILE_NOT_FOUND
         - UPDATER_NOT_SET
         - ISSUE_NOT_FOUND
         - SCANSETTINGS_NOT_FOUND
         - INVALID_QUERY_PARAMETER
+        - INVALID_PM_RULE
         - ISSUE_TRACKER_CONNECTION_NOT_FOUND
         - ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET
         - ISSUE_TRACKER_SETTINGS_ID_NOT_SET
@@ -543,6 +497,62 @@ components:
         - COULD_NOT_UPDATE_PROJECT_SOURCES_FROM_SOURCE_CONTROL
         - USER_ID_IS_INCORRECT
       type: string
+    AuthProviderModel:
+      type: object
+      properties:
+        Id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        scheme:
+          $ref: '#/components/schemas/AuthProviderScheme'
+        enabled:
+          type: boolean
+      additionalProperties: false
+    AuthProviderScheme:
+      enum:
+        - OpenIdConnect
+        - Saml2
+        - Ldap
+      type: string
+    AuthResultModel:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          nullable: true
+        refreshToken:
+          type: string
+          nullable: true
+        expiredAt:
+          type: string
+          format: date-time
+        needChangePassword:
+          type: boolean
+      additionalProperties: false
+    AuthScopeType:
+      enum:
+        - None
+        - Agent
+        - Internal
+        - Web
+        - WebRefresh
+        - WebLongRefresh
+        - AccessToken
+        - AccessTokenRefresh
+      type: string
+    RefreshTokenResultModel:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          nullable: true
+        expiredAt:
+          type: string
+          format: date-time
+      additionalProperties: false
     UserLoginModel:
       type: object
       properties:
@@ -585,26 +595,6 @@ components:
           format: date-time
           nullable: true
       additionalProperties: false
-    AuthProviderModel:
-      type: object
-      properties:
-        Id:
-          type: string
-          format: uuid
-        name:
-          type: string
-          nullable: true
-        scheme:
-          $ref: '#/components/schemas/AuthProviderScheme'
-        enabled:
-          type: boolean
-      additionalProperties: false
-    AuthProviderScheme:
-      enum:
-        - OpenIdConnect
-        - Saml2
-        - Ldap
-      type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
