@@ -141,9 +141,9 @@ class GenerateReportIT extends BaseCliIT {
                 "--token", CONNECTION().getToken(),
                 "--output", TempFile.createFile().toString(),
                 "--project-name", PHP_SMOKE.getName(),
-                "--report-template", "Отчет OWASP Top 10 2017",
-                "--report-file", "owasp.ru.html",
-                "--raw-data-file", "owasp.ru.html");
+                "--report-template", "Scan results report",
+                "--report-file", "owasp.en.html",
+                "--raw-data-file", "owasp.en.html");
         Assertions.assertEquals(FAILED.getCode(), res);
     }
 
@@ -157,8 +157,8 @@ class GenerateReportIT extends BaseCliIT {
                 "--token", CONNECTION().getToken(),
                 "--output", TempFile.createFile().toString(),
                 "--project-name", PHP_SMOKE.getName(),
-                "--report-template", "Отчет OWASP Top 10 2017 ",
-                "--report-file", "owasp.ru.html");
+                "--report-template", "Scan results report ",
+                "--report-file", "owasp.en.html");
         Assertions.assertEquals(FAILED.getCode(), res);
     }
 

@@ -198,6 +198,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         ScanResultModel result = scanResults.stream()
                 .filter(r -> null != r.getProgress())
                 .filter(r -> Stage.DONE.equals(r.getProgress().getStage()))
+                .sorted(Comparator.comparing(ScanResultModel::getScanDate).reversed())
                 .findAny()
                 .orElseThrow(() -> GenericException.raise("Project finished scan results are not found", new IllegalArgumentException(id.toString())));
         return result.getId();
@@ -250,10 +251,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                 .downloadDependencies(projectSettingsModel.getDownloadDependencies())
                 .javaSettings(projectSettingsModel.getJavaSettings())
                 .dotNetSettings(projectSettingsModel.getDotNetSettings())
-                .componentsSettings(projectSettingsModel.getComponentsSettings())
                 .reportAfterScan(projectSettingsModel.getReportAfterScan())
-                .useSastRules(projectSettingsModel.getUseSastRules())
-                .useSecurityPolicies(projectSettingsModel.getUseSecurityPolicies())
                 .skipGitIgnoreFiles(projectSettingsModel.getSkipGitIgnoreFiles())
                 .sourceType(projectSettingsModel.getSourceType())
                 .localFilesSource(projectSettingsModel.getLocalFilesSource())
@@ -261,16 +259,6 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                 .hideSourcesPathAndUserName(projectSettingsModel.getHideSourcesPathAndUserName());
         call(() -> client.getProjectsApi().apiProjectsProjectIdSettingsPut(projectId, projectSettingsUpdatedModel),
                 "Update PT AI project generic settings failed");
-
-        log.trace("Get existing PT AI project blackbox settings");
-        BlackBoxSettingsModel blackBoxSettingsModel = call(
-                () -> client.getProjectsApi().apiProjectsProjectIdBlackBoxSettingsGet(projectId),
-                "Failed to get PT AI project blackbox settings");
-        log.trace("Apply AIPROJ-defined project blackbox settings");
-        AiProjConverter.apply(settings, blackBoxSettingsModel);
-        log.trace("Save modified blackbox settings");
-        call(() -> client.getProjectsApi().apiProjectsProjectIdBlackBoxSettingsPut(projectId, blackBoxSettingsModel),
-                "Update PT AI project blackbox settings failed");
 
         log.trace("Get existing PT AI project security policy");
         SecurityPoliciesModel securityPoliciesModel = call(
@@ -281,6 +269,22 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         call(
                 () -> client.getProjectsApi().apiProjectsProjectIdSecurityPoliciesPut(projectId, securityPoliciesModel),
                 "PT AI project policy assignment failed");
+
+        log.trace("Apply custom analysis rules");
+        AnalysisRulesBaseModel analysisRulesBaseModel = AiProjConverter.apply(settings);
+        call(
+                () -> client.getProjectsApi().apiProjectsProjectIdAnalysisRulesPut(projectId, analysisRulesBaseModel),
+                "PT AI project policy custom analysis rules update failed");
+
+        log.trace("Get existing PT AI project blackbox settings");
+        BlackBoxSettingsModel blackBoxSettingsModel = call(
+                () -> client.getProjectsApi().apiProjectsProjectIdBlackBoxSettingsGet(projectId),
+                "Failed to get PT AI project blackbox settings");
+        log.trace("Apply AIPROJ-defined project blackbox settings");
+        AiProjConverter.apply(settings, blackBoxSettingsModel);
+        log.trace("Save modified blackbox settings");
+        call(() -> client.getProjectsApi().apiProjectsProjectIdBlackBoxSettingsPut(projectId, blackBoxSettingsModel),
+                "Update PT AI project blackbox settings failed");
 
         return JsonParseBrief.builder()
                 .projectId(projectId)

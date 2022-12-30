@@ -252,10 +252,11 @@ public class AiProjConverter {
     }
 
     @SneakyThrows
-    public static ComponentsSettingsModel apply(
-            @NonNull final AiProjScanSettings settings,
-            @NonNull final ComponentsSettingsModel model) {
-        return model.useCustomYaraRules(settings.getUseCustomYaraRules());
+    public static AnalysisRulesBaseModel apply(
+            @NonNull final AiProjScanSettings settings) {
+        return new AnalysisRulesBaseModel()
+                .pmRules(new PmRulesBaseModel().useRules(false))
+                .sastRules(new SastRulesBaseModel().useRules(settings.getIsUseSastRules()));
     }
 
     /**
@@ -287,8 +288,6 @@ public class AiProjConverter {
         model.setJavaSettings(apply(settings, new JavaSettingsModel()));
         // Set .NET
         model.setDotNetSettings(apply(settings, new DotNetSettingsModel()));
-        // Set DC
-        model.setComponentsSettings(apply(settings, new ComponentsSettingsModel()));
         return model;
     }
 
@@ -363,10 +362,10 @@ public class AiProjConverter {
         model.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.get(settings.getBlackBoxScanScope()));
         if (CollectionUtils.isNotEmpty(settings.getCustomHeaders())) {
             log.trace("Set additional HTTP headers");
-            Map<String, String> headers = new HashMap<>();
+            List<HttpHeaderModel> headers = new ArrayList<>();
             for (List<String> header : settings.getCustomHeaders()) {
                 if (2 != header.size()) continue;
-                headers.put(header.get(0), header.get(1));
+                headers.add(new HttpHeaderModel().key(header.get(0)).value(header.get(1)));
             }
             model.setAdditionalHttpHeaders(headers);
         }
@@ -389,10 +388,10 @@ public class AiProjConverter {
         model.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.get(settings.getBlackBoxScanScope()));
         if (CollectionUtils.isNotEmpty(settings.getCustomHeaders())) {
             log.trace("Set additional HTTP headers");
-            Map<String, String> headers = new HashMap<>();
+            List<HttpHeaderModel> headers = new ArrayList<>();
             for (List<String> header : settings.getCustomHeaders()) {
                 if (2 != header.size()) continue;
-                headers.put(header.get(0), header.get(1));
+                headers.add(new HttpHeaderModel().key(header.get(0)).value(header.get(1)));
             }
             model.setAdditionalHttpHeaders(headers);
         }
