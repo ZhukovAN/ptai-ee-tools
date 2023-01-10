@@ -2,6 +2,7 @@ package com.ptsecurity.misc.tools.exceptions;
 
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.impl.EnglishReasonPhraseCatalog;
 
@@ -17,6 +18,7 @@ import static org.joor.Reflect.on;
  * should be human-understandable reason for this exception, like
  * "PT AI license information read failed" etc.
  */
+@Slf4j
 public class GenericException extends RuntimeException {
     /**
      * Some exception types, especially ApiException, may hide interesting details like responseBody.
@@ -29,7 +31,7 @@ public class GenericException extends RuntimeException {
      * Regular expression pattern to check if root exception is an instance
      * of ApiException
      */
-    private static final String APIEXCEPTION_CLASS_REGEX = "com\\.ptsecurity\\.appsec\\.ai\\.ee\\.ptai\\.server\\.[\\w.]+\\.[\\w.]+\\.ApiException";
+    private static final String APIEXCEPTION_CLASS_REGEX = "com\\.ptsecurity\\.appsec\\.ai\\.ee\\.server\\.[\\w.]+\\.[\\w.]+\\.ApiException";
 
     /**
      * Method checks if exception is not an instance of ApiException
@@ -57,7 +59,7 @@ public class GenericException extends RuntimeException {
         this.initCause(inner);
     }
 
-    protected static String getCode(@NonNull final Throwable e) {
+    public static String getApiReason(@NonNull final Throwable e) {
         if (isNotApi(e)) return null;
         int code = on(e).call("getCode").get();
         if (0 != code) {
@@ -65,6 +67,21 @@ public class GenericException extends RuntimeException {
             return String.format("%s (%d)", reason, code);
         } else
             return null;
+    }
+
+    public static Integer getCode(@NonNull final Throwable error) {
+        if (isNotApi(error)) return null;
+        try {
+            int code = on(error).call("getCode").get();
+            return 0 != code ? code : null;
+        } catch (Exception e) {
+            log.error("Failed getCode call", e);
+            return null;
+        }
+    }
+
+    public Integer getCode() {
+        return null == getCause() ? null : getCode(getCause());
     }
 
     private static String extractDetails(@NonNull Throwable e) {

@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api;
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
@@ -11,9 +12,15 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpStatus;
 import org.reflections.Reflections;
 
+import javax.net.ssl.SSLHandshakeException;
 import java.lang.reflect.Modifier;
+import java.net.ConnectException;
+import java.net.URI;
+import java.net.UnknownHostException;
+import java.security.cert.CertificateException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -64,6 +71,39 @@ public class Factory {
         return new ArrayList<>(classes);
     }
 
+    /**
+     * As we need to provide backward-compatibility with at least one PT AI version,
+     * during API client creation we need to do:
+     * 0. Create version-dependent API client instance
+     * 1. Initialize API client with certificates and credentials
+     * 2. Try to authenticate API client on PT AI server
+     * 3. Get version from PT AI server and verify it against API client instance
+     */
+    private enum ClientCreateStage {
+        /**
+         * API client initialization. There may be {@link CertificateException} thrown
+         * during PEM parse wrapped into {@link GenericException}
+         */
+        INIT,
+        /**
+         * Authenticate on PT AI server. There may be different issues:
+         * {@link UnknownHostException} if no host is known,
+         * {@link ConnectException} if host exists but refuses connection,
+         * {@link SSLHandshakeException} if there's problems with SSL settings and
+         * ApiException if endpoint not found or credentials are invalid.
+         * All the exception types are wrapped into {@link GenericException}
+         */
+        AUTH,
+        /**
+         * Get PT AI server version and check. As this stage happens after successfull
+         * authentication, all the network- and SSL-related issues shouldn't appear.
+         * The only exception type may be {@link GenericException} that wraps ApiException,
+         * for example with {@link HttpStatus#SC_NOT_FOUND} code as 4.1.1 and 4.2.0 versions
+         * are differ in version API signatures
+         */
+        VERSION
+    }
+
     @NonNull
     public static AbstractApiClient client(@NonNull final ConnectionSettings connectionSettings, @NonNull AdvancedSettings advancedSettings) throws GenericException {
         List<Class<?>> clients = getAllClientImplementations();
@@ -72,13 +112,18 @@ public class Factory {
             if (!AbstractApiClient.class.isAssignableFrom(clazz)) continue;
             if (Modifier.isAbstract(clazz.getModifiers())) continue;
 
-            AbstractApiClient client = onClass(clazz).create(connectionSettings.validate(), advancedSettings).get();
-            // Initialize all API clients with URL, timeouts, SSL settings etc.
-            client.init();
-            log.debug("Class {} instance created", clazz.getCanonicalName());
+            ClientCreateStage stage = ClientCreateStage.INIT;
             try {
+                AbstractApiClient client = onClass(clazz).create(connectionSettings.validate(), advancedSettings).get();
+                // Initialize all API clients with URL, timeouts, SSL settings etc.
+                client.init();
+                log.debug("Class {} instance created", clazz.getCanonicalName());
+
+                stage = ClientCreateStage.AUTH;
                 call(client::authenticate, "Authentication failed");
                 log.debug("Client authenticated");
+
+                stage = ClientCreateStage.VERSION;
                 String versionString = call(client::getCurrentApiVersion, "PT AI API version read failed")
                         .get(ServerVersionTasks.Component.AIE);
                 if (StringUtils.isEmpty(versionString)) {
@@ -108,11 +153,40 @@ public class Factory {
                 }
                 return client;
             } catch (GenericException e) {
-                log.debug("PT AI server API check failed: {}", e.getDetailedMessage());
-                continue;
+                // As getCause for GenericException may return non-null ApiException the root
+                // reason may reside deeper. Let's get them
+                Throwable e1 = e.getCause();
+                Throwable e2 = null == e1 ? null : e1.getCause();
+
+                if (e2 instanceof CertificateException) {
+                    log.trace("No need to continue iterate through API client versions as there's certificate problem");
+                    throw GenericException.raise(
+                            Resources.i18n_ast_settings_server_ca_pem_message_parse_failed_details(), e.getCause());
+                } else if (e2 instanceof UnknownHostException) {
+                    log.trace("No need to continue iterate through API client versions as there's no known {} host", connectionSettings.getUrl());
+                    throw GenericException.raise(
+                            Resources.i18n_ast_settings_server_check_message_connectionfailed(), e2);
+                } else if (e2 instanceof ConnectException) {
+                    log.trace("No need to continue iterate through API client versions as connection to {} host failed", connectionSettings.getUrl());
+                    throw GenericException.raise(
+                            Resources.i18n_ast_settings_server_check_message_connectionfailed(), e2);
+                } else if (e2 instanceof SSLHandshakeException) {
+                    log.trace("No need to continue iterate through API client versions as there's SSL handshake problem");
+                    throw GenericException.raise(
+                            Resources.i18n_ast_settings_server_check_message_sslhandshakefailed(), e2);
+                } else if (HttpStatus.SC_NOT_FOUND == e.getCode()) {
+                    log.trace("Continue iterate through API client versions as 404 response");
+                } else if (HttpStatus.SC_UNAUTHORIZED == e.getCode()) {
+                    log.trace("No need to continue iterate through API client versions as authentication failed");
+                    throw GenericException.raise(
+                            Resources.i18n_ast_settings_server_check_message_unauthorized(), e.getCause());
+                } else {
+                    log.debug("PT AI server API check failed: {}", e.getDetailedMessage());
+                    log.trace("Exception details:", e);
+                }
             }
         }
-        throw GenericException.raise("PT AI server API client create failed", new VersionUnsupportedException());
+        throw GenericException.raise(Resources.i18n_ast_settings_server_check_message_endpointnotfound(), new VersionUnsupportedException());
     }
 
     @NonNull

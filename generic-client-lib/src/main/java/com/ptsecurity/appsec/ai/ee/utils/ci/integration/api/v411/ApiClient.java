@@ -33,6 +33,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ApiClientHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.LoggingInterceptor;
 import com.ptsecurity.misc.tools.Jwt;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.CertificateHelper;
 import io.reactivex.rxjava3.core.Single;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -215,7 +216,7 @@ public class ApiClient extends AbstractApiClient {
                 .build();
         log.trace("HubConnection created with id = " + id);
 
-        X509TrustManager trustManager = ApiClientHelper.createTrustManager(connectionSettings.getCaCertsPem(), connectionSettings.isInsecure());
+        X509TrustManager trustManager = CertificateHelper.createTrustManager(connectionSettings.getCaCertsPem(), connectionSettings.isInsecure());
 
         Object httpClient = Reflect.on(connection).get("httpClient");
         OkHttpClient okHttpClient = Reflect.on(httpClient).get("client");
