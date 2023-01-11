@@ -38,6 +38,7 @@ class GenerateReportIT extends BaseCliIT {
     public static void init() {
         BaseCliIT.init();
         JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE);
+        log.trace("Scan PHP smoke project for GenerateReportIT tests");
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
                 "--url", CONNECTION().getUrl(),

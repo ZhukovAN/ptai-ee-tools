@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static com.ptsecurity.misc.tools.helpers.CertificateHelper.createTrustManager;
 import static org.joor.Reflect.on;
 
 /**
@@ -37,43 +38,6 @@ public class ApiClientHelper {
 
     public ApiClientHelper(@NonNull Object api) {
         apiClient = on(api).call("getApiClient").get();
-    }
-
-    protected static class InsecureX509TrustManager implements X509TrustManager {
-        @Override
-        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-
-        }
-
-        @Override
-        public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-
-        }
-
-        @Override
-        public X509Certificate[] getAcceptedIssuers() {
-            return new X509Certificate[0];
-        }
-    }
-
-    @SneakyThrows
-    public static X509TrustManager createTrustManager(final String caCertsPem, boolean insecure) {
-        if (insecure) return new InsecureX509TrustManager();
-        // Create in-memory keystore and fill it with caCertsPem data
-        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keyStore.load(null, null);
-        if (StringUtils.isNotEmpty(caCertsPem)) {
-            List<X509Certificate> certs = CertificateHelper.readPem(caCertsPem);
-            for (X509Certificate cert : certs)
-                keyStore.setCertificateEntry(UUID.randomUUID().toString(), cert);
-        }
-        // To avoid trustAnchors parameter must be non-empty we need to process separately
-        // empty keystore case
-        if (0 == keyStore.size()) return null;
-        // Init trustManagerFactory with custom CA certificates
-        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        trustManagerFactory.init(keyStore);
-        return (X509TrustManager) trustManagerFactory.getTrustManagers()[0];
     }
 
     /**
