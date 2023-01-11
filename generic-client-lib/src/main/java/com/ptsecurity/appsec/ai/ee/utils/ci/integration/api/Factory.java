@@ -17,10 +17,7 @@ import org.reflections.Reflections;
 
 import javax.net.ssl.SSLHandshakeException;
 import java.lang.reflect.Modifier;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.URI;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.security.cert.CertificateException;
 import java.time.Duration;
 import java.time.Instant;
@@ -154,6 +151,7 @@ public class Factory {
                 }
                 return client;
             } catch (GenericException e) {
+                log.trace("PT AI server connection exception", e);
                 // As getCause for GenericException may return non-null ApiException the root
                 // reason may reside deeper. Let's get them
                 Throwable e1 = e.getCause();
@@ -167,7 +165,7 @@ public class Factory {
                     log.trace("No need to continue iterate through API client versions as there's no known {} host", connectionSettings.getUrl());
                     throw GenericException.raise(
                             Resources.i18n_ast_settings_server_check_message_connectionfailed(), e2);
-                } else if (e2 instanceof ConnectException) {
+                } else if (e2 instanceof ConnectException || e2 instanceof NoRouteToHostException) {
                     log.trace("No need to continue iterate through API client versions as connection to {} host failed", connectionSettings.getUrl());
                     throw GenericException.raise(
                             Resources.i18n_ast_settings_server_check_message_connectionfailed(), e2);
