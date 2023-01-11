@@ -18,6 +18,7 @@ import org.reflections.Reflections;
 import javax.net.ssl.SSLHandshakeException;
 import java.lang.reflect.Modifier;
 import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.UnknownHostException;
 import java.security.cert.CertificateException;
@@ -170,6 +171,10 @@ public class Factory {
                     log.trace("No need to continue iterate through API client versions as connection to {} host failed", connectionSettings.getUrl());
                     throw GenericException.raise(
                             Resources.i18n_ast_settings_server_check_message_connectionfailed(), e2);
+                } else if (e2 instanceof SocketTimeoutException) {
+                    log.trace("No need to continue iterate through API client versions as connection to {} host timeout", connectionSettings.getUrl());
+                    throw GenericException.raise(
+                            Resources.i18n_ast_settings_server_check_message_connectiontimeout(), e2);
                 } else if (e2 instanceof SSLHandshakeException) {
                     log.trace("No need to continue iterate through API client versions as there's SSL handshake problem");
                     throw GenericException.raise(
