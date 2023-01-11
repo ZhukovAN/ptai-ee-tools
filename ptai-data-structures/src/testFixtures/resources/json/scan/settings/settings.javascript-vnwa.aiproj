@@ -1,7 +1,7 @@
 {
     "ProjectName": "junit-javascript-vnwa",
     "ProgrammingLanguage": "JavaScript",
-    "ScanAppType": "JavaScript, Configuration, Fingerprint, PmTaint",
+    "ScanAppType": "JavaScript, Configuration, PmTaint",
     "UseTaintAnalysis": true,
     "UsePmAnalysis": true
 }
