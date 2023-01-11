@@ -22,6 +22,7 @@ import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 import jenkins.model.Jenkins;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.AncestorInPath;
@@ -32,6 +33,7 @@ import java.util.UUID;
 
 @Extension
 @Symbol("serverSettings")
+@Slf4j
 public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
     public ServerSettingsDescriptor() {
         super(ServerSettings.class);
@@ -55,6 +57,7 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
             @QueryParameter("serverCredentialsId") final String serverCredentialsId,
             @QueryParameter("serverInsecure") final boolean serverInsecure) {
         try {
+            log.trace("Test PT AI server {} connection", serverUrl);
             if (!Validator.doCheckFieldNotEmpty(serverUrl))
                 throw new RuntimeException(Resources.i18n_ast_settings_server_url_message_empty());
             boolean urlInvalid = !Validator.doCheckFieldUrl(serverUrl);

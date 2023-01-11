@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.CallHelper;
 import com.ptsecurity.misc.tools.helpers.CertificateHelper;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.StringUtils;
+
+import java.security.cert.CertificateException;
 
 @Getter
 @Setter
@@ -46,8 +49,11 @@ public class ConnectionSettings {
         if (Validator.validateUrl(url).fail())
             throw GenericException.raise(Resources.i18n_ast_settings_server_url_message_invalid(), new IllegalArgumentException(url));
         credentials.validate();
-        if (!insecure && StringUtils.isNotEmpty(caCertsPem))
-            CertificateHelper.readPem(caCertsPem);
+        if (!insecure && StringUtils.isNotEmpty(caCertsPem)) {
+            CallHelper.call(
+                    () -> CertificateHelper.readPem(caCertsPem),
+                    Resources.i18n_ast_settings_server_ca_pem_message_parse_failed_details());
+        }
         return this;
     }
 }

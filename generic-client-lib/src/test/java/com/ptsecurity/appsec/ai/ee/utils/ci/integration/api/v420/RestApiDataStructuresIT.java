@@ -124,34 +124,34 @@ public class RestApiDataStructuresIT extends BaseClientIT {
     public void generateRestApiDataStructures() {
         try (TempFile destination = TempFile.createFolder()) {
             generateData(destination.toPath(), C_SARD_101_000_149_064, (helper) -> {
-                helper.setScanAppType(CONFIGURATION, FINGERPRINT, PMTAINT);
+                helper.setScanAppType(CONFIGURATION, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(true);
             });
 
             generateData(destination.toPath(), PYTHON_DSVW, (helper) -> {
-                helper.setScanAppType(CONFIGURATION, FINGERPRINT, PMTAINT);
+                helper.setScanAppType(CONFIGURATION, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(true);
                 helper.setIsDownloadDependencies(true);
             });
 
             generateData(destination.toPath(), CSHARP_WEBGOAT, (helper) -> {
-                helper.setScanAppType(CSHARP, CONFIGURATION, FINGERPRINT, PMTAINT);
+                helper.setScanAppType(CSHARP, CONFIGURATION, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(true);
                 helper.setIsDownloadDependencies(true);
             });
 
             generateData(destination.toPath(), JAVASCRIPT_VNWA, (helper) -> {
-                helper.setScanAppType(JAVASCRIPT, CONFIGURATION, FINGERPRINT, PMTAINT);
+                helper.setScanAppType(JAVASCRIPT, CONFIGURATION, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(true);
                 helper.setIsDownloadDependencies(false);
             });
 
             generateData(destination.toPath(), JAVA_APP01, (helper) -> {
-                helper.setScanAppType(JAVA, CONFIGURATION, FINGERPRINT, PMTAINT);
+                helper.setScanAppType(JAVA, CONFIGURATION, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(true);
                 helper.setIsDownloadDependencies(true);
@@ -167,7 +167,7 @@ public class RestApiDataStructuresIT extends BaseClientIT {
             });
 
             generateData(destination.toPath(), PHP_OWASP_BRICKS, (helper) -> {
-                helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, CONFIGURATION, FINGERPRINT, PMTAINT);
+                helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, CONFIGURATION, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(true);
                 helper.setUsePmAnalysis(true);
@@ -176,7 +176,7 @@ public class RestApiDataStructuresIT extends BaseClientIT {
             });
 
             generateData(destination.toPath(), PHP_SMOKE, (helper) -> {
-                helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, CONFIGURATION, FINGERPRINT, PMTAINT);
+                helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, CONFIGURATION, PMTAINT);
                 helper.isUseEntryAnalysisPoint(true);
                 helper.isUsePublicAnalysisMethod(true);
                 helper.setUsePmAnalysis(true);

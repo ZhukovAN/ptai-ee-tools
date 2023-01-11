@@ -14,6 +14,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.CallHelper;
 import com.ptsecurity.misc.tools.helpers.CertificateHelper;
 import jetbrains.buildServer.controllers.ActionErrors;
 import jetbrains.buildServer.controllers.BasePropertiesBean;
@@ -187,7 +188,9 @@ public class AstSettingsService {
             temp.addError(TOKEN, Resources.i18n_ast_settings_server_token_message_empty());
         if (!bean.empty(CERTIFICATES)) {
             try {
-                List<X509Certificate> certs = CertificateHelper.readPem(emptyIfNull(bean.getProperties().get(CERTIFICATES)));
+                List<X509Certificate> certs = CallHelper.call(
+                        () -> CertificateHelper.readPem(emptyIfNull(bean.getProperties().get(CERTIFICATES))),
+                        Resources.i18n_ast_settings_server_ca_pem_message_parse_failed_details());
                 if (certs.isEmpty())
                     temp.addError(CERTIFICATES, Resources.i18n_ast_settings_server_ca_pem_message_parse_empty());
             } catch (GenericException e) {

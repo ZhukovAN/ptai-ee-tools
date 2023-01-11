@@ -1,7 +1,7 @@
 {
     "ProjectName": "junit-csharp-webgoat",
     "ProgrammingLanguage": "Csharp",
-    "ScanAppType": "Configuration, Fingerprint, Csharp, PmTaint, DependencyCheck",
+    "ScanAppType": "Configuration, Csharp, PmTaint",
     "IsUsePublicAnalysisMethod": true,
     "IsDownloadDependencies": true,
     "CustomParameters": null,
