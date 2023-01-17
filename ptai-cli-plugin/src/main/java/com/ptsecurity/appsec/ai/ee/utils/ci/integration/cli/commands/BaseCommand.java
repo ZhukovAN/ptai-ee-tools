@@ -7,6 +7,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.BaseCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.PasswordCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Sarif;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
@@ -108,6 +110,10 @@ public abstract class BaseCommand {
                 com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Report.builder().owner(owner).report(report).build().attach(owner);
             for (Reports.RawData rawData : reports.getRaw())
                 RawJson.builder().owner(owner).rawData(rawData).build().attach(owner);
+            for (Reports.Sarif sarif : reports.getSarif())
+                com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.Sarif.builder().owner(owner).sarif(sarif).build().attach(owner);
+            for (Reports.SonarGiif sonarGiif : reports.getSonarGiif())
+                com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif.builder().owner(owner).sonar(sonarGiif).build().attach(owner);
         }
     }
 
