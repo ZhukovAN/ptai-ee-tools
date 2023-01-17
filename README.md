@@ -19,11 +19,15 @@ docker run --rm -u root -v "$PWD":/home/gradle/project -w /home/gradle/project g
 ### Build executable Docker container with CLI plugin
 Execute ```docker build``` command in project root:
 ```
-docker build --tag ptai-ee-tools:latest .
+docker build --tag ptai-cli-plugin:latest .
 ```
 Start container using ```docker run``` command:
 ```
-docker run --rm -it ptai-ee-tools:latest
+docker run --rm -it ptai-cli-plugin:latest
+```
+Save image to file using ```docker save``` command:
+```
+docker save ptai-cli-plugin:latest | gzip > ptai-cli-plugin.tar.gz
 ```
 ## Jenkins and Teamcity plugins debugging
 Both Jenkins and Teamcity Gradle plugins are support starting CI server in debug mode that allows plugin developer to connect to server using IDE tools and debug plugin code. 

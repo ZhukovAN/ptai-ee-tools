@@ -147,6 +147,6 @@
         <module name="ptai-ee-tools.ptai-jenkins-plugin.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="1.8" />
   </component>
 </project>
