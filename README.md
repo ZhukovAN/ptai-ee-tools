@@ -14,7 +14,7 @@ $ ./gradlew build -P jenkinsVersion=2.150.2 -P teamcityVersion=2020.1
 ### Build plugins using Docker Gradle image
 Execute ```docker run``` command in project root:
 ```
-docker run --rm -u root -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:7.1.1-jdk8 gradle build --no-daemon
+docker run --rm -u root -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:7.1.1-jdk11 gradle build --no-daemon
 ```
 ### Build executable Docker container with CLI plugin
 Execute ```docker build``` command in project root:
@@ -54,20 +54,26 @@ See additional info on gradle-teamcity-plugin [page](https://github.com/rodm/gra
 All integration tests are marked as "slow", "scan", "development" and "jenkins". These tests interact with PT AI instance that is to be available via HTTPS REST API. PT AI server connection settings aren't stored in repository but are to be defined in ptai-rest-api/src/testFixtures/resources/configuration.yml file as follows:
 ```yaml
 connections:
-  ptai40: &current
-    version: V40
-    url: https://ptai4.domain.org:443/
+  ptai420:
+    version: V420
+    url: https://ptai420-server.domain.org:443
+    # CI only API token
     token: TOKEN_GOES_HERE
+    # CI and agent API token
+    failSafeToken: ANOTHER_TOKEN_GOES_HERE
     user: root
-    password: GUESS_WHAT_GOES_HERE
+    password: GUESS_WHAT
     ca: keys/domain.org.pem
     insecure: false
-  ptai36:
-    version: V36
-    url: https://ptai.domain.org:443/
+  ptai421: &current
+    version: V420
+    url: https://ptai421-server.domain.org:443
+    # CI only API token
     token: TOKEN_GOES_HERE
-    user: Administrator
-    password: GUESS_WHAT_GOES_HERE
+    # CI and agent API token
+    failSafeToken: ANOTHER_TOKEN_GOES_HERE
+    user: root
+    password: GUESS_WHAT
     ca: keys/domain.org.pem
     insecure: false
 current: *current

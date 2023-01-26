@@ -96,7 +96,7 @@ public class Factory {
          * Get PT AI server version and check. As this stage happens after successfull
          * authentication, all the network- and SSL-related issues shouldn't appear.
          * The only exception type may be {@link GenericException} that wraps ApiException,
-         * for example with {@link HttpStatus#SC_NOT_FOUND} code as 4.1.1 and 4.2.0 versions
+         * for example with {@link HttpStatus#SC_NOT_FOUND} code as 4.1.1 and 4.2.X versions
          * are differ in version API signatures
          */
         VERSION
