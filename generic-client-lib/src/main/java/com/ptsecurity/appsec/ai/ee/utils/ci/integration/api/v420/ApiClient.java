@@ -50,7 +50,7 @@ import static com.ptsecurity.appsec.ai.ee.server.v420.auth.model.AuthScopeType.W
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
-@VersionRange(min = { 4, 2, 0, 0 }, max = { 4, 2, 0, 99999 })
+@VersionRange(min = { 4, 2, 0, 0 }, max = { 4, 2, 99999, 99999 })
 public class ApiClient extends AbstractApiClient {
     @Getter
     protected final String id = UUID.randomUUID().toString();
