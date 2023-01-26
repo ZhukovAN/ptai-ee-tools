@@ -8,6 +8,8 @@ import com.ptsecurity.appsec.ai.ee.server.v411.auth.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.server.v411.auth.model.AuthResultModel;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.server.v411.systemmanagement.model.HealthCheckSummaryResult;
+import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.ApiException;
+import com.ptsecurity.appsec.ai.ee.server.v411.helpers.ApiHelper;
 import com.ptsecurity.misc.tools.Jwt;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V411;
 import static com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.JWT;
 import static com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.checkApiCall;
 import static com.ptsecurity.appsec.ai.ee.server.v411.helpers.ApiHelper.*;
+import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
@@ -101,6 +104,12 @@ public class FastTest extends AbstractTest {
     public void checkProjectNotExist() {
         Boolean projectExists = checkApiCall(() -> PROJECTS.apiProjectsNameExistsGet("junit-" + UUID.randomUUID()));
         assertFalse(projectExists);
+        log.trace("Check that PT AI v.4.1.1 API returns HTTP status 400 if there's no project with given Id");
+        for (TokenType token : TokenType.values()) {
+            ApiHelper.setJwt(token);
+            ApiException exception = assertThrows(ApiException.class, () -> PROJECTS.apiProjectsProjectIdGet(UUID.randomUUID()));
+            assertEquals(exception.getCode(), SC_BAD_REQUEST);
+        }
     }
 
     @Test
