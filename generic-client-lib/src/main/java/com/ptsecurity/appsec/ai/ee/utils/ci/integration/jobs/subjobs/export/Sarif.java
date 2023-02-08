@@ -19,6 +19,7 @@ import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
+import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.ApprovalState.NONE;
 
 @Slf4j
 @Getter
@@ -56,12 +57,15 @@ public class Sarif extends Export {
         ISSUE_LEVEL_MAP.put(BaseIssue.Level.MEDIUM, Result.Level.WARNING);
         ISSUE_LEVEL_MAP.put(BaseIssue.Level.HIGH, Result.Level.ERROR);
 
+        // See https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/sarif-v2.1.0-os.html#_Toc34317647
+        // Confirmed vulnerabilities are represent failed result
         ISSUE_KIND_MAP.put(BaseIssue.ApprovalState.APPROVAL, Result.Kind.FAIL);
         ISSUE_KIND_MAP.put(BaseIssue.ApprovalState.AUTO_APPROVAL, Result.Kind.FAIL);
+        // Discarded mean that no problem was found
         ISSUE_KIND_MAP.put(BaseIssue.ApprovalState.DISCARD, Result.Kind.PASS);
-        ISSUE_KIND_MAP.put(BaseIssue.ApprovalState.NONE, Result.Kind.OPEN);
+        // Issues without approval state should have no kind property as those won't be imported to DefectDojo
+        // ISSUE_KIND_MAP.put(BaseIssue.ApprovalState.NONE, Result.Kind.REVIEW);
         ISSUE_KIND_MAP.put(BaseIssue.ApprovalState.NOT_EXIST, Result.Kind.NOT_APPLICABLE);
-
     }
 
     @SneakyThrows
@@ -116,9 +120,10 @@ public class Sarif extends Export {
                     .withRuleId(issue.getTypeId())
                     .withMessage(new Message().withText(scanResult.getI18n().get(issue.getIssueTypeKey()).get(EN).getTitle()))
                     .withLevel(ISSUE_LEVEL_MAP.get(issue.getLevel()))
-                    .withKind(ISSUE_KIND_MAP.get(issue.getApprovalState()))
                     .withLocations(Collections.singletonList(location))
                     .withProperties(new PropertyBag().withTags(tags));
+            if (NONE != issue.getApprovalState())
+                result.withKind(ISSUE_KIND_MAP.get(issue.getApprovalState()));
             tags.add(issue.getClazz().name());
             if (BaseIssue.Type.SCA.equals(issue.getClazz())) {
                 ScaIssue scaIssue = (ScaIssue) issue;
@@ -156,9 +161,14 @@ public class Sarif extends Export {
                 }
 
                 List<ThreadFlowLocation> threadFlowLocations = new ArrayList<>();
-                addTfl(threadFlowLocations, vulnerabilityIssue.getEntryPoint(), "Entry point");
-                addTfl(threadFlowLocations, vulnerabilityIssue.getTaintDataEntries(), "Taint data entry");
-                addTfl(threadFlowLocations, vulnerabilityIssue.getDataTrace(), "Data operation");
+                // Need to remove those three TFLs as there SHOULD be text property for TFL, but
+                // that can't be retrieved from scan results for:
+                // - entry point (there's no text for entry point, only file and line number)
+                // addTfl(threadFlowLocations, vulnerabilityIssue.getEntryPoint(), "Entry point");
+                // - taint data entries (there's no taint data in scan results)
+                // addTfl(threadFlowLocations, vulnerabilityIssue.getTaintDataEntries(), "Taint data entry");
+                // - data trace entrise (there's no data trace in scan results)
+                // addTfl(threadFlowLocations, vulnerabilityIssue.getDataTrace(), "Data operation");
                 addTfl(threadFlowLocations, vulnerabilityIssue.getVulnerableExpression(), "Exit point");
 
                 if (!threadFlowLocations.isEmpty()) {
