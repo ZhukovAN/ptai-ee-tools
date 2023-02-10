@@ -151,7 +151,7 @@ public class AiProjConverter {
      * @return PT AI v.4.1.1 API programming language group
      */
     @NonNull
-    public static ProgrammingLanguageGroup convertLanguageGroup(@NonNull final ScanResult.ScanSettings.Language language) {
+    protected static ProgrammingLanguageGroup convertLanguageGroup(@NonNull final ScanResult.ScanSettings.Language language) {
         return REVERSE_LANGUAGE_GROUP_MAP.getOrDefault(language, ProgrammingLanguageGroup.NONE);
     }
 
@@ -207,7 +207,7 @@ public class AiProjConverter {
     }
 
     @SneakyThrows
-    public static JavaSettingsModel apply(
+    protected static JavaSettingsModel apply(
             @NonNull final AiProjScanSettings settings,
             @NonNull final JavaSettingsModel model) {
         // Set isUnpackUserJarFiles
@@ -228,7 +228,7 @@ public class AiProjConverter {
     }
 
     @SneakyThrows
-    public static DotNetSettingsModel apply(
+    protected static DotNetSettingsModel apply(
             @NonNull final AiProjScanSettings settings,
             @NonNull final DotNetSettingsModel model) {
         // Set projectType
@@ -252,7 +252,7 @@ public class AiProjConverter {
     }
 
     @SneakyThrows
-    public static ComponentsSettingsModel apply(
+    protected static ComponentsSettingsModel apply(
             @NonNull final AiProjScanSettings settings,
             @NonNull final ComponentsSettingsModel model) {
         return model.useCustomYaraRules(settings.getUseCustomYaraRules());
@@ -293,7 +293,7 @@ public class AiProjConverter {
     }
 
     @SneakyThrows
-    public static BlackBoxAuthenticationFullModel apply(
+    protected static BlackBoxAuthenticationFullModel apply(
             @NonNull final AiProjScanSettings source,
             @NonNull final BlackBoxAuthenticationFullModel destination) {
         destination.setType(AuthType.NONE);
@@ -376,7 +376,7 @@ public class AiProjConverter {
     }
 
     @SneakyThrows
-    public static BlackBoxSettingsBaseModel apply(
+    protected static BlackBoxSettingsBaseModel apply(
             @NonNull final AiProjScanSettings settings,
             @NonNull final BlackBoxSettingsBaseModel model) {
         model.setRunAutocheckAfterScan(settings.getRunAutocheckAfterScan());
@@ -422,7 +422,7 @@ public class AiProjConverter {
         }, "JSON settings parse failed");
     }
 
-    private static String serialize(AiProjScanSettings settings) throws GenericException {
+    protected static String serialize(AiProjScanSettings settings) throws GenericException {
         return call(
                 () -> BaseJsonHelper.serialize(settings.fix()),
                 "JSON settings serialization failed");
@@ -433,7 +433,7 @@ public class AiProjConverter {
      * @return Minimized JSON-defined AST settings, i.e. without comments, formatting etc.
      * @throws GenericException
      */
-    public static String minimize(@NonNull String settingsJson) throws GenericException {
+    protected static String minimize(@NonNull String settingsJson) throws GenericException {
         AiProjScanSettings settings = verify(settingsJson);
         return serialize(settings);
     }

@@ -1,0 +1,525 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "ProjectName": {
+      "title": "Project name",
+      "type": "string"
+    },
+    "ProgrammingLanguage": {
+      "title": "Active scanning language",
+      "type": "string",
+      "enum": [
+        "Java",
+        "CSharp",
+        "VB",
+        "Php",
+        "JavaScript",
+        "Python",
+        "ObjectiveC",
+        "Swift",
+        "CPlusPlus",
+        "Go",
+        "Kotlin",
+        "Sql"
+      ]
+    },
+    "ScanAppType": {
+      "title": "Comma separated list of PT AI scan engines",
+      "type": "string"
+    },
+    "Site": {
+      "title": "Website address",
+      "type": "string"
+    },
+    "IsDownloadDependencies": {
+      "description": "Download dependencies",
+      "type": "boolean"
+    },
+    "IsUsePublicAnalysisMethod": {
+      "description": "Search from available public and protected methods",
+      "type": "boolean"
+    },
+    "PreprocessingTimeout": {
+      "type": "integer"
+    },
+    "CustomParameters": {
+      "title": "Custom parameters",
+      "description": "Custom kernel startup parameters",
+      "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+    },
+    "SkipFileFormats": {
+      "description": "File extensions to be excluded from scan process",
+      "type": "array",
+      "items": [
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "SkipFilesFolders": {
+      "description": "Folder names to exclude from scan process",
+      "type": "array",
+      "items": [
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "DisabledPatterns": {
+      "description": "As not all the patterns may be applied to any language there's need to define set of disabled patterns. Plugin downloads patterns metadata from PT AI server and automatically sets list of disabled patterns in accordance with programming language. But user may extend this list using this parameter",
+      "type": "array",
+      "items": [
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "DisabledTypes": {
+      "description": "Типы проверок исходных кодов, которые не будут выполняться в ходе анализа",
+      "type": "array",
+      "items": {}
+    },
+    "ConsiderPreviousScan": {
+      "type": "boolean"
+    },
+    "HideSuspectedVulnerabilities": {
+      "description": "Hide suspected vulnerabilities by default",
+      "type": "boolean"
+    },
+    "UseIssueTrackerIntegration": {
+      "description": "Enable issue tracking integration",
+      "type": "boolean"
+    },
+    "IsUnpackUserPackages": {
+      "title": "Unpack custom JAR files",
+      "description": "Unpack user packages for Java. Prefixes that define what JARs are to be unpacked are defined via -upp com.mycompany|com.my.company parameter in CustomParameters",
+      "type": "boolean"
+    },
+    "JavaParameters": {
+      "title": "JVM start options",
+      "description": "Additional JDK run parameters",
+      "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+    },
+    "JavaVersion": {
+      "title": "JDK version",
+      "description": "JDK version. 0 for 1.8 and 1 for 1.11",
+      "type": "integer",
+      "enum": [0, 1]
+    },
+    "ProjectType": {
+      "title": "Type of application",
+      "description": ".NET project type",
+      "type": "string",
+      "enum": ["None", "Solution", "WebSite"]
+    },
+    "SolutionFile": {
+      "title": "Solution file",
+      "description": "Path to a solution or project",
+      "type": "string"
+    },
+    "WebSiteFolder": {
+      "description": ".NET website path",
+      "type": "string"
+    },
+    "JavaScriptProjectFolder": {
+      "description": "JavaScript application root path",
+      "type": "string"
+    },
+    "UseTaintAnalysis": {
+      "title": "Use taint analysis mode of PmTaint engine",
+      "type": "boolean"
+    },
+    "UsePmAnalysis": {
+      "title": "Use pattern matching mode of PmTaint engine",
+      "type": "boolean"
+    },
+    "DisableInterpretCores": {
+      "title": "Disable C#, Java, PHP, JSA cores in analysis",
+      "type": "boolean"
+    },
+    "UseDefaultFingerprints": {
+      "description": "Use internal knowledge base of vulnerable components",
+      "type": "boolean"
+    },
+    "UseCustomYaraRules": {
+      "title": "Use custom YARA rules",
+      "type": "boolean"
+    },
+    "Level": {
+      "title": "Search mode",
+      "type": "string",
+      "enum": ["None", "Fast", "Full", "Normal"]
+    },
+    "CustomHeaders": {
+      "type": "array",
+      "items": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    "Authentication": {
+      "type": "object",
+      "properties": {
+        "auth_item": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "null"
+            },
+            "credentials": {
+              "type": "object",
+              "properties": {
+                "cookie": {
+                  "type": "null"
+                },
+                "cookies": {
+                  "type": "null"
+                },
+                "type": {
+                  "type": "integer"
+                },
+                "login": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "null"
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "regexp": {
+                      "type": "null"
+                    },
+                    "is_regexp": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value",
+                    "regexp",
+                    "is_regexp"
+                  ]
+                },
+                "password": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "null"
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "regexp": {
+                      "type": "null"
+                    },
+                    "is_regexp": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value",
+                    "regexp",
+                    "is_regexp"
+                  ]
+                }
+              },
+              "required": [
+                "cookie",
+                "cookies",
+                "type",
+                "login",
+                "password"
+              ]
+            },
+            "test_url": {
+              "type": "null"
+            },
+            "form_url": {
+              "type": "null"
+            },
+            "form_xpath": {
+              "type": "string"
+            },
+            "regexp_of_success": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "domain",
+            "credentials",
+            "test_url",
+            "form_url",
+            "form_xpath",
+            "regexp_of_success"
+          ]
+        }
+      },
+      "required": [
+        "auth_item"
+      ]
+    },
+    "ProxySettings": {
+      "type": "object",
+      "properties": {
+        "IsEnabled": {
+          "type": "boolean"
+        },
+        "Host": {
+          "type": "null"
+        },
+        "Port": {
+          "type": "null"
+        },
+        "Type": {
+          "type": "integer"
+        },
+        "Username": {
+          "type": "null"
+        },
+        "Password": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "IsEnabled",
+        "Host",
+        "Port",
+        "Type",
+        "Username",
+        "Password"
+      ]
+    },
+    "RunAutocheckAfterScan": {
+      "type": "boolean"
+    },
+    "AutocheckSite": {
+      "type": "string"
+    },
+    "AutocheckCustomHeaders": {
+      "type": "array",
+      "items": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    "AutocheckAuthentication": {
+      "type": "object",
+      "properties": {
+        "auth_item": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "type": "null"
+            },
+            "credentials": {
+              "type": "object",
+              "properties": {
+                "cookie": {
+                  "type": "null"
+                },
+                "cookies": {
+                  "type": "null"
+                },
+                "type": {
+                  "type": "integer"
+                },
+                "login": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "null"
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "regexp": {
+                      "type": "null"
+                    },
+                    "is_regexp": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value",
+                    "regexp",
+                    "is_regexp"
+                  ]
+                },
+                "password": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "null"
+                    },
+                    "value": {
+                      "type": "null"
+                    },
+                    "regexp": {
+                      "type": "null"
+                    },
+                    "is_regexp": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "value",
+                    "regexp",
+                    "is_regexp"
+                  ]
+                }
+              },
+              "required": [
+                "cookie",
+                "cookies",
+                "type",
+                "login",
+                "password"
+              ]
+            },
+            "test_url": {
+              "type": "null"
+            },
+            "form_url": {
+              "type": "null"
+            },
+            "form_xpath": {
+              "type": "string"
+            },
+            "regexp_of_success": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "domain",
+            "credentials",
+            "test_url",
+            "form_url",
+            "form_xpath",
+            "regexp_of_success"
+          ]
+        }
+      },
+      "required": [
+        "auth_item"
+      ]
+    },
+    "AutocheckProxySettings": {
+      "type": "object",
+      "properties": {
+        "IsEnabled": {
+          "type": "boolean"
+        },
+        "Host": {
+          "type": "null"
+        },
+        "Port": {
+          "type": "null"
+        },
+        "Type": {
+          "type": "integer"
+        },
+        "Username": {
+          "type": "null"
+        },
+        "Password": {
+          "type": "null"
+        }
+      },
+      "required": [
+        "IsEnabled",
+        "Host",
+        "Port",
+        "Type",
+        "Username",
+        "Password"
+      ]
+    },
+    "SendEmailWithReportsAfterScan": {
+      "type": "boolean"
+    },
+    "CompressReport": {
+      "type": "boolean"
+    },
+    "EmailSettings": {
+      "type": "object",
+      "properties": {
+        "SmtpServerAddress": {
+          "type": "string"
+        },
+        "UserName": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "EmailRecipients": {
+          "type": "string"
+        },
+        "EnableSsl": {
+          "type": "boolean"
+        },
+        "Subject": {
+          "type": "string"
+        },
+        "ConsiderCertificateError": {
+          "type": "boolean"
+        },
+        "SenderEmail": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "SmtpServerAddress",
+        "UserName",
+        "Password",
+        "EmailRecipients",
+        "EnableSsl",
+        "Subject",
+        "ConsiderCertificateError",
+        "SenderEmail"
+      ]
+    },
+    "RootFolder": {
+      "type": "string"
+    },
+    "ScanTarget": {
+      "type": "string"
+    },
+    "IsUseEntryAnalysisPoint": {
+      "type": "boolean"
+    },
+    "ScanUnitTimeout": {
+      "type": "integer"
+    },
+    "CustomYaraRules": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "ProjectName",
+    "ProgrammingLanguage"
+  ]
+}
