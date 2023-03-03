@@ -219,3 +219,5 @@
 + [Fix] SARIF and GIIF report generation fixed
 ### 20220126
 + [Feature] PT AI v.4.2.1 support added
+### 20220208
++ [Feature] PT AI v.4.2.2 support approved
