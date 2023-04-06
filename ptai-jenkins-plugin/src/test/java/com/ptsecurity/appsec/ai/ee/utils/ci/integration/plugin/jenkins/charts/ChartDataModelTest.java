@@ -19,6 +19,7 @@ class ChartDataModelTest extends BaseTest {
     public void testJsonConversion() {
         ObjectMapper mapper = createObjectMapper();
         for (ApiVersion version : ApiVersion.values()) {
+            if (version.isDeprecated()) continue;
             String json = ResourcesHelper.getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + Project.PHP_OWASP_BRICKS.getName() + ".json.7z");
             Assertions.assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);

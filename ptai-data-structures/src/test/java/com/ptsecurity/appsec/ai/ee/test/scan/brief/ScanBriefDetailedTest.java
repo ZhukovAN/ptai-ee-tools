@@ -42,6 +42,7 @@ public class ScanBriefDetailedTest extends BaseTest {
             Path briefDetailed = temp.toPath().resolve("brief").resolve("detailed");
             assertTrue(briefDetailed.toFile().mkdirs());
             for (ScanBrief.ApiVersion version : ScanBrief.ApiVersion.values()) {
+                if (version.isDeprecated()) continue;
                 Path destination = briefDetailed.resolve(version.name().toLowerCase());
                 assertTrue(destination.toFile().mkdirs());
                 for (Project project : ALL) {

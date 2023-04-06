@@ -6,6 +6,7 @@ import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -22,7 +23,19 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ScanBrief {
     public enum ApiVersion {
-        V411, V420
+        @Deprecated V36,
+        @Deprecated V40,
+        @Deprecated V41,
+        V411, V420;
+
+        @SneakyThrows
+        public static boolean isDeprecated(@NonNull final ApiVersion version) {
+            return null != ApiVersion.class.getField(version.name()).getAnnotation(Deprecated.class);
+        }
+
+        public boolean isDeprecated() {
+            return isDeprecated(this);
+        }
     }
 
     @NonNull
