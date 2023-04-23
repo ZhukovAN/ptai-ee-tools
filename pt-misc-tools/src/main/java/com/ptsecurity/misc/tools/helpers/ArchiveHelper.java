@@ -138,10 +138,23 @@ public class ArchiveHelper {
      */
     @SneakyThrows
     public static Path extractZipResourceFile(@NonNull final String name, final Path destinationFolder) {
+        return extractZipStream(getResourceStream(name), destinationFolder);
+    }
+
+    /**
+     * Method extracts zip-packed stream contents to folder
+     * @param stream Absolute name of resource like "code/php-smoke.zip"
+     * @param destinationFolder Folder where resources are to be unpacked.
+     *                   If null value is passed, temporal directory will be automatically created
+     * @return Path to extracted resources. If packed resource contains exactly one file then path
+     * to extracted file will be returned. If resource contains more than one file all these files
+     * will be extracted to destination folder and its path will be returned
+     */
+    @SneakyThrows
+    public static Path extractZipStream(@NonNull final InputStream stream, final Path destinationFolder) {
         Path res = null;
         try (
-                InputStream is = getResourceStream(name);
-                ZipInputStream zis = new ZipInputStream(is)) {
+                ZipInputStream zis = new ZipInputStream(stream)) {
             ZipEntry entry = zis.getNextEntry();
             while (null != entry) {
                 if (!entry.isDirectory()) {
