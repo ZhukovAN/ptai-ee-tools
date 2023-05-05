@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json.schemastore.org/aiproj-1.1.json",
+  "Version": "1.1",
+  "ProjectName": "junit-php-owasp-bricks",
+  "ProgrammingLanguage": "Php",
+  "ScanModules": [
+    "VulnerableSourceCode",
+    "DataFlowAnalysis",
+    "PatternMatching",
+    "Components",
+    "Configuration"
+  ],
+  "CustomParameters": null,
+  "UseSastRules": false,
+  "UseCustomPmRules": false,
+  "UseSecurityPolicies": false,
+  "SkipGitIgnoreFiles": false,
+  "UsePublicAnalysisMethod": false,
+  "DownloadDependencies": false,
+  "MailingProjectSettings": {
+    "Enabled": false,
+    "MailProfileName": null,
+    "EmailRecipients": []
+  }
+}

@@ -1,13 +1,22 @@
 plugins {
     id 'java-library'
     id 'java-test-fixtures'
+    // id 'jsonschema2pojo'
+    id "org.jsonschema2pojo" version "1.2.1"
 }
 
 group = "${rootGroup}"
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.jsonschema2pojo/jsonschema2pojo-gradle-plugin
+    // classpath group: 'org.jsonschema2pojo', name: 'jsonschema2pojo-gradle-plugin', version: '1.2.1'
+
     api project(':pt-misc-tools')
     api project(':ptai-i18n')
+
+    // Need this as generated code uses annotations like @Nullable etc.
+    // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
     // Use JUnit 5 for test fixtures
     testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
@@ -28,4 +37,16 @@ jar {
     manifest {
         attributes 'Jenkins-ClassFilter-Whitelisted': 'true'
     }
+}
+
+jsonSchema2Pojo {
+    source = files("${sourceSets.main.output.resourcesDir}/aiproj/schema")
+    targetDirectory = file("${project.buildDir}/generated/sources/jsonSchema2Pojo")
+    targetPackage = 'com.ptsecurity.appsec.ai.ee.scan.settings.aiproj'
+    generateBuilders = true
+    includeAdditionalProperties = false
+    includeJsr305Annotations = true
+    setAnnotationStyle("jackson2")
+    includeHashcodeAndEquals = true
+    includeToString = true
 }
