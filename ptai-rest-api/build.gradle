@@ -274,6 +274,6 @@ sourceSets.main.java.srcDirs \
  "${swaggerSources.auth420.code.outputDir}/src/main/java", \
  "${swaggerSources.api420.code.outputDir}/src/main/java", \
  "${swaggerSources.notifications420.code.outputDir}/src/main/java", \
-"${swaggerSources.auth430.code.outputDir}/src/main/java", \
+ "${swaggerSources.auth430.code.outputDir}/src/main/java", \
  "${swaggerSources.api430.code.outputDir}/src/main/java", \
  "${swaggerSources.notifications430.code.outputDir}/src/main/java"

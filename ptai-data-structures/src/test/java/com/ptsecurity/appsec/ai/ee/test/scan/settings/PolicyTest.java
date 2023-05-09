@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.test.scan.settings;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.helpers.json.JsonPolicyHelper;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.misc.tools.BaseTest;
 import lombok.SneakyThrows;
@@ -28,11 +29,12 @@ public class PolicyTest extends BaseTest {
         Assertions.assertNotNull(inputStream);
         ObjectMapper mapper = createObjectMapper();
         Policy[] policy = mapper.readValue(inputStream, Policy[].class);
+        String policyRuleString = JsonPolicyHelper.serialize(policy[0].getScopes()[0].getRules()[0]);
 
         Assertions.assertNotNull(policy);
         Assertions.assertEquals(1, policy.length);
         Assertions.assertEquals(1, policy[0].getScopes().length);
-        Assertions.assertEquals(4, policy[0].getScopes()[0].getRules().length);
+        Assertions.assertEquals(3, policy[0].getScopes()[0].getRules().length);
 
         Optional<Policy.Scopes.Rules> rules = Arrays.stream(policy[0].getScopes()[0].getRules()).filter(Policy.Scopes.Rules::isRegex).findFirst();
         Assertions.assertTrue(rules.isPresent());

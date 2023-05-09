@@ -5129,6 +5129,18 @@ paths:
           style: form
           schema:
             type: boolean
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: string
+                  format: binary
+            encoding:
+              files:
+                style: form
       responses:
         '404':
           description: Not Found
@@ -6987,6 +6999,10 @@ components:
         - v1_8
         - v1_11
       type: string
+      # V.4.3: Needed to fix that to avoid enum name generation like _8 and _11
+      x-enum-varnames:
+        - v1_8
+        - v1_11
     JiraTicketLinkModel:
       type: object
       properties:

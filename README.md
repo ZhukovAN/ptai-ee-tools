@@ -86,14 +86,14 @@ $ ./gradlew clean build slowTest
 ### Generic integration tests
 Generic integration tests use predefined vulnerable source packs from generic-client-lib/src/testFixtures/resources/code folder. Use following command to run these tests:
 ```
-$ ./gradlew clean build integrationTest
+$ ./gradlew clean build integrationScanTest
 ```
 ### Development integration tests
 Development integration tests aren't supposed to be started during build. Their main purpose is to launch scans and store PT AI server responses to use them as JUnit tests resources. There's no dedicated Gradle task to run these tests, those are to be executed from IDE.
 ### Jenkins integration tests
 Jenkins' integration tests use embedded Jenkins server to create AST jos and launch them. Use following command to run these tests:
 ```
-$ ./gradlew clean build jenkinsTest
+$ ./gradlew clean build integrationJenkinsTest
 ```
 ## Use advanced settings
 Some parts of plugin internal behaviour aren't accessible from UI or via CLI parameters. Those advanced settings are to be defined as key / value pairs (see AdvancedSettings.java for possible values). For example, plugins remove JWT and API tokens data from trace logs but you may override that using `logging.http.credentials` advanced setting:
