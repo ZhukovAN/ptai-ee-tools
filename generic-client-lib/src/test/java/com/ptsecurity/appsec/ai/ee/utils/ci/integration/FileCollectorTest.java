@@ -27,7 +27,7 @@ import java.util.*;
 import static org.junit.jupiter.api.condition.OS.LINUX;
 
 public class FileCollectorTest extends BaseTest {
-    private static Map<Locale, String> NATIONAL_FILE_NAMES = new HashMap<>();
+    private static final Map<Locale, String> NATIONAL_FILE_NAMES = new HashMap<>();
 
     @BeforeAll
     public static void init() {
@@ -113,35 +113,34 @@ public class FileCollectorTest extends BaseTest {
                 .build());
         FileCollector collector = new FileCollector(transfers, new Tool());
         List<FileCollector.Entry> entries = collector.collectFiles(sources.toFile());
-        Assertions.assertEquals(2, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
+        Assertions.assertEquals(4, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
 
         transfers.clear();
         transfers.addTransfer(Transfer.builder()
                 .excludes("**/build/**/module/**/*.class")
                 .build());
         entries = collector.collectFiles(sources.toFile());
-        Assertions.assertEquals(1, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
+        Assertions.assertEquals(3, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
 
         transfers.clear();
         transfers.addTransfer(Transfer.builder()
                 .excludes("**/*.class")
                 .build());
         entries = collector.collectFiles(sources.toFile());
-        Assertions.assertEquals(1, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
+        Assertions.assertEquals(3, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
 
         transfers.clear();
         transfers.addTransfer(Transfer.builder()
                 .excludes("module/**/build/**/module/**/*.class")
                 .build());
         entries = collector.collectFiles(sources.toFile());
-        Assertions.assertEquals(1, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
+        Assertions.assertEquals(3, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
 
         transfers.clear();
         transfers.addTransfer(Transfer.builder()
                 .excludes("**/build/**/*.class")
                 .build());
         entries = collector.collectFiles(sources.toFile());
-        Assertions.assertEquals(1, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
+        Assertions.assertEquals(3, entries.stream().map(FileCollector.Entry::getPath).filter(p -> !p.toFile().isDirectory()).count());
     }
-
 }
