@@ -84,7 +84,7 @@ public class RestApiDataStructuresIT extends BaseClientIT {
         client.init();
         client.authenticate();
 
-        Path jsons = destination.resolve("v42").resolve("json");
+        Path jsons = destination.resolve("v420").resolve("json");
         jsons.toFile().mkdirs();
         Path scanSettingsDir = jsons.resolve("scanSettings");
         scanSettingsDir.toFile().mkdirs();
@@ -115,7 +115,7 @@ public class RestApiDataStructuresIT extends BaseClientIT {
                 log.debug("Localized ({}) issue headers stored to temp file {}", locale, tempFile.toFile().getAbsolutePath());
                 Path sevenZip = issuesModelDir.resolve(project.getName() + "." + locale.getLocale().getLanguage() + ".json.7z");
                 ArchiveHelper.packData7Zip(sevenZip, FileUtils.readFileToByteArray(tempFile.toFile()));
-            };
+            }
         }
     }
 
