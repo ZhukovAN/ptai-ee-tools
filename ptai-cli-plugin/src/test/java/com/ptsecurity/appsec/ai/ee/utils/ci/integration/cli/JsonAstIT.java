@@ -1,6 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
+import com.contrastsecurity.sarif.SarifSchema210;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import com.ptsecurity.misc.tools.TempFile;
 import lombok.SneakyThrows;
@@ -12,11 +14,14 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
+import java.io.File;
+
 import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.ExitCode.FAILED;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.ExitCode.SUCCESS;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.GENERIC_POLICY;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStream;
 
 @DisplayName("Check new JSON-defined project scans")
@@ -165,6 +170,39 @@ class JsonAstIT extends BaseCliIT {
                     "--input", project.getCode().toString(),
                     "--settings-json", settings.toPath().toString());
             Assertions.assertEquals(SUCCESS.getCode(), res);
+        }
+    }
+
+    @SneakyThrows
+    @Test
+    @Tag("scan")
+    @Tag("integration")
+    @DisplayName("Execute AST of new project with SARIF and GIIF report generation")
+    public void scanAndGenerateGiifReports() {
+        try (TempFile reportsFolder = TempFile.createFolder()) {
+            JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE).randomizeProjectName();
+
+            int res = new CommandLine(new Plugin()).execute(
+                    "json-ast",
+                    "--url", CONNECTION().getUrl(),
+                    "--token", CONNECTION().getToken(),
+                    "--truststore", CA_PEM_FILE.toString(),
+                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--output", reportsFolder.toString(),
+                    "--settings-json", settings.serializeToFile().toString(),
+                    "--sarif-report-file", "sarif.json",
+                    "--giif-report-file", "giif.json");
+            Assertions.assertEquals(SUCCESS.getCode(), res);
+
+            File sarifFile = reportsFolder.toPath().resolve("sarif.json").toFile();
+            Assertions.assertTrue(sarifFile.exists());
+            SarifSchema210 sarif = createObjectMapper().readValue(sarifFile, SarifSchema210.class);
+            Assertions.assertEquals("Positive Technologies", sarif.getRuns().get(0).getTool().getDriver().getOrganization());
+
+            File giifFile = reportsFolder.toPath().resolve("giif.json").toFile();
+            Assertions.assertTrue(giifFile.exists());
+            SonarGiif.SonarGiifReport giifReport = createObjectMapper().readValue(giifFile, SonarGiif.SonarGiifReport.class);
+            Assertions.assertFalse(giifReport.getIssues().isEmpty());
         }
     }
 }

@@ -22,7 +22,19 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ScanBrief {
     public enum ApiVersion {
-        V411, V420
+        @Deprecated V36,
+        @Deprecated V40,
+        @Deprecated V41,
+        V411, V420, V430;
+
+        @SneakyThrows
+        public static boolean isDeprecated(@NonNull final ApiVersion version) {
+            return null != ApiVersion.class.getField(version.name()).getAnnotation(Deprecated.class);
+        }
+
+        public boolean isDeprecated() {
+            return isDeprecated(this);
+        }
     }
 
     @NonNull

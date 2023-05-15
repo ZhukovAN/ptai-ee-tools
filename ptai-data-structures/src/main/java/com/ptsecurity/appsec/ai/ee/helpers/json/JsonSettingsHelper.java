@@ -36,11 +36,11 @@ public class JsonSettingsHelper extends BaseJsonHelper {
 
     public void setProjectName(@NonNull final String value) {
         setStringField(root, PROJECT_NAME, value);
-    };
+    }
 
     public String getProjectName() {
         return getStringField(root, PROJECT_NAME);
-    };
+    }
 
     public JsonSettingsHelper projectName(@NonNull final String value) {
         setProjectName(value);
@@ -54,7 +54,7 @@ public class JsonSettingsHelper extends BaseJsonHelper {
             root.put(PROGRAMMING_LANGUAGE, value.name());
         else if (root.has(PROGRAMMING_LANGUAGE))
             root.remove(PROGRAMMING_LANGUAGE);
-    };
+    }
 
     public Language getProgrammingLanguage() throws GenericException {
         if (!root.has(PROGRAMMING_LANGUAGE) || StringUtils.isEmpty(root.get(PROGRAMMING_LANGUAGE).asText())) return null;
@@ -62,7 +62,7 @@ public class JsonSettingsHelper extends BaseJsonHelper {
         return call(
                 () -> Language.fromString(value),
                 "Invalid " + PROGRAMMING_LANGUAGE + " field value " + value);
-    };
+    }
 
     public JsonSettingsHelper programmingLanguage(@NonNull final Language value) {
         setProgrammingLanguage(value);

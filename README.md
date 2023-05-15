@@ -14,7 +14,7 @@ $ ./gradlew build -P jenkinsVersion=2.150.2 -P teamcityVersion=2020.1
 ### Build plugins using Docker Gradle image
 Execute ```docker run``` command in project root:
 ```
-docker run --rm -u root -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:7.1.1-jdk8 gradle build --no-daemon
+docker run --rm -u root -v "$PWD":/home/gradle/project -w /home/gradle/project gradle:7.1.1-jdk11 gradle build --no-daemon
 ```
 ### Build executable Docker container with CLI plugin
 Execute ```docker build``` command in project root:
@@ -58,20 +58,26 @@ See additional info on gradle-teamcity-plugin [page](https://github.com/rodm/gra
 All integration tests are marked as "slow", "scan", "development" and "jenkins". These tests interact with PT AI instance that is to be available via HTTPS REST API. PT AI server connection settings aren't stored in repository but are to be defined in ptai-rest-api/src/testFixtures/resources/configuration.yml file as follows:
 ```yaml
 connections:
-  ptai40: &current
-    version: V40
-    url: https://ptai4.domain.org:443/
+  ptai420:
+    version: V420
+    url: https://ptai420-server.domain.org:443
+    # CI only API token
     token: TOKEN_GOES_HERE
+    # CI and agent API token
+    failSafeToken: ANOTHER_TOKEN_GOES_HERE
     user: root
-    password: GUESS_WHAT_GOES_HERE
+    password: GUESS_WHAT
     ca: keys/domain.org.pem
     insecure: false
-  ptai36:
-    version: V36
-    url: https://ptai.domain.org:443/
+  ptai421: &current
+    version: V420
+    url: https://ptai421-server.domain.org:443
+    # CI only API token
     token: TOKEN_GOES_HERE
-    user: Administrator
-    password: GUESS_WHAT_GOES_HERE
+    # CI and agent API token
+    failSafeToken: ANOTHER_TOKEN_GOES_HERE
+    user: root
+    password: GUESS_WHAT
     ca: keys/domain.org.pem
     insecure: false
 current: *current
@@ -84,14 +90,14 @@ $ ./gradlew clean build slowTest
 ### Generic integration tests
 Generic integration tests use predefined vulnerable source packs from generic-client-lib/src/testFixtures/resources/code folder. Use following command to run these tests:
 ```
-$ ./gradlew clean build integrationTest
+$ ./gradlew clean build integrationScanTest
 ```
 ### Development integration tests
 Development integration tests aren't supposed to be started during build. Their main purpose is to launch scans and store PT AI server responses to use them as JUnit tests resources. There's no dedicated Gradle task to run these tests, those are to be executed from IDE.
 ### Jenkins integration tests
 Jenkins' integration tests use embedded Jenkins server to create AST jos and launch them. Use following command to run these tests:
 ```
-$ ./gradlew clean build jenkinsTest
+$ ./gradlew clean build integrationJenkinsTest
 ```
 ## Use advanced settings
 Some parts of plugin internal behaviour aren't accessible from UI or via CLI parameters. Those advanced settings are to be defined as key / value pairs (see AdvancedSettings.java for possible values). For example, plugins remove JWT and API tokens data from trace logs but you may override that using `logging.http.credentials` advanced setting:

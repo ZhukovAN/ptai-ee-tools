@@ -213,4 +213,11 @@
 ### 20221227
 + [Feature] PT AI v.4.2.0 support added
 + [Feature] Avanced setting ast.job.poll.interval added. Its value defines time interval in seconds between two sequential AST job status REST API calls to prevent task freeze because of lost events
-+ 
+### 20220111
++ [Feature] Connection problem diagnostic improvements. No more "API client create failed" messages
+### 20220117
++ [Fix] SARIF and GIIF report generation fixed
+### 20220126
++ [Feature] PT AI v.4.2.1 support added
+### 20220208
++ [Feature] PT AI v.4.2.2 support approved

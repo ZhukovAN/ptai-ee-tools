@@ -197,8 +197,8 @@ public class IssuesConverter {
 
     /**
      * Convert PT AI version-dependent sacn statistics into version-agnostic data
-     * @param statistic PT AI 4.1.1 scan statistics
-     * @param scanResult PT AI 4.1.1 scan result
+     * @param statistic PT AI 4.2.X scan statistics
+     * @param scanResult PT AI 4.2.X scan result
      * @return Version-independent scan statistics
      */
     public static ScanBrief.Statistics convert(
@@ -225,8 +225,8 @@ public class IssuesConverter {
     }
 
     /**
-     * Method copies generic fields data from PT AI v.4.1.1 issue to version-independent issue
-     * @param source PT AI v.4.1.1 base issue where fields data is copied from
+     * Method copies generic fields data from PT AI v.4.2.X issue to version-independent issue
+     * @param source PT AI v.4.2.X base issue where fields data is copied from
      * @param destination PT AI API version independent base issue
      */
     protected static void setBaseFields(
@@ -259,7 +259,7 @@ public class IssuesConverter {
             Map<String, String> localizedHeader = localizedIssuesHeaders.get(locale);
             String localizedTitle;
             if (IssueType.FINGERPRINT == issue.getIssueType()) {
-                // PT AI 4.1.1 SCA issues have no headers mapping
+                // PT AI 4.2.X SCA issues have no headers mapping
                 localizedTitle = (RU == locale) ? "Уязвимый компонент" : "Vulnerable component";
                 if (null != issue.getVulnerableComponent()) {
                     if (StringUtils.isNotEmpty(issue.getVulnerableComponent().getComponent())) {
@@ -281,7 +281,7 @@ public class IssuesConverter {
     }
 
     /**
-     * Method converts PT AI v.4.1.1 API issue to list of API version independent vulnerabilities
+     * Method converts PT AI v.4.2.X API issue to list of API version independent vulnerabilities
      * @param issue Base information about vulnerability. Exact descendant issue class type depends
      *                  on a propertyClass field value
      * @return PT AI API version independent vulnerability instance

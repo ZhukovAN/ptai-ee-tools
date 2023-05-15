@@ -24,7 +24,7 @@ import static com.ptsecurity.appsec.ai.ee.server.v420.api.model.Stage.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-@DisplayName("Test PT AI 4.1.1 REST API calls that require scan")
+@DisplayName("Test PT AI 4.2.X REST API calls that require scan")
 @Tag("integration")
 @Tag("scan")
 @Environment(enabledFor = { V420 })
@@ -73,7 +73,7 @@ public class ScanTest extends AbstractTest {
                 .parameters(new UserReportParametersModel()
                         .includeDFD(true)
                         .includeGlossary(true)
-                        // TODO: there's no report filters support in 4.1.1
+                        // TODO: there's no report filters support in 4.2.X
                         .useFilters(false)
                         .formatType(ReportFormatType.CUSTOM)
                         .reportTemplateId(templates.get(0).getId()))

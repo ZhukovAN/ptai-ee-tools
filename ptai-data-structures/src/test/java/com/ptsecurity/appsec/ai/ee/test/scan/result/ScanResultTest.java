@@ -31,6 +31,7 @@ public class ScanResultTest extends BaseTest {
     public void parseBricksScanResults() {
         ObjectMapper mapper = createObjectMapper();
         for (ApiVersion version : ApiVersion.values()) {
+            if (version.isDeprecated()) continue;
             String json = getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_OWASP_BRICKS.getName() + ".json.7z");
             assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);
@@ -51,6 +52,7 @@ public class ScanResultTest extends BaseTest {
     public void parsePhpSmokeScanResults() {
         ObjectMapper mapper = createObjectMapper();
         for (ApiVersion version : ApiVersion.values()) {
+            if (version.isDeprecated()) continue;
             String json = getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_SMOKE.getName() + ".json.7z");
             assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);
@@ -71,6 +73,7 @@ public class ScanResultTest extends BaseTest {
     public void serializeScanResults() {
         ObjectMapper mapper = createObjectMapper();
         for (ApiVersion version : ApiVersion.values()) {
+            if (version.isDeprecated()) continue;
             String json = getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_SMOKE.getName() + ".json.7z");
             assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);

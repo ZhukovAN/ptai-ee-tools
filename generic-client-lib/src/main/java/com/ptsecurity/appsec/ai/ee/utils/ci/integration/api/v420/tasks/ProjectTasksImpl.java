@@ -168,7 +168,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                         ProjectModel projectModel = client.getProjectsApi().apiProjectsProjectIdGet(id);
                         return projectModel.getName();
                     } catch (ApiException e) {
-                        log.trace("PT AI v.4.1.1 API returns HTTP status 400 if there's no project with given Id {}", id);
+                        log.trace("PT AI v.4.2.X API returns HTTP status 400 if there's no project with given Id {}", id);
                         if (HttpStatus.SC_BAD_REQUEST == e.getCode()) return null;
                         throw e;
                     }

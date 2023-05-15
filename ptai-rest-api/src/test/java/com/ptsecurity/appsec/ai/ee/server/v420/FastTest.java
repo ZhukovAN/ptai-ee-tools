@@ -4,15 +4,18 @@ import com.google.gson.reflect.TypeToken;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.TokenType;
 import com.ptsecurity.appsec.ai.ee.server.integration.rest.Environment;
+import com.ptsecurity.appsec.ai.ee.server.v420.api.ApiException;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.*;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.HealthCheckSummaryResult;
 import com.ptsecurity.appsec.ai.ee.server.v420.auth.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.server.v420.auth.model.AuthResultModel;
+import com.ptsecurity.appsec.ai.ee.server.v420.helpers.ApiHelper;
 import com.ptsecurity.misc.tools.Jwt;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Request;
+import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.*;
 
 import java.lang.reflect.Type;
@@ -21,12 +24,14 @@ import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V420;
 import static com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.JWT;
+import static com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.TokenType.CI;
 import static com.ptsecurity.appsec.ai.ee.server.helpers.AbstractApiHelper.checkApiCall;
 import static com.ptsecurity.appsec.ai.ee.server.v420.helpers.ApiHelper.*;
+import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-@DisplayName("Test PT AI 4.2.0 REST API calls that do not require scan")
+@DisplayName("Test PT AI 4.2.X REST API calls that do not require scan")
 @Tag("integration")
 @Environment(enabledFor = { V420 })
 public class FastTest extends AbstractTest {
@@ -101,6 +106,13 @@ public class FastTest extends AbstractTest {
     public void checkProjectNotExist() {
         Boolean projectExists = checkApiCall(() -> PROJECTS.apiProjectsNameExistsGet("junit-" + UUID.randomUUID()));
         assertFalse(projectExists);
+
+        log.trace("Check that PT AI v.4.2.X API returns HTTP status 400 if there's no project with given Id");
+        for (TokenType token : TokenType.values()) {
+            ApiHelper.setJwt(token);
+            ApiException exception = assertThrows(ApiException.class, () -> PROJECTS.apiProjectsProjectIdGet(UUID.randomUUID()));
+            assertEquals(exception.getCode(), SC_BAD_REQUEST);
+        }
     }
 
     @Test
