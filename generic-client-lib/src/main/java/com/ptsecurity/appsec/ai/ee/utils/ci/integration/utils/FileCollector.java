@@ -25,10 +25,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 import static org.apache.commons.compress.archivers.ArchiveStreamFactory.ZIP;
@@ -77,6 +74,10 @@ public class FileCollector {
 
     public static File collect(Transfers transfers, @NonNull final File dir, @NonNull final File zip, @NonNull AbstractTool owner) throws GenericException {
         return call(() -> {
+            owner.fine("Environment variables:");
+            final Map<String, String> environmentVariables = System.getenv();
+            environmentVariables.keySet().stream().sorted().forEach(key -> owner.fine("%s = %s", key, environmentVariables.get(key)));
+
             owner.fine("Create file collector");
             FileCollector collector = new FileCollector(transfers, owner);
 
