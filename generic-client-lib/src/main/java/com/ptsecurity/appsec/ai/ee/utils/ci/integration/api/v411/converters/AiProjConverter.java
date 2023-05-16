@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
-import com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.*;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
@@ -27,49 +27,34 @@ import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
 public class AiProjConverter {
-    private static final Map<AiProjScanSettings.BlackBoxScanLevel, BlackBoxScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
-    private static final Map<AiProjScanSettings.BlackBoxScanScope, ScanScope> BLACKBOX_SCAN_SCOPE_MAP = new HashMap<>();
-    private static final Map<AiProjScanSettings.Authentication.Item.Credentials.Type, AuthType> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
-    private static final Map<AiProjScanSettings.ProxySettings.Type, ProxyType> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
+    private static final Map<UnifiedAiProjScanSettings.BlackBoxScanLevel, BlackBoxScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
+    private static final Map<UnifiedAiProjScanSettings.BlackBoxScanScope, ScanScope> BLACKBOX_SCAN_SCOPE_MAP = new HashMap<>();
+    private static final Map<UnifiedAiProjScanSettings.Authentication.Item.Credentials.Type, AuthType> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
+    private static final Map<UnifiedAiProjScanSettings.ProxySettings.Type, ProxyType> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
     private static final Map<ScanResult.ScanSettings.Language, ProgrammingLanguageGroup> REVERSE_LANGUAGE_GROUP_MAP = new HashMap<>();
+    private static final Map<UnifiedAiProjScanSettings.DotNetSettings.ProjectType, DotNetProjectType> DOTNET_PROJECT_TYPE_MAP = new HashMap<>();
+    private static final Map<UnifiedAiProjScanSettings.JavaSettings.JavaVersion, JavaVersions> JAVA_VERSION_MAP = new HashMap<>();
 
-    /**
-     * Set of ScanAppType values that support abstract interpretation
-     */
-    private static final Set<com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings.ScanAppType> SCAN_APP_TYPE_AI = new HashSet<>(Arrays.asList(
-            com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings.ScanAppType.PHP,
-            com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings.ScanAppType.JAVA,
-            com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings.ScanAppType.CSHARP,
-            com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings.ScanAppType.JAVASCRIPT));
-    /**
-     * Set of programming languages values that support abstract interpretation
-     */
-    private static final Set<ScanBrief.ScanSettings.Language> LANGUAGE_AI = new HashSet<>(Arrays.asList(
-            ScanBrief.ScanSettings.Language.PHP,
-            ScanBrief.ScanSettings.Language.JAVA,
-            ScanBrief.ScanSettings.Language.CSHARP,
-            ScanBrief.ScanSettings.Language.VB,
-            ScanBrief.ScanSettings.Language.JAVASCRIPT));
 
     static {
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NONE, BlackBoxScanLevel.NONE);
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FAST, BlackBoxScanLevel.FAST);
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.NORMAL, BlackBoxScanLevel.NORMAL);
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiProjScanSettings.BlackBoxScanLevel.FULL, BlackBoxScanLevel.FULL);
+        BLACKBOX_SCAN_LEVEL_MAP.put(UnifiedAiProjScanSettings.BlackBoxScanLevel.NONE, BlackBoxScanLevel.NONE);
+        BLACKBOX_SCAN_LEVEL_MAP.put(UnifiedAiProjScanSettings.BlackBoxScanLevel.FAST, BlackBoxScanLevel.FAST);
+        BLACKBOX_SCAN_LEVEL_MAP.put(UnifiedAiProjScanSettings.BlackBoxScanLevel.NORMAL, BlackBoxScanLevel.NORMAL);
+        BLACKBOX_SCAN_LEVEL_MAP.put(UnifiedAiProjScanSettings.BlackBoxScanLevel.FULL, BlackBoxScanLevel.FULL);
 
-        BLACKBOX_SCAN_SCOPE_MAP.put(AiProjScanSettings.BlackBoxScanScope.DOMAIN, ScanScope.DOMAIN);
-        BLACKBOX_SCAN_SCOPE_MAP.put(AiProjScanSettings.BlackBoxScanScope.FOLDER, ScanScope.FOLDER);
-        BLACKBOX_SCAN_SCOPE_MAP.put(AiProjScanSettings.BlackBoxScanScope.PATH, ScanScope.PATH);
+        BLACKBOX_SCAN_SCOPE_MAP.put(UnifiedAiProjScanSettings.BlackBoxScanScope.DOMAIN, ScanScope.DOMAIN);
+        BLACKBOX_SCAN_SCOPE_MAP.put(UnifiedAiProjScanSettings.BlackBoxScanScope.FOLDER, ScanScope.FOLDER);
+        BLACKBOX_SCAN_SCOPE_MAP.put(UnifiedAiProjScanSettings.BlackBoxScanScope.PATH, ScanScope.PATH);
 
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.FORM, AuthType.FORM);
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.HTTP, AuthType.HTTP);
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.NONE, AuthType.NONE);
-        BLACKBOX_AUTH_TYPE_MAP.put(AiProjScanSettings.Authentication.Item.Credentials.Type.COOKIE, AuthType.RAWCOOKIE);
+        BLACKBOX_AUTH_TYPE_MAP.put(UnifiedAiProjScanSettings.Authentication.Item.Credentials.Type.FORM, AuthType.FORM);
+        BLACKBOX_AUTH_TYPE_MAP.put(UnifiedAiProjScanSettings.Authentication.Item.Credentials.Type.HTTP, AuthType.HTTP);
+        BLACKBOX_AUTH_TYPE_MAP.put(UnifiedAiProjScanSettings.Authentication.Item.Credentials.Type.NONE, AuthType.NONE);
+        BLACKBOX_AUTH_TYPE_MAP.put(UnifiedAiProjScanSettings.Authentication.Item.Credentials.Type.COOKIE, AuthType.RAWCOOKIE);
 
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.HTTP, ProxyType.HTTP);
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.HTTPNOCONNECT, ProxyType.HTTPNOCONNECT);
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.SOCKS4, ProxyType.SOCKS4);
-        BLACKBOX_PROXY_TYPE_MAP.put(AiProjScanSettings.ProxySettings.Type.SOCKS5, ProxyType.SOCKS5);
+        BLACKBOX_PROXY_TYPE_MAP.put(UnifiedAiProjScanSettings.ProxySettings.Type.HTTP, ProxyType.HTTP);
+        BLACKBOX_PROXY_TYPE_MAP.put(UnifiedAiProjScanSettings.ProxySettings.Type.HTTPNOCONNECT, ProxyType.HTTPNOCONNECT);
+        BLACKBOX_PROXY_TYPE_MAP.put(UnifiedAiProjScanSettings.ProxySettings.Type.SOCKS4, ProxyType.SOCKS4);
+        BLACKBOX_PROXY_TYPE_MAP.put(UnifiedAiProjScanSettings.ProxySettings.Type.SOCKS5, ProxyType.SOCKS5);
 
         REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.CPP, ProgrammingLanguageGroup.CANDCPLUSPLUS);
         REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.GO, ProgrammingLanguageGroup.GO);
@@ -83,13 +68,20 @@ public class AiProjConverter {
         REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.VB, ProgrammingLanguageGroup.VB);
         REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.PHP, ProgrammingLanguageGroup.PHP);
         REVERSE_LANGUAGE_GROUP_MAP.put(ScanBrief.ScanSettings.Language.OBJECTIVEC, ProgrammingLanguageGroup.OBJECTIVEC);
+
+        DOTNET_PROJECT_TYPE_MAP.put(UnifiedAiProjScanSettings.DotNetSettings.ProjectType.NONE, DotNetProjectType.NONE);
+        DOTNET_PROJECT_TYPE_MAP.put(UnifiedAiProjScanSettings.DotNetSettings.ProjectType.SOLUTION, DotNetProjectType.SOLUTION);
+        DOTNET_PROJECT_TYPE_MAP.put(UnifiedAiProjScanSettings.DotNetSettings.ProjectType.WEBSITE, DotNetProjectType.WEBSITE);
+
+        JAVA_VERSION_MAP.put(UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8, JavaVersions.v1_8);
+        JAVA_VERSION_MAP.put(UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11, JavaVersions.v1_11);
     }
 
-    protected static WhiteBoxSettingsModel apply(@NonNull final AiProjScanSettings settings, @NonNull WhiteBoxSettingsModel model) {
+    protected static WhiteBoxSettingsModel apply(@NonNull final UnifiedAiProjScanSettings settings, @NonNull WhiteBoxSettingsModel model) {
         log.trace("Parse AIPROJ vulnerability search modules list");
         // Vulnerability search modules. Possible values are: Php, Java, CSharp, Configuration,
         // Fingerprint (includes DependencyCheck), PmTaint , BlackBox, JavaScript
-        Set<AiProjScanSettings.ScanAppType> scanAppTypes = Arrays.stream(settings.getScanAppType().split("[, ]+"))
+        Set<UnifiedAiProjScanSettings.ScanAppType> scanAppTypes = Arrays.stream(settings.getScanAppType().split("[, ]+"))
                 .map(AiProjScanSettings.ScanAppType::from)
                 .collect(Collectors.toSet());
 
@@ -208,35 +200,35 @@ public class AiProjConverter {
 
     @SneakyThrows
     protected static JavaSettingsModel apply(
-            @NonNull final AiProjScanSettings settings,
+            @NonNull final UnifiedAiProjScanSettings settings,
             @NonNull final JavaSettingsModel model) {
+        if (null == settings.getJavaSettings()) return model;
+        UnifiedAiProjScanSettings.JavaSettings javaSettings = settings.getJavaSettings();
         // Set isUnpackUserJarFiles
-        model.setUnpackUserPackages(settings.getIsUnpackUserPackages());
+        model.setUnpackUserPackages(javaSettings.isUnpackUserPackages());
         // Set userPackagePrefixes and launchJvmParameters
         log.trace("Try to extract user package prefixes from Java parameters");
         // noinspection ConstantConditions
         do {
-            if (StringUtils.isEmpty(settings.getJavaParameters())) break;
-            JavaParametersParseResult parseResult = parseJavaParameters(settings.getJavaParameters());
+            if (StringUtils.isEmpty(javaSettings.getParameters())) break;
+            JavaParametersParseResult parseResult = parseJavaParameters(javaSettings.getParameters());
             if (null == parseResult) break;
             model.setUserPackagePrefixes(parseResult.getPrefixes());
             model.setParameters(parseResult.getOther());
         } while (false);
         // Set jdkVersion
-        model.setVersion(0 == settings.getJavaVersion() ? JavaVersions.v1_8 : JavaVersions.v1_11);
+        model.setVersion(JAVA_VERSION_MAP.getOrDefault(javaSettings.getJavaVersion(), JavaVersions.v1_8));
         return model;
     }
 
     @SneakyThrows
     protected static DotNetSettingsModel apply(
-            @NonNull final AiProjScanSettings settings,
+            @NonNull final UnifiedAiProjScanSettings settings,
             @NonNull final DotNetSettingsModel model) {
+        if (null == settings.getJavaSettings()) return model;
+        UnifiedAiProjScanSettings.JavaSettings javaSettings = settings.getJavaSettings();
         // Set projectType
-        model.setProjectType(
-                DotNetProjectType.SOLUTION.getValue().equalsIgnoreCase(settings.getProjectType())
-                        ? DotNetProjectType.SOLUTION
-                        : DotNetProjectType.WEBSITE.getValue().equalsIgnoreCase(settings.getProjectType())
-                        ? DotNetProjectType.WEBSITE : DotNetProjectType.NONE);
+        model.setProjectType(DOTNET_PROJECT_TYPE_MAP.getOrDefault(settings.getProjectType(), DotNetProjectType.NONE);
         // In PT AI v.4.1 solution file is to be defined as "./solution.sln" instead of "solution.sln"
         String solutionFile = settings.getSolutionFile();
         do {
@@ -253,9 +245,9 @@ public class AiProjConverter {
 
     @SneakyThrows
     protected static ComponentsSettingsModel apply(
-            @NonNull final AiProjScanSettings settings,
+            @NonNull final UnifiedAiProjScanSettings settings,
             @NonNull final ComponentsSettingsModel model) {
-        return model.useCustomYaraRules(settings.getUseCustomYaraRules());
+        return model.useCustomYaraRules(settings.isUseCustomYaraRules());
     }
 
     /**
@@ -266,7 +258,7 @@ public class AiProjConverter {
      */
     @SneakyThrows
     public static ProjectSettingsModel apply(
-            @NonNull final AiProjScanSettings settings,
+            @NonNull final UnifiedAiProjScanSettings settings,
             @NonNull final ProjectSettingsModel model) {
         log.trace("Set base project settings");
         // Set projectSource
@@ -280,11 +272,11 @@ public class AiProjConverter {
         // Set launchParameters
         model.setLaunchParameters(settings.getCustomParameters());
         //Set useAvailablePublicAndProtectedMethods
-        model.setUseAvailablePublicAndProtectedMethods(settings.getIsUsePublicAnalysisMethod());
+        model.setUseAvailablePublicAndProtectedMethods(settings.isUsePublicAnalysisMethod());
         // Set isLoadDependencies
-        model.setDownloadDependencies(settings.getIsDownloadDependencies());
+        model.setDownloadDependencies(settings.isDownloadDependencies());
         // Set javaSettings
-        model.setJavaSettings(apply(settings, new JavaSettingsModel()));
+        model.setJavaSettings(apply(settings.getJavaSettings(), new JavaSettingsModel()));
         // Set .NET
         model.setDotNetSettings(apply(settings, new DotNetSettingsModel()));
         // Set DC

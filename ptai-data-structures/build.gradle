@@ -43,10 +43,12 @@ jsonSchema2Pojo {
     source = files("${sourceSets.main.output.resourcesDir}/aiproj/schema")
     targetDirectory = file("${project.buildDir}/generated/sources/jsonSchema2Pojo")
     targetPackage = 'com.ptsecurity.appsec.ai.ee.scan.settings.aiproj'
-    generateBuilders = true
+    generateBuilders = false
+    includeGetters = false
+    includeSetters = false
     includeAdditionalProperties = false
     includeJsr305Annotations = true
     setAnnotationStyle("jackson2")
-    includeHashcodeAndEquals = true
-    includeToString = true
+    includeHashcodeAndEquals = false
+    includeToString = false
 }

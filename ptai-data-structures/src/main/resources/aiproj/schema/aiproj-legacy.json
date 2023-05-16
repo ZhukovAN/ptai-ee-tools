@@ -520,6 +520,7 @@
   },
   "required": [
     "ProjectName",
-    "ProgrammingLanguage"
+    "ProgrammingLanguage",
+    "ScanAppType"
   ]
 }
