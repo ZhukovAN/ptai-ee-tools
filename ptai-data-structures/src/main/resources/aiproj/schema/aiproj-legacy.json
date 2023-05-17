@@ -51,34 +51,30 @@
     "SkipFileFormats": {
       "description": "File extensions to be excluded from scan process",
       "type": "array",
-      "items": [
-        {
-          "type": "string"
-        }
-      ]
+      "items": {
+        "type": "string"
+      }
     },
     "SkipFilesFolders": {
       "description": "Folder names to exclude from scan process",
       "type": "array",
-      "items": [
-        {
-          "type": "string"
-        }
-      ]
+      "items": {
+        "type": "string"
+      }
     },
     "DisabledPatterns": {
       "description": "As not all the patterns may be applied to any language there's need to define set of disabled patterns. Plugin downloads patterns metadata from PT AI server and automatically sets list of disabled patterns in accordance with programming language. But user may extend this list using this parameter",
       "type": "array",
-      "items": [
-        {
-          "type": "string"
-        }
-      ]
+      "items": {
+        "type": "string"
+      }
     },
     "DisabledTypes": {
       "description": "Типы проверок исходных кодов, которые не будут выполняться в ходе анализа",
       "type": "array",
-      "items": {}
+      "items": {
+        "type": "string"
+      }
     },
     "ConsiderPreviousScan": {
       "type": "boolean"
@@ -153,19 +149,12 @@
     },
     "CustomHeaders": {
       "type": "array",
-      "items": [
-        {
-          "type": "array",
-          "items": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "string"
-            }
-          ]
+      "items": {
+        "type": "array",
+        "items": {
+            "type": "string"
         }
-      ]
+      }
     },
     "Authentication": {
       "type": "object",
@@ -277,28 +266,23 @@
           "type": "boolean"
         },
         "Host": {
-          "type": "null"
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
         },
         "Port": {
-          "type": "null"
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
         },
         "Type": {
-          "type": "integer"
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
         },
         "Username": {
-          "type": "null"
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
         },
         "Password": {
-          "type": "null"
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
         }
       },
       "required": [
-        "IsEnabled",
-        "Host",
-        "Port",
-        "Type",
-        "Username",
-        "Password"
+        "IsEnabled"
       ]
     },
     "RunAutocheckAfterScan": {

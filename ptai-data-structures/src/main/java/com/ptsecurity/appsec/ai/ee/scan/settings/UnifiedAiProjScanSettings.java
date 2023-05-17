@@ -2,9 +2,8 @@ package com.ptsecurity.appsec.ai.ee.scan.settings;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -41,8 +40,11 @@ public interface UnifiedAiProjScanSettings {
     String getCustomParameters();
 
     @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
     class DotNetSettings {
-        enum ProjectType {
+        public enum ProjectType {
             NONE, SOLUTION, WEBSITE
         }
         protected ProjectType projectType;
@@ -50,11 +52,15 @@ public interface UnifiedAiProjScanSettings {
     }
     DotNetSettings getDotNetSettings();
 
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
     class JavaSettings {
         protected String parameters;
         protected Boolean unpackUserPackages;
         protected String userPackagePrefixes;
-        enum JavaVersion {
+        public enum JavaVersion {
             v1_8, v1_11
         }
         protected JavaSettings.JavaVersion javaVersion;
@@ -74,6 +80,9 @@ public interface UnifiedAiProjScanSettings {
     @NonNull Boolean isDownloadDependencies();
 
     @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
     class MailingProjectSettings {
         @NonNull protected Boolean enabled;
         protected String mailProfileName;
@@ -81,10 +90,18 @@ public interface UnifiedAiProjScanSettings {
     }
     MailingProjectSettings getMailingProjectSettings();
 
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     class BlackBoxSettings {
         protected List<Pair<String, String>> additionalHttpHeaders;
 
         @Getter
+        @Setter
+        @Builder
+        @AllArgsConstructor
         public static class ListItem {
             enum Format {
                 WILDCARD, EXACTMATCH, REGEXP
@@ -95,7 +112,7 @@ public interface UnifiedAiProjScanSettings {
         protected List<ListItem> whiteListedAddresses;
         protected List<ListItem> blackListedAddresses;
 
-        enum ScanLevel {
+        public enum ScanLevel {
             NONE,
             FAST,
             FULL,
@@ -103,7 +120,7 @@ public interface UnifiedAiProjScanSettings {
         }
         protected ScanLevel scanLevel;
 
-        enum ScanScope {
+        public enum ScanScope {
             FOLDER,
             DOMAIN,
             PATH
@@ -117,23 +134,30 @@ public interface UnifiedAiProjScanSettings {
         protected Boolean runAutocheckAfterScan;
 
         @Getter
-        static class ProxySettings {
+        @Setter
+        @Builder
+        @AllArgsConstructor
+        public static class ProxySettings {
             Boolean enabled;
             String host;
             String login;
             String password;
-            int port;
+            Integer port;
 
-            enum Type {
-                HTTP, SOCKS4, SOCKS5
+            public enum Type {
+                HTTP, HTTPNOCONNECT, SOCKS4, SOCKS5
             }
             Type type;
         }
         protected ProxySettings proxySettings;
 
         @Getter
-        static class Authentication {
-            enum Type {
+        @Setter
+        @SuperBuilder
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class Authentication {
+            public enum Type {
                 FORM,
                 HTTP,
                 NONE,
@@ -142,20 +166,32 @@ public interface UnifiedAiProjScanSettings {
             protected Type type;
         }
         @Getter
-        static class CookieAuthentication extends Authentication {
+        @Setter
+        @SuperBuilder
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class CookieAuthentication extends Authentication {
             protected String cookie;
             protected String validationAddress;
             protected String validationTemplate;
         }
         @Getter
-        static class HttpAuthentication extends Authentication {
+        @Setter
+        @SuperBuilder
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class HttpAuthentication extends Authentication {
             protected String login;
             protected String password;
             protected String validationAddress;
         }
         @Getter
-        static class FormAuthentication extends Authentication {
-            enum Detection { AUTO, MANUAL }
+        @Setter
+        @SuperBuilder
+        @NoArgsConstructor
+        @AllArgsConstructor
+        public static class FormAuthentication extends Authentication {
+            public enum Detection { AUTO, MANUAL }
             protected Detection detection;
             protected String formAddress;
             protected String login;
@@ -163,12 +199,21 @@ public interface UnifiedAiProjScanSettings {
             protected String validationAddress;
             protected String validationTemplate;
         }
-        static class FormAuthenticationAuto extends FormAuthentication {}
-        static class FormAuthenticationManual extends FormAuthentication {
+        @Getter
+        @Setter
+        @SuperBuilder
+        @AllArgsConstructor
+        public static class FormAuthenticationAuto extends FormAuthentication {}
+        @Getter
+        @Setter
+        @SuperBuilder
+        @AllArgsConstructor
+        public static class FormAuthenticationManual extends FormAuthentication {
             protected String loginKey;
             protected String passwordKey;
             protected String xPath;
         }
         protected Authentication authentication;
     }
+    BlackBoxSettings getBlackBoxSettings();
 }
