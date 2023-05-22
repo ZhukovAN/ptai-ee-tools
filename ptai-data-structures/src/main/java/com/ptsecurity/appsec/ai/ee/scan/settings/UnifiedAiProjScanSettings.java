@@ -49,6 +49,7 @@ public interface UnifiedAiProjScanSettings {
         }
         protected ProjectType projectType;
         protected String solutionFile;
+        protected String webSiteFolder;
     }
     DotNetSettings getDotNetSettings();
 
@@ -96,7 +97,9 @@ public interface UnifiedAiProjScanSettings {
     @NoArgsConstructor
     @AllArgsConstructor
     class BlackBoxSettings {
-        protected List<Pair<String, String>> additionalHttpHeaders;
+        protected List<Pair<String, String>> httpHeaders;
+        @Deprecated
+        protected List<Pair<String, String>> autocheckHttpHeaders;
 
         @Getter
         @Setter
@@ -133,6 +136,9 @@ public interface UnifiedAiProjScanSettings {
 
         protected Boolean runAutocheckAfterScan;
 
+        @Deprecated
+        protected String autocheckSite;
+
         @Getter
         @Setter
         @Builder
@@ -150,6 +156,8 @@ public interface UnifiedAiProjScanSettings {
             Type type;
         }
         protected ProxySettings proxySettings;
+        @Deprecated
+        protected ProxySettings autocheckProxySettings;
 
         @Getter
         @Setter
@@ -163,7 +171,9 @@ public interface UnifiedAiProjScanSettings {
                 NONE,
                 COOKIE;
             }
-            protected Type type;
+            @NonNull
+            @Builder.Default
+            protected Type type = Type.NONE;
         }
         @Getter
         @Setter
@@ -214,6 +224,8 @@ public interface UnifiedAiProjScanSettings {
             protected String xPath;
         }
         protected Authentication authentication;
+        @Deprecated
+        protected Authentication autocheckAuthentication;
     }
     BlackBoxSettings getBlackBoxSettings();
 }

@@ -1,9 +1,12 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings.legacy;
 
+import com.ptsecurity.appsec.ai.ee.helpers.aiproj.AiProjHelper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.AiprojLegacy;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.AuthItem;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.Authentication;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.ProxySettings;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,8 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,8 +24,10 @@ import java.util.stream.Collectors;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
 import static java.lang.Boolean.TRUE;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Slf4j
+@SuppressWarnings({"deprecation"})
 public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjScanSettings {
     @Override
     public @NonNull String getProjectName() {
@@ -79,7 +85,10 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
 
     private static final Map<AiprojLegacy.ProgrammingLanguage, ScanBrief.ScanSettings.Language> PROGRAMMING_LANGUAGE_MAP = new HashMap<>();
     private static final Map<AiprojLegacy.ProjectType, UnifiedAiProjScanSettings.DotNetSettings.ProjectType> DOTNET_PROJECT_TYPE_MAP = new HashMap<>();
-    private static final Map<Integer, BlackBoxSettings.ProxySettings.Type> PROXY_TYPE_MAP = new HashMap<>();
+    private static final Map<Integer, BlackBoxSettings.ProxySettings.Type> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
+    private static final Map<AiprojLegacy.Level, BlackBoxSettings.ScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
+    private static final Map<Integer, UnifiedAiProjScanSettings.BlackBoxSettings.Authentication.Type> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
+
 
     static {
         PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.C_PLUS_PLUS, ScanBrief.ScanSettings.Language.CPP);
@@ -99,10 +108,20 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
         DOTNET_PROJECT_TYPE_MAP.put(ProjectType.SOLUTION, DotNetSettings.ProjectType.SOLUTION);
         DOTNET_PROJECT_TYPE_MAP.put(ProjectType.WEB_SITE, DotNetSettings.ProjectType.WEBSITE);
 
-        PROXY_TYPE_MAP.put(0, BlackBoxSettings.ProxySettings.Type.HTTP);
-        PROXY_TYPE_MAP.put(1, BlackBoxSettings.ProxySettings.Type.HTTPNOCONNECT);
-        PROXY_TYPE_MAP.put(2, BlackBoxSettings.ProxySettings.Type.SOCKS4);
-        PROXY_TYPE_MAP.put(3, BlackBoxSettings.ProxySettings.Type.SOCKS5);
+        BLACKBOX_PROXY_TYPE_MAP.put(0, BlackBoxSettings.ProxySettings.Type.HTTP);
+        BLACKBOX_PROXY_TYPE_MAP.put(1, BlackBoxSettings.ProxySettings.Type.HTTPNOCONNECT);
+        BLACKBOX_PROXY_TYPE_MAP.put(2, BlackBoxSettings.ProxySettings.Type.SOCKS4);
+        BLACKBOX_PROXY_TYPE_MAP.put(3, BlackBoxSettings.ProxySettings.Type.SOCKS5);
+
+        BLACKBOX_SCAN_LEVEL_MAP.put(Level.NONE, BlackBoxSettings.ScanLevel.NONE);
+        BLACKBOX_SCAN_LEVEL_MAP.put(Level.FAST, BlackBoxSettings.ScanLevel.FAST);
+        BLACKBOX_SCAN_LEVEL_MAP.put(Level.NORMAL, BlackBoxSettings.ScanLevel.NORMAL);
+        BLACKBOX_SCAN_LEVEL_MAP.put(Level.FULL, BlackBoxSettings.ScanLevel.FULL);
+
+        BLACKBOX_AUTH_TYPE_MAP.put(0, BlackBoxSettings.Authentication.Type.FORM);
+        BLACKBOX_AUTH_TYPE_MAP.put(1, BlackBoxSettings.Authentication.Type.HTTP);
+        BLACKBOX_AUTH_TYPE_MAP.put(2, BlackBoxSettings.Authentication.Type.NONE);
+        BLACKBOX_AUTH_TYPE_MAP.put(3, BlackBoxSettings.Authentication.Type.COOKIE);
     }
 
     @Override
@@ -113,19 +132,93 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
         // See internal wiki pageId=193599549
-        // "Vulnerable source code" checkbox means that we either enabled AI-supported PHP / Java / C# / JS scan mode ...
-        boolean abstractIntrepretationCoreUsed = scanAppTypes.stream().anyMatch(SCAN_APP_TYPE_AI::contains);
+        // "Vulnerable authentication code" checkbox means that we either enabled AI-supported PHP / Java / C# / JS scan mode ...
+        boolean abstractInterpretationCoreUsed = scanAppTypes.stream().anyMatch(SCAN_APP_TYPE_AI::contains);
         // ... or all other languages with PmTaint / UseTaintAnalysis enabled
         boolean taintOnlyLanguageUsed = !LANGUAGE_AI.contains(getProgrammingLanguage())
                 && scanAppTypes.contains(ScanAppType.PMTAINT)
                 && TRUE.equals(useTaintAnalysis);
-        if (abstractIntrepretationCoreUsed || taintOnlyLanguageUsed) res.add(ScanModule.VULNERABLESOURCECODE);
-        if (TRUE.equals(useTaintAnalysis) && scanAppTypes.contains(ScanAppType.PMTAINT)) res.add(ScanModule.DATAFLOWANALYSIS);
-        if (TRUE.equals(usePmAnalysis) && scanAppTypes.contains(ScanAppType.PMTAINT)) res.add(ScanModule.PATTERNMATCHING);
+        if (abstractInterpretationCoreUsed || taintOnlyLanguageUsed) res.add(ScanModule.VULNERABLESOURCECODE);
+        if (TRUE.equals(useTaintAnalysis) && scanAppTypes.contains(ScanAppType.PMTAINT))
+            res.add(ScanModule.DATAFLOWANALYSIS);
+        if (TRUE.equals(usePmAnalysis) && scanAppTypes.contains(ScanAppType.PMTAINT))
+            res.add(ScanModule.PATTERNMATCHING);
         if (scanAppTypes.contains(ScanAppType.CONFIGURATION)) res.add(ScanModule.CONFIGURATION);
         if (scanAppTypes.contains(ScanAppType.BLACKBOX)) res.add(ScanModule.BLACKBOX);
-        if (scanAppTypes.contains(ScanAppType.DEPENDENCYCHECK) || scanAppTypes.contains(ScanAppType.FINGERPRINT)) res.add(ScanModule.COMPONENTS);
+        if (scanAppTypes.contains(ScanAppType.DEPENDENCYCHECK) || scanAppTypes.contains(ScanAppType.FINGERPRINT))
+            res.add(ScanModule.COMPONENTS);
         return res;
+    }
+
+    private BlackBoxSettings.ProxySettings convert(@NonNull final ProxySettings proxySettings) {
+        return BlackBoxSettings.ProxySettings.builder()
+                .enabled(TRUE.equals(proxySettings.isEnabled))
+                .type(BLACKBOX_PROXY_TYPE_MAP.get(proxySettings.type))
+                .host(proxySettings.host)
+                .port(proxySettings.port)
+                .login(proxySettings.username)
+                .password(proxySettings.password)
+                .build();
+    }
+
+    private BlackBoxSettings.Authentication convert(final Authentication authentication) {
+        log.trace("Check if AIPROJ authentication field is defined");
+        if (null == authentication || null == authentication.authItem || null == authentication.authItem.credentials)
+            return new BlackBoxSettings.Authentication();
+        @NonNull AuthItem authItem = authentication.authItem;
+        BlackBoxSettings.Authentication.Type authType = BLACKBOX_AUTH_TYPE_MAP.getOrDefault(authItem.credentials.type, BlackBoxSettings.Authentication.Type.NONE);
+
+        if (BlackBoxSettings.Authentication.Type.FORM == authType)
+            return isEmpty(authItem.formXpath)
+                    ? BlackBoxSettings.FormAuthenticationAuto.builder()
+                    .type(authType)
+                    .formAddress(authItem.formUrl)
+                    .login(null != authItem.credentials.login ? authItem.credentials.login.value : null)
+                    .password(null != authItem.credentials.password ? authItem.credentials.password.value : null)
+                    .validationTemplate(authItem.regexpOfSuccess)
+                    .build()
+                    : BlackBoxSettings.FormAuthenticationManual.builder()
+                    .type(authType)
+                    .formAddress(authItem.formUrl)
+                    .xPath(authItem.formXpath)
+                    .loginKey(null != authItem.credentials.login ? authItem.credentials.login.name : null)
+                    .login(null != authItem.credentials.login ? authItem.credentials.login.value : null)
+                    .passwordKey(null != authItem.credentials.password ? authItem.credentials.password.name : null)
+                    .password(null != authItem.credentials.password ? authItem.credentials.password.value : null)
+                    .validationTemplate(authItem.regexpOfSuccess)
+                    .build();
+        else if (BlackBoxSettings.Authentication.Type.HTTP == authType)
+            return BlackBoxSettings.HttpAuthentication.builder()
+                    .login(null != authItem.credentials.login ? authItem.credentials.login.value : null)
+                    .password(null != authItem.credentials.password ? authItem.credentials.password.value : null)
+                    .validationAddress(authItem.testUrl)
+                    .build();
+        else if (BlackBoxSettings.Authentication.Type.COOKIE == authType)
+            return BlackBoxSettings.CookieAuthentication.builder()
+                    .cookie(authItem.credentials.cookie)
+                    .validationAddress(authItem.testUrl)
+                    .validationTemplate(authItem.regexpOfSuccess)
+                    .build();
+        else
+            return new BlackBoxSettings.Authentication();
+    }
+
+    private List<Pair<String, String>> convert(@NonNull final List<List<String>> headers) {
+        List<Pair<String, String>> res = new ArrayList<>();
+        for (List<String> headerNameAndValues : headers) {
+            if (CollectionUtils.isEmpty(headerNameAndValues)) {
+                log.trace("Skip empty headers");
+                continue;
+            }
+            if (isEmpty(headerNameAndValues.get(0))) {
+                log.trace("Skip header with empty name");
+                continue;
+            }
+            for (int i = 1; i < headerNameAndValues.size(); i++)
+                res.add(
+                        new ImmutablePair<>(headerNameAndValues.get(0), headerNameAndValues.get(i)));
+        }
+        return CollectionUtils.isEmpty(res) ? null : res;
     }
 
     @Override
@@ -133,31 +226,27 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
         if (!getScanModules().contains(ScanModule.BLACKBOX)) return null;
 
         BlackBoxSettings blackBoxSettings = new BlackBoxSettings();
-        if (null != this.proxySettings)
-            blackBoxSettings.setProxySettings(BlackBoxSettings.ProxySettings.builder()
-                    .enabled(TRUE.equals(proxySettings.isEnabled))
-                    .type(PROXY_TYPE_MAP.get(proxySettings.type))
-                    .host(proxySettings.host)
-                    .port(proxySettings.port)
-                    .login(proxySettings.username)
-                    .password(proxySettings.password)
-                    .build());
-        if (null != customHeaders) {
-            blackBoxSettings.setAdditionalHttpHeaders(new ArrayList<>());
-            for (List<String> header : customHeaders) {
-                List<String> nonEmptyHeaders = header.stream().filter(StringUtils::isNotEmpty).collect(Collectors.toList());
-                if (CollectionUtils.isEmpty(nonEmptyHeaders)) {
-                    log.trace("Skip empty header");
-                    continue;
-                }
 
-                if (2 > nonEmptyHeaders.size()) {
-                    log.trace("Skip {} header as there's no value defined", nonEmptyHeaders.);
-                }
+        if (null != level) blackBoxSettings.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.get(level));
+        blackBoxSettings.setRunAutocheckAfterScan(TRUE.equals(runAutocheckAfterScan));
 
+        blackBoxSettings.setSite(site);
+        if (null != proxySettings)
+            blackBoxSettings.setProxySettings(convert(proxySettings));
+        if (null != customHeaders)
+            blackBoxSettings.setHttpHeaders(convert(customHeaders));
+        if (null != authentication)
+            blackBoxSettings.setAuthentication(convert(authentication));
 
-            }
-        }
+        if (!blackBoxSettings.getRunAutocheckAfterScan()) return blackBoxSettings;
+
+        blackBoxSettings.setAutocheckSite(autocheckSite);
+        if (null != autocheckProxySettings)
+            blackBoxSettings.setAutocheckProxySettings(convert(autocheckProxySettings));
+        if (null != autocheckCustomHeaders)
+            blackBoxSettings.setAutocheckHttpHeaders(convert(autocheckCustomHeaders));
+        if (null != this.autocheckAuthentication)
+            blackBoxSettings.setAutocheckAuthentication(convert(autocheckAuthentication));
         return blackBoxSettings;
     }
 
@@ -178,18 +267,22 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
 
     @Override
     public DotNetSettings getDotNetSettings() {
+
         return DotNetSettings.builder()
-                .solutionFile(solutionFile)
+                .solutionFile(AiProjHelper.fixSolutionFile(solutionFile))
+                .webSiteFolder(webSiteFolder)
                 .projectType(DOTNET_PROJECT_TYPE_MAP.getOrDefault(projectType, DotNetSettings.ProjectType.NONE))
                 .build();
     }
 
     @Override
     public JavaSettings getJavaSettings() {
+        AiProjHelper.JavaParametersParseResult parseResult = AiProjHelper.parseJavaParameters(javaParameters);
         return JavaSettings.builder()
-                .parameters(javaParameters)
                 .unpackUserPackages(TRUE.equals(isUnpackUserPackages))
+                .userPackagePrefixes(null == parseResult ? null : parseResult.getPrefixes())
                 .javaVersion(AiprojLegacy.JavaVersion._0.equals(javaVersion) ? v1_8 : v1_11)
+                .parameters(null == parseResult ? null : parseResult.getOther())
                 .build();
     }
 
@@ -226,6 +319,7 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
 
     @Override
     public void load(@NonNull String data) throws GenericException {
+        JsonPath
 
     }
 

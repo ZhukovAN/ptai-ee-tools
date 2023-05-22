@@ -1,6 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.converters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ptsecurity.appsec.ai.ee.helpers.json.AiProjHelper;
+import com.ptsecurity.appsec.ai.ee.helpers.json.AiProjHelper.JavaParametersParseResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
@@ -20,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.ptsecurity.appsec.ai.ee.helpers.json.AiProjHelper.parseJavaParameters;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.DEPENDENCYCHECK;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.FINGERPRINT;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
@@ -153,57 +156,6 @@ public class AiProjConverter {
     @NonNull
     public static ProgrammingLanguageGroup convertLanguageGroup(@NonNull final ScanResult.ScanSettings.Language language) {
         return REVERSE_LANGUAGE_GROUP_MAP.getOrDefault(language, ProgrammingLanguageGroup.NONE);
-    }
-
-    @AllArgsConstructor
-    @Getter
-    protected static class JavaParametersParseResult {
-        protected String prefixes;
-        protected String other;
-    }
-
-    /**
-     * @param javaParameters Java CLI parameters that are passed to Java scanning core
-     * @return CLI parameters split into two parts: {@link JavaParametersParseResult#prefixes user package prefixes}
-     * and {@link JavaParametersParseResult#other remaining part of CLI}
-     */
-    protected static JavaParametersParseResult parseJavaParameters(final String javaParameters) {
-        if (StringUtils.isEmpty(javaParameters)) return null;
-        log.trace("Split Java parameters string using 'quote-safe' regular expression");
-        String[] parameters = javaParameters.split("(\"[^\"]*\")|(\\S+)");
-        if (0 == parameters.length) return null;
-        log.trace("Parse Java parameters");
-        List<String> commands = new ArrayList<>();
-        Map<String, List<String>> arguments = new HashMap<>();
-        for (int i = 0 ; i < parameters.length ; i++) {
-            log.trace("Iterate through commands");
-            if (!parameters[i].startsWith("-")) continue;
-            if (parameters.length - 1 == i)
-                // If this is last token just add it as command
-                commands.add(parameters[i]);
-            else if (parameters[i + 1].startsWith("-"))
-                // Next token is a command too
-                commands.add(parameters[i]);
-            else {
-                List<String> argumentValues = new ArrayList<>();
-                for (int j = i + 1; j < parameters.length; j++)
-                    if (!parameters[j].startsWith("-")) argumentValues.add(parameters[j]); else break;
-                arguments.put(parameters[i], argumentValues);
-            }
-        }
-        String prefixes = "";
-        StringBuilder commandBuilder = new StringBuilder();
-        for (String cmd : commands) {
-            if ("-upp".equals(cmd) || "--user-package=prefix".equals(cmd))
-                if (arguments.containsKey(cmd) && 1 == arguments.get(cmd).size())
-                    prefixes = arguments.get(cmd).get(0);
-                else {
-                    commandBuilder.append(cmd).append(" ");
-                    if (arguments.containsKey(cmd))
-                        commandBuilder.append(String.join(" ", arguments.get(cmd))).append(" ");
-                }
-        }
-        return new JavaParametersParseResult(prefixes, commandBuilder.toString().trim());
     }
 
     @SneakyThrows

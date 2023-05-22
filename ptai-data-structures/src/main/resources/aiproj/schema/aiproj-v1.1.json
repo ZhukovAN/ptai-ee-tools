@@ -11,6 +11,7 @@
       "enum": ["1.0", "1.1"]
     },
     "BlackBoxSettings": {
+      "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.BlackBoxSettings",
       "title": "black box options",
       "type": ["object", "null"],
       "description": "Black box and autocheck options",
@@ -21,6 +22,7 @@
           "description": "Dictionary of additional HTTP headers",
           "type": ["array", "null"],
           "items": {
+            "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.HttpHeader",
             "type": "object",
             "properties": {
               "Key": {
@@ -39,6 +41,7 @@
           "title": "Whitelisted addresses",
           "description": "Addresses, that was added in white list",
           "items": {
+            "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.SiteAddress",
             "type": "object",
             "properties": {
               "Address": {
@@ -60,6 +63,7 @@
           "title": "Blacklisted addresses",
           "description": "Addresses, that was added in black list",
           "items": {
+            "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.SiteAddress",
             "type": "object",
             "properties": {
               "Address": {
@@ -133,6 +137,7 @@
           "additionalProperties": false,
           "properties": {
             "Cookie": {
+              "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.authentication.Cookie",
               "type": ["object", "null"],
               "title": "Cookie options",
               "description": "Cookie authentication options",
@@ -157,6 +162,7 @@
               }
             },
             "Form": {
+              "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.authentication.Form",
               "type": ["object", "null"],
               "title": "form authentication options",
               "description": "Form-based authentication options",
@@ -264,6 +270,7 @@
               ]
             },
             "Http": {
+              "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.authentication.Http",
               "title": "HTTP authentication options",
               "type": ["object", "null"],
               "description": "HTTP Basic authentication options",

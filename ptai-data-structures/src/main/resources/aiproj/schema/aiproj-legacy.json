@@ -156,135 +156,8 @@
         }
       }
     },
-    "Authentication": {
-      "type": "object",
-      "properties": {
-        "auth_item": {
-          "type": "object",
-          "properties": {
-            "domain": {
-              "type": "null"
-            },
-            "credentials": {
-              "type": "object",
-              "properties": {
-                "cookie": {
-                  "type": "null"
-                },
-                "cookies": {
-                  "type": "null"
-                },
-                "type": {
-                  "type": "integer"
-                },
-                "login": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "null"
-                    },
-                    "value": {
-                      "type": "null"
-                    },
-                    "regexp": {
-                      "type": "null"
-                    },
-                    "is_regexp": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "value",
-                    "regexp",
-                    "is_regexp"
-                  ]
-                },
-                "password": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "null"
-                    },
-                    "value": {
-                      "type": "null"
-                    },
-                    "regexp": {
-                      "type": "null"
-                    },
-                    "is_regexp": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "value",
-                    "regexp",
-                    "is_regexp"
-                  ]
-                }
-              },
-              "required": [
-                "cookie",
-                "cookies",
-                "type",
-                "login",
-                "password"
-              ]
-            },
-            "test_url": {
-              "type": "null"
-            },
-            "form_url": {
-              "type": "null"
-            },
-            "form_xpath": {
-              "type": "string"
-            },
-            "regexp_of_success": {
-              "type": "null"
-            }
-          },
-          "required": [
-            "domain",
-            "credentials",
-            "test_url",
-            "form_url",
-            "form_xpath",
-            "regexp_of_success"
-          ]
-        }
-      },
-      "required": [
-        "auth_item"
-      ]
-    },
-    "ProxySettings": {
-      "type": "object",
-      "properties": {
-        "IsEnabled": {
-          "type": "boolean"
-        },
-        "Host": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-        },
-        "Port": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
-        },
-        "Type": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
-        },
-        "Username": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-        },
-        "Password": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-        }
-      },
-      "required": [
-        "IsEnabled"
-      ]
-    },
+    "Authentication": { "$ref": "#/$defs/Authentication" },
+    "ProxySettings": { "$ref": "#/$defs/ProxySettings" },
     "RunAutocheckAfterScan": {
       "type": "boolean"
     },
@@ -293,154 +166,15 @@
     },
     "AutocheckCustomHeaders": {
       "type": "array",
-      "items": [
-        {
-          "type": "array",
-          "items": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "string"
-            }
-          ]
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
         }
-      ]
+      }
     },
-    "AutocheckAuthentication": {
-      "type": "object",
-      "properties": {
-        "auth_item": {
-          "type": "object",
-          "properties": {
-            "domain": {
-              "type": "null"
-            },
-            "credentials": {
-              "type": "object",
-              "properties": {
-                "cookie": {
-                  "type": "null"
-                },
-                "cookies": {
-                  "type": "null"
-                },
-                "type": {
-                  "type": "integer"
-                },
-                "login": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "null"
-                    },
-                    "value": {
-                      "type": "null"
-                    },
-                    "regexp": {
-                      "type": "null"
-                    },
-                    "is_regexp": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "value",
-                    "regexp",
-                    "is_regexp"
-                  ]
-                },
-                "password": {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "null"
-                    },
-                    "value": {
-                      "type": "null"
-                    },
-                    "regexp": {
-                      "type": "null"
-                    },
-                    "is_regexp": {
-                      "type": "boolean"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "value",
-                    "regexp",
-                    "is_regexp"
-                  ]
-                }
-              },
-              "required": [
-                "cookie",
-                "cookies",
-                "type",
-                "login",
-                "password"
-              ]
-            },
-            "test_url": {
-              "type": "null"
-            },
-            "form_url": {
-              "type": "null"
-            },
-            "form_xpath": {
-              "type": "string"
-            },
-            "regexp_of_success": {
-              "type": "null"
-            }
-          },
-          "required": [
-            "domain",
-            "credentials",
-            "test_url",
-            "form_url",
-            "form_xpath",
-            "regexp_of_success"
-          ]
-        }
-      },
-      "required": [
-        "auth_item"
-      ]
-    },
-    "AutocheckProxySettings": {
-      "type": "object",
-      "properties": {
-        "IsEnabled": {
-          "type": "boolean"
-        },
-        "Host": {
-          "type": "null"
-        },
-        "Port": {
-          "type": "null"
-        },
-        "Type": {
-          "type": "integer"
-        },
-        "Username": {
-          "type": "null"
-        },
-        "Password": {
-          "type": "null"
-        }
-      },
-      "required": [
-        "IsEnabled",
-        "Host",
-        "Port",
-        "Type",
-        "Username",
-        "Password"
-      ]
-    },
+    "AutocheckAuthentication": { "$ref": "#/$defs/Authentication" },
+    "AutocheckProxySettings": { "$ref": "#/$defs/ProxySettings" },
     "SendEmailWithReportsAfterScan": {
       "type": "boolean"
     },
@@ -506,5 +240,118 @@
     "ProjectName",
     "ProgrammingLanguage",
     "ScanAppType"
-  ]
+  ],
+  "$defs": {
+    "GenericValue": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        },
+        "value": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        },
+        "regexp": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        },
+        "is_regexp": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "is_regexp"
+      ]
+    },
+    "Authentication": {
+      "type": "object",
+      "properties": {
+        "auth_item": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+            },
+            "credentials": {
+              "type": "object",
+              "properties": {
+                "cookie": {
+                  "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+                },
+                "type": {
+                  "type": "integer",
+                  "description": "0 = Form, 1 = HTTP, 2 = None, 3 = Cookie"
+                },
+                "login": { "$ref": "#/$defs/GenericValue" },
+                "password": { "$ref": "#/$defs/GenericValue" }
+              },
+              "required": [
+                "cookie",
+                "type",
+                "login",
+                "password"
+              ]
+            },
+            "test_url": {
+              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+            },
+            "form_url": {
+              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+            },
+            "form_xpath": {
+              "type": "string"
+            },
+            "regexp_of_success": {
+              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+            }
+          },
+          "required": [
+            "domain",
+            "credentials",
+            "test_url",
+            "form_url",
+            "form_xpath",
+            "regexp_of_success"
+          ]
+        }
+      },
+      "required": [
+        "auth_item"
+      ]
+    },
+    "ProxySettings": {
+      "type": "object",
+      "properties": {
+        "IsEnabled": {
+          "type": "boolean"
+        },
+        "Host": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        },
+        "Port": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
+        },
+        "Type": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
+        },
+        "Username": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        },
+        "Password": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        }
+      },
+      "required": [
+        "IsEnabled"
+      ]
+    }
+  },
+  "Headers": {
+    "type": "array",
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
 }
