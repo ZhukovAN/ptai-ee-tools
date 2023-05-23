@@ -164,6 +164,7 @@
               }
             },
             "Type": {
+              "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.blackbox.AuthType",
               "description": "Type of authentication",
               "type": "string",
               "enum": ["Form", "Http", "RawCookie", "None"]
@@ -171,6 +172,7 @@
           }
         },
         "Level": {
+          "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.blackbox.ScanLevel",
           "description": "Search mode",
           "type": "string",
           "enum": ["None", "Fast", "Full", "Normal"]
@@ -213,6 +215,7 @@
           "type": "boolean"
         },
         "ScanScope": {
+          "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.blackbox.ScanScope",
           "description": "Scan scope",
           "type": "string",
           "enum": ["Domain", "Folder", "Path"]
@@ -246,6 +249,7 @@
       "additionalProperties": false,
       "properties": {
         "ProjectType": {
+          "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.DotNetProjectType",
           "description": "Type of application",
           "type": "string",
           "enum": ["None", "Solution", "WebSite"]
@@ -279,6 +283,7 @@
           "type": ["string", "null"]
         },
         "Version": {
+          "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.JavaVersion",
           "description": "JDK version",
           "type": "string",
           "enum": ["v1_8", "v1_11"]
@@ -286,6 +291,7 @@
       }
     },
     "ProgrammingLanguage": {
+      "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.ProgrammingLanguage",
       "description": "Active scanning language",
       "type": "string",
       "enum": [
@@ -312,6 +318,7 @@
       "type": "array",
       "uniqueItems": true,
       "items": {
+        "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.ScanModule",
         "type": "string",
         "enum": [
           "Configuration",

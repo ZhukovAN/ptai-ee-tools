@@ -7,6 +7,10 @@ import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.AiprojLegacy;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.AuthItem;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.Authentication;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.ProxySettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.DotNetProjectType;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.JavaVersion;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.ProgrammingLanguage;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.blackbox.ScanLevel;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.Getter;
 import lombok.NonNull;
@@ -14,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -23,6 +26,9 @@ import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.DotNetProjectType.SOLUTION;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.DotNetProjectType.WEB_SITE;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.DotNetProjectType.NONE;
 import static java.lang.Boolean.TRUE;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -83,10 +89,10 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
             ScanBrief.ScanSettings.Language.VB,
             ScanBrief.ScanSettings.Language.JAVASCRIPT));
 
-    private static final Map<AiprojLegacy.ProgrammingLanguage, ScanBrief.ScanSettings.Language> PROGRAMMING_LANGUAGE_MAP = new HashMap<>();
-    private static final Map<AiprojLegacy.ProjectType, UnifiedAiProjScanSettings.DotNetSettings.ProjectType> DOTNET_PROJECT_TYPE_MAP = new HashMap<>();
+    private static final Map<ProgrammingLanguage, ScanBrief.ScanSettings.Language> PROGRAMMING_LANGUAGE_MAP = new HashMap<>();
+    private static final Map<DotNetProjectType, UnifiedAiProjScanSettings.DotNetSettings.ProjectType> DOTNET_PROJECT_TYPE_MAP = new HashMap<>();
     private static final Map<Integer, BlackBoxSettings.ProxySettings.Type> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
-    private static final Map<AiprojLegacy.Level, BlackBoxSettings.ScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
+    private static final Map<ScanLevel, BlackBoxSettings.ScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
     private static final Map<Integer, UnifiedAiProjScanSettings.BlackBoxSettings.Authentication.Type> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
 
 
@@ -104,19 +110,19 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
         PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.PHP, ScanBrief.ScanSettings.Language.PHP);
         PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.OBJECTIVE_C, ScanBrief.ScanSettings.Language.OBJECTIVEC);
 
-        DOTNET_PROJECT_TYPE_MAP.put(ProjectType.NONE, DotNetSettings.ProjectType.NONE);
-        DOTNET_PROJECT_TYPE_MAP.put(ProjectType.SOLUTION, DotNetSettings.ProjectType.SOLUTION);
-        DOTNET_PROJECT_TYPE_MAP.put(ProjectType.WEB_SITE, DotNetSettings.ProjectType.WEBSITE);
+        DOTNET_PROJECT_TYPE_MAP.put(NONE, DotNetSettings.ProjectType.NONE);
+        DOTNET_PROJECT_TYPE_MAP.put(SOLUTION, DotNetSettings.ProjectType.SOLUTION);
+        DOTNET_PROJECT_TYPE_MAP.put(WEB_SITE, DotNetSettings.ProjectType.WEBSITE);
 
         BLACKBOX_PROXY_TYPE_MAP.put(0, BlackBoxSettings.ProxySettings.Type.HTTP);
         BLACKBOX_PROXY_TYPE_MAP.put(1, BlackBoxSettings.ProxySettings.Type.HTTPNOCONNECT);
         BLACKBOX_PROXY_TYPE_MAP.put(2, BlackBoxSettings.ProxySettings.Type.SOCKS4);
         BLACKBOX_PROXY_TYPE_MAP.put(3, BlackBoxSettings.ProxySettings.Type.SOCKS5);
 
-        BLACKBOX_SCAN_LEVEL_MAP.put(Level.NONE, BlackBoxSettings.ScanLevel.NONE);
-        BLACKBOX_SCAN_LEVEL_MAP.put(Level.FAST, BlackBoxSettings.ScanLevel.FAST);
-        BLACKBOX_SCAN_LEVEL_MAP.put(Level.NORMAL, BlackBoxSettings.ScanLevel.NORMAL);
-        BLACKBOX_SCAN_LEVEL_MAP.put(Level.FULL, BlackBoxSettings.ScanLevel.FULL);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NONE, BlackBoxSettings.ScanLevel.NONE);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FAST, BlackBoxSettings.ScanLevel.FAST);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NORMAL, BlackBoxSettings.ScanLevel.NORMAL);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FULL, BlackBoxSettings.ScanLevel.FULL);
 
         BLACKBOX_AUTH_TYPE_MAP.put(0, BlackBoxSettings.Authentication.Type.FORM);
         BLACKBOX_AUTH_TYPE_MAP.put(1, BlackBoxSettings.Authentication.Type.HTTP);
@@ -267,7 +273,6 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
 
     @Override
     public DotNetSettings getDotNetSettings() {
-
         return DotNetSettings.builder()
                 .solutionFile(AiProjHelper.fixSolutionFile(solutionFile))
                 .webSiteFolder(webSiteFolder)
@@ -281,7 +286,7 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
         return JavaSettings.builder()
                 .unpackUserPackages(TRUE.equals(isUnpackUserPackages))
                 .userPackagePrefixes(null == parseResult ? null : parseResult.getPrefixes())
-                .javaVersion(AiprojLegacy.JavaVersion._0.equals(javaVersion) ? v1_8 : v1_11)
+                .javaVersion(JavaVersion._0.equals(javaVersion) ? v1_8 : v1_11)
                 .parameters(null == parseResult ? null : parseResult.getOther())
                 .build();
     }
@@ -318,9 +323,8 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
     }
 
     @Override
-    public void load(@NonNull String data) throws GenericException {
-        JsonPath
-
+    public UnifiedAiProjScanSettings load(@NonNull String data) throws GenericException {
+        return null;
     }
 
     @Override

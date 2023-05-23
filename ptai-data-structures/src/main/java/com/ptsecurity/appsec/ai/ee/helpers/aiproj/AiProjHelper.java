@@ -1,7 +1,14 @@
 package com.ptsecurity.appsec.ai.ee.helpers.aiproj;
 
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version;
+import com.ptsecurity.appsec.ai.ee.scan.settings.v11.AiProjScanSettings;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,6 +16,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static java.lang.Boolean.TRUE;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Slf4j
 public class AiProjHelper {
@@ -80,5 +90,25 @@ public class AiProjHelper {
             log.trace("Fixed solution file name is {}", solutionFile);
         } while (false);
         return res;
+    }
+
+    public static UnifiedAiProjScanSettings load(@NonNull final String data) throws GenericException {
+        Object json = Configuration.defaultConfiguration().jsonProvider().parse(data);
+        String version = JsonPath.read(json, "$.Version");
+        if (isNotEmpty(version)) {
+            log.trace("Detected AIPROJ version {}", version);
+            if (Version._1_1.value().equals(version))
+                return new AiProjScanSettings().load(data);
+            else if (Version._1_0.value().equals(version)) {
+                return null;
+            } else
+                throw GenericException.raise("AIPROJ parse failed", new IllegalArgumentException("Unsupported AIPROJ version " + version));
+        } else if (null != JsonPath.read(json, "$.ScanModules")) {
+            log.trace("Parse AIPROJ as v.1.0 as there's no version, but ScanModules are defined");
+            return null;
+        } else {
+            log.trace("Parse legacy AIPROJ as there's no version and no ScanModules are defined");
+            return null;
+        }
     }
 }

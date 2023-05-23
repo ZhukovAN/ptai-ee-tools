@@ -1,7 +1,6 @@
 plugins {
     id 'java-library'
     id 'java-test-fixtures'
-    // id 'jsonschema2pojo'
     id "org.jsonschema2pojo" version "1.2.1"
 }
 
@@ -19,6 +18,7 @@ dependencies {
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     // https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path
     implementation 'com.jayway.jsonpath:json-path:2.8.0'
+
 
     // Use JUnit 5 for test fixtures
     testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
@@ -42,7 +42,7 @@ jar {
 }
 
 jsonSchema2Pojo {
-    source = files("${sourceSets.main.output.resourcesDir}/aiproj/schema/aiproj-legacy.json")
+    source = files("${sourceSets.main.output.resourcesDir}/aiproj/schema/")
     targetDirectory = file("${project.buildDir}/generated/sources/jsonSchema2Pojo")
     targetPackage = 'com.ptsecurity.appsec.ai.ee.scan.settings.aiproj'
     generateBuilders = false

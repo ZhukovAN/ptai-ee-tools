@@ -7,11 +7,11 @@
       "type": "string"
     },
     "Version": {
+      "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version",
       "type": "string",
       "enum": ["1.0", "1.1"]
     },
     "BlackBoxSettings": {
-      "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.BlackBoxSettings",
       "title": "black box options",
       "type": ["object", "null"],
       "description": "Black box and autocheck options",
@@ -22,7 +22,6 @@
           "description": "Dictionary of additional HTTP headers",
           "type": ["array", "null"],
           "items": {
-            "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.HttpHeader",
             "type": "object",
             "properties": {
               "Key": {
@@ -41,7 +40,6 @@
           "title": "Whitelisted addresses",
           "description": "Addresses, that was added in white list",
           "items": {
-            "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.SiteAddress",
             "type": "object",
             "properties": {
               "Address": {
@@ -50,6 +48,7 @@
                 "type": "string"
               },
               "Format": {
+                "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.siteaddress.Format",
                 "type": "string",
                 "title": "Address format",
                 "description": "Type of address",
@@ -63,7 +62,6 @@
           "title": "Blacklisted addresses",
           "description": "Addresses, that was added in black list",
           "items": {
-            "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.SiteAddress",
             "type": "object",
             "properties": {
               "Address": {
@@ -137,7 +135,6 @@
           "additionalProperties": false,
           "properties": {
             "Cookie": {
-              "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.authentication.Cookie",
               "type": ["object", "null"],
               "title": "Cookie options",
               "description": "Cookie authentication options",
@@ -162,7 +159,6 @@
               }
             },
             "Form": {
-              "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.authentication.Form",
               "type": ["object", "null"],
               "title": "form authentication options",
               "description": "Form-based authentication options",
@@ -292,6 +288,7 @@
               }
             },
             "Type": {
+              "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.AuthType",
               "title": "Type of authentication",
               "type": "string",
               "enum": ["Form", "Http", "RawCookie", "None"]
@@ -299,6 +296,7 @@
           }
         },
         "Level": {
+          "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.ScanLevel",
           "title": "Search mode",
           "type": "string",
           "enum": ["None", "Fast", "Full", "Normal"]
@@ -330,6 +328,7 @@
               "type": "integer"
             },
             "Type": {
+              "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.ProxyType",
               "title": "Type of proxy",
               "type": "string",
               "enum": ["Http", "Socks4", "Socks5"]
@@ -342,6 +341,7 @@
           "type": "boolean"
         },
         "ScanScope": {
+          "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.ScanScope",
           "title": "Scan scope",
           "type": "string",
           "enum": ["Domain", "Folder", "Path"]
@@ -368,6 +368,7 @@
       "additionalProperties": false,
       "properties": {
         "ProjectType": {
+          "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.DotNetProjectType",
           "title": "Type of application",
           "type": "string",
           "enum": ["None", "Solution", "WebSite"]
@@ -398,6 +399,7 @@
           "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
         },
         "Version": {
+          "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.JavaVersion",
           "title": "JDK version",
           "type": "string",
           "enum": ["v1_8", "v1_11"]
@@ -465,6 +467,7 @@
       ]
     },
     "ProgrammingLanguage": {
+      "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ProgrammingLanguage",
       "title": "Active scanning language",
       "type": "string",
       "enum": [
@@ -491,6 +494,7 @@
       "type": "array",
       "uniqueItems": true,
       "items": {
+        "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ScanModule",
         "type": "string",
         "enum": [
           "Configuration",

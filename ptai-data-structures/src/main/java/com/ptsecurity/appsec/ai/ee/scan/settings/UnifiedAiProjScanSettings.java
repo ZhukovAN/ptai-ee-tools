@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface UnifiedAiProjScanSettings {
-    void load(@NonNull final String data) throws GenericException;
+    UnifiedAiProjScanSettings load(@NonNull final String data) throws GenericException;
 
     enum Version { LEGACY, V10, V11 }
     Version getVersion();
@@ -47,8 +47,10 @@ public interface UnifiedAiProjScanSettings {
         public enum ProjectType {
             NONE, SOLUTION, WEBSITE
         }
-        protected ProjectType projectType;
+        @Builder.Default
+        protected ProjectType projectType = ProjectType.NONE;
         protected String solutionFile;
+        @Deprecated
         protected String webSiteFolder;
     }
     DotNetSettings getDotNetSettings();
@@ -59,7 +61,8 @@ public interface UnifiedAiProjScanSettings {
     @AllArgsConstructor
     class JavaSettings {
         protected String parameters;
-        protected Boolean unpackUserPackages;
+        @Builder.Default
+        protected Boolean unpackUserPackages = false;
         protected String userPackagePrefixes;
         public enum JavaVersion {
             v1_8, v1_11
@@ -85,8 +88,11 @@ public interface UnifiedAiProjScanSettings {
     @Builder
     @AllArgsConstructor
     class MailingProjectSettings {
-        @NonNull protected Boolean enabled;
+        @NonNull
+        @Builder.Default
+        protected Boolean enabled = false;
         protected String mailProfileName;
+        @Builder.Default
         protected List<String> emailRecipients = new ArrayList<>();
     }
     MailingProjectSettings getMailingProjectSettings();
@@ -132,9 +138,11 @@ public interface UnifiedAiProjScanSettings {
 
         protected String site;
 
-        protected Boolean sslCheck;
+        @Builder.Default
+        protected Boolean sslCheck = true;
 
-        protected Boolean runAutocheckAfterScan;
+        @Builder.Default
+        protected Boolean runAutocheckAfterScan = false;
 
         @Deprecated
         protected String autocheckSite;

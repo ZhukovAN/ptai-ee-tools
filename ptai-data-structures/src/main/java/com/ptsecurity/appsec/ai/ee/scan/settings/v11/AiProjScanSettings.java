@@ -1,168 +1,204 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings.v11;
 
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
 import com.ptsecurity.appsec.ai.ee.helpers.aiproj.AiProjHelper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.scan.settings.BaseAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.*;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.AuthItem;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.Authentication;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.DotNetProjectType;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.JavaVersion;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ProgrammingLanguage;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.AuthType;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.ProxyType;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.ScanLevel;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
-import static java.lang.Boolean.TRUE;
+import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Slf4j
-public class AiProjScanSettings implements UnifiedAiProjScanSettings {
-    @Override
-    public @NonNull String getProjectName() {
-        return projectName;
-    }
-
-    @Override
-    public ScanBrief.ScanSettings.@NonNull Language getProgrammingLanguage() {
-        return PROGRAMMING_LANGUAGE_MAP.get(programmingLanguage);
-    }
-
-    @Accessors(fluent = true)
-    @RequiredArgsConstructor
-    private enum ScanAppType {
-        PHP("Php"),
-        JAVA("Java"),
-        CSHARP("CSharp"),
-        CONFIGURATION("Configuration"),
-        FINGERPRINT("Fingerprint"),
-        DEPENDENCYCHECK("DependencyCheck"),
-        PMTAINT("PmTaint"),
-        BLACKBOX("BlackBox"),
-        JAVASCRIPT("JavaScript");
-
-        @Getter
-        private final String value;
-        private static final Map<String, com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType> VALUES = new HashMap<>();
-
-        static {
-            for (com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType f : values()) VALUES.put(f.value, f);
-        }
-
-        public static com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType from(@NonNull final String value) {
-            return VALUES.get(value);
-        }
-    }
-
-    /**
-     * Set of ScanAppType values that support abstract interpretation
-     */
-    private static final Set<com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType> SCAN_APP_TYPE_AI = new HashSet<>(Arrays.asList(
-            com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.PHP,
-            com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.JAVA,
-            com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.CSHARP,
-            com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.JAVASCRIPT));
-    /**
-     * Set of programming languages values that support abstract interpretation
-     */
-    private static final Set<ScanBrief.ScanSettings.Language> LANGUAGE_AI = new HashSet<>(Arrays.asList(
-            ScanBrief.ScanSettings.Language.PHP,
-            ScanBrief.ScanSettings.Language.JAVA,
-            ScanBrief.ScanSettings.Language.CSHARP,
-            ScanBrief.ScanSettings.Language.VB,
-            ScanBrief.ScanSettings.Language.JAVASCRIPT));
-
-    private static final Map<AiprojLegacy.ProgrammingLanguage, ScanBrief.ScanSettings.Language> PROGRAMMING_LANGUAGE_MAP = new HashMap<>();
-    private static final Map<AiprojLegacy.ProjectType, UnifiedAiProjScanSettings.DotNetSettings.ProjectType> DOTNET_PROJECT_TYPE_MAP = new HashMap<>();
-    private static final Map<Integer, BlackBoxSettings.ProxySettings.Type> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
-    private static final Map<AiprojLegacy.Level, BlackBoxSettings.ScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
-    private static final Map<Integer, UnifiedAiProjScanSettings.BlackBoxSettings.Authentication.Type> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
-
+public class AiProjScanSettings extends BaseAiProjScanSettings implements UnifiedAiProjScanSettings {
+    private static final Map<String, ScanBrief.ScanSettings.Language> PROGRAMMING_LANGUAGE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
+    private static final Map<String, ScanModule> SCAN_MODULE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
+    private static final Map<String, UnifiedAiProjScanSettings.DotNetSettings.ProjectType> DOTNET_PROJECT_TYPE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
+    private static final Map<String, UnifiedAiProjScanSettings.JavaSettings.JavaVersion> JAVA_VERSION_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
+    private static final Map<String, BlackBoxSettings.ProxySettings.Type> BLACKBOX_PROXY_TYPE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
+    private static final Map<String, BlackBoxSettings.ScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
+    private static final Map<String, BlackBoxSettings.Authentication.Type> BLACKBOX_AUTH_TYPE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
 
     static {
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.C_PLUS_PLUS, ScanBrief.ScanSettings.Language.CPP);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.GO, ScanBrief.ScanSettings.Language.GO);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.JAVA_SCRIPT, ScanBrief.ScanSettings.Language.JAVASCRIPT);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.C_SHARP, ScanBrief.ScanSettings.Language.CSHARP);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.JAVA, ScanBrief.ScanSettings.Language.JAVA);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.KOTLIN, ScanBrief.ScanSettings.Language.KOTLIN);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.SQL, ScanBrief.ScanSettings.Language.SQL);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.PYTHON, ScanBrief.ScanSettings.Language.PYTHON);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.SWIFT, ScanBrief.ScanSettings.Language.SWIFT);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.VB, ScanBrief.ScanSettings.Language.VB);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.PHP, ScanBrief.ScanSettings.Language.PHP);
-        PROGRAMMING_LANGUAGE_MAP.put(AiprojLegacy.ProgrammingLanguage.OBJECTIVE_C, ScanBrief.ScanSettings.Language.OBJECTIVEC);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.JAVA.value(), ScanBrief.ScanSettings.Language.JAVA);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.C_SHARP.value(), ScanBrief.ScanSettings.Language.CSHARP);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.VB.value(), ScanBrief.ScanSettings.Language.VB);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.PHP.value(), ScanBrief.ScanSettings.Language.PHP);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.JAVA_SCRIPT.value(), ScanBrief.ScanSettings.Language.JAVASCRIPT);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.PYTHON.value(), ScanBrief.ScanSettings.Language.PYTHON);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.OBJECTIVE_C.value(), ScanBrief.ScanSettings.Language.OBJECTIVEC);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.SWIFT.value(), ScanBrief.ScanSettings.Language.SWIFT);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.C_AND_C_PLUS_PLUS.value(), ScanBrief.ScanSettings.Language.CPP);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.GO.value(), ScanBrief.ScanSettings.Language.GO);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.KOTLIN.value(), ScanBrief.ScanSettings.Language.KOTLIN);
+        PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.SQL.value(), ScanBrief.ScanSettings.Language.SQL);
 
-        DOTNET_PROJECT_TYPE_MAP.put(AiprojLegacy.ProjectType.NONE, DotNetSettings.ProjectType.NONE);
-        DOTNET_PROJECT_TYPE_MAP.put(AiprojLegacy.ProjectType.SOLUTION, DotNetSettings.ProjectType.SOLUTION);
-        DOTNET_PROJECT_TYPE_MAP.put(AiprojLegacy.ProjectType.WEB_SITE, DotNetSettings.ProjectType.WEBSITE);
+        SCAN_MODULE_MAP.put(com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ScanModule.CONFIGURATION.value(), ScanModule.CONFIGURATION);
+        SCAN_MODULE_MAP.put(com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ScanModule.COMPONENTS.value(), ScanModule.COMPONENTS);
+        SCAN_MODULE_MAP.put(com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ScanModule.BLACK_BOX.value(), ScanModule.BLACKBOX);
+        SCAN_MODULE_MAP.put(com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ScanModule.PATTERN_MATCHING.value(), ScanModule.PATTERNMATCHING);
+        SCAN_MODULE_MAP.put(com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ScanModule.DATA_FLOW_ANALYSIS.value(), ScanModule.DATAFLOWANALYSIS);
+        SCAN_MODULE_MAP.put(com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ScanModule.VULNERABLE_SOURCE_CODE.value(), ScanModule.VULNERABLESOURCECODE);
 
-        BLACKBOX_PROXY_TYPE_MAP.put(0, BlackBoxSettings.ProxySettings.Type.HTTP);
-        BLACKBOX_PROXY_TYPE_MAP.put(1, BlackBoxSettings.ProxySettings.Type.HTTPNOCONNECT);
-        BLACKBOX_PROXY_TYPE_MAP.put(2, BlackBoxSettings.ProxySettings.Type.SOCKS4);
-        BLACKBOX_PROXY_TYPE_MAP.put(3, BlackBoxSettings.ProxySettings.Type.SOCKS5);
+        DOTNET_PROJECT_TYPE_MAP.put(DotNetProjectType.NONE.value(), DotNetSettings.ProjectType.NONE);
+        DOTNET_PROJECT_TYPE_MAP.put(DotNetProjectType.SOLUTION.value(), DotNetSettings.ProjectType.SOLUTION);
+        DOTNET_PROJECT_TYPE_MAP.put(DotNetProjectType.WEB_SITE.value(), DotNetSettings.ProjectType.WEBSITE);
 
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiprojLegacy.Level.NONE, BlackBoxSettings.ScanLevel.NONE);
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiprojLegacy.Level.FAST, BlackBoxSettings.ScanLevel.FAST);
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiprojLegacy.Level.NORMAL, BlackBoxSettings.ScanLevel.NORMAL);
-        BLACKBOX_SCAN_LEVEL_MAP.put(AiprojLegacy.Level.FULL, BlackBoxSettings.ScanLevel.FULL);
+        JAVA_VERSION_MAP.put(JavaVersion.V_1_8.value(), v1_8);
+        JAVA_VERSION_MAP.put(JavaVersion.V_1_11.value(), v1_11);
 
-        BLACKBOX_AUTH_TYPE_MAP.put(0, BlackBoxSettings.Authentication.Type.FORM);
-        BLACKBOX_AUTH_TYPE_MAP.put(1, BlackBoxSettings.Authentication.Type.HTTP);
-        BLACKBOX_AUTH_TYPE_MAP.put(2, BlackBoxSettings.Authentication.Type.NONE);
-        BLACKBOX_AUTH_TYPE_MAP.put(3, BlackBoxSettings.Authentication.Type.COOKIE);
+        BLACKBOX_PROXY_TYPE_MAP.put(ProxyType.HTTP.value(), BlackBoxSettings.ProxySettings.Type.HTTP);
+        BLACKBOX_PROXY_TYPE_MAP.put(ProxyType.SOCKS_4.value(), BlackBoxSettings.ProxySettings.Type.SOCKS4);
+        BLACKBOX_PROXY_TYPE_MAP.put(ProxyType.SOCKS_5.value(), BlackBoxSettings.ProxySettings.Type.SOCKS5);
+
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NONE.value(), BlackBoxSettings.ScanLevel.NONE);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FAST.value(), BlackBoxSettings.ScanLevel.NONE);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FULL.value(), BlackBoxSettings.ScanLevel.NONE);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NORMAL.value(), BlackBoxSettings.ScanLevel.NONE);
+
+        BLACKBOX_AUTH_TYPE_MAP.put(AuthType.NONE.value(), BlackBoxSettings.Authentication.Type.NONE);
+        BLACKBOX_AUTH_TYPE_MAP.put(AuthType.FORM.value(), BlackBoxSettings.Authentication.Type.FORM);
+        BLACKBOX_AUTH_TYPE_MAP.put(AuthType.RAW_COOKIE.value(), BlackBoxSettings.Authentication.Type.COOKIE);
+        BLACKBOX_AUTH_TYPE_MAP.put(AuthType.HTTP.value(), BlackBoxSettings.Authentication.Type.HTTP);
+    }
+
+    public UnifiedAiProjScanSettings load(@NonNull final String data) throws GenericException {
+        aiprojDocument = Configuration.defaultConfiguration().jsonProvider().parse(data);
+        return this;
+    }
+
+    @Override
+    public Version getVersion() {
+        return Version.V11;
+    }
+
+    @Override
+    public @NonNull String getProjectName() {
+        return S("$.ProjectName");
+    }
+
+    @Override
+    public @NonNull ScanBrief.ScanSettings.Language getProgrammingLanguage() {
+        return PROGRAMMING_LANGUAGE_MAP.get(S("$.ProgrammingLanguage"));
     }
 
     @Override
     public Set<ScanModule> getScanModules() {
-        return scanModules
         Set<ScanModule> res = new HashSet<>();
-        Set<com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType> scanAppTypes = Arrays.stream(scanAppType.split("[, ]+"))
-                .map(com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType::from)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet());
-        // See internal wiki pageId=193599549
-        // "Vulnerable authentication code" checkbox means that we either enabled AI-supported PHP / Java / C# / JS scan mode ...
-        boolean abstractInterpretationCoreUsed = scanAppTypes.stream().anyMatch(SCAN_APP_TYPE_AI::contains);
-        // ... or all other languages with PmTaint / UseTaintAnalysis enabled
-        boolean taintOnlyLanguageUsed = !LANGUAGE_AI.contains(getProgrammingLanguage())
-                && scanAppTypes.contains(com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.PMTAINT)
-                && TRUE.equals(useTaintAnalysis);
-        if (abstractInterpretationCoreUsed || taintOnlyLanguageUsed) res.add(ScanModule.VULNERABLESOURCECODE);
-        if (TRUE.equals(useTaintAnalysis) && scanAppTypes.contains(com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.PMTAINT))
-            res.add(ScanModule.DATAFLOWANALYSIS);
-        if (TRUE.equals(usePmAnalysis) && scanAppTypes.contains(com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.PMTAINT))
-            res.add(ScanModule.PATTERNMATCHING);
-        if (scanAppTypes.contains(com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.CONFIGURATION)) res.add(ScanModule.CONFIGURATION);
-        if (scanAppTypes.contains(com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.BLACKBOX)) res.add(ScanModule.BLACKBOX);
-        if (scanAppTypes.contains(com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.DEPENDENCYCHECK) || scanAppTypes.contains(com.ptsecurity.appsec.ai.ee.scan.settings.legacy.AiProjScanSettings.ScanAppType.FINGERPRINT))
-            res.add(ScanModule.COMPONENTS);
+        List<String> scanModules = JsonPath.read(aiprojDocument, "$.ScanModules[*]");
+        for (String scanModule : scanModules)
+            if (SCAN_MODULE_MAP.containsKey(scanModule)) res.add(SCAN_MODULE_MAP.get(scanModule));
         return res;
     }
 
-    private BlackBoxSettings.ProxySettings convert(@NonNull final ProxySettings proxySettings) {
-        return BlackBoxSettings.ProxySettings.builder()
-                .enabled(TRUE.equals(proxySettings.isEnabled))
-                .type(BLACKBOX_PROXY_TYPE_MAP.get(proxySettings.type))
-                .host(proxySettings.host)
-                .port(proxySettings.port)
-                .login(proxySettings.username)
-                .password(proxySettings.password)
+    @Override
+    public String getCustomParameters() {
+        return S("$.CustomParameters");
+    }
+
+    @Override
+    public DotNetSettings getDotNetSettings() {
+        if (null == JsonPath.read(aiprojDocument, "$.DotNetSettings")) return null;
+        String solutionFile = S("$.DotNetSettings.SolutionFile");
+        String projectType = S("$.DotNetSettings.ProjectType");
+        return DotNetSettings.builder()
+                .solutionFile(AiProjHelper.fixSolutionFile(solutionFile))
+                .projectType(DOTNET_PROJECT_TYPE_MAP.getOrDefault(projectType, DotNetSettings.ProjectType.NONE))
                 .build();
     }
 
-    private BlackBoxSettings.Authentication convert(final Authentication authentication) {
+    @Override
+    public JavaSettings getJavaSettings() {
+        if (null == JsonPath.read(aiprojDocument, "$.JavaSettings")) return null;
+        return JavaSettings.builder()
+                .unpackUserPackages(B("$.JavaSettings.UnpackUserPackages"))
+                .userPackagePrefixes(S("$.JavaSettings.UserPackagePrefixes"))
+                .javaVersion(JAVA_VERSION_MAP.getOrDefault(S("$.JavaSettings.Version"), v1_11))
+                .parameters(S("$.JavaSettings.Parameters"))
+                .build();
+    }
+
+    @Override
+    public @NonNull Boolean isSkipGitIgnoreFiles() {
+        return B("$.SkipGitIgnoreFiles");
+    }
+
+    @Override
+    public @NonNull Boolean isUsePublicAnalysisMethod() {
+        return B("$.UsePublicAnalysisMethod");
+    }
+
+    @Override
+    public @NonNull Boolean isUseSastRules() {
+        return B("$.UseSastRules");
+    }
+
+    @Override
+    public @NonNull Boolean isUseCustomPmRules() {
+        return B("$.UseCustomPmRules");
+    }
+
+    @Override
+    public @NonNull Boolean isUseCustomYaraRules() {
+        throw GenericException.raise("No custom SAST rules support for AIPROJ schema v.1.1", new UnsupportedOperationException());
+    }
+
+    @Override
+    public @NonNull Boolean isUseSecurityPolicies() {
+        return B("$.UseSecurityPolicies");
+    }
+
+    @Override
+    public @NonNull Boolean isDownloadDependencies() {
+        return B("$.DownloadDependencies");
+    }
+
+    @Override
+    public MailingProjectSettings getMailingProjectSettings() {
+        if (null == JsonPath.read(aiprojDocument, "$.MailingProjectSettings")) return null;
+        return MailingProjectSettings.builder()
+                .enabled(B("$.MailingProjectSettings.Enabled"))
+                .mailProfileName(S("$.MailingProjectSettings.MailProfileName"))
+                .emailRecipients(JsonPath.read(aiprojDocument, "$.MailingProjectSettings.EmailRecipients"))
+                .build();
+    }
+
+    private BlackBoxSettings.ProxySettings convertProxySettings(@NonNull final Object proxySettings) {
+        return BlackBoxSettings.ProxySettings.builder()
+                .enabled(B(proxySettings, "$.Enabled"))
+                .type(BLACKBOX_PROXY_TYPE_MAP.get(S(proxySettings, "$.Type")))
+                .host(S(proxySettings, "$.Host"))
+                .port(I(proxySettings, "$.Port"))
+                .login(S(proxySettings, "$.Login"))
+                .password(S(proxySettings, "$.Password"))
+                .build();
+    }
+
+    private BlackBoxSettings.Authentication convertAuthentication(final Object auth) {
         log.trace("Check if AIPROJ authentication field is defined");
-        if (null == authentication || null == authentication.authItem || null == authentication.authItem.credentials)
+        if (null == auth)
             return new BlackBoxSettings.Authentication();
-        @NonNull AuthItem authItem = authentication.authItem;
-        BlackBoxSettings.Authentication.Type authType = BLACKBOX_AUTH_TYPE_MAP.getOrDefault(authItem.credentials.type, BlackBoxSettings.Authentication.Type.NONE);
+        BlackBoxSettings.Authentication.Type authType;
+        authType = BLACKBOX_AUTH_TYPE_MAP.getOrDefault(S(auth, "$.Type"), BlackBoxSettings.Authentication.Type.NONE);
 
         if (BlackBoxSettings.Authentication.Type.FORM == authType)
             return isEmpty(authItem.formXpath)
@@ -220,10 +256,12 @@ public class AiProjScanSettings implements UnifiedAiProjScanSettings {
     @Override
     public BlackBoxSettings getBlackBoxSettings() {
         if (!getScanModules().contains(ScanModule.BLACKBOX)) return null;
+        if (null == JsonPath.read(aiprojDocument, "$.BlackBoxSettings")) return null;
 
         BlackBoxSettings blackBoxSettings = new BlackBoxSettings();
 
-        if (null != level) blackBoxSettings.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.get(level));
+        blackBoxSettings.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.getOrDefault(S("$.BlackBoxSettings.Level"), BlackBoxSettings.ScanLevel.NONE));
+        /*
         blackBoxSettings.setRunAutocheckAfterScan(TRUE.equals(runAutocheckAfterScan));
 
         blackBoxSettings.setSite(site);
@@ -243,85 +281,7 @@ public class AiProjScanSettings implements UnifiedAiProjScanSettings {
             blackBoxSettings.setAutocheckHttpHeaders(convert(autocheckCustomHeaders));
         if (null != this.autocheckAuthentication)
             blackBoxSettings.setAutocheckAuthentication(convert(autocheckAuthentication));
+        */
         return blackBoxSettings;
-    }
-
-    @Override
-    public @NonNull Boolean isDownloadDependencies() {
-        return TRUE.equals(isDownloadDependencies);
-    }
-
-    @Override
-    public @NonNull Boolean isUsePublicAnalysisMethod() {
-        return TRUE.equals(isUsePublicAnalysisMethod);
-    }
-
-    @Override
-    public String getCustomParameters() {
-        return customParameters;
-    }
-
-    @Override
-    public DotNetSettings getDotNetSettings() {
-
-        return DotNetSettings.builder()
-                .solutionFile(AiProjHelper.fixSolutionFile(solutionFile))
-                .webSiteFolder(webSiteFolder)
-                .projectType(DOTNET_PROJECT_TYPE_MAP.getOrDefault(projectType, DotNetSettings.ProjectType.NONE))
-                .build();
-    }
-
-    @Override
-    public JavaSettings getJavaSettings() {
-        AiProjHelper.JavaParametersParseResult parseResult = AiProjHelper.parseJavaParameters(javaParameters);
-        return JavaSettings.builder()
-                .unpackUserPackages(TRUE.equals(isUnpackUserPackages))
-                .userPackagePrefixes(null == parseResult ? null : parseResult.getPrefixes())
-                .javaVersion(AiprojLegacy.JavaVersion._0.equals(javaVersion) ? v1_8 : v1_11)
-                .parameters(null == parseResult ? null : parseResult.getOther())
-                .build();
-    }
-
-    @Override
-    public @NonNull Boolean isSkipGitIgnoreFiles() {
-        if (CollectionUtils.isEmpty(skipFilesFolders)) return false;
-        return skipFilesFolders.contains(".gitignore");
-    }
-
-    @Override
-    public @NonNull Boolean isUseSastRules() {
-        throw GenericException.raise("No custom SAST rules support for legacy AIPROJ schema", new UnsupportedOperationException());
-    }
-
-    @Override
-    public @NonNull Boolean isUseCustomPmRules() {
-        throw GenericException.raise("No custom PM rules support for legacy AIPROJ schema", new UnsupportedOperationException());
-    }
-
-    @Override
-    public @NonNull Boolean isUseCustomYaraRules() {
-        return TRUE.equals(useCustomYaraRules);
-    }
-
-    @Override
-    public @NonNull Boolean isUseSecurityPolicies() {
-        throw GenericException.raise("No security policy support for legacy AIPROJ schema", new UnsupportedOperationException());
-    }
-
-    @Override
-    public MailingProjectSettings getMailingProjectSettings() {
-        throw GenericException.raise("No mail settings support for legacy AIPROJ schema", new UnsupportedOperationException());
-    }
-
-    @Override
-    public void load(@NonNull String data) throws GenericException {
-        Object dataObject = JsonPath.parse(data).read("$[?(@.id == 2)]");
-        String dataString = dataObject.toString();
-
-    }
-
-    @Override
-    public UnifiedAiProjScanSettings.Version getVersion() {
-        return UnifiedAiProjScanSettings.Version.V11;
     }
 }

@@ -1,8 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420.converters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ptsecurity.appsec.ai.ee.helpers.json.AiProjHelper;
-import com.ptsecurity.appsec.ai.ee.helpers.json.AiProjHelper.JavaParametersParseResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
@@ -11,8 +9,6 @@ import com.ptsecurity.appsec.ai.ee.server.v420.api.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.ptsecurity.appsec.ai.ee.helpers.json.AiProjHelper.parseJavaParameters;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.DEPENDENCYCHECK;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.FINGERPRINT;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
@@ -168,11 +163,11 @@ public class AiProjConverter {
         log.trace("Try to extract user package prefixes from Java parameters");
         // noinspection ConstantConditions
         do {
-            if (StringUtils.isEmpty(settings.getJavaParameters())) break;
-            JavaParametersParseResult parseResult = parseJavaParameters(settings.getJavaParameters());
-            if (null == parseResult) break;
-            model.setUserPackagePrefixes(parseResult.getPrefixes());
-            model.setParameters(parseResult.getOther());
+            // if (StringUtils.isEmpty(settings.getJavaParameters())) break;
+            // JavaParametersParseResult parseResult = parseJavaParameters(settings.getJavaParameters());
+            // if (null == parseResult) break;
+            // model.setUserPackagePrefixes(parseResult.getPrefixes());
+            // model.setParameters(parseResult.getOther());
         } while (false);
         // Set jdkVersion
         model.setVersion(0 == settings.getJavaVersion() ? JavaVersions.v1_8 : JavaVersions.v1_11);

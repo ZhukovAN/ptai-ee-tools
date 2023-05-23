@@ -7,6 +7,7 @@
       "type": "string"
     },
     "ProgrammingLanguage": {
+      "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.ProgrammingLanguage",
       "title": "Active scanning language",
       "type": "string",
       "enum": [
@@ -98,12 +99,14 @@
       "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
     },
     "JavaVersion": {
+      "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.JavaVersion",
       "title": "JDK version",
       "description": "JDK version. 0 for 1.8 and 1 for 1.11",
       "type": "integer",
       "enum": [0, 1]
     },
     "ProjectType": {
+      "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.DotNetProjectType",
       "title": "Type of application",
       "description": ".NET project type",
       "type": "string",
@@ -143,6 +146,7 @@
       "type": "boolean"
     },
     "Level": {
+      "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.blackbox.ScanLevel",
       "title": "Search mode",
       "type": "string",
       "enum": ["None", "Fast", "Full", "Normal"]
