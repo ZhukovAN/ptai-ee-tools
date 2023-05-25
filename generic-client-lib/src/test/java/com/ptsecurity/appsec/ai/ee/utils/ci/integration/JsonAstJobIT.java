@@ -27,7 +27,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V411;
-import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V420;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.PHP;
 import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level.*;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
@@ -289,7 +288,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @DisplayName("Scan project with slash in its name")
     public void scanProjectWithBadCharacter() {
         try (TempFile destination = TempFile.createFolder()) {
-            JsonSettingsTestHelper settings = new JsonSettingsTestHelper(getResourceString("json/scan/settings/settings.java-app01.aiproj"));
+            JsonSettingsTestHelper settings = new JsonSettingsTestHelper(getResourceString("json/scan/settings/legacy/settings.java-app01.aiproj"));
             settings.setProjectName("junit-" + UUID.randomUUID() + "-origin/master");
             GenericAstJob astJob = JsonAstJobImpl.builder()
                     .async(false)

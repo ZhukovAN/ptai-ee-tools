@@ -204,6 +204,7 @@
               "type": "integer"
             },
             "Type": {
+              "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.blackbox.ProxyType",
               "description": "Type of proxy",
               "type": "string",
               "enum": ["Http", "Socks4", "Socks5"]

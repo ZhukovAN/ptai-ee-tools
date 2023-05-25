@@ -2,7 +2,7 @@ package com.ptsecurity.appsec.ai.ee.test.scan.settings;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.AiprojLegacy;
-import com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings;
+// import com.ptsecurity.appsec.ai.ee.scan.settings.v411.AiProjScanSettings;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class AiprojLegacyTest {
     @Test
     @SneakyThrows
     public void parse() {
-        InputStream inputStream = getResourceStream("json/scan/settings/settings.dast.aiproj");
+        InputStream inputStream = getResourceStream("json/scan/settings/legacy/settings.dast.aiproj");
         Assertions.assertNotNull(inputStream);
         ObjectMapper mapper = createObjectMapper();
         AiprojLegacy settings = mapper.readValue(inputStream, AiprojLegacy.class);

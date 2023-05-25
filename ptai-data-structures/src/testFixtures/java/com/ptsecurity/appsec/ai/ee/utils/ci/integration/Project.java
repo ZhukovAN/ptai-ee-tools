@@ -70,7 +70,7 @@ public class Project {
     }
 
     private Project(@NonNull final String name) {
-        this(PREFIX + name, "code/" + name + ".7z", "json/scan/settings/settings." + name + ".aiproj");
+        this(PREFIX + name, "code/" + name + ".7z", "json/scan/settings/legacy/settings." + name + ".aiproj");
     }
 
     public Project randomClone() {

@@ -111,15 +111,15 @@ public interface UnifiedAiProjScanSettings {
         @Setter
         @Builder
         @AllArgsConstructor
-        public static class ListItem {
-            enum Format {
+        public static class AddressListItem {
+            public enum Format {
                 WILDCARD, EXACTMATCH, REGEXP
             }
             protected Format format;
             protected String address;
         }
-        protected List<ListItem> whiteListedAddresses;
-        protected List<ListItem> blackListedAddresses;
+        protected List<AddressListItem> whiteListedAddresses;
+        protected List<AddressListItem> blackListedAddresses;
 
         public enum ScanLevel {
             NONE,
@@ -139,7 +139,7 @@ public interface UnifiedAiProjScanSettings {
         protected String site;
 
         @Builder.Default
-        protected Boolean sslCheck = true;
+        protected Boolean sslCheck = false;
 
         @Builder.Default
         protected Boolean runAutocheckAfterScan = false;
@@ -173,6 +173,7 @@ public interface UnifiedAiProjScanSettings {
         @NoArgsConstructor
         @AllArgsConstructor
         public static class Authentication {
+            public static final Authentication NONE = new Authentication();
             public enum Type {
                 FORM,
                 HTTP,
@@ -209,8 +210,8 @@ public interface UnifiedAiProjScanSettings {
         @NoArgsConstructor
         @AllArgsConstructor
         public static class FormAuthentication extends Authentication {
-            public enum Detection { AUTO, MANUAL }
-            protected Detection detection;
+            public enum DetectionType { AUTO, MANUAL }
+            protected DetectionType detectionType;
             protected String formAddress;
             protected String login;
             protected String password;

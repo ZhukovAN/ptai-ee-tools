@@ -213,7 +213,7 @@ public class AiProjConverter {
             BlackBoxFormAuthenticationModel formAuthModel;
             UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication formAuth;
             formAuth = (UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication) auth;
-            if (UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.Detection.AUTO == formAuth.getDetection()) {
+            if (UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.DetectionType.AUTO == formAuth.getDetectionType()) {
                 UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthenticationAuto formAuthAuto;
                 formAuthAuto = (UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthenticationAuto) formAuth;
                 formAuthModel = new BlackBoxFormAuthenticationModel()

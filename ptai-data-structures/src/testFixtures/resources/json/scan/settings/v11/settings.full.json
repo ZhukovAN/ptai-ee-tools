@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json.schemastore.org/aiproj-1.1.json",
+  "Version": "1.1",
+  "ProjectName": "full",
+  "ProgrammingLanguage": "Php",
+  "ScanModules": [
+    "VulnerableSourceCode",
+    "DataFlowAnalysis",
+    "PatternMatching",
+    "Components",
+    "Configuration",
+    "BlackBox"
+  ],
+  "CustomParameters": "--log-level=trace",
+  "UseSastRules": false,
+  "UseCustomPmRules": false,
+  "UseSecurityPolicies": true,
+  "SkipGitIgnoreFiles": false,
+  "UsePublicAnalysisMethod": true,
+  "DownloadDependencies": true,
+  "BlackBoxSettings": {
+    "Site": "https://missing.ptdemo.local",
+    "Level": "Full",
+    "SslCheck": true,
+    "ScanScope": "Domain",
+    "BlackListedAddresses": [
+      {
+        "Format": "Wildcard",
+        "Address": "https://test.ptdemo.local/admin/*"
+      },
+      {
+        "Format": "ExactMatch",
+        "Address": "https://test.ptdemo.local/setup"
+      }
+    ],
+    "WhiteListedAddresses": [
+      {
+        "Format": "ExactMatch",
+        "Address": "https://test.ptdemo.local/sales"
+      },
+      {
+        "Format": "Wildcard",
+        "Address": "https://test.ptdemo.local/users/*"
+      }
+    ],
+    "AdditionalHttpHeaders": [
+      {
+        "Key": "ptai-scan",
+        "Value": "ptai-scan-header-value"
+      }
+    ],
+    "Authentication": {
+      "Type": "Form",
+      "Form": {
+        "FormDetection": "Auto",
+        "LoginKey": null,
+        "PasswordKey": null,
+        "Login": "*****",
+        "Password": "*****",
+        "FormAddress": "https://site.example.com:8888/path",
+        "FormXPath": null,
+        "ValidationTemplate": "Welcome"
+      }
+    },
+    "ProxySettings": {
+      "Enabled": true,
+      "Type": "Http",
+      "Host": "192.168.0.1",
+      "Port": 3128,
+      "Login": "*****",
+      "Password": "*****"
+    },
+    "RunAutocheckAfterScan": true
+  },
+  "MailingProjectSettings": {
+    "Enabled": true,
+    "MailProfileName": "PTDemo",
+    "EmailRecipients": [
+      "developer@ptdemo.local",
+      "ciso@ptdemo.local"
+    ]
+  }
+}

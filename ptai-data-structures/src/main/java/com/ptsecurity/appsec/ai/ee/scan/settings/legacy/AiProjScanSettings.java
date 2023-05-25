@@ -1,5 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings.legacy;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.jayway.jsonpath.Configuration;
+import com.networknt.schema.*;
 import com.ptsecurity.appsec.ai.ee.helpers.aiproj.AiProjHelper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
@@ -12,6 +15,7 @@ import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.JavaVersion;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.ProgrammingLanguage;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.blackbox.ScanLevel;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.ResourcesHelper;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +33,8 @@ import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSetting
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.DotNetProjectType.SOLUTION;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.DotNetProjectType.WEB_SITE;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.DotNetProjectType.NONE;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 import static java.lang.Boolean.TRUE;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -299,12 +305,14 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
 
     @Override
     public @NonNull Boolean isUseSastRules() {
-        throw GenericException.raise("No custom SAST rules support for legacy AIPROJ schema", new UnsupportedOperationException());
+        log.trace("No custom SAST rules support for legacy AIPROJ schema");
+        return false;
     }
 
     @Override
     public @NonNull Boolean isUseCustomPmRules() {
-        throw GenericException.raise("No custom PM rules support for legacy AIPROJ schema", new UnsupportedOperationException());
+        log.trace("No custom PM rules support for legacy AIPROJ schema");
+        return false;
     }
 
     @Override
@@ -314,17 +322,33 @@ public class AiProjScanSettings extends AiprojLegacy implements UnifiedAiProjSca
 
     @Override
     public @NonNull Boolean isUseSecurityPolicies() {
-        throw GenericException.raise("No security policy support for legacy AIPROJ schema", new UnsupportedOperationException());
+        log.trace("No security policy support for legacy AIPROJ schema");
+        return false;
     }
 
     @Override
     public MailingProjectSettings getMailingProjectSettings() {
-        throw GenericException.raise("No mail settings support for legacy AIPROJ schema", new UnsupportedOperationException());
+        log.trace("No mail settings support for legacy AIPROJ schema");
+        return null;
     }
 
     @Override
     public UnifiedAiProjScanSettings load(@NonNull String data) throws GenericException {
-        return null;
+        return call(() -> {
+            String schema = ResourcesHelper.getResourceString("aiproj/schema/aiproj-legacy.json");
+            JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4);
+            JsonSchema jsonSchema = factory.getSchema(schema);
+            JsonNode jsonNode = createObjectMapper().readTree(data);
+            Set<ValidationMessage> errors = jsonSchema.validate(jsonNode);
+            if (CollectionUtils.isNotEmpty(errors)) {
+                log.debug("AIPROJ parse errors:");
+                for (ValidationMessage error : errors)
+                    log.debug(error.getMessage());
+                throw GenericException.raise("AIPROJ schema validation failed", new JsonSchemaException(errors.toString()));
+            }
+            return createObjectMapper().readValue(data, AiProjScanSettings.class);
+
+        }, "AIPROJ parse failed");
     }
 
     @Override

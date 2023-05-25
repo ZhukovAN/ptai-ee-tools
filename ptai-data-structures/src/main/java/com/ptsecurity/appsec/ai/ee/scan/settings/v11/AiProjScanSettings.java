@@ -1,20 +1,22 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings.v11;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
+import com.networknt.schema.*;
 import com.ptsecurity.appsec.ai.ee.helpers.aiproj.AiProjHelper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.settings.BaseAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.AuthItem;
-import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.Authentication;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.DetectionType;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.DotNetProjectType;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.JavaVersion;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ProgrammingLanguage;
-import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.AuthType;
-import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.ProxyType;
-import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.ScanLevel;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.*;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.siteaddress.Format;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.ResourcesHelper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -25,6 +27,8 @@ import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
+import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -36,7 +40,10 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
     private static final Map<String, UnifiedAiProjScanSettings.JavaSettings.JavaVersion> JAVA_VERSION_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
     private static final Map<String, BlackBoxSettings.ProxySettings.Type> BLACKBOX_PROXY_TYPE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
     private static final Map<String, BlackBoxSettings.ScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
+    private static final Map<String, BlackBoxSettings.ScanScope> BLACKBOX_SCAN_SCOPE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
     private static final Map<String, BlackBoxSettings.Authentication.Type> BLACKBOX_AUTH_TYPE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
+    private static final Map<String, BlackBoxSettings.AddressListItem.Format> BLACKBOX_ADDRESS_FORMAT_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
+    private static final Map<String, DetectionType> BLACKBOX_FORM_AUTH_DETECTION_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
 
     static {
         PROGRAMMING_LANGUAGE_MAP.put(ProgrammingLanguage.JAVA.value(), ScanBrief.ScanSettings.Language.JAVA);
@@ -75,20 +82,44 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
         BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FULL.value(), BlackBoxSettings.ScanLevel.NONE);
         BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NORMAL.value(), BlackBoxSettings.ScanLevel.NONE);
 
+        BLACKBOX_SCAN_SCOPE_MAP.put(ScanScope.PATH.value(), BlackBoxSettings.ScanScope.PATH);
+        BLACKBOX_SCAN_SCOPE_MAP.put(ScanScope.DOMAIN.value(), BlackBoxSettings.ScanScope.DOMAIN);
+        BLACKBOX_SCAN_SCOPE_MAP.put(ScanScope.FOLDER.value(), BlackBoxSettings.ScanScope.FOLDER);
+
         BLACKBOX_AUTH_TYPE_MAP.put(AuthType.NONE.value(), BlackBoxSettings.Authentication.Type.NONE);
         BLACKBOX_AUTH_TYPE_MAP.put(AuthType.FORM.value(), BlackBoxSettings.Authentication.Type.FORM);
         BLACKBOX_AUTH_TYPE_MAP.put(AuthType.RAW_COOKIE.value(), BlackBoxSettings.Authentication.Type.COOKIE);
         BLACKBOX_AUTH_TYPE_MAP.put(AuthType.HTTP.value(), BlackBoxSettings.Authentication.Type.HTTP);
+
+        BLACKBOX_ADDRESS_FORMAT_MAP.put(Format.WILDCARD.value(), BlackBoxSettings.AddressListItem.Format.WILDCARD);
+        BLACKBOX_ADDRESS_FORMAT_MAP.put(Format.EXACT_MATCH.value(), BlackBoxSettings.AddressListItem.Format.EXACTMATCH);
+        BLACKBOX_ADDRESS_FORMAT_MAP.put(Format.REG_EXP.value(), BlackBoxSettings.AddressListItem.Format.REGEXP);
+
+        BLACKBOX_FORM_AUTH_DETECTION_MAP.put(AuthFormDetectionType.AUTO.value(), DetectionType.AUTO);
+        BLACKBOX_FORM_AUTH_DETECTION_MAP.put(AuthFormDetectionType.MANUAL.value(), DetectionType.MANUAL);
     }
 
     public UnifiedAiProjScanSettings load(@NonNull final String data) throws GenericException {
-        aiprojDocument = Configuration.defaultConfiguration().jsonProvider().parse(data);
-        return this;
+        return call(() -> {
+            String schema = ResourcesHelper.getResourceString("aiproj/schema/aiproj-v1.1.json");
+            JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4);
+            JsonSchema jsonSchema = factory.getSchema(schema);
+            JsonNode jsonNode = createObjectMapper().readTree(data);
+            Set<ValidationMessage> errors = jsonSchema.validate(jsonNode);
+            if (CollectionUtils.isNotEmpty(errors)) {
+                log.debug("AIPROJ parse errors:");
+                for (ValidationMessage error : errors)
+                    log.debug(error.getMessage());
+                throw GenericException.raise("AIPROJ schema validation failed", new JsonSchemaException(errors.toString()));
+            }
+            aiprojDocument = Configuration.defaultConfiguration().jsonProvider().parse(data);
+            return this;
+        }, "AIPROJ parse failed");
     }
 
     @Override
     public Version getVersion() {
-        return Version.V11;
+        return Version.V10;
     }
 
     @Override
@@ -159,7 +190,8 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
 
     @Override
     public @NonNull Boolean isUseCustomYaraRules() {
-        throw GenericException.raise("No custom SAST rules support for AIPROJ schema v.1.1", new UnsupportedOperationException());
+        log.trace("No custom SAST rules support for AIPROJ schema v.1.1");
+        return false;
     }
 
     @Override
@@ -174,11 +206,13 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
 
     @Override
     public MailingProjectSettings getMailingProjectSettings() {
-        if (null == JsonPath.read(aiprojDocument, "$.MailingProjectSettings")) return null;
+        Object mailingProjectSettings = O("$.MailingProjectSettings");
+        if (null == mailingProjectSettings) return null;
+
         return MailingProjectSettings.builder()
-                .enabled(B("$.MailingProjectSettings.Enabled"))
-                .mailProfileName(S("$.MailingProjectSettings.MailProfileName"))
-                .emailRecipients(JsonPath.read(aiprojDocument, "$.MailingProjectSettings.EmailRecipients"))
+                .enabled(B(mailingProjectSettings, "$.Enabled"))
+                .mailProfileName(S(mailingProjectSettings, "$.MailProfileName"))
+                .emailRecipients(JsonPath.read(mailingProjectSettings, "$.EmailRecipients"))
                 .build();
     }
 
@@ -195,60 +229,91 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
 
     private BlackBoxSettings.Authentication convertAuthentication(final Object auth) {
         log.trace("Check if AIPROJ authentication field is defined");
-        if (null == auth)
-            return new BlackBoxSettings.Authentication();
+        if (null == auth) {
+            log.info("Explicitly set authentication type NONE as there's no authentication settings defined");
+            return BlackBoxSettings.Authentication.NONE;
+        }
         BlackBoxSettings.Authentication.Type authType;
         authType = BLACKBOX_AUTH_TYPE_MAP.getOrDefault(S(auth, "$.Type"), BlackBoxSettings.Authentication.Type.NONE);
 
-        if (BlackBoxSettings.Authentication.Type.FORM == authType)
-            return isEmpty(authItem.formXpath)
+        if (BlackBoxSettings.Authentication.Type.FORM == authType) {
+            Object form = O(auth, "$.Form");
+            if (null == form) {
+                log.info("Explicitly set authentication type NONE as there's no form authentication settings defined");
+                return BlackBoxSettings.Authentication.NONE;
+            }
+            DetectionType detectionType = BLACKBOX_FORM_AUTH_DETECTION_MAP.getOrDefault(S(form, "$.FormDetection"), DetectionType.AUTO);
+            return (DetectionType.AUTO.equals(detectionType))
                     ? BlackBoxSettings.FormAuthenticationAuto.builder()
                     .type(authType)
-                    .formAddress(authItem.formUrl)
-                    .login(null != authItem.credentials.login ? authItem.credentials.login.value : null)
-                    .password(null != authItem.credentials.password ? authItem.credentials.password.value : null)
-                    .validationTemplate(authItem.regexpOfSuccess)
+                    .detectionType(detectionType)
+                    .formAddress(S(form, "$.FormAddress"))
+                    .login(S(form, "$.Login"))
+                    .password(S(form, "$.Password"))
+                    .validationTemplate(S(form, "$.ValidationTemplate"))
                     .build()
                     : BlackBoxSettings.FormAuthenticationManual.builder()
                     .type(authType)
-                    .formAddress(authItem.formUrl)
-                    .xPath(authItem.formXpath)
-                    .loginKey(null != authItem.credentials.login ? authItem.credentials.login.name : null)
-                    .login(null != authItem.credentials.login ? authItem.credentials.login.value : null)
-                    .passwordKey(null != authItem.credentials.password ? authItem.credentials.password.name : null)
-                    .password(null != authItem.credentials.password ? authItem.credentials.password.value : null)
-                    .validationTemplate(authItem.regexpOfSuccess)
+                    .detectionType(detectionType)
+                    .formAddress(S(form, "$.FormAddress"))
+                    .loginKey(S(form, "$.LoginKey"))
+                    .login(S(form, "$.Login"))
+                    .passwordKey(S(form, "$.PasswordKey"))
+                    .password(S(form, "$.Password"))
+                    .validationTemplate(S(form, "$.ValidationTemplate"))
+                    .xPath(S(form, "$.FormXPath"))
                     .build();
-        else if (BlackBoxSettings.Authentication.Type.HTTP == authType)
+        } else if (BlackBoxSettings.Authentication.Type.HTTP == authType) {
+            Object http = O(auth, "$.Http");
+            if (null == http) {
+                log.info("Explicitly set authentication type NONE as there's no HTTP authentication settings defined");
+                return BlackBoxSettings.Authentication.NONE;
+            }
             return BlackBoxSettings.HttpAuthentication.builder()
-                    .login(null != authItem.credentials.login ? authItem.credentials.login.value : null)
-                    .password(null != authItem.credentials.password ? authItem.credentials.password.value : null)
-                    .validationAddress(authItem.testUrl)
+                    .login(S(http, "$.Login"))
+                    .password(S(http, "$.Password"))
+                    .validationAddress(S(http, "$.ValidationAddress"))
                     .build();
-        else if (BlackBoxSettings.Authentication.Type.COOKIE == authType)
+        } else if (BlackBoxSettings.Authentication.Type.COOKIE == authType) {
+            Object cookie = O(auth, "$.Cookie");
+            if (null == cookie) {
+                log.info("Explicitly set authentication type NONE as there's no cookie authentication settings defined");
+                return BlackBoxSettings.Authentication.NONE;
+            }
             return BlackBoxSettings.CookieAuthentication.builder()
-                    .cookie(authItem.credentials.cookie)
-                    .validationAddress(authItem.testUrl)
-                    .validationTemplate(authItem.regexpOfSuccess)
+                    .cookie(S(cookie, "$.Cookie"))
+                    .validationAddress(S(cookie, "$.ValidationAddress"))
+                    .validationTemplate(S(cookie, "$.ValidationTemplate"))
                     .build();
-        else
-            return new BlackBoxSettings.Authentication();
+        } else
+            return BlackBoxSettings.Authentication.NONE;
     }
 
-    private List<Pair<String, String>> convert(@NonNull final List<List<String>> headers) {
+    private List<Pair<String, String>> convertHeaders(@NonNull final Object[] headers) {
         List<Pair<String, String>> res = new ArrayList<>();
-        for (List<String> headerNameAndValues : headers) {
-            if (CollectionUtils.isEmpty(headerNameAndValues)) {
-                log.trace("Skip empty headers");
-                continue;
-            }
-            if (isEmpty(headerNameAndValues.get(0))) {
+
+        for (Object headerKeyValue : headers) {
+            String key = S(headerKeyValue, "$.Key");
+            if (isEmpty(key)) {
                 log.trace("Skip header with empty name");
                 continue;
             }
-            for (int i = 1; i < headerNameAndValues.size(); i++)
-                res.add(
-                        new ImmutablePair<>(headerNameAndValues.get(0), headerNameAndValues.get(i)));
+            res.add(new ImmutablePair<>(key, S(headerKeyValue, "$.Value")));
+        }
+        return CollectionUtils.isEmpty(res) ? null : res;
+    }
+
+    private List<BlackBoxSettings.AddressListItem> convertAddresses(@NonNull final Object[] addresses) {
+        List<BlackBoxSettings.AddressListItem> res = new ArrayList<>();
+
+        for (Object address : addresses) {
+            String stringFormat = S(address, "$.Format");
+            BlackBoxSettings.AddressListItem.Format format = BLACKBOX_ADDRESS_FORMAT_MAP.get(stringFormat);
+            if (null == format) {
+                log.trace("Skip unknown address format {}", stringFormat);
+                continue;
+            }
+            res.add(new BlackBoxSettings.AddressListItem(format, S(address, "$.Address")));
         }
         return CollectionUtils.isEmpty(res) ? null : res;
     }
@@ -256,32 +321,35 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
     @Override
     public BlackBoxSettings getBlackBoxSettings() {
         if (!getScanModules().contains(ScanModule.BLACKBOX)) return null;
-        if (null == JsonPath.read(aiprojDocument, "$.BlackBoxSettings")) return null;
+        Object blackBoxSettings = O("$.BlackBoxSettings");
+        if (null == blackBoxSettings) return null;
 
-        BlackBoxSettings blackBoxSettings = new BlackBoxSettings();
+        BlackBoxSettings res = new BlackBoxSettings();
 
-        blackBoxSettings.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.getOrDefault(S("$.BlackBoxSettings.Level"), BlackBoxSettings.ScanLevel.NONE));
-        /*
-        blackBoxSettings.setRunAutocheckAfterScan(TRUE.equals(runAutocheckAfterScan));
+        res.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.getOrDefault(S("$.BlackBoxSettings.Level"), BlackBoxSettings.ScanLevel.NONE));
+        res.setRunAutocheckAfterScan(B(blackBoxSettings, "$.RunAutocheckAfterScan"));
+        res.setSite(S(blackBoxSettings, "$.Site"));
+        res.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.getOrDefault(S("$.BlackBoxSettings.ScanScope"), BlackBoxSettings.ScanScope.PATH));
+        res.setSslCheck(B(blackBoxSettings, "$.SslCheck"));
 
-        blackBoxSettings.setSite(site);
+        Object proxySettings = O(blackBoxSettings, "$.ProxySettings");
         if (null != proxySettings)
-            blackBoxSettings.setProxySettings(convert(proxySettings));
-        if (null != customHeaders)
-            blackBoxSettings.setHttpHeaders(convert(customHeaders));
-        if (null != authentication)
-            blackBoxSettings.setAuthentication(convert(authentication));
+            res.setProxySettings(convertProxySettings(proxySettings));
 
-        if (!blackBoxSettings.getRunAutocheckAfterScan()) return blackBoxSettings;
+        Object[] customHeaders = JsonPath.read(blackBoxSettings, "$.AdditionalHttpHeaders");
+        if (null != customHeaders && 0 != customHeaders.length)
+            res.setHttpHeaders(convertHeaders(customHeaders));
 
-        blackBoxSettings.setAutocheckSite(autocheckSite);
-        if (null != autocheckProxySettings)
-            blackBoxSettings.setAutocheckProxySettings(convert(autocheckProxySettings));
-        if (null != autocheckCustomHeaders)
-            blackBoxSettings.setAutocheckHttpHeaders(convert(autocheckCustomHeaders));
-        if (null != this.autocheckAuthentication)
-            blackBoxSettings.setAutocheckAuthentication(convert(autocheckAuthentication));
-        */
-        return blackBoxSettings;
+        Object authentication = O(blackBoxSettings, "$.Authentication");
+        res.setAuthentication(convertAuthentication(authentication));
+
+        Object[] addresses = JsonPath.read(blackBoxSettings, "$.WhiteListedAddresses");
+        if (null != addresses && 0 != addresses.length)
+            res.setWhiteListedAddresses(convertAddresses(addresses));
+        addresses = JsonPath.read(blackBoxSettings, "$.BlackListedAddresses");
+        if (null != addresses && 0 != addresses.length)
+            res.setBlackListedAddresses(convertAddresses(addresses));
+
+        return res;
     }
 }

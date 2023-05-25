@@ -1,8 +1,8 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType;
 import com.ptsecurity.appsec.ai.ee.helpers.json.JsonSettingsHelper;
+// import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType;
 import com.ptsecurity.misc.tools.TempFile;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.NonNull;
@@ -42,7 +42,7 @@ public class JsonSettingsTestHelper extends JsonSettingsHelper {
     }
 
     private final String SCAN_APP_TYPE = "ScanAppType";
-
+/*
     public void setScanAppType(final ScanAppType... values) {
         // noinspection ConstantConditions
         do {
@@ -128,4 +128,5 @@ public class JsonSettingsTestHelper extends JsonSettingsHelper {
         setProjectName("junit-" + UUID.randomUUID());
         return this;
     }
+    */
 }

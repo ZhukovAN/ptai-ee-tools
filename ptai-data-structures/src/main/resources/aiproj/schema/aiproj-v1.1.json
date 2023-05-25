@@ -165,6 +165,7 @@
               "additionalProperties": false,
               "properties": {
                 "FormDetection": {
+                  "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.AuthFormDetectionType",
                   "type": "string",
                   "title": "Detection",
                   "description": "Type of form authentication detection",

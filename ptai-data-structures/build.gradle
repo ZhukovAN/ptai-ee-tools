@@ -19,6 +19,12 @@ dependencies {
     // https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path
     implementation 'com.jayway.jsonpath:json-path:2.8.0'
 
+    // We can't use jsonschema2pojo to parse AIPROJ v.1.0 and 1.1 as their schema
+    // uses oneOf / allOf that aren't fully supported, but at least we may check JSON
+    // and use JsonPath after that
+    // https://mvnrepository.com/artifact/com.networknt/json-schema-validator
+    implementation group: 'com.networknt', name: 'json-schema-validator', version: '1.0.82'
+
 
     // Use JUnit 5 for test fixtures
     testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
