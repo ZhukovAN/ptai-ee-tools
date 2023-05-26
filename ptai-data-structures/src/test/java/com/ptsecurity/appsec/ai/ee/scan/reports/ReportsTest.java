@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.test.scan.reports;
+package com.ptsecurity.appsec.ai.ee.scan.reports;
 
 import com.fasterxml.jackson.core.io.JsonEOFException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -8689,6 +8689,11 @@ components:
       additionalProperties: false
     ScanResultModel:
       type: object
+      required:
+        - id
+        - projectId
+        - settingsId
+        - scanDate
       properties:
         id:
           type: string

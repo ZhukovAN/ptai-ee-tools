@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.test.scan.brief;
+package com.ptsecurity.appsec.ai.ee.scan.brief;
 
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;

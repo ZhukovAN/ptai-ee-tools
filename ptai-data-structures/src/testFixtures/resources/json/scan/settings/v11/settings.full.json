@@ -55,8 +55,8 @@
         "FormDetection": "Auto",
         "LoginKey": null,
         "PasswordKey": null,
-        "Login": "*****",
-        "Password": "*****",
+        "Login": "admin",
+        "Password": "P@ssw0rd",
         "FormAddress": "https://site.example.com:8888/path",
         "FormXPath": null,
         "ValidationTemplate": "Welcome"
@@ -67,8 +67,8 @@
       "Type": "Http",
       "Host": "192.168.0.1",
       "Port": 3128,
-      "Login": "*****",
-      "Password": "*****"
+      "Login": "admin",
+      "Password": "P@ssw0rd"
     },
     "RunAutocheckAfterScan": true
   },

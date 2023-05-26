@@ -1,13 +1,10 @@
-package com.ptsecurity.appsec.ai.ee.scan.settings.v10;
+package com.ptsecurity.appsec.ai.ee.scan.settings;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.networknt.schema.*;
-import com.ptsecurity.appsec.ai.ee.helpers.aiproj.AiProjHelper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
-import com.ptsecurity.appsec.ai.ee.scan.settings.BaseAiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.DotNetProjectType;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.JavaVersion;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.ProgrammingLanguage;
@@ -23,6 +20,8 @@ import org.apache.commons.collections.CollectionUtils;
 
 import java.util.*;
 
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.DetectionType.AUTO;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.DetectionType.MANUAL;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
@@ -31,7 +30,7 @@ import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Slf4j
-public class AiProjScanSettings extends BaseAiProjScanSettings implements UnifiedAiProjScanSettings {
+public class AiProjV10ScanSettings extends UnifiedAiProjScanSettings {
     private static final Map<String, ScanBrief.ScanSettings.Language> PROGRAMMING_LANGUAGE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
     private static final Map<String, ScanModule> SCAN_MODULE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
     private static final Map<String, UnifiedAiProjScanSettings.DotNetSettings.ProjectType> DOTNET_PROJECT_TYPE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
@@ -74,9 +73,9 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
         BLACKBOX_PROXY_TYPE_MAP.put(ProxyType.SOCKS_5.value(), BlackBoxSettings.ProxySettings.Type.SOCKS5);
 
         BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NONE.value(), BlackBoxSettings.ScanLevel.NONE);
-        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FAST.value(), BlackBoxSettings.ScanLevel.NONE);
-        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FULL.value(), BlackBoxSettings.ScanLevel.NONE);
-        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NORMAL.value(), BlackBoxSettings.ScanLevel.NONE);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FAST.value(), BlackBoxSettings.ScanLevel.FAST);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FULL.value(), BlackBoxSettings.ScanLevel.FULL);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NORMAL.value(), BlackBoxSettings.ScanLevel.NORMAL);
 
         BLACKBOX_SCAN_SCOPE_MAP.put(ScanScope.PATH.value(), BlackBoxSettings.ScanScope.PATH);
         BLACKBOX_SCAN_SCOPE_MAP.put(ScanScope.DOMAIN.value(), BlackBoxSettings.ScanScope.DOMAIN);
@@ -88,22 +87,9 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
         BLACKBOX_AUTH_TYPE_MAP.put(AuthType.HTTP.value(), BlackBoxSettings.Authentication.Type.HTTP);
     }
 
-    public UnifiedAiProjScanSettings load(@NonNull final String data) throws GenericException {
-        return call(() -> {
-            String schema = ResourcesHelper.getResourceString("aiproj/schema/aiproj-v1.0.json");
-            JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4);
-            JsonSchema jsonSchema = factory.getSchema(schema);
-            JsonNode jsonNode = createObjectMapper().readTree(data);
-            Set<ValidationMessage> errors = jsonSchema.validate(jsonNode);
-            if (CollectionUtils.isNotEmpty(errors)) {
-                log.debug("AIPROJ parse errors:");
-                for (ValidationMessage error : errors)
-                    log.debug(error.getMessage());
-                throw GenericException.raise("AIPROJ schema validation failed", new JsonSchemaException(errors.toString()));
-            }
-            aiprojDocument = Configuration.defaultConfiguration().jsonProvider().parse(data);
-            return this;
-        }, "AIPROJ parse failed");
+    @Override
+    public @NonNull String getJsonSchema() {
+        return ResourcesHelper.getResourceString("aiproj/schema/aiproj-v1.0.json");
     }
 
     @Override
@@ -124,7 +110,7 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
     @Override
     public Set<ScanModule> getScanModules() {
         Set<ScanModule> res = new HashSet<>();
-        List<String> scanModules = JsonPath.read(aiprojDocument, "$.ScanModules[*]");
+        List<String> scanModules = O(aiprojDocument, "$.ScanModules[*]");
         for (String scanModule : scanModules)
             if (SCAN_MODULE_MAP.containsKey(scanModule)) res.add(SCAN_MODULE_MAP.get(scanModule));
         return res;
@@ -137,18 +123,18 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
 
     @Override
     public DotNetSettings getDotNetSettings() {
-        if (null == JsonPath.read(aiprojDocument, "$.DotNetSettings")) return null;
+        if (null == O(aiprojDocument, "$.DotNetSettings")) return null;
         String solutionFile = S("$.DotNetSettings.SolutionFile");
         String projectType = S("$.DotNetSettings.ProjectType");
         return DotNetSettings.builder()
-                .solutionFile(AiProjHelper.fixSolutionFile(solutionFile))
+                .solutionFile(fixSolutionFile(solutionFile))
                 .projectType(DOTNET_PROJECT_TYPE_MAP.getOrDefault(projectType, DotNetSettings.ProjectType.NONE))
                 .build();
     }
 
     @Override
     public JavaSettings getJavaSettings() {
-        if (null == JsonPath.read(aiprojDocument, "$.JavaSettings")) return null;
+        if (null == O(aiprojDocument, "$.JavaSettings")) return null;
         return JavaSettings.builder()
                 .unpackUserPackages(B("$.JavaSettings.UnpackUserPackages"))
                 .userPackagePrefixes(S("$.JavaSettings.UserPackagePrefixes"))
@@ -224,23 +210,16 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
                 log.info("Explicitly set authentication type NONE as there's no form authentication settings defined");
                 return BlackBoxSettings.Authentication.NONE;
             }
-            return isEmpty(S(form, "$.FormXPath"))
-                    ? BlackBoxSettings.FormAuthenticationAuto.builder()
+            return BlackBoxSettings.FormAuthentication.builder()
                     .type(authType)
-                    .formAddress(S(form, "$.FormAddress"))
-                    .login(S(form, "$.Login"))
-                    .password(S(form, "$.Password"))
-                    .validationTemplate(S(form, "$.ValidationTemplate"))
-                    .build()
-                    : BlackBoxSettings.FormAuthenticationManual.builder()
-                    .type(authType)
-                    .formAddress(S(form, "$.FormAddress"))
+                    .detectionType(isEmpty(S(form, "$.FormXPath")) ? AUTO : MANUAL)
                     .loginKey(S(form, "$.LoginKey"))
+                    .passwordKey(S(form, "$.PasswordKey"))
                     .login(S(form, "$.Login"))
-                    .passwordKey(S(form, "$.Password"))
                     .password(S(form, "$.Password"))
-                    .validationTemplate(S(form, "$.ValidationTemplate"))
+                    .formAddress(S(form, "$.FormAddress"))
                     .xPath(S(form, "$.FormXPath"))
+                    .validationTemplate(S(form, "$.ValidationTemplate"))
                     .build();
         } else if (BlackBoxSettings.Authentication.Type.HTTP == authType) {
             Object http = O(auth, "$.Http");

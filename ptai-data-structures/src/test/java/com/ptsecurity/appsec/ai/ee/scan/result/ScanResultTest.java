@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.test.scan.result;
+package com.ptsecurity.appsec.ai.ee.scan.result;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

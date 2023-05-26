@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.test.scan.settings;
+package com.ptsecurity.appsec.ai.ee.scan.settings;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.helpers.json.JsonPolicyHelper;

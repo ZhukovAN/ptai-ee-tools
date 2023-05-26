@@ -1,14 +1,10 @@
-package com.ptsecurity.appsec.ai.ee.scan.settings.v11;
+package com.ptsecurity.appsec.ai.ee.scan.settings;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.networknt.schema.*;
-import com.ptsecurity.appsec.ai.ee.helpers.aiproj.AiProjHelper;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
-import com.ptsecurity.appsec.ai.ee.scan.settings.BaseAiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.DetectionType;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.DotNetProjectType;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.JavaVersion;
@@ -25,6 +21,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
+import static com.networknt.schema.ValidatorTypeCode.FORMAT;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
@@ -33,7 +30,7 @@ import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Slf4j
-public class AiProjScanSettings extends BaseAiProjScanSettings implements UnifiedAiProjScanSettings {
+public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
     private static final Map<String, ScanBrief.ScanSettings.Language> PROGRAMMING_LANGUAGE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
     private static final Map<String, ScanModule> SCAN_MODULE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
     private static final Map<String, UnifiedAiProjScanSettings.DotNetSettings.ProjectType> DOTNET_PROJECT_TYPE_MAP = new TreeMap<>(CASE_INSENSITIVE_ORDER);
@@ -78,9 +75,9 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
         BLACKBOX_PROXY_TYPE_MAP.put(ProxyType.SOCKS_5.value(), BlackBoxSettings.ProxySettings.Type.SOCKS5);
 
         BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NONE.value(), BlackBoxSettings.ScanLevel.NONE);
-        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FAST.value(), BlackBoxSettings.ScanLevel.NONE);
-        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FULL.value(), BlackBoxSettings.ScanLevel.NONE);
-        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NORMAL.value(), BlackBoxSettings.ScanLevel.NONE);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FAST.value(), BlackBoxSettings.ScanLevel.FAST);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FULL.value(), BlackBoxSettings.ScanLevel.FULL);
+        BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NORMAL.value(), BlackBoxSettings.ScanLevel.NORMAL);
 
         BLACKBOX_SCAN_SCOPE_MAP.put(ScanScope.PATH.value(), BlackBoxSettings.ScanScope.PATH);
         BLACKBOX_SCAN_SCOPE_MAP.put(ScanScope.DOMAIN.value(), BlackBoxSettings.ScanScope.DOMAIN);
@@ -99,27 +96,23 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
         BLACKBOX_FORM_AUTH_DETECTION_MAP.put(AuthFormDetectionType.MANUAL.value(), DetectionType.MANUAL);
     }
 
-    public UnifiedAiProjScanSettings load(@NonNull final String data) throws GenericException {
-        return call(() -> {
-            String schema = ResourcesHelper.getResourceString("aiproj/schema/aiproj-v1.1.json");
-            JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4);
-            JsonSchema jsonSchema = factory.getSchema(schema);
-            JsonNode jsonNode = createObjectMapper().readTree(data);
-            Set<ValidationMessage> errors = jsonSchema.validate(jsonNode);
-            if (CollectionUtils.isNotEmpty(errors)) {
-                log.debug("AIPROJ parse errors:");
-                for (ValidationMessage error : errors)
-                    log.debug(error.getMessage());
-                throw GenericException.raise("AIPROJ schema validation failed", new JsonSchemaException(errors.toString()));
-            }
-            aiprojDocument = Configuration.defaultConfiguration().jsonProvider().parse(data);
-            return this;
-        }, "AIPROJ parse failed");
+    @Override
+    public @NonNull String getJsonSchema() {
+        return ResourcesHelper.getResourceString("aiproj/schema/aiproj-v1.1.json");
+    }
+
+    @Override
+    public void processErrorMessages(Set<ValidationMessage> errors) {
+        errors.removeIf(e -> {
+            return
+                    e.getCode().equals(FORMAT.getErrorCode()) &&
+                    e.getSchemaPath().equals("#/properties/MailingProjectSettings/properties/EmailRecipients/items");
+        });
     }
 
     @Override
     public Version getVersion() {
-        return Version.V10;
+        return Version.V11;
     }
 
     @Override
@@ -135,7 +128,7 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
     @Override
     public Set<ScanModule> getScanModules() {
         Set<ScanModule> res = new HashSet<>();
-        List<String> scanModules = JsonPath.read(aiprojDocument, "$.ScanModules[*]");
+        List<String> scanModules = O(aiprojDocument, "$.ScanModules[*]");
         for (String scanModule : scanModules)
             if (SCAN_MODULE_MAP.containsKey(scanModule)) res.add(SCAN_MODULE_MAP.get(scanModule));
         return res;
@@ -148,18 +141,18 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
 
     @Override
     public DotNetSettings getDotNetSettings() {
-        if (null == JsonPath.read(aiprojDocument, "$.DotNetSettings")) return null;
+        if (null == O(aiprojDocument, "$.DotNetSettings")) return null;
         String solutionFile = S("$.DotNetSettings.SolutionFile");
         String projectType = S("$.DotNetSettings.ProjectType");
         return DotNetSettings.builder()
-                .solutionFile(AiProjHelper.fixSolutionFile(solutionFile))
+                .solutionFile(fixSolutionFile(solutionFile))
                 .projectType(DOTNET_PROJECT_TYPE_MAP.getOrDefault(projectType, DotNetSettings.ProjectType.NONE))
                 .build();
     }
 
     @Override
     public JavaSettings getJavaSettings() {
-        if (null == JsonPath.read(aiprojDocument, "$.JavaSettings")) return null;
+        if (null == O(aiprojDocument, "$.JavaSettings")) return null;
         return JavaSettings.builder()
                 .unpackUserPackages(B("$.JavaSettings.UnpackUserPackages"))
                 .userPackagePrefixes(S("$.JavaSettings.UserPackagePrefixes"))
@@ -212,7 +205,7 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
         return MailingProjectSettings.builder()
                 .enabled(B(mailingProjectSettings, "$.Enabled"))
                 .mailProfileName(S(mailingProjectSettings, "$.MailProfileName"))
-                .emailRecipients(JsonPath.read(mailingProjectSettings, "$.EmailRecipients"))
+                .emailRecipients(O(mailingProjectSettings, "$.EmailRecipients"))
                 .build();
     }
 
@@ -243,25 +236,16 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
                 return BlackBoxSettings.Authentication.NONE;
             }
             DetectionType detectionType = BLACKBOX_FORM_AUTH_DETECTION_MAP.getOrDefault(S(form, "$.FormDetection"), DetectionType.AUTO);
-            return (DetectionType.AUTO.equals(detectionType))
-                    ? BlackBoxSettings.FormAuthenticationAuto.builder()
+            return BlackBoxSettings.FormAuthentication.builder()
                     .type(authType)
                     .detectionType(detectionType)
-                    .formAddress(S(form, "$.FormAddress"))
-                    .login(S(form, "$.Login"))
-                    .password(S(form, "$.Password"))
-                    .validationTemplate(S(form, "$.ValidationTemplate"))
-                    .build()
-                    : BlackBoxSettings.FormAuthenticationManual.builder()
-                    .type(authType)
-                    .detectionType(detectionType)
-                    .formAddress(S(form, "$.FormAddress"))
                     .loginKey(S(form, "$.LoginKey"))
-                    .login(S(form, "$.Login"))
                     .passwordKey(S(form, "$.PasswordKey"))
+                    .login(S(form, "$.Login"))
                     .password(S(form, "$.Password"))
-                    .validationTemplate(S(form, "$.ValidationTemplate"))
+                    .formAddress(S(form, "$.FormAddress"))
                     .xPath(S(form, "$.FormXPath"))
+                    .validationTemplate(S(form, "$.ValidationTemplate"))
                     .build();
         } else if (BlackBoxSettings.Authentication.Type.HTTP == authType) {
             Object http = O(auth, "$.Http");
@@ -289,7 +273,7 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
             return BlackBoxSettings.Authentication.NONE;
     }
 
-    private List<Pair<String, String>> convertHeaders(@NonNull final Object[] headers) {
+    private List<Pair<String, String>> convertHeaders(@NonNull final List<Object> headers) {
         List<Pair<String, String>> res = new ArrayList<>();
 
         for (Object headerKeyValue : headers) {
@@ -303,7 +287,7 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
         return CollectionUtils.isEmpty(res) ? null : res;
     }
 
-    private List<BlackBoxSettings.AddressListItem> convertAddresses(@NonNull final Object[] addresses) {
+    private List<BlackBoxSettings.AddressListItem> convertAddresses(@NonNull final List<Object> addresses) {
         List<BlackBoxSettings.AddressListItem> res = new ArrayList<>();
 
         for (Object address : addresses) {
@@ -336,18 +320,18 @@ public class AiProjScanSettings extends BaseAiProjScanSettings implements Unifie
         if (null != proxySettings)
             res.setProxySettings(convertProxySettings(proxySettings));
 
-        Object[] customHeaders = JsonPath.read(blackBoxSettings, "$.AdditionalHttpHeaders");
-        if (null != customHeaders && 0 != customHeaders.length)
+        List<Object> customHeaders = O(blackBoxSettings, "$.AdditionalHttpHeaders");
+        if (null != customHeaders && 0 != customHeaders.size())
             res.setHttpHeaders(convertHeaders(customHeaders));
 
         Object authentication = O(blackBoxSettings, "$.Authentication");
         res.setAuthentication(convertAuthentication(authentication));
 
-        Object[] addresses = JsonPath.read(blackBoxSettings, "$.WhiteListedAddresses");
-        if (null != addresses && 0 != addresses.length)
+        List<Object> addresses = O(blackBoxSettings, "$.WhiteListedAddresses");
+        if (null != addresses && 0 != addresses.size())
             res.setWhiteListedAddresses(convertAddresses(addresses));
-        addresses = JsonPath.read(blackBoxSettings, "$.BlackListedAddresses");
-        if (null != addresses && 0 != addresses.length)
+        addresses = O(blackBoxSettings, "$.BlackListedAddresses");
+        if (null != addresses && 0 != addresses.size())
             res.setBlackListedAddresses(convertAddresses(addresses));
 
         return res;

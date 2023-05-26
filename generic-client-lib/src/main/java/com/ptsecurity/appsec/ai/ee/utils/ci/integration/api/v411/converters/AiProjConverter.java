@@ -5,6 +5,8 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.DetectionType;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
@@ -137,7 +139,6 @@ public class AiProjConverter {
         // Set isUnpackUserJarFiles
         model.setUnpackUserPackages(javaSettings.getUnpackUserPackages());
         // Set userPackagePrefixes and launchJvmParameters
-        log.trace("Try to extract user package prefixes from Java parameters");
         model.setUserPackagePrefixes(javaSettings.getUserPackagePrefixes());
         model.setParameters(javaSettings.getParameters());
         // Set jdkVersion
@@ -211,28 +212,23 @@ public class AiProjConverter {
 
         if (AuthType.FORM == destination.getType()) {
             BlackBoxFormAuthenticationModel formAuthModel;
-            UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication formAuth;
-            formAuth = (UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication) auth;
-            if (UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.DetectionType.AUTO == formAuth.getDetectionType()) {
-                UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthenticationAuto formAuthAuto;
-                formAuthAuto = (UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthenticationAuto) formAuth;
+            FormAuthentication formAuth;
+            formAuth = (FormAuthentication) auth;
+            if (DetectionType.AUTO == formAuth.getDetectionType())
                 formAuthModel = new BlackBoxFormAuthenticationModel()
-                        .formAddress(formAuthAuto.getFormAddress())
-                        .login(formAuthAuto.getLogin())
-                        .password(formAuthAuto.getPassword())
-                        .validationTemplate(formAuthAuto.getValidationTemplate());
-            } else {
-                UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthenticationManual formAuthManual;
-                formAuthManual = (UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthenticationManual) formAuth;
+                        .formAddress(formAuth.getFormAddress())
+                        .login(formAuth.getLogin())
+                        .password(formAuth.getPassword())
+                        .validationTemplate(formAuth.getValidationTemplate());
+            else
                 formAuthModel = new BlackBoxFormAuthenticationModel()
-                        .formAddress(formAuthManual.getFormAddress())
-                        .formXPath(formAuthManual.getXPath())
-                        .loginKey(formAuthManual.getLoginKey())
-                        .login(formAuthManual.getLogin())
-                        .passwordKey(formAuthManual.getPasswordKey())
-                        .password(formAuthManual.getPassword())
-                        .validationTemplate(formAuthManual.getValidationTemplate());
-            }
+                        .formAddress(formAuth.getFormAddress())
+                        .formXPath(formAuth.getXPath())
+                        .loginKey(formAuth.getLoginKey())
+                        .login(formAuth.getLogin())
+                        .passwordKey(formAuth.getPasswordKey())
+                        .password(formAuth.getPassword())
+                        .validationTemplate(formAuth.getValidationTemplate());
             destination.setForm(formAuthModel);
         } else if (AuthType.HTTP == destination.getType()) {
             UnifiedAiProjScanSettings.BlackBoxSettings.HttpAuthentication httpAuth;

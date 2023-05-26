@@ -1,6 +1,6 @@
 {
     "ProjectName": "junit-csharp-webgoat",
-    "ProgrammingLanguage": "Csharp",
+    "ProgrammingLanguage": "CSharp",
     "ScanAppType": "Configuration, Csharp, PmTaint",
     "IsUsePublicAnalysisMethod": true,
     "IsDownloadDependencies": true,
