@@ -1,9 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.JsonPath;
-import com.networknt.schema.*;
+import com.networknt.schema.ValidationMessage;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.DetectionType;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.DotNetProjectType;
@@ -11,7 +8,6 @@ import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.JavaVersion;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ProgrammingLanguage;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.*;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.siteaddress.Format;
-import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.misc.tools.helpers.ResourcesHelper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +20,6 @@ import java.util.*;
 import static com.networknt.schema.ValidatorTypeCode.FORMAT;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
-import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
-import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -126,17 +120,38 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
     }
 
     @Override
+    public UnifiedAiProjScanSettings setProgrammingLanguage(ScanBrief.ScanSettings.@NonNull Language value) {
+        for (String language : PROGRAMMING_LANGUAGE_MAP.keySet()) {
+            if (!PROGRAMMING_LANGUAGE_MAP.get(language).equals(value)) continue;
+            aiprojDocument.set("$.ProgrammingLanguage", language);
+        }
+        return this;
+    }
+
+    @Override
     public Set<ScanModule> getScanModules() {
         Set<ScanModule> res = new HashSet<>();
-        List<String> scanModules = O(aiprojDocument, "$.ScanModules[*]");
+        List<String> scanModules = O("$.ScanModules");
         for (String scanModule : scanModules)
             if (SCAN_MODULE_MAP.containsKey(scanModule)) res.add(SCAN_MODULE_MAP.get(scanModule));
         return res;
     }
 
     @Override
+    public UnifiedAiProjScanSettings setScanModules(@NonNull Set<ScanModule> modules) {
+        aiprojDocument.set("$.ScanModules", modules);
+        return this;
+    }
+
+    @Override
     public String getCustomParameters() {
         return S("$.CustomParameters");
+    }
+
+    @Override
+    public UnifiedAiProjScanSettings setCustomParameters(String parameters) {
+        aiprojDocument.set("$.CustomParameters", parameters);
+        return this;
     }
 
     @Override
@@ -172,6 +187,12 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
     }
 
     @Override
+    public UnifiedAiProjScanSettings setUsePublicAnalysisMethod(@NonNull Boolean value) {
+        aiprojDocument.set("$.UsePublicAnalysisMethod", value);
+        return this;
+    }
+
+    @Override
     public @NonNull Boolean isUseSastRules() {
         return B("$.UseSastRules");
     }
@@ -195,6 +216,12 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
     @Override
     public @NonNull Boolean isDownloadDependencies() {
         return B("$.DownloadDependencies");
+    }
+
+    @Override
+    public UnifiedAiProjScanSettings setDownloadDependencies(@NonNull Boolean value) {
+        aiprojDocument.set("$.DownloadDependencies", value);
+        return this;
     }
 
     @Override

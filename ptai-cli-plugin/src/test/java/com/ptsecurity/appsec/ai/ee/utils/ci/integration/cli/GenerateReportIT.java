@@ -4,11 +4,11 @@ import com.contrastsecurity.sarif.SarifSchema210;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import com.ptsecurity.misc.tools.TempFile;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.*;
@@ -26,6 +26,7 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.PHP_SMOKE
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.ExitCode.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStream;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 
 @DisplayName("Report generation tests")
@@ -35,19 +36,22 @@ class GenerateReportIT extends BaseCliIT {
     protected static UUID LATEST_COMPLETE_SCAN_RESULT_ID;
 
     @BeforeAll
+    @SneakyThrows
     public static void init() {
         BaseCliIT.init();
-        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE);
-        log.trace("Scan PHP smoke project for GenerateReportIT tests");
-        int res = new CommandLine(new Plugin()).execute(
-                "json-ast",
-                "--url", CONNECTION().getUrl(),
-                "--token", CONNECTION().getToken(),
-                "--insecure",
-                "--input", PHP_SMOKE.getCode().toString(),
-                "--settings-json", settings.toPath().toString());
-        Assertions.assertEquals(SUCCESS.getCode(), res);
-        LATEST_COMPLETE_SCAN_RESULT_ID = getLatestCompleteScanResults(PHP_SMOKE.getName());
+        try (TempFile settings = TempFile.createFile()) {
+            FileUtils.writeStringToFile(settings.toFile(), PHP_SMOKE.getSettings().toJson(), UTF_8);
+            log.trace("Scan PHP smoke project for GenerateReportIT tests");
+            int res = new CommandLine(new Plugin()).execute(
+                    "json-ast",
+                    "--url", CONNECTION().getUrl(),
+                    "--token", CONNECTION().getToken(),
+                    "--insecure",
+                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--settings-json", settings.toPath().toString());
+            Assertions.assertEquals(SUCCESS.getCode(), res);
+            LATEST_COMPLETE_SCAN_RESULT_ID = getLatestCompleteScanResults(PHP_SMOKE.getName());
+        }
     }
 
     @Test

@@ -43,6 +43,15 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
         return PROGRAMMING_LANGUAGE_MAP.get(S("$.ProgrammingLanguage"));
     }
 
+    @Override
+    public UnifiedAiProjScanSettings setProgrammingLanguage(ScanBrief.ScanSettings.@NonNull Language value) {
+        for (String language : PROGRAMMING_LANGUAGE_MAP.keySet()) {
+            if (!PROGRAMMING_LANGUAGE_MAP.get(language).equals(value)) continue;
+            aiprojDocument.set("$.ProgrammingLanguage", language);
+        }
+        return this;
+    }
+
     @Accessors(fluent = true)
     @RequiredArgsConstructor
     private enum ScanAppType {
@@ -156,6 +165,13 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
         return res;
     }
 
+    @Override
+    public UnifiedAiProjScanSettings setScanModules(@NonNull Set<ScanModule> modules) {
+        String modulesList = String.join(", ", modules.stream().map(ScanModule::getValue).collect(Collectors.toSet()));
+        aiprojDocument.set("$.ScanModules", modulesList);
+        return this;
+    }
+
     private BlackBoxSettings.ProxySettings convertProxySettings(@NonNull final Object proxySettings) {
         return BlackBoxSettings.ProxySettings.builder()
                 .enabled(B(proxySettings, "$.IsEnabled"))
@@ -263,13 +279,31 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
     }
 
     @Override
+    public UnifiedAiProjScanSettings setDownloadDependencies(@NonNull Boolean value) {
+        aiprojDocument.set("$.IsDownloadDependencies", value);
+        return this;
+    }
+
+    @Override
     public @NonNull Boolean isUsePublicAnalysisMethod() {
         return B("$.IsUsePublicAnalysisMethod");
     }
 
     @Override
+    public UnifiedAiProjScanSettings setUsePublicAnalysisMethod(@NonNull Boolean value) {
+        aiprojDocument.set("$.IsUsePublicAnalysisMethod", value);
+        return this;
+    }
+
+    @Override
     public String getCustomParameters() {
         return S("$.CustomParameters");
+    }
+
+    @Override
+    public UnifiedAiProjScanSettings setCustomParameters(String parameters) {
+        aiprojDocument.set("$.CustomParameters", parameters);
+        return this;
     }
 
     @Override

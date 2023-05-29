@@ -3,9 +3,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v420;
 import com.google.gson.reflect.TypeToken;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.integration.rest.Environment;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.JsonAstJobIT;
@@ -16,7 +15,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import com.ptsecurity.misc.tools.TempFile;
 import com.ptsecurity.misc.tools.helpers.ArchiveHelper;
 import lombok.NonNull;
@@ -35,10 +33,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V420;
-import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
-import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ScanModule.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 
@@ -49,15 +48,15 @@ import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMappe
 public class RestApiDataStructuresIT extends BaseClientIT {
 
     @SneakyThrows
-    protected void generateData(@NonNull final Path destination, @NonNull final Project project, @NonNull final Consumer<JsonSettingsTestHelper> modifySettings) {
+    protected void generateData(@NonNull final Path destination, @NonNull final Project project, @NonNull final Consumer<UnifiedAiProjScanSettings> modifySettings) {
         RawData rawData = RawData.builder()
                 .fileName(UUID.randomUUID() + ".json")
                 .build();
 
-        JsonSettingsTestHelper helper = new JsonSettingsTestHelper(project.getSettings());
-        helper.setProjectName(project.getName());
+        UnifiedAiProjScanSettings settings = project.getSettings().clone();
+        settings.setProjectName(project.getName());
 
-        modifySettings.accept(helper);
+        modifySettings.accept(settings);
 
         GenericAstJob astJob = JsonAstJobIT.JsonAstJobImpl.builder()
                 .async(false)
@@ -67,7 +66,7 @@ public class RestApiDataStructuresIT extends BaseClientIT {
                 .sources(project.getCode())
                 .destination(destination)
                 // As we directly pass scan settings there's no need to call Project's setup method
-                .jsonSettings(helper.serialize())
+                .jsonSettings(settings.toJson())
                 .build();
         RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
         FailIfAstFailed.builder().build().attach(astJob);
@@ -123,65 +122,51 @@ public class RestApiDataStructuresIT extends BaseClientIT {
     @Test
     public void generateRestApiDataStructures() {
         try (TempFile destination = TempFile.createFolder()) {
-            generateData(destination.toPath(), C_SARD_101_000_149_064, (helper) -> {
-                helper.setScanAppType(CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
+            generateData(destination.toPath(), C_SARD_101_000_149_064, (settings) -> {
+                settings.setScanModules(Stream.of(CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
             });
 
-            generateData(destination.toPath(), PYTHON_DSVW, (helper) -> {
-                helper.setScanAppType(CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setIsDownloadDependencies(true);
+            generateData(destination.toPath(), PYTHON_DSVW, (settings) -> {
+                settings.setScanModules(Stream.of(CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(true);
             });
 
-            generateData(destination.toPath(), CSHARP_WEBGOAT, (helper) -> {
-                helper.setScanAppType(CSHARP, CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setIsDownloadDependencies(true);
+            generateData(destination.toPath(), CSHARP_WEBGOAT, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(true);
             });
 
-            generateData(destination.toPath(), JAVASCRIPT_VNWA, (helper) -> {
-                helper.setScanAppType(JAVASCRIPT, CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setIsDownloadDependencies(false);
+            generateData(destination.toPath(), JAVASCRIPT_VNWA, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(false);
             });
 
-            generateData(destination.toPath(), JAVA_APP01, (helper) -> {
-                helper.setScanAppType(JAVA, CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setIsDownloadDependencies(true);
+            generateData(destination.toPath(), JAVA_APP01, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(true);
             });
 
-            generateData(destination.toPath(), JAVA_OWASP_BENCHMARK, (helper) -> {
-                helper.setScanAppType(JAVA, PMTAINT);
-                helper.isUseEntryAnalysisPoint(false);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setUsePmAnalysis(true);
-                helper.setUseTaintAnalysis(false);
-                helper.setIsDownloadDependencies(true);
+            generateData(destination.toPath(), JAVA_OWASP_BENCHMARK, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(true);
             });
 
-            generateData(destination.toPath(), PHP_OWASP_BRICKS, (helper) -> {
-                helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setUsePmAnalysis(true);
-                helper.setUseTaintAnalysis(true);
-                helper.setIsDownloadDependencies(false);
+            generateData(destination.toPath(), PHP_OWASP_BRICKS, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(false);
             });
 
-            generateData(destination.toPath(), PHP_SMOKE, (helper) -> {
-                helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setUsePmAnalysis(true);
-                helper.setUseTaintAnalysis(true);
-                helper.setIsDownloadDependencies(true);
+            generateData(destination.toPath(), PHP_SMOKE, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(true);
             });
 
             log.trace("REST API data generation complete");

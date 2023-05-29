@@ -1,6 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
-import com.ptsecurity.appsec.ai.ee.helpers.json.JsonSettingsHelper;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.misc.tools.helpers.ArchiveHelper;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStrin
 @Builder
 @AllArgsConstructor
 public class Project {
-    private static final String PREFIX = "junit-";
+    public static final String PREFIX = "junit-";
 
     public static final Project JAVA_APP01 = new Project("java-app01");
     public static final Project JAVA_OWASP_BENCHMARK = new Project("java-owasp-benchmark");
@@ -36,7 +36,7 @@ public class Project {
 
     @Getter
     @Setter
-    protected String settings;
+    protected UnifiedAiProjScanSettings settings;
 
     @Getter
     protected final String sourcesZipResourceName;
@@ -64,8 +64,7 @@ public class Project {
     @SneakyThrows
     private Project(@NonNull final String name, @NonNull final String sourcesZipResourceName, @NonNull final String settingsResourceName) {
         this.name = name;
-        String genericSettings = getResourceString(settingsResourceName);
-        this.settings = new JsonSettingsHelper(genericSettings).projectName(name).verifyRequiredFields().serialize();
+        this.settings = UnifiedAiProjScanSettings.loadSettings(getResourceString(settingsResourceName));
         this.sourcesZipResourceName = sourcesZipResourceName;
     }
 
@@ -76,10 +75,12 @@ public class Project {
     public Project randomClone() {
         String cloneName = UUID.randomUUID().toString();
         log.trace("Randomized cloned project name {}", cloneName);
-        JsonSettingsHelper settingsHelper = new JsonSettingsHelper(settings).projectName(cloneName);
+
+        UnifiedAiProjScanSettings random = settings.clone();
+        random.setProjectName(cloneName);
         return Project.builder()
                 .name(cloneName)
-                .settings(settingsHelper.serialize())
+                .settings(random)
                 .sourcesZipResourceName(sourcesZipResourceName).build();
     }
 }

@@ -108,17 +108,38 @@ public class AiProjV10ScanSettings extends UnifiedAiProjScanSettings {
     }
 
     @Override
+    public UnifiedAiProjScanSettings setProgrammingLanguage(ScanBrief.ScanSettings.@NonNull Language value) {
+        for (String language : PROGRAMMING_LANGUAGE_MAP.keySet()) {
+            if (!PROGRAMMING_LANGUAGE_MAP.get(language).equals(value)) continue;
+            aiprojDocument.set("$.ProgrammingLanguage", language);
+        }
+        return this;
+    }
+
+    @Override
     public Set<ScanModule> getScanModules() {
         Set<ScanModule> res = new HashSet<>();
-        List<String> scanModules = O(aiprojDocument, "$.ScanModules[*]");
+        List<String> scanModules = O("$.ScanModules");
         for (String scanModule : scanModules)
             if (SCAN_MODULE_MAP.containsKey(scanModule)) res.add(SCAN_MODULE_MAP.get(scanModule));
         return res;
     }
 
     @Override
+    public UnifiedAiProjScanSettings setScanModules(@NonNull Set<ScanModule> modules) {
+        aiprojDocument.set("$.ScanModules", modules);
+        return this;
+    }
+
+    @Override
     public String getCustomParameters() {
         return S("$.CustomParameters");
+    }
+
+    @Override
+    public UnifiedAiProjScanSettings setCustomParameters(String parameters) {
+        aiprojDocument.set("$.CustomParameters", parameters);
+        return this;
     }
 
     @Override
@@ -154,6 +175,12 @@ public class AiProjV10ScanSettings extends UnifiedAiProjScanSettings {
     }
 
     @Override
+    public UnifiedAiProjScanSettings setUsePublicAnalysisMethod(@NonNull Boolean value) {
+        aiprojDocument.set("$.UsePublicAnalysisMethod", value);
+        return this;
+    }
+
+    @Override
     public @NonNull Boolean isUseSastRules() {
         return B("$.UseSastRules");
     }
@@ -176,6 +203,12 @@ public class AiProjV10ScanSettings extends UnifiedAiProjScanSettings {
     @Override
     public @NonNull Boolean isDownloadDependencies() {
         return B("$.DownloadDependencies");
+    }
+
+    @Override
+    public UnifiedAiProjScanSettings setDownloadDependencies(@NonNull Boolean value) {
+        aiprojDocument.set("$.DownloadDependencies", value);
+        return this;
     }
 
     @Override

@@ -1,6 +1,119 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
+  "definitions": {
+    "GenericValue": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        },
+        "value": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        },
+        "regexp": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        },
+        "is_regexp": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "is_regexp"
+      ]
+    },
+    "Authentication": {
+      "type": "object",
+      "properties": {
+        "auth_item": {
+          "type": "object",
+          "properties": {
+            "domain": {
+              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+            },
+            "credentials": {
+              "type": "object",
+              "properties": {
+                "cookie": {
+                  "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+                },
+                "type": {
+                  "type": "integer",
+                  "description": "0 = Form, 1 = HTTP, 2 = None, 3 = Cookie"
+                },
+                "login": { "$ref": "#/definitions/GenericValue" },
+                "password": { "$ref": "#/definitions/GenericValue" }
+              },
+              "required": [
+                "cookie",
+                "type",
+                "login",
+                "password"
+              ]
+            },
+            "test_url": {
+              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+            },
+            "form_url": {
+              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+            },
+            "form_xpath": {
+              "type": "string"
+            },
+            "regexp_of_success": {
+              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+            }
+          },
+          "required": [
+            "domain",
+            "credentials",
+            "test_url",
+            "form_url",
+            "form_xpath",
+            "regexp_of_success"
+          ]
+        }
+      },
+      "required": [
+        "auth_item"
+      ]
+    },
+    "ProxySettings": {
+      "type": "object",
+      "properties": {
+        "IsEnabled": {
+          "type": "boolean"
+        },
+        "Host": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        },
+        "Port": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
+        },
+        "Type": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
+        },
+        "Username": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        },
+        "Password": {
+          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+        }
+      },
+      "required": [
+        "IsEnabled"
+      ]
+    },
+    "Headers": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
   "properties": {
     "ProjectName": {
       "title": "Project name",
@@ -151,34 +264,18 @@
       "type": "string",
       "enum": ["None", "Fast", "Full", "Normal"]
     },
-    "CustomHeaders": {
-      "type": "array",
-      "items": {
-        "type": "array",
-        "items": {
-            "type": "string"
-        }
-      }
-    },
-    "Authentication": { "$ref": "#/$defs/Authentication" },
-    "ProxySettings": { "$ref": "#/$defs/ProxySettings" },
+    "CustomHeaders": { "$ref": "#/definitions/Headers" },
+    "Authentication": { "$ref": "#/definitions/Authentication" },
+    "ProxySettings": { "$ref": "#/definitions/ProxySettings" },
     "RunAutocheckAfterScan": {
       "type": "boolean"
     },
     "AutocheckSite": {
       "type": "string"
     },
-    "AutocheckCustomHeaders": {
-      "type": "array",
-      "items": {
-        "type": "array",
-        "items": {
-          "type": "string"
-        }
-      }
-    },
-    "AutocheckAuthentication": { "$ref": "#/$defs/Authentication" },
-    "AutocheckProxySettings": { "$ref": "#/$defs/ProxySettings" },
+    "AutocheckCustomHeaders": { "$ref": "#/definitions/Headers" },
+    "AutocheckAuthentication": { "$ref": "#/definitions/Authentication" },
+    "AutocheckProxySettings": { "$ref": "#/definitions/ProxySettings" },
     "SendEmailWithReportsAfterScan": {
       "type": "boolean"
     },
@@ -244,118 +341,5 @@
     "ProjectName",
     "ProgrammingLanguage",
     "ScanAppType"
-  ],
-  "$defs": {
-    "GenericValue": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-        },
-        "value": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-        },
-        "regexp": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-        },
-        "is_regexp": {
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "is_regexp"
-      ]
-    },
-    "Authentication": {
-      "type": "object",
-      "properties": {
-        "auth_item": {
-          "type": "object",
-          "properties": {
-            "domain": {
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-            },
-            "credentials": {
-              "type": "object",
-              "properties": {
-                "cookie": {
-                  "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-                },
-                "type": {
-                  "type": "integer",
-                  "description": "0 = Form, 1 = HTTP, 2 = None, 3 = Cookie"
-                },
-                "login": { "$ref": "#/$defs/GenericValue" },
-                "password": { "$ref": "#/$defs/GenericValue" }
-              },
-              "required": [
-                "cookie",
-                "type",
-                "login",
-                "password"
-              ]
-            },
-            "test_url": {
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-            },
-            "form_url": {
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-            },
-            "form_xpath": {
-              "type": "string"
-            },
-            "regexp_of_success": {
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-            }
-          },
-          "required": [
-            "domain",
-            "credentials",
-            "test_url",
-            "form_url",
-            "form_xpath",
-            "regexp_of_success"
-          ]
-        }
-      },
-      "required": [
-        "auth_item"
-      ]
-    },
-    "ProxySettings": {
-      "type": "object",
-      "properties": {
-        "IsEnabled": {
-          "type": "boolean"
-        },
-        "Host": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-        },
-        "Port": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
-        },
-        "Type": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
-        },
-        "Username": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-        },
-        "Password": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
-        }
-      },
-      "required": [
-        "IsEnabled"
-      ]
-    }
-  },
-  "Headers": {
-    "type": "array",
-    "items": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    }
-  }
+  ]
 }

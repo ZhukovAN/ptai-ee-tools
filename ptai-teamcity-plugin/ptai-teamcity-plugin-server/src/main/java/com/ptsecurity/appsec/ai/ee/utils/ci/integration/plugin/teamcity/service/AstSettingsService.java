@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.service
 import com.ptsecurity.appsec.ai.ee.ServerCheckResult;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
@@ -12,7 +13,6 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.teamcity.admin.As
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.misc.tools.helpers.CallHelper;
 import com.ptsecurity.misc.tools.helpers.CertificateHelper;
@@ -223,7 +223,7 @@ public class AstSettingsService {
                 results.add(JSON_SETTINGS, MESSAGE_JSON_SETTINGS_EMPTY);
             else {
                 try {
-                    new JsonSettingsHelper(bean.get(JSON_SETTINGS)).verifyRequiredFields();
+                    UnifiedAiProjScanSettings.loadSettings(bean.get(JSON_SETTINGS)).verifyRequiredFields();
                 } catch (GenericException e) {
                     results.add(JSON_SETTINGS, e.getDetailedMessage());
                     log.warn(e.getDetailedMessage(), e);
@@ -328,8 +328,8 @@ public class AstSettingsService {
                     results.failure();
                 }
             } else {
-                JsonSettingsHelper helper = new JsonSettingsHelper(bean.getProperties().get(JSON_SETTINGS)).verifyRequiredFields();
-                results.add("JSON settings are verified, project name is " + helper.getProjectName());
+                UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(bean.getProperties().get(JSON_SETTINGS)).verifyRequiredFields();
+                results.add("JSON settings are verified, project name is " + settings.getProjectName());
                 Policy[] policyJson = JsonPolicyHelper.verify(bean.getProperties().get(JSON_POLICY));
                 results.add("JSON policy is verified, number of rule sets is " + policyJson.length);
             }

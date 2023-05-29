@@ -1,8 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -65,9 +64,8 @@ class DeleteProjectIT extends BaseCliIT {
         for (int i = 1; i <= 5 ; i++) {
             Project phpSmokeClone = PHP_SMOKE.randomClone();
             phpSmokeClone.setName(PHP_SMOKE.getName() + "-" + i);
-            JsonSettingsHelper settings = new JsonSettingsTestHelper(PHP_SMOKE)
-                    .projectName(phpSmokeClone.getName());
-            phpSmokeClone.setSettings(settings.serialize());
+            UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone().setProjectName(phpSmokeClone.getName());
+            phpSmokeClone.setSettings(settings);
             UUID projectId = setup(phpSmokeClone);
             projects.add(Pair.of(phpSmokeClone.getName(), projectId));
         }

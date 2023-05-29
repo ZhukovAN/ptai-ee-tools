@@ -1,9 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
 import com.contrastsecurity.sarif.SarifSchema210;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import com.ptsecurity.misc.tools.TempFile;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,8 @@ class JsonAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Execute AST of new project with no policy defined")
     public void scanNewProjectWithoutPolicy() {
-        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE).randomizeProjectName();
+        UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone().setProjectName(randomProjectName());
+
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
                 "--url", CONNECTION().getUrl(),
@@ -50,7 +51,7 @@ class JsonAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Execute AST of new project ignoring policy assessment result")
     public void scanNewProjectAndIgnorePolicy() {
-        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE).randomizeProjectName();
+        UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone().setProjectName(randomProjectName());
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
                 "--url", CONNECTION().getUrl(),
@@ -68,7 +69,7 @@ class JsonAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Execute AST of new project with policy assessment")
     public void failNewProjectScanDueToPolicyAssessment() {
-        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE).randomizeProjectName();
+        UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone().setProjectName(randomProjectName());
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
                 "--url", CONNECTION().getUrl(),
@@ -87,8 +88,8 @@ class JsonAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Execute AST of new project with missing dependencies")
     public void failNewProjectScanWithMissingDependencies() {
-        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(JAVA_APP01).randomizeProjectName();
-        settings.setIsDownloadDependencies(false);
+        UnifiedAiProjScanSettings settings = JAVA_APP01.getSettings().clone().setProjectName(randomProjectName());
+        settings.setDownloadDependencies(false);
 
         int res = new CommandLine(new Plugin()).execute(
                 "json-ast",
@@ -108,7 +109,7 @@ class JsonAstIT extends BaseCliIT {
     @DisplayName("Execute AST of new project with explicit report generation")
     public void scanAndGenerateReports() {
         try (TempFile reportsFolder = TempFile.createFolder()) {
-            JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE).randomizeProjectName();
+            UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone().setProjectName(randomProjectName());
 
             int res = new CommandLine(new Plugin()).execute(
                     "json-ast",
@@ -135,7 +136,7 @@ class JsonAstIT extends BaseCliIT {
     public void scanAndGenerateJsonDefinedReports() {
         try (TempFile reportsJson = TempFile.createFile();
              TempFile reportsFolder = TempFile.createFolder()) {
-            JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE).randomizeProjectName();
+            UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone().setProjectName(randomProjectName());
 
             FileUtils.copyInputStreamToFile(getResourceStream("json/scan/reports/reports.1.json"), reportsJson.toFile());
 
@@ -146,7 +147,7 @@ class JsonAstIT extends BaseCliIT {
                     "--truststore", CA_PEM_FILE.toString(),
                     "--input", PHP_SMOKE.getCode().toString(),
                     "--output", reportsFolder.toString(),
-                    "--settings-json", settings.toPath().toString(),
+                    "--settings-json", settings.serializeToFile().toString(),
                     "--report-json", reportsJson.toString());
             Assertions.assertEquals(SUCCESS.getCode(), res);
             Assertions.assertTrue(reportsFolder.toPath().resolve("report.ru.html").toFile().exists());
@@ -161,14 +162,14 @@ class JsonAstIT extends BaseCliIT {
     @DisplayName("Execute AST of every tiny project")
     public void scanTinyProjects() {
         for (Project project : TINY) {
-            JsonSettingsTestHelper settings = new JsonSettingsTestHelper(project).randomizeProjectName();
+            UnifiedAiProjScanSettings settings = project.getSettings().clone().setProjectName(randomProjectName());
             int res = new CommandLine(new Plugin()).execute(
                     "json-ast",
                     "--url", CONNECTION().getUrl(),
                     "--token", CONNECTION().getToken(),
                     "--truststore", CA_PEM_FILE.toString(),
                     "--input", project.getCode().toString(),
-                    "--settings-json", settings.toPath().toString());
+                    "--settings-json", settings.serializeToFile().toString());
             Assertions.assertEquals(SUCCESS.getCode(), res);
         }
     }
@@ -180,7 +181,7 @@ class JsonAstIT extends BaseCliIT {
     @DisplayName("Execute AST of new project with SARIF and GIIF report generation")
     public void scanAndGenerateGiifReports() {
         try (TempFile reportsFolder = TempFile.createFolder()) {
-            JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE).randomizeProjectName();
+            UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone().setProjectName(randomProjectName());
 
             int res = new CommandLine(new Plugin()).execute(
                     "json-ast",

@@ -1,11 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings;
 
-import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
-import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
 import hudson.Extension;
 import hudson.model.Item;
 import hudson.util.FormValidation;
@@ -61,8 +60,8 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
                 if (!Validator.doCheckFieldNotEmpty(jsonSettings))
                     return Validator.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty());
 
-                JsonSettingsHelper helper = new JsonSettingsHelper(jsonSettings).verifyRequiredFields();
-                return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_settings_message_success(helper.getProjectName(), helper.getProgrammingLanguage()));
+                UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(jsonSettings).verifyRequiredFields();
+                return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_settings_message_success(settings.getProjectName(), settings.getProgrammingLanguage()));
             } catch (Exception e) {
                 return Validator.error(e);
             }

@@ -8,6 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.UUID;
 import java.util.logging.LogManager;
 
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStream;
@@ -24,5 +28,10 @@ public class BaseTest {
     @BeforeEach
     public void pre(@NonNull final TestInfo testInfo) {
         log.info("Test started: {}", testInfo.getDisplayName());
+    }
+
+    @NonNull
+    public static String randomProjectName() {
+        return "junit-" + UUID.randomUUID();
     }
 }
