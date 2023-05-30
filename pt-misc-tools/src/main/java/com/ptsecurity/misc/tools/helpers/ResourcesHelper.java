@@ -23,6 +23,7 @@ public class ResourcesHelper {
     @SneakyThrows
     @NonNull
     public static InputStream getResourceStream(@NonNull final String name) {
+        log.trace("Get resource {} stream", name);
         return Objects.requireNonNull(ResourcesHelper.class.getClassLoader().getResourceAsStream(name));
     }
 

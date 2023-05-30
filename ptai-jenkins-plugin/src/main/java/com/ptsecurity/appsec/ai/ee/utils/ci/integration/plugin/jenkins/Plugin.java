@@ -25,6 +25,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import hudson.AbortException;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -161,7 +162,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 throw new AbortException(check.getMessage());
             UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(jsonSettings);
             log.trace("JSON-defined project settings before macro replacement is {}", settings.toJson());
-            jsonSettings = UnifiedAiProjScanSettings.replaceMacro(jsonSettings, (s -> Util.replaceMacro(s, buildInfo.getEnvVars())));
+            jsonSettings = BaseJsonHelper.replaceMacro(jsonSettings, (s -> Util.replaceMacro(s, buildInfo.getEnvVars())));
             log.trace("JSON-defined project settings after macro replacement is {}", jsonSettings);
             settings = UnifiedAiProjScanSettings.loadSettings(jsonSettings);
             projectName = settings.getProjectName();

@@ -27,17 +27,17 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V411;
-import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.PHP;
 import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level.*;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ScanModule.*;
 import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.JAVA_OWASP_BENCHMARK;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.PHP_SMOKE;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
 import static java.util.Collections.singleton;
@@ -71,16 +71,16 @@ public class JsonAstJobIT extends BaseAstIT {
     }
 
     @SneakyThrows
-    protected void scanProjectTwice(@NonNull final Project project) {
+    protected void scanProjectTwice(@NonNull final ProjectTemplate projectTemplate) {
         try (TempFile destination = TempFile.createFolder()) {
             GenericAstJob astJob = JsonAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(project.getCode())
+                    .sources(projectTemplate.getCode())
                     .destination(destination.toPath())
-                    .jsonSettings(project.getSettings().clone()
+                    .jsonSettings(projectTemplate.getSettings()
                             .setUsePublicAnalysisMethod(true)
                             .setProjectName(randomProjectName())
                             .toJson())
@@ -88,7 +88,7 @@ public class JsonAstJobIT extends BaseAstIT {
                     .build();
 
             for (int i = 0 ; i < 2 ; i++) {
-                log.trace("{} scan {} project", 0 == i ? "First" : "Second", project.getName());
+                log.trace("{} scan {} project", 0 == i ? "First" : "Second", projectTemplate.getName());
                 AbstractJob.JobExecutionResult res = astJob.execute();
                 Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
                 Thread.sleep(15000);
@@ -99,18 +99,17 @@ public class JsonAstJobIT extends BaseAstIT {
     @SneakyThrows
     public ScanResult scanPhpSmokeMisc(@NonNull final Consumer<UnifiedAiProjScanSettings> modifySettings) {
         try (TempFile destination = TempFile.createFolder()) {
-
-            UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone();
-            modifySettings.accept(settings);
+            ProjectTemplate randomClone = randomClone(PHP_SMOKE);
+            modifySettings.accept(randomClone.getSettings());
 
             GenericAstJob astJob = JsonAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(PHP_SMOKE.getCode())
+                    .sources(randomClone.getCode())
                     .destination(destination.toPath())
-                    .jsonSettings(settings.toJson())
+                    .jsonSettings(randomClone.getSettings().toJson())
                     .build();
             RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
             FailIfAstFailed.builder().build().attach(astJob);
@@ -235,14 +234,15 @@ public class JsonAstJobIT extends BaseAstIT {
     @DisplayName("Check raw report multiflow XSS representation via group Id")
     public void checkMultiflow() {
         try (TempFile destination = TempFile.createFolder()) {
+            ProjectTemplate randomClone = randomClone(PHP_SMOKE);
             GenericAstJob astJob = JsonAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(PHP_SMOKE.getCode())
+                    .sources(randomClone.getCode())
                     .destination(destination.toPath())
-                    .jsonSettings(PHP_SMOKE.getSettings().toJson())
+                    .jsonSettings(randomClone.getSettings().toJson())
                     .build();
             RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
 
@@ -263,9 +263,9 @@ public class JsonAstJobIT extends BaseAstIT {
     @Tag("scan")
     @DisplayName("Scan every (except OWASP Benchmark) project twice: first time as a new project, second time as existing")
     public void scanEveryProjectTwice() {
-        for (Project project : ALL) {
-            if (JAVA_OWASP_BENCHMARK == project) continue;
-            scanProjectTwice(project);
+        for (ID templateId : ID.values()) {
+            if (JAVA_OWASP_BENCHMARK == templateId) continue;
+            scanProjectTwice(ProjectTemplate.randomClone(templateId));
         }
     }
 
@@ -275,17 +275,17 @@ public class JsonAstJobIT extends BaseAstIT {
     @DisplayName("Scan project with slash in its name")
     public void scanProjectWithBadCharacter() {
         try (TempFile destination = TempFile.createFolder()) {
-            UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings
-                    .loadSettings(getResourceString("json/scan/settings/legacy/settings.java-app01.aiproj"))
-                    .setProjectName(randomProjectName() + "-origin/master");
+            ProjectTemplate randomClone = randomClone(PHP_SMOKE);
+            randomClone.setName(randomClone.getName() + "-origin/master");
+            randomClone.getSettings().setProjectName(randomClone.getName());
             GenericAstJob astJob = JsonAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(JAVA_APP01.getCode())
+                    .sources(randomClone.getCode())
                     .destination(destination.toPath())
-                    .jsonSettings(settings.toJson())
+                    .jsonSettings(randomClone.getSettings().toJson())
                     .jsonPolicy(getResourceString("json/scan/settings/policy.generic.json"))
                     .build();
             AbstractJob.JobExecutionResult res = astJob.execute();

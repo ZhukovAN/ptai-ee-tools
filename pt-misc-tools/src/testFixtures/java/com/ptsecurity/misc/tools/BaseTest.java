@@ -19,11 +19,8 @@ import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStrea
 
 @Slf4j
 public class BaseTest {
-    @SneakyThrows
     @BeforeAll
     public static void init() {
-        // InputStream stream = getResourceStream("logging.properties.bak");
-        // LogManager.getLogManager().readConfiguration(stream);
     }
 
     @BeforeEach
@@ -33,16 +30,13 @@ public class BaseTest {
 
     @NonNull
     public static String randomProjectName() {
-        return "junit-" + UUID.randomUUID();
+        return randomProjectName("junit");
     }
 
-    @Test
-    public void writeToLog() {
-        log.debug("debug");
-        log.trace("trace");
-        log.info("info");
-        log.debug("debug");
-        log.error("error");
-        log.warn("warn");
+    @NonNull
+    public static String randomProjectName(@NonNull final String prefix) {
+        String res = prefix + "-" + UUID.randomUUID();
+        log.trace("Random project name {} generated", res);
+        return res;
     }
 }

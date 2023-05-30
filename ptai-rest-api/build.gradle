@@ -40,15 +40,13 @@ dependencies {
     // Use JUnit 5 for test fixtures
     testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testFixturesImplementation('org.junit.jupiter:junit-jupiter')
-    // Enable Slf4J log for test fixtures
-    testFixturesImplementation "org.slf4j:slf4j-api:$slf4jVersion"
-    // ... and use JUL provider for them
-    testFixturesImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
 
-    testImplementation(testFixtures(project(":ptai-data-structures")))
     // Need this to write tests that use some common functions like
     // logging, zipped data processing, JSON parse etc.
-    testFixturesApi(testFixtures(project(":pt-misc-tools")))
+    testImplementation(testFixtures(project(":pt-misc-tools")))
+    testImplementation(testFixtures(project(":ptai-data-structures")))
+
+    testFixturesImplementation(testFixtures(project(":pt-misc-tools")))
     testFixturesImplementation(testFixtures(project(":ptai-data-structures")))
 }
 

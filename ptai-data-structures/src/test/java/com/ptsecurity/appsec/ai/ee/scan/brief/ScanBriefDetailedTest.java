@@ -5,7 +5,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate;
 import com.ptsecurity.misc.tools.helpers.ArchiveHelper;
 import com.ptsecurity.misc.tools.BaseTest;
 import com.ptsecurity.misc.tools.helpers.ResourcesHelper;
@@ -19,7 +19,8 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.serialize;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,21 +46,22 @@ public class ScanBriefDetailedTest extends BaseTest {
                 if (version.isDeprecated()) continue;
                 Path destination = briefDetailed.resolve(version.name().toLowerCase());
                 assertTrue(destination.toFile().mkdirs());
-                for (Project project : ALL) {
-                    ScanBriefDetailed scanBriefDetailed = parseScanResults(project.getName(), version);
+                for (ProjectTemplate.ID templateId : ID.values()) {
+                    ProjectTemplate projectTemplate = getTemplate(templateId);
+                    ScanBriefDetailed scanBriefDetailed = parseScanResults(projectTemplate.getName(), version);
                     String json = serialize(scanBriefDetailed);
-                    ArchiveHelper.packData7Zip(destination.resolve(project.getName() + ".json.7z"), json);
-                    if (JAVA_OWASP_BENCHMARK == project) {
+                    ArchiveHelper.packData7Zip(destination.resolve(projectTemplate.getName() + ".json.7z"), json);
+                    if (JAVA_OWASP_BENCHMARK == templateId) {
                         long sqliCount = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().stream()
                                 .filter(i -> BaseIssue.Level.HIGH == i.getLevel())
                                 .filter(i -> "SQL Injection".equalsIgnoreCase(i.getTitle().get(Reports.Locale.EN))).count();
                         Assertions.assertNotEquals(0, sqliCount);
-                    } else if (PHP_SMOKE.equals(project)) {
+                    } else if (PHP_SMOKE.equals(templateId)) {
                         long xssCount = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().stream()
                                 .filter(i -> BaseIssue.Level.MEDIUM == i.getLevel())
                                 .filter(i -> "Cross-Site Scripting".equalsIgnoreCase(i.getTitle().get(Reports.Locale.EN))).count();
                         Assertions.assertNotEquals(0, xssCount);
-                    } else if (PHP_OWASP_BRICKS.equals(project)) {
+                    } else if (PHP_OWASP_BRICKS.equals(templateId)) {
                         long sqliCount = scanBriefDetailed.getDetails().getChartData().getBaseIssueDistributionData().stream()
                                 .filter(i -> BaseIssue.Level.HIGH == i.getLevel())
                                 .filter(i -> "SQL Injection".equalsIgnoreCase(i.getTitle().get(Reports.Locale.EN))).count();

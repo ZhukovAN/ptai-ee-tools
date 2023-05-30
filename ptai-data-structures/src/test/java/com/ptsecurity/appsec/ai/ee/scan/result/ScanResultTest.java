@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.victools.jsonschema.generator.*;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion;
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate;
 import com.ptsecurity.misc.tools.BaseTest;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +16,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.PHP_OWASP_BRICKS;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.PHP_SMOKE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResource7ZipString;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -32,7 +31,8 @@ public class ScanResultTest extends BaseTest {
         ObjectMapper mapper = createObjectMapper();
         for (ApiVersion version : ApiVersion.values()) {
             if (version.isDeprecated()) continue;
-            String json = getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_OWASP_BRICKS.getName() + ".json.7z");
+            ProjectTemplate projectTemplate = getTemplate(ID.PHP_OWASP_BRICKS);
+            String json = getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + projectTemplate.getName() + ".json.7z");
             assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);
             Assertions.assertNotNull(scanResult.getStatistics());
@@ -53,7 +53,8 @@ public class ScanResultTest extends BaseTest {
         ObjectMapper mapper = createObjectMapper();
         for (ApiVersion version : ApiVersion.values()) {
             if (version.isDeprecated()) continue;
-            String json = getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_SMOKE.getName() + ".json.7z");
+            ProjectTemplate projectTemplate = getTemplate(ID.PHP_SMOKE);
+            String json = getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + projectTemplate.getName() + ".json.7z");
             assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);
             Assertions.assertNotNull(scanResult.getStatistics());
@@ -74,7 +75,8 @@ public class ScanResultTest extends BaseTest {
         ObjectMapper mapper = createObjectMapper();
         for (ApiVersion version : ApiVersion.values()) {
             if (version.isDeprecated()) continue;
-            String json = getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + PHP_SMOKE.getName() + ".json.7z");
+            ProjectTemplate projectTemplate = getTemplate(ID.PHP_SMOKE);
+            String json = getResource7ZipString("json/scan/result/" + version.name().toLowerCase() + "/" + projectTemplate.getName() + ".json.7z");
             assertFalse(StringUtils.isEmpty(json));
             ScanResult scanResult = mapper.readValue(json, ScanResult.class);
             String jsonOut = mapper.writeValueAsString(scanResult);

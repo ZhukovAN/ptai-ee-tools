@@ -35,7 +35,7 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Slf4j
 @Accessors
-public abstract class UnifiedAiProjScanSettings implements Cloneable {
+public abstract class UnifiedAiProjScanSettings {
     protected final Configuration configuration = Configuration.builder().options(Option.SUPPRESS_EXCEPTIONS).build();
     protected ParseContext ctx;
 
@@ -43,16 +43,6 @@ public abstract class UnifiedAiProjScanSettings implements Cloneable {
 
     public String toJson() {
         return configuration.jsonProvider().toJson(aiprojDocument.read("$"));
-    }
-
-    @Override
-    public UnifiedAiProjScanSettings clone() {
-        try {
-            UnifiedAiProjScanSettings clone = (UnifiedAiProjScanSettings) super.clone();
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
     }
 
     public Path serializeToFile() throws GenericException {
@@ -65,34 +55,6 @@ public abstract class UnifiedAiProjScanSettings implements Cloneable {
             Files.write(file, data.getBytes(StandardCharsets.UTF_8));
         }, "Data to file serialization failed");
         return file;
-    }
-
-    protected static void processJsonNode(final String name, @NonNull final JsonNode node, @NonNull Function<String, String> converter) {
-        if (node.isObject()) {
-            Iterator<Map.Entry<String, JsonNode>> fields = node.fields();
-            fields.forEachRemaining(field -> {
-                if (field.getValue().isTextual()) {
-                    log.trace("Process {} field", name);
-                    ObjectNode objectNode = (ObjectNode) node;
-                    objectNode.put(field.getKey(), converter.apply(field.getValue().asText()));
-                } else if (field.getValue().isObject())
-                    processJsonNode(field.getKey(), field.getValue(), converter);
-            });
-        } else if (node.isArray()) {
-            log.trace("Process JSON array nameless nodes");
-            ArrayNode arrayField = (ArrayNode) node;
-            arrayField.forEach(item -> processJsonNode(null, item, converter));
-        }
-    }
-
-    public static String replaceMacro(@NonNull String json, @NonNull Function<String, String> converter) throws GenericException {
-        final ObjectMapper mapper = createObjectMapper();
-        JsonNode root = call(() -> mapper.readTree(json), "JSON read failed");
-        log.trace("Process JSON nameless root node");
-        processJsonNode(null, root, converter);
-        return call(
-                () -> mapper.writeValueAsString(root),
-                "JSON serialization failed");
     }
 
     public UnifiedAiProjScanSettings verifyRequiredFields() throws GenericException {

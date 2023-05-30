@@ -44,8 +44,13 @@ subprojects {
         testImplementation('org.junit.jupiter:junit-jupiter')
         // Enable Slf4J log for tests
         testImplementation "org.slf4j:slf4j-api:$slf4jVersion"
-        // ... and use JUL provider for them
-        // testImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
+        // ... and use Log4J2 provider for them
+        // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+        testRuntimeOnly "org.apache.logging.log4j:log4j-api:${log4jVersion}"
+        // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+        testRuntimeOnly "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+        // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+        testRuntimeOnly "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {

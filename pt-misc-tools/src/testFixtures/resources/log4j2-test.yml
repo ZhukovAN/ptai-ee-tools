@@ -3,7 +3,7 @@ Configuration:
   Properties:
     Property:
       - name: filename
-        value: ptai-ee-tools.test
+        value: junit-test
       - name: pattern
         value: "[%d{yy-MMM-dd HH:mm:ss:SSS}] [%-5p] [%c{1.}:%L] - %m%n"
 
@@ -31,11 +31,12 @@ Configuration:
           max: 5
         Filters:
           ThresholdFilter:
-            level: debug
+            # Allow FATAL, ERROR, WARN, INFO and DEBUG events logging
+            level: DEBUG
             onMatch: ACCEPT
             onMismatch: DENY
       - name: TRACE
-        fileName: ${filename}.trace
+        fileName: ${filename}.trace.log
         filePattern: ${filename}.trace-%d{yyyy-MM-dd}-%i.log.gz
         PatternLayout:
           Pattern: ${pattern}
@@ -46,7 +47,7 @@ Configuration:
           max: 20
         Filters:
           ThresholdFilter:
-            level: debug
+            level: FATAL
             onMatch: DENY
             onMismatch: NEUTRAL
 

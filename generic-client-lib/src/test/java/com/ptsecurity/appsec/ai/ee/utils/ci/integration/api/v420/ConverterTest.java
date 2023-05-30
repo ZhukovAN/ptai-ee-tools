@@ -7,7 +7,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.ScanResultModel;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.ScanSettingsModel;
 import com.ptsecurity.appsec.ai.ee.server.v420.api.model.VulnerabilityModel;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.misc.tools.BaseTest;
 import com.ptsecurity.misc.tools.TempFile;
@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.ALL;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.getTemplate;
 import static com.ptsecurity.misc.tools.helpers.ArchiveHelper.extractResourceFile;
 import static com.ptsecurity.misc.tools.helpers.ArchiveHelper.packData7Zip;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
@@ -75,10 +75,11 @@ public class ConverterTest extends BaseTest {
             Path scanResults420 = destination.toPath().resolve("result").resolve("v420");
             assertTrue(scanResults420.toFile().mkdirs());
 
-            for (Project project : ALL) {
-                ScanResult scanResult = generateScanResultV420(project.getName());
+            for (ProjectTemplate.ID templateId : ProjectTemplate.ID.values()) {
+                ProjectTemplate projectTemplate = getTemplate(templateId);
+                ScanResult scanResult = generateScanResultV420(projectTemplate.getName());
                 String json = BaseJsonHelper.minimize(scanResult);
-                packData7Zip(scanResults420.resolve(project.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
+                packData7Zip(scanResults420.resolve(projectTemplate.getName() + ".json.7z"), json.getBytes(StandardCharsets.UTF_8));
             }
             log.trace("Scan results are saved to {}", destination);
         }

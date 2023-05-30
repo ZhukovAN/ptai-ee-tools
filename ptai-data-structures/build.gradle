@@ -29,13 +29,10 @@ dependencies {
     // Use JUnit 5 for test fixtures
     testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testFixturesImplementation('org.junit.jupiter:junit-jupiter')
-    // Enable Slf4J log for test fixtures
-    testFixturesImplementation "org.slf4j:slf4j-api:$slf4jVersion"
-    // ... and use JUL provider for them
-    testFixturesImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
-    // Need this to write tests that use some common functions like
+    // Need this to write tests and test fixtures that use some common functions like
     // logging, zipped data processing, JSON parse etc.
     testFixturesApi(testFixtures(project(":pt-misc-tools")))
+    testImplementation(testFixtures(project(":pt-misc-tools")))
     // https://mvnrepository.com/artifact/com.github.victools/jsonschema-generator
     testImplementation 'com.github.victools:jsonschema-generator:4.24.3'
 }
