@@ -45,7 +45,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                         if (!client.getProjectsApi().apiProjectsNameExistsGet(name)) return null;
                         return client.getProjectsApi().apiProjectsNameNameGet(name);
                     } catch (ApiException e) {
-                        log.trace("PT AI v.4.2 API returns HTTP status 204 if there's no project with given name {}", name);
+                        log.trace("PT AI v.4.3 API returns HTTP status 204 if there's no project with given name {}", name);
                         if (HttpStatus.SC_NO_CONTENT == e.getCode()) return null;
                         throw e;
                     }
@@ -69,7 +69,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
                         ProjectModel projectModel = client.getProjectsApi().apiProjectsProjectIdGet(id);
                         return projectModel.getName();
                     } catch (ApiException e) {
-                        log.trace("PT AI v.4.2.X API returns HTTP status 400 if there's no project with given Id {}", id);
+                        log.trace("PT AI v.4.3.X API returns HTTP status 400 if there's no project with given Id {}", id);
                         if (HttpStatus.SC_BAD_REQUEST == e.getCode()) return null;
                         throw e;
                     }
@@ -202,7 +202,7 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
     @Override
     @NonNull
     public List<Pair<UUID, String>> listProjects() throws GenericException {
-        // PT AI v.4.2 supports project list load:
+        // PT AI v.4.3 supports project list load:
         // without details - if API token authentication used
         // with details - if login / password authentication used
         boolean withoutDetails = client.getConnectionSettings().getCredentials() instanceof TokenCredentials;

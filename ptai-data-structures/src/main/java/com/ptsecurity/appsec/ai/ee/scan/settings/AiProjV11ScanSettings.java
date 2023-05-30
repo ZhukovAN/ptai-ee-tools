@@ -123,7 +123,8 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
     public UnifiedAiProjScanSettings setProgrammingLanguage(ScanBrief.ScanSettings.@NonNull Language value) {
         for (String language : PROGRAMMING_LANGUAGE_MAP.keySet()) {
             if (!PROGRAMMING_LANGUAGE_MAP.get(language).equals(value)) continue;
-            aiprojDocument.set("$.ProgrammingLanguage", language);
+            aiprojDocument.put("$", "ProgrammingLanguage", language);
+            break;
         }
         return this;
     }
@@ -139,7 +140,7 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public UnifiedAiProjScanSettings setScanModules(@NonNull Set<ScanModule> modules) {
-        aiprojDocument.set("$.ScanModules", modules);
+        aiprojDocument.put("$", "ScanModules", modules);
         return this;
     }
 
@@ -150,7 +151,7 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public UnifiedAiProjScanSettings setCustomParameters(String parameters) {
-        aiprojDocument.set("$.CustomParameters", parameters);
+        aiprojDocument.put("$", "CustomParameters", parameters);
         return this;
     }
 
@@ -188,7 +189,7 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public UnifiedAiProjScanSettings setUsePublicAnalysisMethod(@NonNull Boolean value) {
-        aiprojDocument.set("$.UsePublicAnalysisMethod", value);
+        aiprojDocument.put("$", "UsePublicAnalysisMethod", value);
         return this;
     }
 
@@ -220,7 +221,7 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public UnifiedAiProjScanSettings setDownloadDependencies(@NonNull Boolean value) {
-        aiprojDocument.set("$.DownloadDependencies", value);
+        aiprojDocument.put("$", "DownloadDependencies", value);
         return this;
     }
 

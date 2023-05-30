@@ -100,7 +100,7 @@ public class JsonAstJobIT extends BaseAstIT {
     public ScanResult scanPhpSmokeMisc(@NonNull final Consumer<UnifiedAiProjScanSettings> modifySettings) {
         try (TempFile destination = TempFile.createFolder()) {
 
-            UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone().setProgrammingLanguage(PHP);
+            UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone();
             modifySettings.accept(settings);
 
             GenericAstJob astJob = JsonAstJobImpl.builder()

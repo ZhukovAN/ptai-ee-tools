@@ -1,6 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.misc.tools.BaseTest;
@@ -19,6 +22,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Read and parse data from legacy scan settings (aiproj) JSON resource file")
 class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
+    @Test
+    @DisplayName("Set JSON field values")
+    public void setJsonFieldValues() {
+        String json = "{ }";
+        Configuration config = Configuration.builder().options(Option.SUPPRESS_EXCEPTIONS).build();
+        assertNull(JsonPath.using(config).parse(json).read("$.enabled"));
+        String changedJson = JsonPath.using(config).parse(json).put("$", "enabled", true).jsonString();
+        assertNotEquals(json, changedJson);
+        json = JsonPath.using(config).parse(json).put("$", "enabled", false).jsonString();
+        assertNotEquals(json, changedJson);
+    }
+
     @Test
     @SneakyThrows
     @DisplayName("Fail settings.incorrect.aiproj file with missing quote in project name")

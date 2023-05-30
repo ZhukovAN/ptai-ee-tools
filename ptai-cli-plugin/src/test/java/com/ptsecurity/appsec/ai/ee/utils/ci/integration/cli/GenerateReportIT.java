@@ -240,7 +240,7 @@ class GenerateReportIT extends BaseCliIT {
             Path reportDfd = reportsFolder.toPath().resolve("dfd.html");
             Path reportGlossary = reportsFolder.toPath().resolve("glossary.html");
 
-            for (Path report : new Path[]{reportMin, reportMax, reportDfd, reportGlossary}) {
+            for (Path report : new Path[] { reportMin, reportMax, reportDfd, reportGlossary }) {
                 List<String> args = new ArrayList<>(Arrays.asList(
                         "generate-report",
                         "--url", CONNECTION().getUrl(),
@@ -251,6 +251,7 @@ class GenerateReportIT extends BaseCliIT {
                         "--scan-result-id", LATEST_COMPLETE_SCAN_RESULT_ID.toString(),
                         "--report-file", report.getFileName().toString(),
                         "--report-template", "Scan results report"));
+                log.info("Report {} generated, size {}", report.getFileName(), report.toFile().length());
                 if (report.equals(reportMax) || report.equals(reportDfd)) args.add("--report-include-dfd");
                 if (report.equals(reportMax) || report.equals(reportGlossary)) args.add("--report-include-glossary");
                 Integer res = new CommandLine(new Plugin()).execute(args.toArray(new String[0]));

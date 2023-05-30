@@ -64,8 +64,7 @@ class DeleteProjectIT extends BaseCliIT {
         for (int i = 1; i <= 5 ; i++) {
             Project phpSmokeClone = PHP_SMOKE.randomClone();
             phpSmokeClone.setName(PHP_SMOKE.getName() + "-" + i);
-            UnifiedAiProjScanSettings settings = PHP_SMOKE.getSettings().clone().setProjectName(phpSmokeClone.getName());
-            phpSmokeClone.setSettings(settings);
+            phpSmokeClone.getSettings().setProjectName(phpSmokeClone.getName());
             UUID projectId = setup(phpSmokeClone);
             projects.add(Pair.of(phpSmokeClone.getName(), projectId));
         }

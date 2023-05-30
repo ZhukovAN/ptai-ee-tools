@@ -132,9 +132,9 @@ public class AiProjConverter {
     }
 
     /**
-     * Method converts PT AI API version independent language to PT AI v.4.2 API programming language group
+     * Method converts PT AI API version independent language to PT AI v.4.3 API programming language group
      * @param language PT AI API version independent language
-     * @return PT AI v.4.2 API programming language group
+     * @return PT AI v.4.3 API programming language group
      */
     @NonNull
     public static ProgrammingLanguageGroup convertLanguageGroup(@NonNull final Language language) {

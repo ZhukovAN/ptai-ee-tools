@@ -287,7 +287,7 @@ public abstract class UnifiedAiProjScanSettings implements Cloneable {
     public abstract String getProjectName();
 
     public UnifiedAiProjScanSettings setProjectName(@NonNull final String name) {
-        ctx.parse(aiprojDocument).set("$.ProjectName", name);
+        aiprojDocument.put("$", "ProjectName", name);
         return this;
     }
 

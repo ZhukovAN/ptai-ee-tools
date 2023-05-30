@@ -47,7 +47,8 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
     public UnifiedAiProjScanSettings setProgrammingLanguage(ScanBrief.ScanSettings.@NonNull Language value) {
         for (String language : PROGRAMMING_LANGUAGE_MAP.keySet()) {
             if (!PROGRAMMING_LANGUAGE_MAP.get(language).equals(value)) continue;
-            aiprojDocument.set("$.ProgrammingLanguage", language);
+            aiprojDocument.put("$", "ProgrammingLanguage", language);
+            break;
         }
         return this;
     }
@@ -167,8 +168,26 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public UnifiedAiProjScanSettings setScanModules(@NonNull Set<ScanModule> modules) {
-        String modulesList = String.join(", ", modules.stream().map(ScanModule::getValue).collect(Collectors.toSet()));
-        aiprojDocument.set("$.ScanModules", modulesList);
+        Set<String> legacyModules = new HashSet<>();
+        // Php, Java, CSharp, JavaScript, Configuration, Fingerprint, PmTaint, BlackBox
+        if (modules.contains(ScanModule.CONFIGURATION)) legacyModules.add(ScanAppType.CONFIGURATION.value());
+        if (modules.contains(ScanModule.COMPONENTS)) legacyModules.add(ScanAppType.FINGERPRINT.value());
+        if (modules.contains(ScanModule.BLACKBOX)) legacyModules.add(ScanAppType.BLACKBOX.value());
+        if (modules.contains(ScanModule.PATTERNMATCHING) || modules.contains(ScanModule.DATAFLOWANALYSIS))
+            legacyModules.add(ScanAppType.PMTAINT.value());
+        if (modules.contains(ScanModule.VULNERABLESOURCECODE)) {
+            ScanBrief.ScanSettings.Language language = getProgrammingLanguage();
+            if (ScanBrief.ScanSettings.Language.PHP == language)
+                legacyModules.add(ScanAppType.PHP.value());
+            else if (ScanBrief.ScanSettings.Language.JAVA == language)
+                legacyModules.add(ScanAppType.JAVA.value());
+            else if (ScanBrief.ScanSettings.Language.CSHARP == language)
+                legacyModules.add(ScanAppType.CSHARP.value());
+            else if (ScanBrief.ScanSettings.Language.JAVASCRIPT == language)
+                legacyModules.add(ScanAppType.JAVASCRIPT.value());
+        }
+        String modulesList = String.join(", ", legacyModules.stream().collect(Collectors.toSet()));
+        aiprojDocument.put("$", "ScanAppType", modulesList);
         return this;
     }
 
@@ -280,7 +299,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public UnifiedAiProjScanSettings setDownloadDependencies(@NonNull Boolean value) {
-        aiprojDocument.set("$.IsDownloadDependencies", value);
+        aiprojDocument.put("$", "IsDownloadDependencies", value);
         return this;
     }
 
@@ -291,7 +310,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public UnifiedAiProjScanSettings setUsePublicAnalysisMethod(@NonNull Boolean value) {
-        aiprojDocument.set("$.IsUsePublicAnalysisMethod", value);
+        aiprojDocument.put("$", "IsUsePublicAnalysisMethod", value);
         return this;
     }
 
@@ -302,7 +321,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public UnifiedAiProjScanSettings setCustomParameters(String parameters) {
-        aiprojDocument.set("$.CustomParameters", parameters);
+        aiprojDocument.put("$", "CustomParameters", parameters);
         return this;
     }
 

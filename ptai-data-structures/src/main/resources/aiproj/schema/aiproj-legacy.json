@@ -112,6 +112,11 @@
           "type": "string"
         }
       }
+    },
+    "ScanType": {
+      "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.ScanAppType",
+      "type": "string",
+      "enum": ["Php", "Java", "CSharp", "JavaScript", "Configuration", "Fingerprint", "PmTaint", "BlackBox"]
     }
   },
   "properties": {

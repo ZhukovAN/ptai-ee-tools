@@ -45,7 +45,7 @@ subprojects {
         // Enable Slf4J log for tests
         testImplementation "org.slf4j:slf4j-api:$slf4jVersion"
         // ... and use JUL provider for them
-        testImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
+        // testImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
     }
 
     task sourcesJar(type: Jar, dependsOn: classes) {

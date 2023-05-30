@@ -5,6 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
 import java.io.InputStream;
@@ -21,8 +22,8 @@ public class BaseTest {
     @SneakyThrows
     @BeforeAll
     public static void init() {
-        InputStream stream = getResourceStream("logging.properties");
-        LogManager.getLogManager().readConfiguration(stream);
+        // InputStream stream = getResourceStream("logging.properties.bak");
+        // LogManager.getLogManager().readConfiguration(stream);
     }
 
     @BeforeEach
@@ -33,5 +34,15 @@ public class BaseTest {
     @NonNull
     public static String randomProjectName() {
         return "junit-" + UUID.randomUUID();
+    }
+
+    @Test
+    public void writeToLog() {
+        log.debug("debug");
+        log.trace("trace");
+        log.info("info");
+        log.debug("debug");
+        log.error("error");
+        log.warn("warn");
     }
 }
