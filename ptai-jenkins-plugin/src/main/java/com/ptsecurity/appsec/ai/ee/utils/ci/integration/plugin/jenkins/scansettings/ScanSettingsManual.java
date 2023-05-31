@@ -16,6 +16,9 @@ import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 @ToString
 public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings {
     @Getter
@@ -40,15 +43,15 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
             return Resources.i18n_ast_settings_type_manual_label();
         }
 
-        public FormValidation doCheckJsonSettings(@QueryParameter("jsonSettings") String jsonSettings) {
-            FormValidation res = Validator.doCheckFieldNotEmpty(jsonSettings, Resources.i18n_ast_settings_type_manual_json_settings_message_empty());
+        public FormValidation doCheckJsonSettings(@QueryParameter String value) {
+            FormValidation res = Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_type_manual_json_settings_message_empty());
             if (FormValidation.Kind.OK != res.kind) return res;
-            return Validator.doCheckFieldJsonSettings(jsonSettings, Resources.i18n_ast_settings_type_manual_json_settings_message_invalid());
+            return Validator.doCheckFieldJsonSettings(value, Resources.i18n_ast_settings_type_manual_json_settings_message_invalid());
         }
 
-        public FormValidation doCheckJsonPolicy(@QueryParameter("jsonPolicy") String jsonPolicy) {
-            if (Validator.doCheckFieldNotEmpty(jsonPolicy))
-                return Validator.doCheckFieldJsonPolicy(jsonPolicy, Resources.i18n_ast_settings_type_manual_json_policy_message_invalid());
+        public FormValidation doCheckJsonPolicy(@QueryParameter String value) {
+            if (Validator.doCheckFieldNotEmpty(value))
+                return Validator.doCheckFieldJsonPolicy(value, Resources.i18n_ast_settings_type_manual_json_policy_message_invalid());
             else
                 return FormValidation.ok();
         }
@@ -57,11 +60,15 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
                 @AncestorInPath Item ignoredItem,
                 @QueryParameter("jsonSettings") final String jsonSettings) {
             try {
+                Collection<FormValidation> validations = new ArrayList<>();
                 if (!Validator.doCheckFieldNotEmpty(jsonSettings))
-                    return Validator.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty());
+                    validations.add(Validator.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty()));
+                if (!Validator.doCheckFieldNotEmpty(jsonSettings))
+                    validations.add(Validator.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty()));
+                return FormValidation.aggregate(validations);
 
-                UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(jsonSettings).verifyRequiredFields();
-                return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_settings_message_success(settings.getProjectName(), settings.getProgrammingLanguage()));
+                // UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(jsonSettings).verifyRequiredFields();
+                // return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_settings_message_success(settings.getProjectName(), settings.getProgrammingLanguage()));
             } catch (Exception e) {
                 return Validator.error(e);
             }

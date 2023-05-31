@@ -30,8 +30,8 @@ public class ScanSettingsUi extends ScanSettings {
             return Resources.i18n_ast_settings_type_ui_label();
         }
 
-        public FormValidation doCheckProjectName(@QueryParameter("projectName") String projectName) {
-            return Validator.doCheckFieldNotEmpty(projectName, Resources.i18n_ast_settings_type_ui_project_message_empty());
+        public FormValidation doCheckProjectName(@QueryParameter("projectName") String value) {
+            return Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_type_ui_project_message_empty());
         }
 
         public FormValidation doTestProject(

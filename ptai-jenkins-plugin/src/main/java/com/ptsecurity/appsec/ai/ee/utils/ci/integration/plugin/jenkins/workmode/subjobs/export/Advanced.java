@@ -40,10 +40,10 @@ public class Advanced extends Export {
             return Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_label();
         }
 
-        public FormValidation doCheckJson(@QueryParameter("json") String json) {
-            FormValidation res = Validator.doCheckFieldNotEmpty(json, Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_empty());
+        public FormValidation doCheckJson(@QueryParameter("json") String value) {
+            FormValidation res = Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_empty());
             if (FormValidation.Kind.OK != res.kind) return res;
-            return Validator.doCheckFieldJsonReports(json, Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_invalid());
+            return Validator.doCheckFieldJsonReports(value, Resources.i18n_ast_settings_mode_synchronous_subjob_export_advanced_settings_message_invalid());
         }
     }
 }

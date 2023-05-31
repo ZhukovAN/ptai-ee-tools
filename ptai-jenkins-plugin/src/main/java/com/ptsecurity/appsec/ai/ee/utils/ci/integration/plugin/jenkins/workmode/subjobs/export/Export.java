@@ -13,17 +13,17 @@ import java.util.Locale;
 public abstract class Export extends Base {
     public static abstract class ExportDescriptor extends BaseDescriptor {
         @SuppressWarnings("unused")
-        public FormValidation doCheckFileName(@QueryParameter("fileName") String fileName) {
-            return Validator.doCheckFieldNotEmpty(fileName, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_file_message_empty());
+        public FormValidation doCheckFileName(@QueryParameter("fileName") String value) {
+            return Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_file_message_empty());
         }
         @SuppressWarnings("unused")
-        public FormValidation doCheckTemplate(@QueryParameter("template") String template) {
-            return Validator.doCheckFieldNotEmpty(template, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_template_message_empty());
+        public FormValidation doCheckTemplate(@QueryParameter("template") String value) {
+            return Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_template_message_empty());
         }
         @SuppressWarnings("unused")
-        public FormValidation doCheckFilter(@QueryParameter("filter") String filter) {
-            if (Validator.doCheckFieldNotEmpty(filter))
-                return Validator.doCheckFieldJsonIssuesFilter(filter, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_filter_message_invalid());
+        public FormValidation doCheckFilter(@QueryParameter("filter") String value) {
+            if (Validator.doCheckFieldNotEmpty(value))
+                return Validator.doCheckFieldJsonIssuesFilter(value, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_filter_message_invalid());
             else
                 return FormValidation.ok();
         }

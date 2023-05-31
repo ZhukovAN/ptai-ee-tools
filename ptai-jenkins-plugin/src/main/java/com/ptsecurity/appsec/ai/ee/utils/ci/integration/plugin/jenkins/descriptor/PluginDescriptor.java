@@ -308,8 +308,8 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
     }
 
     @SuppressWarnings("unused")
-    public FormValidation doCheckAdvancedSettings(@QueryParameter("advancedSettings") String advancedSettings) {
-        return Validator.doCheckFieldAdvancedSettings(advancedSettings, Resources.i18n_ast_settings_advanced_message_invalid());
+    public FormValidation doCheckAdvancedSettings(@QueryParameter("advancedSettings") String value) {
+        return Validator.doCheckFieldAdvancedSettings(value, Resources.i18n_ast_settings_advanced_message_invalid());
     }
 
     private static boolean isApplicableManifest(Manifest manifest) {
