@@ -223,7 +223,7 @@ public class AstSettingsService {
                 results.add(JSON_SETTINGS, MESSAGE_JSON_SETTINGS_EMPTY);
             else {
                 try {
-                    UnifiedAiProjScanSettings.loadSettings(bean.get(JSON_SETTINGS)).verifyRequiredFields();
+                    UnifiedAiProjScanSettings.parse(bean.get(JSON_SETTINGS));
                 } catch (GenericException e) {
                     results.add(JSON_SETTINGS, e.getDetailedMessage());
                     log.warn(e.getDetailedMessage(), e);
@@ -328,7 +328,7 @@ public class AstSettingsService {
                     results.failure();
                 }
             } else {
-                UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(bean.getProperties().get(JSON_SETTINGS)).verifyRequiredFields();
+                UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(bean.getProperties().get(JSON_SETTINGS));
                 results.add("JSON settings are verified, project name is " + settings.getProjectName());
                 Policy[] policyJson = JsonPolicyHelper.verify(bean.getProperties().get(JSON_POLICY));
                 results.add("JSON policy is verified, number of rule sets is " + policyJson.length);

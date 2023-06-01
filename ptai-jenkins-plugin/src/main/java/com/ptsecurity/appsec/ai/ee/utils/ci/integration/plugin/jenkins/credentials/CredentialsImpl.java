@@ -101,7 +101,7 @@ public class CredentialsImpl extends BaseStandardCredentials implements Credenti
         }
 
         @SuppressWarnings("unused") // Called by groovy view
-        public FormValidation doCheckToken(@QueryParameter("token") String value) {
+        public FormValidation doCheckToken(@QueryParameter String value) {
             return Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_server_token_message_empty());
         }
     }

@@ -136,12 +136,12 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
         do {
             if (scanSettingsUiDescriptor.getDisplayName().equals(selectedScanSettings)) {
                 res = scanSettingsUiDescriptor.doCheckProjectName(projectName);
-                if (FormValidation.Kind.OK != res.kind) break;
+                if (FormValidation.Kind.ERROR == res.kind) break;
             } else if (scanSettingsManualDescriptor.getDisplayName().equals(selectedScanSettings)) {
                 res = scanSettingsManualDescriptor.doCheckJsonSettings(jsonSettings);
-                if (FormValidation.Kind.OK != res.kind) break;
+                if (FormValidation.Kind.ERROR == res.kind) break;
                 res = scanSettingsManualDescriptor.doCheckJsonPolicy(jsonPolicy);
-                if (FormValidation.Kind.OK != res.kind) break;
+                if (FormValidation.Kind.ERROR == res.kind) break;
             }
             if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
                 if (!Validator.doCheckFieldNotEmpty(configName)) {
@@ -151,7 +151,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             } else if (configLocalDescriptor.getDisplayName().equals(selectedConfig)) {
                 ServerSettingsDescriptor serverSettingsDescriptor = Jenkins.get().getDescriptorByType(ServerSettingsDescriptor.class);
                 res = serverSettingsDescriptor.doCheckServerUrl(serverUrl);
-                if (FormValidation.Kind.OK != res.kind) break;
+                if (FormValidation.Kind.ERROR == res.kind) break;
                 if (!Validator.doCheckFieldNotEmpty(serverCredentialsId)) {
                     res = Validator.error(Resources.i18n_ast_settings_server_credentials_message_empty());
                     break;
@@ -179,7 +179,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
                 projectName,
                 serverUrl, serverCredentialsId, serverInsecure,
                 configName);
-        if (FormValidation.Kind.OK != res.kind) return res;
+        if (FormValidation.Kind.ERROR == res.kind) return res;
 
         ConfigGlobal.Descriptor configGlobalDescriptor = Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
          try {
@@ -204,7 +204,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             boolean selectedScanSettingsUi = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class).getDisplayName().equals(selectedScanSettings);
             String realProjectName = selectedScanSettingsUi
                     ? projectName
-                    : UnifiedAiProjScanSettings.loadSettings(jsonSettings).verifyRequiredFields().getProjectName();
+                    : UnifiedAiProjScanSettings.loadSettings(jsonSettings).getProjectName();
             UUID projectId = searchProject(realProjectName, realServerUrl, credentials, insecure);
             if (null == projectId) {
                 // For manual defined (JSON) scan settings lack of project isn't a crime itself, just show warning
@@ -308,7 +308,7 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
     }
 
     @SuppressWarnings("unused")
-    public FormValidation doCheckAdvancedSettings(@QueryParameter("advancedSettings") String value) {
+    public FormValidation doCheckAdvancedSettings(@QueryParameter String value) {
         return Validator.doCheckFieldAdvancedSettings(value, Resources.i18n_ast_settings_advanced_message_invalid());
     }
 

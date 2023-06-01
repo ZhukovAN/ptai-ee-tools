@@ -39,9 +39,9 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
         super(ServerSettings.class);
     }
 
-    public FormValidation doCheckServerUrl(@QueryParameter("serverUrl") String value) {
+    public FormValidation doCheckServerUrl(@QueryParameter String value) {
         FormValidation res = Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_server_url_message_empty());
-        if (FormValidation.Kind.OK != res.kind) return res;
+        if (FormValidation.Kind.ERROR == res.kind) return res;
         return Validator.doCheckFieldUrl(value, Resources.i18n_ast_settings_server_url_message_invalid());
     }
 

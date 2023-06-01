@@ -13,15 +13,15 @@ import java.util.Locale;
 public abstract class Export extends Base {
     public static abstract class ExportDescriptor extends BaseDescriptor {
         @SuppressWarnings("unused")
-        public FormValidation doCheckFileName(@QueryParameter("fileName") String value) {
+        public FormValidation doCheckFileName(@QueryParameter String value) {
             return Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_file_message_empty());
         }
         @SuppressWarnings("unused")
-        public FormValidation doCheckTemplate(@QueryParameter("template") String value) {
+        public FormValidation doCheckTemplate(@QueryParameter String value) {
             return Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_template_message_empty());
         }
         @SuppressWarnings("unused")
-        public FormValidation doCheckFilter(@QueryParameter("filter") String value) {
+        public FormValidation doCheckFilter(@QueryParameter String value) {
             if (Validator.doCheckFieldNotEmpty(value))
                 return Validator.doCheckFieldJsonIssuesFilter(value, Resources.i18n_ast_settings_mode_synchronous_subjob_export_report_filter_message_invalid());
             else

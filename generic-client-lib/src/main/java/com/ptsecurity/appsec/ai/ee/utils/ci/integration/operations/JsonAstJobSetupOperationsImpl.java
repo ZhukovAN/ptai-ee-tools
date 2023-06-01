@@ -25,9 +25,7 @@ public class JsonAstJobSetupOperationsImpl extends AbstractSetupOperations imple
         // TODO: Add "replace macro" implementation for settings and policy
         log.trace("Check JSON settings");
 
-        jsonSettings = UnifiedAiProjScanSettings.loadSettings(jsonSettings)
-                .verifyRequiredFields()
-                .toJson();
+        jsonSettings = UnifiedAiProjScanSettings.loadSettings(jsonSettings).toJson();
         ProjectTasks projectTasks = new Factory().projectTasks(owner.getClient());
         ProjectTasks.JsonParseBrief brief = projectTasks.setupFromJson(jsonSettings, jsonPolicy, this::uploadSources);
         owner.setProjectName(brief.getProjectName());

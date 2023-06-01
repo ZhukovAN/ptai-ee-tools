@@ -7,6 +7,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.JavaVersion;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.ProgrammingLanguage;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.blackbox.ScanLevel;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.blackbox.ScanScope;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.misc.tools.helpers.ResourcesHelper;
 import lombok.Getter;
@@ -28,6 +29,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSetting
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.DotNetProjectType.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
+import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Slf4j
@@ -68,7 +70,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
         @Getter
         private final String value;
-        private static final Map<String, ScanAppType> VALUES = new HashMap<>();
+        private static final Map<String, ScanAppType> VALUES = new TreeMap<>(Comparator.nullsFirst(CASE_INSENSITIVE_ORDER));
 
         static {
             for (ScanAppType f : values()) VALUES.put(f.value, f);
@@ -87,20 +89,12 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
             ScanAppType.JAVA,
             ScanAppType.CSHARP,
             ScanAppType.JAVASCRIPT));
-    /**
-     * Set of programming languages values that support abstract interpretation
-     */
-    private static final Set<ScanBrief.ScanSettings.Language> LANGUAGE_AI = new HashSet<>(Arrays.asList(
-            ScanBrief.ScanSettings.Language.PHP,
-            ScanBrief.ScanSettings.Language.JAVA,
-            ScanBrief.ScanSettings.Language.CSHARP,
-            ScanBrief.ScanSettings.Language.VB,
-            ScanBrief.ScanSettings.Language.JAVASCRIPT));
 
-    private static final Map<String, ScanBrief.ScanSettings.Language> PROGRAMMING_LANGUAGE_MAP = new HashMap<>();
-    private static final Map<String, UnifiedAiProjScanSettings.DotNetSettings.ProjectType> DOTNET_PROJECT_TYPE_MAP = new HashMap<>();
+    private static final Map<String, ScanBrief.ScanSettings.Language> PROGRAMMING_LANGUAGE_MAP = new TreeMap<>(Comparator.nullsFirst(CASE_INSENSITIVE_ORDER));
+    private static final Map<String, UnifiedAiProjScanSettings.DotNetSettings.ProjectType> DOTNET_PROJECT_TYPE_MAP = new TreeMap<>(Comparator.nullsFirst(CASE_INSENSITIVE_ORDER));
     private static final Map<Integer, BlackBoxSettings.ProxySettings.Type> BLACKBOX_PROXY_TYPE_MAP = new HashMap<>();
-    private static final Map<String, BlackBoxSettings.ScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new HashMap<>();
+    private static final Map<String, BlackBoxSettings.ScanLevel> BLACKBOX_SCAN_LEVEL_MAP = new TreeMap<>(Comparator.nullsFirst(CASE_INSENSITIVE_ORDER));
+    private static final Map<String, BlackBoxSettings.ScanScope> BLACKBOX_SCAN_SCOPE_MAP = new TreeMap<>(Comparator.nullsFirst(CASE_INSENSITIVE_ORDER));
     private static final Map<Integer, UnifiedAiProjScanSettings.BlackBoxSettings.Authentication.Type> BLACKBOX_AUTH_TYPE_MAP = new HashMap<>();
 
 
@@ -132,6 +126,10 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
         BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.NORMAL.value(), BlackBoxSettings.ScanLevel.NORMAL);
         BLACKBOX_SCAN_LEVEL_MAP.put(ScanLevel.FULL.value(), BlackBoxSettings.ScanLevel.FULL);
 
+        BLACKBOX_SCAN_SCOPE_MAP.put(ScanScope.PATH.value(), BlackBoxSettings.ScanScope.PATH);
+        BLACKBOX_SCAN_SCOPE_MAP.put(ScanScope.DOMAIN.value(), BlackBoxSettings.ScanScope.DOMAIN);
+        BLACKBOX_SCAN_SCOPE_MAP.put(ScanScope.FOLDER.value(), BlackBoxSettings.ScanScope.FOLDER);
+
         BLACKBOX_AUTH_TYPE_MAP.put(0, BlackBoxSettings.Authentication.Type.FORM);
         BLACKBOX_AUTH_TYPE_MAP.put(1, BlackBoxSettings.Authentication.Type.HTTP);
         BLACKBOX_AUTH_TYPE_MAP.put(2, BlackBoxSettings.Authentication.Type.NONE);
@@ -148,13 +146,11 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
         // See internal wiki pageId=193599549
-        // "Vulnerable authentication code" checkbox means that we either enabled AI-supported PHP / Java / C# / JS scan mode ...
+        // "Vulnerable authentication code" checkbox means that we enabled
+        // AI-supported PHP / Java / C# / JS scan mode
         boolean abstractInterpretationCoreUsed = scanAppTypes.stream().anyMatch(SCAN_APP_TYPE_AI::contains);
-        // ... or all other languages with PmTaint / UseTaintAnalysis enabled
-        boolean taintOnlyLanguageUsed = !LANGUAGE_AI.contains(getProgrammingLanguage())
-                && scanAppTypes.contains(ScanAppType.PMTAINT)
-                && B("$.UseTaintAnalysis");
-        if (abstractInterpretationCoreUsed || taintOnlyLanguageUsed) res.add(ScanModule.VULNERABLESOURCECODE);
+        if (abstractInterpretationCoreUsed) res.add(ScanModule.VULNERABLESOURCECODE);
+
         if (B("$.UseTaintAnalysis") && scanAppTypes.contains(ScanAppType.PMTAINT))
             res.add(ScanModule.DATAFLOWANALYSIS);
         if (B("$.UsePmAnalysis") && scanAppTypes.contains(ScanAppType.PMTAINT))
@@ -267,6 +263,8 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
         blackBoxSettings.setRunAutocheckAfterScan(B("$.RunAutocheckAfterScan"));
 
         blackBoxSettings.setSite(S("$.Site"));
+        blackBoxSettings.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.getOrDefault(S("$.ScanScope"), BlackBoxSettings.ScanScope.PATH));
+
         Object proxySettings = O("$.ProxySettings");
         if (null != proxySettings)
             blackBoxSettings.setProxySettings(convertProxySettings(proxySettings));
@@ -336,12 +334,11 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public JavaSettings getJavaSettings() {
-        JavaParametersParseResult parseResult = parseJavaParameters(S("$.JavaParameters"));
         return JavaSettings.builder()
                 .unpackUserPackages(B("$.IsUnpackUserPackages"))
-                .userPackagePrefixes(null == parseResult ? null : parseResult.getPrefixes())
+                .userPackagePrefixes(S("$.UserPackagePrefixes"))
                 .javaVersion(JavaVersion._0.value().equals(I("$.JavaVersion")) ? v1_8 : v1_11)
-                .parameters(null == parseResult ? null : parseResult.getOther())
+                .parameters(S("$.JavaParameters"))
                 .build();
     }
 
@@ -354,8 +351,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public @NonNull Boolean isUseSastRules() {
-        log.trace("No custom SAST rules support for legacy AIPROJ schema");
-        return false;
+        return B("$.UseSastRules");
     }
 
     @Override
@@ -371,8 +367,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public @NonNull Boolean isUseSecurityPolicies() {
-        log.trace("No security policy support for legacy AIPROJ schema");
-        return false;
+        return B("$.UseSecurityPolicies");
     }
 
     @Override

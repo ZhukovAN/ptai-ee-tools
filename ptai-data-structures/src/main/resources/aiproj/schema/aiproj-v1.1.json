@@ -1,5 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "nullable-string": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "nullable-boolean": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    }
+  },
   "additionalProperties": false,
   "description": "Settings for project analysis by the Application Inspector",
   "properties": {
@@ -202,19 +216,19 @@
                       "type": ["string"]
                     },
                     "FormXPath": {
-                      "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+                      "$ref": "#/definitions/nullable-string"
                     },
                     "Login": {
                       "type": "string"
                     },
                     "LoginKey": {
-                      "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+                      "$ref": "#/definitions/nullable-string"
                     },
                     "Password": {
                       "type": "string"
                     },
                     "PasswordKey": {
-                      "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+                      "$ref": "#/definitions/nullable-string"
                     },
                     "ValidationTemplate": {
                       "type": ["string"]
@@ -314,15 +328,15 @@
             },
             "Host": {
               "title": "Address",
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+              "$ref": "#/definitions/nullable-string"
             },
             "Login": {
               "title": "User",
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+              "$ref": "#/definitions/nullable-string"
             },
             "Password": {
               "title": "Password",
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+              "$ref": "#/definitions/nullable-string"
             },
             "Port": {
               "title": "Port",
@@ -360,7 +374,7 @@
     "CustomParameters": {
       "title": "Custom parameters",
       "description": "Custom kernel startup parameters",
-      "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+      "$ref": "#/definitions/nullable-string"
     },
     "DotNetSettings": {
       "title": ".NET options",
@@ -377,7 +391,7 @@
         "SolutionFile": {
           "title": "Solution file",
           "description": "Path to a solution or project",
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+          "$ref": "#/definitions/nullable-string"
         }
       }
     },
@@ -389,7 +403,7 @@
       "properties": {
         "Parameters": {
           "title": "JVM start options",
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+          "$ref": "#/definitions/nullable-string"
         },
         "UnpackUserPackages": {
           "title": "Unpack custom JAR files",
@@ -397,7 +411,7 @@
         },
         "UserPackagePrefixes": {
           "title": "Prefixes of custom packages",
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+          "$ref": "#/definitions/nullable-string"
         },
         "Version": {
           "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.JavaVersion",
@@ -419,7 +433,7 @@
         },
         "MailProfileName": {
           "title": "Email profile name",
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+          "$ref": "#/definitions/nullable-string"
         },
         "EmailRecipients": {
           "title": "List of recipients",
@@ -455,7 +469,7 @@
               "enum": [false]
             },
             "MailProfileName": {
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+              "$ref": "#/definitions/nullable-string"
             },
             "EmailRecipients": {
               "type": "array",
@@ -488,12 +502,14 @@
     },
     "ProjectName": {
       "title": "Project name",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "ScanModules": {
       "title": "Enabled modules",
       "type": "array",
       "uniqueItems": true,
+      "minItems": 1,
       "items": {
         "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ScanModule",
         "type": "string",
@@ -534,7 +550,7 @@
     },
     "DownloadDependencies": {
       "title": "Download dependencies",
-      "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-boolean"
+      "$ref": "#/definitions/nullable-boolean"
     }
   },
   "required": ["ProjectName", "ProgrammingLanguage", "ScanModules"],

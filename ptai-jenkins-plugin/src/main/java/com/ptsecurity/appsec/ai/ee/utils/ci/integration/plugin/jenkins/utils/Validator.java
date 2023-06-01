@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
@@ -12,7 +13,12 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.regex.Pattern;
+
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.Version.V11;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.i18n_ast_settings_type_manual_json_settings_message_invalid;
 
 @Slf4j
 public class Validator {
@@ -39,10 +45,6 @@ public class Validator {
 
     public static boolean doCheckFieldRegEx(String value) {
         return checkViaException(() -> Pattern.compile(value));
-    }
-
-    public static boolean doCheckFieldJsonSettings(String value) {
-        return checkViaException(() -> UnifiedAiProjScanSettings.loadSettings(value).verifyRequiredFields());
     }
 
     public static boolean doCheckFieldJsonPolicy(String value) {
@@ -85,8 +87,26 @@ public class Validator {
         return doCheckFieldJsonPolicy(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
     }
 
-    public static FormValidation doCheckFieldJsonSettings(String value, String errorMessage) {
-        return doCheckFieldJsonSettings(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
+    public static FormValidation doCheckFieldJsonSettings(String value) {
+        try {
+            UnifiedAiProjScanSettings.ParseResult parseResult = UnifiedAiProjScanSettings.parse(value);
+            if (parseResult.getErrors().isEmpty()) {
+                FormValidation ok = FormValidation.ok(
+                        Resources.i18n_ast_settings_type_manual_json_settings_message_success(
+                                parseResult.getSettings().getProjectName(),
+                                parseResult.getSettings().getProgrammingLanguage().getValue()));
+                if (V11 == parseResult.getSettings().getVersion())
+                    return ok;
+                else
+                    return FormValidation.warning(Resources.i18n_ast_settings_type_manual_json_settings_message_deprecated());
+            }
+            Collection<FormValidation> errors = new ArrayList<>();
+            for (String error : parseResult.getErrors())
+                errors.add(FormValidation.error(error));
+            return FormValidation.aggregate(errors);
+        } catch (GenericException e) {
+            return Validator.error(e);
+        }
     }
 
     public static FormValidation doCheckFieldJsonIssuesFilter(String value, String errorMessage) {

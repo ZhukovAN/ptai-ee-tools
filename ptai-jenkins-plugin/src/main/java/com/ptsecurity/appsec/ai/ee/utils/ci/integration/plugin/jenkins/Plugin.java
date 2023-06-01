@@ -155,10 +155,10 @@ public class Plugin extends Builder implements SimpleBuildStep {
             log.trace("UI-defined project name after macro replacement is {}", projectName);
         } else {
             check = scanSettingsManualDescriptor.doTestJsonSettings(item, jsonSettings);
-            if (FormValidation.Kind.OK != check.kind)
+            if (FormValidation.Kind.ERROR == check.kind)
                 throw new AbortException(check.getMessage());
             check = scanSettingsManualDescriptor.doTestJsonPolicy(item, jsonPolicy);
-            if (FormValidation.Kind.OK != check.kind)
+            if (FormValidation.Kind.ERROR == check.kind)
                 throw new AbortException(check.getMessage());
             UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(jsonSettings);
             log.trace("JSON-defined project settings before macro replacement is {}", settings.toJson());
@@ -205,7 +205,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 jsonSettings, jsonPolicy,
                 projectName,
                 serverUrl, credentialsId, serverInsecure, configName);
-        if (FormValidation.Kind.OK != check.kind)
+        if (FormValidation.Kind.ERROR == check.kind)
             throw new AbortException(check.getMessage());
         // TODO: Implement scan node support when PT AI will be able to
         // String node = StringUtils.isEmpty(nodeName) ? Base.DEFAULT_PTAI_NODE_NAME : nodeName;

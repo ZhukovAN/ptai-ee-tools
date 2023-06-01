@@ -44,9 +44,7 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
         }
 
         public FormValidation doCheckJsonSettings(@QueryParameter String value) {
-            FormValidation res = Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_type_manual_json_settings_message_empty());
-            if (FormValidation.Kind.OK != res.kind) return res;
-            return Validator.doCheckFieldJsonSettings(value, Resources.i18n_ast_settings_type_manual_json_settings_message_invalid());
+            return Validator.doCheckFieldJsonSettings(value);
         }
 
         public FormValidation doCheckJsonPolicy(@QueryParameter String value) {
@@ -59,19 +57,7 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
         public FormValidation doTestJsonSettings(
                 @AncestorInPath Item ignoredItem,
                 @QueryParameter("jsonSettings") final String jsonSettings) {
-            try {
-                Collection<FormValidation> validations = new ArrayList<>();
-                if (!Validator.doCheckFieldNotEmpty(jsonSettings))
-                    validations.add(Validator.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty()));
-                if (!Validator.doCheckFieldNotEmpty(jsonSettings))
-                    validations.add(Validator.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty()));
-                return FormValidation.aggregate(validations);
-
-                // UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(jsonSettings).verifyRequiredFields();
-                // return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_settings_message_success(settings.getProjectName(), settings.getProgrammingLanguage()));
-            } catch (Exception e) {
-                return Validator.error(e);
-            }
+            return Validator.doCheckFieldJsonSettings(jsonSettings);
         }
 
         public FormValidation doTestJsonPolicy(

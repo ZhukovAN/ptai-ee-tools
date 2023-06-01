@@ -2,17 +2,26 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "definitions": {
+    "nullable-string": {
+      "type": ["string", "null"]
+    },
+    "nullable-integer": {
+      "type": ["integer", "null"]
+    },
+    "nullable-boolean": {
+      "type": ["boolean", "null"]
+    },
     "GenericValue": {
       "type": "object",
       "properties": {
         "name": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+          "$ref": "#/definitions/nullable-string"
         },
         "value": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+          "$ref": "#/definitions/nullable-string"
         },
         "regexp": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+          "$ref": "#/definitions/nullable-string"
         },
         "is_regexp": {
           "type": "boolean"
@@ -29,13 +38,13 @@
           "type": "object",
           "properties": {
             "domain": {
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+              "$ref": "#/definitions/nullable-string"
             },
             "credentials": {
               "type": "object",
               "properties": {
                 "cookie": {
-                  "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+                  "$ref": "#/definitions/nullable-string"
                 },
                 "type": {
                   "type": "integer",
@@ -52,16 +61,16 @@
               ]
             },
             "test_url": {
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+              "$ref": "#/definitions/nullable-string"
             },
             "form_url": {
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+              "$ref": "#/definitions/nullable-string"
             },
             "form_xpath": {
               "type": "string"
             },
             "regexp_of_success": {
-              "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+              "$ref": "#/definitions/nullable-string"
             }
           },
           "required": [
@@ -85,19 +94,19 @@
           "type": "boolean"
         },
         "Host": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+          "$ref": "#/definitions/nullable-string"
         },
         "Port": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
+          "$ref": "#/definitions/nullable-integer"
         },
         "Type": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-integer"
+          "$ref": "#/definitions/nullable-integer"
         },
         "Username": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+          "$ref": "#/definitions/nullable-string"
         },
         "Password": {
-          "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+          "$ref": "#/definitions/nullable-string"
         }
       },
       "required": [
@@ -119,10 +128,12 @@
       "enum": ["Php", "Java", "CSharp", "JavaScript", "Configuration", "Fingerprint", "PmTaint", "BlackBox"]
     }
   },
+  "additionalProperties": false,
   "properties": {
     "ProjectName": {
       "title": "Project name",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "ProgrammingLanguage": {
       "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.ProgrammingLanguage",
@@ -165,7 +176,7 @@
     "CustomParameters": {
       "title": "Custom parameters",
       "description": "Custom kernel startup parameters",
-      "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+      "$ref": "#/definitions/nullable-string"
     },
     "SkipFileFormats": {
       "description": "File extensions to be excluded from scan process",
@@ -211,10 +222,14 @@
       "description": "Unpack user packages for Java. Prefixes that define what JARs are to be unpacked are defined via -upp com.mycompany|com.my.company parameter in CustomParameters",
       "type": "boolean"
     },
+    "UserPackagePrefixes": {
+      "title": "User-defined Java package prefixes",
+      "$ref": "#/definitions/nullable-string"
+    },
     "JavaParameters": {
       "title": "JVM start options",
       "description": "Additional JDK run parameters",
-      "$ref": "https://json.schemastore.org/base-04.json#/definitions/nullable-string"
+      "$ref": "#/definitions/nullable-string"
     },
     "JavaVersion": {
       "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.JavaVersion",
@@ -251,6 +266,14 @@
       "title": "Use pattern matching mode of PmTaint engine",
       "type": "boolean"
     },
+    "UseSecurityPolicies": {
+      "title": "Check AST results for security policy compliance",
+      "type": "boolean"
+    },
+    "UseSastRules": {
+      "title": "Use SAST rules",
+      "type": "boolean"
+    },
     "DisableInterpretCores": {
       "title": "Disable C#, Java, PHP, JSA cores in analysis",
       "type": "boolean"
@@ -268,6 +291,12 @@
       "title": "Search mode",
       "type": "string",
       "enum": ["None", "Fast", "Full", "Normal"]
+    },
+    "ScanScope": {
+      "javaType" : "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.blackbox.ScanScope",
+      "title": "Scan scope",
+      "type": "string",
+      "enum": ["Domain", "Folder", "Path"]
     },
     "CustomHeaders": { "$ref": "#/definitions/Headers" },
     "Authentication": { "$ref": "#/definitions/Authentication" },
@@ -336,6 +365,9 @@
       "type": "boolean"
     },
     "ScanUnitTimeout": {
+      "type": "integer"
+    },
+    "PreprocessingTimeout": {
       "type": "integer"
     },
     "CustomYaraRules": {

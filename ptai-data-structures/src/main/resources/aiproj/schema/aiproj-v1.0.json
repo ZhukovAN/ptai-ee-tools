@@ -312,12 +312,14 @@
     },
     "ProjectName": {
       "description": "Project name",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "ScanModules": {
       "description": "Enabled modules",
       "type": "array",
       "uniqueItems": true,
+      "minItems": 1,
       "items": {
         "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v10.ScanModule",
         "type": "string",

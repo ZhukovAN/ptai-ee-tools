@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jayway.jsonpath.*;
 import com.networknt.schema.*;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.misc.tools.TempFile;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
@@ -28,14 +29,17 @@ import java.util.function.Function;
 
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version._1_0;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version._1_1;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 import static java.lang.Boolean.TRUE;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Slf4j
 @Accessors
 public abstract class UnifiedAiProjScanSettings {
+    private static final List<NonValidationKeyword> NON_VALIDATION_KEYS = Collections.singletonList(new NonValidationKeyword("javaType"));
     protected final Configuration configuration = Configuration.builder().options(Option.SUPPRESS_EXCEPTIONS).build();
     protected ParseContext ctx;
 
@@ -57,65 +61,11 @@ public abstract class UnifiedAiProjScanSettings {
         return file;
     }
 
-    public UnifiedAiProjScanSettings verifyRequiredFields() throws GenericException {
-        call(() -> {
-            if (StringUtils.isEmpty(getProjectName()))
-                throw new IllegalArgumentException("ProjectName field is not defined or empty");
-            if (null == getProgrammingLanguage())
-                throw new IllegalArgumentException("ProgrammingLanguage field is not defined or empty");
-        }, "JSON settings parse failed");
-        return this;
-    }
-
     @AllArgsConstructor
     @Getter
     public static class JavaParametersParseResult {
         protected String prefixes;
         protected String other;
-    }
-
-    /**
-     * @param javaParameters Java CLI parameters that are passed to Java scanning core
-     * @return CLI parameters split into two parts: {@link JavaParametersParseResult#prefixes user package prefixes}
-     * and {@link JavaParametersParseResult#other remaining part of CLI}
-     */
-    public static JavaParametersParseResult parseJavaParameters(final String javaParameters) {
-        if (StringUtils.isEmpty(javaParameters)) return null;
-        log.trace("Split Java parameters string using 'quote-safe' regular expression");
-        String[] parameters = javaParameters.split("(\"[^\"]*\")|(\\S+)");
-        if (0 == parameters.length) return null;
-        log.trace("Parse Java parameters");
-        List<String> commands = new ArrayList<>();
-        Map<String, List<String>> arguments = new HashMap<>();
-        for (int i = 0 ; i < parameters.length ; i++) {
-            log.trace("Iterate through commands");
-            if (!parameters[i].startsWith("-")) continue;
-            if (parameters.length - 1 == i)
-                // If this is last token just add it as command
-                commands.add(parameters[i]);
-            else if (parameters[i + 1].startsWith("-"))
-                // Next token is a command too
-                commands.add(parameters[i]);
-            else {
-                List<String> argumentValues = new ArrayList<>();
-                for (int j = i + 1; j < parameters.length; j++)
-                    if (!parameters[j].startsWith("-")) argumentValues.add(parameters[j]); else break;
-                arguments.put(parameters[i], argumentValues);
-            }
-        }
-        String prefixes = "";
-        StringBuilder commandBuilder = new StringBuilder();
-        for (String cmd : commands) {
-            if ("-upp".equals(cmd) || "--user-package=prefix".equals(cmd))
-                if (arguments.containsKey(cmd) && 1 == arguments.get(cmd).size())
-                    prefixes = arguments.get(cmd).get(0);
-                else {
-                    commandBuilder.append(cmd).append(" ");
-                    if (arguments.containsKey(cmd))
-                        commandBuilder.append(String.join(" ", arguments.get(cmd))).append(" ");
-                }
-        }
-        return new JavaParametersParseResult(prefixes, commandBuilder.toString().trim());
     }
 
     /**
@@ -137,32 +87,69 @@ public abstract class UnifiedAiProjScanSettings {
         return res;
     }
 
-    public UnifiedAiProjScanSettings parse(@NonNull final String data) throws GenericException {
-        final List<NonValidationKeyword> NON_VALIDATION_KEYS = Collections.singletonList(new NonValidationKeyword("javaType"));
-        return call(() -> {
-            JsonSchemaFactory factory = JsonSchemaFactory
-                    .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
-                    .addMetaSchema(JsonMetaSchema
-                            .builder(JsonMetaSchema.getV4().getUri(), JsonMetaSchema.getV4())
-                            .addKeywords(NON_VALIDATION_KEYS).build()).build();
-            JsonSchema jsonSchema = factory.getSchema(getJsonSchema());
-            log.trace("Use JacksonXML parser to process input JSON and remove comments from there");
-            JsonNode jsonNode = createObjectMapper().readTree(data);
-            log.trace("Validate JSON for AIPROJ schema compliance");
-            Set<ValidationMessage> errors = jsonSchema.validate(jsonNode);
-            processErrorMessages(errors);
-            if (CollectionUtils.isNotEmpty(errors)) {
-                log.debug("AIPROJ parse errors:");
-                for (ValidationMessage error : errors)
-                    log.debug(error.getMessage());
-                throw GenericException.raise("AIPROJ schema validation failed", new JsonSchemaException(errors.toString()));
-            }
-            ctx = JsonPath.using(configuration);
-            aiprojDocument = ctx.parse(BaseJsonHelper.minimize(jsonNode));
-            return this;
-        }, "AIPROJ parse failed");
+    @Getter
+    @RequiredArgsConstructor
+    public static class ParseResult {
+        @Setter
+        protected UnifiedAiProjScanSettings settings = null;
+        protected final List<String> errors = new ArrayList<>();
+
+        public String getError() {
+            return String.join("; ", errors);
+        }
     }
 
+    @NonNull
+    public static ParseResult parse(@NonNull final String data) throws GenericException {
+        final ParseResult result = new ParseResult();
+        if (isEmpty(data))
+            throw GenericException.raise(
+                    i18n_ast_settings_type_manual_json_settings_message_empty(),
+                    new IllegalArgumentException());
+        log.trace("Parse AIPROJ as generic JSON data");
+        final JsonNode root = call(
+                () -> createObjectMapper().readTree(data),
+                i18n_ast_settings_type_manual_json_settings_message_invalid());
+
+        log.trace("Check Version attribute");
+        JsonNode versionNode = root.path("Version");
+        UnifiedAiProjScanSettings settings;
+        if (null == versionNode || versionNode.isMissingNode())
+            settings = (null == root.path("ScanModules") || root.path("ScanModules").isMissingNode())
+                    ? new AiProjLegacyScanSettings()
+                    : new AiProjV10ScanSettings();
+        else if (_1_1.value().equals(versionNode.textValue()))
+            settings = new AiProjV11ScanSettings();
+        else if (_1_0.value().equals(versionNode.textValue()))
+            settings = new AiProjV10ScanSettings();
+        else
+            throw GenericException.raise(
+                    i18n_ast_settings_type_manual_json_settings_message_invalid(),
+                    new IllegalArgumentException("Unsupported AIPROJ version: " + versionNode.textValue()));
+
+        log.trace("Check AIPROG for schema compliance");
+        JsonSchemaFactory factory = JsonSchemaFactory
+                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
+                .addMetaSchema(JsonMetaSchema
+                        .builder(JsonMetaSchema.getV4().getUri(), JsonMetaSchema.getV4())
+                        .addKeywords(NON_VALIDATION_KEYS).build()).build();
+        log.trace("Validate JSON for AIPROJ schema compliance");
+        JsonSchema jsonSchema = factory.getSchema(settings.getJsonSchema());
+        Set<ValidationMessage> errors = jsonSchema.validate(root);
+        settings.processErrorMessages(errors);
+        if (CollectionUtils.isNotEmpty(errors))
+            errors.forEach(e -> result.getErrors().add(e.getMessage()));
+        else {
+            result.setSettings(settings.init(BaseJsonHelper.minimize(root)));
+        }
+        return result;
+    }
+
+    protected UnifiedAiProjScanSettings init(@NonNull final String data) throws GenericException {
+        ctx = JsonPath.using(configuration);
+        aiprojDocument = ctx.parse(data);
+        return this;
+    }
 
     @NonNull
     protected abstract String getJsonSchema();
@@ -175,24 +162,7 @@ public abstract class UnifiedAiProjScanSettings {
     public void processErrorMessages(Set<ValidationMessage> errors) {};
 
     public static UnifiedAiProjScanSettings loadSettings(@NonNull final String data) throws GenericException {
-        ParseContext ctx = JsonPath.using(Configuration.builder().options(Option.SUPPRESS_EXCEPTIONS).build());
-        DocumentContext doc = ctx.parse(BaseJsonHelper.minimize(data));
-        String version = doc.read("$.Version");
-        if (isNotEmpty(version)) {
-            log.trace("Detected AIPROJ version {}", version);
-            if (_1_1.value().equals(version))
-                return new AiProjV11ScanSettings().parse(data);
-            else if (_1_0.value().equals(version)) {
-                return new AiProjV10ScanSettings().parse(data);
-            } else
-                throw GenericException.raise("AIPROJ parse failed", new IllegalArgumentException("Unsupported AIPROJ version " + version));
-        } else if (null != doc.read("$.ScanModules")) {
-            log.trace("Parse AIPROJ as v.1.0 as there's no version, but ScanModules are defined");
-            return new AiProjV10ScanSettings().parse(data);
-        } else {
-            log.trace("Parse legacy AIPROJ as there's no version and no ScanModules are defined");
-            return new AiProjLegacyScanSettings().parse(data);
-        }
+        return parse(data).getSettings();
     }
 
     protected Boolean B(@NonNull final String path) {
@@ -239,7 +209,7 @@ public abstract class UnifiedAiProjScanSettings {
         return res;
     }
 
-    enum Version { LEGACY, V10, V11 }
+    public enum Version { LEGACY, V10, V11 }
     public abstract Version getVersion();
 
     /**

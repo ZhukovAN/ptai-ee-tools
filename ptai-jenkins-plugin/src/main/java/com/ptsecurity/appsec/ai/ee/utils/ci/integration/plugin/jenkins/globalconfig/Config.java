@@ -53,7 +53,7 @@ public class Config extends AbstractDescribableImpl<Config> implements Cloneable
             return Resources.i18n_ast_settings_config_global_label();
         }
 
-        public FormValidation doCheckConfigName(@QueryParameter("configName") String value) {
+        public FormValidation doCheckConfigName(@QueryParameter String value) {
             return Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_config_global_name_message_empty());
         }
     }
