@@ -34,8 +34,14 @@ dependencies {
     // Use JUnit 5 for test fixtures
     testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testFixturesImplementation('org.junit.jupiter:junit-jupiter')
+
     // Enable Slf4J log for test fixtures
-    testFixturesImplementation "org.slf4j:slf4j-api:$slf4jVersion"
-    // ... and use JUL provider for them
-    testFixturesImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
+    testFixturesApi "org.slf4j:slf4j-api:$slf4jVersion"
+    // ... and use Log4J2 provider for them
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api
+    testFixturesApi "org.apache.logging.log4j:log4j-api:${log4jVersion}"
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+    testFixturesApi "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+    // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+    testFixturesApi "org.apache.logging.log4j:log4j-slf4j2-impl:${log4jVersion}"
 }

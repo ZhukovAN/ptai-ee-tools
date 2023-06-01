@@ -1,9 +1,9 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations;
 
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
-import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
@@ -24,7 +24,8 @@ public class JsonAstJobSetupOperationsImpl extends AbstractSetupOperations imple
     public UUID setupProject() throws GenericException {
         // TODO: Add "replace macro" implementation for settings and policy
         log.trace("Check JSON settings");
-        jsonSettings = new JsonSettingsHelper(jsonSettings).verifyRequiredFields().serialize();
+
+        jsonSettings = UnifiedAiProjScanSettings.loadSettings(jsonSettings).toJson();
         ProjectTasks projectTasks = new Factory().projectTasks(owner.getClient());
         ProjectTasks.JsonParseBrief brief = projectTasks.setupFromJson(jsonSettings, jsonPolicy, this::uploadSources);
         owner.setProjectName(brief.getProjectName());

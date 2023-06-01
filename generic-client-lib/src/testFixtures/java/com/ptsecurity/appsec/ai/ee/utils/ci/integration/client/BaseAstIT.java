@@ -6,6 +6,7 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
@@ -33,6 +34,7 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.randomClone;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
 
@@ -40,19 +42,37 @@ import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStrin
 public abstract class BaseAstIT extends BaseClientIT {
     @SneakyThrows
     @NonNull
-    public static UUID setup(@NonNull final Project project) {
-        return setup(project, null);
+    public static Project setupProjectFromTemplate(@NonNull final ProjectTemplate.ID templateId) {
+        return setupProjectFromTemplate(templateId, null);
     }
 
     @NonNull
-    public static UUID setup(@NonNull final Project project, final String policy) {
+    public static Project setupProjectFromTemplate(@NonNull final ProjectTemplate.ID templateId, final String policy) {
+        ProjectTemplate randomTemplateInstance = randomClone(templateId);
+        return setupProject(randomTemplateInstance, policy);
+    }
+
+    @SneakyThrows
+    @NonNull
+    public static Project setupProject(@NonNull final ProjectTemplate projectTemplate) {
+        return setupProject(projectTemplate, null);
+    }
+
+    @NonNull
+    public static Project setupProject(@NonNull final ProjectTemplate projectTemplate, final String policy) {
         AbstractApiClient client = Factory.client(CONNECTION_SETTINGS());
         ProjectTasks projectTasks = new Factory().projectTasks(client);
-        log.trace("Setup {} project from JSON-defined settings", project.getName());
-        return projectTasks.setupFromJson(project.getSettings(), policy, (projectId) -> {
+        log.trace("Setup {} project from JSON-defined settings", projectTemplate.getName());
+        UUID resultProjectId = projectTasks.setupFromJson(projectTemplate.getSettings().toJson(), policy, (projectId) -> {
             GenericAstTasks genericAstTasks = new Factory().genericAstTasks(client);
-            genericAstTasks.upload(projectId, project.getZip().toFile());
+            genericAstTasks.upload(projectId, projectTemplate.getZip().toFile());
         }).getProjectId();
+        return Project.builder()
+                .id(resultProjectId)
+                .name(projectTemplate.getName())
+                .settings(projectTemplate.getSettings())
+                .sourcesZipResourceName(projectTemplate.getSourcesZipResourceName())
+                .build();
     }
 
     @RequiredArgsConstructor

@@ -15,21 +15,19 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Engine.AI;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Engine.PM;
+import static java.lang.String.CASE_INSENSITIVE_ORDER;
 
 @Slf4j
 public class IssuesConverter {
     private static final Map<IssueApprovalState, BaseIssue.ApprovalState> ISSUE_APPROVAL_STATE_MAP = new HashMap<>();
-    private static final Map<String, BaseIssue.Type> ISSUE_TYPE_MAP = new HashMap<>();
+    private static final Map<String, BaseIssue.Type> ISSUE_TYPE_MAP = new TreeMap<>(Comparator.nullsFirst(CASE_INSENSITIVE_ORDER));
     private static final Map<IssueLevel, BaseIssue.Level> ISSUE_LEVEL_MAP = new HashMap<>();
     private static final Map<ScanMode, VulnerabilityIssue.ScanMode> SCAN_MODE_MAP = new HashMap<>();
     private static final Map<PolicyState, Policy.State> POLICY_STATE_MAP = new HashMap<>();

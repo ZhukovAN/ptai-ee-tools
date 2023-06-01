@@ -1,24 +1,38 @@
 plugins {
     id 'java-library'
     id 'java-test-fixtures'
+    id "org.jsonschema2pojo" version "1.2.1"
 }
 
 group = "${rootGroup}"
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.jsonschema2pojo/jsonschema2pojo-gradle-plugin
+    // classpath group: 'org.jsonschema2pojo', name: 'jsonschema2pojo-gradle-plugin', version: '1.2.1'
+
     api project(':pt-misc-tools')
     api project(':ptai-i18n')
+
+    // Need this as generated code uses annotations like @Nullable etc.
+    // https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    // https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path
+    implementation 'com.jayway.jsonpath:json-path:2.8.0'
+
+    // We can't use jsonschema2pojo to parse AIPROJ v.1.0 and 1.1 as their schema
+    // uses oneOf / allOf that aren't fully supported, but at least we may check JSON
+    // and use JsonPath after that
+    // https://mvnrepository.com/artifact/com.networknt/json-schema-validator
+    implementation group: 'com.networknt', name: 'json-schema-validator', version: '1.0.82'
+
 
     // Use JUnit 5 for test fixtures
     testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testFixturesImplementation('org.junit.jupiter:junit-jupiter')
-    // Enable Slf4J log for test fixtures
-    testFixturesImplementation "org.slf4j:slf4j-api:$slf4jVersion"
-    // ... and use JUL provider for them
-    testFixturesImplementation "org.slf4j:slf4j-jdk14:$slf4jVersion"
-    // Need this to write tests that use some common functions like
+    // Need this to write tests and test fixtures that use some common functions like
     // logging, zipped data processing, JSON parse etc.
     testFixturesApi(testFixtures(project(":pt-misc-tools")))
+    testImplementation(testFixtures(project(":pt-misc-tools")))
     // https://mvnrepository.com/artifact/com.github.victools/jsonschema-generator
     testImplementation 'com.github.victools:jsonschema-generator:4.24.3'
 }
@@ -28,4 +42,18 @@ jar {
     manifest {
         attributes 'Jenkins-ClassFilter-Whitelisted': 'true'
     }
+}
+
+jsonSchema2Pojo {
+    source = files("${sourceSets.main.output.resourcesDir}/aiproj/schema/")
+    targetDirectory = file("${project.buildDir}/generated/sources/jsonSchema2Pojo")
+    targetPackage = 'com.ptsecurity.appsec.ai.ee.scan.settings.aiproj'
+    generateBuilders = false
+    includeGetters = false
+    includeSetters = false
+    includeAdditionalProperties = false
+    includeJsr305Annotations = true
+    setAnnotationStyle("jackson2")
+    includeHashcodeAndEquals = false
+    includeToString = false
 }

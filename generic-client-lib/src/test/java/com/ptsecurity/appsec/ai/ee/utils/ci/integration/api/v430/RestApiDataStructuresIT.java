@@ -4,19 +4,17 @@ import com.google.gson.reflect.TypeToken;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.integration.rest.Environment;
 import com.ptsecurity.appsec.ai.ee.server.v430.api.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.JsonAstJobIT;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v430.ApiClient;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseClientIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import com.ptsecurity.misc.tools.TempFile;
 import com.ptsecurity.misc.tools.helpers.ArchiveHelper;
 import lombok.NonNull;
@@ -35,10 +33,13 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V430;
-import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.*;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ScanModule.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 
 @Slf4j
@@ -48,25 +49,24 @@ import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMappe
 public class RestApiDataStructuresIT extends BaseClientIT {
 
     @SneakyThrows
-    protected void generateData(@NonNull final Path destination, @NonNull final Project project, @NonNull final Consumer<JsonSettingsTestHelper> modifySettings) {
+    protected void generateData(@NonNull final Path destination, @NonNull final ProjectTemplate.ID templateId, @NonNull final Consumer<UnifiedAiProjScanSettings> modifySettings) {
         RawData rawData = RawData.builder()
                 .fileName(UUID.randomUUID() + ".json")
                 .build();
 
-        JsonSettingsTestHelper helper = new JsonSettingsTestHelper(project.getSettings());
-        helper.setProjectName(project.getName());
-
-        modifySettings.accept(helper);
+        ProjectTemplate projectTemplate = getTemplate(templateId);
+        UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(projectTemplate.getSettings().toJson());
+        modifySettings.accept(settings);
 
         GenericAstJob astJob = JsonAstJobIT.JsonAstJobImpl.builder()
                 .async(false)
                 .fullScanMode(true)
                 .connectionSettings(CONNECTION_SETTINGS())
                 .console(System.out)
-                .sources(project.getCode())
+                .sources(projectTemplate.getCode())
                 .destination(destination)
                 // As we directly pass scan settings there's no need to call Project's setup method
-                .jsonSettings(helper.serialize())
+                .jsonSettings(settings.toJson())
                 .build();
         RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
         FailIfAstFailed.builder().build().attach(astJob);
@@ -95,15 +95,15 @@ public class RestApiDataStructuresIT extends BaseClientIT {
         Call call = client.getProjectsApi().apiProjectsProjectIdScanSettingsScanSettingsIdGetCall(scanResult.getProjectId(), scanResult.getScanSettings().getId(), null);
         final Type stringType = new TypeToken<String>() {}.getType();
         ApiResponse<String> scanSettingsResponse = client.getProjectsApi().getApiClient().execute(call, stringType);
-        FileUtils.writeStringToFile(scanSettingsDir.resolve(project.getName() + ".json").toFile(), scanSettingsResponse.getData(), StandardCharsets.UTF_8);
+        FileUtils.writeStringToFile(scanSettingsDir.resolve(projectTemplate.getName() + ".json").toFile(), scanSettingsResponse.getData(), StandardCharsets.UTF_8);
 
         call = client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGetCall(scanResult.getProjectId(), scanResult.getId(), null);
         ApiResponse<String> scanResultResponse = client.getProjectsApi().getApiClient().execute(call, stringType);
-        FileUtils.writeStringToFile(scanResultDir.resolve(project.getName() + ".json").toFile(), scanResultResponse.getData(), StandardCharsets.UTF_8);
+        FileUtils.writeStringToFile(scanResultDir.resolve(projectTemplate.getName() + ".json").toFile(), scanResultResponse.getData(), StandardCharsets.UTF_8);
 
         call = client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdIssuesGetCall(scanResult.getProjectId(), scanResult.getId(), null);
         ApiResponse<String> scanIssuesResponse = client.getProjectsApi().getApiClient().execute(call, stringType);
-        FileUtils.writeStringToFile(issuesModelDir.resolve(project.getName() + ".json").toFile(), scanIssuesResponse.getData(), StandardCharsets.UTF_8);
+        FileUtils.writeStringToFile(issuesModelDir.resolve(projectTemplate.getName() + ".json").toFile(), scanIssuesResponse.getData(), StandardCharsets.UTF_8);
 
         for (Reports.Locale locale : Reports.Locale.values()) {
             log.trace("Getting issues data using {} locale", locale);
@@ -112,7 +112,7 @@ public class RestApiDataStructuresIT extends BaseClientIT {
             try (TempFile tempFile = TempFile.createFile()) {
                 FileUtils.writeStringToFile(tempFile.toFile(), scanIssuesHeadersResponse.getData(), StandardCharsets.UTF_8);
                 log.debug("Localized ({}) issue headers stored to temp file {}", locale, tempFile.toFile().getAbsolutePath());
-                Path sevenZip = issuesModelDir.resolve(project.getName() + "." + locale.getLocale().getLanguage() + ".json.7z");
+                Path sevenZip = issuesModelDir.resolve(projectTemplate.getName() + "." + locale.getLocale().getLanguage() + ".json.7z");
                 ArchiveHelper.packData7Zip(sevenZip, FileUtils.readFileToByteArray(tempFile.toFile()));
             }
         }
@@ -122,65 +122,51 @@ public class RestApiDataStructuresIT extends BaseClientIT {
     @Test
     public void generateRestApiDataStructures() {
         try (TempFile destination = TempFile.createFolder()) {
-            generateData(destination.toPath(), C_SARD_101_000_149_064, (helper) -> {
-                helper.setScanAppType(CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
+            generateData(destination.toPath(), C_SARD_101_000_149_064, (settings) -> {
+                settings.setScanModules(Stream.of(CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
             });
 
-            generateData(destination.toPath(), PYTHON_DSVW, (helper) -> {
-                helper.setScanAppType(CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setIsDownloadDependencies(true);
+            generateData(destination.toPath(), PYTHON_DSVW, (settings) -> {
+                settings.setScanModules(Stream.of(CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(true);
             });
 
-            generateData(destination.toPath(), CSHARP_WEBGOAT, (helper) -> {
-                helper.setScanAppType(CSHARP, CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setIsDownloadDependencies(true);
+            generateData(destination.toPath(), CSHARP_WEBGOAT, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(true);
             });
 
-            generateData(destination.toPath(), JAVASCRIPT_VNWA, (helper) -> {
-                helper.setScanAppType(JAVASCRIPT, CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setIsDownloadDependencies(false);
+            generateData(destination.toPath(), JAVASCRIPT_VNWA, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(false);
             });
 
-            generateData(destination.toPath(), JAVA_APP01, (helper) -> {
-                helper.setScanAppType(JAVA, CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setIsDownloadDependencies(true);
+            generateData(destination.toPath(), JAVA_APP01, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(true);
             });
 
-            generateData(destination.toPath(), JAVA_OWASP_BENCHMARK, (helper) -> {
-                helper.setScanAppType(JAVA, PMTAINT);
-                helper.isUseEntryAnalysisPoint(false);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setUsePmAnalysis(true);
-                helper.setUseTaintAnalysis(false);
-                helper.setIsDownloadDependencies(true);
+            generateData(destination.toPath(), JAVA_OWASP_BENCHMARK, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(true);
             });
 
-            generateData(destination.toPath(), PHP_OWASP_BRICKS, (helper) -> {
-                helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setUsePmAnalysis(true);
-                helper.setUseTaintAnalysis(true);
-                helper.setIsDownloadDependencies(false);
+            generateData(destination.toPath(), PHP_OWASP_BRICKS, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(false);
             });
 
-            generateData(destination.toPath(), PHP_SMOKE, (helper) -> {
-                helper.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, CONFIGURATION, PMTAINT);
-                helper.isUseEntryAnalysisPoint(true);
-                helper.isUsePublicAnalysisMethod(true);
-                helper.setUsePmAnalysis(true);
-                helper.setUseTaintAnalysis(true);
-                helper.setIsDownloadDependencies(true);
+            generateData(destination.toPath(), PHP_SMOKE, (settings) -> {
+                settings.setScanModules(Stream.of(VULNERABLESOURCECODE, CONFIGURATION, DATAFLOWANALYSIS, PATTERNMATCHING).collect(Collectors.toSet()));
+                settings.setUsePublicAnalysisMethod(true);
+                settings.setDownloadDependencies(true);
             });
 
             log.trace("REST API data generation complete");

@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.misc.tools.TempFile;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -15,14 +15,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
-import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.PHP_SMOKE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.PHP_SMOKE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.getTemplate;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.ExitCode.FAILED;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.ExitCode.SUCCESS;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.GENERIC_POLICY;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.setup;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.setupProjectFromTemplate;
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStream;
 import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 
@@ -35,11 +35,11 @@ class UiAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("AST of existing project")
     void scanExistingProject() {
-        setup(PHP_SMOKE);
+        Project project = BaseAstIT.setupProjectFromTemplate(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", PHP_SMOKE.getName(),
-                "--input", PHP_SMOKE.getCode().toString(),
+                "--project", project.getName(),
+                "--input", project.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken());
@@ -50,11 +50,11 @@ class UiAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Fail AST of existing project with no source code included")
     void failIfNoSourcesIncluded() {
-        setup(PHP_SMOKE);
+        Project project = BaseAstIT.setupProjectFromTemplate(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", PHP_SMOKE.getName(),
-                "--input", PHP_SMOKE.getCode().toString(),
+                "--project", project.getName(),
+                "--input", project.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
@@ -68,11 +68,11 @@ class UiAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Fail AST of policy violating project")
     void failIfPolicyViolated() {
-        setup(PHP_SMOKE, GENERIC_POLICY.getJson());
+        Project project = setupProjectFromTemplate(PHP_SMOKE, GENERIC_POLICY.getJson());
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", PHP_SMOKE.getName(),
-                "--input", PHP_SMOKE.getCode().toString(),
+                "--project", project.getName(),
+                "--input", project.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
@@ -86,8 +86,8 @@ class UiAstIT extends BaseCliIT {
     void failIfProjectMissing() {
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", PHP_SMOKE.getName() + UUID.randomUUID(),
-                "--input", PHP_SMOKE.getCode().toString(),
+                "--project", randomProjectName(),
+                "--input", getTemplate(PHP_SMOKE).getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken());
@@ -98,11 +98,11 @@ class UiAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Fail AST of existing project without custom truststore")
     void failWithoutTruststore() {
-        setup(PHP_SMOKE);
+        Project project = setupProjectFromTemplate(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", PHP_SMOKE.getName(),
-                "--input", PHP_SMOKE.getCode().toString(),
+                "--project", project.getName(),
+                "--input", project.getCode().toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--truststore", DUMMY_CA_PEM_FILE.toString());
@@ -114,11 +114,11 @@ class UiAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Insecure AST of existing project without custom truststore")
     void scanInsecureWithoutTruststore() {
-        setup(PHP_SMOKE);
+        Project project = setupProjectFromTemplate(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", PHP_SMOKE.getName(),
-                "--input", PHP_SMOKE.getCode().toString(),
+                "--project", project.getName(),
+                "--input", project.getCode().toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--insecure");
@@ -132,12 +132,12 @@ class UiAstIT extends BaseCliIT {
     @DisplayName("Twice AST of existing project to test report overwrite")
     void rewriteExistingReport() {
         try (TempFile reportsFolder = TempFile.createFolder()) {
-            setup(PHP_SMOKE);
+            Project project = setupProjectFromTemplate(PHP_SMOKE);
             Path report = reportsFolder.toPath().resolve("owasp.en.html");
             Integer res = new CommandLine(new Plugin()).execute(
                     "ui-ast",
-                    "--project", PHP_SMOKE.getName(),
-                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--project", project.getName(),
+                    "--input", project.getCode().toString(),
                     "--output", reportsFolder.toString(),
                     "--url", CONNECTION().getUrl(),
                     "--token", CONNECTION().getToken(),
@@ -151,8 +151,8 @@ class UiAstIT extends BaseCliIT {
 
             res = new CommandLine(new Plugin()).execute(
                     "ui-ast",
-                    "--project", PHP_SMOKE.getName(),
-                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--project", project.getName(),
+                    "--input", project.getCode().toString(),
                     "--output", reportsFolder.toString(),
                     "--url", CONNECTION().getUrl(),
                     "--token", CONNECTION().getToken(),
@@ -174,13 +174,13 @@ class UiAstIT extends BaseCliIT {
     void generateJsonDefinedReports() {
         try (TempFile reportsFolder = TempFile.createFolder();
              TempFile reportsJson = TempFile.createFile()) {
-            setup(PHP_SMOKE);
+            Project project = setupProjectFromTemplate(PHP_SMOKE);
             copyInputStreamToFile(getResourceStream("json/scan/reports/reports.1.json"), reportsJson.toFile());
 
             Integer res = new CommandLine(new Plugin()).execute(
                     "ui-ast",
-                    "--project", PHP_SMOKE.getName(),
-                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--project", project.getName(),
+                    "--input", project.getCode().toString(),
                     "--output", reportsFolder.toString(),
                     "--url", CONNECTION().getUrl(),
                     "--token", CONNECTION().getToken(),
@@ -197,12 +197,12 @@ class UiAstIT extends BaseCliIT {
     @DisplayName("Fail AST existing project with bad JSON-defined reports")
     public void failInvalidReportsJson() {
         try (TempFile reportsJson = TempFile.createFile()) {
-            setup(PHP_SMOKE);
+            Project project = setupProjectFromTemplate(PHP_SMOKE);
             copyInputStreamToFile(getResourceStream("json/scan/reports/reports.2.json"), reportsJson.toFile());
             Integer res = new CommandLine(new Plugin()).execute(
                     "ui-ast",
-                    "--project", PHP_SMOKE.getName(),
-                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--project", project.getName(),
+                    "--input", project.getCode().toString(),
                     "--url", CONNECTION().getUrl(),
                     "--token", CONNECTION().getToken(),
                     "--truststore", CA_PEM_FILE.toString(),
@@ -218,12 +218,12 @@ class UiAstIT extends BaseCliIT {
     @DisplayName("Fail AST existing project with JSON-defined reports with missing templates")
     public void failMissingJsonDefinedReportTemplates() {
         try (TempFile reportsJson = TempFile.createFile()) {
-            setup(PHP_SMOKE);
+            Project project = setupProjectFromTemplate(PHP_SMOKE);
             copyInputStreamToFile(getResourceStream("json/scan/reports/reports.3.json"), reportsJson.toFile());
             Integer res = new CommandLine(new Plugin()).execute(
                     "ui-ast",
-                    "--project", PHP_SMOKE.getName(),
-                    "--input", PHP_SMOKE.getCode().toString(),
+                    "--project", project.getName(),
+                    "--input", project.getCode().toString(),
                     "--url", CONNECTION().getUrl(),
                     "--token", CONNECTION().getToken(),
                     "--truststore", CA_PEM_FILE.toString(),
@@ -236,12 +236,11 @@ class UiAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Asynchronous AST of existing project")
     void scanProjectAsync() {
-        Project phpSmokeClone = PHP_SMOKE.randomClone();
-        setup(phpSmokeClone);
+        Project project = setupProjectFromTemplate(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", phpSmokeClone.getName(),
-                "--input", phpSmokeClone.getCode().toString(),
+                "--project", project.getName(),
+                "--input", project.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
@@ -253,11 +252,11 @@ class UiAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Asynchronous AST of missing project with custom truststore")
     void failMissingProjectAsync() {
-        setup(PHP_SMOKE);
+        Project project = setupProjectFromTemplate(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", PHP_SMOKE.getName() + UUID.randomUUID(),
-                "--input", PHP_SMOKE.getCode().toString(),
+                "--project", randomProjectName(),
+                "--input", project.getCode().toString(),
                 "--truststore", CA_PEM_FILE.toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
@@ -269,11 +268,11 @@ class UiAstIT extends BaseCliIT {
     @Tag("integration")
     @DisplayName("Asynchronous AST of existing project without custom truststore")
     void failWithoutTruststoreAsync() {
-        setup(PHP_SMOKE);
+        Project project = setupProjectFromTemplate(PHP_SMOKE);
         Integer res = new CommandLine(new Plugin()).execute(
                 "ui-ast",
-                "--project", PHP_SMOKE.getName(),
-                "--input", PHP_SMOKE.getCode().toString(),
+                "--project", project.getName(),
+                "--input", project.getCode().toString(),
                 "--url", CONNECTION().getUrl(),
                 "--token", CONNECTION().getToken(),
                 "--truststore", DUMMY_CA_PEM_FILE.toString());

@@ -19,11 +19,15 @@ docker run --rm -u root -v "$PWD":/home/gradle/project -w /home/gradle/project g
 ### Build executable Docker container with CLI plugin
 Execute ```docker build``` command in project root:
 ```
-docker build --tag ptai-ee-tools:latest .
+docker build --tag ptai-cli-plugin:latest .
 ```
 Start container using ```docker run``` command:
 ```
-docker run --rm -it ptai-ee-tools:latest
+docker run --rm -it ptai-cli-plugin:latest
+```
+Save image to file using ```docker save``` command:
+```
+docker save ptai-cli-plugin:latest | gzip > ptai-cli-plugin.tar.gz
 ```
 ## Jenkins and Teamcity plugins debugging
 Both Jenkins and Teamcity Gradle plugins are support starting CI server in debug mode that allows plugin developer to connect to server using IDE tools and debug plugin code. 
@@ -51,7 +55,9 @@ $ ./gradlew installTeamcity
 ```
 See additional info on gradle-teamcity-plugin [page](https://github.com/rodm/gradle-teamcity-plugin).
 ## Launch integration tests
-All integration tests are marked as "slow", "scan", "development" and "jenkins". These tests interact with PT AI instance that is to be available via HTTPS REST API. PT AI server connection settings aren't stored in repository but are to be defined in ptai-rest-api/src/testFixtures/resources/configuration.yml file as follows:
+All integration tests are marked as "integration" (including additional tags "slow", "scan" and "jenkins") and "development". These tests interact with PT AI instance that is to be available via HTTPS REST API. 
+
+As PT AI server connection settings and credentials aren't stored in repository, those are to be defined in ptai-rest-api/src/testFixtures/resources/configuration.yml file as follows:
 ```yaml
 connections:
   ptai420:
@@ -66,8 +72,8 @@ connections:
     ca: keys/domain.org.pem
     insecure: false
   ptai421: &current
-    version: V420
-    url: https://ptai421-server.domain.org:443
+    version: V430
+    url: https://ptai-server.domain.org:443
     # CI only API token
     token: TOKEN_GOES_HERE
     # CI and agent API token
@@ -78,10 +84,15 @@ connections:
     insecure: false
 current: *current
 ```
+### "Pure" (i.e. without any additional tag) integration tests
+Tests that are marked with "integration" tag only are fast as those aren't start any scans. These tests are used to check PT AI REST API interactions and may be launched using following command:
+```
+$ ./gradlew integrationFastTest
+```
 ### Slow tests
 Long-running tests include these containing JWT token refresh check etc. These tests last very long time and to be launched separately:
 ```
-$ ./gradlew clean build slowTest
+$ ./gradlew clean build integrationSlowTest
 ```
 ### Generic integration tests
 Generic integration tests use predefined vulnerable source packs from generic-client-lib/src/testFixtures/resources/code folder. Use following command to run these tests:

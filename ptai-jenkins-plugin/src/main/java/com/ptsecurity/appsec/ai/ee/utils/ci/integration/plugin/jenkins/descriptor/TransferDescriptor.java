@@ -28,8 +28,8 @@ public class TransferDescriptor extends Descriptor<Transfer> {
         return "transferDescriptor";
     }
 
-    public FormValidation doCheckIncludes(@QueryParameter final String includes) {
-        return Validator.doCheckFieldNotEmpty(includes, Resources.i18n_ast_settings_transfers_transfer_includes_message_empty());
+    public FormValidation doCheckIncludes(@QueryParameter final String value) {
+        return Validator.doCheckFieldNotEmpty(value, Resources.i18n_ast_settings_transfers_transfer_includes_message_empty());
     }
 
     public FormValidation doCheckPatternSeparator(@QueryParameter final String value) {

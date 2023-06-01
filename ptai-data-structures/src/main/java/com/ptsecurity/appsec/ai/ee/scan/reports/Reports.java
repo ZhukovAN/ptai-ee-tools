@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
+import static java.lang.String.CASE_INSENSITIVE_ORDER;
+
 /**
  * Set of reports to be generated after AST job is complete
  */
@@ -25,7 +27,7 @@ public class Reports {
 
         RU("ru-RU", 1049, new java.util.Locale("ru", "RU"));
 
-        private static final Map<String, Locale> VALUES = new HashMap<>();
+        private static final Map<String, Locale> VALUES = new TreeMap<>(Comparator.nullsFirst(CASE_INSENSITIVE_ORDER));
 
         static {
             for (Locale f : values()) VALUES.put(f.value, f);

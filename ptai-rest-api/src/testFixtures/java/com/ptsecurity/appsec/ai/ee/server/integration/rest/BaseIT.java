@@ -1,7 +1,10 @@
 package com.ptsecurity.appsec.ai.ee.server.integration.rest;
 
 import com.ptsecurity.misc.tools.BaseTest;
+import lombok.NonNull;
 import lombok.SneakyThrows;
+
+import java.util.UUID;
 
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
 

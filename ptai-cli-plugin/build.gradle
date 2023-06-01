@@ -3,10 +3,6 @@ plugins {
     id 'com.github.johnrengelman.shadow'
 }
 
-ext {
-    log4jVersion = '2.17.1'
-}
-
 group = "${rootGroup}"
 
 mainClassName = 'com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.Plugin'
@@ -30,17 +26,17 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
     implementation "org.apache.logging.log4j:log4j-core:${log4jVersion}"
     // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
-    implementation "org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}"
+    implementation "org.apache.logging.log4j:log4j-slf4j2-impl:${log4jVersion}"
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml
     implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
 
+    testImplementation(testFixtures(project(":pt-misc-tools")))
     testImplementation(testFixtures(project(":ptai-data-structures")))
     testImplementation(testFixtures(project(":ptai-rest-api")))
     testImplementation(testFixtures(project(":generic-client-lib")))
     // Intercept CLI output for testing
     // https://mvnrepository.com/artifact/com.github.stefanbirkner/system-lambda
     testImplementation 'com.github.stefanbirkner:system-lambda:1.2.1'
-
 }
 
 jar {
