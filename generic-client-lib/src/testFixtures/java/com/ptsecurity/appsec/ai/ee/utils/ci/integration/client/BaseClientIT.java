@@ -6,15 +6,11 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 
-import java.util.UUID;
-
 import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT.GENERIC_POLICY;
 
 public abstract class BaseClientIT extends BaseIT {
     protected static ProjectTasks projectTasks;

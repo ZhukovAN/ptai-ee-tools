@@ -22,7 +22,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.UUID;
 
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.PHP_SMOKE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.PHP_SMOKE;
 
 @DisplayName("Test UI-based AST")
 @Tag("integration")
@@ -56,15 +56,15 @@ public class UiAstJobIT extends BaseAstIT {
     @DisplayName("Scan PHP smoke project with medium level vulnerabilities")
     public void scanPhpSmoke() {
         try (TempFile destination = TempFile.createFolder()) {
-            setup(PHP_SMOKE);
+            Project project = setupProjectFromTemplate(PHP_SMOKE);
 
             GenericAstJob astJob = UiAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
-                    .projectName(PHP_SMOKE.getName())
+                    .projectName(project.getName())
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(PHP_SMOKE.getCode())
+                    .sources(project.getCode())
                     .destination(destination.toPath())
                     .build();
 
@@ -83,15 +83,15 @@ public class UiAstJobIT extends BaseAstIT {
     @DisplayName("Fail scan because of missing report template")
     public void failMissingReportTemplate() {
         try (TempFile destination = TempFile.createFolder()) {
-            setup(PHP_SMOKE);
+            Project project = setupProjectFromTemplate(PHP_SMOKE);
 
             GenericAstJob astJob = UiAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
-                    .projectName(PHP_SMOKE.getName())
+                    .projectName(project.getName())
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(PHP_SMOKE.getCode())
+                    .sources(project.getCode())
                     .destination(destination.toPath())
                     .build();
 
@@ -110,15 +110,15 @@ public class UiAstJobIT extends BaseAstIT {
     @DisplayName("Scan PHP smoke project with miscellaneous level vulnerabilities")
     public void scanPhpSmokeMisc() {
         try (TempFile destination = TempFile.createFolder()) {
-            setup(PHP_SMOKE);
+            Project project = setupProjectFromTemplate(PHP_SMOKE);
 
             GenericAstJob astJob = UiAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
-                    .projectName(PHP_SMOKE.getName())
+                    .projectName(project.getName())
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(PHP_SMOKE.getCode())
+                    .sources(project.getCode())
                     .destination(destination.toPath())
                     .build();
 
@@ -135,15 +135,14 @@ public class UiAstJobIT extends BaseAstIT {
     @DisplayName("Test async scan duration")
     public void scanPhpSmokeAsync() {
         try (TempFile destination = TempFile.createFolder()) {
-            Project phpSmokeClone = PHP_SMOKE.randomClone();
-            setup(phpSmokeClone);
+            Project project = setupProjectFromTemplate(PHP_SMOKE);
             GenericAstJob astJob = UiAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
-                    .projectName(phpSmokeClone.getName())
+                    .projectName(project.getName())
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(phpSmokeClone.getCode())
+                    .sources(project.getCode())
                     .destination(destination.toPath())
                     .build();
 

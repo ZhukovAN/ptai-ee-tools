@@ -156,7 +156,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
     public void stop(@NonNull UUID scanResultId) throws GenericException {
         log.debug("Calling scan stop for scan result ID {}", scanResultId);
         // TODO: Implement different approach to stop task that is enqueued but not
-        //  started yet. PT AI 4.2 doesn't stop these jobs, so we need to delete scan
+        //  started yet. PT AI 4.3 doesn't stop these jobs, so we need to delete scan
         //  result as PT AI viewer does
         call(
                 () -> client.getScanQueueApi().apiScansScanResultIdStopPost(scanResultId),
@@ -209,7 +209,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         ScanStatisticModel statistic = call(
                 () -> Objects.requireNonNull(scanResult.getStatistic(), "Scan result statistics is null"),
                 "Get scan result statistics failed");
-        log.trace("Converting v.4.2 scan result statistics to version-independent data");
+        log.trace("Converting v.4.3 scan result statistics to version-independent data");
         call(
                 () -> scanBrief.setStatistics(convert(statistic, scanResult)),
                 "Scan result statistics conversion failed");

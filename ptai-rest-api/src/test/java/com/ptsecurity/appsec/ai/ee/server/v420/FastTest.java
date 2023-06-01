@@ -104,7 +104,7 @@ public class FastTest extends AbstractTest {
     @Test
     @DisplayName("Check missing project")
     public void checkProjectNotExist() {
-        Boolean projectExists = checkApiCall(() -> PROJECTS.apiProjectsNameExistsGet("junit-" + UUID.randomUUID()));
+        Boolean projectExists = checkApiCall(() -> PROJECTS.apiProjectsNameExistsGet(randomProjectName()));
         assertFalse(projectExists);
 
         log.trace("Check that PT AI v.4.2.X API returns HTTP status 400 if there's no project with given Id");

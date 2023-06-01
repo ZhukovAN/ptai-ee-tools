@@ -1,11 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins;
 
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
-import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
@@ -24,7 +24,8 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.subjobs.Base;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsHelper;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import hudson.AbortException;
 import hudson.FilePath;
 import hudson.Launcher;
@@ -154,17 +155,17 @@ public class Plugin extends Builder implements SimpleBuildStep {
             log.trace("UI-defined project name after macro replacement is {}", projectName);
         } else {
             check = scanSettingsManualDescriptor.doTestJsonSettings(item, jsonSettings);
-            if (FormValidation.Kind.OK != check.kind)
+            if (FormValidation.Kind.ERROR == check.kind)
                 throw new AbortException(check.getMessage());
             check = scanSettingsManualDescriptor.doTestJsonPolicy(item, jsonPolicy);
-            if (FormValidation.Kind.OK != check.kind)
+            if (FormValidation.Kind.ERROR == check.kind)
                 throw new AbortException(check.getMessage());
-            JsonSettingsHelper helper = new JsonSettingsHelper(jsonSettings);
-            log.trace("JSON-defined project settings before macro replacement is {}", helper.serialize());
-            jsonSettings = JsonSettingsHelper.replaceMacro(jsonSettings, (s -> Util.replaceMacro(s, buildInfo.getEnvVars())));
+            UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(jsonSettings);
+            log.trace("JSON-defined project settings before macro replacement is {}", settings.toJson());
+            jsonSettings = BaseJsonHelper.replaceMacro(jsonSettings, (s -> Util.replaceMacro(s, buildInfo.getEnvVars())));
             log.trace("JSON-defined project settings after macro replacement is {}", jsonSettings);
-            helper = new JsonSettingsHelper(jsonSettings);
-            projectName = helper.getProjectName();
+            settings = UnifiedAiProjScanSettings.loadSettings(jsonSettings);
+            projectName = settings.getProjectName();
 
             if (StringUtils.isNotEmpty(jsonPolicy))
                 jsonPolicy = JsonPolicyHelper.minimize(jsonPolicy);
@@ -204,7 +205,7 @@ public class Plugin extends Builder implements SimpleBuildStep {
                 jsonSettings, jsonPolicy,
                 projectName,
                 serverUrl, credentialsId, serverInsecure, configName);
-        if (FormValidation.Kind.OK != check.kind)
+        if (FormValidation.Kind.ERROR == check.kind)
             throw new AbortException(check.getMessage());
         // TODO: Implement scan node support when PT AI will be able to
         // String node = StringUtils.isEmpty(nodeName) ? Base.DEFAULT_PTAI_NODE_NAME : nodeName;

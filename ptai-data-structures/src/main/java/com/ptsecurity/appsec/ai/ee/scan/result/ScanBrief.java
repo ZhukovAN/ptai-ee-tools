@@ -137,6 +137,7 @@ public class ScanBrief {
             }
 
             @NonNull
+            @Getter
             @JsonValue
             private final String value;
         }
