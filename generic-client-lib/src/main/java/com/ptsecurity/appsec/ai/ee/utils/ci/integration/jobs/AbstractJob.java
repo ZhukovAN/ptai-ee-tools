@@ -89,5 +89,5 @@ public abstract class AbstractJob extends AbstractTool {
      */
     public String replaceMacro(final String value, final Map<String, String> replacements) {
         return value;
-    };
+    }
 }

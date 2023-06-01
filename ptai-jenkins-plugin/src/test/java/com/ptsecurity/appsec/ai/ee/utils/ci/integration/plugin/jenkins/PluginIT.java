@@ -6,6 +6,7 @@ import com.cloudbees.plugins.credentials.CredentialsStore;
 import com.cloudbees.plugins.credentials.SystemCredentialsProvider;
 import com.cloudbees.plugins.credentials.domains.Domain;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
@@ -24,7 +25,6 @@ import hudson.model.Result;
 import hudson.scm.SCM;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Rule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -39,7 +39,7 @@ import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool.DEFAULT_LOG_PREFIX;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.PHP_SMOKE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.PHP_SMOKE;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob.DEFAULT_OUTPUT_FOLDER;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -76,20 +76,20 @@ public class PluginIT extends BaseAstIT {
     @Tag("jenkins")
     @DisplayName("Execute simple SAST job for PHP smoke medium")
     public void scanPhpSmokeMedium(JenkinsRule jenkinsRule) {
-        setup(PHP_SMOKE);
+        Project phpSmoke = setupProjectFromTemplate(PHP_SMOKE);
 
         initCredentials(jenkinsRule);
 
         log.trace("Create project and set source code location");
 
-        java.net.URL sourcesPack = PHP_SMOKE.getZip().toUri().toURL();
+        java.net.URL sourcesPack = phpSmoke.getZip().toUri().toURL();
         assertNotNull(sourcesPack);
         SCM scm = new ExtractResourceSCM(sourcesPack);
         String projectName = "project-" + UUID.randomUUID();
         FreeStyleProject project = jenkinsRule.createFreeStyleProject(projectName);
         project.setScm(scm);
         // Create PT AI plugin settings
-        ScanSettingsUi scanSettings = new ScanSettingsUi(PHP_SMOKE.getName());
+        ScanSettingsUi scanSettings = new ScanSettingsUi(phpSmoke.getName());
 
         ServerSettings serverSettings = new ServerSettings(CONNECTION().getUrl(), credentials.getId(), true);
         ConfigCustom configCustom = new ConfigCustom(serverSettings);

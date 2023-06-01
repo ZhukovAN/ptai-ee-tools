@@ -71,5 +71,15 @@
       <option name="name" value="maven" />
       <option name="url" value="https://maven.net173.org/repository/maven-public/" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="Domain.ORG Nexus repository" />
+      <option name="name" value="Domain.ORG Nexus repository" />
+      <option name="url" value="https://nexus.domain.org/repository/maven-proxy/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="PTDemo.LOCAL Nexus repository" />
+      <option name="name" value="PTDemo.LOCAL Nexus repository" />
+      <option name="url" value="https://nexus.ptdemo.local/repository/maven-proxy/" />
+    </remote-repository>
   </component>
 </project>

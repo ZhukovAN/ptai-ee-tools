@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
@@ -113,10 +114,13 @@ class CheckServerIT extends BaseCliIT {
     @Test
     @DisplayName("Fail invalid service connection")
     public void authenticateFailInvalidHost() {
+        URL ptaiUrl = new URL(CONNECTION().getUrl());
+        URL invalidServiceUrl = new URL(ptaiUrl.getProtocol(), ptaiUrl.getHost(), 9443, ptaiUrl.getFile());
+
         String outText = tapSystemOutNormalized(() -> {
             Integer res = new CommandLine(new Plugin()).execute(
                     "check-server",
-                    "--url", "https://docker.domain.org:9443",
+                    "--url", invalidServiceUrl.toString(),
                     "--token", CONNECTION().getToken(),
                     "--insecure");
             assertEquals(FAILED.getCode(), res);
@@ -128,10 +132,12 @@ class CheckServerIT extends BaseCliIT {
     @Test
     @DisplayName("Fail invalid port connection")
     public void authenticateFailInvalidPort() {
+        URL ptaiUrl = new URL(CONNECTION().getUrl());
+        URL invalidServiceUrl = new URL(ptaiUrl.getProtocol(), ptaiUrl.getHost(), 65535, ptaiUrl.getFile());
         String outText = tapSystemOutNormalized(() -> {
             Integer res = new CommandLine(new Plugin()).execute(
                     "check-server",
-                    "--url", "https://docker.domain.org:65535",
+                    "--url", invalidServiceUrl.toString(),
                     "--token", CONNECTION().getToken(),
                     "--insecure");
             assertEquals(FAILED.getCode(), res);

@@ -3,8 +3,8 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli;
 import com.contrastsecurity.sarif.SarifSchema210;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import com.ptsecurity.misc.tools.TempFile;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.PHP_SMOKE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.PHP_SMOKE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.randomClone;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.cli.commands.BaseCommand.ExitCode.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceStream;
@@ -32,22 +33,27 @@ import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
 @Tag("integration")
 @Slf4j
 class GenerateReportIT extends BaseCliIT {
+    protected static String PHP_SMOKE_CLONE;
     protected static UUID LATEST_COMPLETE_SCAN_RESULT_ID;
 
     @BeforeAll
+    @SneakyThrows
     public static void init() {
         BaseCliIT.init();
-        JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE);
-        log.trace("Scan PHP smoke project for GenerateReportIT tests");
-        int res = new CommandLine(new Plugin()).execute(
-                "json-ast",
-                "--url", CONNECTION().getUrl(),
-                "--token", CONNECTION().getToken(),
-                "--insecure",
-                "--input", PHP_SMOKE.getCode().toString(),
-                "--settings-json", settings.toPath().toString());
-        Assertions.assertEquals(SUCCESS.getCode(), res);
-        LATEST_COMPLETE_SCAN_RESULT_ID = getLatestCompleteScanResults(PHP_SMOKE.getName());
+        try (TempFile settings = TempFile.createFile()) {
+            ProjectTemplate project = randomClone(PHP_SMOKE);
+            PHP_SMOKE_CLONE = project.getName();
+            log.trace("Scan PHP smoke project for GenerateReportIT tests");
+            int res = new CommandLine(new Plugin()).execute(
+                    "json-ast",
+                    "--url", CONNECTION().getUrl(),
+                    "--token", CONNECTION().getToken(),
+                    "--insecure",
+                    "--input", project.getCode().toString(),
+                    "--settings-json", project.getSettings().serializeToFile().toString());
+            Assertions.assertEquals(SUCCESS.getCode(), res);
+            LATEST_COMPLETE_SCAN_RESULT_ID = getLatestCompleteScanResults(project.getName());
+        }
     }
 
     @Test
@@ -106,7 +112,7 @@ class GenerateReportIT extends BaseCliIT {
                         "--token", CONNECTION().getToken(),
                         "--insecure",
                         "--output", reportsFolder.toString(),
-                        "--project-name", PHP_SMOKE.getName()));
+                        "--project-name", PHP_SMOKE_CLONE));
                 if (null != scanResultId) {
                     args.add("--scan-result-id");
                     args.add(scanResultId.toString());
@@ -141,7 +147,7 @@ class GenerateReportIT extends BaseCliIT {
                 "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--output", TempFile.createFile().toString(),
-                "--project-name", PHP_SMOKE.getName(),
+                "--project-name", PHP_SMOKE_CLONE,
                 "--report-template", "Scan results report",
                 "--report-file", "owasp.en.html",
                 "--raw-data-file", "owasp.en.html");
@@ -157,7 +163,7 @@ class GenerateReportIT extends BaseCliIT {
                 "--truststore", CA_PEM_FILE.toString(),
                 "--token", CONNECTION().getToken(),
                 "--output", TempFile.createFile().toString(),
-                "--project-name", PHP_SMOKE.getName(),
+                "--project-name", PHP_SMOKE_CLONE,
                 "--report-template", "Scan results report ",
                 "--report-file", "owasp.en.html");
         Assertions.assertEquals(FAILED.getCode(), res);
@@ -177,7 +183,7 @@ class GenerateReportIT extends BaseCliIT {
                     "--truststore", CA_PEM_FILE.toString(),
                     "--token", CONNECTION().getToken(),
                     "--output", reportsFolder.toString(),
-                    "--project-name", PHP_SMOKE.getName(),
+                    "--project-name", PHP_SMOKE_CLONE,
                     "--scan-result-id", LATEST_COMPLETE_SCAN_RESULT_ID.toString(),
                     "--report-json", reportsJson.toString());
             Assertions.assertEquals(SUCCESS.getCode(), res);
@@ -197,7 +203,7 @@ class GenerateReportIT extends BaseCliIT {
                     "--truststore", CA_PEM_FILE.toString(),
                     "--token", CONNECTION().getToken(),
                     "--output", TempFile.createFile().toString(),
-                    "--project-name", PHP_SMOKE.getName(),
+                    "--project-name", PHP_SMOKE_CLONE,
                     "--scan-result-id", LATEST_COMPLETE_SCAN_RESULT_ID.toString(),
                     "--report-json", reportsJson.toString());
             Assertions.assertEquals(FAILED.getCode(), res);
@@ -218,7 +224,7 @@ class GenerateReportIT extends BaseCliIT {
                     "--truststore", CA_PEM_FILE.toString(),
                     "--token", CONNECTION().getToken(),
                     "--output", reportsFolder.toString(),
-                    "--project-name", PHP_SMOKE.getName(),
+                    "--project-name", PHP_SMOKE_CLONE,
                     "--scan-result-id", LATEST_COMPLETE_SCAN_RESULT_ID.toString(),
                     "--report-json", reportsJson.toString());
             Assertions.assertEquals(SUCCESS.getCode(), res);
@@ -236,17 +242,18 @@ class GenerateReportIT extends BaseCliIT {
             Path reportDfd = reportsFolder.toPath().resolve("dfd.html");
             Path reportGlossary = reportsFolder.toPath().resolve("glossary.html");
 
-            for (Path report : new Path[]{reportMin, reportMax, reportDfd, reportGlossary}) {
+            for (Path report : new Path[] { reportMin, reportMax, reportDfd, reportGlossary }) {
                 List<String> args = new ArrayList<>(Arrays.asList(
                         "generate-report",
                         "--url", CONNECTION().getUrl(),
                         "--truststore", CA_PEM_FILE.toString(),
                         "--token", CONNECTION().getToken(),
                         "--output", reportsFolder.toString(),
-                        "--project-name", PHP_SMOKE.getName(),
+                        "--project-name", PHP_SMOKE_CLONE,
                         "--scan-result-id", LATEST_COMPLETE_SCAN_RESULT_ID.toString(),
                         "--report-file", report.getFileName().toString(),
                         "--report-template", "Scan results report"));
+                log.info("Report {} generated, size {}", report.getFileName(), report.toFile().length());
                 if (report.equals(reportMax) || report.equals(reportDfd)) args.add("--report-include-dfd");
                 if (report.equals(reportMax) || report.equals(reportGlossary)) args.add("--report-include-glossary");
                 Integer res = new CommandLine(new Plugin()).execute(args.toArray(new String[0]));
@@ -274,7 +281,7 @@ class GenerateReportIT extends BaseCliIT {
                     "--truststore", CA_PEM_FILE.toString(),
                     "--token", CONNECTION().getToken(),
                     "--output", reportsFolder.toString(),
-                    "--project-name", PHP_SMOKE.getName(),
+                    "--project-name", PHP_SMOKE_CLONE,
                     "--scan-result-id", LATEST_COMPLETE_SCAN_RESULT_ID.toString(),
                     "--sarif-report-file", report.getFileName().toString()));
             Integer res = new CommandLine(new Plugin()).execute(args.toArray(new String[0]));
@@ -303,7 +310,7 @@ class GenerateReportIT extends BaseCliIT {
                     "--truststore", CA_PEM_FILE.toString(),
                     "--token", CONNECTION().getToken(),
                     "--output", reportsFolder.toString(),
-                    "--project-name", PHP_SMOKE.getName(),
+                    "--project-name", PHP_SMOKE_CLONE,
                     "--scan-result-id", LATEST_COMPLETE_SCAN_RESULT_ID.toString(),
                     "--report-json", reportsJson.toString());
             Assertions.assertEquals(SUCCESS.getCode(), res);
@@ -332,7 +339,7 @@ class GenerateReportIT extends BaseCliIT {
                     "--truststore", CA_PEM_FILE.toString(),
                     "--token", CONNECTION().getToken(),
                     "--output", reportsFolder.toString(),
-                    "--project-name", PHP_SMOKE.getName(),
+                    "--project-name", PHP_SMOKE_CLONE,
                     "--scan-result-id", LATEST_COMPLETE_SCAN_RESULT_ID.toString(),
                     "--giif-report-file", report.getFileName().toString()));
             Integer res = new CommandLine(new Plugin()).execute(args.toArray(new String[0]));

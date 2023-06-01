@@ -1,0 +1,7 @@
+{
+    "ProjectName": "junit-php-owasp-bricks",
+    "ProgrammingLanguage": "Php",
+    "ScanAppType": "Php, Configuration, PmTaint",
+    "UseTaintAnalysis": true,
+    "UsePmAnalysis": true
+}

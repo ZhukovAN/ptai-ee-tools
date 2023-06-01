@@ -1,40 +1,46 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration;
 
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.*;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.ConfigurationIssue;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.VulnerabilityIssue;
+import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.WeaknessIssue;
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseAstIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJson;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.JsonAstJobSetupOperationsImpl;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonSettingsTestHelper;
 import com.ptsecurity.misc.tools.TempFile;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V411;
-import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V420;
-import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.PHP;
 import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Level.*;
-import static com.ptsecurity.appsec.ai.ee.scan.settings.AbstractAiProjScanSettings.ScanAppType.*;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ScanModule.*;
 import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Project.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.JAVA_OWASP_BENCHMARK;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.PHP_SMOKE;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
+import static java.util.Collections.singleton;
 
 @DisplayName("Test JSON-based AST")
 @Tag("integration")
@@ -65,25 +71,24 @@ public class JsonAstJobIT extends BaseAstIT {
     }
 
     @SneakyThrows
-    protected void scanProjectTwice(@NonNull final Project project) {
+    protected void scanProjectTwice(@NonNull final ProjectTemplate projectTemplate) {
         try (TempFile destination = TempFile.createFolder()) {
             GenericAstJob astJob = JsonAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(project.getCode())
+                    .sources(projectTemplate.getCode())
                     .destination(destination.toPath())
-                    .jsonSettings(new JsonSettingsTestHelper(project.getSettings())
-                            .isUseEntryAnalysisPoint(true)
-                            .isUsePublicAnalysisMethod(true)
-                            .projectName("junit-" + UUID.randomUUID())
-                            .serialize())
+                    .jsonSettings(projectTemplate.getSettings()
+                            .setUsePublicAnalysisMethod(true)
+                            .setProjectName(randomProjectName())
+                            .toJson())
                     .jsonPolicy(getResourceString("json/scan/settings/policy.generic.json"))
                     .build();
 
             for (int i = 0 ; i < 2 ; i++) {
-                log.trace("{} scan {} project", 0 == i ? "First" : "Second", project.getName());
+                log.trace("{} scan {} project", 0 == i ? "First" : "Second", projectTemplate.getName());
                 AbstractJob.JobExecutionResult res = astJob.execute();
                 Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
                 Thread.sleep(15000);
@@ -92,21 +97,19 @@ public class JsonAstJobIT extends BaseAstIT {
     }
 
     @SneakyThrows
-    public ScanResult scanPhpSmokeMisc(@NonNull final Consumer<JsonSettingsTestHelper> modifySettings) {
+    public ScanResult scanPhpSmokeMisc(@NonNull final Consumer<UnifiedAiProjScanSettings> modifySettings) {
         try (TempFile destination = TempFile.createFolder()) {
-
-            JsonSettingsTestHelper settings = new JsonSettingsTestHelper(PHP_SMOKE.getSettings());
-            settings.setProgrammingLanguage(PHP);
-            modifySettings.accept(settings);
+            ProjectTemplate randomClone = randomClone(PHP_SMOKE);
+            modifySettings.accept(randomClone.getSettings());
 
             GenericAstJob astJob = JsonAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(PHP_SMOKE.getCode())
+                    .sources(randomClone.getCode())
                     .destination(destination.toPath())
-                    .jsonSettings(settings.serialize())
+                    .jsonSettings(randomClone.getSettings().toJson())
                     .build();
             RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
             FailIfAstFailed.builder().build().attach(astJob);
@@ -124,10 +127,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Tag("scan")
     @DisplayName("Check PHP smoke miscellaneous project scan results contain low level vulnerabilities only")
     public void checkLowLevelVulnerabilitiesOnly() {
-        ScanResult scanResult = scanPhpSmokeMisc((settings) -> {
-            settings.setScanAppType(CONFIGURATION);
-            settings.setIsUseEntryAnalysisPoint(true);
-        });
+        ScanResult scanResult = scanPhpSmokeMisc((settings) -> settings.setScanModules(singleton(CONFIGURATION)));
         Assertions.assertNotNull(scanResult);
         Assertions.assertNotEquals(0, scanResult.getIssues().size());
         long lowLevelCount = scanResult.getIssues().stream()
@@ -141,12 +141,7 @@ public class JsonAstJobIT extends BaseAstIT {
     @Tag("scan")
     @DisplayName("Check PHP smoke miscellaneous project scan results contain PM potential level vulnerabilities only")
     public void checkPmVulnerabilitiesOnly() {
-        ScanResult scanResult = scanPhpSmokeMisc((settings) -> {
-            settings.setScanAppType(PMTAINT);
-            settings.setUseTaintAnalysis(false);
-            settings.setUsePmAnalysis(true);
-            settings.setIsUseEntryAnalysisPoint(true);
-        });
+        ScanResult scanResult = scanPhpSmokeMisc((settings) -> settings.setScanModules(singleton(PATTERNMATCHING)));
         Assertions.assertNotNull(scanResult);
         Assertions.assertNotEquals(0, scanResult.getIssues().size());
         long potentialLevelCount = scanResult.getIssues().stream()
@@ -161,11 +156,8 @@ public class JsonAstJobIT extends BaseAstIT {
     @DisplayName("Check PHP smoke miscellaneous project scan results contain public / protected vulnerabilities only")
     public void checkPublicProtectedVulnerabilitiesOnly() {
         ScanResult scanResult = scanPhpSmokeMisc((settings) -> {
-            settings.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP);
-            settings.setUseTaintAnalysis(false);
-            settings.setUsePmAnalysis(true);
-            settings.setIsUseEntryAnalysisPoint(false);
-            settings.setIsUsePublicAnalysisMethod(true);
+            settings.setScanModules(singleton(VULNERABLESOURCECODE));
+            settings.setUsePublicAnalysisMethod(true);
         });
         Assertions.assertNotNull(scanResult);
         Assertions.assertNotEquals(0, scanResult.getIssues().size());
@@ -182,11 +174,8 @@ public class JsonAstJobIT extends BaseAstIT {
     @DisplayName("Check PHP smoke miscellaneous project scan results contain different vulnerabilities")
     public void checkAllVulnerabilities() {
         ScanResult scanResult = scanPhpSmokeMisc((settings) -> {
-            settings.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, PMTAINT, CONFIGURATION);
-            settings.setUseTaintAnalysis(false);
-            settings.setUsePmAnalysis(true);
-            settings.setIsUseEntryAnalysisPoint(true);
-            settings.setIsUsePublicAnalysisMethod(true);
+            settings.setScanModules(Stream.of(VULNERABLESOURCECODE, PATTERNMATCHING, CONFIGURATION).collect(Collectors.toSet()));
+            settings.setUsePublicAnalysisMethod(true);
         });
         Assertions.assertNotNull(scanResult);
         Assertions.assertNotEquals(0, scanResult.getIssues().size());
@@ -223,20 +212,16 @@ public class JsonAstJobIT extends BaseAstIT {
     @DisplayName("Check PHP smoke miscellaneous project scan settings change")
     public void checkScanSettingsChange() {
         ScanResult firstScanResult = scanPhpSmokeMisc((settings) -> {
-            settings.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP, PMTAINT, CONFIGURATION);
-            settings.setUseTaintAnalysis(true);
-            settings.setUsePmAnalysis(true);
-            settings.setIsUseEntryAnalysisPoint(true);
-            settings.setIsUsePublicAnalysisMethod(true);
+            settings.setScanModules(Stream.of(VULNERABLESOURCECODE, PATTERNMATCHING, DATAFLOWANALYSIS, CONFIGURATION).collect(Collectors.toSet()));
+            settings.setUsePublicAnalysisMethod(true);
             settings.setCustomParameters("-l php");
         });
         Assertions.assertNotNull(firstScanResult);
         // As analyseMiscScanResults generates random project name, let's store it
         String projectName = firstScanResult.getProjectName();
         ScanResult secondScanResult = scanPhpSmokeMisc((settings) -> {
-            settings.setScanAppType(AbstractAiProjScanSettings.ScanAppType.PHP);
-            settings.setIsUseEntryAnalysisPoint(true);
-            settings.setIsUsePublicAnalysisMethod(false);
+            settings.setScanModules(singleton(VULNERABLESOURCECODE));
+            settings.setUsePublicAnalysisMethod(false);
             settings.setProjectName(projectName);
         });
         Assertions.assertNotNull(secondScanResult);
@@ -249,14 +234,15 @@ public class JsonAstJobIT extends BaseAstIT {
     @DisplayName("Check raw report multiflow XSS representation via group Id")
     public void checkMultiflow() {
         try (TempFile destination = TempFile.createFolder()) {
+            ProjectTemplate randomClone = randomClone(PHP_SMOKE);
             GenericAstJob astJob = JsonAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(PHP_SMOKE.getCode())
+                    .sources(randomClone.getCode())
                     .destination(destination.toPath())
-                    .jsonSettings(PHP_SMOKE.getSettings())
+                    .jsonSettings(randomClone.getSettings().toJson())
                     .build();
             RawJson.builder().owner(astJob).rawData(rawData).build().attach(astJob);
 
@@ -277,9 +263,9 @@ public class JsonAstJobIT extends BaseAstIT {
     @Tag("scan")
     @DisplayName("Scan every (except OWASP Benchmark) project twice: first time as a new project, second time as existing")
     public void scanEveryProjectTwice() {
-        for (Project project : ALL) {
-            if (JAVA_OWASP_BENCHMARK == project) continue;
-            scanProjectTwice(project);
+        for (ID templateId : ID.values()) {
+            if (JAVA_OWASP_BENCHMARK == templateId) continue;
+            scanProjectTwice(ProjectTemplate.randomClone(templateId));
         }
     }
 
@@ -289,16 +275,17 @@ public class JsonAstJobIT extends BaseAstIT {
     @DisplayName("Scan project with slash in its name")
     public void scanProjectWithBadCharacter() {
         try (TempFile destination = TempFile.createFolder()) {
-            JsonSettingsTestHelper settings = new JsonSettingsTestHelper(getResourceString("json/scan/settings/settings.java-app01.aiproj"));
-            settings.setProjectName("junit-" + UUID.randomUUID() + "-origin/master");
+            ProjectTemplate randomClone = randomClone(PHP_SMOKE);
+            randomClone.setName(randomClone.getName() + "-origin/master");
+            randomClone.getSettings().setProjectName(randomClone.getName());
             GenericAstJob astJob = JsonAstJobImpl.builder()
                     .async(false)
                     .fullScanMode(true)
                     .connectionSettings(CONNECTION_SETTINGS())
                     .console(System.out)
-                    .sources(JAVA_APP01.getCode())
+                    .sources(randomClone.getCode())
                     .destination(destination.toPath())
-                    .jsonSettings(settings.serialize())
+                    .jsonSettings(randomClone.getSettings().toJson())
                     .jsonPolicy(getResourceString("json/scan/settings/policy.generic.json"))
                     .build();
             AbstractJob.JobExecutionResult res = astJob.execute();
