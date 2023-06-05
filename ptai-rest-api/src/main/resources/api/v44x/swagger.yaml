@@ -1,10 +1,10 @@
 openapi: 3.0.1
 info:
-  title: Current API v3
-  description: 'To specify the API version in your request, add v{version} after api/ in the address. For example, api/v2/auth.'
-  version: '3'
+  title: Current API v4
+  description: 'To specify the API version in your request, add v{version} after api/ in the address. For example, api/v4/auth.'
+  version: '4'
 servers:
-  - url: https://ptai.domain.org/
+  - url: https://ptai.ptdemo.local/
 security:
   - Bearer: []
 paths:
@@ -42,6 +42,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProjectChangeHistoryRowModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/history/projects/{projectId}/row/{id}':
@@ -76,6 +85,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ProjectChangeHistoryRowModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/history/projects/{projectId}/{objectType}':
@@ -119,6 +137,55 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProjectChangeHistoryRowModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  '/api/history/projects/{projectId}/comment':
+    post:
+      tags:
+        - ChangeHistory
+      summary: Add comment to project history
+      parameters:
+        - name: projectId
+          in: path
+          description: Project id
+          required: true
+          style: simple
+          schema:
+            type: string
+            format: uuid
+        - name: entityId
+          in: query
+          description: Related entity Id
+          style: form
+          schema:
+            type: string
+        - name: comment
+          in: query
+          description: Comment
+          style: form
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/configs/securityPoliciesTemplate:
@@ -155,8 +222,8 @@ paths:
             text/plain:
               schema:
                 type: string
-        '404':
-          description: Not Found
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -186,8 +253,8 @@ paths:
             text/plain:
               schema:
                 type: string
-        '404':
-          description: Not Found
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -212,8 +279,8 @@ paths:
       responses:
         '200':
           description: Success
-        '404':
-          description: Not Found
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -227,7 +294,7 @@ paths:
     get:
       tags:
         - Configs
-      summary: Get pattern matching patterns
+      summary: Get pattern matching rules
       responses:
         '200':
           description: Success
@@ -247,32 +314,44 @@ paths:
     post:
       tags:
         - Configs
+      summary: Add pattern matching rule
       requestBody:
         content:
           application/json-patch+json:
             schema:
-              $ref: '#/components/schemas/PmRuleModel'
+              $ref: '#/components/schemas/PmRuleCreateUpdateModel'
           application/json:
             schema:
-              $ref: '#/components/schemas/PmRuleModel'
+              $ref: '#/components/schemas/PmRuleCreateUpdateModel'
           text/json:
             schema:
-              $ref: '#/components/schemas/PmRuleModel'
+              $ref: '#/components/schemas/PmRuleCreateUpdateModel'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/PmRuleModel'
+              $ref: '#/components/schemas/PmRuleCreateUpdateModel'
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/configs/pmRules/{id}':
     delete:
       tags:
         - Configs
+      summary: Delete pattern matching rule by it's identifier
       parameters:
         - name: id
           in: path
+          description: Pattern matching rule identifier
           required: true
           style: simple
           schema:
@@ -280,14 +359,25 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     get:
       tags:
         - Configs
+      summary: Get pattern matching rule by it's identifier
       parameters:
         - name: id
           in: path
+          description: Pattern matching rule identifier
           required: true
           style: simple
           schema:
@@ -302,14 +392,25 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/PmRuleModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     put:
       tags:
         - Configs
+      summary: Update pattern matching rule by it's identifier
       parameters:
         - name: id
           in: path
+          description: Pattern matching rule identifier
           required: true
           style: simple
           schema:
@@ -318,19 +419,28 @@ paths:
         content:
           application/json-patch+json:
             schema:
-              $ref: '#/components/schemas/PmRuleModel'
+              $ref: '#/components/schemas/PmRuleCreateUpdateModel'
           application/json:
             schema:
-              $ref: '#/components/schemas/PmRuleModel'
+              $ref: '#/components/schemas/PmRuleCreateUpdateModel'
           text/json:
             schema:
-              $ref: '#/components/schemas/PmRuleModel'
+              $ref: '#/components/schemas/PmRuleCreateUpdateModel'
           application/*+json:
             schema:
-              $ref: '#/components/schemas/PmRuleModel'
+              $ref: '#/components/schemas/PmRuleCreateUpdateModel'
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/directoryContent/{projectId}':
@@ -457,6 +567,15 @@ paths:
             text/plain:
               schema:
                 type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
   /api/auth/external/signin/ldap:
     post:
       tags:
@@ -486,6 +605,15 @@ paths:
             text/plain:
               schema:
                 type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
   /api/auth/external/sessions:
     get:
       tags:
@@ -518,6 +646,15 @@ paths:
             text/plain:
               schema:
                 type: string
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
   /api/auth/external/signout:
     post:
       tags:
@@ -539,6 +676,15 @@ paths:
               ReturnUrl:
                 style: form
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -564,6 +710,15 @@ paths:
             schema:
               $ref: '#/components/schemas/LdapSettingsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -598,6 +753,15 @@ paths:
             schema:
               $ref: '#/components/schemas/LdapSettingsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -623,6 +787,15 @@ paths:
             schema:
               $ref: '#/components/schemas/OpenIdSettingsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -657,6 +830,15 @@ paths:
             schema:
               $ref: '#/components/schemas/OpenIdSettingsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -685,6 +867,15 @@ paths:
               SigningCertificateFile:
                 style: form
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -711,8 +902,8 @@ paths:
           schema:
             type: string
       responses:
-        '400':
-          description: Bad Request
+        '404':
+          description: Not Found
           content:
             application/octet-stream:
               schema:
@@ -755,8 +946,8 @@ paths:
           schema:
             type: string
       responses:
-        '400':
-          description: Bad Request
+        '404':
+          description: Not Found
           content:
             application/octet-stream:
               schema:
@@ -786,6 +977,7 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get available trackers
       responses:
         '200':
           description: Success
@@ -806,6 +998,7 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get all connection settings
       responses:
         '200':
           description: Success
@@ -826,15 +1019,26 @@ paths:
     delete:
       tags:
         - IssueTracker
+      summary: Delete connection setting
       parameters:
         - name: id
           in: path
+          description: Connection setting identifier
           required: true
           style: simple
           schema:
             type: string
             format: uuid
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -842,15 +1046,26 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get connection setting by it's identifier
       parameters:
         - name: id
           in: path
+          description: Connection setting identifier
           required: true
           style: simple
           schema:
             type: string
             format: uuid
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -865,6 +1080,7 @@ paths:
     put:
       tags:
         - IssueTracker
+      summary: Set connection setting
       parameters:
         - name: id
           in: path
@@ -893,6 +1109,15 @@ paths:
             schema:
               $ref: '#/components/schemas/ConnectionSettingsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -901,6 +1126,7 @@ paths:
     post:
       tags:
         - IssueTracker
+      summary: Test connection
       requestBody:
         content:
           application/json-patch+json:
@@ -916,6 +1142,15 @@ paths:
             schema:
               $ref: '#/components/schemas/ConnectionSettingsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -924,15 +1159,26 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get projects for connection by it's identifier
       parameters:
         - name: connectionId
           in: path
+          description: Connection identifier
           required: true
           style: simple
           schema:
             type: string
             format: uuid
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -952,9 +1198,11 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get ticket by key
       parameters:
         - name: connectionId
           in: path
+          description: Connection identifier
           required: true
           style: simple
           schema:
@@ -962,11 +1210,21 @@ paths:
             format: uuid
         - name: key
           in: path
+          description: Ticket key
           required: true
           style: simple
           schema:
             type: string
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -982,15 +1240,18 @@ paths:
     post:
       tags:
         - IssueTracker
+      summary: Create ticket
       parameters:
         - name: connectionId
           in: path
+          description: Connection identifier
           required: true
           style: simple
           schema:
             type: string
             format: uuid
       requestBody:
+        description: Ticket
         content:
           application/json-patch+json:
             schema:
@@ -1005,6 +1266,15 @@ paths:
             schema:
               $ref: '#/components/schemas/TicketModels'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1020,9 +1290,11 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get project ticket types
       parameters:
         - name: connectionId
           in: path
+          description: Connection identifier
           required: true
           style: simple
           schema:
@@ -1030,11 +1302,21 @@ paths:
             format: uuid
         - name: project
           in: path
+          description: Project name
           required: true
           style: simple
           schema:
             type: string
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1054,15 +1336,26 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get priorities
       parameters:
         - name: connectionId
           in: path
+          description: Connection identifier
           required: true
           style: simple
           schema:
             type: string
             format: uuid
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1082,9 +1375,11 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get users
       parameters:
         - name: connectionId
           in: path
+          description: Connection identifier
           required: true
           style: simple
           schema:
@@ -1092,10 +1387,20 @@ paths:
             format: uuid
         - name: query
           in: query
+          description: Query
           style: form
           schema:
             type: string
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1115,9 +1420,11 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get ticket fields
       parameters:
         - name: connectionId
           in: path
+          description: Connection identifier
           required: true
           style: simple
           schema:
@@ -1125,17 +1432,28 @@ paths:
             format: uuid
         - name: project
           in: path
+          description: Project
           required: true
           style: simple
           schema:
             type: string
         - name: ticketType
           in: path
+          description: Ticket type
           required: true
           style: simple
           schema:
             type: string
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1155,9 +1473,11 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get options for ticket fields
       parameters:
         - name: connectionId
           in: path
+          description: Connection identifier
           required: true
           style: simple
           schema:
@@ -1165,22 +1485,34 @@ paths:
             format: uuid
         - name: project
           in: path
+          description: Project
           required: true
           style: simple
           schema:
             type: string
         - name: ticketType
           in: path
+          description: Ticket type
           required: true
           style: simple
           schema:
             type: string
         - name: fieldName
           in: query
+          description: Field name
           style: form
           schema:
             type: string
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1200,9 +1532,11 @@ paths:
     get:
       tags:
         - IssueTracker
+      summary: Get statuses
       parameters:
         - name: connectionId
           in: path
+          description: Connection identifier
           required: true
           style: simple
           schema:
@@ -1210,10 +1544,20 @@ paths:
             format: uuid
         - name: ticketType
           in: query
+          description: Ticket type
           style: form
           schema:
             type: string
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1233,18 +1577,22 @@ paths:
     post:
       tags:
         - IssueTrackerOauth1A
+      summary: Get oauth request token
       parameters:
         - name: providerKey
           in: query
+          description: Tracker name
           style: form
           schema:
             type: string
         - name: host
           in: query
+          description: Host
           style: form
           schema:
             type: string
       requestBody:
+        description: Authorization data
         content:
           application/json-patch+json:
             schema:
@@ -1259,6 +1607,15 @@ paths:
             schema:
               $ref: '#/components/schemas/Oauth1DataModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1274,23 +1631,28 @@ paths:
     post:
       tags:
         - IssueTrackerOauth1A
+      summary: Get oauth access token
       parameters:
         - name: providerKey
           in: query
+          description: Tracker name
           style: form
           schema:
             type: string
         - name: host
           in: query
+          description: Host
           style: form
           schema:
             type: string
         - name: requestToken
           in: query
+          description: Oauth request token
           style: form
           schema:
             type: string
       requestBody:
+        description: Authorization data
         content:
           application/json-patch+json:
             schema:
@@ -1305,6 +1667,15 @@ paths:
             schema:
               $ref: '#/components/schemas/Oauth1DataModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1435,8 +1806,8 @@ paths:
               schema:
                 type: string
                 format: binary
-        '400':
-          description: Bad Request
+        '404':
+          description: Not Found
           content:
             application/zip:
               schema:
@@ -1480,6 +1851,13 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: uuid
         '401':
           description: Unauthorized
   /api/mailing/mailProfiles:
@@ -1602,15 +1980,6 @@ paths:
               schema:
                 type: string
                 format: uuid
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Nullable'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/Nullable'
         '400':
           description: Bad Request
           content:
@@ -1694,6 +2063,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   '/api/mailing/mailProfiles/{mailProfileId}/usedInProjects':
@@ -1775,6 +2146,15 @@ paths:
             schema:
               $ref: '#/components/schemas/MemberModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1800,6 +2180,15 @@ paths:
             type: string
             format: uuid
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -1884,6 +2273,15 @@ paths:
               items:
                 $ref: '#/components/schemas/ProjectMemberModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -1915,6 +2313,15 @@ paths:
             schema:
               $ref: '#/components/schemas/ProjectMemberModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -1940,6 +2347,15 @@ paths:
             type: integer
             format: int64
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -2020,6 +2436,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   /api/projects:
@@ -2067,6 +2485,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
     get:
@@ -2092,6 +2512,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ProjectModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/name/{name}':
@@ -2116,6 +2545,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ProjectModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{name}/exists':
@@ -2138,6 +2576,15 @@ paths:
             text/plain:
               schema:
                 type: boolean
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/scanResults':
@@ -2168,6 +2615,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ScanResultModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/scanResults/last':
@@ -2194,6 +2650,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ScanResultModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/projects/base:
@@ -2238,7 +2703,9 @@ paths:
     post:
       tags:
         - Projects
+      summary: Create project with extended settings
       requestBody:
+        description: ''
         content:
           application/json-patch+json:
             schema:
@@ -2344,6 +2811,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   /api/projects/withScans:
@@ -2365,15 +2834,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProjectWithScanInfoModel'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/withScans/{projectId}':
@@ -2576,6 +3036,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/BaseProjectSettingsModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/exclusions':
@@ -2602,6 +3071,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/FileFolderExclusionsModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     put:
@@ -2633,6 +3111,15 @@ paths:
             schema:
               $ref: '#/components/schemas/FileFolderExclusionsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -2678,6 +3165,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ProjectSettingsModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     put:
@@ -2709,6 +3205,15 @@ paths:
             schema:
               $ref: '#/components/schemas/ProjectSettingsUpdatedModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -2743,6 +3248,15 @@ paths:
             schema:
               $ref: '#/components/schemas/ExtendedProjectSettingsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -2894,6 +3408,12 @@ paths:
               schema:
                 type: string
                 format: binary
+        '404':
+          description: Not Found
+          content:
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/securityPolicies':
@@ -2920,6 +3440,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/SecurityPoliciesModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     put:
@@ -2960,6 +3489,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/sastRules':
@@ -2986,6 +3517,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/SastRulesModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     put:
@@ -3017,6 +3557,15 @@ paths:
             schema:
               $ref: '#/components/schemas/SastRulesBaseModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -3045,6 +3594,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/PmRulesBaseModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     put:
@@ -3076,6 +3634,15 @@ paths:
             schema:
               $ref: '#/components/schemas/PmRulesBaseModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -3104,6 +3671,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/AnalysisRulesModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     put:
@@ -3135,6 +3711,15 @@ paths:
             schema:
               $ref: '#/components/schemas/AnalysisRulesBaseModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -3171,6 +3756,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ScanResultModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/issues/{issueId}/state':
@@ -3211,6 +3805,15 @@ paths:
             schema:
               $ref: '#/components/schemas/ChangeIssueApprovalStateModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -3253,6 +3856,15 @@ paths:
             schema:
               $ref: '#/components/schemas/ChangeIssueIsFavoriteModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -3287,6 +3899,15 @@ paths:
             schema:
               $ref: '#/components/schemas/ChangeIssuesApprovalStateModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -3321,6 +3942,15 @@ paths:
             schema:
               $ref: '#/components/schemas/ChangeIssuesFavoriteModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -3361,6 +3991,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ScanErrorModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/tracker/extendedSettings':
@@ -3387,6 +4026,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/IssueTrackerIntegrationSettingsModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     put:
@@ -3427,6 +4075,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/tracker/links/{issueId}/jira':
@@ -3476,6 +4126,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/tracker/links/{issueId}/jira/unlink':
@@ -3510,6 +4162,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   /api/projects/activeScans:
@@ -3559,6 +4213,15 @@ paths:
           schema:
             type: string
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -3593,6 +4256,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   '/api/projects/{projectId}/unpin':
@@ -3618,6 +4283,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   /api/reports/templates:
@@ -3651,6 +4318,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ReportTemplateModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     post:
@@ -3754,6 +4430,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ReportTemplateModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     put:
@@ -3823,6 +4508,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ReportTemplateModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/reports/userTemplates/{name}':
@@ -3852,6 +4546,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ReportTemplateModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/reports/templates/check:
@@ -3908,8 +4611,8 @@ paths:
               schema:
                 type: string
                 format: binary
-        '400':
-          description: Bad Request
+        '404':
+          description: Not Found
           content:
             application/octet-stream:
               schema:
@@ -3942,8 +4645,8 @@ paths:
             schema:
               $ref: '#/components/schemas/ReportTemplateModel'
       responses:
-        '400':
-          description: Bad Request
+        '404':
+          description: Not Found
           content:
             application/octet-stream:
               schema:
@@ -4065,6 +4768,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   '/api/scanAgents/{scanAgentId}':
@@ -4090,6 +4795,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   /api/scanAgents/hasActive:
@@ -4129,6 +4836,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   /api/scanAgents/count:
@@ -4228,6 +4937,15 @@ paths:
             type: string
             format: uuid
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -4246,6 +4964,7 @@ paths:
     get:
       tags:
         - ServerSettings
+      summary: Get proxy settings
       responses:
         '200':
           description: Success
@@ -4262,6 +4981,7 @@ paths:
     get:
       tags:
         - ServerSettings
+      summary: Get current certificate
       responses:
         '200':
           description: Success
@@ -4311,6 +5031,15 @@ paths:
             schema:
               $ref: '#/components/schemas/LogSettingsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -4338,6 +5067,15 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/settings/logs/external:
@@ -4363,6 +5101,15 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/settings/storage:
@@ -4401,6 +5148,15 @@ paths:
             schema:
               $ref: '#/components/schemas/FileStorageSettingsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -4441,6 +5197,15 @@ paths:
             schema:
               $ref: '#/components/schemas/SSOSettingsModel'
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -4464,15 +5229,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/AuthProviderSettingsModel'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
     post:
@@ -4729,12 +5485,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SourceControlCredentalsType'
+                  $ref: '#/components/schemas/SourceControlCredentialsType'
             text/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/SourceControlCredentalsType'
+                  $ref: '#/components/schemas/SourceControlCredentialsType'
         '400':
           description: Bad Request
           content:
@@ -5024,15 +5780,6 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -5057,15 +5804,13 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
-        '404':
-          description: Not Found
+        '200':
+          description: Success
           content:
-            application/json:
+            text/plain:
               schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
+                type: string
+                format: uuid
         '401':
           description: Unauthorized
   '/api/store/{projectId}/sources':
@@ -5083,12 +5828,6 @@ paths:
             type: string
             format: uuid
       responses:
-        '400':
-          description: Bad Request
-          content:
-            application/zip:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -5142,8 +5881,8 @@ paths:
               files:
                 style: form
       responses:
-        '404':
-          description: Not Found
+        '400':
+          description: Bad Request
           content:
             application/json:
               schema:
@@ -5164,10 +5903,12 @@ paths:
         '200':
           description: Success
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                format: uuid
+                $ref: '#/components/schemas/UploadSessionModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/UploadSessionModel'
         '400':
           description: Bad Request
           content:
@@ -5205,15 +5946,6 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/store/uploadSession/{uploadId}/add':
@@ -5235,15 +5967,6 @@ paths:
           description: Success
         '400':
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-        '404':
-          description: Not Found
           content:
             application/json:
               schema:
@@ -5277,15 +6000,6 @@ paths:
                 format: uuid
         '400':
           description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-        '404':
-          description: Not Found
           content:
             application/json:
               schema:
@@ -5333,15 +6047,6 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -5369,12 +6074,6 @@ paths:
             type: string
             format: uuid
       responses:
-        '400':
-          description: Bad Request
-          content:
-            application/zip:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -5413,12 +6112,6 @@ paths:
             type: string
             format: uuid
       responses:
-        '400':
-          description: Bad Request
-          content:
-            application/zip:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
           content:
@@ -5719,6 +6412,15 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   '/api/auth/users/{userId}/delete':
@@ -5744,6 +6446,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   '/api/auth/users/{userId}/restore':
@@ -5769,6 +6473,8 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
         '401':
           description: Unauthorized
   /api/versions/package/current:
@@ -5783,15 +6489,6 @@ paths:
             text/plain:
               schema:
                 type: string
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
-            text/json:
-              schema:
-                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
 components:
@@ -5858,29 +6555,10 @@ components:
         - EXT_AUTH_PROVIDER_UPDATE_ERROR
         - EXT_AUTH_PROVIDER_DELETE_ERROR
         - EXT_AUTH_PROVIDER_IS_INCORRECT
-        - EXT_AUTH_PROVIDER_NAME_IS_EMPTY
-        - EXT_AUTH_PROVIDER_NAME_LENGTH_LIMIT
         - EXT_AUTH_PROVIDER_WITH_SAME_NAME_ALREADY_EXISTS
-        - EXT_AUTH_SETTINGS_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_OPENID_AUTHORITY_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_OPENID_CLIENT_ID_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_OPENID_CLIENT_SECRET_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_ISSUER_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_ALLOWED_ISSUER_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_ACS_URL_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_LOGOUT_URL_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_SIGN_VALIDATION_CERT_IS_EMPTY
-        - EXT_AUTH_SETTINGS_SAML2_SIGN_VALIDATION_CERT_SIZE_LIMIT
         - EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_IS_EMPTY
-        - EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_SIZE_LIMIT
         - EXT_AUTH_SETTINGS_SAML2_NAMEID_POLICY_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_INCORRECT
         - EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_EMPTY
-        - EXT_AUTH_SETTINGS_LDAP_HOST_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_LDAP_HOST_HAS_SCHEMA
-        - EXT_AUTH_SETTINGS_LDAP_PORT_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_LDAP_SSL_PORT_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_LDAP_BASE_DN_IS_INCORRECT
         - EXT_AUTH_SETTINGS_TEST_CONNECTION_FAILED
         - EXT_AUTH_ROLE_MAPPINGS_EMPTY_FIELDS
         - EXT_AUTH_ROLE_MAPPINGS_NO_GLOBAL_ROLES
@@ -5919,6 +6597,7 @@ components:
         - EXT_AUTH_USER_PROVISION_ERROR
         - EXT_AUTH_USER_PROVISION_USER_IS_NOT_DEFINED
         - EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_NOT_MAPPED
+        - EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_TOO_LONG
         - EXT_AUTH_USER_PROVISION_NAME_FIELD_IS_NOT_MAPPED
         - UPDATE_PACKAGE_VERSION_IS_ALREADY_UPLOADED
         - UPDATE_PACKAGE_UPLOADED_IS_ALREADY_STARTED
@@ -6999,7 +7678,7 @@ components:
         - v1_8
         - v1_11
       type: string
-      # V.4.3: Needed to fix that to avoid enum name generation like _8 and _11
+      # V.4.4: Needed to fix that to avoid enum name generation like _8 and _11
       x-enum-varnames:
         - v1_8
         - v1_11
@@ -7221,9 +7900,6 @@ components:
             $ref: '#/components/schemas/ProjectMemberInfoModel'
           nullable: true
       additionalProperties: false
-    Nullable:
-      type: object
-      additionalProperties: false
     Oauth1AccessTokenModel:
       type: object
       properties:
@@ -7338,21 +8014,15 @@ components:
         - WorkWithScanScheduler
         - ReadGlobalParams
       type: string
-    PmRuleModel:
+    PmRuleCreateUpdateModel:
       type: object
       properties:
-        id:
-          type: string
-          nullable: true
         name:
           type: string
           nullable: true
         description:
           type: string
           nullable: true
-        version:
-          type: integer
-          format: int32
         programmingLanguages:
           type: array
           items:
@@ -7368,11 +8038,42 @@ components:
           nullable: true
         level:
           $ref: '#/components/schemas/IssueLevel'
+      additionalProperties: false
+    PmRuleModel:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        version:
+          type: integer
+          format: int32
         modifiedDate:
           type: string
           format: date-time
         modifiedBy:
           $ref: '#/components/schemas/UserModel'
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        programmingLanguages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProgrammingLanguages'
+          nullable: true
+        dataFormat:
+          $ref: '#/components/schemas/DataFormat'
+        filenameWildcard:
+          type: string
+          nullable: true
+        value:
+          type: string
+          nullable: true
+        level:
+          $ref: '#/components/schemas/IssueLevel'
       additionalProperties: false
     PmRulesBaseModel:
       type: object
@@ -7711,7 +8412,7 @@ components:
         includeSubmodules:
           type: boolean
         sourceControlCredentialsType:
-          $ref: '#/components/schemas/SourceControlCredentalsType'
+          $ref: '#/components/schemas/SourceControlCredentialsType'
         repositoryType:
           $ref: '#/components/schemas/RepositoryType'
         projectCollection:
@@ -7862,6 +8563,7 @@ components:
         - Sans
         - Json
         - Xml
+        - Md
       type: string
     RepositoryType:
       enum:
@@ -8318,7 +9020,7 @@ components:
           type: string
           nullable: true
         sourceControlCredentialsType:
-          $ref: '#/components/schemas/SourceControlCredentalsType'
+          $ref: '#/components/schemas/SourceControlCredentialsType'
         login:
           type: string
           nullable: true
@@ -8329,12 +9031,13 @@ components:
           type: string
           nullable: true
       additionalProperties: false
-    SourceControlCredentalsType:
+    SourceControlCredentialsType:
       enum:
         - None
         - Anonymous
         - Password
         - AuthenticationToken
+        - BasicUsingHeader
       type: string
     SourceControlScanSettingsModel:
       type: object
@@ -8562,6 +9265,19 @@ components:
         userName:
           type: string
           nullable: true
+      additionalProperties: false
+    UploadSessionModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        maxBytes:
+          type: integer
+          format: int32
+        maxFiles:
+          type: integer
+          format: int32
       additionalProperties: false
     UserMappingFieldType:
       enum:

@@ -1,10 +1,10 @@
 openapi: 3.0.1
 info:
-  title: Current API v3
-  description: 'To specify the API version in your request, add v{version} after api/ in the address. For example, api/v2/auth.'
-  version: '3'
+  title: Current API v4
+  description: 'To specify the API version in your request, add v{version} after api/ in the address. For example, api/v4/auth.'
+  version: '4'
 servers:
-  - url: https://ptai.domain.org/
+  - url: https://ptai.ptdemo.local/
 paths:
   /api/auth/accessToken:
     get:
@@ -91,6 +91,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/AccessTokenModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/auth/accessToken/revoke:
@@ -107,6 +116,15 @@ paths:
             type: string
             format: uuid
       responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '200':
           description: Success
         '401':
@@ -134,6 +152,15 @@ paths:
             text/json:
               schema:
                 $ref: '#/components/schemas/AuthResultModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
         '401':
           description: Unauthorized
   /api/auth/userLogin:
@@ -303,29 +330,10 @@ components:
         - EXT_AUTH_PROVIDER_UPDATE_ERROR
         - EXT_AUTH_PROVIDER_DELETE_ERROR
         - EXT_AUTH_PROVIDER_IS_INCORRECT
-        - EXT_AUTH_PROVIDER_NAME_IS_EMPTY
-        - EXT_AUTH_PROVIDER_NAME_LENGTH_LIMIT
         - EXT_AUTH_PROVIDER_WITH_SAME_NAME_ALREADY_EXISTS
-        - EXT_AUTH_SETTINGS_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_OPENID_AUTHORITY_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_OPENID_CLIENT_ID_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_OPENID_CLIENT_SECRET_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_ISSUER_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_ALLOWED_ISSUER_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_ACS_URL_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_LOGOUT_URL_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_SIGN_VALIDATION_CERT_IS_EMPTY
-        - EXT_AUTH_SETTINGS_SAML2_SIGN_VALIDATION_CERT_SIZE_LIMIT
         - EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_IS_EMPTY
-        - EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_SIZE_LIMIT
         - EXT_AUTH_SETTINGS_SAML2_NAMEID_POLICY_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_INCORRECT
         - EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_EMPTY
-        - EXT_AUTH_SETTINGS_LDAP_HOST_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_LDAP_HOST_HAS_SCHEMA
-        - EXT_AUTH_SETTINGS_LDAP_PORT_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_LDAP_SSL_PORT_IS_INCORRECT
-        - EXT_AUTH_SETTINGS_LDAP_BASE_DN_IS_INCORRECT
         - EXT_AUTH_SETTINGS_TEST_CONNECTION_FAILED
         - EXT_AUTH_ROLE_MAPPINGS_EMPTY_FIELDS
         - EXT_AUTH_ROLE_MAPPINGS_NO_GLOBAL_ROLES
@@ -364,6 +372,7 @@ components:
         - EXT_AUTH_USER_PROVISION_ERROR
         - EXT_AUTH_USER_PROVISION_USER_IS_NOT_DEFINED
         - EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_NOT_MAPPED
+        - EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_TOO_LONG
         - EXT_AUTH_USER_PROVISION_NAME_FIELD_IS_NOT_MAPPED
         - UPDATE_PACKAGE_VERSION_IS_ALREADY_UPLOADED
         - UPDATE_PACKAGE_UPLOADED_IS_ALREADY_STARTED
