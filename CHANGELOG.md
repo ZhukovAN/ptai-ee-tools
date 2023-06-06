@@ -4,7 +4,7 @@
 + [Feature] Jenkins and CLI plugins reporting settings changed to allow generation of raw issues JSON and filtered PDF/HTML reports, XML/JSON data exports
 + [Feature] All the HTTP requests and responses are logged using FINEST level
 + [Feature] CLI, Jenkins and Teamcity plugins are now support insecure SSL connections i.e. without CA certificate chain verification
-+ [Feature] Valid AST result statuses are SUCCESS, FAILED and INTERRUPTED. If AST is done then initial result is SUCCESS. If policy defined and fail-if-failed is on, status changes to FAILED, if no policy or assessment succeeds and there were scan errors or warnings and fail-if-unstable is on, then status also changes to FAILED    
++ [Feature] Valid AST result statuses are SUCCESS, FAILED and INTERRUPTED. If AST is done then initial result is SUCCESS. If policy defined and fail-if-failed is on, status changes to FAILED, if no policy or assessment succeeds and there were scan errors or warnings and fail-if-unstable is on, then status also changes to FAILED
 + [Fix] Due to some limitations of HTTP/2 API (sometimes it answers HTTP 401 for valid authentication token) all REST API clients now use HTTP/1 protocol
 ### 20201217
 + [Fix] Restored functions of Teamcity plugin, plan to implement async scan and report generation
@@ -19,7 +19,7 @@
 ### 20210112
 + [Feature] CLI plugin enum parameters are made case-insensitive
 + [Feature] Extended issues filtering syntax implemented, see sample JSON in reports.5.json
-+ [Feature] Jenkins plugin reporting locale uses browser locale 
++ [Feature] Jenkins plugin reporting locale uses browser locale
 + [Feature] Jenkins plugin reporting template uses predefined browser locale based names
 ### 20210122
 + [Fix] "Scan enqueued" event fixed
@@ -39,7 +39,7 @@
 + [Fix] Hidden "nodeName" parameter removed from Jenkins plugin
 + [Fix] Jenkins credentials plugin version changed to 2.3.14
 + [Fix] Jenkins token-macro plugin version changed to 2.13
-+ [Fix] PT AI result URL output removed as it is not supported in PT AI Viewer 
++ [Fix] PT AI result URL output removed as it is not supported in PT AI Viewer
 + [Fix] ScanEnqueued event subscription removed as there's no more handler for it exist. This will fix SignalR exception when event reaches BaseClient
 + [Feature] Full / incremental scan mode option added to Jenkins plugin
 + [Feature] Added zipped sources file size log output
@@ -50,7 +50,7 @@
 + [ToDo] Investigate Jenkins plugin fail for 2.277.1: build job fails on save
 ### 20210413
 + [Fix] Dockerfile fixed to allow CLI plugin execution from Gitlab CI
-+ [Fix] Ant and Slf4J dependencies are removed from Jenkins's plugin pom.xml file as those JARs versions are managed by parent org.jenkins-ci.plugins artifact that maintains actual BOM of dependencies in accordance with jenkins.version variable, see details [here](https://github.com/jenkinsci/plugin-pom).  
++ [Fix] Ant and Slf4J dependencies are removed from Jenkins's plugin pom.xml file as those JARs versions are managed by parent org.jenkins-ci.plugins artifact that maintains actual BOM of dependencies in accordance with jenkins.version variable, see details [here](https://github.com/jenkinsci/plugin-pom).
 + [Feature] CLI plugin --use-default-excludes parameter added
 ### 20210414
 + [Fix] Transitive dependencies to Maven localizer plugin 1.26 are fixed by adding explicit repository URL to parent pom.xml
@@ -99,10 +99,10 @@
 ### 20210817
 + [Fix] Jenkins VirtualChannel throws exception that is inherited from Throwable instead of Exception. But CallHelper processes ava.util.concurrent.Callable lambdas that throw Exception. That means that CallHelper can't process VirtualChannel exceptions and some JDK's like OpenJDK 8 raises build error here. So I had to implement own Callable inside CallHelper that throws Throwable
 + [Feature] Jenkins plugin logo changed. Now it uses icon from PT AI IDE plugins
-### 20210819 
+### 20210819
 + [Fix] Fixed scan settings change for second and following scans
 + [Feature] UI for terminated / incomplete scans implemented for Jenkins plugin
-### 20210820 
+### 20210820
 + [Feature] Integration test for project scan settings change using JSON added
 + [Feature] UI for scan stage duration statistic added
 + [Fix] JSON-defined BlackBox engine level processing fixed
@@ -127,7 +127,7 @@
 ### 20210914
 + [Fix] JWT refresh fixed
 + [Feature] SignalR version update 1.0.0 -> 5.0.9. Need this to check if websocket proxy connection issue can be fixed
-+ [Feature] Advanced settings class implemented. Use ```-Dptai.http.response.max.body.size="10"``` Java parameter to restrict HTTP response body size to store to logs 
++ [Feature] Advanced settings class implemented. Use ```-Dptai.http.response.max.body.size="10"``` Java parameter to restrict HTTP response body size to store to logs
 ### 20210916
 + [Fix] Use of LastBuildAction allows plugin to show project-scope actions both for pipeline and freestyle jobs. But this works only if there were at least one successful build (see https://issues.jenkins.io/browse/JENKINS-28479). Added getProjectActions for build step to fix that for at least freestyle projects
 + [Fix] jcenter.bintray.com repository not available. Replaced with https://download.jetbrains.com/teamcity-repository
@@ -144,11 +144,11 @@
 + [Feature] Support for PT AI 3.6.5.1541 added
 ### 20211102
 + [Fix] Integration tests for incremental scans are removed as those may fail
-+ [Feature] Jenkins plugin "fail-if-failed" / "fail-if-unstable" and reports generation are merged to single UI that allows to manually define set of post-AST actions including reports generation, policy processing etc. 
++ [Feature] Jenkins plugin "fail-if-failed" / "fail-if-unstable" and reports generation are merged to single UI that allows to manually define set of post-AST actions including reports generation, policy processing etc.
 ### 20211125
 + [Fix] SignalR version changed to 6.0.0
 + [Feature] SARIF report generation added to Jenkins plugin
-### 20211210 
+### 20211210
 + [Feature] Jenkins reports now support environment variables macro expansion for file / template names and for JSON filter
 + [Feature] SonarQube's [Generic Issue Import Format](https://docs.sonarqube.org/latest/analysis/generic-issue/) report generation added to Jenkins plugin
 ### 20211223
@@ -188,7 +188,7 @@
 + [Feature] WebGoat.NET source code added
 + [Fix] PT AI 4.0 and 4.1 both require C# solution file name started with "./" while 3.6 doesn't. Checks and fixes are added to AiProjConverters
 + [Fix] Sources upload step moved from GenericAstJob to SetupOperations and ProjectTasks implementations. This is done because C# projects require solution file to be uploaded already before project setup. Otherwise we'll get error {"errorCode":"INVALID_JSON_FIELDS","details":{"additionalParams.solutionFile":"NotExist"}} while calling https://{url}/api/projects/{projectId}/settings
-+ [Fix] Removed x-enum-varnames from DotNetProjectType as both 4.0 and 4.1 use string enums 
++ [Fix] Removed x-enum-varnames from DotNetProjectType as both 4.0 and 4.1 use string enums
 ### 20220825
 + [Feature] Advanced setting ast.result.rest.url.filename added. If its value is defined then AST result URL will be saved to corresponding file
 ### 20220902
@@ -225,3 +225,5 @@
 + [Feature] PT AI v.4.3.0 support approved
 + [Feature] Legacy, 1.0 and 1.1 AIPROJ versions support added
 + [Fix] Jenkins check functions are fixed. Jenkins uses FormValidation.findParameters method to find properties that chacked field depends on. If parameter value does not equals to "value", that parameter name is added as "checkDependsOn" attribute and JS event listener added to corresponding UI control (see registerValidator in hudson-behaviour.js). That means that, for example, previous doCheckJsonSettings will be called twice: first time as checker attached to onchange event and second time - as onchange listener for jsonSettings field from checkDependsOn attribute
+### 20230530
++ [Feature] PT AI v.4.4.1 support approved
