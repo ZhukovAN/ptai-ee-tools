@@ -1,8 +1,8 @@
 openapi: 3.0.1
 info:
-  title: Current API v2
+  title: Current API v3
   description: 'To specify the API version in your request, add v{version} after api/ in the address. For example, api/v2/auth.'
-  version: '2'
+  version: '3'
 servers:
   - url: https://ptai.domain.org/
 paths:

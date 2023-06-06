@@ -25,7 +25,7 @@ public class ScanBrief {
         @Deprecated V36,
         @Deprecated V40,
         @Deprecated V41,
-        V411, V420, V430;
+        V411, V420, V430, V44X;
 
         @SneakyThrows
         public static boolean isDeprecated(@NonNull final ApiVersion version) {
