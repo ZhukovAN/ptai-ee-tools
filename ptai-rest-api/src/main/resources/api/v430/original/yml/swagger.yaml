@@ -8120,6 +8120,7 @@ components:
         - Sans
         - Json
         - Xml
+        - Md
       type: string
     RepositoryType:
       enum:
