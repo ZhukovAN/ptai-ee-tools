@@ -1,0 +1,30 @@
+pipeline {
+  agent {
+    kubernetes {
+      yamlFile '.jenkins/build-pod.yaml'
+    }
+  }
+  parameters{
+    string(name: 'JENKINS_VERSION', defaultValue: '2.387.3', description: 'Version of Jenkins that PT AI plugin is to support')
+    string(name: 'TEAMCITY_VERSION', defaultValue: '2022.10', description: 'Version of TeamCity that PT AI plugin is to support')
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+    stage('Build image') {
+      steps {
+        container('gradle') {
+          sh "gradle build -P jenkinsVersion=${params.JENKINS_VERSION} -P teamcityVersion=${params.TEAMCITY_VERSION}"
+        }
+      }
+    }
+    stage('Archive') {
+      steps {
+        archiveArtifacts artifacts: 'ptai-cli-plugin/build/libs/ptai-cli-plugin.jar, ptai-jenkins-plugin/build/libs/ptai-jenkins-plugin.hpi, ptai-teamcity-plugin/ptai-teamcity-plugin-server/build/distributions/ptai-teamcity-plugin.zip', followSymlinks: false
+      }
+    }
+  }
+}
