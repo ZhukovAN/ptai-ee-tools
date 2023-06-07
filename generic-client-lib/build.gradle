@@ -54,8 +54,7 @@ dependencies {
     // Use JUnit 5 for test fixtures
     testFixturesImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testFixturesImplementation('org.junit.jupiter:junit-jupiter')
-    // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
-    testFixturesApi 'io.jsonwebtoken:jjwt:0.9.1'
+
     // https://mvnrepository.com/artifact/com.contrastsecurity/java-sarif
     testFixturesApi 'com.contrastsecurity:java-sarif:2.0'
 
@@ -64,6 +63,10 @@ dependencies {
     testImplementation(testFixtures(project(":pt-misc-tools")))
     testImplementation(testFixtures(project(":ptai-data-structures")))
     testImplementation(testFixtures(project(":ptai-rest-api")))
+
+    testImplementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    testRuntimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    testRuntimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     testFixturesImplementation(testFixtures(project(":pt-misc-tools")))
     testFixturesImplementation(testFixtures(project(":ptai-data-structures")))

@@ -43,7 +43,8 @@ public class AuthenticationIT extends BaseClientIT {
         int signatureIdx = initialJwtResponse.getAccessToken().lastIndexOf('.');
         String withoutSignature = initialJwtResponse.getAccessToken().substring(0, signatureIdx + 1);
         // Allow up to five seconds time difference between PT AI client and server to avoid something like PrematureJwtException
-        JwtParser parser = Jwts.parser().setAllowedClockSkewSeconds(5);
+        JwtParser parser = Jwts.parserBuilder(). setAllowedClockSkewSeconds(5).build();
+        // JwtParser parser = Jwts.parser().setAllowedClockSkewSeconds(5);
         io.jsonwebtoken.Jwt<Header, Claims> initialJwt = parser.parseClaimsJwt(withoutSignature);
         ServerVersionTasks serverVersionTasks = new Factory().serverVersionTasks(client);
         Map<ServerVersionTasks.Component, String> versions = Assertions.assertDoesNotThrow(
