@@ -32,7 +32,7 @@ Usage: java -jar ptai-cli-plugin.jar [-hV] COMMAND
   -V, --version   Print version information and exit.
 Commands:
   ui-ast                 Calls PT AI for AST. Project settings are defined in
-                           the PT AI viewer UI
+                           the PT AI UI
   json-ast               Calls PT AI for AST. Project settings and policy are
                            defined with JSON files
   check-server           Checks PT AI server connection
@@ -63,7 +63,7 @@ Calls PT AI for AST. Project settings are defined in the PT AI viewer UI
       --output=<path>        Folder where AST reports are to be stored. By
                                default .ptai folder is used
   -p, --project=<name>       Project name how it is setup and seen in the PT AI
-                               viewer
+                               UI
   -i, --includes=<pattern>   Comma-separated list of files to include to scan.
                                The string is a comma separated list of includes
                                for an Ant fileset eg. '**/*.jar'(see http://ant.
@@ -92,7 +92,7 @@ Healthy services: 13 out of 13, License: 554433, vaildity period: from 2019-05-1
 ```
 You may see **truststore** parameter that defines PEM-encoded file with trusted certificates. You may omit this parameter if PT AI EE server's certificate issued by certificate authority which CA certificates are placed to JDK's cacerts file
 ## Scan sources using UI-defined settings
-Use ui-ast subcommand to scan sources with settings defined usilg PT AI Viewer:
+Use ui-ast subcommand to scan sources with settings defined using PT AI UI:
 ```
 java -jar ptai-cli-plugin-0.1-jar-with-dependencies.jar ui-ast --token 6M9Qsct5fg20/UEzN7/hvR2RlXkTWOI5 --url https://ptai.domain.org --truststore ../src/test/resources/keys/domain.org.pem --project app01 --input ./app01
 PT AI project ID is 23f6879c-f83c-4919-8a6c-150c543ac373

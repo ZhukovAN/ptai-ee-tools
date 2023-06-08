@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin
 
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor
 import lib.FormTagLib
 
 def f = namespace(FormTagLib);
@@ -9,7 +10,7 @@ div() {
 }
 
 div() {
-    String version = com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor.PluginDescriptor.getVersion()
+    String version = PluginDescriptor.getVersion()
     text(_("version.info"))
     text(version)
 }
