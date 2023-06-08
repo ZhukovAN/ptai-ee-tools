@@ -262,7 +262,7 @@ public class ApiClient extends AbstractApiClient {
         connection.on("ScanResultRemoved", (data) -> {
             log.trace("Message of type ScanResultRemovedEvent: {}", data);
             if (!scanResultId.equals(data.getScanResultId())) return;
-            if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI viewer");
+            if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI UI");
             if (null != eventConsumer) eventConsumer.process(Stage.ABORTED);
             pollingThread.reset();
             if (null != queue) {

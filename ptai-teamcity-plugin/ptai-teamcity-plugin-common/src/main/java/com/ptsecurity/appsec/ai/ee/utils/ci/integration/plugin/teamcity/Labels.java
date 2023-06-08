@@ -23,8 +23,8 @@ public class Labels {
     public static final String SERVER_SETTINGS_LOCAL = "Task scope defined";
 
     public static final String AST_SETTINGS = "Scan settings type";
-    public static final String AST_SETTINGS_JSON = "JSON-defined settings";
-    public static final String AST_SETTINGS_UI = "PT AI viewer-defined settings";
+    public static final String AST_SETTINGS_JSON = Resources.i18n_ast_settings_type_manual_label();
+    public static final String AST_SETTINGS_UI = Resources.i18n_ast_settings_type_ui_label();
     public static final String PROJECT_NAME = "Project name";
     public static final String JSON_SETTINGS = "Scans settings";
     public static final String JSON_POLICY = "Policy";

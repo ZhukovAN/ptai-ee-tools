@@ -213,7 +213,7 @@ public abstract class UnifiedAiProjScanSettings {
     public abstract Version getVersion();
 
     /**
-     * Project name i.e. how it will be shown in PT AI viewer interface
+     * Project name i.e. how it will be shown in PT AI UI
      */
     @NonNull
     public abstract String getProjectName();

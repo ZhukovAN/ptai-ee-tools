@@ -22,10 +22,10 @@ public class Hints {
     public static final String SERVER_SETTINIGS_LOCAL = "Task scope defined PT AI server config";
 
     public static final String AST_SETTINGS = "Choose how AST settings are defined";
-    public static final String AST_SETTINGS_JSON = "JSON-defined settings";
-    public static final String AST_SETTINGS_UI = "PT AI viewer-defined settings";
+    public static final String AST_SETTINGS_JSON = Resources.i18n_ast_settings_type_manual_label();
+    public static final String AST_SETTINGS_UI = Resources.i18n_ast_settings_type_ui_label();
 
-    public static final String PROJECT_NAME = "Project name as it defined in PT AI Viewer UI";
+    public static final String PROJECT_NAME = "Project name as it defined in PT AI UI";
     public static final String JSON_SETTINGS = "Scan settings in JSON format";
     public static final String JSON_POLICY =
             "Project SAST policy in JSON format." +
