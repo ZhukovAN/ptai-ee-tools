@@ -286,6 +286,48 @@ swaggerSources {
             ]
         }
     }
+
+    auth450 {
+        inputFile = file('src/main/resources/api/v450/auth.yaml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v450.auth.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v450.auth.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
+    api450 {
+        inputFile = file('src/main/resources/api/v450/swagger.yaml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v450.api.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v450.api.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
+
+    notifications450 {
+        inputFile = file('src/main/resources/api/v450/notifications.yml')
+        code {
+            language = 'java'
+            library = 'okhttp-gson'
+            additionalProperties = [
+                    'modelPackage': 'com.ptsecurity.appsec.ai.ee.server.v450.notifications.model',
+                    'apiPackage': 'com.ptsecurity.appsec.ai.ee.server.v450.notifications.api',
+                    'dateLibrary': 'java8',
+                    'hideGenerationTimestamp': 'true'
+            ]
+        }
+    }
 }
 
 compileJava.dependsOn \
