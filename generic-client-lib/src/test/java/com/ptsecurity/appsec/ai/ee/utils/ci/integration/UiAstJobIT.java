@@ -160,4 +160,29 @@ public class UiAstJobIT extends BaseAstIT {
             Assertions.assertEquals(asyncScan.compareTo(syncScan), -1);
         }
     }
+
+    @SneakyThrows
+    @Test
+    @Tag("scan")
+    @DisplayName("Scan already started PHP smoke project")
+    public void scanAlreadyStarted() {
+        try (TempFile destination = TempFile.createFolder()) {
+            Project project = setupProjectFromTemplate(PHP_SMOKE);
+
+            GenericAstJob astJob = UiAstJobImpl.builder()
+                    .async(true)
+                    .fullScanMode(true)
+                    .projectName(project.getName())
+                    .connectionSettings(CONNECTION_SETTINGS())
+                    .console(System.out)
+                    .sources(project.getCode())
+                    .destination(destination.toPath())
+                    .build();
+            AbstractJob.JobExecutionResult res = astJob.execute();
+            Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+            Thread.sleep(5000);
+            res = astJob.execute();
+            Assertions.assertEquals(res, AbstractJob.JobExecutionResult.FAILED);
+        }
+    }
 }

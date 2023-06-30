@@ -3,9 +3,11 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.AbstractTool;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.AstPolicyViolationException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.ScanAlreadyStartedException;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.MinorAstErrorsException;
 import lombok.Builder;
@@ -64,6 +66,9 @@ public abstract class AbstractJob extends AbstractTool {
             } else if (e.getCause() instanceof AstPolicyViolationException || e.getCause() instanceof MinorAstErrorsException) {
                 log.debug(e.getDetailedMessage(), e.getCause());
                 return JobExecutionResult.FAILED;
+            } else if (e.getCause() instanceof ScanAlreadyStartedException) {
+                AdvancedSettings advancedSettings = getAdvancedSettings();
+                advancedSettings.getString()
             }
         }
         severe(e.getDetailedMessage());

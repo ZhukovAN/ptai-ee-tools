@@ -6,16 +6,21 @@ import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.server.v44x.api.ApiException;
 import com.ptsecurity.appsec.ai.ee.server.v44x.api.model.*;
+import com.ptsecurity.appsec.ai.ee.server.v44x.api.model.ApiErrorModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v44x.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v44x.converters.EnumsConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v44x.converters.IssuesConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v44x.converters.ScanErrorsConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.AstPolicyViolationException;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.exceptions.ScanAlreadyStartedException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +34,9 @@ import java.util.concurrent.LinkedBlockingDeque;
 import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.progress.Stage.*;
+import static com.ptsecurity.appsec.ai.ee.server.v44x.api.model.ApiErrorType.SCAN_ALREADY_SCHEDULED;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v44x.converters.IssuesConverter.convert;
+import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
@@ -49,9 +56,23 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         // incremental, but it can be overridden by JSON settings or forced from UI
         ScanType scanType = fullScanMode ? ScanType.FULL : ScanType.INCREMENTAL;
         startScanModel.setScanType(scanType);
-        return call(
-                () -> client.getScanQueueApi().apiScansProjectIdStartPost(projectId, startScanModel),
-                "PT AI project scan start failed");
+        return call(() -> {
+            try {
+                return client.getScanQueueApi().apiScansProjectIdStartPost(projectId, startScanModel);
+            } catch (ApiException e) {
+                // Need to implement special processing for SCAN_ALREADY_SCHEDULED error message
+                String errorCode = null;
+                try {
+                    ApiErrorModel errorModel = createObjectMapper().readValue(e.getResponseBody(), ApiErrorModel.class);
+                    errorCode = Objects.requireNonNull(errorModel.getErrorCode()).getValue();
+                } catch (Exception _e) {
+                    log.warn("ApiException thrown, but ApiErrorModel parse failed", _e);
+                }
+                if (SCAN_ALREADY_SCHEDULED.getValue().equals(errorCode))
+                    throw new ScanAlreadyStartedException();
+                throw e;
+            }
+            },"PT AI project scan start failed");
     }
 
     @Override
