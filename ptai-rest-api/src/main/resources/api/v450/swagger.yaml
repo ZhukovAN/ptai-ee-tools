@@ -8346,6 +8346,8 @@ components:
         localeId:
           type: string
           nullable: true
+        filters:
+          $ref: '#/components/schemas/UserReportFiltersModel'
       additionalProperties: false
     ReportTemplateModel:
       type: object
@@ -9184,6 +9186,88 @@ components:
         lastLoginDate:
           type: string
           format: date-time
+          nullable: true
+      additionalProperties: false
+    UserReportFiltersModel:
+      type: object
+      properties:
+        types:
+          type: array
+          items:
+            type: string
+          nullable: true
+        levelHigh:
+          type: boolean
+          nullable: true
+        levelMedium:
+          type: boolean
+          nullable: true
+        levelLow:
+          type: boolean
+          nullable: true
+        levelPotential:
+          type: boolean
+          nullable: true
+        statusUndefined:
+          type: boolean
+          nullable: true
+        statusConfirmed:
+          type: boolean
+          nullable: true
+        statusConfirmedAuto:
+          type: boolean
+          nullable: true
+        statusRejected:
+          type: boolean
+          nullable: true
+        modeEntryPoint:
+          type: boolean
+          nullable: true
+        modePublicMethods:
+          type: boolean
+          nullable: true
+        modeOthers:
+          type: boolean
+          nullable: true
+        foundThisScan:
+          type: boolean
+          nullable: true
+        foundPrevScan:
+          type: boolean
+          nullable: true
+        conditional:
+          type: boolean
+          nullable: true
+        nonConditional:
+          type: boolean
+          nullable: true
+        suppressed:
+          type: boolean
+          nullable: true
+        nonSuppressed:
+          type: boolean
+          nullable: true
+        suspected:
+          type: boolean
+          nullable: true
+        secondLevel:
+          type: boolean
+          nullable: true
+        noPlaceToFix:
+          type: boolean
+          nullable: true
+        onlyFavourite:
+          type: boolean
+          nullable: true
+        moduleWhiteBox:
+          type: boolean
+          nullable: true
+        moduleBlackBox:
+          type: boolean
+          nullable: true
+        limit:
+          type: integer
+          format: int32
           nullable: true
       additionalProperties: false
     UserReportParametersModel:
