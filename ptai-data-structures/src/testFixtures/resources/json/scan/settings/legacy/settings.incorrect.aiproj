@@ -1,7 +1,7 @@
 {
 	// Main Settings
 	// Наименование проекта под которым он будет отображаться
-	// в интерфейсе ПО Application Inspector Viewer
+	// в интерфейсе ПО Application Inspector
 	"ProjectName "JSON-based Maven project",
 	// Язык программирования, используемый ядром абстрактной интерпретации.
 	// Возможные значения - Php, Java, CSharp. В случае анализа кода

@@ -19,7 +19,7 @@ import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob.
 @CommandLine.Command(
         name = "ui-ast",
         sortOptions = false,
-        description = "Calls PT AI for AST. Project settings are defined in the PT AI viewer UI",
+        description = "Calls PT AI for AST. Project settings are defined in the PT AI UI",
         exitCodeOnInvalidInput = Plugin.INVALID_INPUT,
         exitCodeListHeading = "Exit Codes:%n",
         exitCodeList = {
@@ -44,7 +44,7 @@ public class UiAst extends BaseCommand implements Callable<Integer> {
             names = {"-p", "--project"}, order = 5,
             required = true,
             paramLabel = "<name>",
-            description = "Project name how it is setup and seen in the PT AI viewer")
+            description = "Project name how it is setup and seen in the PT AI UI")
     protected String project = null;
 
     @CommandLine.Option(

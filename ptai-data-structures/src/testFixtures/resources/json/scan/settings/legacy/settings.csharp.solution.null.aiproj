@@ -1,0 +1,13 @@
+{
+    "ProjectName": "junit-csharp-webgoat",
+    "ProgrammingLanguage": "CSharp",
+    "ScanAppType": "Configuration, Csharp, PmTaint",
+    "IsUsePublicAnalysisMethod": true,
+    "IsDownloadDependencies": true,
+    "CustomParameters": null,
+    "ProjectType": "Solution",
+    "SolutionFile": null,
+    "UseSecurityPolicies": false,
+    "UseCustomYaraRules": false,
+    "UseSastRules": false
+}

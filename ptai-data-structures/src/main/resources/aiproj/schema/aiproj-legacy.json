@@ -248,7 +248,7 @@
     "SolutionFile": {
       "title": "Solution file",
       "description": "Path to a solution or project",
-      "type": "string"
+      "$ref": "#/definitions/nullable-string"
     },
     "WebSiteFolder": {
       "description": ".NET website path",

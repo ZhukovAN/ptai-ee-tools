@@ -162,7 +162,10 @@ public abstract class UnifiedAiProjScanSettings {
     public void processErrorMessages(Set<ValidationMessage> errors) {};
 
     public static UnifiedAiProjScanSettings loadSettings(@NonNull final String data) throws GenericException {
-        return parse(data).getSettings();
+        ParseResult result = parse(data);
+        if (CollectionUtils.isNotEmpty(result.getErrors()))
+            throw GenericException.raise("Settings parse failed", new IllegalArgumentException(result.getError()));
+        return result.getSettings();
     }
 
     protected Boolean B(@NonNull final String path) {
@@ -213,7 +216,7 @@ public abstract class UnifiedAiProjScanSettings {
     public abstract Version getVersion();
 
     /**
-     * Project name i.e. how it will be shown in PT AI viewer interface
+     * Project name i.e. how it will be shown in PT AI UI
      */
     @NonNull
     public abstract String getProjectName();
