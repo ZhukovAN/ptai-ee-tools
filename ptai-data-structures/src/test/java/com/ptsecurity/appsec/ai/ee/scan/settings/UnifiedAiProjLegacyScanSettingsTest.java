@@ -45,6 +45,24 @@ class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
 
     @Test
     @SneakyThrows
+    @DisplayName("Fail legacy AIPROJ with none or null SolutionFile field")
+    public void checkSolutionFile() {
+        final String solutionNull = getResourceString("json/scan/settings/legacy/settings.csharp.solution.null.aiproj");
+        assertDoesNotThrow(() -> UnifiedAiProjScanSettings.loadSettings(solutionNull).toJson());
+        String solutionEmpty = getResourceString("json/scan/settings/legacy/settings.csharp.solution.none.aiproj");
+        assertDoesNotThrow(() -> UnifiedAiProjScanSettings.loadSettings(solutionEmpty).toJson());
+    }
+
+    @Test
+    @SneakyThrows
+    @DisplayName("Fail legacy AIPROJ with case-insensitive enum")
+    public void failCaseInsensitiveEnum() {
+        final String data = getResourceString("json/scan/settings/legacy/settings.case-insensitive.aiproj");
+        assertThrows(GenericException.class, () -> UnifiedAiProjScanSettings.loadSettings(data));
+    }
+
+    @Test
+    @SneakyThrows
     @DisplayName("Load minimal scan settings that contain project name and language only")
     public void loadMinimalAiProj() {
         String data = getResourceString("json/scan/settings/legacy/settings.minimal.aiproj");
