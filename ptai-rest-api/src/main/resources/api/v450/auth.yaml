@@ -3,6 +3,8 @@ info:
   title: Current API v5
   description: 'To specify the API version in your request, add v{version} after api/ in the address. For example, api/v5/auth.'
   version: '5'
+servers:
+  - url: https://ptai.ptdemo.local/
 paths:
   /api/auth/accessToken:
     get:
@@ -129,6 +131,8 @@ paths:
           description: Unauthorized
   /api/auth/signin:
     get:
+      security:
+        - ApiKeyAuth: [ ]
       tags:
         - Auth
       summary: "Login by access token in request headers.\r\nSend access token in header with name \"Access-Token\""
@@ -209,6 +213,8 @@ paths:
           description: Unauthorized
   /api/auth/refreshToken:
     get:
+      security:
+        - ApiKeyAuth: []
       tags:
         - Auth
       summary: Refresh token
