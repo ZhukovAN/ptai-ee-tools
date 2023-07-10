@@ -146,25 +146,7 @@ public class IssuesConverter {
      * @return Java 8 Duration instance
      */
     protected static Duration parseDuration(@NonNull final String value) {
-        final Pattern pattern = Pattern.compile("(-)?([\\d]+\\.)?([\\d]{2}:[\\d]{2}:[\\d]{2})(\\.[\\d]+)?");
-        Matcher matcher = pattern.matcher(value);
-        if (!matcher.matches()) throw new IllegalArgumentException("Duration " + value + " parse failed");
-        Duration res = Duration.between(LocalTime.MIN, LocalTime.parse(matcher.group(3), DateTimeFormatter.ISO_LOCAL_TIME));
-        // Let's work with days
-        if (StringUtils.isNotEmpty(matcher.group(2))) {
-            String daysStr = StringUtils.stripEnd(matcher.group(2), ".");
-            res = res.plusDays(Integer.parseInt(daysStr));
-        }
-        if (StringUtils.isNotEmpty(matcher.group(4))) {
-            String fractionStr = StringUtils.stripStart(matcher.group(4), ".");
-            if (7 < fractionStr.length())
-                fractionStr = StringUtils.left(fractionStr, 7);
-            else if (7 > fractionStr.length())
-                fractionStr = StringUtils.rightPad(fractionStr, 7, "0");
-            res = res.plusNanos(Integer.parseInt(fractionStr) * 100L);
-        }
-        if (StringUtils.isNotEmpty(matcher.group(1))) res = res.negated();
-        return res;
+        return Duration.parse(value);
     }
 
     /**

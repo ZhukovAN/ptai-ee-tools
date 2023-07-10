@@ -83,8 +83,8 @@ public class AiProjConverter {
         DOTNET_PROJECT_TYPE_MAP.put(DotNetSettings.ProjectType.SOLUTION, DotNetProjectType.SOLUTION);
         DOTNET_PROJECT_TYPE_MAP.put(DotNetSettings.ProjectType.WEBSITE, DotNetProjectType.WEBSITE);
 
-        JAVA_VERSION_MAP.put(JavaSettings.JavaVersion.v1_8, JavaVersions._8);
-        JAVA_VERSION_MAP.put(JavaSettings.JavaVersion.v1_11, JavaVersions._11);
+        JAVA_VERSION_MAP.put(JavaSettings.JavaVersion.v1_8, JavaVersions.v1_8);
+        JAVA_VERSION_MAP.put(JavaSettings.JavaVersion.v1_11, JavaVersions.v1_11);
 
     }
 
@@ -151,7 +151,7 @@ public class AiProjConverter {
         model.setUserPackagePrefixes(javaSettings.getUserPackagePrefixes());
         model.setParameters(javaSettings.getParameters());
         // Set jdkVersion
-        model.setVersion(JAVA_VERSION_MAP.getOrDefault(javaSettings.getJavaVersion(), JavaVersions._11));
+        model.setVersion(JAVA_VERSION_MAP.getOrDefault(javaSettings.getJavaVersion(), JavaVersions.v1_11));
         return model;
     }
 

@@ -3,6 +3,10 @@ info:
   title: Current API v5
   description: 'To specify the API version in your request, add v{version} after api/ in the address. For example, api/v5/auth.'
   version: '5'
+servers:
+  - url: https://ptai.ptdemo.local/
+security:
+  - Bearer: []
 paths:
   '/api/history/projects/{projectId}':
     get:
@@ -7518,6 +7522,9 @@ components:
         - v1_8
         - v1_11
       type: string
+      x-enum-varnames:
+        - v1_8
+        - v1_11
     JiraTicketLinkModel:
       type: object
       properties:
@@ -9532,5 +9539,3 @@ components:
       description: Please insert JWT with Bearer into field
       name: Authorization
       in: header
-security:
-  - Bearer: [ ]
