@@ -11,3 +11,10 @@ spec:
     args:
     - infinity
     restartPolicy: Never
+  - name: kaniko
+    image: dockerhub.ptdemo.local/kaniko-project/executor:ptdemo
+    command:
+    - sleep
+    args:
+    - infinity
+    restartPolicy: Never

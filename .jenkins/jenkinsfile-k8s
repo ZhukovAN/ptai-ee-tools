@@ -14,7 +14,7 @@ pipeline {
         checkout scm
       }
     }
-    stage('Build image') {
+    stage('Build Java sources') {
       steps {
         container('gradle') {
           sh "gradle build -P jenkinsVersion=${params.JENKINS_VERSION} -P teamcityVersion=${params.TEAMCITY_VERSION}"
@@ -24,6 +24,16 @@ pipeline {
     stage('Archive') {
       steps {
         archiveArtifacts artifacts: 'ptai-cli-plugin/build/libs/ptai-cli-plugin.jar, ptai-jenkins-plugin/build/libs/ptai-jenkins-plugin.hpi, ptai-teamcity-plugin/ptai-teamcity-plugin-server/build/distributions/ptai-teamcity-plugin.zip', followSymlinks: false
+      }
+    }
+    stage('Build CLI image') {
+      steps {
+        container('kaniko') {
+          sh """
+            VERSION=$(cat gradle.properties | grep version | cut -d'=' -f2)
+            /kaniko/executor --context `pwd` --dockerfile ptai-cli-plugin/Dockerfile --destination registry.ptdemo.local/pt/ptai-cli-plugin:${VERSION}
+          """
+        }
       }
     }
   }
