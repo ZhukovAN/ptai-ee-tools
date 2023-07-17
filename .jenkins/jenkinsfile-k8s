@@ -17,9 +17,11 @@ pipeline {
     stage('Build Java sources') {
       steps {
         container('gradle') {
-          def props = readProperties  file:'gradle.properties'
-          def version= props['version']
-          echo "VERSION=${version}"
+          script {
+            def props = readProperties  file:'gradle.properties'
+            def version= props['version']
+            echo "VERSION=${version}"
+          }
           sh """
             echo ${version}
           """
