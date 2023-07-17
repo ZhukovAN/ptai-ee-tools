@@ -1,3 +1,5 @@
+def version = 'unknown'
+
 pipeline {
   agent {
     kubernetes {
@@ -12,12 +14,19 @@ pipeline {
     stage('Checkout') {
       steps {
         checkout scm
-        props = readProperties file: 'gradle.properties'
       }
     }
     stage('Build Java sources') {
       steps {
         container('gradle') {
+          script {
+            def props = readProperties  file:'gradle.properties'
+            version = props['version']
+            echo "VERSION=${version}"
+          }
+          sh """
+            echo ${version}
+          """
         }
       }
     }
@@ -31,6 +40,7 @@ pipeline {
         container('kaniko') {
           sh """
             echo 2023
+            echo ${version}
           """
         }
       }
