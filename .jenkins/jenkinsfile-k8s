@@ -14,23 +14,20 @@ pipeline {
     stage('Checkout') {
       steps {
         checkout scm
+        script {
+          def props = readProperties  file:'gradle.properties'
+          version = props['version']
+        }
       }
     }
     stage('Build Java sources') {
       steps {
         container('gradle') {
-          script {
-            def props = readProperties  file:'gradle.properties'
-            version = props['version']
-            echo "VERSION=${version}"
-          }
-          sh """
-            echo ${version}
-          """
+          sh "gradle build -P jenkinsVersion=${params.JENKINS_VERSION} -P teamcityVersion=${params.TEAMCITY_VERSION}"
         }
       }
     }
-    stage('Archive') {
+    stage('Archive artifacts') {
       steps {
         archiveArtifacts artifacts: 'ptai-cli-plugin/build/libs/ptai-cli-plugin.jar, ptai-jenkins-plugin/build/libs/ptai-jenkins-plugin.hpi, ptai-teamcity-plugin/ptai-teamcity-plugin-server/build/distributions/ptai-teamcity-plugin.zip', followSymlinks: false
       }
@@ -39,8 +36,7 @@ pipeline {
       steps {
         container('kaniko') {
           sh """
-            echo 2023
-            echo ${version}
+            /kaniko/executor --context `pwd` --dockerfile ptai-cli-plugin/Dockerfile --destination registry.ptdemo.local/pt/ptai-cli-plugin:${version}
           """
         }
       }
