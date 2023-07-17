@@ -12,19 +12,12 @@ pipeline {
     stage('Checkout') {
       steps {
         checkout scm
+        props = readProperties file: 'gradle.properties'
       }
     }
     stage('Build Java sources') {
       steps {
         container('gradle') {
-          script {
-            def props = readProperties  file:'gradle.properties'
-            def version= props['version']
-            echo "VERSION=${version}"
-          }
-          sh """
-            echo ${version}
-          """
         }
       }
     }
