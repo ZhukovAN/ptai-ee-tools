@@ -35,8 +35,9 @@ pipeline {
       steps {
         container('kaniko') {
           sh """
-            VERSION=`cat gradle.properties | grep version | cut -d'=' -f2`
-            /kaniko/executor --context `pwd` --dockerfile ptai-cli-plugin/Dockerfile --destination registry.ptdemo.local/pt/ptai-cli-plugin:${VERSION}
+            echo 2023
+            # VERSION=`cat gradle.properties | grep version | cut -d'=' -f2`
+            # /kaniko/executor --context `pwd` --dockerfile ptai-cli-plugin/Dockerfile --destination registry.ptdemo.local/pt/ptai-cli-plugin:${VERSION}
           """
         }
       }
