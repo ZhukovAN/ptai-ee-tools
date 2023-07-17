@@ -19,8 +19,6 @@ pipeline {
         container('gradle') {
           sh """
             echo $PATH
-            # VERSION=`cat gradle.properties | grep version | cut -d'=' -f2`
-            # echo $VERSION
           """
           sh "gradle build -P jenkinsVersion=${params.JENKINS_VERSION} -P teamcityVersion=${params.TEAMCITY_VERSION} --no-daemon"
         }
@@ -36,8 +34,6 @@ pipeline {
         container('kaniko') {
           sh """
             echo 2023
-            # VERSION=`cat gradle.properties | grep version | cut -d'=' -f2`
-            # /kaniko/executor --context `pwd` --dockerfile ptai-cli-plugin/Dockerfile --destination registry.ptdemo.local/pt/ptai-cli-plugin:${VERSION}
           """
         }
       }
