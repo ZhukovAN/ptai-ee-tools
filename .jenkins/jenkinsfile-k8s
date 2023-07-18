@@ -23,7 +23,7 @@ pipeline {
     stage('Build Java sources') {
       steps {
         container('gradle') {
-          sh "gradle build -P jenkinsVersion=${params.JENKINS_VERSION} -P teamcityVersion=${params.TEAMCITY_VERSION}"
+          sh "gradle build -P jenkinsVersion=${params.JENKINS_VERSION} -P teamcityVersion=${params.TEAMCITY_VERSION} --no-daemon"
         }
       }
     }
