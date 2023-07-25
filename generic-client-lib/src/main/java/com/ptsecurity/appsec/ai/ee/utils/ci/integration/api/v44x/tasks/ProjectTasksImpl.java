@@ -10,12 +10,16 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.CallHelper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -23,6 +27,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
@@ -210,6 +215,19 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         List<Pair<UUID, String>> res = new ArrayList<>();
         for (ProjectModel project : projects)
             res.add(Pair.of(project.getId(), project.getName()));
+        return res;
+    }
+
+    @Override
+    public UnifiedAiProjScanSettings loadProjectScanSettings(@NonNull UUID projectId, @NonNull final UUID scanSettingsId) throws GenericException {
+        UnifiedAiProjScanSettings res;
+        File aiprojFile = call(() -> client.getProjectsApi().apiProjectsProjectIdScanSettingsScanSettingsIdAiprojGet(projectId, scanSettingsId), "PT AI project scan settings load failed");
+        try {
+            res = call(() -> UnifiedAiProjScanSettings.loadSettings(FileUtils.readFileToString(aiprojFile, UTF_8)), "AIPROJ file parse failed");
+        } catch (GenericException e) {
+            if (!aiprojFile.delete()) log.warn("AIPROJ file {} delete failed", aiprojFile.getAbsolutePath());
+            throw e;
+        }
         return res;
     }
 }

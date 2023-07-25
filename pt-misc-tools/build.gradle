@@ -15,16 +15,14 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-io/commons-io
     api 'commons-io:commons-io:2.6'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    api 'org.apache.commons:commons-lang3:3.8.1'
-    // https://mvnrepository.com/artifact/commons-validator/commons-validator
-    api 'commons-validator:commons-validator:1.6'
+    api 'org.apache.commons:commons-lang3:3.12.0'
     // https://mvnrepository.com/artifact/org.jooq/joor-java-8
     api 'org.jooq:joor-java-8:0.9.13'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     api 'org.apache.commons:commons-text:1.10.0'
     // Get HTTP error codes descriptions
     // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
-    api 'org.apache.httpcomponents:httpclient:4.5.10'
+    api 'org.apache.httpcomponents:httpclient:4.5.14'
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml
     api "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
     // Java 8 date / time API

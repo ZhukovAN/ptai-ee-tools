@@ -12,11 +12,11 @@ import com.ptsecurity.misc.tools.TempFile;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import com.ptsecurity.misc.tools.helpers.CallHelper;
+import com.ptsecurity.misc.tools.helpers.CollectionsHelper;
 import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -32,6 +32,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version._1_1;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CollectionsHelper.isNotEmpty;
 import static java.lang.Boolean.TRUE;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -137,7 +138,7 @@ public abstract class UnifiedAiProjScanSettings {
         JsonSchema jsonSchema = factory.getSchema(settings.getJsonSchema());
         Set<ValidationMessage> errors = jsonSchema.validate(root);
         settings.processErrorMessages(errors);
-        if (CollectionUtils.isNotEmpty(errors))
+        if (isNotEmpty(errors))
             errors.forEach(e -> result.getErrors().add(e.getMessage()));
         else {
             result.setSettings(settings.init(BaseJsonHelper.minimize(root)));
@@ -163,7 +164,7 @@ public abstract class UnifiedAiProjScanSettings {
 
     public static UnifiedAiProjScanSettings loadSettings(@NonNull final String data) throws GenericException {
         ParseResult result = parse(data);
-        if (CollectionUtils.isNotEmpty(result.getErrors()))
+        if (isNotEmpty(result.getErrors()))
             throw GenericException.raise("Settings parse failed", new IllegalArgumentException(result.getError()));
         return result.getSettings();
     }

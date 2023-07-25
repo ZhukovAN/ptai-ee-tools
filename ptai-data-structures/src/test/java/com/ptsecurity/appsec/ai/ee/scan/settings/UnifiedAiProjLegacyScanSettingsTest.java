@@ -55,6 +55,15 @@ class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
 
     @Test
     @SneakyThrows
+    @DisplayName("Check legacy AIPROJ with UNIX-path SolutionFile field")
+    public void checkUnixSolutionFile() {
+        final String scanSettings = getResourceString("json/scan/settings/v11/settings.unix.solutionfile.json");
+        UnifiedAiProjScanSettings settings = assertDoesNotThrow(() -> UnifiedAiProjScanSettings.loadSettings(scanSettings));
+        assertDoesNotThrow(() -> UnifiedAiProjScanSettings.loadSettings(settings.toJson()).toJson());
+    }
+
+    @Test
+    @SneakyThrows
     @DisplayName("Fail legacy AIPROJ with case-insensitive enum")
     public void failCaseInsensitiveEnum() {
         final String data = getResourceString("json/scan/settings/legacy/settings.case-insensitive.aiproj");

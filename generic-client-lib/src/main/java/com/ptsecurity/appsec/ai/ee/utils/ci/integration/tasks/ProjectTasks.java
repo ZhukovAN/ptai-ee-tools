@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks;
 
+import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,4 +49,6 @@ public interface ProjectTasks {
     void deleteProject(@NonNull final UUID id) throws GenericException;
 
     List<Pair<UUID, String>> listProjects() throws GenericException;
+
+    UnifiedAiProjScanSettings loadProjectScanSettings(@NonNull final UUID projectId, @NonNull final UUID scanSettingsId) throws GenericException;
 }
