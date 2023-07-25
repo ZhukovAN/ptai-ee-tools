@@ -183,6 +183,7 @@ public class FastTest extends AbstractTest {
         assertEquals(Boolean.TRUE, changedBlackBoxSettings.getIsActive());
         assertEquals("https://localhost", changedBlackBoxSettings.getSite());
     }
+
     @Test
     @DisplayName("Read / write project security policy settings")
     public void readWriteProjectSecurityPolicy() {

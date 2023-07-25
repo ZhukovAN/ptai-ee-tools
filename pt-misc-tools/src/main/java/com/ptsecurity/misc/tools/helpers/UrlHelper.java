@@ -1,21 +1,19 @@
 package com.ptsecurity.misc.tools.helpers;
 
-import org.apache.commons.validator.routines.DomainValidator;
-import org.apache.commons.validator.routines.UrlValidator;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class UrlHelper {
-    private static final boolean USE_EXTENDED_TLDS = true;
-    private static final String[] GENERIC_TLDS_PLUS = new String[] { "corp", "local" };
-
     public static boolean checkUrl(final String value) {
-        UrlValidator urlValidator = new UrlValidator(
-                new String[]{"http", "https"},
-                UrlValidator.ALLOW_LOCAL_URLS);
-        return urlValidator.isValid(value);
+        try {
+            new URL(value).toURI();
+            return true;
+        } catch (MalformedURLException e) {
+            return false;
+        } catch (URISyntaxException e) {
+            return false;
+        }
     }
 
-    static {
-        if (USE_EXTENDED_TLDS)
-            DomainValidator.updateTLDOverride(DomainValidator.ArrayType.GENERIC_PLUS, GENERIC_TLDS_PLUS);
-    }
 }

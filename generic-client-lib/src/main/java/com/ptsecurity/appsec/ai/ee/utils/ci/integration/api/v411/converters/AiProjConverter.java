@@ -14,7 +14,6 @@ import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -24,6 +23,7 @@ import java.util.Map;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ScanModule.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CollectionsHelper.isNotEmpty;
 
 @Slf4j
 @SuppressWarnings({"deprecation"})
@@ -282,7 +282,7 @@ public class AiProjConverter {
         model.setIsActive(true);
         model.setLevel(BLACKBOX_SCAN_LEVEL_MAP.get(blackBoxSettings.getScanLevel()));
         model.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.get(blackBoxSettings.getScanScope()));
-        if (CollectionUtils.isNotEmpty(blackBoxSettings.getHttpHeaders())) {
+        if (isNotEmpty(blackBoxSettings.getHttpHeaders())) {
             log.trace("Set additional HTTP headers");
             Map<String, String> headers = new HashMap<>();
             for (Pair<String, String> header : settings.getBlackBoxSettings().getHttpHeaders())
@@ -306,7 +306,7 @@ public class AiProjConverter {
         model.setSite(blackBoxSettings.getSite());
         model.setLevel(BLACKBOX_SCAN_LEVEL_MAP.get(blackBoxSettings.getScanLevel()));
         model.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.get(blackBoxSettings.getScanScope()));
-        if (CollectionUtils.isNotEmpty(blackBoxSettings.getHttpHeaders())) {
+        if (isNotEmpty(blackBoxSettings.getHttpHeaders())) {
             log.trace("Set additional HTTP headers");
             Map<String, String> headers = new HashMap<>();
             for (Pair<String, String> header : blackBoxSettings.getHttpHeaders()) {

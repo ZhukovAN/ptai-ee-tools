@@ -17,7 +17,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.fusesource.jansi/jansi
     implementation 'org.fusesource.jansi:jansi:1.18'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-configuration2
-    implementation 'org.apache.commons:commons-configuration2:2.7'
+    implementation 'org.apache.commons:commons-configuration2:2.9.0'
     // https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils
     implementation 'commons-beanutils:commons-beanutils:1.9.4'
 

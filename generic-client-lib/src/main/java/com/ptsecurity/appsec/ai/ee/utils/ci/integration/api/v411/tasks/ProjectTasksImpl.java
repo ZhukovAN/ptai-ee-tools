@@ -14,14 +14,17 @@ import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.HttpStatus;
 
+import java.io.File;
 import java.util.*;
 import java.util.function.Consumer;
 
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Slf4j
 public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
@@ -188,5 +191,10 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         for (ProjectModel project : projects)
             res.add(Pair.of(project.getId(), project.getName()));
         return res;
+    }
+
+    @Override
+    public UnifiedAiProjScanSettings loadProjectScanSettings(@NonNull UUID projectId, @NonNull UUID scanSettingsId) throws GenericException {
+        throw GenericException.raise("No AIPROJ scan settings download support in PT AI 4.1.1", new UnsupportedOperationException());
     }
 }

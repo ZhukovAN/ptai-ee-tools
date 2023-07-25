@@ -3,6 +3,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '5.2.0' apply false
     id 'org.jenkins-ci.jpi' version '0.47.0' apply false
     id 'com.palantir.git-version' version '0.12.3' apply false
+    id 'org.cyclonedx.bom' version '1.7.4' apply false
 }
 
 allprojects {
@@ -18,6 +19,14 @@ subprojects {
     apply plugin: 'idea'
     apply plugin: 'io.freefair.lombok'
     apply plugin: 'maven-publish'
+
+    apply plugin:org.cyclonedx.gradle.CycloneDxPlugin
+    cyclonedxBom {
+        projectType = "library"
+        destination = file("build/reports")
+        outputName = "bom"
+        outputFormat = "json"
+    }
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
