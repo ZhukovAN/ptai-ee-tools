@@ -11,7 +11,6 @@ import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.siteaddress.Format;
 import com.ptsecurity.misc.tools.helpers.ResourcesHelper;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -20,6 +19,7 @@ import java.util.*;
 import static com.networknt.schema.ValidatorTypeCode.FORMAT;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
+import static com.ptsecurity.misc.tools.helpers.CollectionsHelper.isEmpty;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -312,7 +312,7 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
             }
             res.add(new ImmutablePair<>(key, S(headerKeyValue, "$.Value")));
         }
-        return CollectionUtils.isEmpty(res) ? null : res;
+        return isEmpty(res) ? null : res;
     }
 
     private List<BlackBoxSettings.AddressListItem> convertAddresses(@NonNull final List<Object> addresses) {
@@ -327,7 +327,7 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
             }
             res.add(new BlackBoxSettings.AddressListItem(format, S(address, "$.Address")));
         }
-        return CollectionUtils.isEmpty(res) ? null : res;
+        return isEmpty(res) ? null : res;
     }
 
     @Override

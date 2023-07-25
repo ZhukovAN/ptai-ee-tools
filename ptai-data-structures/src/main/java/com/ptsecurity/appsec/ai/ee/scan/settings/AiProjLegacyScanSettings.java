@@ -1,21 +1,16 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.jayway.jsonpath.JsonPath;
-import com.networknt.schema.*;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.JavaVersion;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.ProgrammingLanguage;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.blackbox.ScanLevel;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.blackbox.ScanScope;
-import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.misc.tools.helpers.ResourcesHelper;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -27,8 +22,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSetting
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.DotNetProjectType.*;
-import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
-import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
+import static com.ptsecurity.misc.tools.helpers.CollectionsHelper.isEmpty;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -238,7 +232,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
     private List<Pair<String, String>> convertHeaders(@NonNull final List<String>[] headers) {
         List<Pair<String, String>> res = new ArrayList<>();
         for (List<String> headerNameAndValues : headers) {
-            if (CollectionUtils.isEmpty(headerNameAndValues)) {
+            if (isEmpty(headerNameAndValues)) {
                 log.trace("Skip empty headers");
                 continue;
             }
@@ -250,7 +244,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
                 res.add(
                         new ImmutablePair<>(headerNameAndValues.get(0), headerNameAndValues.get(i)));
         }
-        return CollectionUtils.isEmpty(res) ? null : res;
+        return isEmpty(res) ? null : res;
     }
 
     @Override
@@ -345,7 +339,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
     @Override
     public @NonNull Boolean isSkipGitIgnoreFiles() {
         List<String> skipFilesFolders = O(aiprojDocument,"$.SkipFilesFolders");
-        if (CollectionUtils.isEmpty(skipFilesFolders)) return false;
+        if (isEmpty(skipFilesFolders)) return false;
         return skipFilesFolders.contains(".gitignore");
     }
 

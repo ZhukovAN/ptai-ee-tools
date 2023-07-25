@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+import static com.ptsecurity.misc.tools.helpers.CollectionsHelper.isNotEmpty;
 
 /**
  * As {@link ScanResult} is in fact a DTO class, we need to implement its processing separately

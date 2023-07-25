@@ -6,12 +6,11 @@ import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.result.issue.types.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
-import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ReportsTasks;
+import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.net.URI;
@@ -20,6 +19,7 @@ import java.util.*;
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.EN;
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
 import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.ApprovalState.NONE;
+import static com.ptsecurity.misc.tools.helpers.CollectionsHelper.isEmpty;
 
 @Slf4j
 @Getter
@@ -219,7 +219,7 @@ public class Sarif extends Export {
     }
 
     public static void addTfl(List<ThreadFlowLocation> list, final List<BaseSourceIssue.Place> placeList, final String text) {
-        if (CollectionUtils.isEmpty(placeList)) return;
+        if (isEmpty(placeList)) return;
         for (BaseSourceIssue.Place place : placeList)
             if (null != place) list.add(tfl(place, text));
     }
