@@ -14,6 +14,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailI
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.JsonAstJobSetupOperationsImpl;
 import com.ptsecurity.misc.tools.TempFile;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
+import com.ptsecurity.misc.tools.helpers.ArchiveHelper;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
@@ -36,8 +37,7 @@ import static com.ptsecurity.appsec.ai.ee.scan.result.issue.types.BaseIssue.Leve
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ScanModule.*;
 import static com.ptsecurity.appsec.ai.ee.server.integration.rest.Connection.CONNECTION;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.*;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.JAVA_OWASP_BENCHMARK;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.PHP_SMOKE;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.*;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
 import static java.util.Collections.singleton;
@@ -272,6 +272,24 @@ public class JsonAstJobIT extends BaseAstIT {
     @SneakyThrows
     @Test
     @Tag("scan")
+    @DisplayName("Scan WebGoat.NET project")
+    public void scanWebGoat() {
+        ProjectTemplate webGoat = randomClone(CSHARP_WEBGOAT);
+        GenericAstJob astJob = JsonAstJobImpl.builder()
+                .async(false)
+                .fullScanMode(true)
+                .connectionSettings(CONNECTION_SETTINGS())
+                .console(System.out)
+                .sources(webGoat.getCode())
+                .jsonSettings(webGoat.getSettings().toJson())
+                .build();
+        AbstractJob.JobExecutionResult res = astJob.execute();
+        Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
+    }
+
+    @SneakyThrows
+    @Test
+    @Tag("scan")
     @DisplayName("Scan project with slash in its name")
     public void scanProjectWithBadCharacter() {
         try (TempFile destination = TempFile.createFolder()) {
@@ -292,4 +310,5 @@ public class JsonAstJobIT extends BaseAstIT {
             Assertions.assertEquals(res, AbstractJob.JobExecutionResult.SUCCESS);
         }
     }
+
 }

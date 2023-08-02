@@ -85,7 +85,7 @@ public class ProjectTemplate {
     }
 
     private ProjectTemplate(@NonNull final String name) {
-        this("junit-" + name, "code/" + name + ".7z", "json/scan/settings/legacy/settings." + name + ".aiproj");
+        this("junit-" + name, "code/" + name + ".7z", "json/scan/settings/legacy/settings." + name + ".json");
     }
 
     public static ProjectTemplate getTemplate(@NonNull final ProjectTemplate.ID sourceTemplate) {

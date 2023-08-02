@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.jayway.jsonpath.*;
+import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.networknt.schema.*;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
@@ -41,7 +43,11 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 @Accessors
 public abstract class UnifiedAiProjScanSettings {
     private static final List<NonValidationKeyword> NON_VALIDATION_KEYS = Collections.singletonList(new NonValidationKeyword("javaType"));
-    protected final Configuration configuration = Configuration.builder().options(Option.SUPPRESS_EXCEPTIONS).build();
+    protected final Configuration configuration = Configuration.builder()
+            .options(Option.SUPPRESS_EXCEPTIONS)
+            .mappingProvider(new JacksonMappingProvider())
+            .jsonProvider(new JacksonJsonProvider())
+            .build();
     protected ParseContext ctx;
 
     protected DocumentContext aiprojDocument;
@@ -183,6 +189,10 @@ public abstract class UnifiedAiProjScanSettings {
 
     protected <T> T O(@NonNull final String path) {
         return aiprojDocument.read(path);
+    }
+
+    protected <T> T O(@NonNull final String path, Class<T> type) {
+        return aiprojDocument.read(path, type);
     }
 
     protected <T> T O(@NonNull final Object json, @NonNull final String path) {

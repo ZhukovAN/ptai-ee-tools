@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/aiproj-1.1.json",
   "Version": "1.1",
-  "ProjectName": "full",
-  "ProgrammingLanguage": "Php",
+  "ProjectName": "WebGoat.NET",
+  "ProgrammingLanguage": "Java",
   "ScanModules": [
     "VulnerableSourceCode",
     "DataFlowAnalysis",
@@ -18,8 +18,18 @@
   "SkipGitIgnoreFiles": false,
   "UsePublicAnalysisMethod": true,
   "DownloadDependencies": true,
+  "DotNetSettings": {
+    "ProjectType": "Solution",
+    "SolutionFile": "./WebGoat.NET.sln"
+  },
+  "JavaSettings": {
+    "Parameters": "-Dfile.encoding=UTF-8",
+    "UnpackUserPackages": true,
+    "UserPackagePrefixes": "com.ptsecurity.appsec",
+    "Version": "v1_11"
+  },
   "BlackBoxSettings": {
-    "Site": "https://missing.ptdemo.local",
+    "Site": "https://test.ptdemo.local",
     "Level": "Full",
     "SslCheck": true,
     "ScanScope": "Domain",
@@ -45,6 +55,10 @@
     ],
     "AdditionalHttpHeaders": [
       {
+        "Key": "custom-header",
+        "Value": "custom-value"
+      },
+      {
         "Key": "ptai-scan",
         "Value": "ptai-scan-header-value"
       }
@@ -52,20 +66,20 @@
     "Authentication": {
       "Type": "Form",
       "Form": {
-        "FormDetection": "Auto",
-        "LoginKey": null,
-        "PasswordKey": null,
+        "FormDetection": "Manual",
+        "LoginKey": "username",
+        "PasswordKey": "password",
         "Login": "admin",
         "Password": "P@ssw0rd",
-        "FormAddress": "https://site.example.com:8888/path",
-        "FormXPath": null,
+        "FormAddress": "https://test.ptdemo.local/login",
+        "FormXPath": "/html/body/form",
         "ValidationTemplate": "Welcome"
       }
     },
     "ProxySettings": {
       "Enabled": true,
       "Type": "Http",
-      "Host": "192.168.0.1",
+      "Host": "proxy.ptdemo.local",
       "Port": 3128,
       "Login": "admin",
       "Password": "P@ssw0rd"

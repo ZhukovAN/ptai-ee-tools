@@ -144,7 +144,7 @@ public class AiProjV10ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public DotNetSettings getDotNetSettings() {
-        if (null == O(aiprojDocument, "$.DotNetSettings")) return null;
+        if (null == O("$.DotNetSettings")) return null;
         String solutionFile = S("$.DotNetSettings.SolutionFile");
         String projectType = S("$.DotNetSettings.ProjectType");
         return DotNetSettings.builder()
@@ -155,7 +155,7 @@ public class AiProjV10ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public JavaSettings getJavaSettings() {
-        if (null == O(aiprojDocument, "$.JavaSettings")) return null;
+        if (null == O("$.JavaSettings")) return null;
         return JavaSettings.builder()
                 .unpackUserPackages(B("$.JavaSettings.UnpackUserPackages"))
                 .userPackagePrefixes(S("$.JavaSettings.UserPackagePrefixes"))
