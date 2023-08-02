@@ -59,35 +59,6 @@
     // Custom analysys parameters
     "CustomParameters": "-upp com.ptsecurity",
 
-    // File extensions to be excluded from scan process. By default PT AI tries to search
-    // vulnerabilities in files despite of those types
-    "SkipFileFormats": ["*.gif"],
-
-    // Folder names to exclude from scan process
-    "SkipFilesFolders": ["\\.git\\", "\\.gitignore", "\\.gitmodules", "\\.gitattributes", "\\$tf\\", "\\$BuildProcessTemplate\\", "\\.tfignore"],
-
-    // As not all the patterns may be applied to any language there's need to
-    // define set of disabled patterns. Plugin downloads patterns metadata from PT AI server and automatically sets list of disabled patterns in accordance with programming language. But user may extend this list usind this parameter
-    "DisabledPatterns": ["145", "146", "148", "149"],
-
-    // Типы проверок исходных кодов, которые не будут выполняться в ходе анализа
-    "DisabledTypes": [],
-
-    // Учитывать результаты предыдущего анализа проекта с тем же именем.
-    // Значение true означает, что если в коде по итогам анализа выявлены
-    // те же уязвимости, что и при предыдущем анализе, то для них автоматически
-    // будут проставлены те же самые статусы подтверждения. Эта опция
-    // позволяет сделать процесс анализа сходящимся во времени когда
-    // максимальные трудозатраты на разбор уязвимостей приходятся на самые первые
-    // итерации анализа
-    "ConsiderPreviousScan": true,
-
-    // Hide suspected vulnerabilities by default
-    "HideSuspectedVulnerabilities": true,
-
-    // Enable issue tracking integration
-    "UseIssueTrackerIntegration": true,
-
     // Java engine parameters
 
     // Атрибут, указывающий на необходимость распаковки пользовательских
@@ -114,14 +85,6 @@
     // Относительный путь к анализируемому проекту/решению C#
     "SolutionFile": "<Path_to_solution>",
 
-    // Путь к каталогу с содержимым сайта C#
-    "WebSiteFolder": "<Path_to_webfolder>",
-
-    // JavaScript engine parameters
-
-    // JavaScript application root path
-    "JavaScriptProjectFolder": "path_to_dir",
-
     // PM / Taint engine parameters
 
     // Use Taint analysis
@@ -129,15 +92,6 @@
 
     // Use Pattern Matching
     "UsePmAnalysis": true,
-
-    // Disable C#, Java, PHP, JSA cores in analysis
-    "DisableInterpretCores": false,
-
-    // Fingerprint engine parameters
-
-    // Ядро анализа уязвимых версий сторонних компонентов использует внутреннюю
-    // базу знаний PT AI
-    "UseDefaultFingerprints": true,
 
     // Включить использование пользовательских Yara-правил при работе ядра анализа
     // уязвимых версий сторонних компонентов использует внутреннюю базу знаний PT AI
@@ -201,9 +155,6 @@
     // Start vulnerabilities automatic check after scan
     "RunAutocheckAfterScan": false,
 
-    // Адрес веб-приложения, развернутого на тестовой площадке, используемого
-    // для автопроверки выявленных уязвимостей
-    "AutocheckSite": "http://localhost",
     // Пользовательские HTTP-заголовки, передаваемые при автопроверке выявленных уязвимостей
     "AutocheckCustomHeaders": [["", ""]],
     // Параметры аутентификации, передаваемые при автопроверке выявленных уязвимостей
@@ -247,53 +198,5 @@
         "Username": null,
         // Proxy password
         "Password": null
-    },
-
-    // EMail parameters
-
-    // Отправка e-mail с отчетом по итогам анализа встроенными средствами PT AI
-    "SendEmailWithReportsAfterScan": false,
-    // Дополнительно архивировать отчет при его отправке по e-mail встроенными
-    // средствами PT AI
-    "CompressReport": false,
-
-    // Email Parameters
-    "EmailSettings": {
-        // SMTP server address
-        "SmtpServerAddress": "mail.ptsecurity.ru",
-        // Login to access mail server
-        "UserName": "testagent_wes@ptsecurity.com",
-        // Password to access mail server
-        "Password": "P@ssw0rd",
-        // Recepient address
-        "EmailRecipients": "User@ptsecurity.ru",
-        // Enable SSL
-        "EnableSsl": true,
-        // Subject
-        "Subject": "Email Title",
-        // Consider certificate errors for sending emails
-        "ConsiderCertificateError": true,
-        // Sender
-        "SenderEmail": "testagent_wes@ptsecurity.com"
-    },
-
-    // Корневая папка приложения
-    "RootFolder": "C:\\TestProject",
-    // Папка с анализируемым кодом. В общем случае является подкаталогом по
-    // отношению к RootFolder что позволяет сократить время сканирования за
-    // счет явного ограничения состава анализируемых файлов и не потерять в
-    // качестве анализа благодаря указанию RootFolder, в котором содержится
-    // весь код приложения, в т.ч. файлы, от которых зависит код в ScanTarget
-    "ScanTarget": "C:\\TestProject",
-    // Включить режим поиска от точек входа, реализуемый ядрами абстрактной
-    // интерпретации Java/PHP/C#. Позволяет находить уязвимости, которые могут
-    // быть использованы злоумышленниками и формировать эксплойты для демонстрации
-    "IsUseEntryAnalysisPoint": true,
-    // Максимальное время в секундах, выделяемое на анализ одиночного файла
-    // ядрами абстрактной интерпретации Java/PHP/C#. При превышении указанного
-    // времени анализ файла прерывается с выводом соответствующего сообщения
-    "ScanUnitTimeout": 600,
-    // Пользовательские правила Yara для ядра анализа уязвимых версий сторонних
-    // компонентов
-    "CustomYaraRules": ""
+    }
 }

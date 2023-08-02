@@ -170,52 +170,10 @@
       "description": "Search from available public and protected methods",
       "type": "boolean"
     },
-    "PreprocessingTimeout": {
-      "type": "integer"
-    },
     "CustomParameters": {
       "title": "Custom parameters",
       "description": "Custom kernel startup parameters",
       "$ref": "#/definitions/nullable-string"
-    },
-    "SkipFileFormats": {
-      "description": "File extensions to be excluded from scan process",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "SkipFilesFolders": {
-      "description": "Folder names to exclude from scan process",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "DisabledPatterns": {
-      "description": "As not all the patterns may be applied to any language there's need to define set of disabled patterns. Plugin downloads patterns metadata from PT AI server and automatically sets list of disabled patterns in accordance with programming language. But user may extend this list using this parameter",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "DisabledTypes": {
-      "description": "Типы проверок исходных кодов, которые не будут выполняться в ходе анализа",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "ConsiderPreviousScan": {
-      "type": "boolean"
-    },
-    "HideSuspectedVulnerabilities": {
-      "description": "Hide suspected vulnerabilities by default",
-      "type": "boolean"
-    },
-    "UseIssueTrackerIntegration": {
-      "description": "Enable issue tracking integration",
-      "type": "boolean"
     },
     "IsUnpackUserPackages": {
       "title": "Unpack custom JAR files",
@@ -250,14 +208,6 @@
       "description": "Path to a solution or project",
       "$ref": "#/definitions/nullable-string"
     },
-    "WebSiteFolder": {
-      "description": ".NET website path",
-      "type": "string"
-    },
-    "JavaScriptProjectFolder": {
-      "description": "JavaScript application root path",
-      "type": "string"
-    },
     "UseTaintAnalysis": {
       "title": "Use taint analysis mode of PmTaint engine",
       "type": "boolean"
@@ -272,14 +222,6 @@
     },
     "UseSastRules": {
       "title": "Use SAST rules",
-      "type": "boolean"
-    },
-    "DisableInterpretCores": {
-      "title": "Disable C#, Java, PHP, JSA cores in analysis",
-      "type": "boolean"
-    },
-    "UseDefaultFingerprints": {
-      "description": "Use internal knowledge base of vulnerable components",
       "type": "boolean"
     },
     "UseCustomYaraRules": {
@@ -304,74 +246,11 @@
     "RunAutocheckAfterScan": {
       "type": "boolean"
     },
-    "AutocheckSite": {
-      "type": "string"
-    },
     "AutocheckCustomHeaders": { "$ref": "#/definitions/Headers" },
     "AutocheckAuthentication": { "$ref": "#/definitions/Authentication" },
     "AutocheckProxySettings": { "$ref": "#/definitions/ProxySettings" },
-    "SendEmailWithReportsAfterScan": {
-      "type": "boolean"
-    },
-    "CompressReport": {
-      "type": "boolean"
-    },
-    "EmailSettings": {
-      "type": "object",
-      "properties": {
-        "SmtpServerAddress": {
-          "type": "string"
-        },
-        "UserName": {
-          "type": "string"
-        },
-        "Password": {
-          "type": "string"
-        },
-        "EmailRecipients": {
-          "type": "string"
-        },
-        "EnableSsl": {
-          "type": "boolean"
-        },
-        "Subject": {
-          "type": "string"
-        },
-        "ConsiderCertificateError": {
-          "type": "boolean"
-        },
-        "SenderEmail": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "SmtpServerAddress",
-        "UserName",
-        "Password",
-        "EmailRecipients",
-        "EnableSsl",
-        "Subject",
-        "ConsiderCertificateError",
-        "SenderEmail"
-      ]
-    },
-    "RootFolder": {
-      "type": "string"
-    },
-    "ScanTarget": {
-      "type": "string"
-    },
-    "IsUseEntryAnalysisPoint": {
-      "type": "boolean"
-    },
-    "ScanUnitTimeout": {
-      "type": "integer"
-    },
     "PreprocessingTimeout": {
       "type": "integer"
-    },
-    "CustomYaraRules": {
-      "type": "string"
     }
   },
   "required": [
