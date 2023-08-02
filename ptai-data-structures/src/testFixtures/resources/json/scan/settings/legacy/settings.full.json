@@ -1,0 +1,99 @@
+{
+    "ProjectName": "WebGoat.NET",
+    "ProgrammingLanguage": "Java",
+    "ScanAppType": "Java, Configuration, Fingerprint, PmTaint, BlackBox",
+    "Site": "https://test.ptdemo.local",
+    "IsDownloadDependencies": true,
+    "IsUsePublicAnalysisMethod": true,
+    "CustomParameters": "--log-level=trace",
+    "JavaParameters": "-Dfile.encoding=UTF-8",
+    "IsUnpackUserPackages": true,
+    "JavaVersion": 1,
+    "PreprocessingTimeout": 60,
+    "UserPackagePrefixes": "com.ptsecurity.appsec",
+
+    "ProjectType": "Solution",
+    "SolutionFile": "./WebGoat.NET.sln",
+
+    "UseTaintAnalysis": true,
+    "UsePmAnalysis": true,
+    "UseSecurityPolicies": true,
+
+    "UseCustomYaraRules": false,
+    "UseSastRules": false,
+
+    "Level": "Full",
+    "ScanScope": "Domain",
+    "CustomHeaders": [["custom-header", "custom-value"], ["ptai-scan", "ptai-scan-header-value"]],
+
+    "Authentication": {
+        "auth_item": {
+            "domain": "ptdemo.local",
+            "credentials": {
+                "cookie": null,
+                "cookies": null,
+                "type": 0,
+                "login": {
+                    "name": "username",
+                    "value": "admin",
+                    "regexp": null,
+                    "is_regexp": false
+                },
+                "password": {
+                    "name": "password",
+                    "value": "P@ssw0rd",
+                    "regexp": null,
+                    "is_regexp": false
+                }
+            },
+            "test_url": "https://test.ptdemo.local",
+            "form_url": "https://test.ptdemo.local/login",
+            "form_xpath": "/html/body/form",
+            "regexp_of_success": "Welcome"
+        }
+    },
+    "ProxySettings": {
+        "IsEnabled": true,
+        "Host": "proxy.ptdemo.local",
+        "Port": 3128,
+        "Type": 0,
+        "Username": "admin",
+        "Password": "P@ssw0rd"
+    },
+    "RunAutocheckAfterScan": true,
+    "AutocheckCustomHeaders": [["custom-header", "custom-value"], ["one-more-custom-header", "another-value"]],
+    "AutocheckAuthentication": {
+        "auth_item": {
+            "domain": "ptdemo.local",
+            "credentials": {
+                "cookie": null,
+                "cookies": null,
+                "type": 2,
+                "login": {
+                    "name": "username",
+                    "value": "admin",
+                    "regexp": null,
+                    "is_regexp": false
+                },
+                "password": {
+                    "name": "password",
+                    "value": "P@ssw0rd",
+                    "regexp": null,
+                    "is_regexp": false
+                }
+            },
+            "test_url": "https://test.ptdemo.local",
+            "form_url": "https://test.ptdemo.local/login",
+            "form_xpath": "/html/body/form",
+            "regexp_of_success": "Welcome"
+        }
+    },
+    "AutocheckProxySettings": {
+        "IsEnabled": true,
+        "Host": "proxy.ptdemo.local",
+        "Port": 3128,
+        "Type": 0,
+        "Username": "admin",
+        "Password": "P@ssw0rd"
+    }
+}

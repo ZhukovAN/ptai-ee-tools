@@ -377,6 +377,7 @@
       "$ref": "#/definitions/nullable-string"
     },
     "DotNetSettings": {
+      "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.DotNetSettings",
       "title": ".NET options",
       "type": ["object", "null"],
       "description": ".NET scan options",

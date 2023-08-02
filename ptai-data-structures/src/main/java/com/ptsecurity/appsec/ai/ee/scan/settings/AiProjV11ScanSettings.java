@@ -1,9 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings;
 
+import com.jayway.jsonpath.JsonPath;
 import com.networknt.schema.ValidationMessage;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.DetectionType;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.DotNetProjectType;
+import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.DotNetSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.JavaVersion;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ProgrammingLanguage;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.*;
@@ -20,6 +22,7 @@ import static com.networknt.schema.ValidatorTypeCode.FORMAT;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
 import static com.ptsecurity.misc.tools.helpers.CollectionsHelper.isEmpty;
+import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -157,7 +160,7 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public DotNetSettings getDotNetSettings() {
-        if (null == O(aiprojDocument, "$.DotNetSettings")) return null;
+        if (null == O("$.DotNetSettings")) return null;
         String solutionFile = S("$.DotNetSettings.SolutionFile");
         String projectType = S("$.DotNetSettings.ProjectType");
         return DotNetSettings.builder()
@@ -168,7 +171,7 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public JavaSettings getJavaSettings() {
-        if (null == O(aiprojDocument, "$.JavaSettings")) return null;
+        if (null == O("$.JavaSettings")) return null;
         return JavaSettings.builder()
                 .unpackUserPackages(B("$.JavaSettings.UnpackUserPackages"))
                 .userPackagePrefixes(S("$.JavaSettings.UserPackagePrefixes"))

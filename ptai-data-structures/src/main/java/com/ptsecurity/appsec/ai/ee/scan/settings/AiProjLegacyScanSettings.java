@@ -229,7 +229,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
             return BlackBoxSettings.Authentication.NONE;
     }
 
-    private List<Pair<String, String>> convertHeaders(@NonNull final List<String>[] headers) {
+    private List<Pair<String, String>> convertHeaders(@NonNull final List<List<String>> headers) {
         List<Pair<String, String>> res = new ArrayList<>();
         for (List<String> headerNameAndValues : headers) {
             if (isEmpty(headerNameAndValues)) {
@@ -243,6 +243,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
             for (int i = 1; i < headerNameAndValues.size(); i++)
                 res.add(
                         new ImmutablePair<>(headerNameAndValues.get(0), headerNameAndValues.get(i)));
+
         }
         return isEmpty(res) ? null : res;
     }
@@ -258,11 +259,12 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
         blackBoxSettings.setSite(S("$.Site"));
         blackBoxSettings.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.getOrDefault(S("$.ScanScope"), BlackBoxSettings.ScanScope.PATH));
+        blackBoxSettings.setSslCheck(false);
 
         Object proxySettings = O("$.ProxySettings");
         if (null != proxySettings)
             blackBoxSettings.setProxySettings(convertProxySettings(proxySettings));
-        List<String>[] customHeaders = O(aiprojDocument,"$.CustomHeaders");
+        List<List<String>> customHeaders = O("$.CustomHeaders");
         if (null != customHeaders)
             blackBoxSettings.setHttpHeaders(convertHeaders(customHeaders));
         Object authentication = O("$.Authentication.auth_item");
@@ -275,7 +277,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
         proxySettings = O("$.AutocheckProxySettings");
         if (null != proxySettings)
             blackBoxSettings.setAutocheckProxySettings(convertProxySettings(proxySettings));
-        customHeaders = O(aiprojDocument,"$.AutocheckCustomHeaders");
+        customHeaders = O("$.AutocheckCustomHeaders");
         if (null != customHeaders)
             blackBoxSettings.setAutocheckHttpHeaders(convertHeaders(customHeaders));
         authentication = O("$.AutocheckAuthentication.auth_item");
@@ -338,9 +340,8 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public @NonNull Boolean isSkipGitIgnoreFiles() {
-        List<String> skipFilesFolders = O(aiprojDocument,"$.SkipFilesFolders");
-        if (isEmpty(skipFilesFolders)) return false;
-        return skipFilesFolders.contains(".gitignore");
+        log.trace("No skip .gitignore files support for legacy AIPROJ schema");
+        return false;
     }
 
     @Override

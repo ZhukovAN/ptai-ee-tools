@@ -11,17 +11,29 @@ import com.ptsecurity.misc.tools.exceptions.GenericException;
 import com.ptsecurity.misc.tools.helpers.ResourcesHelper;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.JAVA;
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Language.PHP;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.AddressListItem.Format.EXACTMATCH;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.AddressListItem.Format.WILDCARD;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.ScanLevel.FULL;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.ScanLevel.NORMAL;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.ScanScope.DOMAIN;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ScanModule.*;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ScanModule.BLACKBOX;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.Version.LEGACY;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.Version.V11;
 import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Read and parse data from legacy scan settings (aiproj) JSON resource file")
-class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
+class AiProjLegacyScanSettingsTest extends BaseTest {
     @Test
     @DisplayName("Set JSON field values")
     public void setJsonFieldValues() {
@@ -38,7 +50,7 @@ class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
     @SneakyThrows
     @DisplayName("Fail settings.incorrect.aiproj file with missing quote in project name")
     public void failIncorrectAiProj() {
-        String data = getResourceString("json/scan/settings/legacy/settings.incorrect.aiproj");
+        String data = getResourceString("json/scan/settings/legacy/settings.incorrect.json");
         GenericException genericException = Assertions.assertThrows(GenericException.class, () -> UnifiedAiProjScanSettings.loadSettings(data));
         Assertions.assertEquals(genericException.getCause().getClass(), JsonParseException.class);
     }
@@ -47,17 +59,17 @@ class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
     @SneakyThrows
     @DisplayName("Fail legacy AIPROJ with none or null SolutionFile field")
     public void checkSolutionFile() {
-        final String solutionNull = getResourceString("json/scan/settings/legacy/settings.csharp.solution.null.aiproj");
+        final String solutionNull = getResourceString("json/scan/settings/legacy/settings.csharp.solution.null.json");
         assertDoesNotThrow(() -> UnifiedAiProjScanSettings.loadSettings(solutionNull).toJson());
-        String solutionEmpty = getResourceString("json/scan/settings/legacy/settings.csharp.solution.none.aiproj");
+        String solutionEmpty = getResourceString("json/scan/settings/legacy/settings.csharp.solution.none.json");
         assertDoesNotThrow(() -> UnifiedAiProjScanSettings.loadSettings(solutionEmpty).toJson());
     }
 
     @Test
     @SneakyThrows
-    @DisplayName("Check legacy AIPROJ with UNIX-path SolutionFile field")
-    public void checkUnixSolutionFile() {
-        final String scanSettings = getResourceString("json/scan/settings/v11/settings.unix.solutionfile.json");
+    @DisplayName("Check AIPROJ v.1.1 with non-root SolutionFile field")
+    public void checkNonRootSolutionFile() {
+        final String scanSettings = getResourceString("json/scan/settings/v11/settings.csharp.non-root.solutionfile.json");
         UnifiedAiProjScanSettings settings = assertDoesNotThrow(() -> UnifiedAiProjScanSettings.loadSettings(scanSettings));
         assertDoesNotThrow(() -> UnifiedAiProjScanSettings.loadSettings(settings.toJson()).toJson());
     }
@@ -66,7 +78,7 @@ class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
     @SneakyThrows
     @DisplayName("Fail legacy AIPROJ with case-insensitive enum")
     public void failCaseInsensitiveEnum() {
-        final String data = getResourceString("json/scan/settings/legacy/settings.case-insensitive.aiproj");
+        final String data = getResourceString("json/scan/settings/legacy/settings.case-insensitive.json");
         assertThrows(GenericException.class, () -> UnifiedAiProjScanSettings.loadSettings(data));
     }
 
@@ -74,10 +86,10 @@ class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
     @SneakyThrows
     @DisplayName("Load minimal scan settings that contain project name and language only")
     public void loadMinimalAiProj() {
-        String data = getResourceString("json/scan/settings/legacy/settings.minimal.aiproj");
+        String data = getResourceString("json/scan/settings/legacy/settings.minimal.json");
         @NonNull
         UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(data);
-        assertEquals(UnifiedAiProjScanSettings.Version.LEGACY, settings.getVersion());
+        assertEquals(LEGACY, settings.getVersion());
         Assertions.assertNotNull(settings);
         assertTrue("Test Project".equalsIgnoreCase(settings.getProjectName()));
         Assertions.assertEquals(ScanResult.ScanSettings.Language.PHP, settings.getProgrammingLanguage());
@@ -87,10 +99,10 @@ class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
     @SneakyThrows
     @DisplayName("Load generic scan settings that contain project name and language only")
     public void loadGenericAiProj() {
-        String data = getResourceString("json/scan/settings/legacy/settings.generic.aiproj");
+        String data = getResourceString("json/scan/settings/legacy/settings.generic.json");
         @NonNull
         UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(data);
-        assertEquals(UnifiedAiProjScanSettings.Version.LEGACY, settings.getVersion());
+        assertEquals(LEGACY, settings.getVersion());
         assertTrue("JSON-based Maven project".equalsIgnoreCase(settings.getProjectName()));
         Assertions.assertEquals(ScanResult.ScanSettings.Language.JAVA, settings.getProgrammingLanguage());
         assertTrue(settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.VULNERABLESOURCECODE));
@@ -103,10 +115,10 @@ class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
     @SneakyThrows
     @DisplayName("Load DAST-only settings")
     public void loadDastOnlyAiProj() {
-        String data = getResourceString("json/scan/settings/legacy/settings.dast.aiproj");
+        String data = getResourceString("json/scan/settings/legacy/settings.dast.json");
         @NonNull
         UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(data);
-        assertEquals(UnifiedAiProjScanSettings.Version.LEGACY, settings.getVersion());
+        assertEquals(LEGACY, settings.getVersion());
         assertTrue("Test project".equalsIgnoreCase(settings.getProjectName()));
         assertTrue(settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.BLACKBOX));
         assertEquals(1, settings.getScanModules().size());
@@ -119,10 +131,10 @@ class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
     @SneakyThrows
     @DisplayName("Load JavaScript settings")
     public void loadJavaScriptAiProj() {
-        String data = getResourceString("json/scan/settings/legacy/settings.javascript-vnwa.aiproj");
+        String data = getResourceString("json/scan/settings/legacy/settings.javascript-vnwa.json");
         @NonNull
         UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(data);
-        assertEquals(UnifiedAiProjScanSettings.Version.LEGACY, settings.getVersion());
+        assertEquals(LEGACY, settings.getVersion());
         assertTrue("junit-javascript-vnwa".equalsIgnoreCase(settings.getProjectName()));
         assertEquals(ScanBrief.ScanSettings.Language.JAVASCRIPT, settings.getProgrammingLanguage());
         assertTrue(settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.VULNERABLESOURCECODE));
@@ -149,8 +161,7 @@ class UnifiedAiProjLegacyScanSettingsTest extends BaseTest {
             String data = getResourceString("json/scan/settings/legacy/" + resourceName);
             System.out.println(resourceName);
             UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(data);
-            assertEquals(UnifiedAiProjScanSettings.Version.LEGACY, settings.getVersion());
+            assertEquals(LEGACY, settings.getVersion());
         }
     }
-
 }
