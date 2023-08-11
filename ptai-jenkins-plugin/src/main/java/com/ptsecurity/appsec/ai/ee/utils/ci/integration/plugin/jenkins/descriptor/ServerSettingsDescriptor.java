@@ -104,6 +104,7 @@ public class ServerSettingsDescriptor extends Descriptor<ServerSettings> {
             // Construct a fake project
             item = new FreeStyleProject((ItemGroup)Jenkins.get(), "fake-" + UUID.randomUUID().toString());
         return new StandardListBoxModel()
+                .includeEmptyValue()
                 .includeMatchingAs(
                         item instanceof Queue.Task
                                 ? Tasks.getAuthenticationOf((Queue.Task) item)
