@@ -48,6 +48,7 @@ import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMappe
 @Environment(enabledFor = { V420 })
 public class RestApiDataStructuresIT extends BaseClientIT {
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @SneakyThrows
     protected void generateData(@NonNull final Path destination, @NonNull final ProjectTemplate.ID templateId, @NonNull final Consumer<UnifiedAiProjScanSettings> modifySettings) {
         RawData rawData = RawData.builder()

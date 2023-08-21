@@ -17,6 +17,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.RawJ
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.state.FailIfAstFailed;
 import com.ptsecurity.misc.tools.TempFile;
 import com.ptsecurity.misc.tools.helpers.ArchiveHelper;
+import io.jsonwebtoken.lang.Assert;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +49,7 @@ import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMappe
 @Environment(enabledFor = { V44X })
 public class RestApiDataStructuresIT extends BaseClientIT {
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @SneakyThrows
     protected void generateData(@NonNull final Path destination, @NonNull final ProjectTemplate.ID templateId, @NonNull final Consumer<UnifiedAiProjScanSettings> modifySettings) {
         RawData rawData = RawData.builder()
