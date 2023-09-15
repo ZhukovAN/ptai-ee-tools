@@ -134,7 +134,7 @@ public abstract class UnifiedAiProjScanSettings {
                     i18n_ast_settings_type_manual_json_settings_message_invalid(),
                     new IllegalArgumentException("Unsupported AIPROJ version: " + versionNode.textValue()));
 
-        log.trace("Check AIPROG for schema compliance");
+        log.trace("Check AIPROJ for schema compliance");
         JsonSchemaFactory factory = JsonSchemaFactory
                 .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
                 .addMetaSchema(JsonMetaSchema
