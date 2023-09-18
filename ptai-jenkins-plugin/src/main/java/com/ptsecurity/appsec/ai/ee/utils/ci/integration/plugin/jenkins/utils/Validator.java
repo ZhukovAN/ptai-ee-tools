@@ -1,7 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils;
 
+import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.ReportUtils;
@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.regex.Pattern;
 
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.Version.V11;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.i18n_ast_settings_type_manual_json_settings_message_invalid;
 
 @Slf4j
 public class Validator {
@@ -45,10 +44,6 @@ public class Validator {
 
     public static boolean doCheckFieldRegEx(String value) {
         return checkViaException(() -> Pattern.compile(value));
-    }
-
-    public static boolean doCheckFieldJsonPolicy(String value) {
-        return checkViaException(() -> { if (doCheckFieldNotEmpty(value)) JsonPolicyHelper.verify(value); });
     }
 
     public static boolean doCheckFieldJsonIssuesFilter(String value) {
@@ -83,29 +78,43 @@ public class Validator {
         return doCheckFieldRegEx(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
     }
 
-    public static FormValidation doCheckFieldJsonPolicy(String value, String errorMessage) {
-        return doCheckFieldJsonPolicy(value) ? FormValidation.ok() : FormValidation.error(errorMessage);
+    public static FormValidation doCheckFieldJsonPolicy(String value) {
+        try {
+            if (!Validator.doCheckFieldNotEmpty(value))
+                return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_empty());
+
+            Policy[] policy = JsonPolicyHelper.verify(value);
+            if (null == policy || 0 == policy.length)
+                return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_empty());
+            else
+                return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_success(policy.length));
+        } catch (Exception e) {
+            return Validator.error(e);
+        }
     }
 
     public static FormValidation doCheckFieldJsonSettings(String value) {
-        try {
-            UnifiedAiProjScanSettings.ParseResult parseResult = UnifiedAiProjScanSettings.parse(value);
-            if (parseResult.getErrors().isEmpty()) {
-                FormValidation ok = FormValidation.ok(
-                        Resources.i18n_ast_settings_type_manual_json_settings_message_success(
-                                parseResult.getSettings().getProjectName(),
-                                parseResult.getSettings().getProgrammingLanguage().getValue()));
-                if (V11 == parseResult.getSettings().getVersion())
-                    return ok;
-                else
-                    return FormValidation.warning(Resources.i18n_ast_settings_type_manual_json_settings_message_deprecated());
+        if (!doCheckFieldNotEmpty(value))
+            return FormValidation.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty());
+        UnifiedAiProjScanSettings.ParseResult parseResult = UnifiedAiProjScanSettings.parse(value);
+        if (null == parseResult.getCause()) {
+            FormValidation ok = FormValidation.ok(
+                    Resources.i18n_ast_settings_type_manual_json_settings_message_success(
+                            parseResult.getSettings().getProjectName(),
+                            parseResult.getSettings().getProgrammingLanguage().getValue()));
+            if (V11 == parseResult.getSettings().getVersion())
+                return ok;
+            else
+                return FormValidation.warning(Resources.i18n_ast_settings_type_manual_json_settings_message_deprecated());
+        } else {
+            if (parseResult.getErrors().isEmpty())
+                return FormValidation.error(parseResult.getCause(), Resources.i18n_ast_settings_type_manual_json_settings_message_invalid());
+            else {
+                Collection<FormValidation> errors = new ArrayList<>();
+                for (String error : parseResult.getErrors())
+                    errors.add(FormValidation.error(error));
+                return FormValidation.aggregate(errors);
             }
-            Collection<FormValidation> errors = new ArrayList<>();
-            for (String error : parseResult.getErrors())
-                errors.add(FormValidation.error(error));
-            return FormValidation.aggregate(errors);
-        } catch (GenericException e) {
-            return Validator.error(e);
         }
     }
 

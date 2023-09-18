@@ -1,5 +1,6 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.JavaVersion;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.legacy.ProgrammingLanguage;
@@ -29,21 +30,25 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @Slf4j
 @SuppressWarnings({"deprecation"})
 public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
+    public AiProjLegacyScanSettings(@NonNull final JsonNode rootNode) {
+        super(rootNode);
+    }
+
     @Override
     public @NonNull String getProjectName() {
-        return S("$.ProjectName");
+        return S("ProjectName");
     }
 
     @Override
     public ScanBrief.ScanSettings.@NonNull Language getProgrammingLanguage() {
-        return PROGRAMMING_LANGUAGE_MAP.get(S("$.ProgrammingLanguage"));
+        return PROGRAMMING_LANGUAGE_MAP.get(S("ProgrammingLanguage"));
     }
 
     @Override
     public UnifiedAiProjScanSettings setProgrammingLanguage(ScanBrief.ScanSettings.@NonNull Language value) {
         for (String language : PROGRAMMING_LANGUAGE_MAP.keySet()) {
             if (!PROGRAMMING_LANGUAGE_MAP.get(language).equals(value)) continue;
-            aiprojDocument.put("$", "ProgrammingLanguage", language);
+            rootNode.put("ProgrammingLanguage", language);
             break;
         }
         return this;
@@ -133,7 +138,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
     @Override
     public Set<ScanModule> getScanModules() {
         Set<ScanModule> res = new HashSet<>();
-        String scanAppType = S("$.ScanAppType");
+        String scanAppType = S("ScanAppType");
         if (isEmpty(scanAppType)) return res;
         Set<ScanAppType> scanAppTypes = Arrays.stream(scanAppType.split("[, ]+"))
                 .map(ScanAppType::from)
@@ -145,9 +150,9 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
         boolean abstractInterpretationCoreUsed = scanAppTypes.stream().anyMatch(SCAN_APP_TYPE_AI::contains);
         if (abstractInterpretationCoreUsed) res.add(ScanModule.VULNERABLESOURCECODE);
 
-        if (B("$.UseTaintAnalysis") && scanAppTypes.contains(ScanAppType.PMTAINT))
+        if (B("UseTaintAnalysis") && scanAppTypes.contains(ScanAppType.PMTAINT))
             res.add(ScanModule.DATAFLOWANALYSIS);
-        if (B("$.UsePmAnalysis") && scanAppTypes.contains(ScanAppType.PMTAINT))
+        if (B("UsePmAnalysis") && scanAppTypes.contains(ScanAppType.PMTAINT))
             res.add(ScanModule.PATTERNMATCHING);
         if (scanAppTypes.contains(ScanAppType.CONFIGURATION)) res.add(ScanModule.CONFIGURATION);
         if (scanAppTypes.contains(ScanAppType.BLACKBOX)) res.add(ScanModule.BLACKBOX);
@@ -176,62 +181,72 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
             else if (ScanBrief.ScanSettings.Language.JAVASCRIPT == language)
                 legacyModules.add(ScanAppType.JAVASCRIPT.value());
         }
-        String modulesList = String.join(", ", legacyModules.stream().collect(Collectors.toSet()));
-        aiprojDocument.put("$", "ScanAppType", modulesList);
+        String modulesList = String.join(", ", new HashSet<>(legacyModules));
+        rootNode.put("ScanAppType", modulesList);
         return this;
     }
 
-    private BlackBoxSettings.ProxySettings convertProxySettings(@NonNull final Object proxySettings) {
+    private BlackBoxSettings.ProxySettings convertProxySettings(@NonNull final JsonNode proxySettings) {
         return BlackBoxSettings.ProxySettings.builder()
-                .enabled(B(proxySettings, "$.IsEnabled"))
-                .type(BLACKBOX_PROXY_TYPE_MAP.get(I(proxySettings, "$.Type")))
-                .host(S(proxySettings, "$.Host"))
-                .port(I(proxySettings, "$.Port"))
-                .login(S(proxySettings, "$.Username"))
-                .password(S(proxySettings, "$.Password"))
+                .enabled(B(proxySettings, "IsEnabled"))
+                .type(BLACKBOX_PROXY_TYPE_MAP.get(I(proxySettings, "Type")))
+                .host(S(proxySettings, "Host"))
+                .port(I(proxySettings, "Port"))
+                .login(S(proxySettings, "Username"))
+                .password(S(proxySettings, "Password"))
                 .build();
     }
 
-    private BlackBoxSettings.Authentication convertAuthentication(final Object auth) {
+    private BlackBoxSettings.Authentication convertAuthentication(@NonNull final JsonNode auth) {
         log.trace("Check if AIPROJ authentication field is defined");
-        if (null == auth || null == O(auth, "$.credentials")) {
+        if (N(auth, "credentials").isMissingNode()) {
             log.info("Explicitly set authentication type NONE as there's no authentication settings defined");
             return BlackBoxSettings.Authentication.NONE;
         }
         BlackBoxSettings.Authentication.Type authType;
-        authType = BLACKBOX_AUTH_TYPE_MAP.getOrDefault(I(auth, "$.credentials.type"), BlackBoxSettings.Authentication.Type.NONE);
+        authType = BLACKBOX_AUTH_TYPE_MAP.getOrDefault(I(auth, "credentials.type"), BlackBoxSettings.Authentication.Type.NONE);
 
         if (BlackBoxSettings.Authentication.Type.FORM == authType) {
             return BlackBoxSettings.FormAuthentication.builder()
                     .type(authType)
-                    .detectionType(isEmpty(S(auth, "$.form_xpath")) ? AUTO : MANUAL)
-                    .loginKey(S(auth, "$.credentials.login.name"))
-                    .passwordKey(S(auth, "$.credentials.password.name"))
-                    .login(S(auth, "$.credentials.login.value"))
-                    .password(S(auth, "$.credentials.password.value"))
-                    .formAddress(S(auth, "$.form_url"))
-                    .xPath(S(auth, "$.form_xpath"))
-                    .validationTemplate(S(auth, "$.regexp_of_success"))
+                    .detectionType(isEmpty(S(auth, "form_xpath")) ? AUTO : MANUAL)
+                    .loginKey(S(auth, "credentials.login.name"))
+                    .passwordKey(S(auth, "credentials.password.name"))
+                    .login(S(auth, "credentials.login.value"))
+                    .password(S(auth, "credentials.password.value"))
+                    .formAddress(S(auth, "form_url"))
+                    .xPath(S(auth, "form_xpath"))
+                    .validationTemplate(S(auth, "regexp_of_success"))
                     .build();
         } else if (BlackBoxSettings.Authentication.Type.HTTP == authType) {
             return BlackBoxSettings.HttpAuthentication.builder()
-                    .login(S(auth, "$.credentials.login.value"))
-                    .password(S(auth, "$.credentials.password.value"))
-                    .validationAddress(S(auth, "$.test_url"))
+                    .login(S(auth, "credentials.login.value"))
+                    .password(S(auth, "credentials.password.value"))
+                    .validationAddress(S(auth, "test_url"))
                     .build();
         } else if (BlackBoxSettings.Authentication.Type.COOKIE == authType) {
             return BlackBoxSettings.CookieAuthentication.builder()
-                    .cookie(S(auth, "$.credentials.cookie"))
-                    .validationAddress(S(auth, "$.test_url"))
-                    .validationTemplate(S(auth, "$.regexp_of_success"))
+                    .cookie(S(auth, "credentials.cookie"))
+                    .validationAddress(S(auth, "test_url"))
+                    .validationTemplate(S(auth, "regexp_of_success"))
                     .build();
         } else
             return BlackBoxSettings.Authentication.NONE;
     }
 
-    private List<Pair<String, String>> convertHeaders(@NonNull final List<List<String>> headers) {
+    private List<Pair<String, String>> convertHeaders(@NonNull final JsonNode headers) {
+        if (!headers.isArray()) return null;
         List<Pair<String, String>> res = new ArrayList<>();
-        for (List<String> headerNameAndValues : headers) {
+        for (JsonNode header : headers) {
+            if (!header.isArray()) {
+                log.trace("Skip non-array item");
+                continue;
+            }
+            List<String> headerNameAndValues = new ArrayList<>();
+            for (JsonNode item : header) {
+                if (!item.isValueNode()) continue;
+                headerNameAndValues.add(item.asText());
+            }
             if (isEmpty(headerNameAndValues)) {
                 log.trace("Skip empty headers");
                 continue;
@@ -254,87 +269,87 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
         BlackBoxSettings blackBoxSettings = new BlackBoxSettings();
 
-        blackBoxSettings.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.getOrDefault(S("$.Level"), BlackBoxSettings.ScanLevel.NONE));
-        blackBoxSettings.setRunAutocheckAfterScan(B("$.RunAutocheckAfterScan"));
+        blackBoxSettings.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.getOrDefault(S("Level"), BlackBoxSettings.ScanLevel.NONE));
+        blackBoxSettings.setRunAutocheckAfterScan(B("RunAutocheckAfterScan"));
 
-        blackBoxSettings.setSite(S("$.Site"));
-        blackBoxSettings.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.getOrDefault(S("$.ScanScope"), BlackBoxSettings.ScanScope.PATH));
+        blackBoxSettings.setSite(S("Site"));
+        blackBoxSettings.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.getOrDefault(S("ScanScope"), BlackBoxSettings.ScanScope.PATH));
         blackBoxSettings.setSslCheck(false);
 
-        Object proxySettings = O("$.ProxySettings");
-        if (null != proxySettings)
+        JsonNode proxySettings = N("ProxySettings");
+        if (!proxySettings.isMissingNode())
             blackBoxSettings.setProxySettings(convertProxySettings(proxySettings));
-        List<List<String>> customHeaders = O("$.CustomHeaders");
-        if (null != customHeaders)
+        JsonNode customHeaders = N("CustomHeaders");
+        if (customHeaders.isArray())
             blackBoxSettings.setHttpHeaders(convertHeaders(customHeaders));
-        Object authentication = O("$.Authentication.auth_item");
-        if (null != authentication)
+        JsonNode authentication = N("Authentication.auth_item");
+        if (!authentication.isMissingNode())
             blackBoxSettings.setAuthentication(convertAuthentication(authentication));
 
         if (!blackBoxSettings.getRunAutocheckAfterScan()) return blackBoxSettings;
 
-        blackBoxSettings.setAutocheckSite(S("$.AutocheckSite"));
-        proxySettings = O("$.AutocheckProxySettings");
-        if (null != proxySettings)
+        blackBoxSettings.setAutocheckSite(S("AutocheckSite"));
+        proxySettings = N("AutocheckProxySettings");
+        if (!proxySettings.isMissingNode())
             blackBoxSettings.setAutocheckProxySettings(convertProxySettings(proxySettings));
-        customHeaders = O("$.AutocheckCustomHeaders");
-        if (null != customHeaders)
+        customHeaders = N("AutocheckCustomHeaders");
+        if (customHeaders.isArray())
             blackBoxSettings.setAutocheckHttpHeaders(convertHeaders(customHeaders));
-        authentication = O("$.AutocheckAuthentication.auth_item");
-        if (null != authentication)
+        authentication = N("AutocheckAuthentication.auth_item");
+        if (!authentication.isMissingNode())
             blackBoxSettings.setAutocheckAuthentication(convertAuthentication(authentication));
         return blackBoxSettings;
     }
 
     @Override
     public @NonNull Boolean isDownloadDependencies() {
-        return B("$.IsDownloadDependencies");
+        return B("IsDownloadDependencies");
     }
 
     @Override
     public UnifiedAiProjScanSettings setDownloadDependencies(@NonNull Boolean value) {
-        aiprojDocument.put("$", "IsDownloadDependencies", value);
+        rootNode.put("IsDownloadDependencies", value);
         return this;
     }
 
     @Override
     public @NonNull Boolean isUsePublicAnalysisMethod() {
-        return B("$.IsUsePublicAnalysisMethod");
+        return B("IsUsePublicAnalysisMethod");
     }
 
     @Override
     public UnifiedAiProjScanSettings setUsePublicAnalysisMethod(@NonNull Boolean value) {
-        aiprojDocument.put("$", "IsUsePublicAnalysisMethod", value);
+        rootNode.put("IsUsePublicAnalysisMethod", value);
         return this;
     }
 
     @Override
     public String getCustomParameters() {
-        return S("$.CustomParameters");
+        return S("CustomParameters");
     }
 
     @Override
     public UnifiedAiProjScanSettings setCustomParameters(String parameters) {
-        aiprojDocument.put("$", "CustomParameters", parameters);
+        rootNode.put("CustomParameters", parameters);
         return this;
     }
 
     @Override
     public DotNetSettings getDotNetSettings() {
         return DotNetSettings.builder()
-                .solutionFile(fixSolutionFile(S("$.SolutionFile")))
-                .webSiteFolder(S("$.WebSiteFolder"))
-                .projectType(DOTNET_PROJECT_TYPE_MAP.getOrDefault(S("$.ProjectType"), DotNetSettings.ProjectType.NONE))
+                .solutionFile(fixSolutionFile(S("SolutionFile")))
+                .webSiteFolder(S("WebSiteFolder"))
+                .projectType(DOTNET_PROJECT_TYPE_MAP.getOrDefault(S("ProjectType"), DotNetSettings.ProjectType.NONE))
                 .build();
     }
 
     @Override
     public JavaSettings getJavaSettings() {
         return JavaSettings.builder()
-                .unpackUserPackages(B("$.IsUnpackUserPackages"))
-                .userPackagePrefixes(S("$.UserPackagePrefixes"))
-                .javaVersion(JavaVersion._0.value().equals(I("$.JavaVersion")) ? v1_8 : v1_11)
-                .parameters(S("$.JavaParameters"))
+                .unpackUserPackages(B("IsUnpackUserPackages"))
+                .userPackagePrefixes(S("UserPackagePrefixes"))
+                .javaVersion(JavaVersion._0.value().equals(I("JavaVersion")) ? v1_8 : v1_11)
+                .parameters(S("JavaParameters"))
                 .build();
     }
 
@@ -346,7 +361,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public @NonNull Boolean isUseSastRules() {
-        return B("$.UseSastRules");
+        return B("UseSastRules");
     }
 
     @Override
@@ -357,12 +372,12 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public @NonNull Boolean isUseCustomYaraRules() {
-        return B("$.UseCustomYaraRules");
+        return B("UseCustomYaraRules");
     }
 
     @Override
     public @NonNull Boolean isUseSecurityPolicies() {
-        return B("$.UseSecurityPolicies");
+        return B("UseSecurityPolicies");
     }
 
     @Override

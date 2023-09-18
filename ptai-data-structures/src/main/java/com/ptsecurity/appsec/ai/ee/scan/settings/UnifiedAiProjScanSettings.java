@@ -1,20 +1,12 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.jayway.jsonpath.*;
-import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
-import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.networknt.schema.*;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.misc.tools.TempFile;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
-import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import com.ptsecurity.misc.tools.helpers.CallHelper;
-import com.ptsecurity.misc.tools.helpers.CollectionsHelper;
 import lombok.*;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
@@ -22,38 +14,36 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
-import java.util.function.Function;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version._1_0;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version._1_1;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.i18n_ast_settings_type_manual_json_settings_message_empty;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.i18n_ast_settings_type_manual_json_settings_message_invalid;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 import static com.ptsecurity.misc.tools.helpers.CollectionsHelper.isNotEmpty;
-import static java.lang.Boolean.TRUE;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Slf4j
 @Accessors
 public abstract class UnifiedAiProjScanSettings {
     private static final List<NonValidationKeyword> NON_VALIDATION_KEYS = Collections.singletonList(new NonValidationKeyword("javaType"));
-    protected final Configuration configuration = Configuration.builder()
-            .options(Option.SUPPRESS_EXCEPTIONS)
-            .mappingProvider(new JacksonMappingProvider())
-            .jsonProvider(new JacksonJsonProvider())
-            .build();
-    protected ParseContext ctx;
+    protected final ObjectNode rootNode;
 
-    protected DocumentContext aiprojDocument;
+    public UnifiedAiProjScanSettings(@NonNull final JsonNode jsonNode) {
+        rootNode = (ObjectNode) jsonNode;
+    }
 
+    @SneakyThrows
     public String toJson() {
-        return configuration.jsonProvider().toJson(aiprojDocument.read("$"));
+        return createObjectMapper().writeValueAsString(rootNode);
     }
 
     public Path serializeToFile() throws GenericException {
@@ -99,63 +89,68 @@ public abstract class UnifiedAiProjScanSettings {
     public static class ParseResult {
         @Setter
         protected UnifiedAiProjScanSettings settings = null;
+
         protected final List<String> errors = new ArrayList<>();
 
         public String getError() {
             return String.join("; ", errors);
         }
+
+        @Setter
+        protected GenericException cause;
     }
 
     @NonNull
-    public static ParseResult parse(@NonNull final String data) throws GenericException {
+    public static ParseResult parse(@NonNull final String data) {
         final ParseResult result = new ParseResult();
-        if (isEmpty(data))
-            throw GenericException.raise(
-                    i18n_ast_settings_type_manual_json_settings_message_empty(),
-                    new IllegalArgumentException());
-        log.trace("Parse AIPROJ as generic JSON data");
-        final JsonNode root = call(
-                () -> createObjectMapper().readTree(data),
-                i18n_ast_settings_type_manual_json_settings_message_invalid());
+        try {
+            if (isEmpty(data))
+                throw GenericException.raise(
+                        i18n_ast_settings_type_manual_json_settings_message_empty(),
+                        new IllegalArgumentException("AIPROJ must not be empty"));
+            log.trace("Parse AIPROJ as generic JSON data");
+            final JsonNode root = call(
+                    () -> createObjectMapper().readTree(data),
+                    i18n_ast_settings_type_manual_json_settings_message_invalid());
 
-        log.trace("Check Version attribute");
-        JsonNode versionNode = root.path("Version");
-        UnifiedAiProjScanSettings settings;
-        if (null == versionNode || versionNode.isMissingNode())
-            settings = (null == root.path("ScanModules") || root.path("ScanModules").isMissingNode())
-                    ? new AiProjLegacyScanSettings()
-                    : new AiProjV10ScanSettings();
-        else if (_1_1.value().equals(versionNode.textValue()))
-            settings = new AiProjV11ScanSettings();
-        else if (_1_0.value().equals(versionNode.textValue()))
-            settings = new AiProjV10ScanSettings();
-        else
-            throw GenericException.raise(
-                    i18n_ast_settings_type_manual_json_settings_message_invalid(),
-                    new IllegalArgumentException("Unsupported AIPROJ version: " + versionNode.textValue()));
+            log.trace("Check Version attribute");
+            JsonNode versionNode = root.path("Version");
+            UnifiedAiProjScanSettings settings;
+            if (null == versionNode || versionNode.isMissingNode())
+                settings = (null == root.path("ScanModules") || root.path("ScanModules").isMissingNode())
+                        ? new AiProjLegacyScanSettings(root)
+                        : new AiProjV10ScanSettings(root);
+            else if (_1_1.value().equals(versionNode.textValue()))
+                settings = new AiProjV11ScanSettings(root);
+            else if (_1_0.value().equals(versionNode.textValue()))
+                settings = new AiProjV10ScanSettings(root);
+            else {
+                throw GenericException.raise(
+                        i18n_ast_settings_type_manual_json_settings_message_invalid(),
+                        new IllegalArgumentException("Unsupported AIPROJ version: " + versionNode.textValue()));
+            }
 
-        log.trace("Check AIPROG for schema compliance");
-        JsonSchemaFactory factory = JsonSchemaFactory
-                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
-                .addMetaSchema(JsonMetaSchema
-                        .builder(JsonMetaSchema.getV4().getUri(), JsonMetaSchema.getV4())
-                        .addKeywords(NON_VALIDATION_KEYS).build()).build();
-        log.trace("Validate JSON for AIPROJ schema compliance");
-        JsonSchema jsonSchema = factory.getSchema(settings.getJsonSchema());
-        Set<ValidationMessage> errors = jsonSchema.validate(root);
-        settings.processErrorMessages(errors);
-        if (isNotEmpty(errors))
-            errors.forEach(e -> result.getErrors().add(e.getMessage()));
-        else {
-            result.setSettings(settings.init(BaseJsonHelper.minimize(root)));
+            log.trace("Check AIPROJ for schema compliance");
+            JsonSchemaFactory factory = JsonSchemaFactory
+                    .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
+                    .addMetaSchema(JsonMetaSchema
+                            .builder(JsonMetaSchema.getV4().getUri(), JsonMetaSchema.getV4())
+                            .addKeywords(NON_VALIDATION_KEYS).build()).build();
+            log.trace("Validate JSON for AIPROJ schema compliance");
+            JsonSchema jsonSchema = factory.getSchema(settings.getJsonSchema());
+            Set<ValidationMessage> errors = jsonSchema.validate(root);
+            settings.processErrorMessages(errors);
+            if (isNotEmpty(errors)) {
+                errors.forEach(e -> result.getErrors().add(e.getMessage()));
+                throw GenericException.raise(
+                        i18n_ast_settings_type_manual_json_settings_message_invalid(),
+                        new IllegalArgumentException("AIPROJ schema validation failed"));
+            } else
+                result.setSettings(settings);
+        } catch (GenericException e) {
+            result.setCause(e);
         }
         return result;
-    }
-
-    protected UnifiedAiProjScanSettings init(@NonNull final String data) throws GenericException {
-        ctx = JsonPath.using(configuration);
-        aiprojDocument = ctx.parse(data);
-        return this;
     }
 
     @NonNull
@@ -166,59 +161,65 @@ public abstract class UnifiedAiProjScanSettings {
      * domain names etc.). This method removes low-severity errors from validation results
      * @param errors List of errors to be processed
      */
-    public void processErrorMessages(Set<ValidationMessage> errors) {};
+    public void processErrorMessages(Set<ValidationMessage> errors) {}
 
     public static UnifiedAiProjScanSettings loadSettings(@NonNull final String data) throws GenericException {
         ParseResult result = parse(data);
-        if (isNotEmpty(result.getErrors()))
-            throw GenericException.raise("Settings parse failed", new IllegalArgumentException(result.getError()));
+        if (null != result.getCause())
+            throw result.getCause();
         return result.getSettings();
     }
 
     protected Boolean B(@NonNull final String path) {
-        Boolean res = TRUE.equals(O(path));
+        Boolean res = N(path).asBoolean();
         log.trace("JsonPath {} = {}", path, res);
         return res;
     }
 
     protected Integer I(@NonNull final String path) {
-        Integer res = O(path);
+        JsonNode node = N(path);
+        Integer res = node.isMissingNode() ? null : node.asInt();
         log.trace("JsonPath {} = {}", path, res);
         return res;
     }
 
-    protected <T> T O(@NonNull final String path) {
-        return aiprojDocument.read(path);
+    @NonNull
+    protected JsonNode N(@NonNull final String path) {
+        return N(rootNode, path);
     }
 
-    protected <T> T O(@NonNull final String path, Class<T> type) {
-        return aiprojDocument.read(path, type);
-    }
-
-    protected <T> T O(@NonNull final Object json, @NonNull final String path) {
-        return ctx.parse(json).read(path);
+    @NonNull
+    protected JsonNode N(@NonNull final JsonNode rootNode, @NonNull final String path) {
+        JsonNode node = rootNode;
+        String[] propertyNames = path.split("\\.");
+        for (String propertyName : propertyNames) {
+            node = node.path(propertyName);
+            if (node.isMissingNode()) break;
+        }
+        return node;
     }
 
     protected String S(@NonNull final String path) {
-        String res = O(path);
+        JsonNode resNode = N(path);
+        String res = resNode.isMissingNode() || resNode.isNull() ? null : resNode.asText();
         log.trace("JsonPath {} = {}", path, res);
         return res;
     }
 
-    protected Boolean B(@NonNull final Object json, @NonNull final String path) {
-        Boolean res = TRUE.equals(O(json, path));
+    protected Boolean B(@NonNull final JsonNode json, @NonNull final String path) {
+        Boolean res = N(json, path).asBoolean();
         log.trace("JsonPath {} = {}", path, res);
         return res;
     }
 
-    protected Integer I(@NonNull final Object json, @NonNull final String path) {
-        Integer res = O(json, path);
+    protected Integer I(@NonNull final JsonNode json, @NonNull final String path) {
+        Integer res = N(json, path).asInt();
         log.trace("JsonPath {} = {}", path, res);
         return res;
     }
 
-    protected String S(@NonNull final Object json, @NonNull final String path) {
-        String res = O(json, path);
+    protected String S(@NonNull final JsonNode json, @NonNull final String path) {
+        String res = N(json, path).asText();
         log.trace("JsonPath {} = {}", path, res);
         return res;
     }
@@ -233,7 +234,7 @@ public abstract class UnifiedAiProjScanSettings {
     public abstract String getProjectName();
 
     public UnifiedAiProjScanSettings setProjectName(@NonNull final String name) {
-        aiprojDocument.put("$", "ProjectName", name);
+        rootNode.put("ProjectName", name);
         return this;
     }
 
@@ -408,7 +409,7 @@ public abstract class UnifiedAiProjScanSettings {
                 FORM,
                 HTTP,
                 NONE,
-                COOKIE;
+                COOKIE
             }
             @NonNull
             @Builder.Default

@@ -50,7 +50,7 @@ class AiProjLegacyScanSettingsTest extends BaseTest {
     @SneakyThrows
     @DisplayName("Fail settings.incorrect.aiproj file with missing quote in project name")
     public void failIncorrectAiProj() {
-        String data = getResourceString("json/scan/settings/legacy/settings.incorrect.json");
+        String data = getResourceString("json/scan/settings/legacy/settings.incorrect.syntax.json");
         GenericException genericException = Assertions.assertThrows(GenericException.class, () -> UnifiedAiProjScanSettings.loadSettings(data));
         Assertions.assertEquals(genericException.getCause().getClass(), JsonParseException.class);
     }
@@ -78,7 +78,7 @@ class AiProjLegacyScanSettingsTest extends BaseTest {
     @SneakyThrows
     @DisplayName("Fail legacy AIPROJ with case-insensitive enum")
     public void failCaseInsensitiveEnum() {
-        final String data = getResourceString("json/scan/settings/legacy/settings.case-insensitive.json");
+        final String data = getResourceString("json/scan/settings/legacy/settings.incorrect.case-sensitive.json");
         assertThrows(GenericException.class, () -> UnifiedAiProjScanSettings.loadSettings(data));
     }
 

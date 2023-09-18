@@ -48,33 +48,7 @@ public class ScanSettingsManual extends com.ptsecurity.appsec.ai.ee.utils.ci.int
         }
 
         public FormValidation doCheckJsonPolicy(@QueryParameter String value) {
-            if (Validator.doCheckFieldNotEmpty(value))
-                return Validator.doCheckFieldJsonPolicy(value, Resources.i18n_ast_settings_type_manual_json_policy_message_invalid());
-            else
-                return FormValidation.ok();
-        }
-
-        public FormValidation doTestJsonSettings(
-                @AncestorInPath Item ignoredItem,
-                @QueryParameter("jsonSettings") final String jsonSettings) {
-            return Validator.doCheckFieldJsonSettings(jsonSettings);
-        }
-
-        public FormValidation doTestJsonPolicy(
-                @AncestorInPath Item ignoredItem,
-                @QueryParameter("jsonPolicy") final String jsonPolicy) {
-            try {
-                if (!Validator.doCheckFieldNotEmpty(jsonPolicy))
-                    return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_empty());
-
-                Policy[] policy = JsonPolicyHelper.verify(jsonPolicy);
-                if (null == policy || 0 == policy.length)
-                    return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_empty());
-                else
-                    return FormValidation.ok(Resources.i18n_ast_settings_type_manual_json_policy_message_success(policy.length));
-            } catch (Exception e) {
-                return Validator.error(e);
-            }
+            return Validator.doCheckFieldJsonPolicy(value);
         }
     }
 }
