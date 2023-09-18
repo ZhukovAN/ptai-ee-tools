@@ -1,11 +1,11 @@
 package com.ptsecurity.appsec.ai.ee.scan.settings;
 
-import com.jayway.jsonpath.JsonPath;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.networknt.schema.ValidationMessage;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.BlackBoxSettings.FormAuthentication.DetectionType;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.DotNetProjectType;
-import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.DotNetSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.JavaVersion;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.ProgrammingLanguage;
 import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.blackbox.*;
@@ -22,7 +22,6 @@ import static com.networknt.schema.ValidatorTypeCode.FORMAT;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_11;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.JavaSettings.JavaVersion.v1_8;
 import static com.ptsecurity.misc.tools.helpers.CollectionsHelper.isEmpty;
-import static com.ptsecurity.misc.tools.helpers.ResourcesHelper.getResourceString;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -93,6 +92,10 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
         BLACKBOX_FORM_AUTH_DETECTION_MAP.put(AuthFormDetectionType.MANUAL.value(), DetectionType.MANUAL);
     }
 
+    public AiProjV11ScanSettings(@NonNull final JsonNode rootNode) {
+        super(rootNode);
+    }
+
     @Override
     public @NonNull String getJsonSchema() {
         return ResourcesHelper.getResourceString("aiproj/schema/aiproj-v1.1.json");
@@ -114,19 +117,19 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public @NonNull String getProjectName() {
-        return S("$.ProjectName");
+        return S("ProjectName");
     }
 
     @Override
     public @NonNull ScanBrief.ScanSettings.Language getProgrammingLanguage() {
-        return PROGRAMMING_LANGUAGE_MAP.get(S("$.ProgrammingLanguage"));
+        return PROGRAMMING_LANGUAGE_MAP.get(S("ProgrammingLanguage"));
     }
 
     @Override
     public UnifiedAiProjScanSettings setProgrammingLanguage(ScanBrief.ScanSettings.@NonNull Language value) {
         for (String language : PROGRAMMING_LANGUAGE_MAP.keySet()) {
             if (!PROGRAMMING_LANGUAGE_MAP.get(language).equals(value)) continue;
-            aiprojDocument.put("$", "ProgrammingLanguage", language);
+            rootNode.put("ProgrammingLanguage", language);
             break;
         }
         return this;
@@ -135,34 +138,35 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
     @Override
     public Set<ScanModule> getScanModules() {
         Set<ScanModule> res = new HashSet<>();
-        List<String> scanModules = O("$.ScanModules");
-        for (String scanModule : scanModules)
-            if (SCAN_MODULE_MAP.containsKey(scanModule)) res.add(SCAN_MODULE_MAP.get(scanModule));
+        JsonNode scanModules = N("ScanModules");
+        for (JsonNode scanModule : scanModules)
+            if (SCAN_MODULE_MAP.containsKey(scanModule.asText())) res.add(SCAN_MODULE_MAP.get(scanModule.asText()));
         return res;
     }
 
     @Override
     public UnifiedAiProjScanSettings setScanModules(@NonNull Set<ScanModule> modules) {
-        aiprojDocument.put("$", "ScanModules", modules);
+        ArrayNode modulesNode = rootNode.putArray("ScanModules");
+        modules.forEach((module) -> modulesNode.add(module.getValue()));
         return this;
     }
 
     @Override
     public String getCustomParameters() {
-        return S("$.CustomParameters");
+        return S("CustomParameters");
     }
 
     @Override
     public UnifiedAiProjScanSettings setCustomParameters(String parameters) {
-        aiprojDocument.put("$", "CustomParameters", parameters);
+        rootNode.put("CustomParameters", parameters);
         return this;
     }
 
     @Override
     public DotNetSettings getDotNetSettings() {
-        if (null == O("$.DotNetSettings")) return null;
-        String solutionFile = S("$.DotNetSettings.SolutionFile");
-        String projectType = S("$.DotNetSettings.ProjectType");
+        if (N("DotNetSettings").isMissingNode()) return null;
+        String solutionFile = S("DotNetSettings.SolutionFile");
+        String projectType = S("DotNetSettings.ProjectType");
         return DotNetSettings.builder()
                 .solutionFile(fixSolutionFile(solutionFile))
                 .projectType(DOTNET_PROJECT_TYPE_MAP.getOrDefault(projectType, DotNetSettings.ProjectType.NONE))
@@ -171,39 +175,39 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public JavaSettings getJavaSettings() {
-        if (null == O("$.JavaSettings")) return null;
+        if (N("JavaSettings").isMissingNode()) return null;
         return JavaSettings.builder()
-                .unpackUserPackages(B("$.JavaSettings.UnpackUserPackages"))
-                .userPackagePrefixes(S("$.JavaSettings.UserPackagePrefixes"))
-                .javaVersion(JAVA_VERSION_MAP.getOrDefault(S("$.JavaSettings.Version"), v1_11))
-                .parameters(S("$.JavaSettings.Parameters"))
+                .unpackUserPackages(B("JavaSettings.UnpackUserPackages"))
+                .userPackagePrefixes(S("JavaSettings.UserPackagePrefixes"))
+                .javaVersion(JAVA_VERSION_MAP.getOrDefault(S("JavaSettings.Version"), v1_11))
+                .parameters(S("JavaSettings.Parameters"))
                 .build();
     }
 
     @Override
     public @NonNull Boolean isSkipGitIgnoreFiles() {
-        return B("$.SkipGitIgnoreFiles");
+        return B("SkipGitIgnoreFiles");
     }
 
     @Override
     public @NonNull Boolean isUsePublicAnalysisMethod() {
-        return B("$.UsePublicAnalysisMethod");
+        return B("UsePublicAnalysisMethod");
     }
 
     @Override
     public UnifiedAiProjScanSettings setUsePublicAnalysisMethod(@NonNull Boolean value) {
-        aiprojDocument.put("$", "UsePublicAnalysisMethod", value);
+        rootNode.put("UsePublicAnalysisMethod", value);
         return this;
     }
 
     @Override
     public @NonNull Boolean isUseSastRules() {
-        return B("$.UseSastRules");
+        return B("UseSastRules");
     }
 
     @Override
     public @NonNull Boolean isUseCustomPmRules() {
-        return B("$.UseCustomPmRules");
+        return B("UseCustomPmRules");
     }
 
     @Override
@@ -214,121 +218,125 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public @NonNull Boolean isUseSecurityPolicies() {
-        return B("$.UseSecurityPolicies");
+        return B("UseSecurityPolicies");
     }
 
     @Override
     public @NonNull Boolean isDownloadDependencies() {
-        return B("$.DownloadDependencies");
+        return B("DownloadDependencies");
     }
 
     @Override
     public UnifiedAiProjScanSettings setDownloadDependencies(@NonNull Boolean value) {
-        aiprojDocument.put("$", "DownloadDependencies", value);
+        rootNode.put("DownloadDependencies", value);
         return this;
     }
 
     @Override
     public MailingProjectSettings getMailingProjectSettings() {
-        Object mailingProjectSettings = O("$.MailingProjectSettings");
-        if (null == mailingProjectSettings) return null;
+        JsonNode mailingProjectSettings = N("MailingProjectSettings");
+        if (mailingProjectSettings.isMissingNode()) return null;
+
+        List<String> emailRecipients = new ArrayList<>();
+        JsonNode emailRecipientsNode = N(mailingProjectSettings, "EmailRecipients");
+        if (emailRecipientsNode.isArray())
+            for (JsonNode emailNode : emailRecipientsNode) emailRecipients.add(emailNode.asText());
 
         return MailingProjectSettings.builder()
-                .enabled(B(mailingProjectSettings, "$.Enabled"))
-                .mailProfileName(S(mailingProjectSettings, "$.MailProfileName"))
-                .emailRecipients(O(mailingProjectSettings, "$.EmailRecipients"))
+                .enabled(B(mailingProjectSettings, "Enabled"))
+                .mailProfileName(S(mailingProjectSettings, "MailProfileName"))
+                .emailRecipients(emailRecipients)
                 .build();
     }
 
-    private BlackBoxSettings.ProxySettings convertProxySettings(@NonNull final Object proxySettings) {
+    private BlackBoxSettings.ProxySettings convertProxySettings(@NonNull final JsonNode proxySettings) {
         return BlackBoxSettings.ProxySettings.builder()
-                .enabled(B(proxySettings, "$.Enabled"))
-                .type(BLACKBOX_PROXY_TYPE_MAP.get(S(proxySettings, "$.Type")))
-                .host(S(proxySettings, "$.Host"))
-                .port(I(proxySettings, "$.Port"))
-                .login(S(proxySettings, "$.Login"))
-                .password(S(proxySettings, "$.Password"))
+                .enabled(B(proxySettings, "Enabled"))
+                .type(BLACKBOX_PROXY_TYPE_MAP.get(S(proxySettings, "Type")))
+                .host(S(proxySettings, "Host"))
+                .port(I(proxySettings, "Port"))
+                .login(S(proxySettings, "Login"))
+                .password(S(proxySettings, "Password"))
                 .build();
     }
 
-    private BlackBoxSettings.Authentication convertAuthentication(final Object auth) {
+    private BlackBoxSettings.Authentication convertAuthentication(final JsonNode auth) {
         log.trace("Check if AIPROJ authentication field is defined");
         if (null == auth) {
             log.info("Explicitly set authentication type NONE as there's no authentication settings defined");
             return BlackBoxSettings.Authentication.NONE;
         }
         BlackBoxSettings.Authentication.Type authType;
-        authType = BLACKBOX_AUTH_TYPE_MAP.getOrDefault(S(auth, "$.Type"), BlackBoxSettings.Authentication.Type.NONE);
+        authType = BLACKBOX_AUTH_TYPE_MAP.getOrDefault(S(auth, "Type"), BlackBoxSettings.Authentication.Type.NONE);
 
         if (BlackBoxSettings.Authentication.Type.FORM == authType) {
-            Object form = O(auth, "$.Form");
-            if (null == form) {
+            JsonNode form = N(auth, "Form");
+            if (form.isMissingNode()) {
                 log.info("Explicitly set authentication type NONE as there's no form authentication settings defined");
                 return BlackBoxSettings.Authentication.NONE;
             }
-            DetectionType detectionType = BLACKBOX_FORM_AUTH_DETECTION_MAP.getOrDefault(S(form, "$.FormDetection"), DetectionType.AUTO);
+            DetectionType detectionType = BLACKBOX_FORM_AUTH_DETECTION_MAP.getOrDefault(S(form, "FormDetection"), DetectionType.AUTO);
             return BlackBoxSettings.FormAuthentication.builder()
                     .type(authType)
                     .detectionType(detectionType)
-                    .loginKey(S(form, "$.LoginKey"))
-                    .passwordKey(S(form, "$.PasswordKey"))
-                    .login(S(form, "$.Login"))
-                    .password(S(form, "$.Password"))
-                    .formAddress(S(form, "$.FormAddress"))
-                    .xPath(S(form, "$.FormXPath"))
-                    .validationTemplate(S(form, "$.ValidationTemplate"))
+                    .loginKey(S(form, "LoginKey"))
+                    .passwordKey(S(form, "PasswordKey"))
+                    .login(S(form, "Login"))
+                    .password(S(form, "Password"))
+                    .formAddress(S(form, "FormAddress"))
+                    .xPath(S(form, "FormXPath"))
+                    .validationTemplate(S(form, "ValidationTemplate"))
                     .build();
         } else if (BlackBoxSettings.Authentication.Type.HTTP == authType) {
-            Object http = O(auth, "$.Http");
-            if (null == http) {
+            JsonNode http = N(auth, "Http");
+            if (http.isMissingNode()) {
                 log.info("Explicitly set authentication type NONE as there's no HTTP authentication settings defined");
                 return BlackBoxSettings.Authentication.NONE;
             }
             return BlackBoxSettings.HttpAuthentication.builder()
-                    .login(S(http, "$.Login"))
-                    .password(S(http, "$.Password"))
-                    .validationAddress(S(http, "$.ValidationAddress"))
+                    .login(S(http, "Login"))
+                    .password(S(http, "Password"))
+                    .validationAddress(S(http, "ValidationAddress"))
                     .build();
         } else if (BlackBoxSettings.Authentication.Type.COOKIE == authType) {
-            Object cookie = O(auth, "$.Cookie");
-            if (null == cookie) {
+            JsonNode cookie = N(auth, "Cookie");
+            if (cookie.isMissingNode()) {
                 log.info("Explicitly set authentication type NONE as there's no cookie authentication settings defined");
                 return BlackBoxSettings.Authentication.NONE;
             }
             return BlackBoxSettings.CookieAuthentication.builder()
-                    .cookie(S(cookie, "$.Cookie"))
-                    .validationAddress(S(cookie, "$.ValidationAddress"))
-                    .validationTemplate(S(cookie, "$.ValidationTemplate"))
+                    .cookie(S(cookie, "Cookie"))
+                    .validationAddress(S(cookie, "ValidationAddress"))
+                    .validationTemplate(S(cookie, "ValidationTemplate"))
                     .build();
         } else
             return BlackBoxSettings.Authentication.NONE;
     }
 
-    private List<Pair<String, String>> convertHeaders(@NonNull final List<Object> headers) {
+    private List<Pair<String, String>> convertHeaders(@NonNull final JsonNode headers) {
         List<Pair<String, String>> res = new ArrayList<>();
 
-        for (Object headerKeyValue : headers) {
-            String key = S(headerKeyValue, "$.Key");
+        for (JsonNode headerKeyValue : headers) {
+            String key = S(headerKeyValue, "Key");
             if (isEmpty(key)) {
                 log.trace("Skip header with empty name");
                 continue;
             }
-            res.add(new ImmutablePair<>(key, S(headerKeyValue, "$.Value")));
+            res.add(new ImmutablePair<>(key, S(headerKeyValue, "Value")));
         }
         return isEmpty(res) ? null : res;
     }
 
-    private List<BlackBoxSettings.AddressListItem> convertAddresses(@NonNull final List<Object> addresses) {
+    private List<BlackBoxSettings.AddressListItem> convertAddresses(@NonNull final JsonNode addresses) {
         List<BlackBoxSettings.AddressListItem> res = new ArrayList<>();
-
-        for (Object address : addresses) {
-            String stringFormat = S(address, "$.Format");
+        for (JsonNode address : addresses) {
+            String stringFormat = S(address, "Format");
             BlackBoxSettings.AddressListItem.Format format = BLACKBOX_ADDRESS_FORMAT_MAP.get(stringFormat);
             if (null == format) {
                 log.trace("Skip unknown address format {}", stringFormat);
                 continue;
             }
-            res.add(new BlackBoxSettings.AddressListItem(format, S(address, "$.Address")));
+            res.add(new BlackBoxSettings.AddressListItem(format, S(address, "Address")));
         }
         return isEmpty(res) ? null : res;
     }
@@ -336,33 +344,33 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
     @Override
     public BlackBoxSettings getBlackBoxSettings() {
         if (!getScanModules().contains(ScanModule.BLACKBOX)) return null;
-        Object blackBoxSettings = O("$.BlackBoxSettings");
-        if (null == blackBoxSettings) return null;
+        JsonNode blackBoxSettings = N("BlackBoxSettings");
+        if (blackBoxSettings.isMissingNode()) return null;
 
         BlackBoxSettings res = new BlackBoxSettings();
 
-        res.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.getOrDefault(S("$.BlackBoxSettings.Level"), BlackBoxSettings.ScanLevel.NONE));
-        res.setRunAutocheckAfterScan(B(blackBoxSettings, "$.RunAutocheckAfterScan"));
-        res.setSite(S(blackBoxSettings, "$.Site"));
-        res.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.getOrDefault(S("$.BlackBoxSettings.ScanScope"), BlackBoxSettings.ScanScope.PATH));
-        res.setSslCheck(B(blackBoxSettings, "$.SslCheck"));
+        res.setScanLevel(BLACKBOX_SCAN_LEVEL_MAP.getOrDefault(S("BlackBoxSettings.Level"), BlackBoxSettings.ScanLevel.NONE));
+        res.setRunAutocheckAfterScan(B(blackBoxSettings, "RunAutocheckAfterScan"));
+        res.setSite(S(blackBoxSettings, "Site"));
+        res.setScanScope(BLACKBOX_SCAN_SCOPE_MAP.getOrDefault(S("BlackBoxSettings.ScanScope"), BlackBoxSettings.ScanScope.PATH));
+        res.setSslCheck(B(blackBoxSettings, "SslCheck"));
 
-        Object proxySettings = O(blackBoxSettings, "$.ProxySettings");
-        if (null != proxySettings)
+        JsonNode proxySettings = N(blackBoxSettings, "ProxySettings");
+        if (!proxySettings.isMissingNode())
             res.setProxySettings(convertProxySettings(proxySettings));
 
-        List<Object> customHeaders = O(blackBoxSettings, "$.AdditionalHttpHeaders");
-        if (null != customHeaders && 0 != customHeaders.size())
+        JsonNode customHeaders = N(blackBoxSettings, "AdditionalHttpHeaders");
+        if (customHeaders.isArray())
             res.setHttpHeaders(convertHeaders(customHeaders));
 
-        Object authentication = O(blackBoxSettings, "$.Authentication");
+        JsonNode authentication = N(blackBoxSettings, "Authentication");
         res.setAuthentication(convertAuthentication(authentication));
 
-        List<Object> addresses = O(blackBoxSettings, "$.WhiteListedAddresses");
-        if (null != addresses && 0 != addresses.size())
+        JsonNode addresses = N(blackBoxSettings, "WhiteListedAddresses");
+        if (addresses.isArray())
             res.setWhiteListedAddresses(convertAddresses(addresses));
-        addresses = O(blackBoxSettings, "$.BlackListedAddresses");
-        if (null != addresses && 0 != addresses.size())
+        addresses = N(blackBoxSettings, "BlackListedAddresses");
+        if (addresses.isArray())
             res.setBlackListedAddresses(convertAddresses(addresses));
 
         return res;

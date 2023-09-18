@@ -154,13 +154,13 @@ public class Plugin extends Builder implements SimpleBuildStep {
             projectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
             log.trace("UI-defined project name after macro replacement is {}", projectName);
         } else {
-            check = scanSettingsManualDescriptor.doTestJsonSettings(item, jsonSettings);
+            UnifiedAiProjScanSettings.ParseResult parseResult = UnifiedAiProjScanSettings.parse(jsonSettings);
+            if (null != parseResult.getCause())
+                throw new AbortException(parseResult.getError());
+            check = scanSettingsManualDescriptor.doCheckJsonPolicy(jsonPolicy);
             if (FormValidation.Kind.ERROR == check.kind)
                 throw new AbortException(check.getMessage());
-            check = scanSettingsManualDescriptor.doTestJsonPolicy(item, jsonPolicy);
-            if (FormValidation.Kind.ERROR == check.kind)
-                throw new AbortException(check.getMessage());
-            UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(jsonSettings);
+            UnifiedAiProjScanSettings settings = parseResult.getSettings();
             log.trace("JSON-defined project settings before macro replacement is {}", settings.toJson());
             jsonSettings = BaseJsonHelper.replaceMacro(jsonSettings, (s -> Util.replaceMacro(s, buildInfo.getEnvVars())));
             log.trace("JSON-defined project settings after macro replacement is {}", jsonSettings);
