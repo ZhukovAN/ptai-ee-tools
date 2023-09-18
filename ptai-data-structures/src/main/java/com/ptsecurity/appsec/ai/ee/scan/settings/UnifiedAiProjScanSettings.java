@@ -89,55 +89,66 @@ public abstract class UnifiedAiProjScanSettings {
     public static class ParseResult {
         @Setter
         protected UnifiedAiProjScanSettings settings = null;
+
         protected final List<String> errors = new ArrayList<>();
 
         public String getError() {
             return String.join("; ", errors);
         }
+
+        @Setter
+        protected GenericException cause;
     }
 
     @NonNull
-    public static ParseResult parse(@NonNull final String data) throws GenericException {
+    public static ParseResult parse(@NonNull final String data) {
         final ParseResult result = new ParseResult();
-        if (isEmpty(data))
-            throw GenericException.raise(
-                    i18n_ast_settings_type_manual_json_settings_message_empty(),
-                    new IllegalArgumentException());
-        log.trace("Parse AIPROJ as generic JSON data");
-        final JsonNode root = call(
-                () -> createObjectMapper().readTree(data),
-                i18n_ast_settings_type_manual_json_settings_message_invalid());
+        try {
+            if (isEmpty(data))
+                throw GenericException.raise(
+                        i18n_ast_settings_type_manual_json_settings_message_empty(),
+                        new IllegalArgumentException("AIPROJ must not be empty"));
+            log.trace("Parse AIPROJ as generic JSON data");
+            final JsonNode root = call(
+                    () -> createObjectMapper().readTree(data),
+                    i18n_ast_settings_type_manual_json_settings_message_invalid());
 
-        log.trace("Check Version attribute");
-        JsonNode versionNode = root.path("Version");
-        UnifiedAiProjScanSettings settings;
-        if (null == versionNode || versionNode.isMissingNode())
-            settings = (null == root.path("ScanModules") || root.path("ScanModules").isMissingNode())
-                    ? new AiProjLegacyScanSettings(root)
-                    : new AiProjV10ScanSettings(root);
-        else if (_1_1.value().equals(versionNode.textValue()))
-            settings = new AiProjV11ScanSettings(root);
-        else if (_1_0.value().equals(versionNode.textValue()))
-            settings = new AiProjV10ScanSettings(root);
-        else
-            throw GenericException.raise(
-                    i18n_ast_settings_type_manual_json_settings_message_invalid(),
-                    new IllegalArgumentException("Unsupported AIPROJ version: " + versionNode.textValue()));
+            log.trace("Check Version attribute");
+            JsonNode versionNode = root.path("Version");
+            UnifiedAiProjScanSettings settings;
+            if (null == versionNode || versionNode.isMissingNode())
+                settings = (null == root.path("ScanModules") || root.path("ScanModules").isMissingNode())
+                        ? new AiProjLegacyScanSettings(root)
+                        : new AiProjV10ScanSettings(root);
+            else if (_1_1.value().equals(versionNode.textValue()))
+                settings = new AiProjV11ScanSettings(root);
+            else if (_1_0.value().equals(versionNode.textValue()))
+                settings = new AiProjV10ScanSettings(root);
+            else {
+                throw GenericException.raise(
+                        i18n_ast_settings_type_manual_json_settings_message_invalid(),
+                        new IllegalArgumentException("Unsupported AIPROJ version: " + versionNode.textValue()));
+            }
 
-        log.trace("Check AIPROJ for schema compliance");
-        JsonSchemaFactory factory = JsonSchemaFactory
-                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
-                .addMetaSchema(JsonMetaSchema
-                        .builder(JsonMetaSchema.getV4().getUri(), JsonMetaSchema.getV4())
-                        .addKeywords(NON_VALIDATION_KEYS).build()).build();
-        log.trace("Validate JSON for AIPROJ schema compliance");
-        JsonSchema jsonSchema = factory.getSchema(settings.getJsonSchema());
-        Set<ValidationMessage> errors = jsonSchema.validate(root);
-        settings.processErrorMessages(errors);
-        if (isNotEmpty(errors))
-            errors.forEach(e -> result.getErrors().add(e.getMessage()));
-        else {
-            result.setSettings(settings);
+            log.trace("Check AIPROJ for schema compliance");
+            JsonSchemaFactory factory = JsonSchemaFactory
+                    .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V4))
+                    .addMetaSchema(JsonMetaSchema
+                            .builder(JsonMetaSchema.getV4().getUri(), JsonMetaSchema.getV4())
+                            .addKeywords(NON_VALIDATION_KEYS).build()).build();
+            log.trace("Validate JSON for AIPROJ schema compliance");
+            JsonSchema jsonSchema = factory.getSchema(settings.getJsonSchema());
+            Set<ValidationMessage> errors = jsonSchema.validate(root);
+            settings.processErrorMessages(errors);
+            if (isNotEmpty(errors)) {
+                errors.forEach(e -> result.getErrors().add(e.getMessage()));
+                throw GenericException.raise(
+                        i18n_ast_settings_type_manual_json_settings_message_invalid(),
+                        new IllegalArgumentException("AIPROJ schema validation failed"));
+            } else
+                result.setSettings(settings);
+        } catch (GenericException e) {
+            result.setCause(e);
         }
         return result;
     }
@@ -154,8 +165,8 @@ public abstract class UnifiedAiProjScanSettings {
 
     public static UnifiedAiProjScanSettings loadSettings(@NonNull final String data) throws GenericException {
         ParseResult result = parse(data);
-        if (isNotEmpty(result.getErrors()))
-            throw GenericException.raise("Settings parse failed", new IllegalArgumentException(result.getError()));
+        if (null != result.getCause())
+            throw result.getCause();
         return result.getSettings();
     }
 
