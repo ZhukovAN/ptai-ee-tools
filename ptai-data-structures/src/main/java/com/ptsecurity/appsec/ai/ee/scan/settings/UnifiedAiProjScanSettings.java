@@ -17,14 +17,12 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version._1_0;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version._1_1;
-import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.i18n_ast_settings_type_manual_json_settings_message_empty;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.i18n_ast_settings_type_manual_json_settings_message_invalid;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
@@ -87,14 +85,18 @@ public abstract class UnifiedAiProjScanSettings {
     @Getter
     @RequiredArgsConstructor
     public static class ParseResult {
+        @Getter
+        @Setter
+        @Builder
+        public static class Message {
+            public enum Type { INFO, WARNING, ERROR };
+            protected Type type;
+            protected String text;
+        }
         @Setter
         protected UnifiedAiProjScanSettings settings = null;
 
-        protected final List<String> errors = new ArrayList<>();
-
-        public String getError() {
-            return String.join("; ", errors);
-        }
+        protected final List<Message> messages = new ArrayList<>();
 
         @Setter
         protected GenericException cause;
@@ -103,21 +105,31 @@ public abstract class UnifiedAiProjScanSettings {
     @NonNull
     public static ParseResult parse(@NonNull final String data) {
         final ParseResult result = new ParseResult();
-        try {
-            if (isEmpty(data))
-                throw GenericException.raise(
-                        i18n_ast_settings_type_manual_json_settings_message_empty(),
-                        new IllegalArgumentException("AIPROJ must not be empty"));
-            log.trace("Parse AIPROJ as generic JSON data");
-            final JsonNode root = call(
-                    () -> createObjectMapper().readTree(data),
-                    i18n_ast_settings_type_manual_json_settings_message_invalid());
+        //noinspection ConstantConditions
+        do {
+            if (isEmpty(data)) {
+                result.getMessages().add(ParseResult.Message.builder()
+                        .type(ParseResult.Message.Type.ERROR)
+                        .text(i18n_ast_settings_type_manual_json_settings_message_empty())
+                        .build());
+                break;
+            }
+            final JsonNode root;
+            try {
+                log.trace("Try to parse AIPROJ as generic JSON data");
+                root = call(
+                        () -> createObjectMapper().readTree(data),
+                        i18n_ast_settings_type_manual_json_settings_message_invalid());
+            } catch (GenericException e) {
+                result.setCause(e);
+                break;
+            }
 
             log.trace("Check Version attribute");
             JsonNode versionNode = root.path("Version");
             UnifiedAiProjScanSettings settings;
-            if (null == versionNode || versionNode.isMissingNode())
-                settings = (null == root.path("ScanModules") || root.path("ScanModules").isMissingNode())
+            if (versionNode.isMissingNode())
+                settings = (root.path("ScanModules").isMissingNode())
                         ? new AiProjLegacyScanSettings(root)
                         : new AiProjV10ScanSettings(root);
             else if (_1_1.value().equals(versionNode.textValue()))
@@ -125,9 +137,11 @@ public abstract class UnifiedAiProjScanSettings {
             else if (_1_0.value().equals(versionNode.textValue()))
                 settings = new AiProjV10ScanSettings(root);
             else {
-                throw GenericException.raise(
-                        i18n_ast_settings_type_manual_json_settings_message_invalid(),
-                        new IllegalArgumentException("Unsupported AIPROJ version: " + versionNode.textValue()));
+                result.getMessages().add(ParseResult.Message.builder()
+                        .type(ParseResult.Message.Type.ERROR)
+                        .text(i18n_ast_settings_type_manual_json_settings_message_version_unknown())
+                        .build());
+                break;
             }
 
             log.trace("Check AIPROJ for schema compliance");
@@ -139,17 +153,14 @@ public abstract class UnifiedAiProjScanSettings {
             log.trace("Validate JSON for AIPROJ schema compliance");
             JsonSchema jsonSchema = factory.getSchema(settings.getJsonSchema());
             Set<ValidationMessage> errors = jsonSchema.validate(root);
-            settings.processErrorMessages(errors);
-            if (isNotEmpty(errors)) {
-                errors.forEach(e -> result.getErrors().add(e.getMessage()));
-                throw GenericException.raise(
-                        i18n_ast_settings_type_manual_json_settings_message_invalid(),
-                        new IllegalArgumentException("AIPROJ schema validation failed"));
-            } else
-                result.setSettings(settings);
-        } catch (GenericException e) {
-            result.setCause(e);
-        }
+            result.getMessages().addAll(settings.processErrorMessages(errors));
+            if (result.getMessages().stream().noneMatch((m) -> m.getType().equals(ParseResult.Message.Type.ERROR)))
+                result.getMessages().add(ParseResult.Message.builder()
+                        .type(ParseResult.Message.Type.INFO)
+                        .text(i18n_ast_settings_type_manual_json_settings_message_success(settings.getProjectName(), settings.getProgrammingLanguage().getValue()))
+                        .build());
+            result.setSettings(settings);
+        } while (false);
         return result;
     }
 
@@ -161,12 +172,27 @@ public abstract class UnifiedAiProjScanSettings {
      * domain names etc.). This method removes low-severity errors from validation results
      * @param errors List of errors to be processed
      */
-    public void processErrorMessages(Set<ValidationMessage> errors) {}
+    public Set<ParseResult.Message> processErrorMessages(Set<ValidationMessage> errors) {
+        Set<ParseResult.Message> result = new HashSet<>();
+        for (ValidationMessage error : errors)
+            result.add(ParseResult.Message.builder()
+                    .type(ParseResult.Message.Type.ERROR)
+                    .text(error.getMessage())
+                    .build());
+        return result;
+    }
 
+    @Deprecated
     public static UnifiedAiProjScanSettings loadSettings(@NonNull final String data) throws GenericException {
         ParseResult result = parse(data);
         if (null != result.getCause())
             throw result.getCause();
+        List<ParseResult.Message> errors = result.getMessages().stream().filter((m) -> m.getType().equals(ParseResult.Message.Type.ERROR)).collect(Collectors.toList());
+        if (!errors.isEmpty())
+            throw GenericException.raise(
+                    i18n_ast_settings_type_manual_json_settings_message_invalid(),
+                    new IllegalArgumentException()
+            );
         return result.getSettings();
     }
 

@@ -46,6 +46,8 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.*;
 
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ParseResult.Message.Type.ERROR;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ParseResult.Message.Type.WARNING;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 @Slf4j
@@ -154,9 +156,17 @@ public class Plugin extends Builder implements SimpleBuildStep {
             projectName = Util.replaceMacro(projectName, buildInfo.getEnvVars());
             log.trace("UI-defined project name after macro replacement is {}", projectName);
         } else {
+            // TODO: Parse settings after macro replacement
             UnifiedAiProjScanSettings.ParseResult parseResult = UnifiedAiProjScanSettings.parse(jsonSettings);
+            for (UnifiedAiProjScanSettings.ParseResult.Message message : parseResult.getMessages()) {
+                if (message.getType().equals(ERROR))
+                    log.error(message.getText());
+                else if (message.getType().equals(WARNING))
+                    log.warn(message.getText());
+            }
             if (null != parseResult.getCause())
-                throw new AbortException(parseResult.getError());
+                throw new AbortException(parseResult.getCause().getMessage());
+
             check = scanSettingsManualDescriptor.doCheckJsonPolicy(jsonPolicy);
             if (FormValidation.Kind.ERROR == check.kind)
                 throw new AbortException(check.getMessage());
