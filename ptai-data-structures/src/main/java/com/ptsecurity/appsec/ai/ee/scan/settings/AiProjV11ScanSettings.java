@@ -102,12 +102,19 @@ public class AiProjV11ScanSettings extends UnifiedAiProjScanSettings {
     }
 
     @Override
-    public void processErrorMessages(Set<ValidationMessage> errors) {
-        errors.removeIf(e -> {
-            return
-                    e.getCode().equals(FORMAT.getErrorCode()) &&
-                    e.getSchemaPath().equals("#/properties/MailingProjectSettings/properties/EmailRecipients/items");
-        });
+    public Set<ParseResult.Message> processErrorMessages(Set<ValidationMessage> errors) {
+        Set<ParseResult.Message> result = new HashSet<>();
+        for (ValidationMessage error : errors) {
+            ParseResult.Message.Type type = error.getCode().equals(FORMAT.getErrorCode()) &&
+                    error.getSchemaPath().equals("#/properties/MailingProjectSettings/properties/EmailRecipients/items")
+                    ? ParseResult.Message.Type.WARNING
+                    : ParseResult.Message.Type.ERROR;
+            result.add(ParseResult.Message.builder()
+                    .type(type)
+                    .text(error.getMessage())
+                    .build());
+        }
+        return result;
     }
 
     @Override

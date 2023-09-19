@@ -57,6 +57,14 @@ class AiProjLegacyScanSettingsTest extends BaseTest {
 
     @Test
     @SneakyThrows
+    @DisplayName("Check settings.incorrect.aiproj file with not defined fields")
+    public void checkAiProjNotDefinedFields() {
+        String data = getResourceString("json/scan/settings/legacy/settings.incorrect.not-defined-fields.json");
+        Assertions.assertDoesNotThrow(() -> UnifiedAiProjScanSettings.loadSettings(data));
+    }
+
+    @Test
+    @SneakyThrows
     @DisplayName("Fail legacy AIPROJ with none or null SolutionFile field")
     public void checkSolutionFile() {
         final String solutionNull = getResourceString("json/scan/settings/legacy/settings.csharp.solution.null.json");
