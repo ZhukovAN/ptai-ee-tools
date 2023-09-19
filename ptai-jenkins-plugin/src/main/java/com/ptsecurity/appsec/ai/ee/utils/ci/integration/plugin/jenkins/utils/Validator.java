@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ParseResult.Message.Type.ERROR;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.Version.V11;
 
 @Slf4j
@@ -94,28 +95,35 @@ public class Validator {
     }
 
     public static FormValidation doCheckFieldJsonSettings(String value) {
-        if (!doCheckFieldNotEmpty(value))
-            return FormValidation.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty());
-        UnifiedAiProjScanSettings.ParseResult parseResult = UnifiedAiProjScanSettings.parse(value);
-        if (null == parseResult.getCause()) {
-            FormValidation ok = FormValidation.ok(
-                    Resources.i18n_ast_settings_type_manual_json_settings_message_success(
-                            parseResult.getSettings().getProjectName(),
-                            parseResult.getSettings().getProgrammingLanguage().getValue()));
-            if (V11 == parseResult.getSettings().getVersion())
-                return ok;
-            else
-                return FormValidation.warning(Resources.i18n_ast_settings_type_manual_json_settings_message_deprecated());
-        } else {
-            if (parseResult.getErrors().isEmpty())
-                return FormValidation.error(parseResult.getCause(), Resources.i18n_ast_settings_type_manual_json_settings_message_invalid());
-            else {
-                Collection<FormValidation> errors = new ArrayList<>();
-                for (String error : parseResult.getErrors())
-                    errors.add(FormValidation.error(error));
-                return FormValidation.aggregate(errors);
+        Collection<FormValidation> messages = new ArrayList<>();
+        do {
+            if (!doCheckFieldNotEmpty(value)) {
+                messages.add(FormValidation.error(Resources.i18n_ast_settings_type_manual_json_settings_message_empty()));
+                break;
             }
-        }
+
+            UnifiedAiProjScanSettings.ParseResult parseResult = UnifiedAiProjScanSettings.parse(value);
+            if (!parseResult.getMessages().isEmpty()) {
+                log.trace("There are messages generated during parse");
+                for (UnifiedAiProjScanSettings.ParseResult.Message message : parseResult.getMessages())
+                    messages.add(message.getType().equals(ERROR)
+                            ? FormValidation.error(message.getText())
+                            : FormValidation.warning(message.getText()));
+            }
+            if (null == parseResult.getCause()) {
+                if (V11 == parseResult.getSettings().getVersion())
+                    messages.add(FormValidation.ok(
+                            Resources.i18n_ast_settings_type_manual_json_settings_message_success(
+                                    parseResult.getSettings().getProjectName(),
+                                    parseResult.getSettings().getProgrammingLanguage().getValue())));
+                else
+                    messages.add(FormValidation.warning(Resources.i18n_ast_settings_type_manual_json_settings_message_deprecated()));
+            } else
+                messages.add(FormValidation.error(
+                        parseResult.getCause(),
+                        Resources.i18n_ast_settings_type_manual_json_settings_message_invalid()));
+        } while (false);
+        return FormValidation.aggregate(messages);
     }
 
     public static FormValidation doCheckFieldJsonIssuesFilter(String value, String errorMessage) {
