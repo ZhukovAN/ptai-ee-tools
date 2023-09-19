@@ -350,6 +350,7 @@
       "type": "boolean"
     }
   },
+  "required": ["ProjectName", "ProgrammingLanguage", "ScanModules"],
   "title": "aiproj",
   "type": "object"
 }
