@@ -1,0 +1,1413 @@
+openapi: 3.0.1
+info:
+  title: Notifications
+  description: This section contains messages transmitted between the notification service and client. You can view the message format in a list or in a YAML file. Instructions for integrating clients with the notification service are provided in the Administrator Guide. Warning. Clients are not included in the PT AI distribution kit. They are not automatically generated.
+  version: notifications
+paths: { }
+components:
+  schemas:
+    AuthProviderChanged:
+      type: object
+      properties:
+        providerId:
+          type: string
+          format: uuid
+        isDisabled:
+          type: boolean
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    AuthProviderDeleted:
+      type: object
+      properties:
+        providerId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    FinishChangingIssuesStates:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    GlobalMembersChangePermission:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        action:
+          $ref: '#/components/schemas/PermissionAction'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    IncrementalScanCheck:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        previousScanResultId:
+          type: string
+          format: uuid
+        isCheckSuccess:
+          type: boolean
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    IssueDescription:
+      type: object
+      properties:
+        issueDescription:
+          $ref: '#/components/schemas/IssueDescriptionBase'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    IssueMetadata:
+      type: object
+      properties:
+        issueMetadata:
+          $ref: '#/components/schemas/IssueBaseMetadata'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    IssuesUpdated:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssueUpdatedInfoModel'
+          nullable: true
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    IssueTrackerConnectionAdded:
+      type: object
+      properties:
+        connectionId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    IssueTrackerConnectionChanged:
+      type: object
+      properties:
+        connectionId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    IssueTrackerConnectionDeleted:
+      type: object
+      properties:
+        connectionId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    IssueTrackerIntegrationChanged:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        settingsId:
+          type: string
+          format: uuid
+        settingsHashcode:
+          type: integer
+          format: int32
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    LicenseChanged:
+      type: object
+      properties:
+        licenseData:
+          $ref: '#/components/schemas/EnterpriseLicenseModel'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    LicenseWillExpire:
+      type: object
+      properties:
+        licenseData:
+          $ref: '#/components/schemas/EnterpriseLicenseModel'
+        level:
+          $ref: '#/components/schemas/LicenseExpirationLevel'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    LogSettingsChanged:
+      type: object
+      properties:
+        settings:
+          $ref: '#/components/schemas/LogSettingsModel'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    PermissionsSettingsChanged:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        permissionsHashcode:
+          type: integer
+          format: int32
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    PoliciesRulesChanged:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        rulesHashcode:
+          type: integer
+          format: int32
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectCreated:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        userCreator:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectDeleted:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectHistoryChanged:
+      type: object
+      properties:
+        changeHistoryIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          nullable: true
+        projectId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectMembersChangePermission:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        userActions:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserPermissionActionModel'
+          nullable: true
+          readOnly: true
+        permissionType:
+          $ref: '#/components/schemas/PermissionType'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectNameUpdated:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectSettingsChanged:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        settingsId:
+          type: string
+          format: uuid
+        settingsHashcode:
+          type: integer
+          format: int32
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectSourceDeleted:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectSourceError:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        error:
+          $ref: '#/components/schemas/ApiErrorModel'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectSourceUpdated:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        updater:
+          $ref: '#/components/schemas/UpdaterInfoModel'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectSourceUpdating:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        progress:
+          $ref: '#/components/schemas/ProgressModel'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectUpdated:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ProjectViewChangePermission:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        projectIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          nullable: true
+        action:
+          $ref: '#/components/schemas/PermissionAction'
+        permissionType:
+          $ref: '#/components/schemas/PermissionType'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ReportGenerateError:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        errorMessage:
+          type: string
+          nullable: true
+          readOnly: true
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ReportGenerateFinished:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ReportGenerateProgress:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        progressMessage:
+          type: string
+          nullable: true
+          readOnly: true
+        progressValue:
+          type: number
+          format: float
+          readOnly: true
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    SastRulesChanged:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ScanAppType'
+        rulesHashcode:
+          type: integer
+          format: int32
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanAgentDeleted:
+      type: object
+      properties:
+        scanAgentId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanAgentLimitExceeded:
+      type: object
+      properties:
+        scanAgentName:
+          type: string
+          nullable: true
+        limit:
+          type: integer
+          format: int32
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanAgentRegistered:
+      type: object
+      properties:
+        scanAgentId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanAgentStatusChanged:
+      type: object
+      properties:
+        scanAgentId:
+          type: string
+          format: uuid
+        statusType:
+          $ref: '#/components/schemas/ScanAgentStatusType'
+        progress:
+          $ref: '#/components/schemas/ScanProgressModel'
+        projectName:
+          type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanAgentStopped:
+      type: object
+      properties:
+        scanResultId:
+          type: string
+          format: uuid
+          readOnly: true
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanCompleted:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        stage:
+          $ref: '#/components/schemas/Stage'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanDelta:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        statistic:
+          $ref: '#/components/schemas/ScanStatisticModel'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanDequeued:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanEnqueued:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanProgress:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        progress:
+          $ref: '#/components/schemas/ScanProgressModel'
+        statistic:
+          $ref: '#/components/schemas/ScanStatisticModel'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanResultRemoved:
+      type: object
+      properties:
+        scanResultId:
+          type: string
+          format: uuid
+        projectId:
+          type: string
+          format: uuid
+        deleteGroup:
+          type: boolean
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ScanStarted:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ServerCertChanged:
+      type: object
+      properties:
+        certificateInfo:
+          $ref: '#/components/schemas/CertificateInfoModel'
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ServerCertWillExpired:
+      type: object
+      properties:
+        friendlyName:
+          type: string
+          nullable: true
+        thumbprint:
+          type: string
+          nullable: true
+        expiredDate:
+          type: string
+          format: date-time
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    StartChangingIssuesStates:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    TestMailSendingResult:
+      type: object
+      properties:
+        testMailId:
+          type: string
+          format: uuid
+        initiatorId:
+          type: string
+          format: uuid
+        success:
+          type: boolean
+        errorMessage:
+          type: string
+          nullable: true
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    TicketLinkedToIssue:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        issueId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    TicketUnlinkedFromIssue:
+      type: object
+      properties:
+        projectId:
+          type: string
+          format: uuid
+        scanResultId:
+          type: string
+          format: uuid
+        issueId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    UserBlocked:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    UserCreated:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    UserDeleted:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    UserUnblocked:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+      additionalProperties: false
+      description: notification message
+    ApiErrorModel:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ApiErrorType'
+        details:
+          type: object
+          additionalProperties:
+            type: string
+            nullable: true
+          nullable: true
+      additionalProperties: false
+    ApiErrorType:
+      enum:
+        - None
+        - INCORRECT_USER_AND_PASSWORD
+        - USER_ID_IS_EMPTY
+        - MEMBER_ALREADY_EXISTS
+        - MEMBER_NOT_EXISTS
+        - PROJECT_ROLE_PERMISSIONS_ALREADY_EXISTS
+        - ACCESS_TOKEN_IS_INCORRECT
+        - ACCESS_TOKEN_ID_IS_INCORRECT
+        - ACCESS_TOKEN_WITH_SAME_NAME_ALREADY_EXISTS
+        - PASSWORD_IS_INCORRECT
+        - USER_IS_INCORRECT
+        - INITIATOR_NOT_FOUND
+        - CREDENTIAL_STORE_IS_UNVAILABLE_OR_TAINTED
+        - USER_BLOCKED
+        - CANNOT_ASSIGN_PROJECT_ROLE_TO_ADMINISTRATOR
+        - EXT_AUTH_PROVIDERS_GET_ERROR
+        - EXT_AUTH_PROVIDERS_BY_SAME_SCHEME_LIMIT_ERROR
+        - EXT_AUTH_PROVIDERS_AT_LEAST_ONE_ENABLED_LIMIT_ERROR
+        - EXT_AUTH_PROVIDER_GET_NOT_FOUND
+        - EXT_AUTH_PROVIDER_GET_ERROR
+        - EXT_AUTH_PROVIDER_UPDATE_ERROR
+        - EXT_AUTH_PROVIDER_DELETE_ERROR
+        - EXT_AUTH_PROVIDER_IS_INCORRECT
+        - EXT_AUTH_PROVIDER_WITH_SAME_NAME_ALREADY_EXISTS
+        - EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_IS_EMPTY
+        - EXT_AUTH_SETTINGS_SAML2_NAMEID_POLICY_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_EMPTY
+        - EXT_AUTH_SETTINGS_TEST_CONNECTION_FAILED
+        - EXT_AUTH_ROLE_MAPPINGS_EMPTY_FIELDS
+        - EXT_AUTH_ROLE_MAPPINGS_NO_GLOBAL_ROLES
+        - EXT_AUTH_SIGNIN_ERROR
+        - EXT_AUTH_SIGNIN_CALLBACK_ERROR
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_EMPTY
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_EMPTY_OR_DISABLED
+        - EXT_AUTH_SIGNIN_SCOPE_TYPE_IS_INCORRECT
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_NOT_AUTHENTICATED
+        - EXT_AUTH_SIGNIN_INVALID_CREDENTIALS
+        - EXT_AUTH_SIGNIN_INVALID_SESSION_ID
+        - EXT_AUTH_SIGNIN_SCHEME_IS_INCORRECT
+        - EXT_AUTH_SIGNIN_OPENID_INVALID_CONFIGURATION
+        - EXT_AUTH_SIGNIN_OPENID_TOKEN_EXPIRED
+        - EXT_AUTH_SIGNIN_OPENID_INCONSISTENT_RESPONSE_MODE_AND_TYPE
+        - EXT_AUTH_SIGNIN_OPENID_INVALID_CLIENT_SECRET
+        - EXT_AUTH_SIGNIN_SAML2_SETTINGS_IS_EMPTY
+        - EXT_AUTH_SIGNIN_SAML2_RESPONSE_STATUS_ERROR
+        - EXT_AUTH_SIGNIN_SAML2_INVALID_SIGNATURE
+        - EXT_AUTH_SIGNIN_LDAP_SSL_REQUIRED
+        - EXT_AUTH_SIGNIN_LDAP_SETTINGS_IS_EMPTY
+        - EXT_AUTH_SIGN_OUT_ERROR
+        - EXT_AUTH_SIGN_OUT_PROVIDER_IS_EMPTY
+        - EXT_AUTH_SIGN_OUT_TOKEN_NOT_FOUND
+        - EXT_AUTH_SIGN_OUT_SCHEME_IS_INCORRECT
+        - EXT_AUTH_SIGN_OUT_OPENID_ERROR
+        - EXT_AUTH_SIGN_OUT_SAML2_ERROR
+        - EXT_AUTH_SIGN_OUT_SAML2_EMPTY_LOGOUT_URL_ERROR
+        - EXT_AUTH_SESSION_GET_ERROR
+        - EXT_AUTH_SESSION_CLAIMS_NOT_DEFINED
+        - EXT_AUTH_SESSION_NOT_FOUND
+        - EXT_AUTH_SESSION_EXPIRED
+        - EXT_AUTH_SESSION_PROVIDER_NOT_FOUND
+        - EXT_AUTH_SESSION_USER_NOT_EQUAL
+        - EXT_AUTH_METADATA_SAML2_ERROR
+        - EXT_AUTH_USER_PROVISION_ERROR
+        - EXT_AUTH_USER_PROVISION_USER_IS_NOT_DEFINED
+        - EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_NOT_MAPPED
+        - EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_TOO_LONG
+        - EXT_AUTH_USER_PROVISION_NAME_FIELD_IS_NOT_MAPPED
+        - UPDATE_PACKAGE_VERSION_IS_ALREADY_UPLOADED
+        - UPDATE_PACKAGE_UPLOADED_IS_ALREADY_STARTED
+        - UPDATE_PACKAGE_UNKNOWN_PRODUCT
+        - UPDATE_PACKAGE_VERSION_IS_NOT_UPLOADED
+        - UPDATE_SERVER_PROCESS_RUN_TIMEOUT
+        - UPDATE_SERVER_PARAMETERS_INVALID
+        - UPDATE_SERVER_INSTALLER_EXIT_WITH_ERROR
+        - UPDATE_SERVER_PACKAGE_IS_INCORRECT
+        - UPDATE_SERVER_NOT_ENOUGH_SPACE
+        - VERSION_MISMATCH
+        - CERTIFICATE_FILE_IS_EMPTY
+        - CERTIFICATE_IS_ALREADY_INSTALLED
+        - CERTIFICATE_IS_NOT_VALID
+        - URI_IS_NOT_VALID
+        - PORT_IS_NOT_SPECIFIED
+        - INCORRECT_DATE_VALUE
+        - LOGS_NOT_FOUND
+        - PROJECT_WITH_SAME_NAME_ALREADY_EXISTS
+        - UNEXPECTED_SCAN_STAGE
+        - PROJECT_NOT_FOUND
+        - UPLOAD_NOT_FOUND
+        - SCANRESULT_NOT_FOUND
+        - INVALID_JSON_FIELDS
+        - INVALID_BLACKBOX_SETTINGS
+        - INVALID_LOCALE_ID
+        - INCORRECT_SAST_RULES
+        - INCORRECT_PM_RULE
+        - UNEXPECTED_LANGUAGE
+        - MAIL_PROFILE_NOT_FOUND
+        - UPDATER_NOT_SET
+        - ISSUE_NOT_FOUND
+        - SCANSETTINGS_NOT_FOUND
+        - INVALID_QUERY_PARAMETER
+        - INVALID_PM_RULE
+        - PM_RULE_NOT_FOUND
+        - ENTITY_NOT_FOUND
+        - ROW_NOT_FOUND
+        - ISSUE_TRACKER_CONNECTION_NOT_FOUND
+        - ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET
+        - ISSUE_TRACKER_SETTINGS_ID_NOT_SET
+        - ISSUE_TRACKER_CREDENTIALS_NOT_SET
+        - ISSUE_TRACKER_HOST_IS_INCORRECT
+        - ISSUE_TRACKER_OAUTH_DATA_NOT_SET
+        - ISSUE_TRACKER_TRACKER_NOT_FOUND
+        - ISSUE_TRACKER_TRACKER_NOT_FOUND_WITH_OAUTH
+        - ISSUE_TRACKER_INVALID_TICKET_LINK
+        - ISSUE_TRACKER_UNSUPPORTED_FIELDS_COFIGURATION
+        - ISSUE_TRACKER_TICKET_CREATION_FAILED
+        - ISSUE_TRACKER_PRIORITIES_GETTING_FAILED
+        - ISSUE_TRACKER_USERS_GETTING_FAILED
+        - ISSUE_TRACKER_STATUSES_GETTING_FAILED
+        - ISSUE_TRACKER_FIELDS_GETTING_FAILED
+        - ISSUE_TRACKER_OPTIONS_GETTING_FAILED
+        - ISSUE_TRACKER_EXISTING_TICKETS_GETTING_FAILED
+        - ISSUE_TRACKER_COMPONENTS_GETTING_FAILED
+        - ISSUE_TRACKER_CAPTCHA_CHALLENGE
+        - ISSUE_TRACKER_AUTHENTICATION_DENIED_DETAILED
+        - ISSUE_TRACKER_AUTHENTICATION_DENIED
+        - ISSUE_TRACKER_AUTHENTICATION_FAILED
+        - ISSUE_TRACKER_OAUTH_SETTINGS_INVALID
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_GETTING_ACCESS_TOKEN_FAILED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_INVALID_ACCESS_TOKEN_RETURNED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_GETTING_REQUEST_TOKEN_FAILED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_INVALID_REQUEST_TOKEN_RETURNED
+        - FS_SOURCE_IS_BUSY
+        - DIRECTORY_NOT_FOUND
+        - INVALID_ARCHIVE_DATA
+        - ISSUE_ATTACH_TICKET_LINK_FAILED
+        - COMMENT_POLICY_FAILED_COMMENT_IS_EMPTY
+        - PROJECTS_COUNT_LIMITED_BY_LICENSE
+        - LICENSE_FILE_IS_INVALID
+        - LICENSE_EXPIRED
+        - LICENSE_FINGERPRINT_ERROR
+        - LICENSE_WITHOUT_FINGERPRINT
+        - LANGUAGE_NOT_ALLOWED_BY_LICENCE
+        - LICENSED_AGENTS_LIMIT_EXCEED
+        - COULD_NOT_STORE_LICENSE
+        - LICENSE_SERVICE_NOT_AVAILABLE
+        - LICENSE_UNLICENSED_USAGE
+        - LICENSE_VARIANT_NOT_SUPPORTED
+        - NON_VCS_PROJECT
+        - UNKNOWN_SOURCE_VERSION_CONTROL_SYSTEM
+        - SOURCE_VERSION_CONTROL_SYSTEM_ERROR
+        - INVALID_VERSION_CONTROL_SYSTEM_SETTINGS
+        - OPERATION_NOT_EXISTS
+        - SCAN_AGENT_NOT_FOUND
+        - SCAN_ALREADY_SCHEDULED
+        - INCORRECT_AGENT_STATUS
+        - SCAN_AGENT_WAS_SUSPENDED
+        - SCAN_AGENT_IS_SCANNING
+        - SCAN_NOT_FOUND
+        - ACTIVE_SCAN_AGENTS_NOT_FOUND
+        - NO_ACTIVE_SCAN_AGENT_THAT_SUPPORTS_LANGUAGE
+        - SCAN_AGENT_IS_ACTIVE
+        - SCHEDULING_IS_LOCKED
+        - SCAN_AGENT_NUMBER_EXCEED
+        - NO_SCAN_MODULES
+        - ONLY_BLACKBOX_IS_NOT_ALLOWED
+        - INCORRECT_AGENT_OS_TAG
+        - SERVER_CERTIFICATE_NOT_FOUND
+        - FILESYSTEM_ERROR_ACCESS_DENIED
+        - VAULT_CREDENTIALS_NOT_FOUND
+        - REPORT_TEMPLATE_NOT_FOUND
+        - REPORT_GENERATE_FAILED
+        - REPORT_TEMPLATE_INVALID
+        - REPORT_TEMPLATE_UNKNOWN_FORMAT
+        - REPORT_INCORRECT_PARAMETERS
+        - REPORT_TEMPLATE_WITH_SAME_NAME_ALREADY_EXISTS
+        - REPORT_TEMPLATE_FILE_NAME_INCORRECT_MACROS
+        - REPORT_TEMPLATE_INVALID_FILE_NAME
+        - INVALID_VERSION_CONTROL_SYSTEM_CONNECTION_SETTINGS
+        - COULD_NOT_STORE_PROJECT
+        - COULD_NOT_STORE_SCAN_SETTINGS
+        - FILES_FOR_DOWNLOAD_NOT_FOUND
+        - PROJECTS_FILES_NOT_FOUND
+        - INVALID_UPLOAD_PATH
+        - INVALID_PATH_PARAMETER
+        - TOO_MANY_FILES
+        - COULD_NOT_CHECKOUT_PROJECT
+        - COULD_NOT_UPDATE_PROJECT_SOURCES_FROM_SOURCE_CONTROL
+        - USER_ID_IS_INCORRECT
+      type: string
+    CertificateInfoModel:
+      type: object
+      properties:
+        thumbprint:
+          type: string
+          nullable: true
+        friendlyName:
+          type: string
+          nullable: true
+        subjectName:
+          type: string
+          nullable: true
+        dateStart:
+          type: string
+          format: date-time
+        dateEnd:
+          type: string
+          format: date-time
+        daysBeforeExpiry:
+          type: integer
+          format: int32
+          nullable: true
+        issuer:
+          type: string
+          nullable: true
+      additionalProperties: false
+    ElasticSearchTargetModel:
+      type: object
+      properties:
+        host:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+        isEnabled:
+          type: boolean
+        isStructured:
+          type: boolean
+        logLevel:
+          $ref: '#/components/schemas/LogLevel'
+      additionalProperties: false
+    EnterpriseLicenseModel:
+      type: object
+      properties:
+        licenseNumber:
+          type: integer
+          format: int32
+        key:
+          type: string
+          nullable: true
+        client:
+          type: string
+          nullable: true
+        currentDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        limitProjects:
+          type: integer
+          format: int32
+        maxAgents:
+          type: integer
+          format: int32
+        languages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProgrammingLanguageGroup'
+          nullable: true
+        isValid:
+          type: boolean
+        perpetual:
+          type: boolean
+        apiVersion:
+          type: integer
+          format: int32
+        variant:
+          $ref: '#/components/schemas/LicenseVariant'
+      additionalProperties: false
+    ExternalLoggingSettingsModel:
+      type: object
+      properties:
+        splunk:
+          $ref: '#/components/schemas/SplunkTargetModel'
+        elasticSearch:
+          $ref: '#/components/schemas/ElasticSearchTargetModel'
+      additionalProperties: false
+    IssueApprovalState:
+      enum:
+        - None
+        - Approval
+        - Discard
+        - NotExist
+        - AutoApproval
+      type: string
+    IssueBaseMetadata:
+      type: object
+      properties:
+        key:
+          type: string
+          nullable: true
+          readOnly: true
+        issueType:
+          $ref: '#/components/schemas/IssueType'
+        level:
+          $ref: '#/components/schemas/IssueLevel'
+      additionalProperties: false
+    IssueDescriptionBase:
+      type: object
+      properties:
+        key:
+          type: string
+          nullable: true
+          readOnly: true
+        issueType:
+          $ref: '#/components/schemas/IssueType'
+      additionalProperties: false
+    IssueLevel:
+      enum:
+        - None
+        - Potential
+        - Low
+        - Medium
+        - High
+      type: string
+    IssueType:
+      enum:
+        - Unknown
+        - Vulnerability
+        - Weakness
+        - Configuration
+        - Fingerprint
+        - BlackBox
+        - YaraMatch
+      type: string
+    IssueUpdatedInfoModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        isFavorite:
+          type: boolean
+        approvalState:
+          $ref: '#/components/schemas/IssueApprovalState'
+        exploitUrl:
+          type: string
+          nullable: true
+        exploit:
+          type: string
+          nullable: true
+        hash:
+          type: string
+          nullable: true
+      additionalProperties: false
+    LicenseExpirationLevel:
+      enum:
+        - Information
+        - Warning
+        - Error
+      type: string
+    LicenseVariant:
+      enum:
+        - Enterprise
+        - Desktop
+        - PCode
+      type: string
+    LogLevel:
+      enum:
+        - Undefined
+        - Trace
+        - Debug
+        - Info
+        - Warn
+        - Error
+        - Fatal
+      type: string
+    LogSettingsModel:
+      type: object
+      properties:
+        fileLoggingLevel:
+          $ref: '#/components/schemas/LogLevel'
+        externalLoggingSettings:
+          $ref: '#/components/schemas/ExternalLoggingSettingsModel'
+      additionalProperties: false
+    PermissionAction:
+      enum:
+        - Add
+        - Remove
+        - Update
+      type: string
+    PermissionType:
+      enum:
+        - None
+        - ManageIssueTrackerTicket
+        - ManagePermissions
+        - ViewProject
+        - CreateProject
+        - DeleteProject
+        - ChangeIssueStatus
+        - ManageScan
+        - ManageGlobalParams
+        - DeleteScanResult
+        - UpdateProject
+        - ManageUpdate
+        - ManageIssueTracker
+        - DiscardIssueWithoutComment
+        - ApproveIssueWithoutComment
+        - ManageIssueTrackerIntegration
+        - ManageLicense
+        - DeleteIssueTrackerTicket
+        - WorkWithScanScheduler
+        - ReadGlobalParams
+      type: string
+    PolicyState:
+      enum:
+        - None
+        - Rejected
+        - Confirmed
+      type: string
+    ProgrammingLanguageGroup:
+      enum:
+        - None
+        - Java
+        - CSharp
+        - VB
+        - Php
+        - JavaScript
+        - Python
+        - ObjectiveC
+        - Swift
+        - CAndCPlusPlus
+        - Go
+        - Kotlin
+        - Sql
+      type: string
+    ProgressModel:
+      type: object
+      properties:
+        stage:
+          type: string
+          nullable: true
+        subStage:
+          type: string
+          nullable: true
+        value:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ScanAgentStatusType:
+      enum:
+        - Pending
+        - Scan
+        - Suspend
+        - Inactive
+        - Update
+        - Stopping
+      type: string
+    ScanAppType:
+      enum:
+        - None
+        - Binary
+        - Configuration
+        - Fingerprint
+        - Java
+        - CSharp
+        - PHP
+        - PmTaint
+        - BlackBox
+        - JavaScript
+        - DependencyCheck
+        - Python
+      type: string
+    ScanProgressModel:
+      type: object
+      properties:
+        stage:
+          $ref: '#/components/schemas/Stage'
+        subStage:
+          type: string
+          nullable: true
+        value:
+          type: integer
+          format: int32
+      additionalProperties: false
+    ScanStatisticModel:
+      type: object
+      properties:
+        high:
+          type: integer
+          format: int32
+        medium:
+          type: integer
+          format: int32
+        low:
+          type: integer
+          format: int32
+        potential:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        filesTotal:
+          type: integer
+          format: int32
+        filesScanned:
+          type: integer
+          format: int32
+        urlsScanned:
+          type: integer
+          format: int32
+        urlsTotal:
+          type: integer
+          format: int32
+        scanDuration:
+          type: string
+          format: date-span
+        policyState:
+          $ref: '#/components/schemas/PolicyState'
+      additionalProperties: false
+    SplunkTargetModel:
+      type: object
+      properties:
+        host:
+          type: string
+          nullable: true
+        port:
+          type: integer
+          format: int32
+        isEnabled:
+          type: boolean
+        isStructured:
+          type: boolean
+        logLevel:
+          $ref: '#/components/schemas/LogLevel'
+      additionalProperties: false
+    Stage:
+      enum:
+        - Unknown
+        - VFSSetup
+        - Initialize
+        - Precheck
+        - Scan
+        - Finalize
+        - Done
+        - Failed
+        - Aborted
+        - Enqueued
+        - Autocheck
+      type: string
+    UpdaterInfoModel:
+      type: object
+      properties:
+        tokenName:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        userName:
+          type: string
+          nullable: true
+      additionalProperties: false
+    UserPermissionActionModel:
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        action:
+          $ref: '#/components/schemas/PermissionAction'
+      additionalProperties: false
