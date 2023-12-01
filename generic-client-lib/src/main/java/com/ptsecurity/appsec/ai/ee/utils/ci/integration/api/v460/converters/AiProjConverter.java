@@ -85,6 +85,7 @@ public class AiProjConverter {
 
         JAVA_VERSION_MAP.put(JavaSettings.JavaVersion.v1_8, JavaVersions.v1_8);
         JAVA_VERSION_MAP.put(JavaSettings.JavaVersion.v1_11, JavaVersions.v1_11);
+        JAVA_VERSION_MAP.put(JavaSettings.JavaVersion.v1_17, JavaVersions.v1_17);
 
     }
 

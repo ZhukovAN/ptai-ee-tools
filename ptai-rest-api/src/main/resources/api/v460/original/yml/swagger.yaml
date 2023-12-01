@@ -4846,7 +4846,7 @@ paths:
     get:
       tags:
         - ScanAgent
-      summary: Get all scan agents
+      summary: Get scan agent by id
       parameters:
         - name: scanAgentId
           in: path
@@ -7937,6 +7937,7 @@ components:
       enum:
         - v1_8
         - v1_11
+        - v1_17
       type: string
     JiraTicketLinkModel:
       type: object

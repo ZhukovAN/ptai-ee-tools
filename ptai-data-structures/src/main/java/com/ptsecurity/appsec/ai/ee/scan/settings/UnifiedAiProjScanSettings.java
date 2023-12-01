@@ -313,7 +313,7 @@ public abstract class UnifiedAiProjScanSettings {
         protected Boolean unpackUserPackages = false;
         protected String userPackagePrefixes;
         public enum JavaVersion {
-            v1_8, v1_11
+            v1_8, v1_11, v1_17
         }
         protected UnifiedAiProjScanSettings.JavaSettings.JavaVersion javaVersion;
     }
