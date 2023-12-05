@@ -99,6 +99,8 @@ dependencies {
     // implementation platform('io.jenkins.tools.bom:bom-2.387.x:2543.vfb_1a_5fb_9496d')
     // https://mvnrepository.com/artifact/io.jenkins.tools.bom/bom-2.361.x
     // implementation platform('io.jenkins.tools.bom:bom-2.361.x:2120.v89a_c54a_1e4f9')
+    // https://mvnrepository.com/artifact/io.jenkins.tools.bom/bom-2.289.x
+    // implementation platform('io.jenkins.tools.bom:bom-2.289.x:1500.ve4d05cd32975')
 
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/token-macro
     implementation "org.jenkins-ci.plugins:token-macro"
@@ -114,7 +116,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-api
     jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-api"
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-step-api
-    // jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-step-api"
+    jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-step-api"
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/scm-api
     // jenkinsServer "org.jenkins-ci.plugins:scm-api"
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/trilead-api
@@ -124,7 +126,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/matrix-project
     // jenkinsServer "org.jenkins-ci.plugins:matrix-project"
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
-    // jenkinsServer "org.jenkins-ci.plugins:git"
+    jenkinsServer "org.jenkins-ci.plugins:git"
 
     // jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.6"
 

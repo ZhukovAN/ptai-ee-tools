@@ -135,7 +135,9 @@ l.layout(title: Resources.i18n_ast_result_label()) {
 
         def scanSettings = [:]
         scanSettings[Resources.i18n_ast_settings_base_projectname_label()] = "${scanBriefDetailed.projectName}"
-        scanSettings[Resources.i18n_ast_settings_base_url_label()] = "${scanBriefDetailed.scanSettings.url}"
+        def url = scanBriefDetailed.scanSettings.url;
+        if (null == url) url = Resources.i18n_misc_strings_empty();
+        scanSettings[Resources.i18n_ast_settings_base_url_label()] = url
         scanSettings[Resources.i18n_ast_settings_base_programminglanguage_label()] = "${scanBriefDetailed.scanSettings.language}"
         scanSettings[Resources.i18n_ast_settings_mode_label()] = scanBriefDetailed.getUseAsyncScan()
                 ? Resources.i18n_ast_settings_mode_asynchronous_label()
