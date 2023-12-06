@@ -27,7 +27,7 @@ jenkinsPlugin {
     url = 'https://www.ptsecurity.com/ww-en/products/ai/'
 
     // plugin URL on GitHub, optional
-    gitHubUrl = 'https://github.com/PositiveTechnologies/ptaiPlugins'
+    gitHubUrl = 'https://github.com/POSIdev-community/ptai-ee-tools.git'
 
     // use the plugin class loader before the core class loader, defaults to false
     // pluginFirstClassLoader = true
@@ -88,15 +88,31 @@ configurations {
     webjars
 }
 
+// Retuns -1 if version a is before b, 0 if those are equal and 1 if a is after b
+def compareVersion(a, b) {
+    List versionA = a.tokenize('.')
+    List versionB = b.tokenize('.')
+
+    def commonIndices = Math.min(versionA.size(), versionB.size())
+    for (int i = 0; i < commonIndices; ++i) {
+        def numberA = versionA[i].toInteger()
+        def numberB = versionB[i].toInteger()
+        if (numberA != numberB)
+            return numberA <=> numberB
+    }
+    // If we got this far then all the common indices are identical, so whichever version is longer must be more recent
+    return versionA.size() <=> versionB.size()
+}
+
 dependencies {
     api project(':generic-client-lib')
     api project(':ptai-report-tools')
     testImplementation(testFixtures(project(':generic-client-lib')))
 
     // https://mvnrepository.com/artifact/io.jenkins.tools.bom/bom-2.426.x
-    implementation platform('io.jenkins.tools.bom:bom-2.426.x:2582.v830625dd636c')
+    // implementation platform('io.jenkins.tools.bom:bom-2.426.x:2582.v830625dd636c')
     // https://mvnrepository.com/artifact/io.jenkins.tools.bom/bom-2.387.x
-    // implementation platform('io.jenkins.tools.bom:bom-2.387.x:2543.vfb_1a_5fb_9496d')
+    jenkinsServer platform('io.jenkins.tools.bom:bom-2.387.x:2543.vfb_1a_5fb_9496d')
     // https://mvnrepository.com/artifact/io.jenkins.tools.bom/bom-2.361.x
     // implementation platform('io.jenkins.tools.bom:bom-2.361.x:2120.v89a_c54a_1e4f9')
     // https://mvnrepository.com/artifact/io.jenkins.tools.bom/bom-2.289.x
@@ -128,7 +144,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
     jenkinsServer "org.jenkins-ci.plugins:git"
 
-    jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.6"
+    jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.5"
 
     // Uncomment this to look how DC trend charts are look like
     // jenkinsServer "org.jenkins-ci.plugins:dependency-check-jenkins-plugin:5.1.1"
@@ -155,6 +171,14 @@ dependencies {
     testImplementation(testFixtures(project(":ptai-data-structures")))
     testImplementation(testFixtures(project(":ptai-rest-api")))
     testImplementation(testFixtures(project(":generic-client-lib")))
+
+    // For Jenkins versions [2.413 - 2.427] need to explicitly define some dependencies
+    String versionString = findProperty('jenkinsVersion')
+    if (1 != compareVersion('2.413', versionString) && -1 != compareVersion('2.427', versionString)) {
+        implementation 'com.google.j2objc:j2objc-annotations:2.8'
+        implementation 'org.checkerframework:checker-qual:3.38.0'
+        annotationProcessor 'org.checkerframework:checker-qual:3.38.0'
+    }
 }
 
 // Set Jenkins server debug port

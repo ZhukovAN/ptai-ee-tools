@@ -1,15 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.descriptor;
 
-import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.Plugin;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.Credentials;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.credentials.CredentialsImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.globalconfig.Config;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigBase;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconfig.ConfigCustom;
@@ -17,14 +9,11 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.localconf
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsManual;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.scansettings.ScanSettingsUi;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.serversettings.ServerSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.utils.Validator;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkMode;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.plugin.jenkins.workmode.WorkModeSync;
-import com.ptsecurity.misc.tools.exceptions.GenericException;
 import hudson.Extension;
 import hudson.model.AbstractProject;
-import hudson.model.Item;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.CopyOnWriteList;
@@ -37,14 +26,16 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.jenkinsci.Symbol;
-import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -108,47 +99,42 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
     /**
      * Method checks if AST job step settings are correct.
      * It doesn't checks PT AI server availability, project existence etc.
-     * @param selectedScanSettings AST settings mode: UI- or JSON-based
-     * @param selectedConfig Config mode: global- or task-defined
+     * @param scanSettings AST settings mode: UI- or JSON-based
+     * @param config Config mode: global- or task-defined
      * @param jsonSettings JSON-defined AST settings
      * @param jsonPolicy JSON-defined policy
      * @param projectName PT AI project name for UI-defined AST settings mode
      * @param serverUrl PT AI server URL for task-defined private config
      * @param serverCredentialsId PT AI credentials Id for task-defined private config
-     * @param serverInsecure Skip certificate check during SSL handshake
      * @param configName Global configuration name
      * @return Validation result
      */
     public FormValidation doTestProjectFields(
-            final String selectedScanSettings, final String selectedConfig,
+            final ScanSettings scanSettings, final ConfigBase config,
             final String jsonSettings, final String jsonPolicy,
             final String projectName,
             final String serverUrl, final String serverCredentialsId,
-            final boolean serverInsecure,
             final String configName) {
         FormValidation res = null;
-        ScanSettingsUi.Descriptor scanSettingsUiDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class);
-        ScanSettingsManual.Descriptor scanSettingsManualDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsManual.Descriptor.class);
-        ConfigGlobal.Descriptor configGlobalDescriptor = Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
-        ConfigCustom.Descriptor configLocalDescriptor = Jenkins.get().getDescriptorByType(ConfigCustom.Descriptor.class);
-
         // noinspection ConstantConditions
         do {
-            if (scanSettingsUiDescriptor.getDisplayName().equals(selectedScanSettings)) {
+            if (scanSettings instanceof ScanSettingsUi) {
+                ScanSettingsUi.Descriptor scanSettingsUiDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class);
                 res = scanSettingsUiDescriptor.doCheckProjectName(projectName);
                 if (FormValidation.Kind.ERROR == res.kind) break;
-            } else if (scanSettingsManualDescriptor.getDisplayName().equals(selectedScanSettings)) {
+            } else if (scanSettings instanceof  ScanSettingsManual) {
+                ScanSettingsManual.Descriptor scanSettingsManualDescriptor = Jenkins.get().getDescriptorByType(ScanSettingsManual.Descriptor.class);
                 res = scanSettingsManualDescriptor.doCheckJsonSettings(jsonSettings);
                 if (FormValidation.Kind.ERROR == res.kind) break;
                 res = scanSettingsManualDescriptor.doCheckJsonPolicy(jsonPolicy);
                 if (FormValidation.Kind.ERROR == res.kind) break;
             }
-            if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
+            if (config instanceof ConfigGlobal) {
                 if (!Validator.doCheckFieldNotEmpty(configName)) {
                     res = Validator.error(Resources.i18n_ast_settings_config_global_name_message_empty());
                     break;
                 }
-            } else if (configLocalDescriptor.getDisplayName().equals(selectedConfig)) {
+            } else if (config instanceof ConfigCustom) {
                 ServerSettingsDescriptor serverSettingsDescriptor = Jenkins.get().getDescriptorByType(ServerSettingsDescriptor.class);
                 res = serverSettingsDescriptor.doCheckServerUrl(serverUrl);
                 if (FormValidation.Kind.ERROR == res.kind) break;
@@ -159,79 +145,6 @@ public class PluginDescriptor extends BuildStepDescriptor<Builder> {
             }
         } while (false);
         return res;
-    }
-
-    @SuppressWarnings("unused")
-    public FormValidation doTestProject(
-            @AncestorInPath Item item,
-            @QueryParameter("selectedScanSettings") final String selectedScanSettings,
-            @QueryParameter("selectedConfig") final String selectedConfig,
-            @QueryParameter("jsonSettings") final String jsonSettings,
-            @QueryParameter("jsonPolicy") final String jsonPolicy,
-            @QueryParameter("projectName") final String projectName,
-            @QueryParameter("serverUrl") final String serverUrl,
-            @QueryParameter("serverCredentialsId") final String serverCredentialsId,
-            @QueryParameter("serverInsecure") final boolean serverInsecure,
-            @QueryParameter("configName") final String configName) {
-        FormValidation res = doTestProjectFields(
-                selectedScanSettings, selectedConfig,
-                jsonSettings, jsonPolicy,
-                projectName,
-                serverUrl, serverCredentialsId, serverInsecure,
-                configName);
-        if (FormValidation.Kind.ERROR == res.kind) return res;
-
-        ConfigGlobal.Descriptor configGlobalDescriptor = Jenkins.get().getDescriptorByType(ConfigGlobal.Descriptor.class);
-         try {
-            Credentials credentials;
-            String realServerUrl;
-            boolean insecure;
-
-            if (configGlobalDescriptor.getDisplayName().equals(selectedConfig)) {
-                // Settings are defined globally, job just refers them using configName
-                Config base = getConfig(configName);
-                // What is the type of global config?
-                ServerSettings serverSettings = base.getServerSettings();
-                credentials = CredentialsImpl.getCredentialsById(item, serverSettings.getServerCredentialsId());
-                realServerUrl = serverSettings.getServerUrl();
-                insecure = serverSettings.isServerInsecure();
-            } else {
-                credentials = CredentialsImpl.getCredentialsById(item, serverCredentialsId);
-                realServerUrl = serverUrl;
-                insecure = serverInsecure;
-            }
-            // Depending on settings real project name may be defined using UI or JSON
-            boolean selectedScanSettingsUi = Jenkins.get().getDescriptorByType(ScanSettingsUi.Descriptor.class).getDisplayName().equals(selectedScanSettings);
-            String realProjectName = selectedScanSettingsUi
-                    ? projectName
-                    : UnifiedAiProjScanSettings.loadSettings(jsonSettings).getProjectName();
-            UUID projectId = searchProject(realProjectName, realServerUrl, credentials, insecure);
-            if (null == projectId) {
-                // For manual defined (JSON) scan settings lack of project isn't a crime itself, just show warning
-                // instead of error
-                return selectedScanSettingsUi
-                        ? FormValidation.error(Resources.i18n_ast_settings_type_ui_project_message_not_found(realProjectName))
-                        : FormValidation.warning(Resources.i18n_ast_settings_type_ui_project_message_not_found(realProjectName));
-            } else
-                return FormValidation.ok(Resources.i18n_ast_settings_type_ui_project_message_found_id(projectId.toString().substring(0, 4)));
-        } catch (GenericException e) {
-            return Validator.error(e);
-        }
-    }
-
-    private UUID searchProject(
-            @NonNull final String name, @NonNull final String url,
-            @NonNull final Credentials credentials, final boolean insecure) throws GenericException {
-        AdvancedSettings advancedSettings = new AdvancedSettings();
-        if (StringUtils.isNotEmpty(this.advancedSettings))
-            advancedSettings.apply(this.advancedSettings);
-        AbstractApiClient client = Factory.client(ConnectionSettings.builder()
-                .url(url)
-                .credentials(TokenCredentials.builder().token(credentials.getToken().getPlainText()).build())
-                .insecure(insecure)
-                .caCertsPem(credentials.getServerCaCertificates())
-                .build(), advancedSettings);
-        return new Factory().projectTasks(client).searchProject(name);
     }
 
     @Override
