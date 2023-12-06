@@ -166,3 +166,8 @@
     border-top-color: var(--border-line-color);
     border-bottom-color: var(--border-line-color);
 }
+
+.ptai-chart-header {
+    margin-top: 16px;
+    margin-bottom: 8px;
+}

@@ -2,10 +2,12 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/AIPROJ" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/DSVW" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/PT AI 3.6" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/PT AI 4.1" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-jenkins-plugin/work/workspace/PT AI 4.1.1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-server/servers/TeamCity-2020.1/buildAgent/work/6f9968fd8501359c" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/ptai-teamcity-plugin/ptai-teamcity-plugin-server/servers/TeamCity-2022.10/buildAgent/work/fa907ac573c92a20" vcs="Git" />
   </component>
 </project>
