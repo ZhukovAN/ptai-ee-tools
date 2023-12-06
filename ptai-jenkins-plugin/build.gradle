@@ -128,7 +128,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
     jenkinsServer "org.jenkins-ci.plugins:git"
 
-    // jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.6"
+    jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.6"
 
     // Uncomment this to look how DC trend charts are look like
     // jenkinsServer "org.jenkins-ci.plugins:dependency-check-jenkins-plugin:5.1.1"

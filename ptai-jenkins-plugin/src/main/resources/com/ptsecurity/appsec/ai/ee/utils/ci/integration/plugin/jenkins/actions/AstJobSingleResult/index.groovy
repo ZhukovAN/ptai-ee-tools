@@ -89,7 +89,7 @@ def createChartPlaceholder(int col, int row, int width, String prefix, String na
     if (1 == width)
         clazz = 1 == col ? "ptai-chart-left" : "ptai-chart-right"
     div(style: style, class: clazz) {
-        h3(title)
+        h3(title, class: "ptai-chart-header")
         div(
                 id: "${prefix}-${name}",
                 class: "graph-cursor-pointer ptai-chart ${1 == width ? "ptai-small-chart" : "ptai-big-chart"} ") {
@@ -131,7 +131,7 @@ l.layout(title: Resources.i18n_ast_result_label()) {
         def scanBriefDetailed = my.loadScanBriefDetailed()
 
         h1(Resources.i18n_ast_result_singlebuild_title_label())
-        h2(Resources._i18n_ast_settings_label())
+        h2(Resources._i18n_ast_settings_label(), class: "ptai-chart-header")
 
         def scanSettings = [:]
         scanSettings[Resources.i18n_ast_settings_base_projectname_label()] = "${scanBriefDetailed.projectName}"
@@ -190,7 +190,7 @@ l.layout(title: Resources.i18n_ast_result_label()) {
 
         if (my.isEmpty()) return
 
-        h2(Resources.i18n_ast_result_charts_title_breakdown_label())
+        h2(Resources.i18n_ast_result_charts_title_breakdown_label(), class: "ptai-chart-header")
         // Create main charts placeholder grid and initialize it with chart DIVs
         div(class: "ptai-main-content ptai-charts-div") {
             for (Chart chart : ui.charts) createChartPlaceholder(my, chart)

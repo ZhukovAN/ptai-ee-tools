@@ -66,7 +66,6 @@ function maxTextWidth(strings, font) {
 /**
  * Get maximum width of text array items
  * @param strings Array of strings
- * @param font Font used for text render
  * @returns {*} Maximum text width in pixels
  */
 function maxChartTextWidth(strings) {
