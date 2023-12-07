@@ -227,3 +227,5 @@
 + [Fix] Jenkins check functions are fixed. Jenkins uses FormValidation.findParameters method to find properties that chacked field depends on. If parameter value does not equals to "value", that parameter name is added as "checkDependsOn" attribute and JS event listener added to corresponding UI control (see registerValidator in hudson-behaviour.js). That means that, for example, previous doCheckJsonSettings will be called twice: first time as checker attached to onchange event and second time - as onchange listener for jsonSettings field from checkDependsOn attribute
 ### 20230530
 + [Feature] PT AI v.4.4.1 support approved
+### 20231207
++ [Fix] As Jenkins [recommends](https://www.jenkins.io/doc/developer/plugin-development/dependency-management/#jenkins-plugin-bom) using plugin BOM dependency, all explicit credentials / token-macro / etc. plugin version calculations are removed
