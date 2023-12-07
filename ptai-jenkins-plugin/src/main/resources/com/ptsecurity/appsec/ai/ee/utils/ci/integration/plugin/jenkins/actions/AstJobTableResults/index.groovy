@@ -23,7 +23,7 @@ def createChartPlaceholder(int col, int row, int width, String prefix, String na
     if (1 == width)
         clazz = 1 == col ? "ptai-chart-left" : "ptai-chart-right"
     div(style: style, class: clazz) {
-        h3(title)
+        h3(title, class: "ptai-chart-header")
         div(
                 id: "${prefix}-${name}",
                 class: "graph-cursor-pointer ptai-chart ${1 == width ? "ptai-small-chart" : "ptai-big-chart"} ") {
@@ -67,7 +67,7 @@ l.layout(title: "PT AI AST report") {
             }
             return
         }
-        h2(id: "h2", Resources.i18n_ast_result_charts_title_breakdown_label())
+        h2(id: "h2", Resources.i18n_ast_result_charts_title_breakdown_label(), class: "ptai-chart-header")
         div(class: "ptai-main-content ptai-charts-div") {
             for (Chart chart : ui.charts) createChartPlaceholder(my, chart)
         }

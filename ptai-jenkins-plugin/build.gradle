@@ -27,7 +27,7 @@ jenkinsPlugin {
     url = 'https://www.ptsecurity.com/ww-en/products/ai/'
 
     // plugin URL on GitHub, optional
-    gitHubUrl = 'https://github.com/PositiveTechnologies/ptaiPlugins'
+    gitHubUrl = 'https://github.com/POSIdev-community/ptai-ee-tools.git'
 
     // use the plugin class loader before the core class loader, defaults to false
     // pluginFirstClassLoader = true
@@ -88,53 +88,76 @@ configurations {
     webjars
 }
 
+// Retuns -1 if version a is before b, 0 if those are equal and 1 if a is after b
+def compareVersion(a, b) {
+    List versionA = a.tokenize('.')
+    List versionB = b.tokenize('.')
+
+    def commonIndices = Math.min(versionA.size(), versionB.size())
+    for (int i = 0; i < commonIndices; ++i) {
+        def numberA = versionA[i].toInteger()
+        def numberB = versionB[i].toInteger()
+        if (numberA != numberB)
+            return numberA <=> numberB
+    }
+    // If we got this far then all the common indices are identical, so whichever version is longer must be more recent
+    return versionA.size() <=> versionB.size()
+}
+
+def getBom(String versionString) {
+    def bom = [:]
+    // Fill dictionary that maps BOM version to low (inclusive) and high (exclusive) Jenkins versions
+    bom['io.jenkins.tools.bom:bom-2.138.x:4'] = ['2.138', '2.150']
+    bom['io.jenkins.tools.bom:bom-2.150.x:8'] = ['2.150', '2.164']
+    bom['io.jenkins.tools.bom:bom-2.164.x:10'] = ['2.164', '2.176']
+    bom['io.jenkins.tools.bom:bom-2.176.x:16'] = ['2.176', '2.190']
+    bom['io.jenkins.tools.bom:bom-2.190.x:16'] = ['2.190', '2.204']
+    bom['io.jenkins.tools.bom:bom-2.204.x:18'] = ['2.204', '2.222']
+    bom['io.jenkins.tools.bom:bom-2.222.x:887.vae9c8ac09ff7'] = ['2.222', '2.235']
+    bom['io.jenkins.tools.bom:bom-2.235.x:897.v2edc59bdee30'] = ['2.235', '2.249']
+    bom['io.jenkins.tools.bom:bom-2.249.x:984.vb5eaac999a7e'] = ['2.249', '2.263']
+    bom['io.jenkins.tools.bom:bom-2.263.x:984.vb5eaac999a7e'] = ['2.263', '2.277']
+    bom['io.jenkins.tools.bom:bom-2.277.x:991.v88fedb20a115'] = ['2.277', '2.289']
+    bom['io.jenkins.tools.bom:bom-2.289.x:1500.ve4d05cd32975'] = ['2.289', '2.302']
+    bom['io.jenkins.tools.bom:bom-2.302.x:923.v08bdc07cd40f'] = ['2.302', '2.303']
+    bom['io.jenkins.tools.bom:bom-2.303.x:1500.ve4d05cd32975'] = ['2.303', '2.319']
+    bom['io.jenkins.tools.bom:bom-2.319.x:1595.v8c71c13cc3a_9'] = ['2.319', '2.332']
+    bom['io.jenkins.tools.bom:bom-2.332.x:1771.va_7db_01c0e8b_1'] = ['2.332', '2.346']
+    bom['io.jenkins.tools.bom:bom-2.346.x:1742.vb_70478c1b_25f'] = ['2.346', '2.361']
+    bom['io.jenkins.tools.bom:bom-2.361.x:2120.v89a_c54a_1e4f9'] = ['2.361', '2.375']
+    bom['io.jenkins.tools.bom:bom-2.375.x:2198.v39c76fc308ca'] = ['2.375', '2.387']
+    bom['io.jenkins.tools.bom:bom-2.387.x:2543.vfb_1a_5fb_9496d'] = ['2.387', '2.401']
+    bom['io.jenkins.tools.bom:bom-2.401.x:2582.v830625dd636c'] = ['2.401', '2.414']
+    bom['io.jenkins.tools.bom:bom-2.414.x:2582.v830625dd636c'] = ['2.414', '2.426']
+    bom['io.jenkins.tools.bom:bom-2.426.x:2582.v830625dd636c'] = ['2.426', '1000']
+
+    println "Get Jenkins BOM version for v.$versionString"
+    for (entry in bom) {
+        // Check BOM version
+        if (1 != compareVersion(entry.value[0], versionString) && 1 == compareVersion(entry.value[1], versionString)) {
+            println "Artifact: $entry.key = [${entry.value[0]}; ${entry.value[1]}]"
+            return entry.key;
+        }
+    }
+    throw new GradleException("Jenkins versions 2.138 and upper are supported only")
+}
+
 dependencies {
     api project(':generic-client-lib')
     api project(':ptai-report-tools')
-    testImplementation(testFixtures(project(':generic-client-lib')))
 
-    // https://mvnrepository.com/artifact/io.jenkins.tools.bom/bom-2.426.x
-    implementation platform('io.jenkins.tools.bom:bom-2.426.x:2582.v830625dd636c')
-    // https://mvnrepository.com/artifact/io.jenkins.tools.bom/bom-2.387.x
-    // implementation platform('io.jenkins.tools.bom:bom-2.387.x:2543.vfb_1a_5fb_9496d')
-    // https://mvnrepository.com/artifact/io.jenkins.tools.bom/bom-2.361.x
-    // implementation platform('io.jenkins.tools.bom:bom-2.361.x:2120.v89a_c54a_1e4f9')
-    // https://mvnrepository.com/artifact/io.jenkins.tools.bom/bom-2.289.x
-    // implementation platform('io.jenkins.tools.bom:bom-2.289.x:1500.ve4d05cd32975')
-
+    String versionString = findProperty('jenkinsVersion')
+    implementation platform(getBom(versionString))
+    // For Jenkins versions [2.413 - 2.427] need to explicitly define some dependencies
+    if (1 != compareVersion('2.413', versionString) && -1 != compareVersion('2.427', versionString)) {
+        implementation 'com.google.j2objc:j2objc-annotations:2.8'
+        implementation 'org.checkerframework:checker-qual:3.38.0'
+        annotationProcessor 'org.checkerframework:checker-qual:3.38.0'
+    }
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/token-macro
     implementation "org.jenkins-ci.plugins:token-macro"
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/credentials
     implementation "org.jenkins-ci.plugins:credentials"
-
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/token-macro
-    jenkinsServer "org.jenkins-ci.plugins:token-macro"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/credentials
-    jenkinsServer "org.jenkins-ci.plugins:credentials"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/structs
-    // jenkinsServer "org.jenkins-ci.plugins:structs"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-api
-    jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-api"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-step-api
-    jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-step-api"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/scm-api
-    // jenkinsServer "org.jenkins-ci.plugins:scm-api"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/trilead-api
-    // jenkinsServer "org.jenkins-ci.plugins:trilead-api"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/script-security
-    // jenkinsServer "org.jenkins-ci.plugins:script-security"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/matrix-project
-    // jenkinsServer "org.jenkins-ci.plugins:matrix-project"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
-    jenkinsServer "org.jenkins-ci.plugins:git"
-
-    jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.6"
-
-    // Uncomment this to look how DC trend charts are look like
-    // jenkinsServer "org.jenkins-ci.plugins:dependency-check-jenkins-plugin:5.1.1"
-
-    // https://mvnrepository.com/artifact/org.webjars/echarts
-    webjars 'org.webjars:echarts:5.0.2'
 
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
     implementation 'org.apache.commons:commons-lang3:3.12.0'
@@ -146,15 +169,26 @@ dependencies {
     // https://mvnrepository.com/artifact/org.tukaani/xz
     implementation 'org.tukaani:xz:1.9'
 
+    // https://mvnrepository.com/artifact/org.webjars/echarts
+    webjars 'org.webjars:echarts:5.0.2'
+
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-aggregator
+    jenkinsServer 'org.jenkins-ci.plugins.workflow:workflow-aggregator:2.7'
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
+    jenkinsServer "org.jenkins-ci.plugins:git"
+    // Uncomment this to look how DC trend charts are look like
+    // jenkinsServer "org.jenkins-ci.plugins:dependency-check-jenkins-plugin:5.1.1"
+
+    testImplementation(testFixtures(project(':generic-client-lib')))
+    testImplementation(testFixtures(project(":ptai-data-structures")))
+    testImplementation(testFixtures(project(":ptai-rest-api")))
+    testImplementation(testFixtures(project(":generic-client-lib")))
+
     // Need this to execute Jenkins plugin integration tests
     // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-test-harness
     testImplementation 'org.jenkins-ci.main:jenkins-test-harness:2110.v71145c2d8157'
     // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-war
     testImplementation "org.jenkins-ci.main:jenkins-war:${jenkinsVersion}"
-
-    testImplementation(testFixtures(project(":ptai-data-structures")))
-    testImplementation(testFixtures(project(":ptai-rest-api")))
-    testImplementation(testFixtures(project(":generic-client-lib")))
 }
 
 // Set Jenkins server debug port
@@ -224,5 +258,12 @@ jar {
     // See https://www.jenkins.io/blog/2018/01/13/jep-200/
     manifest {
         attributes 'Jenkins-ClassFilter-Whitelisted': 'true'
+    }
+}
+
+task jenkinsBomTest {
+    doLast {
+        String versionString = findProperty('jenkinsVersion')
+        getBom(versionString)
     }
 }
