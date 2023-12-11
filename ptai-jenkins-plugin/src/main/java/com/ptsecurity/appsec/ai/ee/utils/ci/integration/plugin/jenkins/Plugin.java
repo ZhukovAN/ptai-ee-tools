@@ -138,14 +138,6 @@ public class Plugin extends Builder implements SimpleBuildStep {
         ConfigCustom.Descriptor configCustomDescriptor = Jenkins.get().getDescriptorByType(ConfigCustom.Descriptor.class);
 
         boolean selectedScanSettingsUi = scanSettings instanceof ScanSettingsUi;
-        String selectedScanSettings = selectedScanSettingsUi
-                ? scanSettingsUiDescriptor.getDisplayName()
-                : scanSettingsManualDescriptor.getDisplayName();
-
-        String selectedConfig = config instanceof ConfigCustom
-                ? configCustomDescriptor.getDisplayName()
-                : configGlobalDescriptor.getDisplayName();
-
         String jsonSettings = selectedScanSettingsUi ? null : ((ScanSettingsManual) scanSettings).getJsonSettings();
         String jsonPolicy = selectedScanSettingsUi ? null : ((ScanSettingsManual) scanSettings).getJsonPolicy();
 
@@ -210,11 +202,10 @@ public class Plugin extends Builder implements SimpleBuildStep {
         advancedSettings.apply(this.advancedSettings);
 
         check = descriptor.doTestProjectFields(
-                selectedScanSettings,
-                selectedConfig,
+                scanSettings, config,
                 jsonSettings, jsonPolicy,
                 projectName,
-                serverUrl, credentialsId, serverInsecure, configName);
+                serverUrl, credentialsId, configName);
         if (FormValidation.Kind.ERROR == check.kind)
             throw new AbortException(check.getMessage());
         // TODO: Implement scan node support when PT AI will be able to

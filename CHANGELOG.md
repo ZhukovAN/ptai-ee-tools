@@ -231,3 +231,5 @@
 + [Feature] PT AI v.4.5.0 support approved
 ### 20231130
 + [Feature] PT AI v.4.6.0 support approved
+### 20231207
++ [Fix] As Jenkins [recommends](https://www.jenkins.io/doc/developer/plugin-development/dependency-management/#jenkins-plugin-bom) using plugin BOM dependency, all explicit credentials / token-macro / etc. plugin version calculations are removed
