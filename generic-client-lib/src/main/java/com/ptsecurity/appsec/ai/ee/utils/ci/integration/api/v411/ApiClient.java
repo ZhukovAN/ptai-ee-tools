@@ -13,6 +13,7 @@ import com.ptsecurity.appsec.ai.ee.server.v411.auth.model.UserLoginModel;
 import com.ptsecurity.appsec.ai.ee.server.v411.filesstore.api.StoreApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.legacy.api.VersionApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.notifications.model.ScanProgress;
+import com.ptsecurity.appsec.ai.ee.server.v411.notifications.model.ScanResult;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.api.LicenseApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.api.ProjectsApi;
 import com.ptsecurity.appsec.ai.ee.server.v411.projectmanagement.api.ReportsApi;
@@ -54,8 +55,7 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
-import static com.ptsecurity.appsec.ai.ee.server.v411.notifications.model.Stage.ABORTED;
-import static com.ptsecurity.appsec.ai.ee.server.v411.notifications.model.Stage.FAILED;
+import static com.ptsecurity.appsec.ai.ee.server.v411.notifications.model.Stage.*;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
@@ -332,7 +332,8 @@ public class ApiClient extends AbstractApiClient {
                 log.trace("Skip ScanCompleted message as its scanResultId != {}", scanBrief.getId());
             else {
                 pollingThread.reset();
-                queue.add(Stage.DONE);
+                Stage stage = EnumsConverter.convert(Optional.of(data.getResult()).map(ScanResult::getProgress).map(ScanProgress::getStage).orElse(UNKNOWN));
+                queue.add(stage);
             }
         }, ScanCompleteEvent.class);
 

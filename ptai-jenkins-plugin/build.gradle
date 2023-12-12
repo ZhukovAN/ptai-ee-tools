@@ -174,6 +174,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-aggregator
     jenkinsServer 'org.jenkins-ci.plugins.workflow:workflow-aggregator:2.7'
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/pipeline-utility-steps
+    jenkinsServer 'org.jenkins-ci.plugins:pipeline-utility-steps'
     // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
     jenkinsServer "org.jenkins-ci.plugins:git"
     // Uncomment this to look how DC trend charts are look like

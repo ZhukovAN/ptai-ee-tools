@@ -41,10 +41,9 @@ import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
-import static com.ptsecurity.appsec.ai.ee.server.v430.notifications.model.Stage.ABORTED;
-import static com.ptsecurity.appsec.ai.ee.server.v430.notifications.model.Stage.FAILED;
 import static com.ptsecurity.appsec.ai.ee.server.v430.auth.model.AuthScopeType.ACCESSTOKEN;
 import static com.ptsecurity.appsec.ai.ee.server.v430.auth.model.AuthScopeType.WEB;
+import static com.ptsecurity.appsec.ai.ee.server.v430.notifications.model.Stage.*;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
@@ -322,7 +321,7 @@ public class ApiClient extends AbstractApiClient {
                 log.trace("Skip ScanCompleted message as its scanResultId != {}", scanBrief.getId());
             else {
                 pollingThread.reset();
-                queue.add(Stage.DONE);
+                queue.add(EnumsConverter.convert(null == data.getStage() ? UNKNOWN : data.getStage()));
             }
         }, ScanCompleted.class);
 

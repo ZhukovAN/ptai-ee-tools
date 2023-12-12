@@ -16,6 +16,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.VersionRange;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v450.converters.EnumsConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v450.tasks.GenericAstTasksImpl;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v450.tasks.GenericAstTasksImpl.ProjectPollingThread;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v450.tasks.ServerVersionTasksImpl;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ServerVersionTasks;
@@ -43,8 +44,7 @@ import java.util.concurrent.BlockingQueue;
 
 import static com.ptsecurity.appsec.ai.ee.server.v450.auth.model.AuthScopeType.ACCESSTOKEN;
 import static com.ptsecurity.appsec.ai.ee.server.v450.auth.model.AuthScopeType.WEB;
-import static com.ptsecurity.appsec.ai.ee.server.v450.notifications.model.Stage.ABORTED;
-import static com.ptsecurity.appsec.ai.ee.server.v450.notifications.model.Stage.FAILED;
+import static com.ptsecurity.appsec.ai.ee.server.v450.notifications.model.Stage.*;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
@@ -200,7 +200,7 @@ public class ApiClient extends AbstractApiClient {
     public HubConnection createSignalrConnection(
             @NonNull final ScanBrief scanBrief,
             final BlockingQueue<Stage> queue,
-            @NonNull GenericAstTasksImpl.ProjectPollingThread pollingThread) throws GenericException {
+            @NonNull ProjectPollingThread pollingThread) throws GenericException {
         // Create accessTokenProvider to provide SignalR connection
         // with jwt
         Single<String> accessTokenProvider = Single.defer(() -> Single.just(apiJwt.getAccessToken()));
@@ -322,7 +322,7 @@ public class ApiClient extends AbstractApiClient {
                 log.trace("Skip ScanCompleted message as its scanResultId != {}", scanBrief.getId());
             else {
                 pollingThread.reset();
-                queue.add(Stage.DONE);
+                queue.add(EnumsConverter.convert(null == data.getStage() ? UNKNOWN : data.getStage()));
             }
         }, ScanCompleted.class);
 
