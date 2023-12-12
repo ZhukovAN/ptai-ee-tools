@@ -151,7 +151,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         // InterruptedException - job was terminated from JVM side, i.e. from CI.
         boolean abortedFromCi = false;
         try {
-            scanBrief.setState(genericAstTasks.waitForComplete(projectId, scanResultId));
+            genericAstTasks.waitForComplete(scanBrief);
         } catch (InterruptedException e) {
             process(Stage.ABORTED);
             scanBrief.setState(ABORTED);
@@ -165,7 +165,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
                     "Unexpected finished scan result state",
                     new IllegalArgumentException(String.valueOf(scanBrief.getState())));
 
-        // Scan may be stopped from PT AI Viewer. In this case no scan results will be
+        // Scan may be stopped from PT AI UI. In this case no scan results will be
         // available even if scan is aborted at the very latest scan stages and some
         // vulnerabilities are found already
         boolean resultsAvailable = true;

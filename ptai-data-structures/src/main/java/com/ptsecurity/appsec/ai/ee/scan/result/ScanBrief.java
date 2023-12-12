@@ -62,6 +62,11 @@ public class ScanBrief {
     @JsonProperty
     protected String ptaiAgentVersion;
 
+    @Getter
+    @Setter
+    @JsonProperty
+    protected String ptaiAgentName;
+
     @NonNull
     @Getter
     @Setter

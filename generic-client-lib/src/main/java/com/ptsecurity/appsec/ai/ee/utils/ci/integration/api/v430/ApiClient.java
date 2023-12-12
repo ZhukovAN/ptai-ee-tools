@@ -6,6 +6,7 @@ import com.microsoft.signalr.HubConnectionBuilder;
 import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.server.v430.api.api.*;
+import com.ptsecurity.appsec.ai.ee.server.v430.api.model.ScanAgentModel;
 import com.ptsecurity.appsec.ai.ee.server.v430.auth.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.server.v430.auth.api.AuthApi;
 import com.ptsecurity.appsec.ai.ee.server.v430.auth.model.AuthResultModel;
@@ -197,8 +198,7 @@ public class ApiClient extends AbstractApiClient {
     protected String connectedDate = "";
 
     public HubConnection createSignalrConnection(
-            @NonNull UUID projectId,
-            @NonNull final UUID scanResultId,
+            @NonNull final ScanBrief scanBrief,
             final BlockingQueue<Stage> queue,
             @NonNull GenericAstTasksImpl.ProjectPollingThread pollingThread) throws GenericException {
         // Create accessTokenProvider to provide SignalR connection
@@ -241,19 +241,27 @@ public class ApiClient extends AbstractApiClient {
 
         connection.on("NeedSyncClientState", () -> {
             log.trace("Message of type NeedSyncClientState");
-            subscribe(connection, projectId, scanResultId);
+            subscribe(connection, scanBrief);
         });
 
         connection.on("ScanStarted", (data) -> {
             log.trace("Message of type ScanStartedEvent: {}", data);
-            if (!projectId.equals(data.getProjectId()))
-                log.trace("Skip ScanStarted message as its projectId != {}", projectId);
-            else if (!scanResultId.equals(data.getScanResultId()))
-                log.trace("Skip ScanStarted message as its scanResultId != {}", scanResultId);
+            if (!scanBrief.getProjectId().equals(data.getProjectId()))
+                log.trace("Skip ScanStarted message as its projectId != {}", scanBrief.getProjectId());
+            else if (!scanBrief.getId().equals(data.getScanResultId()))
+                log.trace("Skip ScanStarted message as its scanResultId != {}", scanBrief.getId());
             else {
                 if (null != console)
                     console.info("Scan started. Project id: %s, scan result id: %s", data.getProjectId(), data.getScanResultId());
                 if (null != eventConsumer) eventConsumer.process(data);
+                List<ScanAgentModel> scanAgents = call(scanAgentApi::apiScanAgentsGet, "Get scan agents list failed", true);
+                if (null != scanAgents) {
+                    String agentName = scanAgents.stream()
+                            .filter(a -> scanBrief.getProjectId().equals(a.getProjectId()) && scanBrief.getId().equals(a.getScanResultId()))
+                            .map(ScanAgentModel::getAgentName).findAny().orElse(null);
+                    log.trace("Scan started on agent named {}", agentName);
+                    scanBrief.setPtaiAgentName(agentName);
+                }
                 pollingThread.reset();
             }
         }, ScanStarted.class);
@@ -261,20 +269,20 @@ public class ApiClient extends AbstractApiClient {
         // Currently PT AI viewer have no stop scan feature but deletes scan result
         connection.on("ScanResultRemoved", (data) -> {
             log.trace("Message of type ScanResultRemovedEvent: {}", data);
-            if (!scanResultId.equals(data.getScanResultId())) return;
+            if (!scanBrief.getId().equals(data.getScanResultId())) return;
             if (null != console) console.info("Scan result removed. Possibly job was terminated from PT AI UI");
             if (null != eventConsumer) eventConsumer.process(com.ptsecurity.appsec.ai.ee.scan.progress.Stage.ABORTED);
             pollingThread.reset();
             if (null != queue) {
-                log.debug("Scan result {} removed", scanResultId);
+                log.debug("Scan result {} removed", scanBrief.getId());
                 queue.add(Stage.ABORTED);
             }
         }, ScanResultRemoved.class);
 
         connection.on("ScanProgress", (data) -> {
             log.trace("Message of type ScanProgressEvent: {}", data);
-            if (!scanResultId.equals(data.getScanResultId()))
-                log.trace("Skip ScanProgress message as its projectId != {}", projectId);
+            if (!scanBrief.getId().equals(data.getScanResultId()))
+                log.trace("Skip ScanProgress message as its projectId != {}", scanBrief.getProjectId());
             else {
                 StringBuilder builder = new StringBuilder();
                 builder.append(Optional.of(data)
@@ -308,10 +316,10 @@ public class ApiClient extends AbstractApiClient {
 
         connection.on("ScanCompleted", (data) -> {
             log.trace("Message of type ScanCompleteEvent: {}", data);
-            if (!projectId.equals(data.getProjectId()))
-                log.trace("Skip ScanCompleted message as its projectId != {}", projectId);
-            else if (!scanResultId.equals(data.getScanResultId()))
-                log.trace("Skip ScanCompleted message as its scanResultId != {}", scanResultId);
+            if (!scanBrief.getProjectId().equals(data.getProjectId()))
+                log.trace("Skip ScanCompleted message as its projectId != {}", scanBrief.getProjectId());
+            else if (!scanBrief.getId().equals(data.getScanResultId()))
+                log.trace("Skip ScanCompleted message as its scanResultId != {}", scanBrief.getId());
             else {
                 pollingThread.reset();
                 queue.add(Stage.DONE);
@@ -321,8 +329,8 @@ public class ApiClient extends AbstractApiClient {
         return connection;
     }
 
-    public void wait(@NonNull final HubConnection connection, @NonNull UUID projectId, @NonNull final UUID scanResultId) {
-        connection.start().doOnComplete(() -> subscribe(connection, projectId, scanResultId)).blockingAwait();
+    public void wait(@NonNull final HubConnection connection, @NonNull final ScanBrief scanBrief) {
+        connection.start().doOnComplete(() -> subscribe(connection, scanBrief)).blockingAwait();
     }
 
     @Getter
@@ -342,8 +350,7 @@ public class ApiClient extends AbstractApiClient {
 
     protected void subscribe(
             @NonNull final HubConnection connection,
-            @NonNull UUID projectId,
-            @NonNull final UUID scanResultId) {
+            @NonNull final ScanBrief scanBrief) {
         SubscriptionOnNotification subscription = new SubscriptionOnNotification();
         // subscription.Ids.add(scanResultId);
 
@@ -358,7 +365,7 @@ public class ApiClient extends AbstractApiClient {
 
         // ScanResultRemoved event subscription uses projectId-based filtering
         subscription.ids.clear();
-        subscription.ids.add(projectId);
+        subscription.ids.add(scanBrief.getProjectId());
         subscription.notificationTypeName = "ScanResultRemoved";
         connection.send("SubscribeOnNotification", subscription);
     }

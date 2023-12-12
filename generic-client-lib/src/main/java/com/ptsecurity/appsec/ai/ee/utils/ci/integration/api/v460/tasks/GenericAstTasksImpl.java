@@ -19,10 +19,12 @@ import com.ptsecurity.misc.tools.exceptions.GenericException;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import java.io.File;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -72,11 +74,11 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
 
         protected boolean exit = false;
 
-        public ProjectPollingThread(@NonNull final ApiClient client, @NonNull final UUID projectId, @NonNull final UUID scanResultId, final BlockingQueue<@NonNull Stage> queue) {
-            log.trace("AST job state polling thread created for project {}, scan result {}", projectId, scanResultId);
+        public ProjectPollingThread(@NonNull final ApiClient client, @NonNull final ScanBrief scanBrief, final BlockingQueue<@NonNull Stage> queue) {
+            log.trace("AST job state polling thread created for project {}, scan result {}", scanBrief.getProjectId(), scanBrief.getId());
             this.client = client;
-            this.projectId = projectId;
-            this.scanResultId = scanResultId;
+            this.projectId = scanBrief.getProjectId();
+            this.scanResultId = scanBrief.getId();
             this.queue = queue;
 
             this.thread = new Thread(this);
@@ -129,28 +131,28 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
     }
 
     @Override
-    public ScanBrief.State waitForComplete(@NonNull UUID projectId, @NonNull UUID scanResultId) throws InterruptedException {
+    public void waitForComplete(@NonNull ScanBrief scanBrief) throws InterruptedException {
         // Semaphore-based implementation was replaced by queue-based as
         // waitForComplete unblocking may be done on several events like
         // ScanCompleted and ScanProgress with aborted and failed stage values
         BlockingQueue<Stage> queue = new LinkedBlockingDeque<>();
 
         // As sometimes notifications get lost somewhere we need to implement parallel polling thread
-        ProjectPollingThread pollingThread = new ProjectPollingThread(client, projectId, scanResultId, queue);
-        HubConnection connection = client.createSignalrConnection(projectId, scanResultId, queue, pollingThread);
-        client.wait(connection, projectId, scanResultId);
+        ProjectPollingThread pollingThread = new ProjectPollingThread(client, scanBrief, queue);
+        HubConnection connection = client.createSignalrConnection(scanBrief, queue, pollingThread);
+        client.wait(connection, scanBrief);
 
         Stage stage = queue.take();
         connection.stop().blockingAwait();
         pollingThread.stop();
 
-        return FAILED == stage
+        scanBrief.setState(FAILED == stage
                 ? ScanBrief.State.FAILED
                 : ABORTED == stage
                 ? ScanBrief.State.ABORTED
                 : DONE == stage
                 ? ScanBrief.State.DONE
-                : ScanBrief.State.UNKNOWN;
+                : ScanBrief.State.UNKNOWN);
     }
 
     public void stop(@NonNull UUID scanResultId) throws GenericException {
@@ -220,28 +222,6 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
     }
 
     @Override
-    public ScanBrief getScanBrief(@NonNull UUID projectId, @NonNull UUID scanResultId) throws GenericException {
-        String projectName = new ProjectTasksImpl(client).searchProject(projectId);
-        ScanResultModel scanResult = call(
-                () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
-                "Get project scan result failed");
-        log.debug("Project {} scan result {} load complete", projectId, scanResultId);
-
-        ScanSettingsModel scanSettings = call(
-                () -> client.getProjectsApi().apiProjectsProjectIdScanSettingsScanSettingsIdGet(projectId, scanResult.getSettingsId()),
-                "Get project scan settings failed");
-        log.debug("Project {} scan result {} settings loaded", projectId, scanResultId);
-
-        ServerVersionTasks serverVersionTasks = new ServerVersionTasksImpl(client);
-        Map<ServerVersionTasks.Component, String> versions = call(serverVersionTasks::current, "PT AI server API version read ailed");
-
-        ScanBrief res = call(
-                () -> convert(projectName, scanResult, scanSettings, client.getConnectionSettings().getUrl(), versions), "Project scan brief convert failed");
-        log.debug("Project scan result conversion complete");
-        return res;
-    }
-
-    @Override
     public ScanResult getScanResult(@NonNull UUID projectId, @NonNull UUID scanResultId) throws GenericException {
         ScanResultModel scanResult = call(
                 () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
@@ -289,6 +269,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         // enough scan result state may stay UNKNOWN
         // So we need to set state from brief
         scanResult.setState(scanBrief.getState());
+        scanResult.setPtaiAgentName(scanBrief.getPtaiAgentName());
         return scanResult;
     }
 
@@ -299,4 +280,4 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
         if (null == errors || errors.isEmpty()) return null;
         return errors.stream().map(ScanErrorsConverter::convert).collect(Collectors.toList());
     }
-}
+ }
