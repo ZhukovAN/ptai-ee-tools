@@ -143,7 +143,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             // Asynchronous mode means that we aren't need to wait AST job
             // completion. Just notify descendant and exit
             info(Resources.i18n_ast_result_status_success_label());
-            astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(performance()).build());
+            astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(durations()).build());
             return;
         }
 
@@ -163,7 +163,10 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         if (StringUtils.isNotEmpty(diagnosticFileName)) {
             // Save AST diagnostic to artifacts
             log.debug("Save AST diagnostic to {} file", diagnosticFileName);
-            ScanDiagnostic diagnostic = ScanDiagnostic.create(scanBrief, genericAstTasks.getScanErrors(projectId, scanResultId));
+            ScanDiagnostic diagnostic = ScanDiagnostic.create(
+                    scanBrief,
+                    genericAstTasks.getScanErrors(projectId, scanResultId),
+                    performance());
             call(
                     () -> fileOps.saveArtifact(diagnosticFileName, BaseJsonHelper.serialize(diagnostic)),
                     "AST result diagnostic save failed");
@@ -189,7 +192,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             log.debug("Scan brief for project / scan ID {} / {} load failed", projectId, scanResultId);
             log.debug("Exception details", e);
         }
-        astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(performance()).build());
+        astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(durations()).build());
 
         // TODO: Check if partial scan results may be retrieved for failed scans
         if (FAILED == scanBrief.getState())
@@ -223,7 +226,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
     /**
      * List of stage:timestamp pairs that stores scan stage change times. Some stages
      * like initialization may appear multiple times in this list so we need to call
-     * {@link GenericAstJob#performance()} to convert timestamps to stage durations
+     * {@link GenericAstJob#durations()} to convert timestamps to stage durations
      * and aggregate by stage
      */
     @Builder.Default
@@ -238,20 +241,25 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         }
     }
 
-    protected Map<Stage, String> performance() {
+    protected Map<Stage, Pair<ZonedDateTime, Duration>> performance() {
         // Need to use LinkedHashMap to preserve stages order
-        Map<Stage, Duration> durations = new LinkedHashMap<>();
+        Map<Stage, Pair<ZonedDateTime, Duration>> result = new LinkedHashMap<>();
         // Iterate through scan stage timestamps skipping very first
         for (int i = 0 ; i < stages.size() - 1 ; i++) {
             Duration duration = Duration.between(stages.get(i).getValue(), stages.get(i + 1).getValue());
-            if (durations.containsKey(stages.get(i).getKey()))
-                duration = duration.plus(durations.get(stages.get(i).getKey()));
-            durations.put(stages.get(i).getKey(), duration);
+            if (result.containsKey(stages.get(i).getKey()))
+                duration = duration.plus(result.get(stages.get(i).getKey()).getValue());
+            result.put(stages.get(i).getKey(), ImmutablePair.of(stages.get(i).getValue(), duration));
         }
-        Map<Stage, String> performance = new LinkedHashMap<>();
-        for (Map.Entry<Stage, Duration> entry : durations.entrySet())
-            performance.put(entry.getKey(), entry.getValue().toString());
-        return performance;
+        return result;
+    }
+
+    protected Map<Stage, String> durations() {
+        Map<Stage, Pair<ZonedDateTime, Duration>> performance = performance();
+        Map<Stage, String> result = new LinkedHashMap<>();
+        for (Map.Entry<Stage, Pair<ZonedDateTime, Duration>> entry : performance.entrySet())
+            result.put(entry.getKey(), entry.getValue().getValue().toString());
+        return result;
     }
 
     @Override
