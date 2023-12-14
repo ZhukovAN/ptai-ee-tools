@@ -8,9 +8,8 @@ description = 'This plugin used to implement AST using PT Application Inspector'
 version = "${version}"
 
 repositories {
-    maven {
-        url 'https://repo.jenkins-ci.org/public/'
-    }
+    maven { url 'https://repo.jenkins-ci.org/public/' }
+    maven { url 'https://repo.jenkins-ci.org/incrementals/' }
 }
 
 jenkinsPlugin {
@@ -122,7 +121,7 @@ def getBom(String versionString) {
     bom['io.jenkins.tools.bom:bom-2.302.x:923.v08bdc07cd40f'] = ['2.302', '2.303']
     bom['io.jenkins.tools.bom:bom-2.303.x:1500.ve4d05cd32975'] = ['2.303', '2.319']
     bom['io.jenkins.tools.bom:bom-2.319.x:1595.v8c71c13cc3a_9'] = ['2.319', '2.332']
-    bom['io.jenkins.tools.bom:bom-2.332.x:1771.va_7db_01c0e8b_1'] = ['2.332', '2.346']
+    bom['io.jenkins.tools.bom:bom-2.332.x:1742.vb_70478c1b_25f'] = ['2.332', '2.346']
     bom['io.jenkins.tools.bom:bom-2.346.x:1742.vb_70478c1b_25f'] = ['2.346', '2.361']
     bom['io.jenkins.tools.bom:bom-2.361.x:2120.v89a_c54a_1e4f9'] = ['2.361', '2.375']
     bom['io.jenkins.tools.bom:bom-2.375.x:2198.v39c76fc308ca'] = ['2.375', '2.387']
