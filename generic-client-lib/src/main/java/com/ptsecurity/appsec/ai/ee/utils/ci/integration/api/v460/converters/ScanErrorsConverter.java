@@ -5,6 +5,7 @@ import com.ptsecurity.appsec.ai.ee.server.v460.api.model.ErrorLevel;
 import com.ptsecurity.appsec.ai.ee.server.v460.api.model.ScanErrorModel;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,7 @@ public class ScanErrorsConverter {
         return Error.builder()
                 .type(error.getErrorType())
                 .message(error.getMessage())
+                .details(null == error.getError() ? null : error.getError().toString())
                 .critical(Boolean.TRUE.equals(error.getIsCritical()))
                 .level(ERROR_LEVEL_MAP.get(error.getLevel()))
                 .build();

@@ -186,6 +186,8 @@ l.layout(title: Resources.i18n_ast_result_label()) {
             versions[Resources.i18n_ast_settings_server_url_label()] = scanBriefDetailed.ptaiServerUrl
         versions[Resources.i18n_ast_result_statistics_server_version_label()] = scanBriefDetailed.ptaiServerVersion
         versions[Resources.i18n_ast_result_statistics_agent_version_label()] = scanBriefDetailed.ptaiAgentVersion
+        if (StringUtils.isNotEmpty(scanBriefDetailed.ptaiAgentName))
+            versions[Resources.i18n_ast_result_statistics_agent_name_label()] = scanBriefDetailed.ptaiAgentName
         showAstSettingsTable(versions)
 
         if (my.isEmpty()) return

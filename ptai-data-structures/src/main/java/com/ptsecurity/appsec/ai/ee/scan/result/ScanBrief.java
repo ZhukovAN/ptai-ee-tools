@@ -62,6 +62,11 @@ public class ScanBrief {
     @JsonProperty
     protected String ptaiAgentVersion;
 
+    @Getter
+    @Setter
+    @JsonProperty
+    protected String ptaiAgentName;
+
     @NonNull
     @Getter
     @Setter
@@ -202,7 +207,7 @@ public class ScanBrief {
     protected Statistics statistics;
 
     public enum State {
-        UNKNOWN, DONE, FAILED, ABORTED
+        UNKNOWN, DONE, FAILED, ABORTED, ABORTED_FROM_CI
     }
 
     @Getter
