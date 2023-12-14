@@ -233,3 +233,5 @@
 + [Feature] PT AI v.4.6.0 support approved
 ### 20231207
 + [Fix] As Jenkins [recommends](https://www.jenkins.io/doc/developer/plugin-development/dependency-management/#jenkins-plugin-bom) using plugin BOM dependency, all explicit credentials / token-macro / etc. plugin version calculations are removed
+### 20231214
++ [Feature] Advanced setting ast.diagnostic.json.filename added. Its value defines file name where AST job execution details like scan status, PT AI agent name, policy assessment result, etc. will be saved to
