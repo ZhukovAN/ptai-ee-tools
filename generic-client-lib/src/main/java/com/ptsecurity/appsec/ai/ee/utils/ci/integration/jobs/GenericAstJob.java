@@ -3,6 +3,7 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs;
 import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBriefDetailed;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanDiagnostic;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
 import com.ptsecurity.misc.tools.exceptions.GenericException;
@@ -13,6 +14,7 @@ import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.AstOperations
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.SetupOperations;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.GenericAstTasks;
+import com.ptsecurity.misc.tools.helpers.BaseJsonHelper;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.State.*;
+import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.AST_DIAGNOSTIC_JSON_FILENAME;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.AdvancedSettings.SettingInfo.AST_RESULT_REST_URL_FILENAME;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
@@ -140,7 +143,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             // Asynchronous mode means that we aren't need to wait AST job
             // completion. Just notify descendant and exit
             info(Resources.i18n_ast_result_status_success_label());
-            astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(performance()).build());
+            astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(durations()).build());
             return;
         }
 
@@ -149,23 +152,34 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         // DONE / FAILED if AST job finished
         // ABORTED - AST job was terminated by PT AI viewer
         // InterruptedException - job was terminated from JVM side, i.e. from CI.
-        boolean abortedFromCi = false;
         try {
-            scanBrief.setState(genericAstTasks.waitForComplete(projectId, scanResultId));
+            genericAstTasks.waitForComplete(scanBrief);
         } catch (InterruptedException e) {
             process(Stage.ABORTED);
-            scanBrief.setState(ABORTED);
-            abortedFromCi = true;
+            scanBrief.setState(ABORTED_FROM_CI);
             stop();
         }
+        String diagnosticFileName = client.getAdvancedSettings().getString(AST_DIAGNOSTIC_JSON_FILENAME);
+        if (StringUtils.isNotEmpty(diagnosticFileName)) {
+            // Save AST diagnostic to artifacts
+            log.debug("Save AST diagnostic to {} file", diagnosticFileName);
+            ScanDiagnostic diagnostic = ScanDiagnostic.create(
+                    scanBrief,
+                    genericAstTasks.getScanErrors(projectId, scanResultId),
+                    performance());
+            call(
+                    () -> fileOps.saveArtifact(diagnosticFileName, BaseJsonHelper.serialize(diagnostic)),
+                    "AST result diagnostic save failed");
+        }
+
         info("Scan finished, project name: %s, project id: %s, result id: %s", projectName, projectId, scanResultId);
         fine("Resulting state is " + scanBrief.getState());
-        if (!EnumSet.of(DONE, ABORTED, FAILED).contains(scanBrief.getState()))
+        if (!EnumSet.of(DONE, ABORTED, FAILED, ABORTED_FROM_CI).contains(scanBrief.getState()))
             throw GenericException.raise(
                     "Unexpected finished scan result state",
                     new IllegalArgumentException(String.valueOf(scanBrief.getState())));
 
-        // Scan may be stopped from PT AI Viewer. In this case no scan results will be
+        // Scan may be stopped from PT AI UI. In this case no scan results will be
         // available even if scan is aborted at the very latest scan stages and some
         // vulnerabilities are found already
         boolean resultsAvailable = true;
@@ -178,7 +192,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             log.debug("Scan brief for project / scan ID {} / {} load failed", projectId, scanResultId);
             log.debug("Exception details", e);
         }
-        astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(performance()).build());
+        astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(durations()).build());
 
         // TODO: Check if partial scan results may be retrieved for failed scans
         if (FAILED == scanBrief.getState())
@@ -186,8 +200,8 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
                     Resources.i18n_ast_result_status_failed_server_label(),
                     new IllegalArgumentException("AST job state " + scanBrief.getState()));
 
-        if (ABORTED == scanBrief.getState()) {
-            info(abortedFromCi
+        if (ABORTED == scanBrief.getState() || ABORTED_FROM_CI == scanBrief.getState()) {
+            info(ABORTED_FROM_CI == scanBrief.getState()
                     ? Resources.i18n_ast_result_status_interrupted_ci_label()
                     : Resources.i18n_ast_result_status_interrupted_ptai_label());
             throw GenericException.raise(
@@ -212,7 +226,7 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
     /**
      * List of stage:timestamp pairs that stores scan stage change times. Some stages
      * like initialization may appear multiple times in this list so we need to call
-     * {@link GenericAstJob#performance()} to convert timestamps to stage durations
+     * {@link GenericAstJob#durations()} to convert timestamps to stage durations
      * and aggregate by stage
      */
     @Builder.Default
@@ -227,20 +241,25 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
         }
     }
 
-    protected Map<Stage, String> performance() {
+    protected Map<Stage, Pair<ZonedDateTime, Duration>> performance() {
         // Need to use LinkedHashMap to preserve stages order
-        Map<Stage, Duration> durations = new LinkedHashMap<>();
+        Map<Stage, Pair<ZonedDateTime, Duration>> result = new LinkedHashMap<>();
         // Iterate through scan stage timestamps skipping very first
         for (int i = 0 ; i < stages.size() - 1 ; i++) {
             Duration duration = Duration.between(stages.get(i).getValue(), stages.get(i + 1).getValue());
-            if (durations.containsKey(stages.get(i).getKey()))
-                duration = duration.plus(durations.get(stages.get(i).getKey()));
-            durations.put(stages.get(i).getKey(), duration);
+            if (result.containsKey(stages.get(i).getKey()))
+                duration = duration.plus(result.get(stages.get(i).getKey()).getValue());
+            result.put(stages.get(i).getKey(), ImmutablePair.of(stages.get(i).getValue(), duration));
         }
-        Map<Stage, String> performance = new LinkedHashMap<>();
-        for (Map.Entry<Stage, Duration> entry : durations.entrySet())
-            performance.put(entry.getKey(), entry.getValue().toString());
-        return performance;
+        return result;
+    }
+
+    protected Map<Stage, String> durations() {
+        Map<Stage, Pair<ZonedDateTime, Duration>> performance = performance();
+        Map<Stage, String> result = new LinkedHashMap<>();
+        for (Map.Entry<Stage, Pair<ZonedDateTime, Duration>> entry : performance.entrySet())
+            result.put(entry.getKey(), entry.getValue().getValue().toString());
+        return result;
     }
 
     @Override

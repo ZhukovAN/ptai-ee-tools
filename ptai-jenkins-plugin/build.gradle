@@ -13,21 +13,6 @@ repositories {
     }
 }
 
-ext {
-    // Just placeholders for dependencies / test Jenkins
-    // plugin versions. Actual versions are calculated
-    // in processJenkinsVersion function
-    tokenMacroVersion = ''
-    credentialsVersion = ''
-    structsVersion = ''
-    workflowStepApiVersion = ''
-    scmApiVersion = ''
-    trileadApiVersion = ''
-    scriptSecurityVersion = ''
-    matrixProjectVersion = ''
-    gitVersion = ''
-}
-
 jenkinsPlugin {
     // version of Jenkins core this plugin depends on, must be 1.420 or later
     jenkinsVersion = findProperty('jenkinsVersion')
@@ -42,7 +27,7 @@ jenkinsPlugin {
     url = 'https://www.ptsecurity.com/ww-en/products/ai/'
 
     // plugin URL on GitHub, optional
-    gitHubUrl = 'https://github.com/PositiveTechnologies/ptaiPlugins'
+    gitHubUrl = 'https://github.com/POSIdev-community/ptai-ee-tools.git'
 
     // use the plugin class loader before the core class loader, defaults to false
     // pluginFirstClassLoader = true
@@ -103,77 +88,6 @@ configurations {
     webjars
 }
 
-dependencies {
-    api project(':generic-client-lib')
-    api project(':ptai-report-tools')
-    testImplementation(testFixtures(project(':generic-client-lib')))
-
-    def version = processJenkinsVersion()
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/token-macro
-    implementation "org.jenkins-ci.plugins:token-macro:${tokenMacroVersion}"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/credentials
-    implementation "org.jenkins-ci.plugins:credentials:${credentialsVersion}"
-
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/token-macro
-    jenkinsServer "org.jenkins-ci.plugins:token-macro:${tokenMacroVersion}"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/credentials
-    jenkinsServer "org.jenkins-ci.plugins:credentials:${credentialsVersion}"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/structs
-    jenkinsServer "org.jenkins-ci.plugins:structs:${structsVersion}"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-step-api
-    jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-step-api:${workflowStepApiVersion}"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/scm-api
-    jenkinsServer "org.jenkins-ci.plugins:scm-api:${scmApiVersion}"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/trilead-api
-    jenkinsServer "org.jenkins-ci.plugins:trilead-api:${trileadApiVersion}"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/script-security
-    jenkinsServer "org.jenkins-ci.plugins:script-security:${scriptSecurityVersion}"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/matrix-project
-    jenkinsServer "org.jenkins-ci.plugins:matrix-project:${matrixProjectVersion}"
-    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
-    jenkinsServer "org.jenkins-ci.plugins:git:${gitVersion}"
-
-    // Special includes for pipeline testing
-    if ("2.303.1".equals(version)) {
-        api platform("io.jenkins.tools.bom:bom-2.302.x:923.v08bdc07cd40f")
-        jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.6"
-    } else if ("2.277.4".equals(version)) {
-        api platform("io.jenkins.tools.bom:bom-2.277.x:937.v51fde92016ed")
-        jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.5"
-    } else if ("2.164.3".equals(version)) {
-        api platform("io.jenkins.tools.bom:bom-2.164.x:10")
-        jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.5"
-    } else if ("2.150.3".equals(version)) {
-        api platform("io.jenkins.tools.bom:bom-2.150.x:8")
-        jenkinsServer "org.jenkins-ci.plugins.workflow:workflow-aggregator:2.5"
-    }
-    // Uncomment this to look how DC trend charts are look like
-    // jenkinsServer "org.jenkins-ci.plugins:dependency-check-jenkins-plugin:5.1.1"
-
-    // https://mvnrepository.com/artifact/org.webjars/echarts
-    webjars 'org.webjars:echarts:5.0.2'
-
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
-    // https://mvnrepository.com/artifact/org.jooq/joor-java-8
-    implementation 'org.jooq:joor-java-8:0.9.13'
-    // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
-    implementation 'org.apache.commons:commons-compress:1.21'
-    // Need this to work with 7zip compression
-    // https://mvnrepository.com/artifact/org.tukaani/xz
-    implementation 'org.tukaani:xz:1.9'
-
-    // Need this to execute Jenkins plugin integration tests
-    // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-test-harness
-    testImplementation 'org.jenkins-ci.main:jenkins-test-harness:1903.vf505ecb_63589'
-    // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-war
-    testImplementation "org.jenkins-ci.main:jenkins-war:${jenkinsVersion}"
-
-    testImplementation(testFixtures(project(":ptai-data-structures")))
-    testImplementation(testFixtures(project(":ptai-rest-api")))
-    testImplementation(testFixtures(project(":generic-client-lib")))
-}
-
 // Retuns -1 if version a is before b, 0 if those are equal and 1 if a is after b
 def compareVersion(a, b) {
     List versionA = a.tokenize('.')
@@ -190,149 +104,93 @@ def compareVersion(a, b) {
     return versionA.size() <=> versionB.size()
 }
 
-def processJenkinsVersion() {
+def getBom(String versionString) {
+    def bom = [:]
+    // Fill dictionary that maps BOM version to low (inclusive) and high (exclusive) Jenkins versions
+    bom['io.jenkins.tools.bom:bom-2.138.x:4'] = ['2.138', '2.150']
+    bom['io.jenkins.tools.bom:bom-2.150.x:8'] = ['2.150', '2.164']
+    bom['io.jenkins.tools.bom:bom-2.164.x:10'] = ['2.164', '2.176']
+    bom['io.jenkins.tools.bom:bom-2.176.x:16'] = ['2.176', '2.190']
+    bom['io.jenkins.tools.bom:bom-2.190.x:16'] = ['2.190', '2.204']
+    bom['io.jenkins.tools.bom:bom-2.204.x:18'] = ['2.204', '2.222']
+    bom['io.jenkins.tools.bom:bom-2.222.x:887.vae9c8ac09ff7'] = ['2.222', '2.235']
+    bom['io.jenkins.tools.bom:bom-2.235.x:897.v2edc59bdee30'] = ['2.235', '2.249']
+    bom['io.jenkins.tools.bom:bom-2.249.x:984.vb5eaac999a7e'] = ['2.249', '2.263']
+    bom['io.jenkins.tools.bom:bom-2.263.x:984.vb5eaac999a7e'] = ['2.263', '2.277']
+    bom['io.jenkins.tools.bom:bom-2.277.x:991.v88fedb20a115'] = ['2.277', '2.289']
+    bom['io.jenkins.tools.bom:bom-2.289.x:1500.ve4d05cd32975'] = ['2.289', '2.302']
+    bom['io.jenkins.tools.bom:bom-2.302.x:923.v08bdc07cd40f'] = ['2.302', '2.303']
+    bom['io.jenkins.tools.bom:bom-2.303.x:1500.ve4d05cd32975'] = ['2.303', '2.319']
+    bom['io.jenkins.tools.bom:bom-2.319.x:1595.v8c71c13cc3a_9'] = ['2.319', '2.332']
+    bom['io.jenkins.tools.bom:bom-2.332.x:1771.va_7db_01c0e8b_1'] = ['2.332', '2.346']
+    bom['io.jenkins.tools.bom:bom-2.346.x:1742.vb_70478c1b_25f'] = ['2.346', '2.361']
+    bom['io.jenkins.tools.bom:bom-2.361.x:2120.v89a_c54a_1e4f9'] = ['2.361', '2.375']
+    bom['io.jenkins.tools.bom:bom-2.375.x:2198.v39c76fc308ca'] = ['2.375', '2.387']
+    bom['io.jenkins.tools.bom:bom-2.387.x:2543.vfb_1a_5fb_9496d'] = ['2.387', '2.401']
+    bom['io.jenkins.tools.bom:bom-2.401.x:2582.v830625dd636c'] = ['2.401', '2.414']
+    bom['io.jenkins.tools.bom:bom-2.414.x:2582.v830625dd636c'] = ['2.414', '2.426']
+    bom['io.jenkins.tools.bom:bom-2.426.x:2582.v830625dd636c'] = ['2.426', '1000']
+
+    println "Get Jenkins BOM version for v.$versionString"
+    for (entry in bom) {
+        // Check BOM version
+        if (1 != compareVersion(entry.value[0], versionString) && 1 == compareVersion(entry.value[1], versionString)) {
+            println "Artifact: $entry.key = [${entry.value[0]}; ${entry.value[1]}]"
+            return entry.key;
+        }
+    }
+    throw new GradleException("Jenkins versions 2.138 and upper are supported only")
+}
+
+dependencies {
+    api project(':generic-client-lib')
+    api project(':ptai-report-tools')
+
     String versionString = findProperty('jenkinsVersion')
-    if (!versionString) {
-        logger.quiet("Jenkins version is not defined, using 2.164.3 as default")
-        versionString = '2.164.3'
+    implementation platform(getBom(versionString))
+    // For Jenkins versions [2.413 - 2.427] need to explicitly define some dependencies
+    if (1 != compareVersion('2.413', versionString) && -1 != compareVersion('2.427', versionString)) {
+        implementation 'com.google.j2objc:j2objc-annotations:2.8'
+        implementation 'org.checkerframework:checker-qual:3.38.0'
+        annotationProcessor 'org.checkerframework:checker-qual:3.38.0'
     }
-    logger.info("Using Jenkins version: $versionString")
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/token-macro
+    implementation "org.jenkins-ci.plugins:token-macro"
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/credentials
+    implementation "org.jenkins-ci.plugins:credentials"
 
-    def versionMatcher = versionString =~ /(\d+)\.(\d+)\.(\d+)/
-    if (!versionMatcher.matches()) {
-        versionMatcher = versionString =~ /(\d+)\.(\d+)/
-        if (!versionMatcher.matches()) throw new GradleException("Jenkins version syntax incorrect: failed to parse $versionString")
-    }
-    def version = [versionMatcher.group(1).toInteger(), versionMatcher.group(2).toInteger()]
-    if (-1 != compareVersion('2.150', versionString))
-        throw new GradleException("Jenkins versions 2.150 and upper are supported only")
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    // https://mvnrepository.com/artifact/org.jooq/joor-java-8
+    implementation 'org.jooq:joor-java-8:0.9.13'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
+    implementation 'org.apache.commons:commons-compress:1.21'
+    // Need this to work with 7zip compression
+    // https://mvnrepository.com/artifact/org.tukaani/xz
+    implementation 'org.tukaani:xz:1.9'
 
-    // Calculate structs-plugin version. For Jenkins 2.107.3 version 1.21 is to be used, for 2.222.4 - 1.22
-    if (-1 == compareVersion('2.222.4', versionString))
-    // https://updates.jenkins.io/download/plugins/structs/1.22/structs.hpi
-        structsVersion = '1.22'
-    else
-    // https://updates.jenkins.io/download/plugins/structs/1.21/structs.hpi
-        structsVersion = '1.21'
-    logger.info("Using Structs plugin version: $structsVersion")
-    // workflow-step-api: 2.22 -> 2.138.4, 2.23 -> 2.176.4
-    if (-1 == compareVersion('2.176.4', versionString))
-    // https://updates.jenkins.io/download/plugins/workflow-step-api/2.23/workflow-step-api.hpi
-        workflowStepApiVersion = '2.23'
-    else
-    // https://updates.jenkins.io/download/plugins/workflow-step-api/2.22/workflow-step-api.hpi
-        workflowStepApiVersion = '2.22'
-    logger.info("Using Workflow step API plugin version: $workflowStepApiVersion")
-    // token-macro:
-    // 2.12 -> 2.121.3
-    // 2.13 -> 2.222.3
-    // 2.14 -> 2.274
-    if (-1 == compareVersion('2.274', versionString))
-    // https://updates.jenkins.io/download/plugins/token-macro/2.14/token-macro.hpi
-        tokenMacroVersion = '2.14'
-    else if (-1 == compareVersion('2.222.3', versionString))
-    // https://updates.jenkins.io/download/plugins/token-macro/2.13/token-macro.hpi
-        tokenMacroVersion = '2.13'
-    else
-    // https://updates.jenkins.io/download/plugins/token-macro/2.12/token-macro.hpi
-        tokenMacroVersion = '2.12'
-    logger.info("Using Token macro plugin version: $tokenMacroVersion")
-    // credentials:
-    // 2.3.11 -> 2.138.4
-    // 2.3.12 -> 2.222.4
-    if (-1 == compareVersion('2.222.4', versionString))
-    // https://updates.jenkins.io/download/plugins/credentials/2.3.12/credentials.hpi
-        credentialsVersion = '2.3.12'
-    else
-    // https://updates.jenkins.io/download/plugins/credentials/2.3.11/credentials.hpi
-        credentialsVersion = '2.3.11'
-    logger.info("Using Credentials plugin version: $credentialsVersion")
-    // scm-api:
-    // 2.4.1 -> 2.60.3
-    // 2.5.0 - 2.6.2 -> 2.164.3
-    // 2.6.3 -> 2.107.3
-    // 2.6.4 -> 2.176.4
-    if (-1 == compareVersion('2.176.4', versionString))
-    // https://updates.jenkins.io/download/plugins/scm-api/2.6.4/scm-api.hpi
-        scmApiVersion = '2.6.4'
-    else if (-1 == compareVersion('2.164.3', versionString))
-    // https://updates.jenkins.io/download/plugins/scm-api/2.6.2/scm-api.hpi
-        scmApiVersion = '2.6.2'
-    else
-    // https://updates.jenkins.io/download/plugins/scm-api/2.6.3/scm-api.hpi
-        scmApiVersion = '2.6.3'
-    logger.info("Using SCM API plugin version: $scmApiVersion")
-    // trilead-api:
-    // 1.0.3 -> 2.150.1
-    // 1.0.4 - 1.0.8 -> 2.184
-    // 1.0.9 -> 2.204
-    // 1.0.10 -> 2.184
-    // 1.0.12 - 1.0.13 -> 2.204
-    if (-1 == compareVersion('2.204', versionString))
-    // https://updates.jenkins.io/download/plugins/trilead-api/1.0.13/trilead-api.hpi
-        trileadApiVersion = '1.0.13'
-    else if (-1 == compareVersion('2.184', versionString))
-    // https://updates.jenkins.io/download/plugins/trilead-api/1.0.10/trilead-api.hpi
-        trileadApiVersion = '1.0.10'
-    else
-    // https://updates.jenkins.io/download/plugins/trilead-api/1.0.3/trilead-api.hpi
-        trileadApiVersion = '1.0.3'
-    logger.info("Using Trilead API plugin version: $trileadApiVersion")
-    // script-security:
-    // 1.71 -> 2.60.3
-    // 1.72 - 1.76 -> 2.176.4
-    // 1.77 -> 2.222.4
-    if (-1 == compareVersion('2.222.4', versionString))
-    // https://updates.jenkins.io/download/plugins/script-security/1.77/script-security.hpi
-        scriptSecurityVersion = '1.77'
-    else if (-1 == compareVersion('2.176.4', versionString))
-    // https://updates.jenkins.io/download/plugins/script-security/1.76/script-security.hpi
-        scriptSecurityVersion = '1.76'
-    else
-    // https://updates.jenkins.io/download/plugins/script-security/1.71/script-security.hpi
-        scriptSecurityVersion = '1.71'
-    logger.info("Using Script security plugin version: $scriptSecurityVersion")
-    // matrix project:
-    // 1.14 -> 2.7.3
-    // 1.15 - 1.18 -> 2.164.3
-    // 1.19 -> 2.282
-    if (-1 == compareVersion('2.282', versionString))
-    // https://updates.jenkins.io/download/plugins/matrix-project/1.19/matrix-project.hpi
-        matrixProjectVersion = '1.19'
-    else if (-1 == compareVersion('2.164.3', versionString))
-    // https://updates.jenkins.io/download/plugins/matrix-project/1.18/matrix-project.hpi
-        matrixProjectVersion = '1.18'
-    else
-    // https://updates.jenkins.io/download/plugins/matrix-project/1.14/matrix-project.hpi
-        matrixProjectVersion = '1.14'
-    // git:
-    // 4.2.2 -> 2.138.4
-    // 4.3.0 - 4.4.5 -> 2.204.1
-    // 4.5.0 - 4.6.0 -> 2.222.4
-    // 4.7.0 - 4.7.2 -> 2.263.1
-    if (-1 == compareVersion('2.263.1', versionString))
-    // https://updates.jenkins.io/download/plugins/git/4.7.2/git.hpi
-        gitVersion = '4.7.2'
-    else if (-1 == compareVersion('2.222.4', versionString))
-    // https://updates.jenkins.io/download/plugins/git/4.6.0/git.hpi
-        gitVersion = '4.6.0'
-    else if (-1 == compareVersion('2.204.1', versionString))
-    // https://updates.jenkins.io/download/plugins/git/4.4.5/git.hpi
-        gitVersion = '4.4.5'
-    else
-    // https://updates.jenkins.io/download/plugins/git/4.2.2/git.hpi
-        gitVersion = '4.2.2'
-    logger.info("Using Git plugin version: $gitVersion")
+    // https://mvnrepository.com/artifact/org.webjars/echarts
+    webjars 'org.webjars:echarts:5.0.2'
 
-    // Starting with 2.264 (https://www.jenkins.io/blog/2020/11/10/major-changes-in-weekly-releases/)
-    // need to use different UI
-    if (1 != compareVersion('2.355', versionString))
-        sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-355+' ]
-    else if (1 != compareVersion('2.264', versionString))
-        sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-264+' ]
-    else
-        sourceSets.main.resources.srcDirs += [ 'src/main/resources-taglib-2-264-' ]
-    return versionString
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins.workflow/workflow-aggregator
+    jenkinsServer 'org.jenkins-ci.plugins.workflow:workflow-aggregator:2.7'
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/pipeline-utility-steps
+    jenkinsServer 'org.jenkins-ci.plugins:pipeline-utility-steps'
+    // https://mvnrepository.com/artifact/org.jenkins-ci.plugins/git
+    jenkinsServer "org.jenkins-ci.plugins:git"
+    // Uncomment this to look how DC trend charts are look like
+    // jenkinsServer "org.jenkins-ci.plugins:dependency-check-jenkins-plugin:5.1.1"
+
+    testImplementation(testFixtures(project(':generic-client-lib')))
+    testImplementation(testFixtures(project(":ptai-data-structures")))
+    testImplementation(testFixtures(project(":ptai-rest-api")))
+    testImplementation(testFixtures(project(":generic-client-lib")))
+
+    // Need this to execute Jenkins plugin integration tests
+    // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-test-harness
+    testImplementation 'org.jenkins-ci.main:jenkins-test-harness:2110.v71145c2d8157'
+    // https://mvnrepository.com/artifact/org.jenkins-ci.main/jenkins-war
+    testImplementation "org.jenkins-ci.main:jenkins-war:${jenkinsVersion}"
 }
 
 // Set Jenkins server debug port
@@ -402,5 +260,12 @@ jar {
     // See https://www.jenkins.io/blog/2018/01/13/jep-200/
     manifest {
         attributes 'Jenkins-ClassFilter-Whitelisted': 'true'
+    }
+}
+
+task jenkinsBomTest {
+    doLast {
+        String versionString = findProperty('jenkinsVersion')
+        getBom(versionString)
     }
 }

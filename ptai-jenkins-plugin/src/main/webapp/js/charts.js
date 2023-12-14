@@ -66,7 +66,6 @@ function maxTextWidth(strings, font) {
 /**
  * Get maximum width of text array items
  * @param strings Array of strings
- * @param font Font used for text render
  * @returns {*} Maximum text width in pixels
  */
 function maxChartTextWidth(strings) {
@@ -80,10 +79,16 @@ function maxChartTextWidth(strings) {
  * @param divId DIV id to set height
  */
 function setFrameHeight(innerHeight, divId) {
-    var layout = $(divId).getLayout();
-    var divHeight = innerHeight + layout.get('padding-top') + layout.get('border-top') + layout.get('padding-bottom') + layout.get('border-bottom');
+    var style = getComputedStyle(document.getElementById(divId));
+    var divHeight = innerHeight;
+    divHeight += parseInt(style.paddingTop) + parseInt(style.paddingBottom);
+    divHeight += parseInt(style.borderTopWidth) + parseInt(style.borderBottomWidth);
     // Setup chart DIV height
-    $(divId).setStyle({ height: divHeight + 'px' });
+    document.getElementById(divId).style.height = divHeight + 'px';
+}
+
+function hide(divId) {
+    document.getElementById(divId).style.display = "none";
 }
 
 /**
@@ -99,7 +104,7 @@ function setFrameHeight(innerHeight, divId) {
 function createDistributionBarChart(chartDivId, option, maxTextWidth) {
     if (0 === option.series[0].data.length) {
         // Show "NO DATA" placeholder instead of chart if there's no data
-        $(chartDivId).hide();
+        hide(chartDivId);
         // Use fixed 36px height
         setFrameHeight(36, chartDivId + "-no-data", false);
         return;
@@ -116,7 +121,7 @@ function createDistributionBarChart(chartDivId, option, maxTextWidth) {
         top: "0px",
         bottom: chartDimensions.bottomMargin + "px" };
     // Hide "NO DATA placeholder"
-    $(chartDivId + "-no-data").hide();
+    hide(chartDivId + "-no-data");
     // Calculate chart's DIV inner height ...
     var innerHeight = option.yAxis[0].data.length * chartDimensions.barHeight + chartDimensions.bottomMargin;
     // ... and stretch DIV vertically to fit chart
@@ -134,7 +139,7 @@ function createDistributionBarChart(chartDivId, option, maxTextWidth) {
 function createDistributionPieChart(chartDivId, option, i18map = null) {
     if (0 === option.series[0].data.length) {
         // Show "NO DATA" placeholder instead of chart if there's no data
-        $(chartDivId).hide();
+        hide(chartDivId);
         // Use fixed 36px height
         setFrameHeight(36, chartDivId + "-no-data", false);
         return;
@@ -175,7 +180,7 @@ function createDistributionPieChart(chartDivId, option, i18map = null) {
     }
 
     // Hide "NO DATA placeholder"
-    $(chartDivId + "-no-data").hide();
+    hide(chartDivId + "-no-data");
     renderChart(chartDivId, option);
 }
 
@@ -189,7 +194,7 @@ function createTrendChart(chartDivId, option) {
     /*
     if (0 === option.series[0].data.length) {
         // Show "NO DATA" placeholder instead of chart if there's no data
-        $(chartDivId).hide();
+        document.getElementById(chartDivId).hide();
         // Use fixed 36px height
         setFrameHeight(36, chartDivId + "-no-data", false);
         return;
@@ -231,7 +236,7 @@ function createTrendChart(chartDivId, option) {
 function createBuildHistoryChart(chartDivId, option, i18map, small = true) {
     if (0 === option.series[0].data.length) {
         // Show "NO DATA" placeholder instead of chart if there's no data
-        $(chartDivId).hide();
+        hide(chartDivId);
         // Use fixed 36px height
         setFrameHeight(36, chartDivId + "-no-data", false);
         return;
@@ -285,7 +290,7 @@ function createBuildHistoryChart(chartDivId, option, i18map, small = true) {
     }
 
     // Hide "NO DATA placeholder"
-    $(chartDivId + "-no-data").hide();
+    hide(chartDivId + "-no-data");
     var innerHeight = 250;
     setFrameHeight(innerHeight, chartDivId, small);
     renderChart(chartDivId, option);

@@ -25,7 +25,7 @@ public class ScanBrief {
         @Deprecated V36,
         @Deprecated V40,
         @Deprecated V41,
-        V411, V420, V430, V44X, V450;
+        V411, V420, V430, V44X, V450, V460;
 
         @SneakyThrows
         public static boolean isDeprecated(@NonNull final ApiVersion version) {
@@ -61,6 +61,11 @@ public class ScanBrief {
     @Setter
     @JsonProperty
     protected String ptaiAgentVersion;
+
+    @Getter
+    @Setter
+    @JsonProperty
+    protected String ptaiAgentName;
 
     @NonNull
     @Getter
@@ -202,7 +207,7 @@ public class ScanBrief {
     protected Statistics statistics;
 
     public enum State {
-        UNKNOWN, DONE, FAILED, ABORTED
+        UNKNOWN, DONE, FAILED, ABORTED, ABORTED_FROM_CI
     }
 
     @Getter
