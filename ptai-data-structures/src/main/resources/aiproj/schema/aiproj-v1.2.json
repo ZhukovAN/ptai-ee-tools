@@ -418,7 +418,7 @@
             "javaType": "com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v12.JavaVersion",
             "title": "JDK version",
             "type": "string",
-            "enum": [8, 11, 17]
+            "enum": ["8", "11", "17"]
           }
         }
       },
