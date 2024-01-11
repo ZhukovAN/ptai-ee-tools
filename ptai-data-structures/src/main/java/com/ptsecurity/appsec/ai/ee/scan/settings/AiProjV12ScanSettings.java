@@ -121,7 +121,7 @@ public class AiProjV12ScanSettings extends UnifiedAiProjScanSettings {
 
     @Override
     public Version getVersion() {
-        return Version.V11;
+        return Version.V12;
     }
 
     @Override
