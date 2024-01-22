@@ -20,8 +20,9 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version._1_0;
-import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v11.Version._1_1;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v12.Version._1_0;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v12.Version._1_1;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v12.Version._1_2;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.i18n_ast_settings_type_manual_json_settings_message_invalid;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
@@ -132,6 +133,8 @@ public abstract class UnifiedAiProjScanSettings {
                 settings = (root.path("ScanModules").isMissingNode())
                         ? new AiProjLegacyScanSettings(root)
                         : new AiProjV10ScanSettings(root);
+            else if (_1_2.value().equals(versionNode.textValue()))
+                settings = new AiProjV12ScanSettings(root);
             else if (_1_1.value().equals(versionNode.textValue()))
                 settings = new AiProjV11ScanSettings(root);
             else if (_1_0.value().equals(versionNode.textValue()))
@@ -250,7 +253,7 @@ public abstract class UnifiedAiProjScanSettings {
         return res;
     }
 
-    public enum Version { LEGACY, V10, V11 }
+    public enum Version { LEGACY, V10, V11, V12 }
     public abstract Version getVersion();
 
     /**
