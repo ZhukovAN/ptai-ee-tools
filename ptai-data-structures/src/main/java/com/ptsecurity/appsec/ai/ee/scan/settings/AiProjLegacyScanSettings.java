@@ -173,7 +173,7 @@ public class AiProjLegacyScanSettings extends UnifiedAiProjScanSettings {
         if (modules.contains(ScanModule.BLACKBOX)) legacyModules.add(ScanAppType.BLACKBOX.value());
         if (modules.contains(ScanModule.PATTERNMATCHING) || modules.contains(ScanModule.DATAFLOWANALYSIS))
             legacyModules.add(ScanAppType.PMTAINT.value());
-        if (modules.contains(ScanModule.VULNERABLESOURCECODE)) {
+        if (modules.contains(ScanModule.VULNERABLESOURCECODE) || modules.contains(ScanModule.STATICCODEANALYSIS)) {
             ScanBrief.ScanSettings.Language language = getProgrammingLanguage();
             if (ScanBrief.ScanSettings.Language.PHP == language)
                 legacyModules.add(ScanAppType.PHP.value());
