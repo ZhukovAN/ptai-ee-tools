@@ -1,0 +1,601 @@
+openapi: 3.0.1
+info:
+  title: Current API v6
+  description: 'To specify the API version in your request, add v{version} after api/ in the address. For example, api/v6/auth.'
+  version: '6'
+servers:
+  - url: https://ptai.ptdemo.local/
+paths:
+  /api/auth/accessToken:
+    get:
+      tags:
+        - AccessToken
+      summary: All access tokens
+      responses:
+        '200':
+          description: Returns tokens
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccessTokenModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccessTokenModel'
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - AccessToken
+      summary: Create access key
+      requestBody:
+        description: Access token
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateModel'
+      responses:
+        '200':
+          description: Return created key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenCreatedModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenCreatedModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  '/api/auth/accessToken/{id}':
+    get:
+      tags:
+        - AccessToken
+      summary: Access token by id
+      parameters:
+        - name: id
+          in: path
+          description: Token`s id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Returns tokens
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/accessToken/revoke:
+    put:
+      tags:
+        - AccessToken
+      summary: Revoke access token
+      parameters:
+        - name: id
+          in: query
+          description: Token`s id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+  /api/auth/signin:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Auth
+      summary: "Login by access token in request headers.\r\nSend access token in header with name \"Access-Token\""
+      parameters:
+        - name: scopeType
+          in: query
+          schema:
+            $ref: '#/components/schemas/AuthScope'
+      responses:
+        '200':
+          description: Returns the created JWT token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/userLogin:
+    post:
+      tags:
+        - Auth
+      summary: Login local user by credentials
+      parameters:
+        - name: scopeType
+          in: query
+          description: Scope type
+          schema:
+            $ref: '#/components/schemas/AuthScope'
+      requestBody:
+        description: Model with username and password
+        content:
+          application/json-patch+json:
+            schema:
+              $ref: '#/components/schemas/UserLoginModel'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginModel'
+          application/*+json:
+            schema:
+              $ref: '#/components/schemas/UserLoginModel'
+      responses:
+        '200':
+          description: Returns JWT token or pair of access and refresh tokes for Web scope
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/AuthResultModel'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ApiErrorModel'
+        '401':
+          description: Unauthorized
+  /api/auth/refreshToken:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Auth
+      summary: Refresh token
+      responses:
+        '200':
+          description: Returns the created JWT token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResultModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResultModel'
+        '401':
+          description: Unauthorized
+  /api/auth/signout:
+    post:
+      tags:
+        - Auth
+      summary: Local signout via Authorization token in Bearer header
+      responses:
+        '200':
+          description: Returns the created JWT token
+        '401':
+          description: Unauthorized
+components:
+  schemas:
+    AccessTokenCreatedModel:
+      type: object
+      properties:
+        token:
+          type: string
+          nullable: true
+      additionalProperties: false
+    AccessTokenCreateModel:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+        expiresDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessTokenScopeType'
+          nullable: true
+      additionalProperties: false
+    AccessTokenModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        expiresDateTime:
+          type: string
+          format: date-time
+          nullable: true
+        createdDateTime:
+          type: string
+          format: date-time
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessTokenScopeType'
+          nullable: true
+        creator:
+          $ref: '#/components/schemas/UserModel'
+      additionalProperties: false
+    AccessTokenScopeType:
+      enum:
+        - None
+        - ScanAgent
+        - LightClientAndPlugins
+      type: string
+    ApiErrorModel:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ApiErrorType'
+        details:
+          type: object
+          additionalProperties:
+            type: string
+            nullable: true
+          nullable: true
+      additionalProperties: false
+    ApiErrorType:
+      enum:
+        - None
+        - INCORRECT_USER_AND_PASSWORD
+        - USER_ID_IS_EMPTY
+        - MEMBER_ALREADY_EXISTS
+        - MEMBER_NOT_EXISTS
+        - PROJECT_ROLE_PERMISSIONS_ALREADY_EXISTS
+        - ACCESS_TOKEN_IS_INCORRECT
+        - ACCESS_TOKEN_ID_IS_INCORRECT
+        - ACCESS_TOKEN_WITH_SAME_NAME_ALREADY_EXISTS
+        - PASSWORD_IS_INCORRECT
+        - USER_IS_INCORRECT
+        - INITIATOR_NOT_FOUND
+        - CREDENTIAL_STORE_IS_UNVAILABLE_OR_TAINTED
+        - USER_BLOCKED
+        - CANNOT_ASSIGN_PROJECT_ROLE_TO_ADMINISTRATOR
+        - EXT_AUTH_PROVIDERS_GET_ERROR
+        - EXT_AUTH_PROVIDERS_BY_SAME_SCHEME_LIMIT_ERROR
+        - EXT_AUTH_PROVIDERS_AT_LEAST_ONE_ENABLED_LIMIT_ERROR
+        - EXT_AUTH_PROVIDER_GET_NOT_FOUND
+        - EXT_AUTH_PROVIDER_GET_ERROR
+        - EXT_AUTH_PROVIDER_UPDATE_ERROR
+        - EXT_AUTH_PROVIDER_DELETE_ERROR
+        - EXT_AUTH_PROVIDER_IS_INCORRECT
+        - EXT_AUTH_PROVIDER_WITH_SAME_NAME_ALREADY_EXISTS
+        - EXT_AUTH_SETTINGS_SAML2_SIGNING_CERT_IS_EMPTY
+        - EXT_AUTH_SETTINGS_SAML2_NAMEID_POLICY_IS_INCORRECT
+        - EXT_AUTH_SETTINGS_SAML2_SIGN_ALG_IS_EMPTY
+        - EXT_AUTH_SETTINGS_TEST_CONNECTION_FAILED
+        - EXT_AUTH_ROLE_MAPPINGS_EMPTY_FIELDS
+        - EXT_AUTH_ROLE_MAPPINGS_NO_GLOBAL_ROLES
+        - EXT_AUTH_SIGNIN_ERROR
+        - EXT_AUTH_SIGNIN_CALLBACK_ERROR
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_EMPTY
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_EMPTY_OR_DISABLED
+        - EXT_AUTH_SIGNIN_SCOPE_TYPE_IS_INCORRECT
+        - EXT_AUTH_SIGNIN_PROVIDER_IS_NOT_AUTHENTICATED
+        - EXT_AUTH_SIGNIN_INVALID_CREDENTIALS
+        - EXT_AUTH_SIGNIN_INVALID_SESSION_ID
+        - EXT_AUTH_SIGNIN_SCHEME_IS_INCORRECT
+        - EXT_AUTH_SIGNIN_OPENID_INVALID_CONFIGURATION
+        - EXT_AUTH_SIGNIN_OPENID_TOKEN_EXPIRED
+        - EXT_AUTH_SIGNIN_OPENID_INCONSISTENT_RESPONSE_MODE_AND_TYPE
+        - EXT_AUTH_SIGNIN_OPENID_INVALID_CLIENT_SECRET
+        - EXT_AUTH_SIGNIN_SAML2_SETTINGS_IS_EMPTY
+        - EXT_AUTH_SIGNIN_SAML2_RESPONSE_STATUS_ERROR
+        - EXT_AUTH_SIGNIN_SAML2_INVALID_SIGNATURE
+        - EXT_AUTH_SIGNIN_LDAP_SSL_REQUIRED
+        - EXT_AUTH_SIGNIN_LDAP_SETTINGS_IS_EMPTY
+        - EXT_AUTH_SIGN_OUT_ERROR
+        - EXT_AUTH_SIGN_OUT_PROVIDER_IS_EMPTY
+        - EXT_AUTH_SIGN_OUT_TOKEN_NOT_FOUND
+        - EXT_AUTH_SIGN_OUT_SCHEME_IS_INCORRECT
+        - EXT_AUTH_SIGN_OUT_OPENID_ERROR
+        - EXT_AUTH_SIGN_OUT_SAML2_ERROR
+        - EXT_AUTH_SIGN_OUT_SAML2_EMPTY_LOGOUT_URL_ERROR
+        - EXT_AUTH_SESSION_GET_ERROR
+        - EXT_AUTH_SESSION_CLAIMS_NOT_DEFINED
+        - EXT_AUTH_SESSION_NOT_FOUND
+        - EXT_AUTH_SESSION_EXPIRED
+        - EXT_AUTH_SESSION_PROVIDER_NOT_FOUND
+        - EXT_AUTH_SESSION_USER_NOT_EQUAL
+        - EXT_AUTH_METADATA_SAML2_ERROR
+        - EXT_AUTH_USER_PROVISION_ERROR
+        - EXT_AUTH_USER_PROVISION_USER_IS_NOT_DEFINED
+        - EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_NOT_MAPPED
+        - EXT_AUTH_USER_PROVISION_USER_LOGIN_FIELD_IS_TOO_LONG
+        - EXT_AUTH_USER_PROVISION_NAME_FIELD_IS_NOT_MAPPED
+        - UPDATE_PACKAGE_VERSION_IS_ALREADY_UPLOADED
+        - UPDATE_PACKAGE_UPLOADED_IS_ALREADY_STARTED
+        - UPDATE_PACKAGE_UNKNOWN_PRODUCT
+        - UPDATE_PACKAGE_VERSION_IS_NOT_UPLOADED
+        - UPDATE_SERVER_PROCESS_RUN_TIMEOUT
+        - UPDATE_SERVER_PARAMETERS_INVALID
+        - UPDATE_SERVER_INSTALLER_EXIT_WITH_ERROR
+        - UPDATE_SERVER_PACKAGE_IS_INCORRECT
+        - UPDATE_SERVER_NOT_ENOUGH_SPACE
+        - VERSION_MISMATCH
+        - CERTIFICATE_FILE_IS_EMPTY
+        - CERTIFICATE_IS_ALREADY_INSTALLED
+        - CERTIFICATE_IS_NOT_VALID
+        - URI_IS_NOT_VALID
+        - PORT_IS_NOT_SPECIFIED
+        - INCORRECT_DATE_VALUE
+        - LOGS_NOT_FOUND
+        - PROJECT_WITH_SAME_NAME_ALREADY_EXISTS
+        - UNEXPECTED_SCAN_STAGE
+        - PROJECT_NOT_FOUND
+        - UPLOAD_NOT_FOUND
+        - SCANRESULT_NOT_FOUND
+        - INVALID_JSON_FIELDS
+        - INVALID_BLACKBOX_SETTINGS
+        - INVALID_LOCALE_ID
+        - INCORRECT_SAST_RULES
+        - INCORRECT_PM_RULE
+        - UNEXPECTED_LANGUAGE
+        - MAIL_PROFILE_NOT_FOUND
+        - UPDATER_NOT_SET
+        - ISSUE_NOT_FOUND
+        - SCANSETTINGS_NOT_FOUND
+        - INVALID_QUERY_PARAMETER
+        - INVALID_PM_RULE
+        - PM_RULE_NOT_FOUND
+        - ENTITY_NOT_FOUND
+        - ROW_NOT_FOUND
+        - ISSUE_TRACKER_CONNECTION_NOT_FOUND
+        - ISSUE_TRACKER_CONNECTION_SETTINGS_NOT_SET
+        - ISSUE_TRACKER_SETTINGS_ID_NOT_SET
+        - ISSUE_TRACKER_CREDENTIALS_NOT_SET
+        - ISSUE_TRACKER_HOST_IS_INCORRECT
+        - ISSUE_TRACKER_OAUTH_DATA_NOT_SET
+        - ISSUE_TRACKER_TRACKER_NOT_FOUND
+        - ISSUE_TRACKER_TRACKER_NOT_FOUND_WITH_OAUTH
+        - ISSUE_TRACKER_INVALID_TICKET_LINK
+        - ISSUE_TRACKER_UNSUPPORTED_FIELDS_COFIGURATION
+        - ISSUE_TRACKER_TICKET_CREATION_FAILED
+        - ISSUE_TRACKER_PRIORITIES_GETTING_FAILED
+        - ISSUE_TRACKER_USERS_GETTING_FAILED
+        - ISSUE_TRACKER_STATUSES_GETTING_FAILED
+        - ISSUE_TRACKER_FIELDS_GETTING_FAILED
+        - ISSUE_TRACKER_OPTIONS_GETTING_FAILED
+        - ISSUE_TRACKER_EXISTING_TICKETS_GETTING_FAILED
+        - ISSUE_TRACKER_COMPONENTS_GETTING_FAILED
+        - ISSUE_TRACKER_CAPTCHA_CHALLENGE
+        - ISSUE_TRACKER_AUTHENTICATION_DENIED_DETAILED
+        - ISSUE_TRACKER_AUTHENTICATION_DENIED
+        - ISSUE_TRACKER_AUTHENTICATION_FAILED
+        - ISSUE_TRACKER_OAUTH_SETTINGS_INVALID
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_GETTING_ACCESS_TOKEN_FAILED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_INVALID_ACCESS_TOKEN_RETURNED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_GETTING_REQUEST_TOKEN_FAILED
+        - ISSUE_TRACKER_OAUTH_AUTHENTICATION_INVALID_REQUEST_TOKEN_RETURNED
+        - FS_SOURCE_IS_BUSY
+        - DIRECTORY_NOT_FOUND
+        - INVALID_ARCHIVE_DATA
+        - ISSUE_ATTACH_TICKET_LINK_FAILED
+        - COMMENT_POLICY_FAILED_COMMENT_IS_EMPTY
+        - PROJECTS_COUNT_LIMITED_BY_LICENSE
+        - LICENSE_FILE_IS_INVALID
+        - LICENSE_EXPIRED
+        - LICENSE_FINGERPRINT_ERROR
+        - LICENSE_WITHOUT_FINGERPRINT
+        - LANGUAGE_NOT_ALLOWED_BY_LICENCE
+        - LICENSED_AGENTS_LIMIT_EXCEED
+        - COULD_NOT_STORE_LICENSE
+        - LICENSE_SERVICE_NOT_AVAILABLE
+        - LICENSE_UNLICENSED_USAGE
+        - LICENSE_VARIANT_NOT_SUPPORTED
+        - NON_VCS_PROJECT
+        - UNKNOWN_SOURCE_VERSION_CONTROL_SYSTEM
+        - SOURCE_VERSION_CONTROL_SYSTEM_ERROR
+        - INVALID_VERSION_CONTROL_SYSTEM_SETTINGS
+        - OPERATION_NOT_EXISTS
+        - SCAN_AGENT_NOT_FOUND
+        - SCAN_ALREADY_SCHEDULED
+        - INCORRECT_AGENT_STATUS
+        - SCAN_AGENT_WAS_SUSPENDED
+        - SCAN_AGENT_IS_SCANNING
+        - SCAN_NOT_FOUND
+        - ACTIVE_SCAN_AGENTS_NOT_FOUND
+        - NO_ACTIVE_SCAN_AGENT_THAT_SUPPORTS_LANGUAGE
+        - SCAN_AGENT_IS_ACTIVE
+        - SCHEDULING_IS_LOCKED
+        - SCAN_AGENT_NUMBER_EXCEED
+        - NO_SCAN_MODULES
+        - ONLY_BLACKBOX_IS_NOT_ALLOWED
+        - INCORRECT_AGENT_OS_TAG
+        - SCAN_IS_PROCESSING
+        - SERVER_CERTIFICATE_NOT_FOUND
+        - FILESYSTEM_ERROR_ACCESS_DENIED
+        - VAULT_CREDENTIALS_NOT_FOUND
+        - REPORT_TEMPLATE_NOT_FOUND
+        - REPORT_GENERATE_FAILED
+        - REPORT_TEMPLATE_INVALID
+        - REPORT_TEMPLATE_UNKNOWN_FORMAT
+        - REPORT_INCORRECT_PARAMETERS
+        - REPORT_TEMPLATE_WITH_SAME_NAME_ALREADY_EXISTS
+        - REPORT_TEMPLATE_FILE_NAME_INCORRECT_MACROS
+        - REPORT_TEMPLATE_INVALID_FILE_NAME
+        - INVALID_VERSION_CONTROL_SYSTEM_CONNECTION_SETTINGS
+        - COULD_NOT_STORE_PROJECT
+        - COULD_NOT_STORE_SCAN_SETTINGS
+        - FILES_FOR_DOWNLOAD_NOT_FOUND
+        - PROJECTS_FILES_NOT_FOUND
+        - INVALID_UPLOAD_PATH
+        - INVALID_PATH_PARAMETER
+        - TOO_MANY_FILES
+        - COULD_NOT_CHECKOUT_PROJECT
+        - COULD_NOT_UPDATE_PROJECT_SOURCES_FROM_SOURCE_CONTROL
+        - USER_ID_IS_INCORRECT
+      type: string
+    AuthProviderModel:
+      type: object
+      properties:
+        Id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        scheme:
+          $ref: '#/components/schemas/AuthProviderScheme'
+        enabled:
+          type: boolean
+      additionalProperties: false
+    AuthProviderScheme:
+      enum:
+        - OpenIdConnect
+        - Saml2
+        - Ldap
+      type: string
+    AuthResultModel:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          nullable: true
+        refreshToken:
+          type: string
+          nullable: true
+        expiredAt:
+          type: string
+          format: date-time
+        needChangePassword:
+          type: boolean
+      additionalProperties: false
+    AuthScope:
+      enum:
+        - None
+        - Internal
+        - Web
+        - WebRefresh
+        - WebLongRefresh
+        - AccessToken
+        - AccessTokenRefresh
+        - Plugin
+        - PluginRefresh
+      type: string
+    RefreshTokenResultModel:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          nullable: true
+        expiredAt:
+          type: string
+          format: date-time
+      additionalProperties: false
+    UserLoginModel:
+      type: object
+      properties:
+        login:
+          type: string
+          nullable: true
+        password:
+          type: string
+          nullable: true
+        rememberMe:
+          type: boolean
+      additionalProperties: false
+    UserModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          nullable: true
+        email:
+          type: string
+          nullable: true
+        login:
+          type: string
+          nullable: true
+        isRoot:
+          type: boolean
+        isExternal:
+          type: boolean
+        isActive:
+          type: boolean
+        needChangePassword:
+          type: boolean
+        authProvider:
+          $ref: '#/components/schemas/AuthProviderModel'
+        lastLoginDate:
+          type: string
+          format: date-time
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: Access-Token
+      in: header
