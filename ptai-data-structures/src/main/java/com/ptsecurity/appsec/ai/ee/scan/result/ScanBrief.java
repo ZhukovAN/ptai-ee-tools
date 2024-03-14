@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -25,7 +26,7 @@ public class ScanBrief {
         @Deprecated V36,
         @Deprecated V40,
         @Deprecated V41,
-        V411, V420, V430, V44X, V450, V460;
+        V411, V420, V430, V44X, V450, V460, V470;
 
         @SneakyThrows
         public static boolean isDeprecated(@NonNull final ApiVersion version) {
@@ -125,6 +126,7 @@ public class ScanBrief {
         public enum Language {
             PHP("PHP"),
             JAVA("Java"),
+            CSHARPWINONLY("CSharpWinOnly"),
             CSHARP("CSharp"),
             VB("VB"),
             JAVASCRIPT("JavaScript"),
@@ -133,7 +135,9 @@ public class ScanBrief {
             PYTHON("Python"),
             SQL("SQL"),
             OBJECTIVEC("ObjectiveC"),
-            SWIFT("Swift"), KOTLIN("Kotlin");
+            SWIFT("Swift"),
+            KOTLIN("Kotlin"),
+            RUBY("Ruby");
 
             public static Language fromString(@NonNull final String value) {
                 for (Language language : Language.values())
@@ -149,6 +153,9 @@ public class ScanBrief {
 
         @JsonProperty
         protected Language language;
+
+        @JsonProperty
+        protected List<Language> languages;
 
         @JsonProperty
         protected String url;

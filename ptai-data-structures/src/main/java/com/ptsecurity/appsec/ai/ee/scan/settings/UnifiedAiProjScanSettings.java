@@ -20,14 +20,11 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v12.Version._1_0;
-import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v12.Version._1_1;
-import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.v12.Version._1_2;
+import static com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.AiprojV13.Version.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.Resources.i18n_ast_settings_type_manual_json_settings_message_invalid;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
-import static com.ptsecurity.misc.tools.helpers.CollectionsHelper.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Slf4j
@@ -133,6 +130,8 @@ public abstract class UnifiedAiProjScanSettings {
                 settings = (root.path("ScanModules").isMissingNode())
                         ? new AiProjLegacyScanSettings(root)
                         : new AiProjV10ScanSettings(root);
+            else if (_1_3.value().equals(versionNode.textValue()))
+                settings = new AiProjV13ScanSettings(root);
             else if (_1_2.value().equals(versionNode.textValue()))
                 settings = new AiProjV12ScanSettings(root);
             else if (_1_1.value().equals(versionNode.textValue()))
@@ -253,7 +252,7 @@ public abstract class UnifiedAiProjScanSettings {
         return res;
     }
 
-    public enum Version { LEGACY, V10, V11, V12 }
+    public enum Version { LEGACY, V10, V11, V12, V13 }
     public abstract Version getVersion();
 
     /**
@@ -268,7 +267,16 @@ public abstract class UnifiedAiProjScanSettings {
     }
 
     @NonNull
+    @Deprecated
     public abstract ScanBrief.ScanSettings.Language getProgrammingLanguage();
+
+    @NonNull
+    public Set<ScanBrief.ScanSettings.Language> getProgrammingLanguages() {
+        Set<ScanBrief.ScanSettings.Language> res = new HashSet<>();
+        res.add(this.getProgrammingLanguage());
+        return res;
+    }
+
     public abstract UnifiedAiProjScanSettings setProgrammingLanguage(@NonNull final ScanBrief.ScanSettings.Language language);
 
     @RequiredArgsConstructor
@@ -277,8 +285,11 @@ public abstract class UnifiedAiProjScanSettings {
         CONFIGURATION("Configuration"),
         COMPONENTS("Components"),
         BLACKBOX("BlackBox"),
-        DATAFLOWANALYSIS("DataFlowAnalysis"),
         PATTERNMATCHING("PatternMatching"),
+        STATICCODEANALYSIS("StaticCodeAnalysis"),
+        @Deprecated
+        DATAFLOWANALYSIS("DataFlowAnalysis"),
+        @Deprecated
         VULNERABLESOURCECODE("VulnerableSourceCode");
 
         @Getter
@@ -287,8 +298,30 @@ public abstract class UnifiedAiProjScanSettings {
     public abstract Set<UnifiedAiProjScanSettings.ScanModule> getScanModules();
     public abstract UnifiedAiProjScanSettings setScanModules(@NonNull final Set<UnifiedAiProjScanSettings.ScanModule> modules);
 
+    @Deprecated
     public abstract String getCustomParameters();
+    @Deprecated
     public abstract UnifiedAiProjScanSettings setCustomParameters(final String parameters);
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    public static class WindowsDotNetSettings {
+        public enum ProjectType {
+            NONE, SOLUTION, WEBSITE
+        }
+        @Builder.Default
+        protected UnifiedAiProjScanSettings.DotNetSettings.ProjectType projectType = UnifiedAiProjScanSettings.DotNetSettings.ProjectType.NONE;
+        protected String solutionFile;
+        protected Boolean usePublicAnalysisMethod;
+        protected Boolean downloadDependencies;
+        protected String customParameters;
+    }
+
+    public WindowsDotNetSettings getWindowsDotNetSettings() {
+        return null;
+    }
 
     @Getter
     @Setter
@@ -303,8 +336,24 @@ public abstract class UnifiedAiProjScanSettings {
         protected String solutionFile;
         @Deprecated
         protected String webSiteFolder;
+        protected Boolean usePublicAnalysisMethod;
+        protected Boolean downloadDependencies;
+        protected String customParameters;
     }
     public abstract DotNetSettings getDotNetSettings();
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    public static class GoSettings {
+        protected Boolean usePublicAnalysisMethod;
+        protected String customParameters;
+    }
+
+    public GoSettings getGoSettings() {
+        return null;
+    }
 
     @Getter
     @Setter
@@ -319,14 +368,74 @@ public abstract class UnifiedAiProjScanSettings {
             v1_8, v1_11, v1_17
         }
         protected UnifiedAiProjScanSettings.JavaSettings.JavaVersion javaVersion;
+        protected Boolean usePublicAnalysisMethod;
+        protected Boolean downloadDependencies;
+        protected String customParameters;
     }
     public abstract JavaSettings getJavaSettings();
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    public static class JavaScriptSettings {
+        protected Boolean usePublicAnalysisMethod;
+        protected Boolean downloadDependencies;
+        protected String customParameters;
+    }
+
+    public JavaScriptSettings getJavaScriptSettings() {
+        return null;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    public static class PhpSettings {
+        protected Boolean usePublicAnalysisMethod;
+        protected Boolean downloadDependencies;
+        protected String customParameters;
+    }
+
+    public PhpSettings getPhpSettings() {
+        return null;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    public static class PmTaintSettings {
+        protected Boolean usePublicAnalysisMethod;
+        protected String customParameters;
+    }
+
+    public PmTaintSettings getPmTaintSettings() {
+        return null;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @AllArgsConstructor
+    public static class PythonSettings {
+        protected Boolean usePublicAnalysisMethod;
+        protected Boolean downloadDependencies;
+        protected String customParameters;
+    }
+
+    public PythonSettings getPythonSettings() {
+        return null;
+    }
 
     @NonNull
     public abstract Boolean isSkipGitIgnoreFiles();
     @NonNull
+    @Deprecated
     public abstract Boolean isUsePublicAnalysisMethod();
 
+    @Deprecated
     public abstract UnifiedAiProjScanSettings setUsePublicAnalysisMethod(@NonNull final Boolean value);
     @NonNull
     public abstract Boolean isUseSastRules();
@@ -340,7 +449,9 @@ public abstract class UnifiedAiProjScanSettings {
     @NonNull
     public abstract Boolean isUseSecurityPolicies();
     @NonNull
+    @Deprecated
     public abstract Boolean isDownloadDependencies();
+    @Deprecated
     public abstract UnifiedAiProjScanSettings setDownloadDependencies(@NonNull final Boolean value);
 
     @Getter

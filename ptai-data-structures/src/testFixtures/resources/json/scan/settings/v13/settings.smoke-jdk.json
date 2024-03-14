@@ -1,0 +1,26 @@
+{
+    "$schema": "https://json.schemastore.org/aiproj-1.3.json",
+    "Version": "1.3",
+    "ProjectName": "SmokeJdk",
+    "ProgrammingLanguages": ["Java"],
+    "ScanModules": [
+      "StaticCodeAnalysis",
+      "PatternMatching",
+      "Components",
+      "Configuration"
+    ],
+    "UseSastRules": false,
+    "UseCustomPmRules": false,
+    "UseSecurityPolicies": false,
+    "SkipGitIgnoreFiles": false,
+    "MailingProjectSettings": {
+      "Enabled": false,
+      "MailProfileName": null,
+      "EmailRecipients": []
+    },
+    "JavaSettings": {
+        "Version": "17",
+        "UsePublicAnalysisMethod": false,
+        "DownloadDependencies": false
+    }
+  }
