@@ -35,16 +35,16 @@ To add new PT AI version we need to:
  - Create configuration.yml file in path `ptai-rest-api/src/testFixtures/resources` by template `configuration.template.yml`
  - Ca cert you can download from server using browser
 
-### Generate ptai-data-structures test resources
- 
- - Generate `ptai-data-structures/src/testFixtures/resources/json/scan/brief/detailed/vXXX` by `generateScanResults` method in `ptai-data-structures/src/test/java/com/ptsecurity/appsec/ai/ee/scan/brief/ScanBriefDetailedTest.java`
- - Generate `ptai-data-structures/src/testFixtures/resources/json/scan/result/vXXX` by `generateScanResults` method in `generic-client-lib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/api/vXXX/ConverterTest.java`  
- - README for more information `ptai-data-structures/src/test/README.md`
-
 ### Generate ptai-rest-api test resources
 
 - Generate `ptai-rest-api/src/testFixtures/resources/vXXX/json` by `generateRestApiDataStructures` method in `generic-client-lib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/api/vXXX/RestApiDataStructuresIT.java`
 - README for more information `ptai-rest-api/src/test/README.md`
+
+### Generate ptai-data-structures test resources
+
+- Generate `ptai-data-structures/src/testFixtures/resources/json/scan/result/vXXX` by `generateScanResults` method in `generic-client-lib/src/test/java/com/ptsecurity/appsec/ai/ee/utils/ci/integration/api/vXXX/ConverterTest.java`
+- Generate `ptai-data-structures/src/testFixtures/resources/json/scan/brief/detailed/vXXX` by `generateScanResults` method in `ptai-data-structures/src/test/java/com/ptsecurity/appsec/ai/ee/scan/brief/ScanBriefDetailedTest.java`
+- README for more information `ptai-data-structures/src/test/README.md`
 
 ## Update info
 

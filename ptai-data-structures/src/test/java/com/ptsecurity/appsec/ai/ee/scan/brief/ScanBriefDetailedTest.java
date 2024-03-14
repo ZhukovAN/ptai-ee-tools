@@ -36,7 +36,7 @@ public class ScanBriefDetailedTest extends BaseTest {
     }
 
     @Test
-    @DisplayName("Convert PT AI 4.1.1, 4.2.0, 4.3.0, 4.4.1, 4.5.0, 4.6.0 scan results")
+    @DisplayName("Convert PT AI 4.1.1, 4.2.0, 4.3.0, 4.4.1, 4.5.0, 4.6.0, 4.7.0 scan results")
     @SneakyThrows
     public void generateScanResults() {
         try (TempFile temp = TempFile.createFolder()) {
