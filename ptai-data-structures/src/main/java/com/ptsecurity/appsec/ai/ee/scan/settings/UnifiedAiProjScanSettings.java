@@ -87,7 +87,7 @@ public abstract class UnifiedAiProjScanSettings {
         @Setter
         @Builder
         public static class Message {
-            public enum Type { INFO, WARNING, ERROR };
+            public enum Type { INFO, WARNING, ERROR }
             protected Type type;
             protected String text;
         }
@@ -156,11 +156,22 @@ public abstract class UnifiedAiProjScanSettings {
             JsonSchema jsonSchema = factory.getSchema(settings.getJsonSchema());
             Set<ValidationMessage> errors = jsonSchema.validate(root);
             result.getMessages().addAll(settings.processErrorMessages(errors));
-            if (result.getMessages().stream().noneMatch((m) -> m.getType().equals(ParseResult.Message.Type.ERROR)))
-                result.getMessages().add(ParseResult.Message.builder()
-                        .type(ParseResult.Message.Type.INFO)
-                        .text(i18n_ast_settings_type_manual_json_settings_message_success(settings.getProjectName(), settings.getProgrammingLanguage().getValue()))
-                        .build());
+            boolean isMultiScan = settings.getProgrammingLanguages().size() > 1;
+            if (result.getMessages().stream().noneMatch((m) -> m.getType().equals(ParseResult.Message.Type.ERROR))) {
+                ParseResult.Message detectedSettingsMessage;
+                if (isMultiScan) {
+                    detectedSettingsMessage = ParseResult.Message.builder()
+                            .type(ParseResult.Message.Type.INFO)
+                            .text(i18n_ast_settings_type_manual_json_settings_message_mulilang_success(settings.getProjectName(), settings.getProgrammingLanguages().stream().map(ScanBrief.ScanSettings.Language::getValue).collect(Collectors.toList()).toString()))
+                            .build();
+                } else {
+                    detectedSettingsMessage = ParseResult.Message.builder()
+                            .type(ParseResult.Message.Type.INFO)
+                            .text(i18n_ast_settings_type_manual_json_settings_message_success(settings.getProjectName(), settings.getProgrammingLanguage().getValue()))
+                            .build();
+                }
+                result.getMessages().add(detectedSettingsMessage);
+            }
             result.setSettings(settings);
         } while (false);
         return result;
