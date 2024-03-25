@@ -87,7 +87,7 @@ public abstract class UnifiedAiProjScanSettings {
         @Setter
         @Builder
         public static class Message {
-            public enum Type { INFO, WARNING, ERROR };
+            public enum Type { INFO, WARNING, ERROR }
             protected Type type;
             protected String text;
         }
@@ -156,14 +156,28 @@ public abstract class UnifiedAiProjScanSettings {
             JsonSchema jsonSchema = factory.getSchema(settings.getJsonSchema());
             Set<ValidationMessage> errors = jsonSchema.validate(root);
             result.getMessages().addAll(settings.processErrorMessages(errors));
-            if (result.getMessages().stream().noneMatch((m) -> m.getType().equals(ParseResult.Message.Type.ERROR)))
-                result.getMessages().add(ParseResult.Message.builder()
-                        .type(ParseResult.Message.Type.INFO)
-                        .text(i18n_ast_settings_type_manual_json_settings_message_success(settings.getProjectName(), settings.getProgrammingLanguage().getValue()))
-                        .build());
+            if (result.getMessages().stream().noneMatch((m) -> m.getType().equals(ParseResult.Message.Type.ERROR))) {
+                result.getMessages().add(
+                        getDetectedSettingsMessage(settings.getProjectName(), settings.getProgrammingLanguages())
+                );
+            }
             result.setSettings(settings);
         } while (false);
         return result;
+    }
+
+    private static ParseResult.Message getDetectedSettingsMessage(String projectName,Set<ScanBrief.ScanSettings.Language> languages) {
+        boolean isMultiScan = languages.size() > 1;
+        if (isMultiScan) {
+            return ParseResult.Message.builder()
+                    .type(ParseResult.Message.Type.INFO)
+                    .text(i18n_ast_settings_type_manual_json_settings_message_mulilang_success(projectName, languages.stream().map(ScanBrief.ScanSettings.Language::getValue).collect(Collectors.toList()).toString()))
+                    .build();
+        }
+        return ParseResult.Message.builder()
+                    .type(ParseResult.Message.Type.INFO)
+                    .text(i18n_ast_settings_type_manual_json_settings_message_success(projectName, new ArrayList<>(languages).get(0)))
+                    .build();
     }
 
     @NonNull
