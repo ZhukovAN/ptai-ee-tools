@@ -48,6 +48,7 @@ public class I18nHelper {
         SUSPECTED_STATE_SUPPLIER_MAP.put(Boolean.FALSE, Resources::i18n_misc_enums_vulnerability_suspected_false);
 
         SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT, Resources::i18n_misc_enums_vulnerability_scanmode_entrypoint);
+        SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.FROM_ROOT, Resources::i18n_misc_enums_vulnerability_scanmode_root);
         SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.FROM_OTHER, Resources::i18n_misc_enums_vulnerability_scanmode_other);
         SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED, Resources::i18n_misc_enums_vulnerability_scanmode_publicprotected);
         SCAN_MODE_SUPPLIER_MAP.put(VulnerabilityIssue.ScanMode.TAINT, Resources::i18n_misc_enums_vulnerability_scanmode_taint);
