@@ -103,7 +103,7 @@ public class ScanBrief {
         protected UUID id;
 
         public enum Engine {
-            AI, PM, TAINT, DC, FINGERPRINT, CONFIGURATION, BLACKBOX
+            AI, PM, TAINT, STATICCODEANALYSIS, DC, FINGERPRINT, CONFIGURATION, BLACKBOX
         }
 
         @Builder.Default

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V470;
-import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Engine.AI;
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Engine.STATICCODEANALYSIS;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Engine.PM;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 
@@ -108,10 +108,8 @@ public class IssuesConverter {
         STATE_MAP.put(Stage.SCAN, ScanResult.State.UNKNOWN);
         STATE_MAP.put(Stage.VFSSETUP, ScanResult.State.UNKNOWN);
 
-        SCAN_MODULE_MAP.put(ScanModuleType.VULNERABLESOURCECODE, AI);
         SCAN_MODULE_MAP.put(ScanModuleType.PATTERNMATCHING, ScanBrief.ScanSettings.Engine.PM);
-        SCAN_MODULE_MAP.put(ScanModuleType.DATAFLOWANALYSIS, ScanBrief.ScanSettings.Engine.TAINT);
-        SCAN_MODULE_MAP.put(ScanModuleType.STATICCODEANALYSIS, ScanBrief.ScanSettings.Engine.TAINT);
+        SCAN_MODULE_MAP.put(ScanModuleType.STATICCODEANALYSIS, ScanBrief.ScanSettings.Engine.STATICCODEANALYSIS);
         SCAN_MODULE_MAP.put(ScanModuleType.BLACKBOX, ScanBrief.ScanSettings.Engine.BLACKBOX);
         SCAN_MODULE_MAP.put(ScanModuleType.CONFIGURATION, ScanBrief.ScanSettings.Engine.CONFIGURATION);
         SCAN_MODULE_MAP.put(ScanModuleType.COMPONENTS, ScanBrief.ScanSettings.Engine.DC);
@@ -144,7 +142,7 @@ public class IssuesConverter {
                 res.getEngines().add(SCAN_MODULE_MAP.get(scanModuleType));
         }
         // Entry-point analysis method is always enabled
-        res.setUseEntryAnalysisPoint(res.getEngines().contains(AI) || res.getEngines().contains(PM));
+        res.setUseEntryAnalysisPoint(res.getEngines().contains(STATICCODEANALYSIS) || res.getEngines().contains(PM));
 
         return res;
     }
