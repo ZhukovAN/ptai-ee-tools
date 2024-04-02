@@ -11,6 +11,7 @@ import com.ptsecurity.appsec.ai.ee.server.v470.api.model.ReportType;
 import com.ptsecurity.appsec.ai.ee.server.v470.api.model.UserReportParametersModel;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.Factory;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v470.converters.ReportsConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.GenericAstJob;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.subjobs.export.SonarGiif.SonarGiifReport;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.operations.FileOperations;
@@ -214,14 +215,13 @@ public class ReportsTasksImpl extends AbstractTaskImpl implements ReportsTasks {
                 .parameters(new UserReportParametersModel()
                         .includeDFD(report.isIncludeDfd())
                         .includeGlossary(report.isIncludeGlossary())
-                        // TODO: there's no report filters support in 4.3
-                        // .useFilters(null != report.getFilters())
+                        .useFilters(null != report.getFilters())
                         .reportTemplateId(templateModel.getId()))
                 .scanResultId(scanResultId)
                 .projectId(projectId)
                 .localeId(templateLocale.getValue());
-        // TODO: there's no report filters support in 4.3
-        // if (null != report.getFilters()) model.setFilters(ReportsConverter.convert(report.getFilters()));
+
+        if (null != report.getFilters()) model.setFilters(ReportsConverter.convert(report.getFilters()));
         log.trace("Call report generation API");
         File file = call(
                 () -> client.getReportsApi().apiReportsGeneratePost(model),

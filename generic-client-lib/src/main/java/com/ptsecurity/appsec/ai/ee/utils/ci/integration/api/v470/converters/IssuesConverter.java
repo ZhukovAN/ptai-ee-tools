@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static com.ptsecurity.appsec.ai.ee.scan.reports.Reports.Locale.RU;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V470;
-import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Engine.AI;
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Engine.STATICCODEANALYSIS;
 import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ScanSettings.Engine.PM;
 import static java.lang.String.CASE_INSENSITIVE_ORDER;
 
@@ -30,9 +30,9 @@ public class IssuesConverter {
     private static final Map<IssueLevel, BaseIssue.Level> ISSUE_LEVEL_MAP = new HashMap<>();
     private static final Map<ScanMode, VulnerabilityIssue.ScanMode> SCAN_MODE_MAP = new HashMap<>();
     private static final Map<PolicyState, Policy.State> POLICY_STATE_MAP = new HashMap<>();
-    private static final Map<ProgrammingLanguages, ScanResult.ScanSettings.Language> LANGUAGE_MAP = new HashMap<>();
+    private static final Map<ProgrammingLanguageGroup, ScanResult.ScanSettings.Language> LANGUAGE_MAP = new HashMap<>();
+    private static final Map<ProgrammingLanguageLicence, ScanBrief.ScanSettings.Language> LANGUAGE_LICENSE_MAP = new HashMap<>();
     private static final Map<Stage, ScanResult.State> STATE_MAP = new HashMap<>();
-    private static final Map<ScanResult.ScanSettings.Language, ProgrammingLanguages> REVERSE_LANGUAGE_MAP = new HashMap<>();
     private static final Map<ScanModuleType, ScanBrief.ScanSettings.Engine> SCAN_MODULE_MAP = new HashMap<>();
 
     static {
@@ -57,6 +57,7 @@ public class IssuesConverter {
         ISSUE_LEVEL_MAP.put(IssueLevel.HIGH, BaseIssue.Level.HIGH);
 
         SCAN_MODE_MAP.put(ScanMode.FROMENTRYPOINT, VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT);
+        SCAN_MODE_MAP.put(ScanMode.FROMROOTFUNCTION, VulnerabilityIssue.ScanMode.FROM_ROOT);
         SCAN_MODE_MAP.put(ScanMode.FROMPUBLICPROTECTED, VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED);
         SCAN_MODE_MAP.put(ScanMode.TAINT, VulnerabilityIssue.ScanMode.TAINT);
         SCAN_MODE_MAP.put(ScanMode.UNKNOWN, VulnerabilityIssue.ScanMode.UNKNOWN);
@@ -66,22 +67,34 @@ public class IssuesConverter {
         POLICY_STATE_MAP.put(PolicyState.REJECTED, Policy.State.REJECTED);
         POLICY_STATE_MAP.put(PolicyState.CONFIRMED, Policy.State.CONFIRMED);
 
-        LANGUAGE_MAP.put(ProgrammingLanguages.JAVA, ScanResult.ScanSettings.Language.JAVA);
-        LANGUAGE_MAP.put(ProgrammingLanguages.PHP, ScanResult.ScanSettings.Language.PHP);
-        LANGUAGE_MAP.put(ProgrammingLanguages.CSHARP, ScanResult.ScanSettings.Language.CSHARPWINONLY);
-        LANGUAGE_MAP.put(ProgrammingLanguages.JSANET, ScanResult.ScanSettings.Language.CSHARP);
-        LANGUAGE_MAP.put(ProgrammingLanguages.VB, ScanResult.ScanSettings.Language.VB);
-        LANGUAGE_MAP.put(ProgrammingLanguages.GO, ScanResult.ScanSettings.Language.GO);
-        LANGUAGE_MAP.put(ProgrammingLanguages.CPLUSPLUS, ScanResult.ScanSettings.Language.CPP);
-        LANGUAGE_MAP.put(ProgrammingLanguages.PYTHON, ScanResult.ScanSettings.Language.PYTHON);
-        LANGUAGE_MAP.put(ProgrammingLanguages.PLSQL, ScanResult.ScanSettings.Language.SQL);
-        LANGUAGE_MAP.put(ProgrammingLanguages.JAVASCRIPT, ScanResult.ScanSettings.Language.JAVASCRIPT);
-        LANGUAGE_MAP.put(ProgrammingLanguages.KOTLIN, ScanResult.ScanSettings.Language.KOTLIN);
-        LANGUAGE_MAP.put(ProgrammingLanguages.SWIFT, ScanResult.ScanSettings.Language.SWIFT);
-        LANGUAGE_MAP.put(ProgrammingLanguages.RUBY, ScanResult.ScanSettings.Language.RUBY);
-        LANGUAGE_MAP.put(ProgrammingLanguages.OBJECTIVEC, ScanResult.ScanSettings.Language.OBJECTIVEC);
-        for (ProgrammingLanguages language : LANGUAGE_MAP.keySet())
-            REVERSE_LANGUAGE_MAP.put(LANGUAGE_MAP.get(language), language);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.JAVA, ScanResult.ScanSettings.Language.JAVA);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.PHP, ScanResult.ScanSettings.Language.PHP);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.CSHARPWINONLY, ScanResult.ScanSettings.Language.CSHARPWINONLY);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.CSHARP, ScanResult.ScanSettings.Language.CSHARP);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.VB, ScanResult.ScanSettings.Language.VB);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.GO, ScanResult.ScanSettings.Language.GO);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.CANDCPLUSPLUS, ScanResult.ScanSettings.Language.CPP);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.PYTHON, ScanResult.ScanSettings.Language.PYTHON);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.SQL, ScanResult.ScanSettings.Language.SQL);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.JAVASCRIPT, ScanResult.ScanSettings.Language.JAVASCRIPT);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.KOTLIN, ScanResult.ScanSettings.Language.KOTLIN);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.SWIFT, ScanResult.ScanSettings.Language.SWIFT);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.RUBY, ScanResult.ScanSettings.Language.RUBY);
+        LANGUAGE_MAP.put(ProgrammingLanguageGroup.OBJECTIVEC, ScanResult.ScanSettings.Language.OBJECTIVEC);
+
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.JAVA, ScanResult.ScanSettings.Language.JAVA);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.PHP, ScanResult.ScanSettings.Language.PHP);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.CSHARP, ScanResult.ScanSettings.Language.CSHARP);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.VB, ScanResult.ScanSettings.Language.VB);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.GO, ScanResult.ScanSettings.Language.GO);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.CANDCPLUSPLUS, ScanResult.ScanSettings.Language.CPP);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.PYTHON, ScanResult.ScanSettings.Language.PYTHON);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.SQL, ScanResult.ScanSettings.Language.SQL);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.JAVASCRIPT, ScanResult.ScanSettings.Language.JAVASCRIPT);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.KOTLIN, ScanResult.ScanSettings.Language.KOTLIN);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.SWIFT, ScanResult.ScanSettings.Language.SWIFT);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.RUBY, ScanResult.ScanSettings.Language.RUBY);
+        LANGUAGE_LICENSE_MAP.put(ProgrammingLanguageLicence.OBJECTIVEC, ScanResult.ScanSettings.Language.OBJECTIVEC);
 
         STATE_MAP.put(Stage.ABORTED, ScanResult.State.ABORTED);
         STATE_MAP.put(Stage.FAILED, ScanResult.State.FAILED);
@@ -95,9 +108,8 @@ public class IssuesConverter {
         STATE_MAP.put(Stage.SCAN, ScanResult.State.UNKNOWN);
         STATE_MAP.put(Stage.VFSSETUP, ScanResult.State.UNKNOWN);
 
-        SCAN_MODULE_MAP.put(ScanModuleType.VULNERABLESOURCECODE, AI);
         SCAN_MODULE_MAP.put(ScanModuleType.PATTERNMATCHING, ScanBrief.ScanSettings.Engine.PM);
-        SCAN_MODULE_MAP.put(ScanModuleType.DATAFLOWANALYSIS, ScanBrief.ScanSettings.Engine.TAINT);
+        SCAN_MODULE_MAP.put(ScanModuleType.STATICCODEANALYSIS, ScanBrief.ScanSettings.Engine.STATICCODEANALYSIS);
         SCAN_MODULE_MAP.put(ScanModuleType.BLACKBOX, ScanBrief.ScanSettings.Engine.BLACKBOX);
         SCAN_MODULE_MAP.put(ScanModuleType.CONFIGURATION, ScanBrief.ScanSettings.Engine.CONFIGURATION);
         SCAN_MODULE_MAP.put(ScanModuleType.COMPONENTS, ScanBrief.ScanSettings.Engine.DC);
@@ -130,7 +142,7 @@ public class IssuesConverter {
                 res.getEngines().add(SCAN_MODULE_MAP.get(scanModuleType));
         }
         // Entry-point analysis method is always enabled
-        res.setUseEntryAnalysisPoint(res.getEngines().contains(AI) || res.getEngines().contains(PM));
+        res.setUseEntryAnalysisPoint(res.getEngines().contains(STATICCODEANALYSIS) || res.getEngines().contains(PM));
 
         return res;
     }
@@ -215,6 +227,7 @@ public class IssuesConverter {
         destination.setLevel(ISSUE_LEVEL_MAP.get(source.getLevel()));
 
         destination.setApprovalState(ISSUE_APPROVAL_STATE_MAP.get(source.getApprovalState()));
+        destination.setLanguage(LANGUAGE_LICENSE_MAP.get(source.getLanguage()));
         destination.setFavorite(source.getIsFavorite());
         destination.setSuppressed(source.getIsSuppressed());
         destination.setSuspected(source.getIsSuspected());

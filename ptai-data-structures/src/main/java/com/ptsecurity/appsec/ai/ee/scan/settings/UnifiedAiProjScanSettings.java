@@ -171,7 +171,7 @@ public abstract class UnifiedAiProjScanSettings {
         if (isMultiScan) {
             return ParseResult.Message.builder()
                     .type(ParseResult.Message.Type.INFO)
-                    .text(i18n_ast_settings_type_manual_json_settings_message_mulilang_success(projectName, languages.stream().map(ScanBrief.ScanSettings.Language::getValue).collect(Collectors.toList()).toString()))
+                    .text(i18n_ast_settings_type_manual_json_settings_message_mulilang_success(projectName, languages.stream().map(ScanBrief.ScanSettings.Language::getValue).collect(Collectors.toList()).toString().replace("[", "").replace("]", "")))
                     .build();
         }
         return ParseResult.Message.builder()

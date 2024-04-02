@@ -1,6 +1,7 @@
 package com.ptsecurity.appsec.ai.ee.scan.result.issue.types;
 
 import com.fasterxml.jackson.annotation.*;
+import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.misc.tools.helpers.HashHelper;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -118,6 +119,9 @@ public abstract class BaseIssue {
      */
     @JsonProperty("isSuspected")
     protected Boolean suspected;
+
+    @JsonProperty("language")
+    protected ScanResult.ScanSettings.Language language;
 
     /**
      * True if issue marked with suppress comment in source code

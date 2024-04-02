@@ -114,6 +114,29 @@ public class Reports {
         @JsonProperty("confirmationStatuses")
         private List<ApprovalState> confirmationStatuses;
 
+        public enum ProgrammingLanguage {
+            JAVA,
+            CSHARP,
+            VB,
+            PHP,
+            JAVASCRIPT,
+            PYTHON,
+            OBJECTIVEC,
+            SWIFT,
+            CANDCPLUSPLUS,
+            GO,
+            KOTLIN,
+            SQL,
+            RUBY,
+            ALL
+        }
+
+        @JsonProperty("language")
+        private ProgrammingLanguage language;
+
+        @JsonProperty("languages")
+        private List<ProgrammingLanguage> languages;
+
         public enum Condition {
             NONE, NOCONDITION, UNDERCONDITION, ALL
         }
@@ -143,7 +166,7 @@ public class Reports {
         private List<SourceType> sourceTypes;
 
         public enum ScanMode {
-            NONE, FROMENTRYPOINT, FROMPUBLICPROTECTED, FROMOTHER, ALL
+            NONE, FROMENTRYPOINT, FROMPUBLICPROTECTED, FROMROOT, FROMOTHER, ALL
         }
         @JsonProperty("scanMode")
         private ScanMode scanMode;

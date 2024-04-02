@@ -52,6 +52,7 @@ public class BaseJsonChartDataModel {
 
         SCANMODE_COLORS.put(VulnerabilityIssue.ScanMode.FROM_OTHER, LEVEL_COLORS.get(BaseIssue.Level.POTENTIAL));
         SCANMODE_COLORS.put(VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT, LEVEL_COLORS.get(BaseIssue.Level.HIGH));
+        SCANMODE_COLORS.put(VulnerabilityIssue.ScanMode.FROM_ROOT, LEVEL_COLORS.get(BaseIssue.Level.MEDIUM));
         SCANMODE_COLORS.put(VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED, LEVEL_COLORS.get(BaseIssue.Level.MEDIUM));
         SCANMODE_COLORS.put(VulnerabilityIssue.ScanMode.TAINT, LEVEL_COLORS.get(BaseIssue.Level.LOW));
         SCANMODE_COLORS.put(VulnerabilityIssue.ScanMode.NONE, LEVEL_COLORS.get(BaseIssue.Level.NONE));

@@ -30,6 +30,32 @@ public class ScanResultHelper {
 
         // TODO: Get rid of NONE filters
 
+        // Filter by language
+        Set<Reports.IssuesFilter.ProgrammingLanguage> programmingLanguages = new HashSet<>();
+        if (null != filter.getLanguages()) programmingLanguages.add(filter.getLanguage());
+        if (isNotEmpty(filter.getLanguages())) programmingLanguages.addAll(filter.getLanguages());
+
+        if (!programmingLanguages.isEmpty() && !programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.ALL)) {
+            Iterator<BaseIssue> iterator = scanResult.getIssues().iterator();
+            while (iterator.hasNext()) {
+                BaseIssue issue = iterator.next();
+                if (ScanResult.ScanSettings.Language.JAVA.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.JAVA)) continue;
+                if (ScanResult.ScanSettings.Language.PHP.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.PHP)) continue;
+                if (ScanResult.ScanSettings.Language.CSHARP.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.CSHARP)) continue;
+                if (ScanResult.ScanSettings.Language.VB.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.VB)) continue;
+                if (ScanResult.ScanSettings.Language.GO.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.GO)) continue;
+                if (ScanResult.ScanSettings.Language.CPP.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.CANDCPLUSPLUS)) continue;
+                if (ScanResult.ScanSettings.Language.PYTHON.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.PYTHON)) continue;
+                if (ScanResult.ScanSettings.Language.SQL.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.SQL)) continue;
+                if (ScanResult.ScanSettings.Language.JAVASCRIPT.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.JAVASCRIPT)) continue;
+                if (ScanResult.ScanSettings.Language.KOTLIN.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.KOTLIN)) continue;
+                if (ScanResult.ScanSettings.Language.SWIFT.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.SWIFT)) continue;
+                if (ScanResult.ScanSettings.Language.RUBY.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.RUBY)) continue;
+                if (ScanResult.ScanSettings.Language.OBJECTIVEC.equals(issue.getLanguage()) && programmingLanguages.contains(Reports.IssuesFilter.ProgrammingLanguage.OBJECTIVEC)) continue;
+                iterator.remove();
+            }
+        }
+
         // Filter by issue level
         Set<Reports.IssuesFilter.Level> filterLevels = new HashSet<>();
         if (null != filter.getIssueLevel()) filterLevels.add(filter.getIssueLevel());
@@ -125,6 +151,7 @@ public class ScanResultHelper {
                 BaseIssue issue = iterator.next();
                 if (BaseIssue.Type.VULNERABILITY.equals(issue.getClazz())) {
                     VulnerabilityIssue vulnerabilityIssue = (VulnerabilityIssue) issue;
+                    if (VulnerabilityIssue.ScanMode.FROM_ROOT.equals(vulnerabilityIssue.getScanMode()) && scanModes.contains(Reports.IssuesFilter.ScanMode.FROMROOT)) continue;
                     if (VulnerabilityIssue.ScanMode.FROM_OTHER.equals(vulnerabilityIssue.getScanMode()) && scanModes.contains(Reports.IssuesFilter.ScanMode.FROMOTHER)) continue;
                     if (VulnerabilityIssue.ScanMode.FROM_ENTRYPOINT.equals(vulnerabilityIssue.getScanMode()) && scanModes.contains(Reports.IssuesFilter.ScanMode.FROMENTRYPOINT)) continue;
                     if (VulnerabilityIssue.ScanMode.FROM_PUBLICPROTECTED.equals(vulnerabilityIssue.getScanMode()) && scanModes.contains(Reports.IssuesFilter.ScanMode.FROMPUBLICPROTECTED)) continue;
