@@ -396,6 +396,8 @@ public abstract class UnifiedAiProjScanSettings {
         protected Boolean usePublicAnalysisMethod;
         protected Boolean downloadDependencies;
         protected String customParameters;
+        protected Boolean useTaintAnalysis;
+        protected Boolean useJsaAnalysis;
     }
 
     public JavaScriptSettings getJavaScriptSettings() {
