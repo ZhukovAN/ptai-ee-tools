@@ -1,4 +1,4 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v470;
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v471;
 
 import com.google.gson.reflect.TypeToken;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
@@ -6,7 +6,7 @@ import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.integration.rest.Environment;
-import com.ptsecurity.appsec.ai.ee.server.v470.api.ApiResponse;
+import com.ptsecurity.appsec.ai.ee.server.v471.api.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.JsonAstJobIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseClientIT;
@@ -36,16 +36,16 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.*;
+import static com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief.ApiVersion.V471;
 import static com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings.ScanModule.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.ID.*;
 import static com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate.getTemplate;
 import static com.ptsecurity.misc.tools.helpers.BaseJsonHelper.createObjectMapper;
 
 @Slf4j
-@DisplayName("Test PT AI 4.7 REST API data structures")
+@DisplayName("Test PT AI 4.7.1 REST API data structures")
 @Tag("development")
-@Environment(enabledFor = { V470 })
+@Environment(enabledFor = { V471 })
 public class RestApiDataStructuresIT extends BaseClientIT {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -56,7 +56,6 @@ public class RestApiDataStructuresIT extends BaseClientIT {
                 .build();
 
         ProjectTemplate projectTemplate = getTemplate(templateId);
-
         UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(projectTemplate.getSettings().toJson());
         modifySettings.accept(settings);
 
@@ -80,12 +79,12 @@ public class RestApiDataStructuresIT extends BaseClientIT {
         ScanResult scanResult = createObjectMapper().readValue(json, ScanResult.class);
 
         ConnectionSettings connectionSettings = CONNECTION_SETTINGS().validate();
-        com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v470.ApiClient client = new ApiClient(connectionSettings);
+        ApiClient client = new ApiClient(connectionSettings);
         // Initialize all API clients with URL, timeouts, SSL settings etc.
         client.init();
         client.authenticate();
 
-        Path jsons = destination.resolve("v470").resolve("json");
+        Path jsons = destination.resolve("v471").resolve("json");
         jsons.toFile().mkdirs();
         Path scanSettingsDir = jsons.resolve("scanSettings");
         scanSettingsDir.toFile().mkdirs();
