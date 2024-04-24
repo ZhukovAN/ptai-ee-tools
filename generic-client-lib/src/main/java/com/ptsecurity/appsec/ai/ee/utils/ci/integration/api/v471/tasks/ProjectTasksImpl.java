@@ -1,11 +1,11 @@
-package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v470.tasks;
+package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v471.tasks;
 
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.server.v470.api.ApiException;
-import com.ptsecurity.appsec.ai.ee.server.v470.api.model.*;
+import com.ptsecurity.appsec.ai.ee.server.v471.api.ApiException;
+import com.ptsecurity.appsec.ai.ee.server.v471.api.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v470.converters.AiProjConverter;
+import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v471.converters.AiProjConverter;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.TokenCredentials;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.tasks.ProjectTasks;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.utils.json.JsonPolicyHelper;
