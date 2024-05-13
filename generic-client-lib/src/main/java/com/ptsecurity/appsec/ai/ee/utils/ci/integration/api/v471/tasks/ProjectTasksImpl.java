@@ -144,8 +144,12 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         ProjectSettingsModel projectSettingsModel = call(
                 () -> client.getProjectsApi().apiProjectsProjectIdSettingsGet(projectId),
                 "Failed to get PT AI project generic settings");
-        // Temp
-        projectSettingsModel.languages(projectSettings.getLanguages());
+
+        List<LegacyProgrammingLanguageGroup> userDefinedLanguages = projectSettings.getLanguages();
+        // If user defined languages is empty then use default project languages
+        if (userDefinedLanguages == null || !userDefinedLanguages.isEmpty()) {
+            projectSettingsModel.languages(userDefinedLanguages);
+        }
 
         log.trace("Apply AIPROJ-defined project generic settings");
         AiProjConverter.apply(settings, projectSettingsModel);
