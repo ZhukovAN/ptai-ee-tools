@@ -7460,7 +7460,6 @@ components:
           type: boolean
         queueDate:
           type: string
-          format: date-time
           nullable: true
         initiator:
           $ref: '#/components/schemas/InitiatorInfoModel'
@@ -9328,7 +9327,6 @@ components:
           $ref: '#/components/schemas/InitiatorInfoModel'
         queueDate:
           type: string
-          format: date-time
           nullable: true
         scanAgentInfo:
           $ref: '#/components/schemas/ScanAgentInfoModel'

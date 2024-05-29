@@ -88,11 +88,7 @@ public class AiProjConverter {
     }
 
     protected static WhiteBoxSettingsModel apply(@NonNull final UnifiedAiProjScanSettings settings, @NonNull WhiteBoxSettingsModel model) {
-        model.setStaticCodeAnalysisEnabled(
-                settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.VULNERABLESOURCECODE)
-                        || settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.DATAFLOWANALYSIS)
-                        || settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.STATICCODEANALYSIS)
-        );
+        model.setStaticCodeAnalysisEnabled(settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.STATICCODEANALYSIS));
         model.setPatternMatchingEnabled(settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.PATTERNMATCHING));
         model.setSearchForConfigurationFlawsEnabled(settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.CONFIGURATION));
         model.setSearchForVulnerableComponentsEnabled(settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.COMPONENTS));
@@ -272,6 +268,7 @@ public class AiProjConverter {
 
         model.setSourceType(SourceType.EMPTY);
         model.setProjectName(settings.getProjectName());
+        model.setWhiteBoxSettings(apply(settings, new WhiteBoxSettingsModel()));
         model.setDotNetSettings(apply(settings, new DotNetSettingsModel()));
         model.setJsaDotNetSettings(apply(settings, new JsaDotNetSettingsModel()));
         model.setJavaSettings(apply(settings, new JavaSettingsModel()));

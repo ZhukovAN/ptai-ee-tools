@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import static com.ptsecurity.appsec.ai.ee.server.v471.api.model.LegacyProgrammingLanguageGroup.*;
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -147,8 +148,10 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
 
         List<LegacyProgrammingLanguageGroup> userDefinedLanguages = projectSettings.getLanguages();
         // If user defined languages is empty then use default project languages
-        if (userDefinedLanguages == null || !userDefinedLanguages.isEmpty()) {
-            projectSettingsModel.languages(userDefinedLanguages);
+        if (userDefinedLanguages == null || userDefinedLanguages.isEmpty()) {
+            projectSettingsModel.languages(getLanguagesFromDetectionObject(projectSettingsModel.getLangPercentDistribution()));
+        } else {
+            projectSettingsModel.languages(projectSettings.getLanguages());
         }
 
         log.trace("Apply AIPROJ-defined project generic settings");
@@ -239,5 +242,54 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
             throw e;
         }
         return res;
+    }
+
+    private List<LegacyProgrammingLanguageGroup> getLanguagesFromDetectionObject(DefaultProjectSettingsModelLangPercentDistribution detection) {
+        if (detection == null) {
+            return List.of();
+        }
+        List<LegacyProgrammingLanguageGroup> result = new ArrayList<>(List.of());
+
+        if (detection.getJava() != null && detection.getJava() > 0) {
+            result.add(JAVA);
+        }
+        if (detection.getCsharpWinOnly() != null && detection.getCsharpWinOnly() > 0) {
+            result.add(CSHARPWINONLY);
+        }
+        if (detection.getVB() != null && detection.getVB() > 0) {
+            result.add(VB);
+        }
+        if (detection.getPhp() != null && detection.getPhp() > 0) {
+            result.add(PHP);
+        }
+        if (detection.getPython() != null && detection.getPython() > 0) {
+            result.add(PYTHON);
+        }
+        if (detection.getObjectiveC() != null && detection.getObjectiveC() > 0) {
+            result.add(OBJECTIVEC);
+        }
+        if (detection.getSwift() != null && detection.getSwift() > 0) {
+            result.add(SWIFT);
+        }
+        if (detection.getCandCPlusPlus() != null && detection.getCandCPlusPlus() > 0) {
+            result.add(CANDCPLUSPLUS);
+        }
+        if (detection.getGo() != null && detection.getGo() > 0) {
+            result.add(GO);
+        }
+        if (detection.getKotlin() != null && detection.getKotlin() > 0) {
+            result.add(KOTLIN);
+        }
+        if (detection.getSql() != null && detection.getSql() > 0) {
+            result.add(SQL);
+        }
+        if (detection.getRuby() != null && detection.getRuby() > 0) {
+            result.add(RUBY);
+        }
+        if (detection.getCsharp() != null && detection.getCsharp() > 0) {
+            result.add(CSHARP);
+        }
+
+        return result;
     }
 }

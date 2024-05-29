@@ -5,6 +5,7 @@ import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
+import com.ptsecurity.appsec.ai.ee.server.v471.api.JSON;
 import com.ptsecurity.appsec.ai.ee.server.v471.api.api.*;
 import com.ptsecurity.appsec.ai.ee.server.v471.api.model.ScanAgentModel;
 import com.ptsecurity.appsec.ai.ee.server.v471.auth.ApiResponse;
@@ -38,6 +39,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import java.lang.reflect.Type;
 import java.security.SecureRandom;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 
@@ -47,7 +50,7 @@ import static com.ptsecurity.appsec.ai.ee.server.v471.notifications.model.Stage.
 import static com.ptsecurity.misc.tools.helpers.CallHelper.call;
 
 @Slf4j
-@VersionRange(min = { 4, 7, 1, 0 }, max = { 4, 7, 1, 99999 })
+@VersionRange(min = {4, 7, 1, 0}, max = {4, 7, 1, 99999})
 public class ApiClient extends AbstractApiClient {
     @Getter
     protected final String id = UUID.randomUUID().toString();
@@ -59,6 +62,11 @@ public class ApiClient extends AbstractApiClient {
     @Getter
     @ToString.Exclude
     protected final ProjectsApi projectsApi = new ProjectsApi(new com.ptsecurity.appsec.ai.ee.server.v471.api.ApiClient());
+
+    @Getter
+    @ToString.Exclude
+    protected final ProjectsApi dateFormattedProjectsApi = new ProjectsApi(new com.ptsecurity.appsec.ai.ee.server.v471.api.ApiClient()
+            .setOffsetDateTimeFormat(DateTimeFormatter.ISO_LOCAL_DATE_TIME.withZone(ZoneOffset.UTC)));
 
     @Getter
     @ToString.Exclude
@@ -94,12 +102,12 @@ public class ApiClient extends AbstractApiClient {
 
     public ApiClient(@NonNull final ConnectionSettings connectionSettings) {
         super(connectionSettings, AdvancedSettings.getDefault());
-        apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
+        apis.addAll(Arrays.asList(authApi, projectsApi, dateFormattedProjectsApi, configsApi, reportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
     }
 
     public ApiClient(@NonNull final ConnectionSettings connectionSettings, @NonNull final AdvancedSettings advancedSettings) {
         super(connectionSettings, advancedSettings);
-        apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, reportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
+        apis.addAll(Arrays.asList(authApi, projectsApi, configsApi, dateFormattedProjectsApi, reportsApi, licenseApi, scanQueueApi, scanAgentApi, storeApi, healthCheckApi, versionApi));
     }
 
     protected ApiResponse<AuthResultModel> initialAuthentication() throws GenericException {
@@ -156,7 +164,8 @@ public class ApiClient extends AbstractApiClient {
                                     .header("Authorization", "Bearer " + this.apiJwt.getRefreshToken())
                                     .build();
                             call = authApi.getApiClient().getHttpClient().newCall(request);
-                            final Type stringType = new TypeToken<AuthResultModel>() {}.getType();
+                            final Type stringType = new TypeToken<AuthResultModel>() {
+                            }.getType();
                             return authApi.getApiClient().execute(call, stringType);
                         },
                         "Refresh JWT call failed");
@@ -221,7 +230,7 @@ public class ApiClient extends AbstractApiClient {
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1));
         if (null != trustManager) {
             SSLContext sslContext = call(() -> SSLContext.getInstance("TLS"), "SSL context creation failed");
-            call(() -> sslContext.init(null, new TrustManager[] { trustManager }, new SecureRandom()), "SSL context initialization failed");
+            call(() -> sslContext.init(null, new TrustManager[]{trustManager}, new SecureRandom()), "SSL context initialization failed");
             httpBuilder.sslSocketFactory(sslContext.getSocketFactory(), trustManager);
         }
         Reflect.on(httpClient).set("client", httpBuilder.build());

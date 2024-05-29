@@ -6,6 +6,7 @@ import com.ptsecurity.appsec.ai.ee.scan.progress.Stage;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
+import com.ptsecurity.appsec.ai.ee.server.v471.api.JSON;
 import com.ptsecurity.appsec.ai.ee.server.v471.api.model.*;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.AbstractApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v471.ApiClient;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.File;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -93,7 +95,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
                     if (interval > Duration.between(lastResetTime, LocalDateTime.now()).getSeconds()) continue;
                     log.trace("Poll {} project {} scan state", projectId, scanResultId);
                     ScanResultModel scanResult = call(
-                            () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
+                            () -> client.getDateFormattedProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
                             "Get project scan result failed");
                     reset();
                     // TODO: Properly process this
@@ -168,7 +170,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
     public ScanBrief createScanBrief(@NonNull final UUID projectId, @NonNull final UUID scanResultId) throws GenericException {
         String projectName = new ProjectTasksImpl(client).searchProject(projectId);
         ScanResultModel scanResult = call(
-                () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
+                () -> client.getDateFormattedProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
                 "Get project scan result failed");
         log.debug("Project {} scan result {} load complete", projectId, scanResultId);
 
@@ -201,7 +203,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
     public void appendStatistics(@NonNull final ScanBrief scanBrief) throws GenericException {
         log.trace("Getting project {} scan results {}", scanBrief.getProjectId(), scanBrief.getId());
         ScanResultModel scanResult = call(
-                () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(scanBrief.getProjectId(), scanBrief.getId()),
+                () -> client.getDateFormattedProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(scanBrief.getProjectId(), scanBrief.getId()),
                 "Get project scan result failed");
         log.debug("Project {} scan result {} load complete", scanBrief.getProjectId(), scanBrief.getId());
 
@@ -222,7 +224,7 @@ public class GenericAstTasksImpl extends AbstractTaskImpl implements GenericAstT
     @Override
     public ScanResult getScanResult(@NonNull UUID projectId, @NonNull UUID scanResultId) throws GenericException {
         ScanResultModel scanResult = call(
-                () -> client.getProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
+                () -> client.getDateFormattedProjectsApi().apiProjectsProjectIdScanResultsScanResultIdGet(projectId, scanResultId),
                 "Get project scan result failed");
         log.debug("Project {} scan result {} load complete", projectId, scanResultId);
         List<VulnerabilityModel> issues = call(
