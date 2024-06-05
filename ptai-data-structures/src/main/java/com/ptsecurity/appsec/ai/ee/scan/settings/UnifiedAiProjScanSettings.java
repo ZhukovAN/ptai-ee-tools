@@ -219,6 +219,10 @@ public abstract class UnifiedAiProjScanSettings {
         return result.getSettings();
     }
 
+    public Boolean hasPath(@NonNull final String path) {
+        return !N(path).isMissingNode();
+    }
+
     protected Boolean B(@NonNull final String path) {
         Boolean res = N(path).asBoolean();
         log.trace("JsonPath {} = {}", path, res);

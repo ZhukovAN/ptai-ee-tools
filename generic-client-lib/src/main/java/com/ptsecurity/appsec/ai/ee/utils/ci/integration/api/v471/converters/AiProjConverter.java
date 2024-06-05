@@ -87,7 +87,10 @@ public class AiProjConverter {
 
     }
 
-    protected static WhiteBoxSettingsModel apply(@NonNull final UnifiedAiProjScanSettings settings, @NonNull WhiteBoxSettingsModel model) {
+    protected static WhiteBoxSettingsModel apply(@NonNull final UnifiedAiProjScanSettings settings, WhiteBoxSettingsModel model) {
+        if (model == null) {
+            model = new WhiteBoxSettingsModel();
+        }
         model.setStaticCodeAnalysisEnabled(settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.STATICCODEANALYSIS));
         model.setPatternMatchingEnabled(settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.PATTERNMATCHING));
         model.setSearchForConfigurationFlawsEnabled(settings.getScanModules().contains(UnifiedAiProjScanSettings.ScanModule.CONFIGURATION));
@@ -147,7 +150,10 @@ public class AiProjConverter {
     @SneakyThrows
     public static JavaSettingsModel apply(
             @NonNull final UnifiedAiProjScanSettings settings,
-            @NonNull final JavaSettingsModel model) {
+            JavaSettingsModel model) {
+        if (model == null) {
+            model = new JavaSettingsModel();
+        }
         if (null == settings.getJavaSettings()) return model;
         JavaSettings javaSettings = settings.getJavaSettings();
         // Set isUnpackUserJarFiles
@@ -162,7 +168,10 @@ public class AiProjConverter {
     @SneakyThrows
     public static DotNetSettingsModel apply(
             @NonNull final UnifiedAiProjScanSettings settings,
-            @NonNull final DotNetSettingsModel model) {
+            DotNetSettingsModel model) {
+        if (model == null) {
+            model = new DotNetSettingsModel();
+        }
         if (null == settings.getWindowsDotNetSettings()) return model;
         UnifiedAiProjScanSettings.WindowsDotNetSettings dotNetSettings = settings.getWindowsDotNetSettings();
         // Set projectType
@@ -174,7 +183,10 @@ public class AiProjConverter {
     @SneakyThrows
     public static JsaDotNetSettingsModel apply(
             @NonNull final UnifiedAiProjScanSettings settings,
-            @NonNull final JsaDotNetSettingsModel model) {
+            JsaDotNetSettingsModel model) {
+        if (model == null) {
+            model = new JsaDotNetSettingsModel();
+        }
         if (null == settings.getDotNetSettings()) return model;
         DotNetSettings dotNetSettings = settings.getDotNetSettings();
         // Set projectType
@@ -186,7 +198,10 @@ public class AiProjConverter {
     @SneakyThrows
     public static GoSettingsModel apply(
             @NonNull final UnifiedAiProjScanSettings settings,
-            @NonNull final GoSettingsModel model) {
+            GoSettingsModel model) {
+        if (model == null) {
+            model = new GoSettingsModel();
+        }
         if (null == settings.getGoSettings()) return model;
         UnifiedAiProjScanSettings.GoSettings goSettings = settings.getGoSettings();
 
@@ -198,15 +213,20 @@ public class AiProjConverter {
     @SneakyThrows
     public static JavaScriptSettingsModel apply(
             @NonNull final UnifiedAiProjScanSettings settings,
-            @NonNull final JavaScriptSettingsModel model) {
+            JavaScriptSettingsModel model) {
+        if (model == null) {
+            model = new JavaScriptSettingsModel();
+        }
         if (null == settings.getJavaScriptSettings()) return model;
         UnifiedAiProjScanSettings.JavaScriptSettings javaScriptSettings = settings.getJavaScriptSettings();
 
         model.setUseAvailablePublicAndProtectedMethods(javaScriptSettings.getUsePublicAnalysisMethod());
         model.setLaunchParameters(javaScriptSettings.getCustomParameters());
         model.setDownloadDependencies(javaScriptSettings.getDownloadDependencies());
-        model.setUseTaintAnalysis(javaScriptSettings.getUseTaintAnalysis());
-        model.setUseJsaAnalysis(javaScriptSettings.getUseJsaAnalysis());
+        if (javaScriptSettings.getUseTaintAnalysis() || javaScriptSettings.getUseJsaAnalysis()) {
+            model.setUseTaintAnalysis(javaScriptSettings.getUseTaintAnalysis());
+            model.setUseJsaAnalysis(javaScriptSettings.getUseJsaAnalysis());
+        }
         return model;
     }
 
@@ -214,7 +234,10 @@ public class AiProjConverter {
     @SneakyThrows
     public static PhpSettingsModel apply(
             @NonNull final UnifiedAiProjScanSettings settings,
-            @NonNull final PhpSettingsModel model) {
+            PhpSettingsModel model) {
+        if (model == null) {
+            model = new PhpSettingsModel();
+        }
         if (null == settings.getPhpSettings()) return model;
         UnifiedAiProjScanSettings.PhpSettings phpSettings = settings.getPhpSettings();
 
@@ -227,8 +250,11 @@ public class AiProjConverter {
     @SneakyThrows
     public static PythonSettingsModel apply(
             @NonNull final UnifiedAiProjScanSettings settings,
-            @NonNull final PythonSettingsModel model) {
-        if (null == settings.getPhpSettings()) return model;
+            PythonSettingsModel model) {
+        if (model == null) {
+            model = new PythonSettingsModel();
+        }
+        if (null == settings.getPythonSettings()) return model;
         UnifiedAiProjScanSettings.PythonSettings pythonSettings = settings.getPythonSettings();
 
         model.setUseAvailablePublicAndProtectedMethods(pythonSettings.getUsePublicAnalysisMethod());
@@ -240,7 +266,10 @@ public class AiProjConverter {
     @SneakyThrows
     public static PmTaintBaseSettingsModel apply(
             @NonNull final UnifiedAiProjScanSettings settings,
-            @NonNull final PmTaintBaseSettingsModel model) {
+            PmTaintBaseSettingsModel model) {
+        if (model == null) {
+            model = new PmTaintBaseSettingsModel();
+        }
         if (null == settings.getPmTaintSettings()) return model;
         UnifiedAiProjScanSettings.PmTaintSettings pmTaintSettings = settings.getPmTaintSettings();
 
@@ -266,17 +295,20 @@ public class AiProjConverter {
             @NonNull final ProjectSettingsModel model) {
         log.trace("Set base project settings");
 
+        // Here some problem to setup default settings, cause lib which read json config file
+        // If some json value is not setup, and it's for example Bool then it will be read as false
         model.setSourceType(SourceType.EMPTY);
         model.setProjectName(settings.getProjectName());
-        model.setWhiteBoxSettings(apply(settings, new WhiteBoxSettingsModel()));
-        model.setDotNetSettings(apply(settings, new DotNetSettingsModel()));
-        model.setJsaDotNetSettings(apply(settings, new JsaDotNetSettingsModel()));
-        model.setJavaSettings(apply(settings, new JavaSettingsModel()));
-        model.setGoSettings(apply(settings, new GoSettingsModel()));
-        model.setJavaScriptSettings(apply(settings, new JavaScriptSettingsModel()));
-        model.setPhpSettings(apply(settings, new PhpSettingsModel()));
-        model.setPythonSettings(apply(settings, new PythonSettingsModel()));
-        model.setPmTaintSettings(apply(settings, new PmTaintBaseSettingsModel()));
+        model.setWhiteBoxSettings(apply(settings, model.getWhiteBoxSettings()));
+        model.setDotNetSettings(apply(settings, model.getDotNetSettings()));
+        model.setGoSettings(apply(settings, model.getGoSettings()));
+        model.setJavaScriptSettings(apply(settings, model.getJavaScriptSettings()));
+        model.setJavaSettings(apply(settings, model.getJavaSettings()));
+        model.setJsaDotNetSettings(apply(settings, model.getJsaDotNetSettings()));
+        model.setPhpSettings(apply(settings, model.getPhpSettings()));
+        model.setPmTaintSettings(apply(settings, model.getPmTaintSettings()));
+        model.setPythonSettings(apply(settings, model.getPythonSettings()));
+        // TODO: add ruby
 
         return model;
     }

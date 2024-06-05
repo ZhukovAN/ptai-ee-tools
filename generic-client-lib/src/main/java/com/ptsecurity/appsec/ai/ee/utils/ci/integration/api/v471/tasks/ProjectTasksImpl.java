@@ -149,9 +149,23 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         List<LegacyProgrammingLanguageGroup> userDefinedLanguages = projectSettings.getLanguages();
         // If user defined languages is empty then use default project languages
         if (userDefinedLanguages == null || userDefinedLanguages.isEmpty()) {
-            projectSettingsModel.languages(getLanguagesFromDetectionObject(projectSettingsModel.getLangPercentDistribution()));
+            List<LegacyProgrammingLanguageGroup> autoDeterminedLanguages = getLanguagesFromDetectionObject(projectSettingsModel.getLangPercentDistribution());
+            if (autoDeterminedLanguages.isEmpty()) {
+                throw new IllegalArgumentException("Can't auto detect languages, please specify languages to scan explicitly");
+            }
+            projectSettingsModel.languages(autoDeterminedLanguages);
         } else {
-            projectSettingsModel.languages(projectSettings.getLanguages());
+            projectSettingsModel.languages(userDefinedLanguages);
+        }
+
+        UnifiedAiProjScanSettings.JavaScriptSettings jsSettings = settings.getJavaScriptSettings();
+        if (jsSettings != null) {
+            Boolean isInvalidSettings = !jsSettings.getUseJsaAnalysis() && !jsSettings.getUseTaintAnalysis();
+            Boolean invalidSettingsSetExplicitly = settings.hasPath("JavaScriptSettings.UseJsaAnalysis")
+                    && settings.hasPath("JavaScriptSettings.UseTaintAnalysis");
+            if (isInvalidSettings && invalidSettingsSetExplicitly) {
+                throw new IllegalArgumentException("JavaScriptSettings.UseJsaAnalysis and JavaScriptSettings.UseTaintAnalysis can't be false at once. Fix it in config file.");
+            }
         }
 
         log.trace("Apply AIPROJ-defined project generic settings");
@@ -261,6 +275,9 @@ public class ProjectTasksImpl extends AbstractTaskImpl implements ProjectTasks {
         }
         if (detection.getPhp() != null && detection.getPhp() > 0) {
             result.add(PHP);
+        }
+        if (detection.getJavaScript() != null && detection.getJavaScript() > 0) {
+            result.add(JAVASCRIPT);
         }
         if (detection.getPython() != null && detection.getPython() > 0) {
             result.add(PYTHON);
