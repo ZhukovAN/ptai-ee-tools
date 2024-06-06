@@ -1,6 +1,5 @@
 package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v470.tasks;
 
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjV13ScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.Policy;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
 import com.ptsecurity.appsec.ai.ee.server.v470.api.ApiException;

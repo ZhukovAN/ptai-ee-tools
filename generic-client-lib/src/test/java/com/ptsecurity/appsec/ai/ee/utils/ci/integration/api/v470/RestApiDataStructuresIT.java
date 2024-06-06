@@ -3,16 +3,12 @@ package com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v470;
 import com.google.gson.reflect.TypeToken;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports;
 import com.ptsecurity.appsec.ai.ee.scan.reports.Reports.RawData;
-import com.ptsecurity.appsec.ai.ee.scan.result.ScanBrief;
 import com.ptsecurity.appsec.ai.ee.scan.result.ScanResult;
-import com.ptsecurity.appsec.ai.ee.scan.settings.AiProjV13ScanSettings;
 import com.ptsecurity.appsec.ai.ee.scan.settings.UnifiedAiProjScanSettings;
-import com.ptsecurity.appsec.ai.ee.scan.settings.aiproj.AiprojV13;
 import com.ptsecurity.appsec.ai.ee.server.integration.rest.Environment;
 import com.ptsecurity.appsec.ai.ee.server.v470.api.ApiResponse;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.JsonAstJobIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.ProjectTemplate;
-import com.ptsecurity.appsec.ai.ee.utils.ci.integration.api.v470.ApiClient;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.client.BaseClientIT;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.domain.ConnectionSettings;
 import com.ptsecurity.appsec.ai.ee.utils.ci.integration.jobs.AbstractJob;
@@ -25,7 +21,6 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
-import org.apache.commons.compress.utils.Sets;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -61,7 +56,7 @@ public class RestApiDataStructuresIT extends BaseClientIT {
                 .build();
 
         ProjectTemplate projectTemplate = getTemplate(templateId);
-//        projectTemplate.getSettings().setVetsion(AiprojV13.Version._1_3);
+
         UnifiedAiProjScanSettings settings = UnifiedAiProjScanSettings.loadSettings(projectTemplate.getSettings().toJson());
         modifySettings.accept(settings);
 

@@ -237,3 +237,5 @@
 + [Feature] Advanced setting ast.diagnostic.json.filename added. Its value defines file name where AST job execution details like scan status, PT AI agent name, policy assessment result, etc. will be saved to
 ### 20240320
 + [Feature] PT AI v.4.7.0 support approved
+### 20240429
++ [Feature] PT AI v.4.7.1 support approved

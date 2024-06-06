@@ -167,6 +167,13 @@ public abstract class UnifiedAiProjScanSettings {
     }
 
     private static ParseResult.Message getDetectedSettingsMessage(String projectName,Set<ScanBrief.ScanSettings.Language> languages) {
+        if (languages.isEmpty()) {
+            return ParseResult.Message.builder()
+                    .type(ParseResult.Message.Type.INFO)
+                    .text(i18n_ast_settings_type_manual_json_settings_message_autodetect_success(projectName))
+                    .build();
+        }
+
         boolean isMultiScan = languages.size() > 1;
         if (isMultiScan) {
             return ParseResult.Message.builder()
@@ -210,6 +217,10 @@ public abstract class UnifiedAiProjScanSettings {
                     new IllegalArgumentException()
             );
         return result.getSettings();
+    }
+
+    public Boolean hasPath(@NonNull final String path) {
+        return !N(path).isMissingNode();
     }
 
     protected Boolean B(@NonNull final String path) {
@@ -396,6 +407,8 @@ public abstract class UnifiedAiProjScanSettings {
         protected Boolean usePublicAnalysisMethod;
         protected Boolean downloadDependencies;
         protected String customParameters;
+        protected Boolean useTaintAnalysis;
+        protected Boolean useJsaAnalysis;
     }
 
     public JavaScriptSettings getJavaScriptSettings() {

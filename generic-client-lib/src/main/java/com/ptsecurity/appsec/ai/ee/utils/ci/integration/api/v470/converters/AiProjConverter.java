@@ -270,6 +270,7 @@ public class AiProjConverter {
 
         model.setSourceType(SourceType.EMPTY);
         model.setProjectName(settings.getProjectName());
+        model.setWhiteBoxSettings(apply(settings, new WhiteBoxSettingsModel()));
         model.setDotNetSettings(apply(settings, new DotNetSettingsModel()));
         model.setJsaDotNetSettings(apply(settings, new JsaDotNetSettingsModel()));
         model.setJavaSettings(apply(settings, new JavaSettingsModel()));
