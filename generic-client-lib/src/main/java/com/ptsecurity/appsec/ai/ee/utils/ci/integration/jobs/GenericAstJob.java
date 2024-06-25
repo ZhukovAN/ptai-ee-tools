@@ -160,24 +160,26 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             stop();
         }
         String diagnosticFileName = client.getAdvancedSettings().getString(AST_DIAGNOSTIC_JSON_FILENAME);
-        if (StringUtils.isNotEmpty(diagnosticFileName)) {
-            // Save AST diagnostic to artifacts
-            log.debug("Save AST diagnostic to {} file", diagnosticFileName);
-            ScanDiagnostic diagnostic = ScanDiagnostic.create(
-                    scanBrief,
-                    genericAstTasks.getScanErrors(projectId, scanResultId),
-                    performance());
-            call(
-                    () -> fileOps.saveArtifact(diagnosticFileName, BaseJsonHelper.serialize(diagnostic)),
-                    "AST result diagnostic save failed");
-        }
+        // Remember that at this point diagnostic still have policy state set to NONE regardless of actual value
+        ScanDiagnostic diagnostic = StringUtils.isEmpty(diagnosticFileName)
+                ? null
+                : ScanDiagnostic.create(scanBrief, genericAstTasks.getScanErrors(projectId, scanResultId), performance());
 
         info("Scan finished, project name: %s, project id: %s, result id: %s", projectName, projectId, scanResultId);
         fine("Resulting state is " + scanBrief.getState());
-        if (!EnumSet.of(DONE, ABORTED, FAILED, ABORTED_FROM_CI).contains(scanBrief.getState()))
+        if (!EnumSet.of(DONE, ABORTED, FAILED, ABORTED_FROM_CI).contains(scanBrief.getState())) {
+            // Invalid task state, save diagnostic file "as is" i.e. with policy state set to NONE
+            if (null != diagnostic) {
+                // Save AST diagnostic to artifacts
+                log.debug("Save AST diagnostic to {} file", diagnosticFileName);
+                call(
+                        () -> fileOps.saveArtifact(diagnosticFileName, BaseJsonHelper.serialize(diagnostic)),
+                        "AST result diagnostic save failed");
+            }
             throw GenericException.raise(
                     "Unexpected finished scan result state",
                     new IllegalArgumentException(String.valueOf(scanBrief.getState())));
+        }
 
         // Scan may be stopped from PT AI UI. In this case no scan results will be
         // available even if scan is aborted at the very latest scan stages and some
@@ -191,6 +193,14 @@ public abstract class GenericAstJob extends AbstractJob implements EventConsumer
             resultsAvailable = false;
             log.debug("Scan brief for project / scan ID {} / {} load failed", projectId, scanResultId);
             log.debug("Exception details", e);
+        }
+        if (null != diagnostic) {
+            diagnostic.setPolicyState(scanBrief.getPolicyState());
+            // Save AST diagnostic to artifacts
+            log.debug("Save AST diagnostic to {} file", diagnosticFileName);
+            call(
+                    () -> fileOps.saveArtifact(diagnosticFileName, BaseJsonHelper.serialize(diagnostic)),
+                    "AST result diagnostic save failed");
         }
         astOps.scanCompleteCallback(scanBrief, ScanBriefDetailed.Performance.builder().stages(durations()).build());
 
