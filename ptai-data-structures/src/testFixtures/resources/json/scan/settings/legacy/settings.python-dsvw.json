@@ -1,8 +1,0 @@
-{
-    "ProjectName": "junit-python-dsvw",
-    "ProgrammingLanguage": "Python",
-    "ScanAppType": "Configuration, PmTaint",
-    "UseTaintAnalysis": true,
-    "UsePmAnalysis": true,
-    "IsUsePublicAnalysisMethod": true
-}

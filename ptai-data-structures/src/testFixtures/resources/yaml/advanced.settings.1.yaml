@@ -1,7 +1,0 @@
-logging:
-  http:
-    maximumResponseSize: 10240
-  external:
-    type: NONE
-    host: logstash.domain.org
-    port: 5000

@@ -1,8 +1,0 @@
-@startuml
-
-(*) --> "Check includes"
---> "Check excludes"
---> "Flatten"
---> "Remove prefix"
---> (*)
-@enduml

@@ -1,7 +1,0 @@
-<div>
-    <p>PT AI vulnerability analysis mode. Possible options:</p>
-    <ul>
-        <li><b>Asynchronous mode</b><br/>Build pipeline starts application secutity testing (AST) job and continues its execution. The only result file that is published to CI workspace folder is result.url that contains PT AI's REST API endpoint to get scan results</li>
-        <li><b>Synchronous mode</b><br/>Build pipeline starts application secutity testing job and waits its completion. During last stage of AST job PT AI generates reports and makes security policy assessment (if any). This work mode allows you to define if CI build step should be marked as failed if policy assessment is failed and to define reports to be generated on scan complete</li>
-    </ul>
-</div>

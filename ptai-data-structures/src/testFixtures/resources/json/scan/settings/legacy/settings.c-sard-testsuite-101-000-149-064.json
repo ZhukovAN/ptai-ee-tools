@@ -1,8 +1,0 @@
-{
-    "ProjectName": "junit-c-sard-testsuite-101-000-149-064",
-    "ProgrammingLanguage": "CPlusPlus",
-    "ScanAppType": "Configuration, PmTaint",
-    "UseTaintAnalysis": true,
-    "UsePmAnalysis": true,
-    "IsUsePublicAnalysisMethod": true
-}

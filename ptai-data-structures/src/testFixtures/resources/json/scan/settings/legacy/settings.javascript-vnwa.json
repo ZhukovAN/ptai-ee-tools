@@ -1,7 +1,0 @@
-{
-    "ProjectName": "junit-javascript-vnwa",
-    "ProgrammingLanguage": "JavaScript",
-    "ScanAppType": "JavaScript, Configuration, PmTaint",
-    "UseTaintAnalysis": true,
-    "UsePmAnalysis": true
-}
