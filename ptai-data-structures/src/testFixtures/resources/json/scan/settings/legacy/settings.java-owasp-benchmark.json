@@ -1,7 +1,0 @@
-{
-    "ProjectName": "junit-java-owasp-benchmark",
-    "ProgrammingLanguage": "Java",
-    "ScanAppType": "Java, Configuration, PmTaint",
-    "UseTaintAnalysis": true,
-    "UsePmAnalysis": true
-}

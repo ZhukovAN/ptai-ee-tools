@@ -1,4 +1,0 @@
-<?jelly escape-by-default='true'?>
-<div>
-Plugin that allows to integrate Positive Technologies AST solution into build process
-</div>

@@ -1,7 +1,0 @@
-{
-    "ProjectName": "junit-java-app01",
-    "ProgrammingLanguage": "Java",
-    "ScanAppType": "Java, Configuration, PmTaint",
-    "UseTaintAnalysis": true,
-    "UsePmAnalysis": true
-}

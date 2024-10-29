@@ -1,7 +1,0 @@
-{
-    "ProjectName": "junit-php-smoke",
-    "ProgrammingLanguage": "Php",
-    "ScanAppType": "Php, Configuration, PmTaint",
-    "UseTaintAnalysis": true,
-    "UsePmAnalysis": true
-}
